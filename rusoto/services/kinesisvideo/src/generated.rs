@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -72,6 +74,7 @@ pub struct ChannelNameCondition {
     pub comparison_value: Option<String>,
 }
 
+/// see [KinesisVideo::create_signaling_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSignalingChannelInput {
@@ -92,6 +95,7 @@ pub struct CreateSignalingChannelInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [KinesisVideo::create_signaling_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSignalingChannelOutput {
@@ -101,6 +105,7 @@ pub struct CreateSignalingChannelOutput {
     pub channel_arn: Option<String>,
 }
 
+/// see [KinesisVideo::create_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamInput {
@@ -129,6 +134,7 @@ pub struct CreateStreamInput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [KinesisVideo::create_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStreamOutput {
@@ -138,6 +144,7 @@ pub struct CreateStreamOutput {
     pub stream_arn: Option<String>,
 }
 
+/// see [KinesisVideo::delete_signaling_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSignalingChannelInput {
@@ -150,10 +157,12 @@ pub struct DeleteSignalingChannelInput {
     pub current_version: Option<String>,
 }
 
+/// see [KinesisVideo::delete_signaling_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSignalingChannelOutput {}
 
+/// see [KinesisVideo::delete_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamInput {
@@ -166,10 +175,12 @@ pub struct DeleteStreamInput {
     pub stream_arn: String,
 }
 
+/// see [KinesisVideo::delete_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStreamOutput {}
 
+/// see [KinesisVideo::describe_signaling_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSignalingChannelInput {
@@ -183,6 +194,7 @@ pub struct DescribeSignalingChannelInput {
     pub channel_name: Option<String>,
 }
 
+/// see [KinesisVideo::describe_signaling_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSignalingChannelOutput {
@@ -192,6 +204,7 @@ pub struct DescribeSignalingChannelOutput {
     pub channel_info: Option<ChannelInfo>,
 }
 
+/// see [KinesisVideo::describe_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamInput {
@@ -205,6 +218,7 @@ pub struct DescribeStreamInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideo::describe_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamOutput {
@@ -214,6 +228,7 @@ pub struct DescribeStreamOutput {
     pub stream_info: Option<StreamInfo>,
 }
 
+/// see [KinesisVideo::get_data_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataEndpointInput {
@@ -230,6 +245,7 @@ pub struct GetDataEndpointInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideo::get_data_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataEndpointOutput {
@@ -239,6 +255,7 @@ pub struct GetDataEndpointOutput {
     pub data_endpoint: Option<String>,
 }
 
+/// see [KinesisVideo::get_signaling_channel_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSignalingChannelEndpointInput {
@@ -252,6 +269,7 @@ pub struct GetSignalingChannelEndpointInput {
         Option<SingleMasterChannelEndpointConfiguration>,
 }
 
+/// see [KinesisVideo::get_signaling_channel_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSignalingChannelEndpointOutput {
@@ -261,6 +279,7 @@ pub struct GetSignalingChannelEndpointOutput {
     pub resource_endpoint_list: Option<Vec<ResourceEndpointListItem>>,
 }
 
+/// see [KinesisVideo::list_signaling_channels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSignalingChannelsInput {
@@ -278,6 +297,15 @@ pub struct ListSignalingChannelsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSignalingChannelsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [KinesisVideo::list_signaling_channels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSignalingChannelsOutput {
@@ -291,6 +319,31 @@ pub struct ListSignalingChannelsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListSignalingChannelsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ChannelInfo>> {
+        Some(self.channel_info_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSignalingChannelsOutput {
+    type Item = ChannelInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ChannelInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [KinesisVideo::list_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
@@ -308,6 +361,15 @@ pub struct ListStreamsInput {
     pub stream_name_condition: Option<StreamNameCondition>,
 }
 
+impl PagedRequest for ListStreamsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [KinesisVideo::list_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsOutput {
@@ -321,6 +383,31 @@ pub struct ListStreamsOutput {
     pub stream_info_list: Option<Vec<StreamInfo>>,
 }
 
+impl ListStreamsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StreamInfo>> {
+        Some(self.stream_info_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStreamsOutput {
+    type Item = StreamInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StreamInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [KinesisVideo::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -333,6 +420,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// see [KinesisVideo::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -346,6 +434,7 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [KinesisVideo::list_tags_for_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForStreamInput {
@@ -363,6 +452,7 @@ pub struct ListTagsForStreamInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideo::list_tags_for_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForStreamOutput {
@@ -481,6 +571,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [KinesisVideo::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -492,10 +583,12 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [KinesisVideo::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
+/// see [KinesisVideo::tag_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagStreamInput {
@@ -512,10 +605,12 @@ pub struct TagStreamInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [KinesisVideo::tag_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagStreamOutput {}
 
+/// see [KinesisVideo::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -527,10 +622,12 @@ pub struct UntagResourceInput {
     pub tag_key_list: Vec<String>,
 }
 
+/// see [KinesisVideo::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
+/// see [KinesisVideo::untag_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagStreamInput {
@@ -547,10 +644,12 @@ pub struct UntagStreamInput {
     pub tag_key_list: Vec<String>,
 }
 
+/// see [KinesisVideo::untag_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagStreamOutput {}
 
+/// see [KinesisVideo::update_data_retention]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataRetentionInput {
@@ -573,10 +672,12 @@ pub struct UpdateDataRetentionInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideo::update_data_retention]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataRetentionOutput {}
 
+/// see [KinesisVideo::update_signaling_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSignalingChannelInput {
@@ -592,10 +693,12 @@ pub struct UpdateSignalingChannelInput {
     pub single_master_configuration: Option<SingleMasterConfiguration>,
 }
 
+/// see [KinesisVideo::update_signaling_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSignalingChannelOutput {}
 
+/// see [KinesisVideo::update_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamInput {
@@ -620,6 +723,7 @@ pub struct UpdateStreamInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideo::update_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStreamOutput {}
@@ -1728,7 +1832,7 @@ impl fmt::Display for UpdateStreamError {
 impl Error for UpdateStreamError {}
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
 #[async_trait]
-pub trait KinesisVideo {
+pub trait KinesisVideo: Clone + Sync + Send + 'static {
     /// <p>Creates a signaling channel. </p> <p> <code>CreateSignalingChannel</code> is an asynchronous operation.</p>
     async fn create_signaling_channel(
         &self,
@@ -1783,11 +1887,31 @@ pub trait KinesisVideo {
         input: ListSignalingChannelsInput,
     ) -> Result<ListSignalingChannelsOutput, RusotoError<ListSignalingChannelsError>>;
 
+    /// Auto-paginating version of `list_signaling_channels`
+    fn list_signaling_channels_pages(
+        &self,
+        input: ListSignalingChannelsInput,
+    ) -> RusotoStream<ChannelInfo, ListSignalingChannelsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_signaling_channels(state.clone())
+        })
+    }
+
     /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
     async fn list_streams(
         &self,
         input: ListStreamsInput,
     ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>>;
+
+    /// Auto-paginating version of `list_streams`
+    fn list_streams_pages(
+        &self,
+        input: ListStreamsInput,
+    ) -> RusotoStream<StreamInfo, ListStreamsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_streams(state.clone())
+        })
+    }
 
     /// <p>Returns a list of tags associated with the specified signaling channel.</p>
     async fn list_tags_for_resource(

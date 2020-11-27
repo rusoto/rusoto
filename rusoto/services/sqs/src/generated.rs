@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -83,6 +85,7 @@ impl ActionNameListSerializer {
 }
 
 /// <p><p/></p>
+/// see [Sqs::add_permission]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddPermissionRequest {
@@ -253,6 +256,7 @@ impl BooleanDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::change_message_visibility_batch]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangeMessageVisibilityBatchRequest {
@@ -328,6 +332,7 @@ impl ChangeMessageVisibilityBatchRequestEntryListSerializer {
 }
 
 /// <p>For each message in the batch, the response contains a <code> <a>ChangeMessageVisibilityBatchResultEntry</a> </code> tag if the message succeeds or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message fails.</p>
+/// see [Sqs::change_message_visibility_batch]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ChangeMessageVisibilityBatchResult {
@@ -435,6 +440,7 @@ impl ChangeMessageVisibilityBatchResultEntryListDeserializer {
         Ok(obj)
     }
 }
+/// see [Sqs::change_message_visibility]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangeMessageVisibilityRequest {
@@ -468,6 +474,7 @@ impl ChangeMessageVisibilityRequestSerializer {
 }
 
 /// <p><p/></p>
+/// see [Sqs::create_queue]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQueueRequest {
@@ -503,6 +510,7 @@ impl CreateQueueRequestSerializer {
 }
 
 /// <p>Returns the <code>QueueUrl</code> attribute of the created queue.</p>
+/// see [Sqs::create_queue]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateQueueResult {
@@ -530,6 +538,7 @@ impl CreateQueueResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::delete_message_batch]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMessageBatchRequest {
@@ -596,6 +605,7 @@ impl DeleteMessageBatchRequestEntryListSerializer {
 }
 
 /// <p>For each message in the batch, the response contains a <code> <a>DeleteMessageBatchResultEntry</a> </code> tag if the message is deleted or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message can't be deleted.</p>
+/// see [Sqs::delete_message_batch]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteMessageBatchResult {
@@ -702,6 +712,7 @@ impl DeleteMessageBatchResultEntryListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::delete_message]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMessageRequest {
@@ -729,6 +740,7 @@ impl DeleteMessageRequestSerializer {
 }
 
 /// <p><p/></p>
+/// see [Sqs::delete_queue]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueueRequest {
@@ -750,6 +762,7 @@ impl DeleteQueueRequestSerializer {
 }
 
 /// <p><p/></p>
+/// see [Sqs::get_queue_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueueAttributesRequest {
@@ -780,6 +793,7 @@ impl GetQueueAttributesRequestSerializer {
 }
 
 /// <p>A list of returned queue attributes.</p>
+/// see [Sqs::get_queue_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetQueueAttributesResult {
@@ -814,6 +828,7 @@ impl GetQueueAttributesResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::get_queue_url]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueueUrlRequest {
@@ -843,6 +858,7 @@ impl GetQueueUrlRequestSerializer {
 }
 
 /// <p>For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-api-responses.html">Interpreting Responses</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>
+/// see [Sqs::get_queue_url]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetQueueUrlResult {
@@ -870,6 +886,7 @@ impl GetQueueUrlResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::list_dead_letter_source_queues]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeadLetterSourceQueuesRequest {
@@ -879,6 +896,14 @@ pub struct ListDeadLetterSourceQueuesRequest {
     pub next_token: Option<String>,
     /// <p>The URL of a dead-letter queue.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
+}
+
+impl PagedRequest for ListDeadLetterSourceQueuesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListDeadLetterSourceQueuesRequest` contents to a `SignedRequest`.
@@ -901,6 +926,7 @@ impl ListDeadLetterSourceQueuesRequestSerializer {
 }
 
 /// <p>A list of your dead letter source queues.</p>
+/// see [Sqs::list_dead_letter_source_queues]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDeadLetterSourceQueuesResult {
@@ -908,6 +934,30 @@ pub struct ListDeadLetterSourceQueuesResult {
     pub next_token: Option<String>,
     /// <p>A list of source queue URLs that have the <code>RedrivePolicy</code> queue attribute configured with a dead-letter queue.</p>
     pub queue_urls: Vec<String>,
+}
+
+impl ListDeadLetterSourceQueuesResult {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.queue_urls.clone())
+    }
+}
+
+impl PagedOutput for ListDeadLetterSourceQueuesResult {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -937,6 +987,7 @@ impl ListDeadLetterSourceQueuesResultDeserializer {
         )
     }
 }
+/// see [Sqs::list_queue_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueueTagsRequest {
@@ -957,6 +1008,7 @@ impl ListQueueTagsRequestSerializer {
     }
 }
 
+/// see [Sqs::list_queue_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListQueueTagsResult {
@@ -984,6 +1036,7 @@ impl ListQueueTagsResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::list_queues]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
@@ -993,6 +1046,14 @@ pub struct ListQueuesRequest {
     pub next_token: Option<String>,
     /// <p>A string to use for filtering the list results. Only those queues whose name begins with the specified string are returned.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_name_prefix: Option<String>,
+}
+
+impl PagedRequest for ListQueuesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListQueuesRequest` contents to a `SignedRequest`.
@@ -1017,6 +1078,7 @@ impl ListQueuesRequestSerializer {
 }
 
 /// <p>A list of your queues.</p>
+/// see [Sqs::list_queues]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListQueuesResult {
@@ -1024,6 +1086,30 @@ pub struct ListQueuesResult {
     pub next_token: Option<String>,
     /// <p>A list of queue URLs, up to 1,000 entries, or the value of MaxResults that you sent in the request.</p>
     pub queue_urls: Option<Vec<String>>,
+}
+
+impl ListQueuesResult {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.queue_urls.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListQueuesResult {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1391,6 +1477,7 @@ impl MessageSystemAttributeValueSerializer {
 }
 
 /// <p><p/></p>
+/// see [Sqs::purge_queue]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurgeQueueRequest {
@@ -1486,6 +1573,7 @@ impl QueueUrlListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::receive_message]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReceiveMessageRequest {
@@ -1551,6 +1639,7 @@ impl ReceiveMessageRequestSerializer {
 }
 
 /// <p>A list of received messages.</p>
+/// see [Sqs::receive_message]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReceiveMessageResult {
@@ -1580,6 +1669,7 @@ impl ReceiveMessageResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::remove_permission]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
@@ -1604,6 +1694,7 @@ impl RemovePermissionRequestSerializer {
 }
 
 /// <p><p/></p>
+/// see [Sqs::send_message_batch]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendMessageBatchRequest {
@@ -1704,6 +1795,7 @@ impl SendMessageBatchRequestEntryListSerializer {
 }
 
 /// <p>For each message in the batch, the response contains a <code> <a>SendMessageBatchResultEntry</a> </code> tag if the message succeeds or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message fails.</p>
+/// see [Sqs::send_message_batch]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendMessageBatchResult {
@@ -1838,6 +1930,7 @@ impl SendMessageBatchResultEntryListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::send_message]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendMessageRequest {
@@ -1899,6 +1992,7 @@ impl SendMessageRequestSerializer {
 }
 
 /// <p>The <code>MD5OfMessageBody</code> and <code>MessageId</code> elements.</p>
+/// see [Sqs::send_message]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendMessageResult {
@@ -1954,6 +2048,7 @@ impl SendMessageResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Sqs::set_queue_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetQueueAttributesRequest {
@@ -2077,6 +2172,7 @@ impl TagMapSerializer {
     }
 }
 
+/// see [Sqs::tag_queue]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagQueueRequest {
@@ -2116,6 +2212,7 @@ impl TokenDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Sqs::untag_queue]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagQueueRequest {
@@ -3123,7 +3220,7 @@ impl fmt::Display for UntagQueueError {
 impl Error for UntagQueueError {}
 /// Trait representing the capabilities of the Amazon SQS API. Amazon SQS clients implement this trait.
 #[async_trait]
-pub trait Sqs {
+pub trait Sqs: Clone + Sync + Send + 'static {
     /// <p><p>Adds a permission to a queue for a specific <a href="https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-writing-an-sqs-policy.html#write-messages-to-shared-queue">Allow Developers to Write Messages to a Shared Queue</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <ul> <li> <p> <code>AddPermission</code> generates a policy for you. You can use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-creating-custom-policies.html">Using Custom Policies with the Amazon SQS Access Policy Language</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> <li> <p>An Amazon SQS policy can have a maximum of 7 actions.</p> </li> <li> <p>To remove the ability to change queue permissions, you must deny permission to the <code>AddPermission</code>, <code>RemovePermission</code>, and <code>SetQueueAttributes</code> actions in your IAM policy.</p> </li> </ul> </note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;AttributeName.1=first</code> </p> <p> <code>&amp;AttributeName.2=second</code> </p> <note> <p>Cross-account permissions don&#39;t apply to this action. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name">Grant cross-account permissions to a role and a user name</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </note></p>
     async fn add_permission(
         &self,
@@ -3184,6 +3281,16 @@ pub trait Sqs {
         input: ListDeadLetterSourceQueuesRequest,
     ) -> Result<ListDeadLetterSourceQueuesResult, RusotoError<ListDeadLetterSourceQueuesError>>;
 
+    /// Auto-paginating version of `list_dead_letter_source_queues`
+    fn list_dead_letter_source_queues_pages(
+        &self,
+        input: ListDeadLetterSourceQueuesRequest,
+    ) -> RusotoStream<String, ListDeadLetterSourceQueuesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dead_letter_source_queues(state.clone())
+        })
+    }
+
     /// <p><p>List all cost allocation tags added to the specified Amazon SQS queue. For an overview, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-tags.html">Tagging Your Amazon SQS Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <p>Cross-account permissions don&#39;t apply to this action. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name">Grant cross-account permissions to a role and a user name</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </note></p>
     async fn list_queue_tags(
         &self,
@@ -3195,6 +3302,13 @@ pub trait Sqs {
         &self,
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResult, RusotoError<ListQueuesError>>;
+
+    /// Auto-paginating version of `list_queues`
+    fn list_queues_pages(&self, input: ListQueuesRequest) -> RusotoStream<String, ListQueuesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_queues(state.clone())
+        })
+    }
 
     /// <p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve any messages deleted from a queue.</p> <p>The message deletion process takes up to 60 seconds. We recommend waiting for 60 seconds regardless of your queue's size. </p> </important> <p>Messages sent to the queue <i>before</i> you call <code>PurgeQueue</code> might be received but are deleted within the next minute.</p> <p>Messages sent to the queue <i>after</i> you call <code>PurgeQueue</code> might be deleted while the queue is being purged.</p>
     async fn purge_queue(

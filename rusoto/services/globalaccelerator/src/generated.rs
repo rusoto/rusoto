@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -111,6 +113,7 @@ pub struct AcceleratorAttributes {
     pub flow_logs_s3_prefix: Option<String>,
 }
 
+/// see [GlobalAccelerator::add_custom_routing_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCustomRoutingEndpointsRequest {
@@ -122,6 +125,7 @@ pub struct AddCustomRoutingEndpointsRequest {
     pub endpoint_group_arn: String,
 }
 
+/// see [GlobalAccelerator::add_custom_routing_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddCustomRoutingEndpointsResponse {
@@ -135,6 +139,7 @@ pub struct AddCustomRoutingEndpointsResponse {
     pub endpoint_group_arn: Option<String>,
 }
 
+/// see [GlobalAccelerator::advertise_byoip_cidr]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdvertiseByoipCidrRequest {
@@ -143,6 +148,7 @@ pub struct AdvertiseByoipCidrRequest {
     pub cidr: String,
 }
 
+/// see [GlobalAccelerator::advertise_byoip_cidr]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdvertiseByoipCidrResponse {
@@ -152,6 +158,7 @@ pub struct AdvertiseByoipCidrResponse {
     pub byoip_cidr: Option<ByoipCidr>,
 }
 
+/// see [GlobalAccelerator::allow_custom_routing_traffic]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllowCustomRoutingTrafficRequest {
@@ -219,6 +226,7 @@ pub struct CidrAuthorizationContext {
     pub signature: String,
 }
 
+/// see [GlobalAccelerator::create_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAcceleratorRequest {
@@ -246,6 +254,7 @@ pub struct CreateAcceleratorRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [GlobalAccelerator::create_accelerator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAcceleratorResponse {
@@ -255,6 +264,7 @@ pub struct CreateAcceleratorResponse {
     pub accelerator: Option<Accelerator>,
 }
 
+/// see [GlobalAccelerator::create_custom_routing_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomRoutingAcceleratorRequest {
@@ -278,6 +288,7 @@ pub struct CreateCustomRoutingAcceleratorRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [GlobalAccelerator::create_custom_routing_accelerator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomRoutingAcceleratorResponse {
@@ -287,6 +298,7 @@ pub struct CreateCustomRoutingAcceleratorResponse {
     pub accelerator: Option<CustomRoutingAccelerator>,
 }
 
+/// see [GlobalAccelerator::create_custom_routing_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomRoutingEndpointGroupRequest {
@@ -304,6 +316,7 @@ pub struct CreateCustomRoutingEndpointGroupRequest {
     pub listener_arn: String,
 }
 
+/// see [GlobalAccelerator::create_custom_routing_endpoint_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomRoutingEndpointGroupResponse {
@@ -313,6 +326,7 @@ pub struct CreateCustomRoutingEndpointGroupResponse {
     pub endpoint_group: Option<CustomRoutingEndpointGroup>,
 }
 
+/// see [GlobalAccelerator::create_custom_routing_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomRoutingListenerRequest {
@@ -327,6 +341,7 @@ pub struct CreateCustomRoutingListenerRequest {
     pub port_ranges: Vec<PortRange>,
 }
 
+/// see [GlobalAccelerator::create_custom_routing_listener]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomRoutingListenerResponse {
@@ -336,6 +351,7 @@ pub struct CreateCustomRoutingListenerResponse {
     pub listener: Option<CustomRoutingListener>,
 }
 
+/// see [GlobalAccelerator::create_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointGroupRequest {
@@ -382,6 +398,7 @@ pub struct CreateEndpointGroupRequest {
     pub traffic_dial_percentage: Option<f32>,
 }
 
+/// see [GlobalAccelerator::create_endpoint_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointGroupResponse {
@@ -391,6 +408,7 @@ pub struct CreateEndpointGroupResponse {
     pub endpoint_group: Option<EndpointGroup>,
 }
 
+/// see [GlobalAccelerator::create_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateListenerRequest {
@@ -412,6 +430,7 @@ pub struct CreateListenerRequest {
     pub protocol: String,
 }
 
+/// see [GlobalAccelerator::create_listener]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateListenerResponse {
@@ -570,6 +589,7 @@ pub struct CustomRoutingListener {
     pub port_ranges: Option<Vec<PortRange>>,
 }
 
+/// see [GlobalAccelerator::delete_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAcceleratorRequest {
@@ -578,6 +598,7 @@ pub struct DeleteAcceleratorRequest {
     pub accelerator_arn: String,
 }
 
+/// see [GlobalAccelerator::delete_custom_routing_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomRoutingAcceleratorRequest {
@@ -586,6 +607,7 @@ pub struct DeleteCustomRoutingAcceleratorRequest {
     pub accelerator_arn: String,
 }
 
+/// see [GlobalAccelerator::delete_custom_routing_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomRoutingEndpointGroupRequest {
@@ -594,6 +616,7 @@ pub struct DeleteCustomRoutingEndpointGroupRequest {
     pub endpoint_group_arn: String,
 }
 
+/// see [GlobalAccelerator::delete_custom_routing_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomRoutingListenerRequest {
@@ -602,6 +625,7 @@ pub struct DeleteCustomRoutingListenerRequest {
     pub listener_arn: String,
 }
 
+/// see [GlobalAccelerator::delete_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointGroupRequest {
@@ -610,6 +634,7 @@ pub struct DeleteEndpointGroupRequest {
     pub endpoint_group_arn: String,
 }
 
+/// see [GlobalAccelerator::delete_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteListenerRequest {
@@ -618,6 +643,7 @@ pub struct DeleteListenerRequest {
     pub listener_arn: String,
 }
 
+/// see [GlobalAccelerator::deny_custom_routing_traffic]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DenyCustomRoutingTrafficRequest {
@@ -641,6 +667,7 @@ pub struct DenyCustomRoutingTrafficRequest {
     pub endpoint_id: String,
 }
 
+/// see [GlobalAccelerator::deprovision_byoip_cidr]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprovisionByoipCidrRequest {
@@ -649,6 +676,7 @@ pub struct DeprovisionByoipCidrRequest {
     pub cidr: String,
 }
 
+/// see [GlobalAccelerator::deprovision_byoip_cidr]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprovisionByoipCidrResponse {
@@ -658,6 +686,7 @@ pub struct DeprovisionByoipCidrResponse {
     pub byoip_cidr: Option<ByoipCidr>,
 }
 
+/// see [GlobalAccelerator::describe_accelerator_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorAttributesRequest {
@@ -666,6 +695,7 @@ pub struct DescribeAcceleratorAttributesRequest {
     pub accelerator_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_accelerator_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorAttributesResponse {
@@ -675,6 +705,7 @@ pub struct DescribeAcceleratorAttributesResponse {
     pub accelerator_attributes: Option<AcceleratorAttributes>,
 }
 
+/// see [GlobalAccelerator::describe_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorRequest {
@@ -683,6 +714,7 @@ pub struct DescribeAcceleratorRequest {
     pub accelerator_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_accelerator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorResponse {
@@ -692,6 +724,7 @@ pub struct DescribeAcceleratorResponse {
     pub accelerator: Option<Accelerator>,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_accelerator_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomRoutingAcceleratorAttributesRequest {
@@ -700,6 +733,7 @@ pub struct DescribeCustomRoutingAcceleratorAttributesRequest {
     pub accelerator_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_accelerator_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCustomRoutingAcceleratorAttributesResponse {
@@ -709,6 +743,7 @@ pub struct DescribeCustomRoutingAcceleratorAttributesResponse {
     pub accelerator_attributes: Option<CustomRoutingAcceleratorAttributes>,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomRoutingAcceleratorRequest {
@@ -717,6 +752,7 @@ pub struct DescribeCustomRoutingAcceleratorRequest {
     pub accelerator_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_accelerator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCustomRoutingAcceleratorResponse {
@@ -726,6 +762,7 @@ pub struct DescribeCustomRoutingAcceleratorResponse {
     pub accelerator: Option<CustomRoutingAccelerator>,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomRoutingEndpointGroupRequest {
@@ -734,6 +771,7 @@ pub struct DescribeCustomRoutingEndpointGroupRequest {
     pub endpoint_group_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_endpoint_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCustomRoutingEndpointGroupResponse {
@@ -743,6 +781,7 @@ pub struct DescribeCustomRoutingEndpointGroupResponse {
     pub endpoint_group: Option<CustomRoutingEndpointGroup>,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomRoutingListenerRequest {
@@ -751,6 +790,7 @@ pub struct DescribeCustomRoutingListenerRequest {
     pub listener_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_custom_routing_listener]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCustomRoutingListenerResponse {
@@ -760,6 +800,7 @@ pub struct DescribeCustomRoutingListenerResponse {
     pub listener: Option<CustomRoutingListener>,
 }
 
+/// see [GlobalAccelerator::describe_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointGroupRequest {
@@ -768,6 +809,7 @@ pub struct DescribeEndpointGroupRequest {
     pub endpoint_group_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_endpoint_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointGroupResponse {
@@ -777,6 +819,7 @@ pub struct DescribeEndpointGroupResponse {
     pub endpoint_group: Option<EndpointGroup>,
 }
 
+/// see [GlobalAccelerator::describe_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeListenerRequest {
@@ -785,6 +828,7 @@ pub struct DescribeListenerRequest {
     pub listener_arn: String,
 }
 
+/// see [GlobalAccelerator::describe_listener]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeListenerResponse {
@@ -936,6 +980,7 @@ pub struct IpSet {
     pub ip_family: Option<String>,
 }
 
+/// see [GlobalAccelerator::list_accelerators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAcceleratorsRequest {
@@ -949,6 +994,15 @@ pub struct ListAcceleratorsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAcceleratorsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_accelerators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAcceleratorsResponse {
@@ -962,6 +1016,31 @@ pub struct ListAcceleratorsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAcceleratorsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Accelerator>> {
+        Some(self.accelerators.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAcceleratorsResponse {
+    type Item = Accelerator;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Accelerator> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_byoip_cidrs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListByoipCidrsRequest {
@@ -975,6 +1054,15 @@ pub struct ListByoipCidrsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListByoipCidrsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_byoip_cidrs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListByoipCidrsResponse {
@@ -988,6 +1076,31 @@ pub struct ListByoipCidrsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListByoipCidrsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ByoipCidr>> {
+        Some(self.byoip_cidrs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListByoipCidrsResponse {
+    type Item = ByoipCidr;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ByoipCidr> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_accelerators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomRoutingAcceleratorsRequest {
@@ -1001,6 +1114,15 @@ pub struct ListCustomRoutingAcceleratorsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListCustomRoutingAcceleratorsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_accelerators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCustomRoutingAcceleratorsResponse {
@@ -1014,6 +1136,31 @@ pub struct ListCustomRoutingAcceleratorsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListCustomRoutingAcceleratorsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<CustomRoutingAccelerator>> {
+        Some(self.accelerators.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCustomRoutingAcceleratorsResponse {
+    type Item = CustomRoutingAccelerator;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CustomRoutingAccelerator> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_endpoint_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomRoutingEndpointGroupsRequest {
@@ -1030,6 +1177,7 @@ pub struct ListCustomRoutingEndpointGroupsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [GlobalAccelerator::list_custom_routing_endpoint_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCustomRoutingEndpointGroupsResponse {
@@ -1043,6 +1191,7 @@ pub struct ListCustomRoutingEndpointGroupsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [GlobalAccelerator::list_custom_routing_listeners]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomRoutingListenersRequest {
@@ -1059,6 +1208,15 @@ pub struct ListCustomRoutingListenersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListCustomRoutingListenersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_listeners]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCustomRoutingListenersResponse {
@@ -1072,6 +1230,31 @@ pub struct ListCustomRoutingListenersResponse {
     pub next_token: Option<String>,
 }
 
+impl ListCustomRoutingListenersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<CustomRoutingListener>> {
+        Some(self.listeners.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCustomRoutingListenersResponse {
+    type Item = CustomRoutingListener;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CustomRoutingListener> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_port_mappings_by_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomRoutingPortMappingsByDestinationRequest {
@@ -1091,6 +1274,15 @@ pub struct ListCustomRoutingPortMappingsByDestinationRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListCustomRoutingPortMappingsByDestinationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_port_mappings_by_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCustomRoutingPortMappingsByDestinationResponse {
@@ -1104,6 +1296,31 @@ pub struct ListCustomRoutingPortMappingsByDestinationResponse {
     pub next_token: Option<String>,
 }
 
+impl ListCustomRoutingPortMappingsByDestinationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DestinationPortMapping>> {
+        Some(self.destination_port_mappings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCustomRoutingPortMappingsByDestinationResponse {
+    type Item = DestinationPortMapping;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DestinationPortMapping> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_port_mappings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomRoutingPortMappingsRequest {
@@ -1124,6 +1341,15 @@ pub struct ListCustomRoutingPortMappingsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListCustomRoutingPortMappingsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_custom_routing_port_mappings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCustomRoutingPortMappingsResponse {
@@ -1137,6 +1363,31 @@ pub struct ListCustomRoutingPortMappingsResponse {
     pub port_mappings: Option<Vec<PortMapping>>,
 }
 
+impl ListCustomRoutingPortMappingsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PortMapping>> {
+        Some(self.port_mappings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCustomRoutingPortMappingsResponse {
+    type Item = PortMapping;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PortMapping> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_endpoint_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointGroupsRequest {
@@ -1153,6 +1404,15 @@ pub struct ListEndpointGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListEndpointGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_endpoint_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEndpointGroupsResponse {
@@ -1166,6 +1426,31 @@ pub struct ListEndpointGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListEndpointGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<EndpointGroup>> {
+        Some(self.endpoint_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListEndpointGroupsResponse {
+    type Item = EndpointGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EndpointGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_listeners]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListListenersRequest {
@@ -1182,6 +1467,15 @@ pub struct ListListenersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListListenersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GlobalAccelerator::list_listeners]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListListenersResponse {
@@ -1195,6 +1489,31 @@ pub struct ListListenersResponse {
     pub next_token: Option<String>,
 }
 
+impl ListListenersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Listener>> {
+        Some(self.listeners.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListListenersResponse {
+    type Item = Listener;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Listener> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GlobalAccelerator::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1203,6 +1522,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [GlobalAccelerator::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1290,6 +1610,7 @@ pub struct PortRange {
     pub to_port: Option<i64>,
 }
 
+/// see [GlobalAccelerator::provision_byoip_cidr]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvisionByoipCidrRequest {
@@ -1301,6 +1622,7 @@ pub struct ProvisionByoipCidrRequest {
     pub cidr_authorization_context: CidrAuthorizationContext,
 }
 
+/// see [GlobalAccelerator::provision_byoip_cidr]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisionByoipCidrResponse {
@@ -1310,6 +1632,7 @@ pub struct ProvisionByoipCidrResponse {
     pub byoip_cidr: Option<ByoipCidr>,
 }
 
+/// see [GlobalAccelerator::remove_custom_routing_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveCustomRoutingEndpointsRequest {
@@ -1346,6 +1669,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [GlobalAccelerator::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1357,10 +1681,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [GlobalAccelerator::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [GlobalAccelerator::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1372,10 +1698,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [GlobalAccelerator::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [GlobalAccelerator::update_accelerator_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAcceleratorAttributesRequest {
@@ -1396,6 +1724,7 @@ pub struct UpdateAcceleratorAttributesRequest {
     pub flow_logs_s3_prefix: Option<String>,
 }
 
+/// see [GlobalAccelerator::update_accelerator_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAcceleratorAttributesResponse {
@@ -1405,6 +1734,7 @@ pub struct UpdateAcceleratorAttributesResponse {
     pub accelerator_attributes: Option<AcceleratorAttributes>,
 }
 
+/// see [GlobalAccelerator::update_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAcceleratorRequest {
@@ -1425,6 +1755,7 @@ pub struct UpdateAcceleratorRequest {
     pub name: Option<String>,
 }
 
+/// see [GlobalAccelerator::update_accelerator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAcceleratorResponse {
@@ -1434,6 +1765,7 @@ pub struct UpdateAcceleratorResponse {
     pub accelerator: Option<Accelerator>,
 }
 
+/// see [GlobalAccelerator::update_custom_routing_accelerator_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomRoutingAcceleratorAttributesRequest {
@@ -1454,6 +1786,7 @@ pub struct UpdateCustomRoutingAcceleratorAttributesRequest {
     pub flow_logs_s3_prefix: Option<String>,
 }
 
+/// see [GlobalAccelerator::update_custom_routing_accelerator_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCustomRoutingAcceleratorAttributesResponse {
@@ -1463,6 +1796,7 @@ pub struct UpdateCustomRoutingAcceleratorAttributesResponse {
     pub accelerator_attributes: Option<CustomRoutingAcceleratorAttributes>,
 }
 
+/// see [GlobalAccelerator::update_custom_routing_accelerator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomRoutingAcceleratorRequest {
@@ -1483,6 +1817,7 @@ pub struct UpdateCustomRoutingAcceleratorRequest {
     pub name: Option<String>,
 }
 
+/// see [GlobalAccelerator::update_custom_routing_accelerator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCustomRoutingAcceleratorResponse {
@@ -1492,6 +1827,7 @@ pub struct UpdateCustomRoutingAcceleratorResponse {
     pub accelerator: Option<CustomRoutingAccelerator>,
 }
 
+/// see [GlobalAccelerator::update_custom_routing_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomRoutingListenerRequest {
@@ -1503,6 +1839,7 @@ pub struct UpdateCustomRoutingListenerRequest {
     pub port_ranges: Vec<PortRange>,
 }
 
+/// see [GlobalAccelerator::update_custom_routing_listener]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCustomRoutingListenerResponse {
@@ -1512,6 +1849,7 @@ pub struct UpdateCustomRoutingListenerResponse {
     pub listener: Option<CustomRoutingListener>,
 }
 
+/// see [GlobalAccelerator::update_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointGroupRequest {
@@ -1552,6 +1890,7 @@ pub struct UpdateEndpointGroupRequest {
     pub traffic_dial_percentage: Option<f32>,
 }
 
+/// see [GlobalAccelerator::update_endpoint_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointGroupResponse {
@@ -1561,6 +1900,7 @@ pub struct UpdateEndpointGroupResponse {
     pub endpoint_group: Option<EndpointGroup>,
 }
 
+/// see [GlobalAccelerator::update_listener]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateListenerRequest {
@@ -1581,6 +1921,7 @@ pub struct UpdateListenerRequest {
     pub protocol: Option<String>,
 }
 
+/// see [GlobalAccelerator::update_listener]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateListenerResponse {
@@ -1590,6 +1931,7 @@ pub struct UpdateListenerResponse {
     pub listener: Option<Listener>,
 }
 
+/// see [GlobalAccelerator::withdraw_byoip_cidr]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WithdrawByoipCidrRequest {
@@ -1598,6 +1940,7 @@ pub struct WithdrawByoipCidrRequest {
     pub cidr: String,
 }
 
+/// see [GlobalAccelerator::withdraw_byoip_cidr]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WithdrawByoipCidrResponse {
@@ -4341,7 +4684,7 @@ impl fmt::Display for WithdrawByoipCidrError {
 impl Error for WithdrawByoipCidrError {}
 /// Trait representing the capabilities of the AWS Global Accelerator API. AWS Global Accelerator clients implement this trait.
 #[async_trait]
-pub trait GlobalAccelerator {
+pub trait GlobalAccelerator: Clone + Sync + Send + 'static {
     /// <p>Associate a virtual private cloud (VPC) subnet endpoint with your custom routing accelerator.</p> <p>The listener port range must be large enough to support the number of IP addresses that can be specified in your subnet. The number of ports required is: subnet size times the number of ports per destination EC2 instances. For example, a subnet defined as /24 requires a listener port range of at least 255 ports. </p> <p>Note: You must have enough remaining listener ports available to map to the subnet ports, or the call will fail with a LimitExceededException.</p> <p>By default, all destinations in a subnet in a custom routing accelerator cannot receive traffic. To enable all destinations to receive traffic, or to specify individual port mappings that can receive traffic, see the <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/API_AllowCustomRoutingTraffic.html"> AllowCustomRoutingTraffic</a> operation.</p>
     async fn add_custom_routing_endpoints(
         &self,
@@ -4519,11 +4862,31 @@ pub trait GlobalAccelerator {
         input: ListAcceleratorsRequest,
     ) -> Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>>;
 
+    /// Auto-paginating version of `list_accelerators`
+    fn list_accelerators_pages(
+        &self,
+        input: ListAcceleratorsRequest,
+    ) -> RusotoStream<Accelerator, ListAcceleratorsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_accelerators(state.clone())
+        })
+    }
+
     /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p>
     async fn list_byoip_cidrs(
         &self,
         input: ListByoipCidrsRequest,
     ) -> Result<ListByoipCidrsResponse, RusotoError<ListByoipCidrsError>>;
+
+    /// Auto-paginating version of `list_byoip_cidrs`
+    fn list_byoip_cidrs_pages(
+        &self,
+        input: ListByoipCidrsRequest,
+    ) -> RusotoStream<ByoipCidr, ListByoipCidrsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_byoip_cidrs(state.clone())
+        })
+    }
 
     /// <p>List the custom routing accelerators for an AWS account. </p>
     async fn list_custom_routing_accelerators(
@@ -4533,6 +4896,16 @@ pub trait GlobalAccelerator {
         ListCustomRoutingAcceleratorsResponse,
         RusotoError<ListCustomRoutingAcceleratorsError>,
     >;
+
+    /// Auto-paginating version of `list_custom_routing_accelerators`
+    fn list_custom_routing_accelerators_pages(
+        &self,
+        input: ListCustomRoutingAcceleratorsRequest,
+    ) -> RusotoStream<CustomRoutingAccelerator, ListCustomRoutingAcceleratorsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_custom_routing_accelerators(state.clone())
+        })
+    }
 
     /// <p>List the endpoint groups that are associated with a listener for a custom routing accelerator. </p>
     async fn list_custom_routing_endpoint_groups(
@@ -4549,6 +4922,16 @@ pub trait GlobalAccelerator {
         input: ListCustomRoutingListenersRequest,
     ) -> Result<ListCustomRoutingListenersResponse, RusotoError<ListCustomRoutingListenersError>>;
 
+    /// Auto-paginating version of `list_custom_routing_listeners`
+    fn list_custom_routing_listeners_pages(
+        &self,
+        input: ListCustomRoutingListenersRequest,
+    ) -> RusotoStream<CustomRoutingListener, ListCustomRoutingListenersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_custom_routing_listeners(state.clone())
+        })
+    }
+
     /// <p>Provides a complete mapping from the public accelerator IP address and port to destination EC2 instance IP addresses and ports in the virtual public cloud (VPC) subnet endpoint for a custom routing accelerator. For each subnet endpoint that you add, Global Accelerator creates a new static port mapping for the accelerator. The port mappings don't change after Global Accelerator generates them, so you can retrieve and cache the full mapping on your servers. </p> <p>If you remove a subnet from your accelerator, Global Accelerator removes (reclaims) the port mappings. If you add a subnet to your accelerator, Global Accelerator creates new port mappings (the existing ones don't change). If you add or remove EC2 instances in your subnet, the port mappings don't change, because the mappings are created when you add the subnet to Global Accelerator.</p> <p>The mappings also include a flag for each destination denoting which destination IP addresses and ports are allowed or denied traffic.</p>
     async fn list_custom_routing_port_mappings(
         &self,
@@ -4557,6 +4940,16 @@ pub trait GlobalAccelerator {
         ListCustomRoutingPortMappingsResponse,
         RusotoError<ListCustomRoutingPortMappingsError>,
     >;
+
+    /// Auto-paginating version of `list_custom_routing_port_mappings`
+    fn list_custom_routing_port_mappings_pages(
+        &self,
+        input: ListCustomRoutingPortMappingsRequest,
+    ) -> RusotoStream<PortMapping, ListCustomRoutingPortMappingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_custom_routing_port_mappings(state.clone())
+        })
+    }
 
     /// <p>List the port mappings for a specific EC2 instance (destination) in a VPC subnet endpoint. The response is the mappings for one destination IP address. This is useful when your subnet endpoint has mappings that span multiple custom routing accelerators in your account, or for scenarios where you only want to list the port mappings for a specific destination instance.</p>
     async fn list_custom_routing_port_mappings_by_destination(
@@ -4567,17 +4960,47 @@ pub trait GlobalAccelerator {
         RusotoError<ListCustomRoutingPortMappingsByDestinationError>,
     >;
 
+    /// Auto-paginating version of `list_custom_routing_port_mappings_by_destination`
+    fn list_custom_routing_port_mappings_by_destination_pages(
+        &self,
+        input: ListCustomRoutingPortMappingsByDestinationRequest,
+    ) -> RusotoStream<DestinationPortMapping, ListCustomRoutingPortMappingsByDestinationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_custom_routing_port_mappings_by_destination(state.clone())
+        })
+    }
+
     /// <p>List the endpoint groups that are associated with a listener. </p>
     async fn list_endpoint_groups(
         &self,
         input: ListEndpointGroupsRequest,
     ) -> Result<ListEndpointGroupsResponse, RusotoError<ListEndpointGroupsError>>;
 
+    /// Auto-paginating version of `list_endpoint_groups`
+    fn list_endpoint_groups_pages(
+        &self,
+        input: ListEndpointGroupsRequest,
+    ) -> RusotoStream<EndpointGroup, ListEndpointGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_endpoint_groups(state.clone())
+        })
+    }
+
     /// <p>List the listeners for an accelerator. </p>
     async fn list_listeners(
         &self,
         input: ListListenersRequest,
     ) -> Result<ListListenersResponse, RusotoError<ListListenersError>>;
+
+    /// Auto-paginating version of `list_listeners`
+    fn list_listeners_pages(
+        &self,
+        input: ListListenersRequest,
+    ) -> RusotoStream<Listener, ListListenersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_listeners(state.clone())
+        })
+    }
 
     /// <p>List all tags for an accelerator. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
     async fn list_tags_for_resource(

@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl CodeBuildClient {
 }
 
 use serde_json;
+/// see [CodeBuild::batch_delete_builds]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteBuildsInput {
@@ -58,6 +61,7 @@ pub struct BatchDeleteBuildsInput {
     pub ids: Vec<String>,
 }
 
+/// see [CodeBuild::batch_delete_builds]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteBuildsOutput {
@@ -71,6 +75,7 @@ pub struct BatchDeleteBuildsOutput {
     pub builds_not_deleted: Option<Vec<BuildNotDeleted>>,
 }
 
+/// see [CodeBuild::batch_get_build_batches]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetBuildBatchesInput {
@@ -79,6 +84,7 @@ pub struct BatchGetBuildBatchesInput {
     pub ids: Vec<String>,
 }
 
+/// see [CodeBuild::batch_get_build_batches]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetBuildBatchesOutput {
@@ -92,6 +98,7 @@ pub struct BatchGetBuildBatchesOutput {
     pub build_batches_not_found: Option<Vec<String>>,
 }
 
+/// see [CodeBuild::batch_get_builds]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetBuildsInput {
@@ -100,6 +107,7 @@ pub struct BatchGetBuildsInput {
     pub ids: Vec<String>,
 }
 
+/// see [CodeBuild::batch_get_builds]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetBuildsOutput {
@@ -113,6 +121,7 @@ pub struct BatchGetBuildsOutput {
     pub builds_not_found: Option<Vec<String>>,
 }
 
+/// see [CodeBuild::batch_get_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetProjectsInput {
@@ -121,6 +130,7 @@ pub struct BatchGetProjectsInput {
     pub names: Vec<String>,
 }
 
+/// see [CodeBuild::batch_get_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetProjectsOutput {
@@ -134,6 +144,7 @@ pub struct BatchGetProjectsOutput {
     pub projects_not_found: Option<Vec<String>>,
 }
 
+/// see [CodeBuild::batch_get_report_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetReportGroupsInput {
@@ -142,6 +153,7 @@ pub struct BatchGetReportGroupsInput {
     pub report_group_arns: Vec<String>,
 }
 
+/// see [CodeBuild::batch_get_report_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetReportGroupsOutput {
@@ -155,6 +167,7 @@ pub struct BatchGetReportGroupsOutput {
     pub report_groups_not_found: Option<Vec<String>>,
 }
 
+/// see [CodeBuild::batch_get_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetReportsInput {
@@ -163,6 +176,7 @@ pub struct BatchGetReportsInput {
     pub report_arns: Vec<String>,
 }
 
+/// see [CodeBuild::batch_get_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetReportsOutput {
@@ -710,6 +724,7 @@ pub struct CodeCoverageReportSummary {
     pub lines_missed: Option<i64>,
 }
 
+/// see [CodeBuild::create_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectInput {
@@ -790,6 +805,7 @@ pub struct CreateProjectInput {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [CodeBuild::create_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectOutput {
@@ -799,6 +815,7 @@ pub struct CreateProjectOutput {
     pub project: Option<Project>,
 }
 
+/// see [CodeBuild::create_report_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReportGroupInput {
@@ -817,6 +834,7 @@ pub struct CreateReportGroupInput {
     pub type_: String,
 }
 
+/// see [CodeBuild::create_report_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReportGroupOutput {
@@ -826,6 +844,7 @@ pub struct CreateReportGroupOutput {
     pub report_group: Option<ReportGroup>,
 }
 
+/// see [CodeBuild::create_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebhookInput {
@@ -846,6 +865,7 @@ pub struct CreateWebhookInput {
     pub project_name: String,
 }
 
+/// see [CodeBuild::create_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebhookOutput {
@@ -869,6 +889,7 @@ pub struct DebugSession {
     pub session_target: Option<String>,
 }
 
+/// see [CodeBuild::delete_build_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBuildBatchInput {
@@ -877,6 +898,7 @@ pub struct DeleteBuildBatchInput {
     pub id: String,
 }
 
+/// see [CodeBuild::delete_build_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBuildBatchOutput {
@@ -894,6 +916,7 @@ pub struct DeleteBuildBatchOutput {
     pub status_code: Option<String>,
 }
 
+/// see [CodeBuild::delete_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectInput {
@@ -902,10 +925,12 @@ pub struct DeleteProjectInput {
     pub name: String,
 }
 
+/// see [CodeBuild::delete_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectOutput {}
 
+/// see [CodeBuild::delete_report_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReportGroupInput {
@@ -918,10 +943,12 @@ pub struct DeleteReportGroupInput {
     pub delete_reports: Option<bool>,
 }
 
+/// see [CodeBuild::delete_report_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReportGroupOutput {}
 
+/// see [CodeBuild::delete_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReportInput {
@@ -930,10 +957,12 @@ pub struct DeleteReportInput {
     pub arn: String,
 }
 
+/// see [CodeBuild::delete_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReportOutput {}
 
+/// see [CodeBuild::delete_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyInput {
@@ -942,10 +971,12 @@ pub struct DeleteResourcePolicyInput {
     pub resource_arn: String,
 }
 
+/// see [CodeBuild::delete_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcePolicyOutput {}
 
+/// see [CodeBuild::delete_source_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSourceCredentialsInput {
@@ -954,6 +985,7 @@ pub struct DeleteSourceCredentialsInput {
     pub arn: String,
 }
 
+/// see [CodeBuild::delete_source_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSourceCredentialsOutput {
@@ -963,6 +995,7 @@ pub struct DeleteSourceCredentialsOutput {
     pub arn: Option<String>,
 }
 
+/// see [CodeBuild::delete_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookInput {
@@ -971,10 +1004,12 @@ pub struct DeleteWebhookInput {
     pub project_name: String,
 }
 
+/// see [CodeBuild::delete_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookOutput {}
 
+/// see [CodeBuild::describe_code_coverages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeCoveragesInput {
@@ -1007,6 +1042,15 @@ pub struct DescribeCodeCoveragesInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for DescribeCodeCoveragesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::describe_code_coverages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCodeCoveragesOutput {
@@ -1020,6 +1064,31 @@ pub struct DescribeCodeCoveragesOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeCodeCoveragesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<CodeCoverage>> {
+        Some(self.code_coverages.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeCodeCoveragesOutput {
+    type Item = CodeCoverage;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CodeCoverage> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::describe_test_cases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTestCasesInput {
@@ -1040,6 +1109,15 @@ pub struct DescribeTestCasesInput {
     pub report_arn: String,
 }
 
+impl PagedRequest for DescribeTestCasesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::describe_test_cases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTestCasesOutput {
@@ -1051,6 +1129,30 @@ pub struct DescribeTestCasesOutput {
     #[serde(rename = "testCases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub test_cases: Option<Vec<TestCase>>,
+}
+
+impl DescribeTestCasesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<TestCase>> {
+        Some(self.test_cases.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeTestCasesOutput {
+    type Item = TestCase;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TestCase> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Information about a Docker image that is managed by AWS CodeBuild.</p>
@@ -1128,6 +1230,7 @@ pub struct ExportedEnvironmentVariable {
     pub value: Option<String>,
 }
 
+/// see [CodeBuild::get_report_group_trend]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReportGroupTrendInput {
@@ -1140,6 +1243,7 @@ pub struct GetReportGroupTrendInput {
     pub trend_field: String,
 }
 
+/// see [CodeBuild::get_report_group_trend]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReportGroupTrendOutput {
@@ -1151,6 +1255,7 @@ pub struct GetReportGroupTrendOutput {
     pub stats: Option<ReportGroupTrendStats>,
 }
 
+/// see [CodeBuild::get_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePolicyInput {
@@ -1159,6 +1264,7 @@ pub struct GetResourcePolicyInput {
     pub resource_arn: String,
 }
 
+/// see [CodeBuild::get_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePolicyOutput {
@@ -1176,6 +1282,7 @@ pub struct GitSubmodulesConfig {
     pub fetch_submodules: bool,
 }
 
+/// see [CodeBuild::import_source_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSourceCredentialsInput {
@@ -1198,6 +1305,7 @@ pub struct ImportSourceCredentialsInput {
     pub username: Option<String>,
 }
 
+/// see [CodeBuild::import_source_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportSourceCredentialsOutput {
@@ -1207,6 +1315,7 @@ pub struct ImportSourceCredentialsOutput {
     pub arn: Option<String>,
 }
 
+/// see [CodeBuild::invalidate_project_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvalidateProjectCacheInput {
@@ -1215,10 +1324,12 @@ pub struct InvalidateProjectCacheInput {
     pub project_name: String,
 }
 
+/// see [CodeBuild::invalidate_project_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvalidateProjectCacheOutput {}
 
+/// see [CodeBuild::list_build_batches_for_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildBatchesForProjectInput {
@@ -1244,6 +1355,15 @@ pub struct ListBuildBatchesForProjectInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListBuildBatchesForProjectInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_build_batches_for_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildBatchesForProjectOutput {
@@ -1257,6 +1377,31 @@ pub struct ListBuildBatchesForProjectOutput {
     pub next_token: Option<String>,
 }
 
+impl ListBuildBatchesForProjectOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBuildBatchesForProjectOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_build_batches]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildBatchesInput {
@@ -1278,6 +1423,15 @@ pub struct ListBuildBatchesInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListBuildBatchesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_build_batches]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildBatchesOutput {
@@ -1291,6 +1445,31 @@ pub struct ListBuildBatchesOutput {
     pub next_token: Option<String>,
 }
 
+impl ListBuildBatchesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBuildBatchesOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_builds_for_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildsForProjectInput {
@@ -1307,6 +1486,15 @@ pub struct ListBuildsForProjectInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListBuildsForProjectInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_builds_for_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsForProjectOutput {
@@ -1320,6 +1508,31 @@ pub struct ListBuildsForProjectOutput {
     pub next_token: Option<String>,
 }
 
+impl ListBuildsForProjectOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBuildsForProjectOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_builds]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildsInput {
@@ -1333,6 +1546,15 @@ pub struct ListBuildsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListBuildsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_builds]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsOutput {
@@ -1346,10 +1568,36 @@ pub struct ListBuildsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListBuildsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBuildsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_curated_environment_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCuratedEnvironmentImagesInput {}
 
+/// see [CodeBuild::list_curated_environment_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCuratedEnvironmentImagesOutput {
@@ -1359,6 +1607,7 @@ pub struct ListCuratedEnvironmentImagesOutput {
     pub platforms: Option<Vec<EnvironmentPlatform>>,
 }
 
+/// see [CodeBuild::list_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsInput {
@@ -1376,6 +1625,15 @@ pub struct ListProjectsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListProjectsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsOutput {
@@ -1389,6 +1647,31 @@ pub struct ListProjectsOutput {
     pub projects: Option<Vec<String>>,
 }
 
+impl ListProjectsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.projects.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListProjectsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_report_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReportGroupsInput {
@@ -1410,6 +1693,15 @@ pub struct ListReportGroupsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListReportGroupsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_report_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReportGroupsOutput {
@@ -1423,6 +1715,31 @@ pub struct ListReportGroupsOutput {
     pub report_groups: Option<Vec<String>>,
 }
 
+impl ListReportGroupsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.report_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListReportGroupsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_reports_for_report_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReportsForReportGroupInput {
@@ -1447,6 +1764,15 @@ pub struct ListReportsForReportGroupInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListReportsForReportGroupInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_reports_for_report_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReportsForReportGroupOutput {
@@ -1460,6 +1786,31 @@ pub struct ListReportsForReportGroupOutput {
     pub reports: Option<Vec<String>>,
 }
 
+impl ListReportsForReportGroupOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.reports.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListReportsForReportGroupOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReportsInput {
@@ -1481,6 +1832,15 @@ pub struct ListReportsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListReportsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReportsOutput {
@@ -1494,6 +1854,31 @@ pub struct ListReportsOutput {
     pub reports: Option<Vec<String>>,
 }
 
+impl ListReportsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.reports.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListReportsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_shared_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSharedProjectsInput {
@@ -1515,6 +1900,15 @@ pub struct ListSharedProjectsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListSharedProjectsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_shared_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSharedProjectsOutput {
@@ -1528,6 +1922,31 @@ pub struct ListSharedProjectsOutput {
     pub projects: Option<Vec<String>>,
 }
 
+impl ListSharedProjectsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.projects.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSharedProjectsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_shared_report_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSharedReportGroupsInput {
@@ -1549,6 +1968,15 @@ pub struct ListSharedReportGroupsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListSharedReportGroupsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeBuild::list_shared_report_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSharedReportGroupsOutput {
@@ -1562,10 +1990,36 @@ pub struct ListSharedReportGroupsOutput {
     pub report_groups: Option<Vec<String>>,
 }
 
+impl ListSharedReportGroupsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.report_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSharedReportGroupsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeBuild::list_source_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSourceCredentialsInput {}
 
+/// see [CodeBuild::list_source_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSourceCredentialsOutput {
@@ -1961,6 +2415,7 @@ pub struct ProjectSourceVersion {
     pub source_version: String,
 }
 
+/// see [CodeBuild::put_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyInput {
@@ -1972,6 +2427,7 @@ pub struct PutResourcePolicyInput {
     pub resource_arn: String,
 }
 
+/// see [CodeBuild::put_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyOutput {
@@ -2149,6 +2605,7 @@ pub struct ResolvedArtifact {
     pub type_: Option<String>,
 }
 
+/// see [CodeBuild::retry_build_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetryBuildBatchInput {
@@ -2166,6 +2623,7 @@ pub struct RetryBuildBatchInput {
     pub retry_type: Option<String>,
 }
 
+/// see [CodeBuild::retry_build_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetryBuildBatchOutput {
@@ -2174,6 +2632,7 @@ pub struct RetryBuildBatchOutput {
     pub build_batch: Option<BuildBatch>,
 }
 
+/// see [CodeBuild::retry_build]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetryBuildInput {
@@ -2187,6 +2646,7 @@ pub struct RetryBuildInput {
     pub idempotency_token: Option<String>,
 }
 
+/// see [CodeBuild::retry_build]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetryBuildOutput {
@@ -2266,6 +2726,7 @@ pub struct SourceCredentialsInfo {
     pub server_type: Option<String>,
 }
 
+/// see [CodeBuild::start_build_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBuildBatchInput {
@@ -2390,6 +2851,7 @@ pub struct StartBuildBatchInput {
     pub source_version: Option<String>,
 }
 
+/// see [CodeBuild::start_build_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBuildBatchOutput {
@@ -2399,6 +2861,7 @@ pub struct StartBuildBatchOutput {
     pub build_batch: Option<BuildBatch>,
 }
 
+/// see [CodeBuild::start_build]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBuildInput {
@@ -2527,6 +2990,7 @@ pub struct StartBuildInput {
     pub timeout_in_minutes_override: Option<i64>,
 }
 
+/// see [CodeBuild::start_build]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBuildOutput {
@@ -2536,6 +3000,7 @@ pub struct StartBuildOutput {
     pub build: Option<Build>,
 }
 
+/// see [CodeBuild::stop_build_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBuildBatchInput {
@@ -2544,6 +3009,7 @@ pub struct StopBuildBatchInput {
     pub id: String,
 }
 
+/// see [CodeBuild::stop_build_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBuildBatchOutput {
@@ -2552,6 +3018,7 @@ pub struct StopBuildBatchOutput {
     pub build_batch: Option<BuildBatch>,
 }
 
+/// see [CodeBuild::stop_build]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBuildInput {
@@ -2560,6 +3027,7 @@ pub struct StopBuildInput {
     pub id: String,
 }
 
+/// see [CodeBuild::stop_build]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBuildOutput {
@@ -2649,6 +3117,7 @@ pub struct TestReportSummary {
     pub total: i64,
 }
 
+/// see [CodeBuild::update_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectInput {
@@ -2732,6 +3201,7 @@ pub struct UpdateProjectInput {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [CodeBuild::update_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectOutput {
@@ -2741,6 +3211,7 @@ pub struct UpdateProjectOutput {
     pub project: Option<Project>,
 }
 
+/// see [CodeBuild::update_report_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateReportGroupInput {
@@ -2757,6 +3228,7 @@ pub struct UpdateReportGroupInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [CodeBuild::update_report_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateReportGroupOutput {
@@ -2766,6 +3238,7 @@ pub struct UpdateReportGroupOutput {
     pub report_group: Option<ReportGroup>,
 }
 
+/// see [CodeBuild::update_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebhookInput {
@@ -2790,6 +3263,7 @@ pub struct UpdateWebhookInput {
     pub rotate_secret: Option<bool>,
 }
 
+/// see [CodeBuild::update_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebhookOutput {
@@ -4405,7 +4879,7 @@ impl fmt::Display for UpdateWebhookError {
 impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the AWS CodeBuild API. AWS CodeBuild clients implement this trait.
 #[async_trait]
-pub trait CodeBuild {
+pub trait CodeBuild: Clone + Sync + Send + 'static {
     /// <p>Deletes one or more builds.</p>
     async fn batch_delete_builds(
         &self,
@@ -4508,11 +4982,31 @@ pub trait CodeBuild {
         input: DescribeCodeCoveragesInput,
     ) -> Result<DescribeCodeCoveragesOutput, RusotoError<DescribeCodeCoveragesError>>;
 
+    /// Auto-paginating version of `describe_code_coverages`
+    fn describe_code_coverages_pages(
+        &self,
+        input: DescribeCodeCoveragesInput,
+    ) -> RusotoStream<CodeCoverage, DescribeCodeCoveragesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_code_coverages(state.clone())
+        })
+    }
+
     /// <p> Returns a list of details about test cases for a report. </p>
     async fn describe_test_cases(
         &self,
         input: DescribeTestCasesInput,
     ) -> Result<DescribeTestCasesOutput, RusotoError<DescribeTestCasesError>>;
+
+    /// Auto-paginating version of `describe_test_cases`
+    fn describe_test_cases_pages(
+        &self,
+        input: DescribeTestCasesInput,
+    ) -> RusotoStream<TestCase, DescribeTestCasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_test_cases(state.clone())
+        })
+    }
 
     async fn get_report_group_trend(
         &self,
@@ -4543,11 +5037,31 @@ pub trait CodeBuild {
         input: ListBuildBatchesInput,
     ) -> Result<ListBuildBatchesOutput, RusotoError<ListBuildBatchesError>>;
 
+    /// Auto-paginating version of `list_build_batches`
+    fn list_build_batches_pages(
+        &self,
+        input: ListBuildBatchesInput,
+    ) -> RusotoStream<String, ListBuildBatchesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_build_batches(state.clone())
+        })
+    }
+
     /// <p>Retrieves the identifiers of the build batches for a specific project.</p>
     async fn list_build_batches_for_project(
         &self,
         input: ListBuildBatchesForProjectInput,
     ) -> Result<ListBuildBatchesForProjectOutput, RusotoError<ListBuildBatchesForProjectError>>;
+
+    /// Auto-paginating version of `list_build_batches_for_project`
+    fn list_build_batches_for_project_pages(
+        &self,
+        input: ListBuildBatchesForProjectInput,
+    ) -> RusotoStream<String, ListBuildBatchesForProjectError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_build_batches_for_project(state.clone())
+        })
+    }
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
     async fn list_builds(
@@ -4555,11 +5069,28 @@ pub trait CodeBuild {
         input: ListBuildsInput,
     ) -> Result<ListBuildsOutput, RusotoError<ListBuildsError>>;
 
+    /// Auto-paginating version of `list_builds`
+    fn list_builds_pages(&self, input: ListBuildsInput) -> RusotoStream<String, ListBuildsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_builds(state.clone())
+        })
+    }
+
     /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
     async fn list_builds_for_project(
         &self,
         input: ListBuildsForProjectInput,
     ) -> Result<ListBuildsForProjectOutput, RusotoError<ListBuildsForProjectError>>;
+
+    /// Auto-paginating version of `list_builds_for_project`
+    fn list_builds_for_project_pages(
+        &self,
+        input: ListBuildsForProjectInput,
+    ) -> RusotoStream<String, ListBuildsForProjectError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_builds_for_project(state.clone())
+        })
+    }
 
     /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
     async fn list_curated_environment_images(
@@ -4572,11 +5103,31 @@ pub trait CodeBuild {
         input: ListProjectsInput,
     ) -> Result<ListProjectsOutput, RusotoError<ListProjectsError>>;
 
+    /// Auto-paginating version of `list_projects`
+    fn list_projects_pages(
+        &self,
+        input: ListProjectsInput,
+    ) -> RusotoStream<String, ListProjectsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_projects(state.clone())
+        })
+    }
+
     /// <p> Gets a list ARNs for the report groups in the current AWS account. </p>
     async fn list_report_groups(
         &self,
         input: ListReportGroupsInput,
     ) -> Result<ListReportGroupsOutput, RusotoError<ListReportGroupsError>>;
+
+    /// Auto-paginating version of `list_report_groups`
+    fn list_report_groups_pages(
+        &self,
+        input: ListReportGroupsInput,
+    ) -> RusotoStream<String, ListReportGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_report_groups(state.clone())
+        })
+    }
 
     /// <p> Returns a list of ARNs for the reports in the current AWS account. </p>
     async fn list_reports(
@@ -4584,11 +5135,31 @@ pub trait CodeBuild {
         input: ListReportsInput,
     ) -> Result<ListReportsOutput, RusotoError<ListReportsError>>;
 
+    /// Auto-paginating version of `list_reports`
+    fn list_reports_pages(
+        &self,
+        input: ListReportsInput,
+    ) -> RusotoStream<String, ListReportsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_reports(state.clone())
+        })
+    }
+
     /// <p> Returns a list of ARNs for the reports that belong to a <code>ReportGroup</code>. </p>
     async fn list_reports_for_report_group(
         &self,
         input: ListReportsForReportGroupInput,
     ) -> Result<ListReportsForReportGroupOutput, RusotoError<ListReportsForReportGroupError>>;
+
+    /// Auto-paginating version of `list_reports_for_report_group`
+    fn list_reports_for_report_group_pages(
+        &self,
+        input: ListReportsForReportGroupInput,
+    ) -> RusotoStream<String, ListReportsForReportGroupError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_reports_for_report_group(state.clone())
+        })
+    }
 
     /// <p> Gets a list of projects that are shared with other AWS accounts or users. </p>
     async fn list_shared_projects(
@@ -4596,11 +5167,31 @@ pub trait CodeBuild {
         input: ListSharedProjectsInput,
     ) -> Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>>;
 
+    /// Auto-paginating version of `list_shared_projects`
+    fn list_shared_projects_pages(
+        &self,
+        input: ListSharedProjectsInput,
+    ) -> RusotoStream<String, ListSharedProjectsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_shared_projects(state.clone())
+        })
+    }
+
     /// <p> Gets a list of report groups that are shared with other AWS accounts or users. </p>
     async fn list_shared_report_groups(
         &self,
         input: ListSharedReportGroupsInput,
     ) -> Result<ListSharedReportGroupsOutput, RusotoError<ListSharedReportGroupsError>>;
+
+    /// Auto-paginating version of `list_shared_report_groups`
+    fn list_shared_report_groups_pages(
+        &self,
+        input: ListSharedReportGroupsInput,
+    ) -> RusotoStream<String, ListSharedReportGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_shared_report_groups(state.clone())
+        })
+    }
 
     /// <p> Returns a list of <code>SourceCredentialsInfo</code> objects. </p>
     async fn list_source_credentials(

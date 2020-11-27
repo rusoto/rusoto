@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -147,6 +149,7 @@ pub struct ClearTimerAction {
     pub timer_name: String,
 }
 
+/// see [IotEvents::create_detector_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorModelRequest {
@@ -177,6 +180,7 @@ pub struct CreateDetectorModelRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [IotEvents::create_detector_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorModelResponse {
@@ -186,6 +190,7 @@ pub struct CreateDetectorModelResponse {
     pub detector_model_configuration: Option<DetectorModelConfiguration>,
 }
 
+/// see [IotEvents::create_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputRequest {
@@ -205,6 +210,7 @@ pub struct CreateInputRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [IotEvents::create_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputResponse {
@@ -214,6 +220,7 @@ pub struct CreateInputResponse {
     pub input_configuration: Option<InputConfiguration>,
 }
 
+/// see [IotEvents::delete_detector_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorModelRequest {
@@ -222,10 +229,12 @@ pub struct DeleteDetectorModelRequest {
     pub detector_model_name: String,
 }
 
+/// see [IotEvents::delete_detector_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorModelResponse {}
 
+/// see [IotEvents::delete_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputRequest {
@@ -234,10 +243,12 @@ pub struct DeleteInputRequest {
     pub input_name: String,
 }
 
+/// see [IotEvents::delete_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputResponse {}
 
+/// see [IotEvents::describe_detector_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectorModelRequest {
@@ -250,6 +261,7 @@ pub struct DescribeDetectorModelRequest {
     pub detector_model_version: Option<String>,
 }
 
+/// see [IotEvents::describe_detector_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectorModelResponse {
@@ -259,6 +271,7 @@ pub struct DescribeDetectorModelResponse {
     pub detector_model: Option<DetectorModel>,
 }
 
+/// see [IotEvents::describe_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputRequest {
@@ -267,6 +280,7 @@ pub struct DescribeInputRequest {
     pub input_name: String,
 }
 
+/// see [IotEvents::describe_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputResponse {
@@ -276,10 +290,12 @@ pub struct DescribeInputResponse {
     pub input: Option<Input>,
 }
 
+/// see [IotEvents::describe_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoggingOptionsRequest {}
 
+/// see [IotEvents::describe_logging_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLoggingOptionsResponse {
@@ -649,6 +665,7 @@ pub struct LambdaAction {
     pub payload: Option<Payload>,
 }
 
+/// see [IotEvents::list_detector_model_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorModelVersionsRequest {
@@ -665,6 +682,7 @@ pub struct ListDetectorModelVersionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [IotEvents::list_detector_model_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorModelVersionsResponse {
@@ -678,6 +696,7 @@ pub struct ListDetectorModelVersionsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [IotEvents::list_detector_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorModelsRequest {
@@ -691,6 +710,7 @@ pub struct ListDetectorModelsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [IotEvents::list_detector_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorModelsResponse {
@@ -704,6 +724,7 @@ pub struct ListDetectorModelsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [IotEvents::list_inputs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputsRequest {
@@ -717,6 +738,7 @@ pub struct ListInputsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [IotEvents::list_inputs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputsResponse {
@@ -730,6 +752,7 @@ pub struct ListInputsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [IotEvents::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -738,6 +761,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [IotEvents::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -807,6 +831,7 @@ pub struct Payload {
     pub type_: String,
 }
 
+/// see [IotEvents::put_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingOptionsRequest {
@@ -905,6 +930,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [IotEvents::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -916,6 +942,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [IotEvents::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -938,6 +965,7 @@ pub struct TransitionEvent {
     pub next_state: String,
 }
 
+/// see [IotEvents::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -949,10 +977,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [IotEvents::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [IotEvents::update_detector_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorModelRequest {
@@ -975,6 +1005,7 @@ pub struct UpdateDetectorModelRequest {
     pub role_arn: String,
 }
 
+/// see [IotEvents::update_detector_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorModelResponse {
@@ -984,6 +1015,7 @@ pub struct UpdateDetectorModelResponse {
     pub detector_model_configuration: Option<DetectorModelConfiguration>,
 }
 
+/// see [IotEvents::update_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputRequest {
@@ -999,6 +1031,7 @@ pub struct UpdateInputRequest {
     pub input_name: String,
 }
 
+/// see [IotEvents::update_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputResponse {
@@ -1964,7 +1997,7 @@ impl fmt::Display for UpdateInputError {
 impl Error for UpdateInputError {}
 /// Trait representing the capabilities of the AWS IoT Events API. AWS IoT Events clients implement this trait.
 #[async_trait]
-pub trait IotEvents {
+pub trait IotEvents: Clone + Sync + Send + 'static {
     /// <p>Creates a detector model.</p>
     async fn create_detector_model(
         &self,

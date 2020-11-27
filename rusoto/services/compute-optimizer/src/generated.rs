@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -137,6 +139,7 @@ pub struct AutoScalingGroupRecommendationOption {
     pub rank: Option<i64>,
 }
 
+/// see [ComputeOptimizer::describe_recommendation_export_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecommendationExportJobsRequest {
@@ -158,6 +161,7 @@ pub struct DescribeRecommendationExportJobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComputeOptimizer::describe_recommendation_export_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecommendationExportJobsResponse {
@@ -203,6 +207,7 @@ pub struct EBSUtilizationMetric {
     pub value: Option<f64>,
 }
 
+/// see [ComputeOptimizer::export_auto_scaling_group_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportAutoScalingGroupRecommendationsRequest {
@@ -231,6 +236,7 @@ pub struct ExportAutoScalingGroupRecommendationsRequest {
     pub s_3_destination_config: S3DestinationConfig,
 }
 
+/// see [ComputeOptimizer::export_auto_scaling_group_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportAutoScalingGroupRecommendationsResponse {
@@ -254,6 +260,7 @@ pub struct ExportDestination {
     pub s_3: Option<S3Destination>,
 }
 
+/// see [ComputeOptimizer::export_ec2_instance_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportEC2InstanceRecommendationsRequest {
@@ -282,6 +289,7 @@ pub struct ExportEC2InstanceRecommendationsRequest {
     pub s_3_destination_config: S3DestinationConfig,
 }
 
+/// see [ComputeOptimizer::export_ec2_instance_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportEC2InstanceRecommendationsResponse {
@@ -309,6 +317,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
+/// see [ComputeOptimizer::get_auto_scaling_group_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutoScalingGroupRecommendationsRequest {
@@ -334,6 +343,7 @@ pub struct GetAutoScalingGroupRecommendationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComputeOptimizer::get_auto_scaling_group_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAutoScalingGroupRecommendationsResponse {
@@ -351,6 +361,7 @@ pub struct GetAutoScalingGroupRecommendationsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ComputeOptimizer::get_ebs_volume_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEBSVolumeRecommendationsRequest {
@@ -376,6 +387,7 @@ pub struct GetEBSVolumeRecommendationsRequest {
     pub volume_arns: Option<Vec<String>>,
 }
 
+/// see [ComputeOptimizer::get_ebs_volume_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEBSVolumeRecommendationsResponse {
@@ -393,6 +405,7 @@ pub struct GetEBSVolumeRecommendationsResponse {
     pub volume_recommendations: Option<Vec<VolumeRecommendation>>,
 }
 
+/// see [ComputeOptimizer::get_ec2_instance_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEC2InstanceRecommendationsRequest {
@@ -418,6 +431,7 @@ pub struct GetEC2InstanceRecommendationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComputeOptimizer::get_ec2_instance_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEC2InstanceRecommendationsResponse {
@@ -435,6 +449,7 @@ pub struct GetEC2InstanceRecommendationsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ComputeOptimizer::get_ec2_recommendation_projected_metrics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEC2RecommendationProjectedMetricsRequest {
@@ -455,6 +470,7 @@ pub struct GetEC2RecommendationProjectedMetricsRequest {
     pub stat: String,
 }
 
+/// see [ComputeOptimizer::get_ec2_recommendation_projected_metrics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEC2RecommendationProjectedMetricsResponse {
@@ -464,10 +480,12 @@ pub struct GetEC2RecommendationProjectedMetricsResponse {
     pub recommended_option_projected_metrics: Option<Vec<RecommendedOptionProjectedMetric>>,
 }
 
+/// see [ComputeOptimizer::get_enrollment_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEnrollmentStatusRequest {}
 
+/// see [ComputeOptimizer::get_enrollment_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEnrollmentStatusResponse {
@@ -503,6 +521,7 @@ pub struct GetRecommendationError {
     pub message: Option<String>,
 }
 
+/// see [ComputeOptimizer::get_recommendation_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationSummariesRequest {
@@ -520,6 +539,7 @@ pub struct GetRecommendationSummariesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComputeOptimizer::get_recommendation_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationSummariesResponse {
@@ -763,6 +783,7 @@ pub struct Summary {
     pub value: Option<f64>,
 }
 
+/// see [ComputeOptimizer::update_enrollment_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnrollmentStatusRequest {
@@ -775,6 +796,7 @@ pub struct UpdateEnrollmentStatusRequest {
     pub status: String,
 }
 
+/// see [ComputeOptimizer::update_enrollment_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEnrollmentStatusResponse {
@@ -1846,7 +1868,7 @@ impl fmt::Display for UpdateEnrollmentStatusError {
 impl Error for UpdateEnrollmentStatusError {}
 /// Trait representing the capabilities of the AWS Compute Optimizer API. AWS Compute Optimizer clients implement this trait.
 #[async_trait]
-pub trait ComputeOptimizer {
+pub trait ComputeOptimizer: Clone + Sync + Send + 'static {
     /// <p>Describes recommendation export jobs created in the last seven days.</p> <p>Use the <code>ExportAutoScalingGroupRecommendations</code> or <code>ExportEC2InstanceRecommendations</code> actions to request an export of your recommendations. Then use the <code>DescribeRecommendationExportJobs</code> action to view your export jobs.</p>
     async fn describe_recommendation_export_jobs(
         &self,

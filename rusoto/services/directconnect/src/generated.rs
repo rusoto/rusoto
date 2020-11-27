@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl DirectConnectClient {
 }
 
 use serde_json;
+/// see [DirectConnect::accept_direct_connect_gateway_association_proposal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptDirectConnectGatewayAssociationProposalRequest {
@@ -69,6 +72,7 @@ pub struct AcceptDirectConnectGatewayAssociationProposalRequest {
     pub proposal_id: String,
 }
 
+/// see [DirectConnect::accept_direct_connect_gateway_association_proposal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptDirectConnectGatewayAssociationProposalResult {
@@ -77,6 +81,7 @@ pub struct AcceptDirectConnectGatewayAssociationProposalResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
+/// see [DirectConnect::allocate_connection_on_interconnect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateConnectionOnInterconnectRequest {
@@ -97,6 +102,7 @@ pub struct AllocateConnectionOnInterconnectRequest {
     pub vlan: i64,
 }
 
+/// see [DirectConnect::allocate_hosted_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateHostedConnectionRequest {
@@ -121,6 +127,7 @@ pub struct AllocateHostedConnectionRequest {
     pub vlan: i64,
 }
 
+/// see [DirectConnect::allocate_private_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocatePrivateVirtualInterfaceRequest {
@@ -135,6 +142,7 @@ pub struct AllocatePrivateVirtualInterfaceRequest {
     pub owner_account: String,
 }
 
+/// see [DirectConnect::allocate_public_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocatePublicVirtualInterfaceRequest {
@@ -149,6 +157,7 @@ pub struct AllocatePublicVirtualInterfaceRequest {
     pub owner_account: String,
 }
 
+/// see [DirectConnect::allocate_transit_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateTransitVirtualInterfaceRequest {
@@ -163,6 +172,7 @@ pub struct AllocateTransitVirtualInterfaceRequest {
     pub owner_account: String,
 }
 
+/// see [DirectConnect::allocate_transit_virtual_interface]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AllocateTransitVirtualInterfaceResult {
@@ -171,6 +181,7 @@ pub struct AllocateTransitVirtualInterfaceResult {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
+/// see [DirectConnect::associate_connection_with_lag]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateConnectionWithLagRequest {
@@ -182,6 +193,7 @@ pub struct AssociateConnectionWithLagRequest {
     pub lag_id: String,
 }
 
+/// see [DirectConnect::associate_hosted_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateHostedConnectionRequest {
@@ -193,6 +205,7 @@ pub struct AssociateHostedConnectionRequest {
     pub parent_connection_id: String,
 }
 
+/// see [DirectConnect::associate_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateVirtualInterfaceRequest {
@@ -268,6 +281,7 @@ pub struct BGPPeer {
     pub customer_address: Option<String>,
 }
 
+/// see [DirectConnect::confirm_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmConnectionRequest {
@@ -276,6 +290,7 @@ pub struct ConfirmConnectionRequest {
     pub connection_id: String,
 }
 
+/// see [DirectConnect::confirm_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmConnectionResponse {
@@ -285,6 +300,7 @@ pub struct ConfirmConnectionResponse {
     pub connection_state: Option<String>,
 }
 
+/// see [DirectConnect::confirm_private_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmPrivateVirtualInterfaceRequest {
@@ -301,6 +317,7 @@ pub struct ConfirmPrivateVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
+/// see [DirectConnect::confirm_private_virtual_interface]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmPrivateVirtualInterfaceResponse {
@@ -310,6 +327,7 @@ pub struct ConfirmPrivateVirtualInterfaceResponse {
     pub virtual_interface_state: Option<String>,
 }
 
+/// see [DirectConnect::confirm_public_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmPublicVirtualInterfaceRequest {
@@ -318,6 +336,7 @@ pub struct ConfirmPublicVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
+/// see [DirectConnect::confirm_public_virtual_interface]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmPublicVirtualInterfaceResponse {
@@ -327,6 +346,7 @@ pub struct ConfirmPublicVirtualInterfaceResponse {
     pub virtual_interface_state: Option<String>,
 }
 
+/// see [DirectConnect::confirm_transit_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmTransitVirtualInterfaceRequest {
@@ -338,6 +358,7 @@ pub struct ConfirmTransitVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
+/// see [DirectConnect::confirm_transit_virtual_interface]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmTransitVirtualInterfaceResponse {
@@ -348,6 +369,13 @@ pub struct ConfirmTransitVirtualInterfaceResponse {
 }
 
 /// <p>Information about an AWS Direct Connect connection.</p>
+/// see [DirectConnect::allocate_connection_on_interconnect]
+/// see [DirectConnect::allocate_hosted_connection]
+/// see [DirectConnect::associate_connection_with_lag]
+/// see [DirectConnect::associate_hosted_connection]
+/// see [DirectConnect::create_connection]
+/// see [DirectConnect::delete_connection]
+/// see [DirectConnect::disassociate_connection_from_lag]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
@@ -421,6 +449,9 @@ pub struct Connection {
     pub vlan: Option<i64>,
 }
 
+/// see [DirectConnect::describe_connections]
+/// see [DirectConnect::describe_connections_on_interconnect]
+/// see [DirectConnect::describe_hosted_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connections {
@@ -430,6 +461,7 @@ pub struct Connections {
     pub connections: Option<Vec<Connection>>,
 }
 
+/// see [DirectConnect::create_bgp_peer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBGPPeerRequest {
@@ -443,6 +475,7 @@ pub struct CreateBGPPeerRequest {
     pub virtual_interface_id: Option<String>,
 }
 
+/// see [DirectConnect::create_bgp_peer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBGPPeerResponse {
@@ -452,6 +485,7 @@ pub struct CreateBGPPeerResponse {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
+/// see [DirectConnect::create_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionRequest {
@@ -478,6 +512,7 @@ pub struct CreateConnectionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DirectConnect::create_direct_connect_gateway_association_proposal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectConnectGatewayAssociationProposalRequest {
@@ -500,6 +535,7 @@ pub struct CreateDirectConnectGatewayAssociationProposalRequest {
     pub remove_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
 }
 
+/// see [DirectConnect::create_direct_connect_gateway_association_proposal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationProposalResult {
@@ -510,6 +546,7 @@ pub struct CreateDirectConnectGatewayAssociationProposalResult {
         Option<DirectConnectGatewayAssociationProposal>,
 }
 
+/// see [DirectConnect::create_direct_connect_gateway_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectConnectGatewayAssociationRequest {
@@ -530,6 +567,7 @@ pub struct CreateDirectConnectGatewayAssociationRequest {
     pub virtual_gateway_id: Option<String>,
 }
 
+/// see [DirectConnect::create_direct_connect_gateway_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationResult {
@@ -539,6 +577,7 @@ pub struct CreateDirectConnectGatewayAssociationResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
+/// see [DirectConnect::create_direct_connect_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectConnectGatewayRequest {
@@ -551,6 +590,7 @@ pub struct CreateDirectConnectGatewayRequest {
     pub direct_connect_gateway_name: String,
 }
 
+/// see [DirectConnect::create_direct_connect_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayResult {
@@ -560,6 +600,7 @@ pub struct CreateDirectConnectGatewayResult {
     pub direct_connect_gateway: Option<DirectConnectGateway>,
 }
 
+/// see [DirectConnect::create_interconnect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInterconnectRequest {
@@ -586,6 +627,7 @@ pub struct CreateInterconnectRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DirectConnect::create_lag]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLagRequest {
@@ -619,6 +661,7 @@ pub struct CreateLagRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DirectConnect::create_private_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePrivateVirtualInterfaceRequest {
@@ -630,6 +673,7 @@ pub struct CreatePrivateVirtualInterfaceRequest {
     pub new_private_virtual_interface: NewPrivateVirtualInterface,
 }
 
+/// see [DirectConnect::create_public_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicVirtualInterfaceRequest {
@@ -641,6 +685,7 @@ pub struct CreatePublicVirtualInterfaceRequest {
     pub new_public_virtual_interface: NewPublicVirtualInterface,
 }
 
+/// see [DirectConnect::create_transit_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransitVirtualInterfaceRequest {
@@ -652,6 +697,7 @@ pub struct CreateTransitVirtualInterfaceRequest {
     pub new_transit_virtual_interface: NewTransitVirtualInterface,
 }
 
+/// see [DirectConnect::create_transit_virtual_interface]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTransitVirtualInterfaceResult {
@@ -660,6 +706,7 @@ pub struct CreateTransitVirtualInterfaceResult {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
+/// see [DirectConnect::delete_bgp_peer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBGPPeerRequest {
@@ -681,6 +728,7 @@ pub struct DeleteBGPPeerRequest {
     pub virtual_interface_id: Option<String>,
 }
 
+/// see [DirectConnect::delete_bgp_peer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBGPPeerResponse {
@@ -690,6 +738,7 @@ pub struct DeleteBGPPeerResponse {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
+/// see [DirectConnect::delete_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
@@ -698,6 +747,7 @@ pub struct DeleteConnectionRequest {
     pub connection_id: String,
 }
 
+/// see [DirectConnect::delete_direct_connect_gateway_association_proposal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectConnectGatewayAssociationProposalRequest {
@@ -706,6 +756,7 @@ pub struct DeleteDirectConnectGatewayAssociationProposalRequest {
     pub proposal_id: String,
 }
 
+/// see [DirectConnect::delete_direct_connect_gateway_association_proposal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationProposalResult {
@@ -716,6 +767,7 @@ pub struct DeleteDirectConnectGatewayAssociationProposalResult {
         Option<DirectConnectGatewayAssociationProposal>,
 }
 
+/// see [DirectConnect::delete_direct_connect_gateway_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectConnectGatewayAssociationRequest {
@@ -733,6 +785,7 @@ pub struct DeleteDirectConnectGatewayAssociationRequest {
     pub virtual_gateway_id: Option<String>,
 }
 
+/// see [DirectConnect::delete_direct_connect_gateway_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationResult {
@@ -742,6 +795,7 @@ pub struct DeleteDirectConnectGatewayAssociationResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
+/// see [DirectConnect::delete_direct_connect_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectConnectGatewayRequest {
@@ -750,6 +804,7 @@ pub struct DeleteDirectConnectGatewayRequest {
     pub direct_connect_gateway_id: String,
 }
 
+/// see [DirectConnect::delete_direct_connect_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayResult {
@@ -759,6 +814,7 @@ pub struct DeleteDirectConnectGatewayResult {
     pub direct_connect_gateway: Option<DirectConnectGateway>,
 }
 
+/// see [DirectConnect::delete_interconnect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInterconnectRequest {
@@ -767,6 +823,7 @@ pub struct DeleteInterconnectRequest {
     pub interconnect_id: String,
 }
 
+/// see [DirectConnect::delete_interconnect]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInterconnectResponse {
@@ -776,6 +833,7 @@ pub struct DeleteInterconnectResponse {
     pub interconnect_state: Option<String>,
 }
 
+/// see [DirectConnect::delete_lag]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLagRequest {
@@ -784,6 +842,7 @@ pub struct DeleteLagRequest {
     pub lag_id: String,
 }
 
+/// see [DirectConnect::delete_virtual_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualInterfaceRequest {
@@ -792,6 +851,7 @@ pub struct DeleteVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
+/// see [DirectConnect::delete_virtual_interface]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualInterfaceResponse {
@@ -801,6 +861,7 @@ pub struct DeleteVirtualInterfaceResponse {
     pub virtual_interface_state: Option<String>,
 }
 
+/// see [DirectConnect::describe_connection_loa]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionLoaRequest {
@@ -817,6 +878,7 @@ pub struct DescribeConnectionLoaRequest {
     pub provider_name: Option<String>,
 }
 
+/// see [DirectConnect::describe_connection_loa]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConnectionLoaResponse {
@@ -826,6 +888,7 @@ pub struct DescribeConnectionLoaResponse {
     pub loa: Option<Loa>,
 }
 
+/// see [DirectConnect::describe_connections_on_interconnect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionsOnInterconnectRequest {
@@ -834,6 +897,7 @@ pub struct DescribeConnectionsOnInterconnectRequest {
     pub interconnect_id: String,
 }
 
+/// see [DirectConnect::describe_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionsRequest {
@@ -843,6 +907,7 @@ pub struct DescribeConnectionsRequest {
     pub connection_id: Option<String>,
 }
 
+/// see [DirectConnect::describe_direct_connect_gateway_association_proposals]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewayAssociationProposalsRequest {
@@ -868,6 +933,7 @@ pub struct DescribeDirectConnectGatewayAssociationProposalsRequest {
     pub proposal_id: Option<String>,
 }
 
+/// see [DirectConnect::describe_direct_connect_gateway_association_proposals]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationProposalsResult {
@@ -882,6 +948,7 @@ pub struct DescribeDirectConnectGatewayAssociationProposalsResult {
     pub next_token: Option<String>,
 }
 
+/// see [DirectConnect::describe_direct_connect_gateway_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewayAssociationsRequest {
@@ -911,6 +978,15 @@ pub struct DescribeDirectConnectGatewayAssociationsRequest {
     pub virtual_gateway_id: Option<String>,
 }
 
+impl PagedRequest for DescribeDirectConnectGatewayAssociationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectConnect::describe_direct_connect_gateway_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationsResult {
@@ -924,6 +1000,31 @@ pub struct DescribeDirectConnectGatewayAssociationsResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeDirectConnectGatewayAssociationsResult {
+    fn pagination_page_opt(self) -> Option<Vec<DirectConnectGatewayAssociation>> {
+        Some(self.direct_connect_gateway_associations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDirectConnectGatewayAssociationsResult {
+    type Item = DirectConnectGatewayAssociation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DirectConnectGatewayAssociation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DirectConnect::describe_direct_connect_gateway_attachments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewayAttachmentsRequest {
@@ -945,6 +1046,15 @@ pub struct DescribeDirectConnectGatewayAttachmentsRequest {
     pub virtual_interface_id: Option<String>,
 }
 
+impl PagedRequest for DescribeDirectConnectGatewayAttachmentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectConnect::describe_direct_connect_gateway_attachments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAttachmentsResult {
@@ -958,6 +1068,31 @@ pub struct DescribeDirectConnectGatewayAttachmentsResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeDirectConnectGatewayAttachmentsResult {
+    fn pagination_page_opt(self) -> Option<Vec<DirectConnectGatewayAttachment>> {
+        Some(self.direct_connect_gateway_attachments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDirectConnectGatewayAttachmentsResult {
+    type Item = DirectConnectGatewayAttachment;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DirectConnectGatewayAttachment> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DirectConnect::describe_direct_connect_gateways]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewaysRequest {
@@ -975,6 +1110,15 @@ pub struct DescribeDirectConnectGatewaysRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeDirectConnectGatewaysRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectConnect::describe_direct_connect_gateways]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewaysResult {
@@ -988,6 +1132,31 @@ pub struct DescribeDirectConnectGatewaysResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeDirectConnectGatewaysResult {
+    fn pagination_page_opt(self) -> Option<Vec<DirectConnectGateway>> {
+        Some(self.direct_connect_gateways.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDirectConnectGatewaysResult {
+    type Item = DirectConnectGateway;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DirectConnectGateway> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DirectConnect::describe_hosted_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHostedConnectionsRequest {
@@ -996,6 +1165,7 @@ pub struct DescribeHostedConnectionsRequest {
     pub connection_id: String,
 }
 
+/// see [DirectConnect::describe_interconnect_loa]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInterconnectLoaRequest {
@@ -1012,6 +1182,7 @@ pub struct DescribeInterconnectLoaRequest {
     pub provider_name: Option<String>,
 }
 
+/// see [DirectConnect::describe_interconnect_loa]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInterconnectLoaResponse {
@@ -1021,6 +1192,7 @@ pub struct DescribeInterconnectLoaResponse {
     pub loa: Option<Loa>,
 }
 
+/// see [DirectConnect::describe_interconnects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInterconnectsRequest {
@@ -1030,6 +1202,7 @@ pub struct DescribeInterconnectsRequest {
     pub interconnect_id: Option<String>,
 }
 
+/// see [DirectConnect::describe_lags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLagsRequest {
@@ -1039,6 +1212,7 @@ pub struct DescribeLagsRequest {
     pub lag_id: Option<String>,
 }
 
+/// see [DirectConnect::describe_loa]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoaRequest {
@@ -1055,6 +1229,7 @@ pub struct DescribeLoaRequest {
     pub provider_name: Option<String>,
 }
 
+/// see [DirectConnect::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
@@ -1063,6 +1238,7 @@ pub struct DescribeTagsRequest {
     pub resource_arns: Vec<String>,
 }
 
+/// see [DirectConnect::describe_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResponse {
@@ -1072,6 +1248,7 @@ pub struct DescribeTagsResponse {
     pub resource_tags: Option<Vec<ResourceTag>>,
 }
 
+/// see [DirectConnect::describe_virtual_interfaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualInterfacesRequest {
@@ -1229,6 +1406,7 @@ pub struct DirectConnectGatewayAttachment {
     pub virtual_interface_region: Option<String>,
 }
 
+/// see [DirectConnect::disassociate_connection_from_lag]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConnectionFromLagRequest {
@@ -1241,6 +1419,7 @@ pub struct DisassociateConnectionFromLagRequest {
 }
 
 /// <p>Information about an interconnect.</p>
+/// see [DirectConnect::create_interconnect]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Interconnect {
@@ -1302,6 +1481,7 @@ pub struct Interconnect {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DirectConnect::describe_interconnects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Interconnects {
@@ -1312,6 +1492,9 @@ pub struct Interconnects {
 }
 
 /// <p>Information about a link aggregation group (LAG).</p>
+/// see [DirectConnect::create_lag]
+/// see [DirectConnect::delete_lag]
+/// see [DirectConnect::update_lag]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Lag {
@@ -1385,6 +1568,7 @@ pub struct Lag {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DirectConnect::describe_lags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Lags {
@@ -1394,6 +1578,7 @@ pub struct Lags {
     pub lags: Option<Vec<Lag>>,
 }
 
+/// see [DirectConnect::list_virtual_interface_test_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualInterfaceTestHistoryRequest {
@@ -1423,6 +1608,7 @@ pub struct ListVirtualInterfaceTestHistoryRequest {
     pub virtual_interface_id: Option<String>,
 }
 
+/// see [DirectConnect::list_virtual_interface_test_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualInterfaceTestHistoryResponse {
@@ -1437,6 +1623,7 @@ pub struct ListVirtualInterfaceTestHistoryResponse {
 }
 
 /// <p>Information about a Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
+/// see [DirectConnect::describe_loa]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Loa {
@@ -1481,6 +1668,7 @@ pub struct Location {
     pub region: Option<String>,
 }
 
+/// see [DirectConnect::describe_locations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Locations {
@@ -1791,6 +1979,7 @@ pub struct RouteFilterPrefix {
     pub cidr: Option<String>,
 }
 
+/// see [DirectConnect::start_bgp_failover_test]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBgpFailoverTestRequest {
@@ -1807,6 +1996,7 @@ pub struct StartBgpFailoverTestRequest {
     pub virtual_interface_id: String,
 }
 
+/// see [DirectConnect::start_bgp_failover_test]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBgpFailoverTestResponse {
@@ -1816,6 +2006,7 @@ pub struct StartBgpFailoverTestResponse {
     pub virtual_interface_test: Option<VirtualInterfaceTestHistory>,
 }
 
+/// see [DirectConnect::stop_bgp_failover_test]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBgpFailoverTestRequest {
@@ -1824,6 +2015,7 @@ pub struct StopBgpFailoverTestRequest {
     pub virtual_interface_id: String,
 }
 
+/// see [DirectConnect::stop_bgp_failover_test]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBgpFailoverTestResponse {
@@ -1845,6 +2037,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [DirectConnect::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1856,10 +2049,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [DirectConnect::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [DirectConnect::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1871,10 +2066,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [DirectConnect::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [DirectConnect::update_direct_connect_gateway_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDirectConnectGatewayAssociationRequest {
@@ -1892,6 +2089,7 @@ pub struct UpdateDirectConnectGatewayAssociationRequest {
     pub remove_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
 }
 
+/// see [DirectConnect::update_direct_connect_gateway_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDirectConnectGatewayAssociationResult {
@@ -1900,6 +2098,7 @@ pub struct UpdateDirectConnectGatewayAssociationResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
+/// see [DirectConnect::update_lag]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLagRequest {
@@ -1916,6 +2115,7 @@ pub struct UpdateLagRequest {
     pub minimum_links: Option<i64>,
 }
 
+/// see [DirectConnect::update_virtual_interface_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualInterfaceAttributesRequest {
@@ -1942,6 +2142,7 @@ pub struct VirtualGateway {
     pub virtual_gateway_state: Option<String>,
 }
 
+/// see [DirectConnect::describe_virtual_gateways]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualGateways {
@@ -1952,6 +2153,12 @@ pub struct VirtualGateways {
 }
 
 /// <p>Information about a virtual interface.</p>
+/// see [DirectConnect::allocate_private_virtual_interface]
+/// see [DirectConnect::allocate_public_virtual_interface]
+/// see [DirectConnect::associate_virtual_interface]
+/// see [DirectConnect::create_private_virtual_interface]
+/// see [DirectConnect::create_public_virtual_interface]
+/// see [DirectConnect::update_virtual_interface_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualInterface {
@@ -2091,6 +2298,7 @@ pub struct VirtualInterfaceTestHistory {
     pub virtual_interface_id: Option<String>,
 }
 
+/// see [DirectConnect::describe_virtual_interfaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualInterfaces {
@@ -4668,7 +4876,7 @@ impl fmt::Display for UpdateVirtualInterfaceAttributesError {
 impl Error for UpdateVirtualInterfaceAttributesError {}
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
 #[async_trait]
-pub trait DirectConnect {
+pub trait DirectConnect: Clone + Sync + Send + 'static {
     /// <p>Accepts a proposal request to attach a virtual private gateway or transit gateway to a Direct Connect gateway.</p>
     async fn accept_direct_connect_gateway_association_proposal(
         &self,
@@ -4914,6 +5122,17 @@ pub trait DirectConnect {
         RusotoError<DescribeDirectConnectGatewayAssociationsError>,
     >;
 
+    /// Auto-paginating version of `describe_direct_connect_gateway_associations`
+    fn describe_direct_connect_gateway_associations_pages(
+        &self,
+        input: DescribeDirectConnectGatewayAssociationsRequest,
+    ) -> RusotoStream<DirectConnectGatewayAssociation, DescribeDirectConnectGatewayAssociationsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_direct_connect_gateway_associations(state.clone())
+        })
+    }
+
     /// <p>Lists the attachments between your Direct Connect gateways and virtual interfaces. You must specify a Direct Connect gateway, a virtual interface, or both. If you specify a Direct Connect gateway, the response contains all virtual interfaces attached to the Direct Connect gateway. If you specify a virtual interface, the response contains all Direct Connect gateways attached to the virtual interface. If you specify both, the response contains the attachment between the Direct Connect gateway and the virtual interface.</p>
     async fn describe_direct_connect_gateway_attachments(
         &self,
@@ -4923,11 +5142,32 @@ pub trait DirectConnect {
         RusotoError<DescribeDirectConnectGatewayAttachmentsError>,
     >;
 
+    /// Auto-paginating version of `describe_direct_connect_gateway_attachments`
+    fn describe_direct_connect_gateway_attachments_pages(
+        &self,
+        input: DescribeDirectConnectGatewayAttachmentsRequest,
+    ) -> RusotoStream<DirectConnectGatewayAttachment, DescribeDirectConnectGatewayAttachmentsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_direct_connect_gateway_attachments(state.clone())
+        })
+    }
+
     /// <p>Lists all your Direct Connect gateways or only the specified Direct Connect gateway. Deleted Direct Connect gateways are not returned.</p>
     async fn describe_direct_connect_gateways(
         &self,
         input: DescribeDirectConnectGatewaysRequest,
     ) -> Result<DescribeDirectConnectGatewaysResult, RusotoError<DescribeDirectConnectGatewaysError>>;
+
+    /// Auto-paginating version of `describe_direct_connect_gateways`
+    fn describe_direct_connect_gateways_pages(
+        &self,
+        input: DescribeDirectConnectGatewaysRequest,
+    ) -> RusotoStream<DirectConnectGateway, DescribeDirectConnectGatewaysError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_direct_connect_gateways(state.clone())
+        })
+    }
 
     /// <p><p>Lists the hosted connections that have been provisioned on the specified interconnect or link aggregation group (LAG).</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>
     async fn describe_hosted_connections(

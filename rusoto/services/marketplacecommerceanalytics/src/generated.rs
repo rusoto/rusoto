@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -56,6 +58,7 @@ impl MarketplaceCommerceAnalyticsClient {
 
 use serde_json;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
+/// see [MarketplaceCommerceAnalytics::generate_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataSetRequest {
@@ -85,6 +88,7 @@ pub struct GenerateDataSetRequest {
 }
 
 /// <p>Container for the result of the GenerateDataSet operation.</p>
+/// see [MarketplaceCommerceAnalytics::generate_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateDataSetResult {
@@ -95,6 +99,7 @@ pub struct GenerateDataSetResult {
 }
 
 /// <p>Container for the parameters to the StartSupportDataExport operation.</p>
+/// see [MarketplaceCommerceAnalytics::start_support_data_export]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSupportDataExportRequest {
@@ -124,6 +129,7 @@ pub struct StartSupportDataExportRequest {
 }
 
 /// <p>Container for the result of the StartSupportDataExport operation.</p>
+/// see [MarketplaceCommerceAnalytics::start_support_data_export]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSupportDataExportResult {
@@ -201,7 +207,7 @@ impl fmt::Display for StartSupportDataExportError {
 impl Error for StartSupportDataExportError {}
 /// Trait representing the capabilities of the AWS Marketplace Commerce Analytics API. AWS Marketplace Commerce Analytics clients implement this trait.
 #[async_trait]
-pub trait MarketplaceCommerceAnalytics {
+pub trait MarketplaceCommerceAnalytics: Clone + Sync + Send + 'static {
     /// <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
     async fn generate_data_set(
         &self,

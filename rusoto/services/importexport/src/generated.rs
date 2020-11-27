@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -110,6 +112,7 @@ impl ArtifactListDeserializer {
     }
 }
 /// <p>Input structure for the CancelJob operation.</p>
+/// see [ImportExport::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobInput {
@@ -134,6 +137,7 @@ impl CancelJobInputSerializer {
 }
 
 /// <p>Output structure for the CancelJob operation.</p>
+/// see [ImportExport::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelJobOutput {
@@ -168,6 +172,7 @@ impl CarrierDeserializer {
     }
 }
 /// <p>Input structure for the CreateJob operation.</p>
+/// see [ImportExport::create_job]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobInput {
@@ -200,6 +205,7 @@ impl CreateJobInputSerializer {
 }
 
 /// <p>Output structure for the CreateJob operation.</p>
+/// see [ImportExport::create_job]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateJobOutput {
@@ -294,6 +300,7 @@ impl GenericStringDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [ImportExport::get_shipping_label]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShippingLabelInput {
@@ -357,6 +364,7 @@ impl GetShippingLabelInputSerializer {
     }
 }
 
+/// see [ImportExport::get_shipping_label]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetShippingLabelOutput {
@@ -390,6 +398,7 @@ impl GetShippingLabelOutputDeserializer {
     }
 }
 /// <p>Input structure for the GetStatus operation.</p>
+/// see [ImportExport::get_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStatusInput {
@@ -414,6 +423,7 @@ impl GetStatusInputSerializer {
 }
 
 /// <p>Output structure for the GetStatus operation.</p>
+/// see [ImportExport::get_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStatusOutput {
@@ -628,12 +638,21 @@ impl JobsListDeserializer {
     }
 }
 /// <p>Input structure for the ListJobs operation.</p>
+/// see [ImportExport::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsInput {
     pub api_version: Option<String>,
     pub marker: Option<String>,
     pub max_jobs: Option<i64>,
+}
+
+impl PagedRequest for ListJobsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `ListJobsInput` contents to a `SignedRequest`.
@@ -658,11 +677,40 @@ impl ListJobsInputSerializer {
 }
 
 /// <p>Output structure for the ListJobs operation.</p>
+/// see [ImportExport::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListJobsOutput {
     pub is_truncated: Option<bool>,
     pub jobs: Option<Vec<Job>>,
+}
+
+impl ListJobsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Job>> {
+        Some(self.jobs.as_ref()?.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobsOutput {
+    type Item = Job;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.jobs.as_ref()?.last()?.job_id.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Job> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -779,6 +827,7 @@ impl URLDeserializer {
     }
 }
 /// <p>Input structure for the UpateJob operation.</p>
+/// see [ImportExport::update_job]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobInput {
@@ -809,6 +858,7 @@ impl UpdateJobInputSerializer {
 }
 
 /// <p>Output structure for the UpateJob operation.</p>
+/// see [ImportExport::update_job]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateJobOutput {
@@ -1513,7 +1563,7 @@ impl fmt::Display for UpdateJobError {
 impl Error for UpdateJobError {}
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
 #[async_trait]
-pub trait ImportExport {
+pub trait ImportExport: Clone + Sync + Send + 'static {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
     async fn cancel_job(
         &self,
@@ -1543,6 +1593,13 @@ pub trait ImportExport {
         &self,
         input: ListJobsInput,
     ) -> Result<ListJobsOutput, RusotoError<ListJobsError>>;
+
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages(&self, input: ListJobsInput) -> RusotoStream<Job, ListJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_jobs(state.clone())
+        })
+    }
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
     async fn update_job(

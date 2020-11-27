@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -29,6 +31,7 @@ use serde_json;
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attributes {}
 
+/// see [Iot1ClickDevices::claim_devices_by_claim_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClaimDevicesByClaimCodeRequest {
@@ -37,6 +40,7 @@ pub struct ClaimDevicesByClaimCodeRequest {
     pub claim_code: String,
 }
 
+/// see [Iot1ClickDevices::claim_devices_by_claim_code]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClaimDevicesByClaimCodeResponse {
@@ -51,6 +55,7 @@ pub struct ClaimDevicesByClaimCodeResponse {
     pub total: Option<i64>,
 }
 
+/// see [Iot1ClickDevices::describe_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceRequest {
@@ -59,6 +64,7 @@ pub struct DescribeDeviceRequest {
     pub device_id: String,
 }
 
+/// see [Iot1ClickDevices::describe_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceResponse {
@@ -145,6 +151,7 @@ pub struct DeviceMethod {
     pub method_name: Option<String>,
 }
 
+/// see [Iot1ClickDevices::finalize_device_claim]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FinalizeDeviceClaimRequest {
@@ -161,6 +168,7 @@ pub struct FinalizeDeviceClaimRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Iot1ClickDevices::finalize_device_claim]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FinalizeDeviceClaimResponse {
@@ -170,6 +178,7 @@ pub struct FinalizeDeviceClaimResponse {
     pub state: Option<String>,
 }
 
+/// see [Iot1ClickDevices::get_device_methods]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceMethodsRequest {
@@ -178,6 +187,7 @@ pub struct GetDeviceMethodsRequest {
     pub device_id: String,
 }
 
+/// see [Iot1ClickDevices::get_device_methods]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceMethodsResponse {
@@ -187,6 +197,7 @@ pub struct GetDeviceMethodsResponse {
     pub device_methods: Option<Vec<DeviceMethod>>,
 }
 
+/// see [Iot1ClickDevices::initiate_device_claim]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateDeviceClaimRequest {
@@ -195,6 +206,7 @@ pub struct InitiateDeviceClaimRequest {
     pub device_id: String,
 }
 
+/// see [Iot1ClickDevices::initiate_device_claim]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateDeviceClaimResponse {
@@ -204,6 +216,7 @@ pub struct InitiateDeviceClaimResponse {
     pub state: Option<String>,
 }
 
+/// see [Iot1ClickDevices::invoke_device_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeDeviceMethodRequest {
@@ -220,6 +233,7 @@ pub struct InvokeDeviceMethodRequest {
     pub device_method_parameters: Option<String>,
 }
 
+/// see [Iot1ClickDevices::invoke_device_method]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvokeDeviceMethodResponse {
@@ -229,6 +243,7 @@ pub struct InvokeDeviceMethodResponse {
     pub device_method_response: Option<String>,
 }
 
+/// see [Iot1ClickDevices::list_device_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceEventsRequest {
@@ -256,6 +271,15 @@ pub struct ListDeviceEventsRequest {
     pub to_time_stamp: f64,
 }
 
+impl PagedRequest for ListDeviceEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot1ClickDevices::list_device_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceEventsResponse {
@@ -270,6 +294,31 @@ pub struct ListDeviceEventsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDeviceEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DeviceEvent>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeviceEventsResponse {
+    type Item = DeviceEvent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DeviceEvent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot1ClickDevices::list_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
@@ -288,6 +337,15 @@ pub struct ListDevicesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDevicesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot1ClickDevices::list_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
@@ -301,6 +359,31 @@ pub struct ListDevicesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDevicesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DeviceDescription>> {
+        Some(self.devices.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDevicesResponse {
+    type Item = DeviceDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DeviceDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot1ClickDevices::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -309,6 +392,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Iot1ClickDevices::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -322,6 +406,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Iot1ClickDevices::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -337,6 +422,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Iot1ClickDevices::unclaim_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnclaimDeviceRequest {
@@ -345,6 +431,7 @@ pub struct UnclaimDeviceRequest {
     pub device_id: String,
 }
 
+/// see [Iot1ClickDevices::unclaim_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnclaimDeviceResponse {
@@ -354,6 +441,7 @@ pub struct UnclaimDeviceResponse {
     pub state: Option<String>,
 }
 
+/// see [Iot1ClickDevices::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -365,6 +453,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Iot1ClickDevices::update_device_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceStateRequest {
@@ -378,6 +467,7 @@ pub struct UpdateDeviceStateRequest {
     pub enabled: Option<bool>,
 }
 
+/// see [Iot1ClickDevices::update_device_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceStateResponse {}
@@ -975,7 +1065,7 @@ impl fmt::Display for UpdateDeviceStateError {
 impl Error for UpdateDeviceStateError {}
 /// Trait representing the capabilities of the AWS IoT 1-Click Devices Service API. AWS IoT 1-Click Devices Service clients implement this trait.
 #[async_trait]
-pub trait Iot1ClickDevices {
+pub trait Iot1ClickDevices: Clone + Sync + Send + 'static {
     /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you
     /// received a claim code with the device(s).</p>
     async fn claim_devices_by_claim_code(
@@ -1032,11 +1122,31 @@ pub trait Iot1ClickDevices {
         input: ListDeviceEventsRequest,
     ) -> Result<ListDeviceEventsResponse, RusotoError<ListDeviceEventsError>>;
 
+    /// Auto-paginating version of `list_device_events`
+    fn list_device_events_pages(
+        &self,
+        input: ListDeviceEventsRequest,
+    ) -> RusotoStream<DeviceEvent, ListDeviceEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_device_events(state.clone())
+        })
+    }
+
     /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
     async fn list_devices(
         &self,
         input: ListDevicesRequest,
     ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>>;
+
+    /// Auto-paginating version of `list_devices`
+    fn list_devices_pages(
+        &self,
+        input: ListDevicesRequest,
+    ) -> RusotoStream<DeviceDescription, ListDevicesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_devices(state.clone())
+        })
+    }
 
     /// <p>Lists the tags associated with the specified resource ARN.</p>
     async fn list_tags_for_resource(

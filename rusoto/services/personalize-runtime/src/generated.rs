@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -24,6 +26,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [PersonalizeRuntime::get_personalized_ranking]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPersonalizedRankingRequest {
@@ -50,6 +53,7 @@ pub struct GetPersonalizedRankingRequest {
     pub user_id: String,
 }
 
+/// see [PersonalizeRuntime::get_personalized_ranking]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPersonalizedRankingResponse {
@@ -63,6 +67,7 @@ pub struct GetPersonalizedRankingResponse {
     pub recommendation_id: Option<String>,
 }
 
+/// see [PersonalizeRuntime::get_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationsRequest {
@@ -95,6 +100,7 @@ pub struct GetRecommendationsRequest {
     pub user_id: Option<String>,
 }
 
+/// see [PersonalizeRuntime::get_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationsResponse {
@@ -198,7 +204,7 @@ impl fmt::Display for GetRecommendationsError {
 impl Error for GetRecommendationsError {}
 /// Trait representing the capabilities of the Amazon Personalize Runtime API. Amazon Personalize Runtime clients implement this trait.
 #[async_trait]
-pub trait PersonalizeRuntime {
+pub trait PersonalizeRuntime: Clone + Sync + Send + 'static {
     /// <p><p>Re-ranks a list of recommended items for the given user. The first item in the list is deemed the most likely item to be of interest to the user.</p> <note> <p>The solution backing the campaign must have been created using a recipe of type PERSONALIZED_RANKING.</p> </note></p>
     async fn get_personalized_ranking(
         &self,

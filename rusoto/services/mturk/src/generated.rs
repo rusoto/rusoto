@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl MechanicalTurkClient {
 }
 
 use serde_json;
+/// see [MechanicalTurk::accept_qualification_request]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptQualificationRequestRequest {
@@ -63,10 +66,12 @@ pub struct AcceptQualificationRequestRequest {
     pub qualification_request_id: String,
 }
 
+/// see [MechanicalTurk::accept_qualification_request]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptQualificationRequestResponse {}
 
+/// see [MechanicalTurk::approve_assignment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApproveAssignmentRequest {
@@ -83,6 +88,7 @@ pub struct ApproveAssignmentRequest {
     pub requester_feedback: Option<String>,
 }
 
+/// see [MechanicalTurk::approve_assignment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApproveAssignmentResponse {}
@@ -141,6 +147,7 @@ pub struct Assignment {
     pub worker_id: Option<String>,
 }
 
+/// see [MechanicalTurk::associate_qualification_with_worker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateQualificationWithWorkerRequest {
@@ -160,6 +167,7 @@ pub struct AssociateQualificationWithWorkerRequest {
     pub worker_id: String,
 }
 
+/// see [MechanicalTurk::associate_qualification_with_worker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateQualificationWithWorkerResponse {}
@@ -189,6 +197,7 @@ pub struct BonusPayment {
     pub worker_id: Option<String>,
 }
 
+/// see [MechanicalTurk::create_additional_assignments_for_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAdditionalAssignmentsForHITRequest {
@@ -204,10 +213,12 @@ pub struct CreateAdditionalAssignmentsForHITRequest {
     pub unique_request_token: Option<String>,
 }
 
+/// see [MechanicalTurk::create_additional_assignments_for_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAdditionalAssignmentsForHITResponse {}
 
+/// see [MechanicalTurk::create_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITRequest {
@@ -272,6 +283,7 @@ pub struct CreateHITRequest {
     pub unique_request_token: Option<String>,
 }
 
+/// see [MechanicalTurk::create_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITResponse {
@@ -281,6 +293,7 @@ pub struct CreateHITResponse {
     pub hit: Option<HIT>,
 }
 
+/// see [MechanicalTurk::create_hit_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITTypeRequest {
@@ -310,6 +323,7 @@ pub struct CreateHITTypeRequest {
     pub title: String,
 }
 
+/// see [MechanicalTurk::create_hit_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITTypeResponse {
@@ -319,6 +333,7 @@ pub struct CreateHITTypeResponse {
     pub hit_type_id: Option<String>,
 }
 
+/// see [MechanicalTurk::create_hit_with_hit_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITWithHITTypeRequest {
@@ -362,6 +377,7 @@ pub struct CreateHITWithHITTypeRequest {
     pub unique_request_token: Option<String>,
 }
 
+/// see [MechanicalTurk::create_hit_with_hit_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITWithHITTypeResponse {
@@ -371,6 +387,7 @@ pub struct CreateHITWithHITTypeResponse {
     pub hit: Option<HIT>,
 }
 
+/// see [MechanicalTurk::create_qualification_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQualificationTypeRequest {
@@ -413,6 +430,7 @@ pub struct CreateQualificationTypeRequest {
     pub test_duration_in_seconds: Option<i64>,
 }
 
+/// see [MechanicalTurk::create_qualification_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateQualificationTypeResponse {
@@ -422,6 +440,7 @@ pub struct CreateQualificationTypeResponse {
     pub qualification_type: Option<QualificationType>,
 }
 
+/// see [MechanicalTurk::create_worker_block]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkerBlockRequest {
@@ -433,10 +452,12 @@ pub struct CreateWorkerBlockRequest {
     pub worker_id: String,
 }
 
+/// see [MechanicalTurk::create_worker_block]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkerBlockResponse {}
 
+/// see [MechanicalTurk::delete_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHITRequest {
@@ -445,10 +466,12 @@ pub struct DeleteHITRequest {
     pub hit_id: String,
 }
 
+/// see [MechanicalTurk::delete_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHITResponse {}
 
+/// see [MechanicalTurk::delete_qualification_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQualificationTypeRequest {
@@ -457,10 +480,12 @@ pub struct DeleteQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
+/// see [MechanicalTurk::delete_qualification_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQualificationTypeResponse {}
 
+/// see [MechanicalTurk::delete_worker_block]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkerBlockRequest {
@@ -473,10 +498,12 @@ pub struct DeleteWorkerBlockRequest {
     pub worker_id: String,
 }
 
+/// see [MechanicalTurk::delete_worker_block]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkerBlockResponse {}
 
+/// see [MechanicalTurk::disassociate_qualification_from_worker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateQualificationFromWorkerRequest {
@@ -492,14 +519,17 @@ pub struct DisassociateQualificationFromWorkerRequest {
     pub worker_id: String,
 }
 
+/// see [MechanicalTurk::disassociate_qualification_from_worker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateQualificationFromWorkerResponse {}
 
+/// see [MechanicalTurk::get_account_balance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountBalanceRequest {}
 
+/// see [MechanicalTurk::get_account_balance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountBalanceResponse {
@@ -511,6 +541,7 @@ pub struct GetAccountBalanceResponse {
     pub on_hold_balance: Option<String>,
 }
 
+/// see [MechanicalTurk::get_assignment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssignmentRequest {
@@ -519,6 +550,7 @@ pub struct GetAssignmentRequest {
     pub assignment_id: String,
 }
 
+/// see [MechanicalTurk::get_assignment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssignmentResponse {
@@ -532,6 +564,7 @@ pub struct GetAssignmentResponse {
     pub hit: Option<HIT>,
 }
 
+/// see [MechanicalTurk::get_file_upload_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFileUploadURLRequest {
@@ -543,6 +576,7 @@ pub struct GetFileUploadURLRequest {
     pub question_identifier: String,
 }
 
+/// see [MechanicalTurk::get_file_upload_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFileUploadURLResponse {
@@ -552,6 +586,7 @@ pub struct GetFileUploadURLResponse {
     pub file_upload_url: Option<String>,
 }
 
+/// see [MechanicalTurk::get_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHITRequest {
@@ -560,6 +595,7 @@ pub struct GetHITRequest {
     pub hit_id: String,
 }
 
+/// see [MechanicalTurk::get_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHITResponse {
@@ -569,6 +605,7 @@ pub struct GetHITResponse {
     pub hit: Option<HIT>,
 }
 
+/// see [MechanicalTurk::get_qualification_score]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQualificationScoreRequest {
@@ -580,6 +617,7 @@ pub struct GetQualificationScoreRequest {
     pub worker_id: String,
 }
 
+/// see [MechanicalTurk::get_qualification_score]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQualificationScoreResponse {
@@ -589,6 +627,7 @@ pub struct GetQualificationScoreResponse {
     pub qualification: Option<Qualification>,
 }
 
+/// see [MechanicalTurk::get_qualification_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQualificationTypeRequest {
@@ -597,6 +636,7 @@ pub struct GetQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
+/// see [MechanicalTurk::get_qualification_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQualificationTypeResponse {
@@ -707,6 +747,7 @@ pub struct HITLayoutParameter {
     pub value: String,
 }
 
+/// see [MechanicalTurk::list_assignments_for_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssignmentsForHITRequest {
@@ -726,6 +767,15 @@ pub struct ListAssignmentsForHITRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAssignmentsForHITRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_assignments_for_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssignmentsForHITResponse {
@@ -742,6 +792,31 @@ pub struct ListAssignmentsForHITResponse {
     pub num_results: Option<i64>,
 }
 
+impl ListAssignmentsForHITResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Assignment>> {
+        Some(self.assignments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAssignmentsForHITResponse {
+    type Item = Assignment;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Assignment> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_bonus_payments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBonusPaymentsRequest {
@@ -762,6 +837,15 @@ pub struct ListBonusPaymentsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListBonusPaymentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_bonus_payments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBonusPaymentsResponse {
@@ -778,6 +862,31 @@ pub struct ListBonusPaymentsResponse {
     pub num_results: Option<i64>,
 }
 
+impl ListBonusPaymentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BonusPayment>> {
+        Some(self.bonus_payments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBonusPaymentsResponse {
+    type Item = BonusPayment;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BonusPayment> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_hi_ts_for_qualification_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHITsForQualificationTypeRequest {
@@ -794,6 +903,15 @@ pub struct ListHITsForQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
+impl PagedRequest for ListHITsForQualificationTypeRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_hi_ts_for_qualification_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHITsForQualificationTypeResponse {
@@ -810,6 +928,31 @@ pub struct ListHITsForQualificationTypeResponse {
     pub num_results: Option<i64>,
 }
 
+impl ListHITsForQualificationTypeResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HIT>> {
+        Some(self.hi_ts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListHITsForQualificationTypeResponse {
+    type Item = HIT;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HIT> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_hi_ts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHITsRequest {
@@ -822,6 +965,15 @@ pub struct ListHITsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListHITsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_hi_ts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHITsResponse {
@@ -838,6 +990,31 @@ pub struct ListHITsResponse {
     pub num_results: Option<i64>,
 }
 
+impl ListHITsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HIT>> {
+        Some(self.hi_ts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListHITsResponse {
+    type Item = HIT;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HIT> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_qualification_requests]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQualificationRequestsRequest {
@@ -854,6 +1031,15 @@ pub struct ListQualificationRequestsRequest {
     pub qualification_type_id: Option<String>,
 }
 
+impl PagedRequest for ListQualificationRequestsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_qualification_requests]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQualificationRequestsResponse {
@@ -870,6 +1056,31 @@ pub struct ListQualificationRequestsResponse {
     pub qualification_requests: Option<Vec<QualificationRequest>>,
 }
 
+impl ListQualificationRequestsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<QualificationRequest>> {
+        Some(self.qualification_requests.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListQualificationRequestsResponse {
+    type Item = QualificationRequest;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<QualificationRequest> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_qualification_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQualificationTypesRequest {
@@ -893,6 +1104,15 @@ pub struct ListQualificationTypesRequest {
     pub query: Option<String>,
 }
 
+impl PagedRequest for ListQualificationTypesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_qualification_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQualificationTypesResponse {
@@ -909,6 +1129,31 @@ pub struct ListQualificationTypesResponse {
     pub qualification_types: Option<Vec<QualificationType>>,
 }
 
+impl ListQualificationTypesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<QualificationType>> {
+        Some(self.qualification_types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListQualificationTypesResponse {
+    type Item = QualificationType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<QualificationType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_review_policy_results_for_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReviewPolicyResultsForHITRequest {
@@ -937,6 +1182,7 @@ pub struct ListReviewPolicyResultsForHITRequest {
     pub retrieve_results: Option<bool>,
 }
 
+/// see [MechanicalTurk::list_review_policy_results_for_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReviewPolicyResultsForHITResponse {
@@ -965,6 +1211,7 @@ pub struct ListReviewPolicyResultsForHITResponse {
     pub next_token: Option<String>,
 }
 
+/// see [MechanicalTurk::list_reviewable_hi_ts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReviewableHITsRequest {
@@ -986,6 +1233,15 @@ pub struct ListReviewableHITsRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListReviewableHITsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_reviewable_hi_ts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReviewableHITsResponse {
@@ -1002,6 +1258,31 @@ pub struct ListReviewableHITsResponse {
     pub num_results: Option<i64>,
 }
 
+impl ListReviewableHITsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HIT>> {
+        Some(self.hi_ts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListReviewableHITsResponse {
+    type Item = HIT;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HIT> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_worker_blocks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkerBlocksRequest {
@@ -1014,6 +1295,15 @@ pub struct ListWorkerBlocksRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListWorkerBlocksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_worker_blocks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkerBlocksResponse {
@@ -1030,6 +1320,31 @@ pub struct ListWorkerBlocksResponse {
     pub worker_blocks: Option<Vec<WorkerBlock>>,
 }
 
+impl ListWorkerBlocksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<WorkerBlock>> {
+        Some(self.worker_blocks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListWorkerBlocksResponse {
+    type Item = WorkerBlock;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<WorkerBlock> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MechanicalTurk::list_workers_with_qualification_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkersWithQualificationTypeRequest {
@@ -1050,6 +1365,15 @@ pub struct ListWorkersWithQualificationTypeRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListWorkersWithQualificationTypeRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MechanicalTurk::list_workers_with_qualification_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkersWithQualificationTypeResponse {
@@ -1064,6 +1388,30 @@ pub struct ListWorkersWithQualificationTypeResponse {
     #[serde(rename = "Qualifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualifications: Option<Vec<Qualification>>,
+}
+
+impl ListWorkersWithQualificationTypeResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Qualification>> {
+        Some(self.qualifications.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListWorkersWithQualificationTypeResponse {
+    type Item = Qualification;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Qualification> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>The Locale data structure represents a geographical region or location.</p>
@@ -1114,6 +1462,7 @@ pub struct NotifyWorkersFailureStatus {
     pub worker_id: Option<String>,
 }
 
+/// see [MechanicalTurk::notify_workers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyWorkersRequest {
@@ -1128,6 +1477,7 @@ pub struct NotifyWorkersRequest {
     pub worker_ids: Vec<String>,
 }
 
+/// see [MechanicalTurk::notify_workers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyWorkersResponse {
@@ -1307,6 +1657,7 @@ pub struct QualificationType {
     pub test_duration_in_seconds: Option<i64>,
 }
 
+/// see [MechanicalTurk::reject_assignment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectAssignmentRequest {
@@ -1318,10 +1669,12 @@ pub struct RejectAssignmentRequest {
     pub requester_feedback: String,
 }
 
+/// see [MechanicalTurk::reject_assignment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectAssignmentResponse {}
 
+/// see [MechanicalTurk::reject_qualification_request]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectQualificationRequestRequest {
@@ -1334,6 +1687,7 @@ pub struct RejectQualificationRequestRequest {
     pub reason: Option<String>,
 }
 
+/// see [MechanicalTurk::reject_qualification_request]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectQualificationRequestResponse {}
@@ -1432,6 +1786,7 @@ pub struct ReviewResultDetail {
     pub value: Option<String>,
 }
 
+/// see [MechanicalTurk::send_bonus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendBonusRequest {
@@ -1453,10 +1808,12 @@ pub struct SendBonusRequest {
     pub worker_id: String,
 }
 
+/// see [MechanicalTurk::send_bonus]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendBonusResponse {}
 
+/// see [MechanicalTurk::send_test_event_notification]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTestEventNotificationRequest {
@@ -1468,10 +1825,12 @@ pub struct SendTestEventNotificationRequest {
     pub test_event_type: String,
 }
 
+/// see [MechanicalTurk::send_test_event_notification]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTestEventNotificationResponse {}
 
+/// see [MechanicalTurk::update_expiration_for_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateExpirationForHITRequest {
@@ -1483,10 +1842,12 @@ pub struct UpdateExpirationForHITRequest {
     pub hit_id: String,
 }
 
+/// see [MechanicalTurk::update_expiration_for_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateExpirationForHITResponse {}
 
+/// see [MechanicalTurk::update_hit_review_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHITReviewStatusRequest {
@@ -1499,10 +1860,12 @@ pub struct UpdateHITReviewStatusRequest {
     pub revert: Option<bool>,
 }
 
+/// see [MechanicalTurk::update_hit_review_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateHITReviewStatusResponse {}
 
+/// see [MechanicalTurk::update_hit_type_of_hit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHITTypeOfHITRequest {
@@ -1514,10 +1877,12 @@ pub struct UpdateHITTypeOfHITRequest {
     pub hit_type_id: String,
 }
 
+/// see [MechanicalTurk::update_hit_type_of_hit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateHITTypeOfHITResponse {}
 
+/// see [MechanicalTurk::update_notification_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationSettingsRequest {
@@ -1534,10 +1899,12 @@ pub struct UpdateNotificationSettingsRequest {
     pub notification: Option<NotificationSpecification>,
 }
 
+/// see [MechanicalTurk::update_notification_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotificationSettingsResponse {}
 
+/// see [MechanicalTurk::update_qualification_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQualificationTypeRequest {
@@ -1578,6 +1945,7 @@ pub struct UpdateQualificationTypeRequest {
     pub test_duration_in_seconds: Option<i64>,
 }
 
+/// see [MechanicalTurk::update_qualification_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateQualificationTypeResponse {
@@ -3093,7 +3461,7 @@ impl fmt::Display for UpdateQualificationTypeError {
 impl Error for UpdateQualificationTypeError {}
 /// Trait representing the capabilities of the Amazon MTurk API. Amazon MTurk clients implement this trait.
 #[async_trait]
-pub trait MechanicalTurk {
+pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     /// <p> The <code>AcceptQualificationRequest</code> operation approves a Worker's request for a Qualification. </p> <p> Only the owner of the Qualification type can grant a Qualification request for that type. </p> <p> A successful request for the <code>AcceptQualificationRequest</code> operation returns with no errors and an empty body. </p>
     async fn accept_qualification_request(
         &self,
@@ -3222,11 +3590,31 @@ pub trait MechanicalTurk {
         input: ListAssignmentsForHITRequest,
     ) -> Result<ListAssignmentsForHITResponse, RusotoError<ListAssignmentsForHITError>>;
 
+    /// Auto-paginating version of `list_assignments_for_hit`
+    fn list_assignments_for_hit_pages(
+        &self,
+        input: ListAssignmentsForHITRequest,
+    ) -> RusotoStream<Assignment, ListAssignmentsForHITError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_assignments_for_hit(state.clone())
+        })
+    }
+
     /// <p> The <code>ListBonusPayments</code> operation retrieves the amounts of bonuses you have paid to Workers for a given HIT or assignment. </p>
     async fn list_bonus_payments(
         &self,
         input: ListBonusPaymentsRequest,
     ) -> Result<ListBonusPaymentsResponse, RusotoError<ListBonusPaymentsError>>;
+
+    /// Auto-paginating version of `list_bonus_payments`
+    fn list_bonus_payments_pages(
+        &self,
+        input: ListBonusPaymentsRequest,
+    ) -> RusotoStream<BonusPayment, ListBonusPaymentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_bonus_payments(state.clone())
+        })
+    }
 
     /// <p> The <code>ListHITs</code> operation returns all of a Requester's HITs. The operation returns HITs of any status, except for HITs that have been deleted of with the DeleteHIT operation or that have been auto-deleted. </p>
     async fn list_hi_ts(
@@ -3234,11 +3622,28 @@ pub trait MechanicalTurk {
         input: ListHITsRequest,
     ) -> Result<ListHITsResponse, RusotoError<ListHITsError>>;
 
+    /// Auto-paginating version of `list_hi_ts`
+    fn list_hi_ts_pages(&self, input: ListHITsRequest) -> RusotoStream<HIT, ListHITsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_hi_ts(state.clone())
+        })
+    }
+
     /// <p> The <code>ListHITsForQualificationType</code> operation returns the HITs that use the given Qualification type for a Qualification requirement. The operation returns HITs of any status, except for HITs that have been deleted with the <code>DeleteHIT</code> operation or that have been auto-deleted. </p>
     async fn list_hi_ts_for_qualification_type(
         &self,
         input: ListHITsForQualificationTypeRequest,
     ) -> Result<ListHITsForQualificationTypeResponse, RusotoError<ListHITsForQualificationTypeError>>;
+
+    /// Auto-paginating version of `list_hi_ts_for_qualification_type`
+    fn list_hi_ts_for_qualification_type_pages(
+        &self,
+        input: ListHITsForQualificationTypeRequest,
+    ) -> RusotoStream<HIT, ListHITsForQualificationTypeError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_hi_ts_for_qualification_type(state.clone())
+        })
+    }
 
     /// <p> The <code>ListQualificationRequests</code> operation retrieves requests for Qualifications of a particular Qualification type. The owner of the Qualification type calls this operation to poll for pending requests, and accepts them using the AcceptQualification operation. </p>
     async fn list_qualification_requests(
@@ -3246,11 +3651,31 @@ pub trait MechanicalTurk {
         input: ListQualificationRequestsRequest,
     ) -> Result<ListQualificationRequestsResponse, RusotoError<ListQualificationRequestsError>>;
 
+    /// Auto-paginating version of `list_qualification_requests`
+    fn list_qualification_requests_pages(
+        &self,
+        input: ListQualificationRequestsRequest,
+    ) -> RusotoStream<QualificationRequest, ListQualificationRequestsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_qualification_requests(state.clone())
+        })
+    }
+
     /// <p> The <code>ListQualificationTypes</code> operation returns a list of Qualification types, filtered by an optional search term. </p>
     async fn list_qualification_types(
         &self,
         input: ListQualificationTypesRequest,
     ) -> Result<ListQualificationTypesResponse, RusotoError<ListQualificationTypesError>>;
+
+    /// Auto-paginating version of `list_qualification_types`
+    fn list_qualification_types_pages(
+        &self,
+        input: ListQualificationTypesRequest,
+    ) -> RusotoStream<QualificationType, ListQualificationTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_qualification_types(state.clone())
+        })
+    }
 
     /// <p> The <code>ListReviewPolicyResultsForHIT</code> operation retrieves the computed results and the actions taken in the course of executing your Review Policies for a given HIT. For information about how to specify Review Policies when you call CreateHIT, see Review Policies. The ListReviewPolicyResultsForHIT operation can return results for both Assignment-level and HIT-level review results. </p>
     async fn list_review_policy_results_for_hit(
@@ -3267,11 +3692,31 @@ pub trait MechanicalTurk {
         input: ListReviewableHITsRequest,
     ) -> Result<ListReviewableHITsResponse, RusotoError<ListReviewableHITsError>>;
 
+    /// Auto-paginating version of `list_reviewable_hi_ts`
+    fn list_reviewable_hi_ts_pages(
+        &self,
+        input: ListReviewableHITsRequest,
+    ) -> RusotoStream<HIT, ListReviewableHITsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_reviewable_hi_ts(state.clone())
+        })
+    }
+
     /// <p>The <code>ListWorkersBlocks</code> operation retrieves a list of Workers who are blocked from working on your HITs.</p>
     async fn list_worker_blocks(
         &self,
         input: ListWorkerBlocksRequest,
     ) -> Result<ListWorkerBlocksResponse, RusotoError<ListWorkerBlocksError>>;
+
+    /// Auto-paginating version of `list_worker_blocks`
+    fn list_worker_blocks_pages(
+        &self,
+        input: ListWorkerBlocksRequest,
+    ) -> RusotoStream<WorkerBlock, ListWorkerBlocksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_worker_blocks(state.clone())
+        })
+    }
 
     /// <p> The <code>ListWorkersWithQualificationType</code> operation returns all of the Workers that have been associated with a given Qualification type. </p>
     async fn list_workers_with_qualification_type(
@@ -3281,6 +3726,16 @@ pub trait MechanicalTurk {
         ListWorkersWithQualificationTypeResponse,
         RusotoError<ListWorkersWithQualificationTypeError>,
     >;
+
+    /// Auto-paginating version of `list_workers_with_qualification_type`
+    fn list_workers_with_qualification_type_pages(
+        &self,
+        input: ListWorkersWithQualificationTypeRequest,
+    ) -> RusotoStream<Qualification, ListWorkersWithQualificationTypeError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_workers_with_qualification_type(state.clone())
+        })
+    }
 
     /// <p> The <code>NotifyWorkers</code> operation sends an email to one or more Workers that you specify with the Worker ID. You can specify up to 100 Worker IDs to send the same message with a single call to the NotifyWorkers operation. The NotifyWorkers operation will send a notification email to a Worker only if you have previously approved or rejected work from the Worker. </p>
     async fn notify_workers(

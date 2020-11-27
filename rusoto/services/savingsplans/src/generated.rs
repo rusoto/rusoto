@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -24,6 +26,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [SavingsPlans::create_savings_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSavingsPlanRequest {
@@ -51,6 +54,7 @@ pub struct CreateSavingsPlanRequest {
     pub upfront_payment_amount: Option<String>,
 }
 
+/// see [SavingsPlans::create_savings_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSavingsPlanResponse {
@@ -60,6 +64,7 @@ pub struct CreateSavingsPlanResponse {
     pub savings_plan_id: Option<String>,
 }
 
+/// see [SavingsPlans::delete_queued_savings_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueuedSavingsPlanRequest {
@@ -68,10 +73,12 @@ pub struct DeleteQueuedSavingsPlanRequest {
     pub savings_plan_id: String,
 }
 
+/// see [SavingsPlans::delete_queued_savings_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQueuedSavingsPlanResponse {}
 
+/// see [SavingsPlans::describe_savings_plan_rates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlanRatesRequest {
@@ -92,6 +99,7 @@ pub struct DescribeSavingsPlanRatesRequest {
     pub savings_plan_id: String,
 }
 
+/// see [SavingsPlans::describe_savings_plan_rates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlanRatesResponse {
@@ -109,6 +117,7 @@ pub struct DescribeSavingsPlanRatesResponse {
     pub search_results: Option<Vec<SavingsPlanRate>>,
 }
 
+/// see [SavingsPlans::describe_savings_plans_offering_rates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlansOfferingRatesRequest {
@@ -154,6 +163,7 @@ pub struct DescribeSavingsPlansOfferingRatesRequest {
     pub usage_types: Option<Vec<String>>,
 }
 
+/// see [SavingsPlans::describe_savings_plans_offering_rates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlansOfferingRatesResponse {
@@ -167,6 +177,7 @@ pub struct DescribeSavingsPlansOfferingRatesResponse {
     pub search_results: Option<Vec<SavingsPlanOfferingRate>>,
 }
 
+/// see [SavingsPlans::describe_savings_plans_offerings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlansOfferingsRequest {
@@ -224,6 +235,7 @@ pub struct DescribeSavingsPlansOfferingsRequest {
     pub usage_types: Option<Vec<String>>,
 }
 
+/// see [SavingsPlans::describe_savings_plans_offerings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlansOfferingsResponse {
@@ -237,6 +249,7 @@ pub struct DescribeSavingsPlansOfferingsResponse {
     pub search_results: Option<Vec<SavingsPlanOffering>>,
 }
 
+/// see [SavingsPlans::describe_savings_plans]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlansRequest {
@@ -266,6 +279,7 @@ pub struct DescribeSavingsPlansRequest {
     pub states: Option<Vec<String>>,
 }
 
+/// see [SavingsPlans::describe_savings_plans]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlansResponse {
@@ -279,6 +293,7 @@ pub struct DescribeSavingsPlansResponse {
     pub savings_plans: Option<Vec<SavingsPlan>>,
 }
 
+/// see [SavingsPlans::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -287,6 +302,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [SavingsPlans::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -628,6 +644,7 @@ pub struct SavingsPlanRateProperty {
     pub value: Option<String>,
 }
 
+/// see [SavingsPlans::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -639,10 +656,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [SavingsPlans::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [SavingsPlans::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -654,6 +673,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [SavingsPlans::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -1000,7 +1020,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the AWSSavingsPlans API. AWSSavingsPlans clients implement this trait.
 #[async_trait]
-pub trait SavingsPlans {
+pub trait SavingsPlans: Clone + Sync + Send + 'static {
     /// <p>Creates a Savings Plan.</p>
     async fn create_savings_plan(
         &self,

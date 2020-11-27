@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -103,6 +105,7 @@ pub struct CorsRule {
     pub max_age_seconds: Option<i64>,
 }
 
+/// see [MediaStore::create_container]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContainerInput {
@@ -115,6 +118,7 @@ pub struct CreateContainerInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [MediaStore::create_container]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContainerOutput {
@@ -123,6 +127,7 @@ pub struct CreateContainerOutput {
     pub container: Container,
 }
 
+/// see [MediaStore::delete_container]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContainerInput {
@@ -131,10 +136,12 @@ pub struct DeleteContainerInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::delete_container]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContainerOutput {}
 
+/// see [MediaStore::delete_container_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContainerPolicyInput {
@@ -143,10 +150,12 @@ pub struct DeleteContainerPolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::delete_container_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContainerPolicyOutput {}
 
+/// see [MediaStore::delete_cors_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCorsPolicyInput {
@@ -155,10 +164,12 @@ pub struct DeleteCorsPolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::delete_cors_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCorsPolicyOutput {}
 
+/// see [MediaStore::delete_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLifecyclePolicyInput {
@@ -167,10 +178,12 @@ pub struct DeleteLifecyclePolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::delete_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLifecyclePolicyOutput {}
 
+/// see [MediaStore::delete_metric_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMetricPolicyInput {
@@ -179,10 +192,12 @@ pub struct DeleteMetricPolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::delete_metric_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMetricPolicyOutput {}
 
+/// see [MediaStore::describe_container]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContainerInput {
@@ -192,6 +207,7 @@ pub struct DescribeContainerInput {
     pub container_name: Option<String>,
 }
 
+/// see [MediaStore::describe_container]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContainerOutput {
@@ -201,6 +217,7 @@ pub struct DescribeContainerOutput {
     pub container: Option<Container>,
 }
 
+/// see [MediaStore::get_container_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerPolicyInput {
@@ -209,6 +226,7 @@ pub struct GetContainerPolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::get_container_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerPolicyOutput {
@@ -217,6 +235,7 @@ pub struct GetContainerPolicyOutput {
     pub policy: String,
 }
 
+/// see [MediaStore::get_cors_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCorsPolicyInput {
@@ -225,6 +244,7 @@ pub struct GetCorsPolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::get_cors_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCorsPolicyOutput {
@@ -233,6 +253,7 @@ pub struct GetCorsPolicyOutput {
     pub cors_policy: Vec<CorsRule>,
 }
 
+/// see [MediaStore::get_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyInput {
@@ -241,6 +262,7 @@ pub struct GetLifecyclePolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::get_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePolicyOutput {
@@ -249,6 +271,7 @@ pub struct GetLifecyclePolicyOutput {
     pub lifecycle_policy: String,
 }
 
+/// see [MediaStore::get_metric_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricPolicyInput {
@@ -257,6 +280,7 @@ pub struct GetMetricPolicyInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::get_metric_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMetricPolicyOutput {
@@ -265,6 +289,7 @@ pub struct GetMetricPolicyOutput {
     pub metric_policy: MetricPolicy,
 }
 
+/// see [MediaStore::list_containers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContainersInput {
@@ -278,6 +303,15 @@ pub struct ListContainersInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListContainersInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaStore::list_containers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContainersOutput {
@@ -290,6 +324,31 @@ pub struct ListContainersOutput {
     pub next_token: Option<String>,
 }
 
+impl ListContainersOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Container>> {
+        Some(self.containers.clone())
+    }
+}
+
+impl PagedOutput for ListContainersOutput {
+    type Item = Container;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Container> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaStore::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -298,6 +357,7 @@ pub struct ListTagsForResourceInput {
     pub resource: String,
 }
 
+/// see [MediaStore::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -330,6 +390,7 @@ pub struct MetricPolicyRule {
     pub object_group_name: String,
 }
 
+/// see [MediaStore::put_container_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutContainerPolicyInput {
@@ -341,10 +402,12 @@ pub struct PutContainerPolicyInput {
     pub policy: String,
 }
 
+/// see [MediaStore::put_container_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutContainerPolicyOutput {}
 
+/// see [MediaStore::put_cors_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutCorsPolicyInput {
@@ -356,10 +419,12 @@ pub struct PutCorsPolicyInput {
     pub cors_policy: Vec<CorsRule>,
 }
 
+/// see [MediaStore::put_cors_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutCorsPolicyOutput {}
 
+/// see [MediaStore::put_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecyclePolicyInput {
@@ -371,10 +436,12 @@ pub struct PutLifecyclePolicyInput {
     pub lifecycle_policy: String,
 }
 
+/// see [MediaStore::put_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLifecyclePolicyOutput {}
 
+/// see [MediaStore::put_metric_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricPolicyInput {
@@ -386,10 +453,12 @@ pub struct PutMetricPolicyInput {
     pub metric_policy: MetricPolicy,
 }
 
+/// see [MediaStore::put_metric_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutMetricPolicyOutput {}
 
+/// see [MediaStore::start_access_logging]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAccessLoggingInput {
@@ -398,10 +467,12 @@ pub struct StartAccessLoggingInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::start_access_logging]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAccessLoggingOutput {}
 
+/// see [MediaStore::stop_access_logging]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAccessLoggingInput {
@@ -410,6 +481,7 @@ pub struct StopAccessLoggingInput {
     pub container_name: String,
 }
 
+/// see [MediaStore::stop_access_logging]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAccessLoggingOutput {}
@@ -426,6 +498,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [MediaStore::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -437,10 +510,12 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [MediaStore::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
+/// see [MediaStore::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -452,6 +527,7 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [MediaStore::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
@@ -1420,7 +1496,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaStore API. MediaStore clients implement this trait.
 #[async_trait]
-pub trait MediaStore {
+pub trait MediaStore: Clone + Sync + Send + 'static {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
     async fn create_container(
         &self,
@@ -1492,6 +1568,16 @@ pub trait MediaStore {
         &self,
         input: ListContainersInput,
     ) -> Result<ListContainersOutput, RusotoError<ListContainersError>>;
+
+    /// Auto-paginating version of `list_containers`
+    fn list_containers_pages(
+        &self,
+        input: ListContainersInput,
+    ) -> RusotoStream<Container, ListContainersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_containers(state.clone())
+        })
+    }
 
     /// <p>Returns a list of the tags assigned to the specified container. </p>
     async fn list_tags_for_resource(

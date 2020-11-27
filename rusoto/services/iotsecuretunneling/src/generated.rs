@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -56,6 +58,7 @@ impl IoTSecureTunnelingClient {
 }
 
 use serde_json;
+/// see [IoTSecureTunneling::close_tunnel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseTunnelRequest {
@@ -68,6 +71,7 @@ pub struct CloseTunnelRequest {
     pub tunnel_id: String,
 }
 
+/// see [IoTSecureTunneling::close_tunnel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloseTunnelResponse {}
@@ -86,6 +90,7 @@ pub struct ConnectionState {
     pub status: Option<String>,
 }
 
+/// see [IoTSecureTunneling::describe_tunnel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTunnelRequest {
@@ -94,6 +99,7 @@ pub struct DescribeTunnelRequest {
     pub tunnel_id: String,
 }
 
+/// see [IoTSecureTunneling::describe_tunnel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTunnelResponse {
@@ -115,6 +121,7 @@ pub struct DestinationConfig {
     pub thing_name: Option<String>,
 }
 
+/// see [IoTSecureTunneling::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -123,6 +130,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [IoTSecureTunneling::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -132,6 +140,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [IoTSecureTunneling::list_tunnels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTunnelsRequest {
@@ -149,6 +158,7 @@ pub struct ListTunnelsRequest {
     pub thing_name: Option<String>,
 }
 
+/// see [IoTSecureTunneling::list_tunnels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTunnelsResponse {
@@ -162,6 +172,7 @@ pub struct ListTunnelsResponse {
     pub tunnel_summaries: Option<Vec<TunnelSummary>>,
 }
 
+/// see [IoTSecureTunneling::open_tunnel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpenTunnelRequest {
@@ -183,6 +194,7 @@ pub struct OpenTunnelRequest {
     pub timeout_config: Option<TimeoutConfig>,
 }
 
+/// see [IoTSecureTunneling::open_tunnel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpenTunnelResponse {
@@ -215,6 +227,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [IoTSecureTunneling::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -226,6 +239,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [IoTSecureTunneling::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -319,6 +333,7 @@ pub struct TunnelSummary {
     pub tunnel_id: Option<String>,
 }
 
+/// see [IoTSecureTunneling::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -330,6 +345,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [IoTSecureTunneling::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -540,7 +556,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the AWS IoT Secure Tunneling API. AWS IoT Secure Tunneling clients implement this trait.
 #[async_trait]
-pub trait IoTSecureTunneling {
+pub trait IoTSecureTunneling: Clone + Sync + Send + 'static {
     /// <p>Closes a tunnel identified by the unique tunnel id. When a <code>CloseTunnel</code> request is received, we close the WebSocket connections between the client and proxy server so no data can be transmitted.</p>
     async fn close_tunnel(
         &self,

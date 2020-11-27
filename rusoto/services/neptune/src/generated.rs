@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -60,6 +62,7 @@ impl NeptuneClient {
     }
 }
 
+/// see [Neptune::add_role_to_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddRoleToDBClusterMessage {
@@ -91,6 +94,7 @@ impl AddRoleToDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::add_source_identifier_to_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddSourceIdentifierToSubscriptionMessage {
@@ -120,6 +124,7 @@ impl AddSourceIdentifierToSubscriptionMessageSerializer {
     }
 }
 
+/// see [Neptune::add_source_identifier_to_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddSourceIdentifierToSubscriptionResult {
@@ -152,6 +157,7 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
         )
     }
 }
+/// see [Neptune::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
@@ -183,6 +189,7 @@ impl ApplyMethodDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Neptune::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
@@ -212,6 +219,7 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
     }
 }
 
+/// see [Neptune::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResult {
@@ -441,6 +449,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
     }
 }
 
+/// see [Neptune::copy_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterParameterGroupMessage {
@@ -481,6 +490,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::copy_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterParameterGroupResult {
@@ -514,6 +524,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Neptune::copy_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterSnapshotMessage {
@@ -563,6 +574,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Neptune::copy_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterSnapshotResult {
@@ -595,6 +607,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
         )
     }
 }
+/// see [Neptune::copy_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBParameterGroupMessage {
@@ -635,6 +648,7 @@ impl CopyDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::copy_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBParameterGroupResult {
@@ -667,6 +681,7 @@ impl CopyDBParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Neptune::create_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterEndpointMessage {
@@ -723,6 +738,7 @@ impl CreateDBClusterEndpointMessageSerializer {
 }
 
 /// <p>This data type represents the information you need to connect to an Amazon Neptune DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon Neptune DB instance endpoints, see <code>Endpoint</code>.</p>
+/// see [Neptune::create_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterEndpointOutput {
@@ -819,6 +835,7 @@ impl CreateDBClusterEndpointOutputDeserializer {
         )
     }
 }
+/// see [Neptune::create_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterMessage {
@@ -985,6 +1002,7 @@ impl CreateDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::create_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterParameterGroupMessage {
@@ -1022,6 +1040,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::create_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterParameterGroupResult {
@@ -1055,6 +1074,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Neptune::create_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterResult {
@@ -1080,6 +1100,7 @@ impl CreateDBClusterResultDeserializer {
         })
     }
 }
+/// see [Neptune::create_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterSnapshotMessage {
@@ -1114,6 +1135,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Neptune::create_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterSnapshotResult {
@@ -1146,6 +1168,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
         )
     }
 }
+/// see [Neptune::create_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBInstanceMessage {
@@ -1416,6 +1439,7 @@ impl CreateDBInstanceMessageSerializer {
     }
 }
 
+/// see [Neptune::create_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBInstanceResult {
@@ -1442,6 +1466,7 @@ impl CreateDBInstanceResultDeserializer {
         })
     }
 }
+/// see [Neptune::create_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBParameterGroupMessage {
@@ -1479,6 +1504,7 @@ impl CreateDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::create_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBParameterGroupResult {
@@ -1511,6 +1537,7 @@ impl CreateDBParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Neptune::create_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBSubnetGroupMessage {
@@ -1552,6 +1579,7 @@ impl CreateDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::create_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBSubnetGroupResult {
@@ -1584,6 +1612,7 @@ impl CreateDBSubnetGroupResultDeserializer {
         )
     }
 }
+/// see [Neptune::create_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
@@ -1643,6 +1672,7 @@ impl CreateEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Neptune::create_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEventSubscriptionResult {
@@ -2071,6 +2101,7 @@ impl DBClusterEndpointListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_cluster_endpoints]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterEndpointMessage {
@@ -2078,6 +2109,30 @@ pub struct DBClusterEndpointMessage {
     pub db_cluster_endpoints: Option<Vec<DBClusterEndpoint>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterEndpoints</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl DBClusterEndpointMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBClusterEndpoint>> {
+        Some(self.db_cluster_endpoints.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterEndpointMessage {
+    type Item = DBClusterEndpoint;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBClusterEndpoint> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2202,6 +2257,7 @@ impl DBClusterMemberListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterMessage {
@@ -2209,6 +2265,30 @@ pub struct DBClusterMessage {
     pub db_clusters: Option<Vec<DBCluster>>,
     /// <p>A pagination token that can be used in a subsequent DescribeDBClusters request.</p>
     pub marker: Option<String>,
+}
+
+impl DBClusterMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBCluster>> {
+        Some(self.db_clusters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterMessage {
+    type Item = DBCluster;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBCluster> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2350,6 +2430,7 @@ impl DBClusterParameterGroupDeserializer {
         )
     }
 }
+/// see [Neptune::describe_db_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupDetails {
@@ -2357,6 +2438,30 @@ pub struct DBClusterParameterGroupDetails {
     pub marker: Option<String>,
     /// <p>Provides a list of parameters for the DB cluster parameter group.</p>
     pub parameters: Option<Vec<Parameter>>,
+}
+
+impl DBClusterParameterGroupDetails {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterParameterGroupDetails {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2408,6 +2513,8 @@ impl DBClusterParameterGroupListDeserializer {
         })
     }
 }
+/// see [Neptune::modify_db_cluster_parameter_group]
+/// see [Neptune::reset_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupNameMessage {
@@ -2440,6 +2547,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
         )
     }
 }
+/// see [Neptune::describe_db_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupsMessage {
@@ -2447,6 +2555,30 @@ pub struct DBClusterParameterGroupsMessage {
     pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBClusterParameterGroupsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBClusterParameterGroup>> {
+        Some(self.db_cluster_parameter_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterParameterGroupsMessage {
+    type Item = DBClusterParameterGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBClusterParameterGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2814,6 +2946,7 @@ impl DBClusterSnapshotListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotMessage {
@@ -2821,6 +2954,30 @@ pub struct DBClusterSnapshotMessage {
     pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
     /// <p> An optional pagination token provided by a previous <a>DescribeDBClusterSnapshots</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl DBClusterSnapshotMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBClusterSnapshot>> {
+        Some(self.db_cluster_snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterSnapshotMessage {
+    type Item = DBClusterSnapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBClusterSnapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2994,6 +3151,7 @@ impl DBEngineVersionListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBEngineVersionMessage {
@@ -3001,6 +3159,30 @@ pub struct DBEngineVersionMessage {
     pub db_engine_versions: Option<Vec<DBEngineVersion>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBEngineVersionMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBEngineVersion>> {
+        Some(self.db_engine_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBEngineVersionMessage {
+    type Item = DBEngineVersion;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBEngineVersion> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3449,6 +3631,7 @@ impl DBInstanceListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceMessage {
@@ -3456,6 +3639,30 @@ pub struct DBInstanceMessage {
     pub db_instances: Option<Vec<DBInstance>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
+}
+
+impl DBInstanceMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBInstance>> {
+        Some(self.db_instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBInstanceMessage {
+    type Item = DBInstance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBInstance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3596,6 +3803,7 @@ impl DBParameterGroupDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupDetails {
@@ -3603,6 +3811,30 @@ pub struct DBParameterGroupDetails {
     pub marker: Option<String>,
     /// <p>A list of <a>Parameter</a> values.</p>
     pub parameters: Option<Vec<Parameter>>,
+}
+
+impl DBParameterGroupDetails {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBParameterGroupDetails {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3654,6 +3886,8 @@ impl DBParameterGroupListDeserializer {
         })
     }
 }
+/// see [Neptune::modify_db_parameter_group]
+/// see [Neptune::reset_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupNameMessage {
@@ -3746,6 +3980,7 @@ impl DBParameterGroupStatusListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupsMessage {
@@ -3753,6 +3988,30 @@ pub struct DBParameterGroupsMessage {
     pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBParameterGroupsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBParameterGroup>> {
+        Some(self.db_parameter_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBParameterGroupsMessage {
+    type Item = DBParameterGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBParameterGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3918,6 +4177,7 @@ impl DBSubnetGroupDeserializer {
         })
     }
 }
+/// see [Neptune::describe_db_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroupMessage {
@@ -3925,6 +4185,30 @@ pub struct DBSubnetGroupMessage {
     pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBSubnetGroupMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBSubnetGroup>> {
+        Some(self.db_subnet_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBSubnetGroupMessage {
+    type Item = DBSubnetGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBSubnetGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3972,6 +4256,7 @@ impl DBSubnetGroupsDeserializer {
         })
     }
 }
+/// see [Neptune::delete_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterEndpointMessage {
@@ -3996,6 +4281,7 @@ impl DeleteDBClusterEndpointMessageSerializer {
 }
 
 /// <p>This data type represents the information you need to connect to an Amazon Neptune DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+/// see [Neptune::delete_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterEndpointOutput {
@@ -4092,6 +4378,7 @@ impl DeleteDBClusterEndpointOutputDeserializer {
         )
     }
 }
+/// see [Neptune::delete_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterMessage {
@@ -4128,6 +4415,7 @@ impl DeleteDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::delete_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterParameterGroupMessage {
@@ -4151,6 +4439,7 @@ impl DeleteDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::delete_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterResult {
@@ -4176,6 +4465,7 @@ impl DeleteDBClusterResultDeserializer {
         })
     }
 }
+/// see [Neptune::delete_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterSnapshotMessage {
@@ -4199,6 +4489,7 @@ impl DeleteDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Neptune::delete_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterSnapshotResult {
@@ -4231,6 +4522,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
         )
     }
 }
+/// see [Neptune::delete_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBInstanceMessage {
@@ -4267,6 +4559,7 @@ impl DeleteDBInstanceMessageSerializer {
     }
 }
 
+/// see [Neptune::delete_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBInstanceResult {
@@ -4293,6 +4586,7 @@ impl DeleteDBInstanceResultDeserializer {
         })
     }
 }
+/// see [Neptune::delete_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBParameterGroupMessage {
@@ -4316,6 +4610,7 @@ impl DeleteDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::delete_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBSubnetGroupMessage {
@@ -4339,6 +4634,7 @@ impl DeleteDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::delete_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
@@ -4362,6 +4658,7 @@ impl DeleteEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Neptune::delete_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteEventSubscriptionResult {
@@ -4394,6 +4691,7 @@ impl DeleteEventSubscriptionResultDeserializer {
         )
     }
 }
+/// see [Neptune::describe_db_cluster_endpoints]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterEndpointsMessage {
@@ -4407,6 +4705,14 @@ pub struct DescribeDBClusterEndpointsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBClusterEndpointsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClusterEndpointsMessage` contents to a `SignedRequest`.
@@ -4446,6 +4752,7 @@ impl DescribeDBClusterEndpointsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParameterGroupsMessage {
@@ -4457,6 +4764,14 @@ pub struct DescribeDBClusterParameterGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBClusterParameterGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClusterParameterGroupsMessage` contents to a `SignedRequest`.
@@ -4490,6 +4805,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParametersMessage {
@@ -4503,6 +4819,14 @@ pub struct DescribeDBClusterParametersMessage {
     pub max_records: Option<i64>,
     /// <p> A value that indicates to return only parameters for a specific source. Parameter sources can be <code>engine</code>, <code>service</code>, or <code>customer</code>.</p>
     pub source: Option<String>,
+}
+
+impl PagedRequest for DescribeDBClusterParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClusterParametersMessage` contents to a `SignedRequest`.
@@ -4537,6 +4861,7 @@ impl DescribeDBClusterParametersMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_cluster_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotAttributesMessage {
@@ -4564,6 +4889,7 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_cluster_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBClusterSnapshotAttributesResult {
@@ -4597,6 +4923,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
         )
     }
 }
+/// see [Neptune::describe_db_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotsMessage {
@@ -4616,6 +4943,14 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub max_records: Option<i64>,
     /// <p>The type of DB cluster snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all DB cluster snapshots that have been automatically taken by Amazon Neptune for my AWS account.</p> </li> <li> <p> <code>manual</code> - Return all DB cluster snapshots that have been taken by my AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual DB cluster snapshots that have been shared to my AWS account.</p> </li> <li> <p> <code>public</code> - Return all DB cluster snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual DB cluster snapshots are returned. You can include shared DB cluster snapshots with these results by setting the <code>IncludeShared</code> parameter to <code>true</code>. You can include public DB cluster snapshots with these results by setting the <code>IncludePublic</code> parameter to <code>true</code>.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>
     pub snapshot_type: Option<String>,
+}
+
+impl PagedRequest for DescribeDBClusterSnapshotsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClusterSnapshotsMessage` contents to a `SignedRequest`.
@@ -4664,6 +4999,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClustersMessage {
@@ -4675,6 +5011,14 @@ pub struct DescribeDBClustersMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBClustersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClustersMessage` contents to a `SignedRequest`.
@@ -4708,6 +5052,7 @@ impl DescribeDBClustersMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBEngineVersionsMessage {
@@ -4729,6 +5074,14 @@ pub struct DescribeDBEngineVersionsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBEngineVersionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBEngineVersionsMessage` contents to a `SignedRequest`.
@@ -4783,6 +5136,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBInstancesMessage {
@@ -4794,6 +5148,14 @@ pub struct DescribeDBInstancesMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBInstancesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBInstancesMessage` contents to a `SignedRequest`.
@@ -4827,6 +5189,7 @@ impl DescribeDBInstancesMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBParameterGroupsMessage {
@@ -4838,6 +5201,14 @@ pub struct DescribeDBParameterGroupsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBParameterGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBParameterGroupsMessage` contents to a `SignedRequest`.
@@ -4871,6 +5242,7 @@ impl DescribeDBParameterGroupsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBParametersMessage {
@@ -4884,6 +5256,14 @@ pub struct DescribeDBParametersMessage {
     pub max_records: Option<i64>,
     /// <p>The parameter types to return.</p> <p>Default: All parameter types returned</p> <p>Valid Values: <code>user | system | engine-default</code> </p>
     pub source: Option<String>,
+}
+
+impl PagedRequest for DescribeDBParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBParametersMessage` contents to a `SignedRequest`.
@@ -4918,6 +5298,7 @@ impl DescribeDBParametersMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_db_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSubnetGroupsMessage {
@@ -4929,6 +5310,14 @@ pub struct DescribeDBSubnetGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBSubnetGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBSubnetGroupsMessage` contents to a `SignedRequest`.
@@ -4959,6 +5348,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_engine_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultClusterParametersMessage {
@@ -5005,6 +5395,7 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_engine_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultClusterParametersResult {
@@ -5037,6 +5428,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
         )
     }
 }
+/// see [Neptune::describe_engine_default_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultParametersMessage {
@@ -5048,6 +5440,14 @@ pub struct DescribeEngineDefaultParametersMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeEngineDefaultParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEngineDefaultParametersMessage` contents to a `SignedRequest`.
@@ -5079,10 +5479,35 @@ impl DescribeEngineDefaultParametersMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_engine_default_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
+}
+
+impl DescribeEngineDefaultParametersResult {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.engine_defaults.as_ref()?.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEngineDefaultParametersResult {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.engine_defaults.as_ref()?.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -5111,6 +5536,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
         )
     }
 }
+/// see [Neptune::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
@@ -5142,6 +5568,7 @@ impl DescribeEventCategoriesMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
@@ -5153,6 +5580,14 @@ pub struct DescribeEventSubscriptionsMessage {
     pub max_records: Option<i64>,
     /// <p>The name of the event notification subscription you want to describe.</p>
     pub subscription_name: Option<String>,
+}
+
+impl PagedRequest for DescribeEventSubscriptionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEventSubscriptionsMessage` contents to a `SignedRequest`.
@@ -5183,6 +5618,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
@@ -5204,6 +5640,14 @@ pub struct DescribeEventsMessage {
     pub source_type: Option<String>,
     /// <p> The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: 2009-07-08T18:00Z</p>
     pub start_time: Option<String>,
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
@@ -5253,6 +5697,7 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_orderable_db_instance_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableDBInstanceOptionsMessage {
@@ -5272,6 +5717,14 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     pub max_records: Option<i64>,
     /// <p>The VPC filter value. Specify this parameter to show only the available VPC or non-VPC offerings.</p>
     pub vpc: Option<bool>,
+}
+
+impl PagedRequest for DescribeOrderableDBInstanceOptionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeOrderableDBInstanceOptionsMessage` contents to a `SignedRequest`.
@@ -5312,6 +5765,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
@@ -5323,6 +5777,14 @@ pub struct DescribePendingMaintenanceActionsMessage {
     pub max_records: Option<i64>,
     /// <p>The ARN of a resource to return pending maintenance actions for.</p>
     pub resource_identifier: Option<String>,
+}
+
+impl PagedRequest for DescribePendingMaintenanceActionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribePendingMaintenanceActionsMessage` contents to a `SignedRequest`.
@@ -5353,6 +5815,7 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_valid_db_instance_modifications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeValidDBInstanceModificationsMessage {
@@ -5380,6 +5843,7 @@ impl DescribeValidDBInstanceModificationsMessageSerializer {
     }
 }
 
+/// see [Neptune::describe_valid_db_instance_modifications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeValidDBInstanceModificationsResult {
@@ -5762,6 +6226,7 @@ impl EventCategoriesMapListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
@@ -5919,6 +6384,7 @@ impl EventSubscriptionsListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventSubscriptionsMessage {
@@ -5926,6 +6392,30 @@ pub struct EventSubscriptionsMessage {
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
     /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl EventSubscriptionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<EventSubscription>> {
+        Some(self.event_subscriptions_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for EventSubscriptionsMessage {
+    type Item = EventSubscription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EventSubscription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -5959,6 +6449,7 @@ impl EventSubscriptionsMessageDeserializer {
         )
     }
 }
+/// see [Neptune::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
@@ -5966,6 +6457,30 @@ pub struct EventsMessage {
     pub events: Option<Vec<Event>>,
     /// <p> An optional pagination token provided by a previous Events request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
+}
+
+impl EventsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for EventsMessage {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -5992,6 +6507,7 @@ impl EventsMessageDeserializer {
         })
     }
 }
+/// see [Neptune::failover_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailoverDBClusterMessage {
@@ -6025,6 +6541,7 @@ impl FailoverDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::failover_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FailoverDBClusterResult {
@@ -6133,6 +6650,7 @@ impl KeyListSerializer {
     }
 }
 
+/// see [Neptune::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
@@ -6192,6 +6710,7 @@ impl LogTypeListSerializer {
     }
 }
 
+/// see [Neptune::modify_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterEndpointMessage {
@@ -6239,6 +6758,7 @@ impl ModifyDBClusterEndpointMessageSerializer {
 }
 
 /// <p>This data type represents the information you need to connect to an Amazon Aurora DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+/// see [Neptune::modify_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterEndpointOutput {
@@ -6335,6 +6855,7 @@ impl ModifyDBClusterEndpointOutputDeserializer {
         )
     }
 }
+/// see [Neptune::modify_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterMessage {
@@ -6454,6 +6975,7 @@ impl ModifyDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::modify_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterParameterGroupMessage {
@@ -6484,6 +7006,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::modify_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterResult {
@@ -6509,6 +7032,7 @@ impl ModifyDBClusterResultDeserializer {
         })
     }
 }
+/// see [Neptune::modify_db_cluster_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
@@ -6556,6 +7080,7 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
     }
 }
 
+/// see [Neptune::modify_db_cluster_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterSnapshotAttributeResult {
@@ -6589,6 +7114,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
         )
     }
 }
+/// see [Neptune::modify_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBInstanceMessage {
@@ -6836,6 +7362,7 @@ impl ModifyDBInstanceMessageSerializer {
     }
 }
 
+/// see [Neptune::modify_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBInstanceResult {
@@ -6862,6 +7389,7 @@ impl ModifyDBInstanceResultDeserializer {
         })
     }
 }
+/// see [Neptune::modify_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBParameterGroupMessage {
@@ -6892,6 +7420,7 @@ impl ModifyDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::modify_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSubnetGroupMessage {
@@ -6930,6 +7459,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::modify_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBSubnetGroupResult {
@@ -6962,6 +7492,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
         )
     }
 }
+/// see [Neptune::modify_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
@@ -7009,6 +7540,7 @@ impl ModifyEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Neptune::modify_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyEventSubscriptionResult {
@@ -7289,6 +7821,7 @@ impl OrderableDBInstanceOptionsListDeserializer {
         })
     }
 }
+/// see [Neptune::describe_orderable_db_instance_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableDBInstanceOptionsMessage {
@@ -7296,6 +7829,30 @@ pub struct OrderableDBInstanceOptionsMessage {
     pub marker: Option<String>,
     /// <p>An <a>OrderableDBInstanceOption</a> structure containing information about orderable options for the DB instance.</p>
     pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
+}
+
+impl OrderableDBInstanceOptionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<OrderableDBInstanceOption>> {
+        Some(self.orderable_db_instance_options.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for OrderableDBInstanceOptionsMessage {
+    type Item = OrderableDBInstanceOption;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OrderableDBInstanceOption> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7631,6 +8188,7 @@ impl PendingMaintenanceActionsDeserializer {
         })
     }
 }
+/// see [Neptune::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingMaintenanceActionsMessage {
@@ -7638,6 +8196,30 @@ pub struct PendingMaintenanceActionsMessage {
     pub marker: Option<String>,
     /// <p>A list of the pending maintenance actions for the resource.</p>
     pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
+}
+
+impl PendingMaintenanceActionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ResourcePendingMaintenanceActions>> {
+        Some(self.pending_maintenance_actions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for PendingMaintenanceActionsMessage {
+    type Item = ResourcePendingMaintenanceActions;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourcePendingMaintenanceActions> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7787,6 +8369,7 @@ impl PendingModifiedValuesDeserializer {
         })
     }
 }
+/// see [Neptune::promote_read_replica_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PromoteReadReplicaDBClusterMessage {
@@ -7810,6 +8393,7 @@ impl PromoteReadReplicaDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::promote_read_replica_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PromoteReadReplicaDBClusterResult {
@@ -7955,6 +8539,7 @@ impl ReadReplicaIdentifierListDeserializer {
         })
     }
 }
+/// see [Neptune::reboot_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootDBInstanceMessage {
@@ -7983,6 +8568,7 @@ impl RebootDBInstanceMessageSerializer {
     }
 }
 
+/// see [Neptune::reboot_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootDBInstanceResult {
@@ -8009,6 +8595,7 @@ impl RebootDBInstanceResultDeserializer {
         })
     }
 }
+/// see [Neptune::remove_role_from_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveRoleFromDBClusterMessage {
@@ -8040,6 +8627,7 @@ impl RemoveRoleFromDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::remove_source_identifier_from_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveSourceIdentifierFromSubscriptionMessage {
@@ -8073,6 +8661,7 @@ impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
     }
 }
 
+/// see [Neptune::remove_source_identifier_from_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveSourceIdentifierFromSubscriptionResult {
@@ -8105,6 +8694,7 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
         )
     }
 }
+/// see [Neptune::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
@@ -8128,6 +8718,7 @@ impl RemoveTagsFromResourceMessageSerializer {
     }
 }
 
+/// see [Neptune::reset_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBClusterParameterGroupMessage {
@@ -8165,6 +8756,7 @@ impl ResetDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Neptune::reset_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBParameterGroupMessage {
@@ -8246,6 +8838,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
         )
     }
 }
+/// see [Neptune::restore_db_cluster_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterFromSnapshotMessage {
@@ -8361,6 +8954,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
     }
 }
 
+/// see [Neptune::restore_db_cluster_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterFromSnapshotResult {
@@ -8391,6 +8985,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
         )
     }
 }
+/// see [Neptune::restore_db_cluster_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterToPointInTimeMessage {
@@ -8502,6 +9097,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
     }
 }
 
+/// see [Neptune::restore_db_cluster_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterToPointInTimeResult {
@@ -8570,6 +9166,7 @@ impl SourceTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Neptune::start_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDBClusterMessage {
@@ -8593,6 +9190,7 @@ impl StartDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::start_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartDBClusterResult {
@@ -8618,6 +9216,7 @@ impl StartDBClusterResultDeserializer {
         })
     }
 }
+/// see [Neptune::stop_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDBClusterMessage {
@@ -8641,6 +9240,7 @@ impl StopDBClusterMessageSerializer {
     }
 }
 
+/// see [Neptune::stop_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopDBClusterResult {
@@ -8899,6 +9499,7 @@ impl TagListSerializer {
     }
 }
 
+/// see [Neptune::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagListMessage {
@@ -13996,7 +14597,7 @@ impl fmt::Display for StopDBClusterError {
 impl Error for StopDBClusterError {}
 /// Trait representing the capabilities of the Amazon Neptune API. Amazon Neptune clients implement this trait.
 #[async_trait]
-pub trait Neptune {
+pub trait Neptune: Clone + Sync + Send + 'static {
     /// <p>Associates an Identity and Access Management (IAM) role from an Neptune DB cluster.</p>
     async fn add_role_to_db_cluster(
         &self,
@@ -14144,17 +14745,47 @@ pub trait Neptune {
         input: DescribeDBClusterEndpointsMessage,
     ) -> Result<DBClusterEndpointMessage, RusotoError<DescribeDBClusterEndpointsError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_endpoints`
+    fn describe_db_cluster_endpoints_pages(
+        &self,
+        input: DescribeDBClusterEndpointsMessage,
+    ) -> RusotoStream<DBClusterEndpoint, DescribeDBClusterEndpointsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_cluster_endpoints(state.clone())
+        })
+    }
+
     /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group.</p>
     async fn describe_db_cluster_parameter_groups(
         &self,
         input: DescribeDBClusterParameterGroupsMessage,
     ) -> Result<DBClusterParameterGroupsMessage, RusotoError<DescribeDBClusterParameterGroupsError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_parameter_groups`
+    fn describe_db_cluster_parameter_groups_pages(
+        &self,
+        input: DescribeDBClusterParameterGroupsMessage,
+    ) -> RusotoStream<DBClusterParameterGroup, DescribeDBClusterParameterGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_cluster_parameter_groups(state.clone())
+        })
+    }
+
     /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p>
     async fn describe_db_cluster_parameters(
         &self,
         input: DescribeDBClusterParametersMessage,
     ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>>;
+
+    /// Auto-paginating version of `describe_db_cluster_parameters`
+    fn describe_db_cluster_parameters_pages(
+        &self,
+        input: DescribeDBClusterParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeDBClusterParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_cluster_parameters(state.clone())
+        })
+    }
 
     /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
     async fn describe_db_cluster_snapshot_attributes(
@@ -14171,11 +14802,31 @@ pub trait Neptune {
         input: DescribeDBClusterSnapshotsMessage,
     ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_snapshots`
+    fn describe_db_cluster_snapshots_pages(
+        &self,
+        input: DescribeDBClusterSnapshotsMessage,
+    ) -> RusotoStream<DBClusterSnapshot, DescribeDBClusterSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_cluster_snapshots(state.clone())
+        })
+    }
+
     /// <p><p>Returns information about provisioned DB clusters, and supports pagination.</p> <note> <p>This operation can also return information for Amazon RDS clusters and Amazon DocDB clusters.</p> </note></p>
     async fn describe_db_clusters(
         &self,
         input: DescribeDBClustersMessage,
     ) -> Result<DBClusterMessage, RusotoError<DescribeDBClustersError>>;
+
+    /// Auto-paginating version of `describe_db_clusters`
+    fn describe_db_clusters_pages(
+        &self,
+        input: DescribeDBClustersMessage,
+    ) -> RusotoStream<DBCluster, DescribeDBClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_clusters(state.clone())
+        })
+    }
 
     /// <p>Returns a list of the available DB engines.</p>
     async fn describe_db_engine_versions(
@@ -14183,11 +14834,31 @@ pub trait Neptune {
         input: DescribeDBEngineVersionsMessage,
     ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>>;
 
+    /// Auto-paginating version of `describe_db_engine_versions`
+    fn describe_db_engine_versions_pages(
+        &self,
+        input: DescribeDBEngineVersionsMessage,
+    ) -> RusotoStream<DBEngineVersion, DescribeDBEngineVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_engine_versions(state.clone())
+        })
+    }
+
     /// <p><p>Returns information about provisioned instances, and supports pagination.</p> <note> <p>This operation can also return information for Amazon RDS instances and Amazon DocDB instances.</p> </note></p>
     async fn describe_db_instances(
         &self,
         input: DescribeDBInstancesMessage,
     ) -> Result<DBInstanceMessage, RusotoError<DescribeDBInstancesError>>;
+
+    /// Auto-paginating version of `describe_db_instances`
+    fn describe_db_instances_pages(
+        &self,
+        input: DescribeDBInstancesMessage,
+    ) -> RusotoStream<DBInstance, DescribeDBInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_instances(state.clone())
+        })
+    }
 
     /// <p>Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group.</p>
     async fn describe_db_parameter_groups(
@@ -14195,17 +14866,47 @@ pub trait Neptune {
         input: DescribeDBParameterGroupsMessage,
     ) -> Result<DBParameterGroupsMessage, RusotoError<DescribeDBParameterGroupsError>>;
 
+    /// Auto-paginating version of `describe_db_parameter_groups`
+    fn describe_db_parameter_groups_pages(
+        &self,
+        input: DescribeDBParameterGroupsMessage,
+    ) -> RusotoStream<DBParameterGroup, DescribeDBParameterGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_parameter_groups(state.clone())
+        })
+    }
+
     /// <p>Returns the detailed parameter list for a particular DB parameter group.</p>
     async fn describe_db_parameters(
         &self,
         input: DescribeDBParametersMessage,
     ) -> Result<DBParameterGroupDetails, RusotoError<DescribeDBParametersError>>;
 
+    /// Auto-paginating version of `describe_db_parameters`
+    fn describe_db_parameters_pages(
+        &self,
+        input: DescribeDBParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeDBParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_parameters(state.clone())
+        })
+    }
+
     /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>.</p>
     async fn describe_db_subnet_groups(
         &self,
         input: DescribeDBSubnetGroupsMessage,
     ) -> Result<DBSubnetGroupMessage, RusotoError<DescribeDBSubnetGroupsError>>;
+
+    /// Auto-paginating version of `describe_db_subnet_groups`
+    fn describe_db_subnet_groups_pages(
+        &self,
+        input: DescribeDBSubnetGroupsMessage,
+    ) -> RusotoStream<DBSubnetGroup, DescribeDBSubnetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_subnet_groups(state.clone())
+        })
+    }
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
     async fn describe_engine_default_cluster_parameters(
@@ -14225,6 +14926,16 @@ pub trait Neptune {
         RusotoError<DescribeEngineDefaultParametersError>,
     >;
 
+    /// Auto-paginating version of `describe_engine_default_parameters`
+    fn describe_engine_default_parameters_pages(
+        &self,
+        input: DescribeEngineDefaultParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeEngineDefaultParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_engine_default_parameters(state.clone())
+        })
+    }
+
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type.</p>
     async fn describe_event_categories(
         &self,
@@ -14237,11 +14948,31 @@ pub trait Neptune {
         input: DescribeEventSubscriptionsMessage,
     ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>>;
 
+    /// Auto-paginating version of `describe_event_subscriptions`
+    fn describe_event_subscriptions_pages(
+        &self,
+        input: DescribeEventSubscriptionsMessage,
+    ) -> RusotoStream<EventSubscription, DescribeEventSubscriptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_event_subscriptions(state.clone())
+        })
+    }
+
     /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsMessage,
+    ) -> RusotoStream<Event, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
 
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
     async fn describe_orderable_db_instance_options(
@@ -14252,11 +14983,32 @@ pub trait Neptune {
         RusotoError<DescribeOrderableDBInstanceOptionsError>,
     >;
 
+    /// Auto-paginating version of `describe_orderable_db_instance_options`
+    fn describe_orderable_db_instance_options_pages(
+        &self,
+        input: DescribeOrderableDBInstanceOptionsMessage,
+    ) -> RusotoStream<OrderableDBInstanceOption, DescribeOrderableDBInstanceOptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_orderable_db_instance_options(state.clone())
+        })
+    }
+
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
     async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
     ) -> Result<PendingMaintenanceActionsMessage, RusotoError<DescribePendingMaintenanceActionsError>>;
+
+    /// Auto-paginating version of `describe_pending_maintenance_actions`
+    fn describe_pending_maintenance_actions_pages(
+        &self,
+        input: DescribePendingMaintenanceActionsMessage,
+    ) -> RusotoStream<ResourcePendingMaintenanceActions, DescribePendingMaintenanceActionsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_pending_maintenance_actions(state.clone())
+        })
+    }
 
     /// <p>You can call <a>DescribeValidDBInstanceModifications</a> to learn what modifications you can make to your DB instance. You can use this information when you call <a>ModifyDBInstance</a>.</p>
     async fn describe_valid_db_instance_modifications(

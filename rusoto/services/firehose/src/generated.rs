@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -96,6 +98,7 @@ pub struct CopyCommand {
     pub data_table_name: String,
 }
 
+/// see [KinesisFirehose::create_delivery_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeliveryStreamInput {
@@ -141,6 +144,7 @@ pub struct CreateDeliveryStreamInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [KinesisFirehose::create_delivery_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeliveryStreamOutput {
@@ -171,6 +175,7 @@ pub struct DataFormatConversionConfiguration {
     pub schema_configuration: Option<SchemaConfiguration>,
 }
 
+/// see [KinesisFirehose::delete_delivery_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeliveryStreamInput {
@@ -183,6 +188,7 @@ pub struct DeleteDeliveryStreamInput {
     pub delivery_stream_name: String,
 }
 
+/// see [KinesisFirehose::delete_delivery_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeliveryStreamOutput {}
@@ -269,6 +275,7 @@ pub struct DeliveryStreamEncryptionConfigurationInput {
     pub key_type: String,
 }
 
+/// see [KinesisFirehose::describe_delivery_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryStreamInput {
@@ -285,6 +292,7 @@ pub struct DescribeDeliveryStreamInput {
     pub limit: Option<i64>,
 }
 
+/// see [KinesisFirehose::describe_delivery_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryStreamOutput {
@@ -952,6 +960,7 @@ pub struct KinesisStreamSourceDescription {
     pub role_arn: Option<String>,
 }
 
+/// see [KinesisFirehose::list_delivery_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeliveryStreamsInput {
@@ -969,6 +978,7 @@ pub struct ListDeliveryStreamsInput {
     pub limit: Option<i64>,
 }
 
+/// see [KinesisFirehose::list_delivery_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeliveryStreamsOutput {
@@ -980,6 +990,7 @@ pub struct ListDeliveryStreamsOutput {
     pub has_more_delivery_streams: bool,
 }
 
+/// see [KinesisFirehose::list_tags_for_delivery_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForDeliveryStreamInput {
@@ -996,6 +1007,7 @@ pub struct ListTagsForDeliveryStreamInput {
     pub limit: Option<i64>,
 }
 
+/// see [KinesisFirehose::list_tags_for_delivery_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForDeliveryStreamOutput {
@@ -1143,6 +1155,7 @@ pub struct ProcessorParameter {
     pub parameter_value: String,
 }
 
+/// see [KinesisFirehose::put_record_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordBatchInput {
@@ -1154,6 +1167,7 @@ pub struct PutRecordBatchInput {
     pub records: Vec<Record>,
 }
 
+/// see [KinesisFirehose::put_record_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecordBatchOutput {
@@ -1187,6 +1201,7 @@ pub struct PutRecordBatchResponseEntry {
     pub record_id: Option<String>,
 }
 
+/// see [KinesisFirehose::put_record]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordInput {
@@ -1198,6 +1213,7 @@ pub struct PutRecordInput {
     pub record: Record,
 }
 
+/// see [KinesisFirehose::put_record]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecordOutput {
@@ -1658,6 +1674,7 @@ pub struct SplunkRetryOptions {
     pub duration_in_seconds: Option<i64>,
 }
 
+/// see [KinesisFirehose::start_delivery_stream_encryption]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeliveryStreamEncryptionInput {
@@ -1671,10 +1688,12 @@ pub struct StartDeliveryStreamEncryptionInput {
     pub delivery_stream_name: String,
 }
 
+/// see [KinesisFirehose::start_delivery_stream_encryption]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDeliveryStreamEncryptionOutput {}
 
+/// see [KinesisFirehose::stop_delivery_stream_encryption]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeliveryStreamEncryptionInput {
@@ -1683,6 +1702,7 @@ pub struct StopDeliveryStreamEncryptionInput {
     pub delivery_stream_name: String,
 }
 
+/// see [KinesisFirehose::stop_delivery_stream_encryption]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDeliveryStreamEncryptionOutput {}
@@ -1699,6 +1719,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [KinesisFirehose::tag_delivery_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagDeliveryStreamInput {
@@ -1710,10 +1731,12 @@ pub struct TagDeliveryStreamInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [KinesisFirehose::tag_delivery_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagDeliveryStreamOutput {}
 
+/// see [KinesisFirehose::untag_delivery_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagDeliveryStreamInput {
@@ -1725,10 +1748,12 @@ pub struct UntagDeliveryStreamInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [KinesisFirehose::untag_delivery_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagDeliveryStreamOutput {}
 
+/// see [KinesisFirehose::update_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDestinationInput {
@@ -1763,6 +1788,7 @@ pub struct UpdateDestinationInput {
     pub splunk_destination_update: Option<SplunkDestinationUpdate>,
 }
 
+/// see [KinesisFirehose::update_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDestinationOutput {}
@@ -2370,7 +2396,7 @@ impl fmt::Display for UpdateDestinationError {
 impl Error for UpdateDestinationError {}
 /// Trait representing the capabilities of the Firehose API. Firehose clients implement this trait.
 #[async_trait]
-pub trait KinesisFirehose {
+pub trait KinesisFirehose: Clone + Sync + Send + 'static {
     /// <p>Creates a Kinesis Data Firehose delivery stream.</p> <p>By default, you can create up to 50 delivery streams per AWS Region.</p> <p>This is an asynchronous operation that immediately returns. The initial status of the delivery stream is <code>CREATING</code>. After the delivery stream is created, its status is <code>ACTIVE</code> and it now accepts data. If the delivery stream creation fails, the status transitions to <code>CREATING_FAILED</code>. Attempts to send data to a delivery stream that is not in the <code>ACTIVE</code> state cause an exception. To check the state of a delivery stream, use <a>DescribeDeliveryStream</a>.</p> <p>If the status of a delivery stream is <code>CREATING_FAILED</code>, this status doesn't change, and you can't invoke <code>CreateDeliveryStream</code> again on it. However, you can invoke the <a>DeleteDeliveryStream</a> operation to delete it.</p> <p>A Kinesis Data Firehose delivery stream can be configured to receive records directly from providers using <a>PutRecord</a> or <a>PutRecordBatch</a>, or it can be configured to use an existing Kinesis stream as its source. To specify a Kinesis data stream as input, set the <code>DeliveryStreamType</code> parameter to <code>KinesisStreamAsSource</code>, and provide the Kinesis stream Amazon Resource Name (ARN) and role ARN in the <code>KinesisStreamSourceConfiguration</code> parameter.</p> <p>To create a delivery stream with server-side encryption (SSE) enabled, include <a>DeliveryStreamEncryptionConfigurationInput</a> in your request. This is optional. You can also invoke <a>StartDeliveryStreamEncryption</a> to turn on SSE for an existing delivery stream that doesn't have SSE enabled.</p> <p>A delivery stream is configured with a single destination: Amazon S3, Amazon ES, Amazon Redshift, or Splunk. You must specify only one of the following destination configuration parameters: <code>ExtendedS3DestinationConfiguration</code>, <code>S3DestinationConfiguration</code>, <code>ElasticsearchDestinationConfiguration</code>, <code>RedshiftDestinationConfiguration</code>, or <code>SplunkDestinationConfiguration</code>.</p> <p>When you specify <code>S3DestinationConfiguration</code>, you can also provide the following optional values: BufferingHints, <code>EncryptionConfiguration</code>, and <code>CompressionFormat</code>. By default, if no <code>BufferingHints</code> value is provided, Kinesis Data Firehose buffers data up to 5 MB or for 5 minutes, whichever condition is satisfied first. <code>BufferingHints</code> is a hint, so there are some cases where the service cannot adhere to these conditions strictly. For example, record boundaries might be such that the size is a little over or under the configured buffering size. By default, no encryption is performed. We strongly recommend that you enable encryption to ensure secure data storage in Amazon S3.</p> <p>A few notes about Amazon Redshift as a destination:</p> <ul> <li> <p>An Amazon Redshift destination requires an S3 bucket as intermediate location. Kinesis Data Firehose first delivers data to Amazon S3 and then uses <code>COPY</code> syntax to load data into an Amazon Redshift table. This is specified in the <code>RedshiftDestinationConfiguration.S3Configuration</code> parameter.</p> </li> <li> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified in <code>RedshiftDestinationConfiguration.S3Configuration</code> because the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket doesn't support these compression formats.</p> </li> <li> <p>We strongly recommend that you use the user name and password you provide exclusively with Kinesis Data Firehose, and that the permissions for the account are restricted for Amazon Redshift <code>INSERT</code> permissions.</p> </li> </ul> <p>Kinesis Data Firehose assumes the IAM role that is configured as part of the destination. The role should allow the Kinesis Data Firehose principal to assume the role, and the role should have permissions that allow the service to deliver the data. For more information, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3">Grant Kinesis Data Firehose Access to an Amazon S3 Destination</a> in the <i>Amazon Kinesis Data Firehose Developer Guide</i>.</p>
     async fn create_delivery_stream(
         &self,

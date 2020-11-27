@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -236,6 +238,7 @@ pub struct AppInstanceUserSummary {
     pub name: Option<String>,
 }
 
+/// see [Chime::associate_phone_number_with_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumberWithUserRequest {
@@ -250,10 +253,12 @@ pub struct AssociatePhoneNumberWithUserRequest {
     pub user_id: String,
 }
 
+/// see [Chime::associate_phone_number_with_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePhoneNumberWithUserResponse {}
 
+/// see [Chime::associate_phone_numbers_with_voice_connector_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorGroupRequest {
@@ -269,6 +274,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorGroupRequest {
     pub voice_connector_group_id: String,
 }
 
+/// see [Chime::associate_phone_numbers_with_voice_connector_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorGroupResponse {
@@ -278,6 +284,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorGroupResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
+/// see [Chime::associate_phone_numbers_with_voice_connector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorRequest {
@@ -293,6 +300,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::associate_phone_numbers_with_voice_connector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorResponse {
@@ -302,6 +310,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
+/// see [Chime::associate_signin_delegate_groups_with_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSigninDelegateGroupsWithAccountRequest {
@@ -313,6 +322,7 @@ pub struct AssociateSigninDelegateGroupsWithAccountRequest {
     pub signin_delegate_groups: Vec<SigninDelegateGroup>,
 }
 
+/// see [Chime::associate_signin_delegate_groups_with_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSigninDelegateGroupsWithAccountResponse {}
@@ -335,6 +345,7 @@ pub struct Attendee {
     pub join_token: Option<String>,
 }
 
+/// see [Chime::batch_create_attendee]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateAttendeeRequest {
@@ -346,6 +357,7 @@ pub struct BatchCreateAttendeeRequest {
     pub meeting_id: String,
 }
 
+/// see [Chime::batch_create_attendee]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateAttendeeResponse {
@@ -359,6 +371,7 @@ pub struct BatchCreateAttendeeResponse {
     pub errors: Option<Vec<ChimeCreateAttendeeError>>,
 }
 
+/// see [Chime::batch_create_room_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateRoomMembershipRequest {
@@ -373,6 +386,7 @@ pub struct BatchCreateRoomMembershipRequest {
     pub room_id: String,
 }
 
+/// see [Chime::batch_create_room_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateRoomMembershipResponse {
@@ -382,6 +396,7 @@ pub struct BatchCreateRoomMembershipResponse {
     pub errors: Option<Vec<MemberError>>,
 }
 
+/// see [Chime::batch_delete_phone_number]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeletePhoneNumberRequest {
@@ -390,6 +405,7 @@ pub struct BatchDeletePhoneNumberRequest {
     pub phone_number_ids: Vec<String>,
 }
 
+/// see [Chime::batch_delete_phone_number]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeletePhoneNumberResponse {
@@ -399,6 +415,7 @@ pub struct BatchDeletePhoneNumberResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
+/// see [Chime::batch_suspend_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchSuspendUserRequest {
@@ -410,6 +427,7 @@ pub struct BatchSuspendUserRequest {
     pub user_id_list: Vec<String>,
 }
 
+/// see [Chime::batch_suspend_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchSuspendUserResponse {
@@ -419,6 +437,7 @@ pub struct BatchSuspendUserResponse {
     pub user_errors: Option<Vec<UserError>>,
 }
 
+/// see [Chime::batch_unsuspend_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUnsuspendUserRequest {
@@ -430,6 +449,7 @@ pub struct BatchUnsuspendUserRequest {
     pub user_id_list: Vec<String>,
 }
 
+/// see [Chime::batch_unsuspend_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUnsuspendUserResponse {
@@ -439,6 +459,7 @@ pub struct BatchUnsuspendUserResponse {
     pub user_errors: Option<Vec<UserError>>,
 }
 
+/// see [Chime::batch_update_phone_number]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdatePhoneNumberRequest {
@@ -447,6 +468,7 @@ pub struct BatchUpdatePhoneNumberRequest {
     pub update_phone_number_request_items: Vec<UpdatePhoneNumberRequestItem>,
 }
 
+/// see [Chime::batch_update_phone_number]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdatePhoneNumberResponse {
@@ -456,6 +478,7 @@ pub struct BatchUpdatePhoneNumberResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
+/// see [Chime::batch_update_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateUserRequest {
@@ -467,6 +490,7 @@ pub struct BatchUpdateUserRequest {
     pub update_user_request_items: Vec<UpdateUserRequestItem>,
 }
 
+/// see [Chime::batch_update_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateUserResponse {
@@ -832,6 +856,7 @@ pub struct ConversationRetentionSettings {
     pub retention_days: Option<i64>,
 }
 
+/// see [Chime::create_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountRequest {
@@ -840,6 +865,7 @@ pub struct CreateAccountRequest {
     pub name: String,
 }
 
+/// see [Chime::create_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAccountResponse {
@@ -848,6 +874,7 @@ pub struct CreateAccountResponse {
     pub account: Option<Account>,
 }
 
+/// see [Chime::create_app_instance_admin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppInstanceAdminRequest {
@@ -859,6 +886,7 @@ pub struct CreateAppInstanceAdminRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::create_app_instance_admin]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppInstanceAdminResponse {
@@ -872,6 +900,7 @@ pub struct CreateAppInstanceAdminResponse {
     pub app_instance_arn: Option<String>,
 }
 
+/// see [Chime::create_app_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppInstanceRequest {
@@ -887,6 +916,7 @@ pub struct CreateAppInstanceRequest {
     pub name: String,
 }
 
+/// see [Chime::create_app_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppInstanceResponse {
@@ -896,6 +926,7 @@ pub struct CreateAppInstanceResponse {
     pub app_instance_arn: Option<String>,
 }
 
+/// see [Chime::create_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppInstanceUserRequest {
@@ -917,6 +948,7 @@ pub struct CreateAppInstanceUserRequest {
     pub name: String,
 }
 
+/// see [Chime::create_app_instance_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppInstanceUserResponse {
@@ -944,6 +976,7 @@ pub struct ChimeCreateAttendeeError {
     pub external_user_id: Option<String>,
 }
 
+/// see [Chime::create_attendee]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequest {
@@ -972,6 +1005,7 @@ pub struct CreateAttendeeRequestItem {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Chime::create_attendee]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAttendeeResponse {
@@ -981,6 +1015,7 @@ pub struct CreateAttendeeResponse {
     pub attendee: Option<Attendee>,
 }
 
+/// see [Chime::create_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBotRequest {
@@ -996,6 +1031,7 @@ pub struct CreateBotRequest {
     pub domain: Option<String>,
 }
 
+/// see [Chime::create_bot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBotResponse {
@@ -1005,6 +1041,7 @@ pub struct CreateBotResponse {
     pub bot: Option<Bot>,
 }
 
+/// see [Chime::create_channel_ban]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelBanRequest {
@@ -1016,6 +1053,7 @@ pub struct CreateChannelBanRequest {
     pub member_arn: String,
 }
 
+/// see [Chime::create_channel_ban]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelBanResponse {
@@ -1029,6 +1067,7 @@ pub struct CreateChannelBanResponse {
     pub member: Option<Identity>,
 }
 
+/// see [Chime::create_channel_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelMembershipRequest {
@@ -1043,6 +1082,7 @@ pub struct CreateChannelMembershipRequest {
     pub type_: String,
 }
 
+/// see [Chime::create_channel_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelMembershipResponse {
@@ -1056,6 +1096,7 @@ pub struct CreateChannelMembershipResponse {
     pub member: Option<Identity>,
 }
 
+/// see [Chime::create_channel_moderator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelModeratorRequest {
@@ -1067,6 +1108,7 @@ pub struct CreateChannelModeratorRequest {
     pub channel_moderator_arn: String,
 }
 
+/// see [Chime::create_channel_moderator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelModeratorResponse {
@@ -1080,6 +1122,7 @@ pub struct CreateChannelModeratorResponse {
     pub channel_moderator: Option<Identity>,
 }
 
+/// see [Chime::create_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
@@ -1109,6 +1152,7 @@ pub struct CreateChannelRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Chime::create_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
@@ -1118,6 +1162,7 @@ pub struct CreateChannelResponse {
     pub channel_arn: Option<String>,
 }
 
+/// see [Chime::create_meeting_dial_out]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeetingDialOutRequest {
@@ -1135,6 +1180,7 @@ pub struct CreateMeetingDialOutRequest {
     pub to_phone_number: String,
 }
 
+/// see [Chime::create_meeting_dial_out]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeetingDialOutResponse {
@@ -1144,6 +1190,7 @@ pub struct CreateMeetingDialOutResponse {
     pub transaction_id: Option<String>,
 }
 
+/// see [Chime::create_meeting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeetingRequest {
@@ -1172,6 +1219,7 @@ pub struct CreateMeetingRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Chime::create_meeting]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeetingResponse {
@@ -1181,6 +1229,7 @@ pub struct CreateMeetingResponse {
     pub meeting: Option<Meeting>,
 }
 
+/// see [Chime::create_meeting_with_attendees]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeetingWithAttendeesRequest {
@@ -1212,6 +1261,7 @@ pub struct CreateMeetingWithAttendeesRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Chime::create_meeting_with_attendees]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeetingWithAttendeesResponse {
@@ -1228,6 +1278,7 @@ pub struct CreateMeetingWithAttendeesResponse {
     pub meeting: Option<Meeting>,
 }
 
+/// see [Chime::create_phone_number_order]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePhoneNumberOrderRequest {
@@ -1239,6 +1290,7 @@ pub struct CreatePhoneNumberOrderRequest {
     pub product_type: String,
 }
 
+/// see [Chime::create_phone_number_order]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePhoneNumberOrderResponse {
@@ -1248,6 +1300,7 @@ pub struct CreatePhoneNumberOrderResponse {
     pub phone_number_order: Option<PhoneNumberOrder>,
 }
 
+/// see [Chime::create_proxy_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProxySessionRequest {
@@ -1282,6 +1335,7 @@ pub struct CreateProxySessionRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::create_proxy_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProxySessionResponse {
@@ -1291,6 +1345,7 @@ pub struct CreateProxySessionResponse {
     pub proxy_session: Option<ProxySession>,
 }
 
+/// see [Chime::create_room_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomMembershipRequest {
@@ -1309,6 +1364,7 @@ pub struct CreateRoomMembershipRequest {
     pub room_id: String,
 }
 
+/// see [Chime::create_room_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoomMembershipResponse {
@@ -1318,6 +1374,7 @@ pub struct CreateRoomMembershipResponse {
     pub room_membership: Option<RoomMembership>,
 }
 
+/// see [Chime::create_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomRequest {
@@ -1333,6 +1390,7 @@ pub struct CreateRoomRequest {
     pub name: String,
 }
 
+/// see [Chime::create_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoomResponse {
@@ -1342,6 +1400,7 @@ pub struct CreateRoomResponse {
     pub room: Option<Room>,
 }
 
+/// see [Chime::create_sip_media_application_call]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSipMediaApplicationCallRequest {
@@ -1358,6 +1417,7 @@ pub struct CreateSipMediaApplicationCallRequest {
     pub to_phone_number: Option<String>,
 }
 
+/// see [Chime::create_sip_media_application_call]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSipMediaApplicationCallResponse {
@@ -1367,6 +1427,7 @@ pub struct CreateSipMediaApplicationCallResponse {
     pub sip_media_application_call: Option<SipMediaApplicationCall>,
 }
 
+/// see [Chime::create_sip_media_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSipMediaApplicationRequest {
@@ -1382,6 +1443,7 @@ pub struct CreateSipMediaApplicationRequest {
     pub name: Option<String>,
 }
 
+/// see [Chime::create_sip_media_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSipMediaApplicationResponse {
@@ -1391,6 +1453,7 @@ pub struct CreateSipMediaApplicationResponse {
     pub sip_media_application: Option<SipMediaApplication>,
 }
 
+/// see [Chime::create_sip_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSipRuleRequest {
@@ -1412,6 +1475,7 @@ pub struct CreateSipRuleRequest {
     pub trigger_value: String,
 }
 
+/// see [Chime::create_sip_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSipRuleResponse {
@@ -1421,6 +1485,7 @@ pub struct CreateSipRuleResponse {
     pub sip_rule: Option<SipRule>,
 }
 
+/// see [Chime::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -1441,6 +1506,7 @@ pub struct CreateUserRequest {
     pub username: Option<String>,
 }
 
+/// see [Chime::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
@@ -1449,6 +1515,7 @@ pub struct CreateUserResponse {
     pub user: Option<User>,
 }
 
+/// see [Chime::create_voice_connector_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVoiceConnectorGroupRequest {
@@ -1461,6 +1528,7 @@ pub struct CreateVoiceConnectorGroupRequest {
     pub voice_connector_items: Option<Vec<VoiceConnectorItem>>,
 }
 
+/// see [Chime::create_voice_connector_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVoiceConnectorGroupResponse {
@@ -1470,6 +1538,7 @@ pub struct CreateVoiceConnectorGroupResponse {
     pub voice_connector_group: Option<VoiceConnectorGroup>,
 }
 
+/// see [Chime::create_voice_connector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVoiceConnectorRequest {
@@ -1485,6 +1554,7 @@ pub struct CreateVoiceConnectorRequest {
     pub require_encryption: bool,
 }
 
+/// see [Chime::create_voice_connector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVoiceConnectorResponse {
@@ -1523,6 +1593,7 @@ pub struct DNISEmergencyCallingConfiguration {
     pub test_phone_number: Option<String>,
 }
 
+/// see [Chime::delete_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountRequest {
@@ -1531,10 +1602,12 @@ pub struct DeleteAccountRequest {
     pub account_id: String,
 }
 
+/// see [Chime::delete_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAccountResponse {}
 
+/// see [Chime::delete_app_instance_admin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppInstanceAdminRequest {
@@ -1546,6 +1619,7 @@ pub struct DeleteAppInstanceAdminRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::delete_app_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppInstanceRequest {
@@ -1554,6 +1628,7 @@ pub struct DeleteAppInstanceRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::delete_app_instance_streaming_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppInstanceStreamingConfigurationsRequest {
@@ -1562,6 +1637,7 @@ pub struct DeleteAppInstanceStreamingConfigurationsRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::delete_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppInstanceUserRequest {
@@ -1570,6 +1646,7 @@ pub struct DeleteAppInstanceUserRequest {
     pub app_instance_user_arn: String,
 }
 
+/// see [Chime::delete_attendee]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttendeeRequest {
@@ -1581,6 +1658,7 @@ pub struct DeleteAttendeeRequest {
     pub meeting_id: String,
 }
 
+/// see [Chime::delete_channel_ban]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelBanRequest {
@@ -1592,6 +1670,7 @@ pub struct DeleteChannelBanRequest {
     pub member_arn: String,
 }
 
+/// see [Chime::delete_channel_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelMembershipRequest {
@@ -1603,6 +1682,7 @@ pub struct DeleteChannelMembershipRequest {
     pub member_arn: String,
 }
 
+/// see [Chime::delete_channel_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelMessageRequest {
@@ -1614,6 +1694,7 @@ pub struct DeleteChannelMessageRequest {
     pub message_id: String,
 }
 
+/// see [Chime::delete_channel_moderator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelModeratorRequest {
@@ -1625,6 +1706,7 @@ pub struct DeleteChannelModeratorRequest {
     pub channel_moderator_arn: String,
 }
 
+/// see [Chime::delete_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
@@ -1633,6 +1715,7 @@ pub struct DeleteChannelRequest {
     pub channel_arn: String,
 }
 
+/// see [Chime::delete_events_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventsConfigurationRequest {
@@ -1644,6 +1727,7 @@ pub struct DeleteEventsConfigurationRequest {
     pub bot_id: String,
 }
 
+/// see [Chime::delete_meeting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeetingRequest {
@@ -1652,6 +1736,7 @@ pub struct DeleteMeetingRequest {
     pub meeting_id: String,
 }
 
+/// see [Chime::delete_phone_number]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePhoneNumberRequest {
@@ -1660,6 +1745,7 @@ pub struct DeletePhoneNumberRequest {
     pub phone_number_id: String,
 }
 
+/// see [Chime::delete_proxy_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProxySessionRequest {
@@ -1671,6 +1757,7 @@ pub struct DeleteProxySessionRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::delete_room_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomMembershipRequest {
@@ -1685,6 +1772,7 @@ pub struct DeleteRoomMembershipRequest {
     pub room_id: String,
 }
 
+/// see [Chime::delete_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomRequest {
@@ -1696,6 +1784,7 @@ pub struct DeleteRoomRequest {
     pub room_id: String,
 }
 
+/// see [Chime::delete_sip_media_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSipMediaApplicationRequest {
@@ -1704,6 +1793,7 @@ pub struct DeleteSipMediaApplicationRequest {
     pub sip_media_application_id: String,
 }
 
+/// see [Chime::delete_sip_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSipRuleRequest {
@@ -1712,6 +1802,7 @@ pub struct DeleteSipRuleRequest {
     pub sip_rule_id: String,
 }
 
+/// see [Chime::delete_voice_connector_emergency_calling_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorEmergencyCallingConfigurationRequest {
@@ -1720,6 +1811,7 @@ pub struct DeleteVoiceConnectorEmergencyCallingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::delete_voice_connector_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorGroupRequest {
@@ -1728,6 +1820,7 @@ pub struct DeleteVoiceConnectorGroupRequest {
     pub voice_connector_group_id: String,
 }
 
+/// see [Chime::delete_voice_connector_origination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorOriginationRequest {
@@ -1736,6 +1829,7 @@ pub struct DeleteVoiceConnectorOriginationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::delete_voice_connector_proxy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorProxyRequest {
@@ -1744,6 +1838,7 @@ pub struct DeleteVoiceConnectorProxyRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::delete_voice_connector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorRequest {
@@ -1752,6 +1847,7 @@ pub struct DeleteVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::delete_voice_connector_streaming_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorStreamingConfigurationRequest {
@@ -1760,6 +1856,7 @@ pub struct DeleteVoiceConnectorStreamingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::delete_voice_connector_termination_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorTerminationCredentialsRequest {
@@ -1771,6 +1868,7 @@ pub struct DeleteVoiceConnectorTerminationCredentialsRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::delete_voice_connector_termination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorTerminationRequest {
@@ -1779,6 +1877,7 @@ pub struct DeleteVoiceConnectorTerminationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::describe_app_instance_admin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppInstanceAdminRequest {
@@ -1790,6 +1889,7 @@ pub struct DescribeAppInstanceAdminRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::describe_app_instance_admin]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppInstanceAdminResponse {
@@ -1799,6 +1899,7 @@ pub struct DescribeAppInstanceAdminResponse {
     pub app_instance_admin: Option<AppInstanceAdmin>,
 }
 
+/// see [Chime::describe_app_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppInstanceRequest {
@@ -1807,6 +1908,7 @@ pub struct DescribeAppInstanceRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::describe_app_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppInstanceResponse {
@@ -1816,6 +1918,7 @@ pub struct DescribeAppInstanceResponse {
     pub app_instance: Option<AppInstance>,
 }
 
+/// see [Chime::describe_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppInstanceUserRequest {
@@ -1824,6 +1927,7 @@ pub struct DescribeAppInstanceUserRequest {
     pub app_instance_user_arn: String,
 }
 
+/// see [Chime::describe_app_instance_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppInstanceUserResponse {
@@ -1833,6 +1937,7 @@ pub struct DescribeAppInstanceUserResponse {
     pub app_instance_user: Option<AppInstanceUser>,
 }
 
+/// see [Chime::describe_channel_ban]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelBanRequest {
@@ -1844,6 +1949,7 @@ pub struct DescribeChannelBanRequest {
     pub member_arn: String,
 }
 
+/// see [Chime::describe_channel_ban]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelBanResponse {
@@ -1853,6 +1959,7 @@ pub struct DescribeChannelBanResponse {
     pub channel_ban: Option<ChannelBan>,
 }
 
+/// see [Chime::describe_channel_membership_for_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelMembershipForAppInstanceUserRequest {
@@ -1864,6 +1971,7 @@ pub struct DescribeChannelMembershipForAppInstanceUserRequest {
     pub channel_arn: String,
 }
 
+/// see [Chime::describe_channel_membership_for_app_instance_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelMembershipForAppInstanceUserResponse {
@@ -1873,6 +1981,7 @@ pub struct DescribeChannelMembershipForAppInstanceUserResponse {
     pub channel_membership: Option<ChannelMembershipForAppInstanceUserSummary>,
 }
 
+/// see [Chime::describe_channel_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelMembershipRequest {
@@ -1884,6 +1993,7 @@ pub struct DescribeChannelMembershipRequest {
     pub member_arn: String,
 }
 
+/// see [Chime::describe_channel_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelMembershipResponse {
@@ -1893,6 +2003,7 @@ pub struct DescribeChannelMembershipResponse {
     pub channel_membership: Option<ChannelMembership>,
 }
 
+/// see [Chime::describe_channel_moderated_by_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelModeratedByAppInstanceUserRequest {
@@ -1904,6 +2015,7 @@ pub struct DescribeChannelModeratedByAppInstanceUserRequest {
     pub channel_arn: String,
 }
 
+/// see [Chime::describe_channel_moderated_by_app_instance_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelModeratedByAppInstanceUserResponse {
@@ -1913,6 +2025,7 @@ pub struct DescribeChannelModeratedByAppInstanceUserResponse {
     pub channel: Option<ChannelModeratedByAppInstanceUserSummary>,
 }
 
+/// see [Chime::describe_channel_moderator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelModeratorRequest {
@@ -1924,6 +2037,7 @@ pub struct DescribeChannelModeratorRequest {
     pub channel_moderator_arn: String,
 }
 
+/// see [Chime::describe_channel_moderator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelModeratorResponse {
@@ -1933,6 +2047,7 @@ pub struct DescribeChannelModeratorResponse {
     pub channel_moderator: Option<ChannelModerator>,
 }
 
+/// see [Chime::describe_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
@@ -1941,6 +2056,7 @@ pub struct DescribeChannelRequest {
     pub channel_arn: String,
 }
 
+/// see [Chime::describe_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
@@ -1950,6 +2066,7 @@ pub struct DescribeChannelResponse {
     pub channel: Option<Channel>,
 }
 
+/// see [Chime::disassociate_phone_number_from_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumberFromUserRequest {
@@ -1961,10 +2078,12 @@ pub struct DisassociatePhoneNumberFromUserRequest {
     pub user_id: String,
 }
 
+/// see [Chime::disassociate_phone_number_from_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePhoneNumberFromUserResponse {}
 
+/// see [Chime::disassociate_phone_numbers_from_voice_connector_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupRequest {
@@ -1976,6 +2095,7 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupRequest {
     pub voice_connector_group_id: String,
 }
 
+/// see [Chime::disassociate_phone_numbers_from_voice_connector_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupResponse {
@@ -1985,6 +2105,7 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
+/// see [Chime::disassociate_phone_numbers_from_voice_connector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorRequest {
@@ -1996,6 +2117,7 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::disassociate_phone_numbers_from_voice_connector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorResponse {
@@ -2005,6 +2127,7 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
+/// see [Chime::disassociate_signin_delegate_groups_from_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
@@ -2016,6 +2139,7 @@ pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
     pub group_names: Vec<String>,
 }
 
+/// see [Chime::disassociate_signin_delegate_groups_from_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSigninDelegateGroupsFromAccountResponse {}
@@ -2058,6 +2182,7 @@ pub struct GeoMatchParams {
     pub country: String,
 }
 
+/// see [Chime::get_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {
@@ -2066,6 +2191,7 @@ pub struct GetAccountRequest {
     pub account_id: String,
 }
 
+/// see [Chime::get_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountResponse {
@@ -2074,6 +2200,7 @@ pub struct GetAccountResponse {
     pub account: Option<Account>,
 }
 
+/// see [Chime::get_account_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {
@@ -2082,6 +2209,7 @@ pub struct GetAccountSettingsRequest {
     pub account_id: String,
 }
 
+/// see [Chime::get_account_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountSettingsResponse {
@@ -2091,6 +2219,7 @@ pub struct GetAccountSettingsResponse {
     pub account_settings: Option<AccountSettings>,
 }
 
+/// see [Chime::get_app_instance_retention_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppInstanceRetentionSettingsRequest {
@@ -2099,6 +2228,7 @@ pub struct GetAppInstanceRetentionSettingsRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::get_app_instance_retention_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppInstanceRetentionSettingsResponse {
@@ -2112,6 +2242,7 @@ pub struct GetAppInstanceRetentionSettingsResponse {
     pub initiate_deletion_timestamp: Option<f64>,
 }
 
+/// see [Chime::get_app_instance_streaming_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppInstanceStreamingConfigurationsRequest {
@@ -2120,6 +2251,7 @@ pub struct GetAppInstanceStreamingConfigurationsRequest {
     pub app_instance_arn: String,
 }
 
+/// see [Chime::get_app_instance_streaming_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppInstanceStreamingConfigurationsResponse {
@@ -2129,6 +2261,7 @@ pub struct GetAppInstanceStreamingConfigurationsResponse {
     pub app_instance_streaming_configurations: Option<Vec<AppInstanceStreamingConfiguration>>,
 }
 
+/// see [Chime::get_attendee]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAttendeeRequest {
@@ -2140,6 +2273,7 @@ pub struct GetAttendeeRequest {
     pub meeting_id: String,
 }
 
+/// see [Chime::get_attendee]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAttendeeResponse {
@@ -2149,6 +2283,7 @@ pub struct GetAttendeeResponse {
     pub attendee: Option<Attendee>,
 }
 
+/// see [Chime::get_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotRequest {
@@ -2160,6 +2295,7 @@ pub struct GetBotRequest {
     pub bot_id: String,
 }
 
+/// see [Chime::get_bot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotResponse {
@@ -2169,6 +2305,7 @@ pub struct GetBotResponse {
     pub bot: Option<Bot>,
 }
 
+/// see [Chime::get_channel_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChannelMessageRequest {
@@ -2180,6 +2317,7 @@ pub struct GetChannelMessageRequest {
     pub message_id: String,
 }
 
+/// see [Chime::get_channel_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetChannelMessageResponse {
@@ -2189,6 +2327,7 @@ pub struct GetChannelMessageResponse {
     pub channel_message: Option<ChannelMessage>,
 }
 
+/// see [Chime::get_events_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventsConfigurationRequest {
@@ -2200,6 +2339,7 @@ pub struct GetEventsConfigurationRequest {
     pub bot_id: String,
 }
 
+/// see [Chime::get_events_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEventsConfigurationResponse {
@@ -2209,6 +2349,7 @@ pub struct GetEventsConfigurationResponse {
     pub events_configuration: Option<EventsConfiguration>,
 }
 
+/// see [Chime::get_global_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGlobalSettingsResponse {
@@ -2222,6 +2363,7 @@ pub struct GetGlobalSettingsResponse {
     pub voice_connector: Option<VoiceConnectorSettings>,
 }
 
+/// see [Chime::get_meeting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMeetingRequest {
@@ -2230,6 +2372,7 @@ pub struct GetMeetingRequest {
     pub meeting_id: String,
 }
 
+/// see [Chime::get_meeting]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMeetingResponse {
@@ -2239,10 +2382,12 @@ pub struct GetMeetingResponse {
     pub meeting: Option<Meeting>,
 }
 
+/// see [Chime::get_messaging_session_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMessagingSessionEndpointRequest {}
 
+/// see [Chime::get_messaging_session_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMessagingSessionEndpointResponse {
@@ -2252,6 +2397,7 @@ pub struct GetMessagingSessionEndpointResponse {
     pub endpoint: Option<MessagingSessionEndpoint>,
 }
 
+/// see [Chime::get_phone_number_order]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPhoneNumberOrderRequest {
@@ -2260,6 +2406,7 @@ pub struct GetPhoneNumberOrderRequest {
     pub phone_number_order_id: String,
 }
 
+/// see [Chime::get_phone_number_order]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPhoneNumberOrderResponse {
@@ -2269,6 +2416,7 @@ pub struct GetPhoneNumberOrderResponse {
     pub phone_number_order: Option<PhoneNumberOrder>,
 }
 
+/// see [Chime::get_phone_number]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPhoneNumberRequest {
@@ -2277,6 +2425,7 @@ pub struct GetPhoneNumberRequest {
     pub phone_number_id: String,
 }
 
+/// see [Chime::get_phone_number]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPhoneNumberResponse {
@@ -2286,6 +2435,7 @@ pub struct GetPhoneNumberResponse {
     pub phone_number: Option<PhoneNumber>,
 }
 
+/// see [Chime::get_phone_number_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPhoneNumberSettingsResponse {
@@ -2299,6 +2449,7 @@ pub struct GetPhoneNumberSettingsResponse {
     pub calling_name_updated_timestamp: Option<f64>,
 }
 
+/// see [Chime::get_proxy_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProxySessionRequest {
@@ -2310,6 +2461,7 @@ pub struct GetProxySessionRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_proxy_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProxySessionResponse {
@@ -2319,6 +2471,7 @@ pub struct GetProxySessionResponse {
     pub proxy_session: Option<ProxySession>,
 }
 
+/// see [Chime::get_retention_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRetentionSettingsRequest {
@@ -2327,6 +2480,7 @@ pub struct GetRetentionSettingsRequest {
     pub account_id: String,
 }
 
+/// see [Chime::get_retention_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRetentionSettingsResponse {
@@ -2340,6 +2494,7 @@ pub struct GetRetentionSettingsResponse {
     pub retention_settings: Option<RetentionSettings>,
 }
 
+/// see [Chime::get_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomRequest {
@@ -2351,6 +2506,7 @@ pub struct GetRoomRequest {
     pub room_id: String,
 }
 
+/// see [Chime::get_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoomResponse {
@@ -2360,6 +2516,7 @@ pub struct GetRoomResponse {
     pub room: Option<Room>,
 }
 
+/// see [Chime::get_sip_media_application_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSipMediaApplicationLoggingConfigurationRequest {
@@ -2368,6 +2525,7 @@ pub struct GetSipMediaApplicationLoggingConfigurationRequest {
     pub sip_media_application_id: String,
 }
 
+/// see [Chime::get_sip_media_application_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSipMediaApplicationLoggingConfigurationResponse {
@@ -2378,6 +2536,7 @@ pub struct GetSipMediaApplicationLoggingConfigurationResponse {
         Option<SipMediaApplicationLoggingConfiguration>,
 }
 
+/// see [Chime::get_sip_media_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSipMediaApplicationRequest {
@@ -2386,6 +2545,7 @@ pub struct GetSipMediaApplicationRequest {
     pub sip_media_application_id: String,
 }
 
+/// see [Chime::get_sip_media_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSipMediaApplicationResponse {
@@ -2395,6 +2555,7 @@ pub struct GetSipMediaApplicationResponse {
     pub sip_media_application: Option<SipMediaApplication>,
 }
 
+/// see [Chime::get_sip_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSipRuleRequest {
@@ -2403,6 +2564,7 @@ pub struct GetSipRuleRequest {
     pub sip_rule_id: String,
 }
 
+/// see [Chime::get_sip_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSipRuleResponse {
@@ -2412,6 +2574,7 @@ pub struct GetSipRuleResponse {
     pub sip_rule: Option<SipRule>,
 }
 
+/// see [Chime::get_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserRequest {
@@ -2423,6 +2586,7 @@ pub struct GetUserRequest {
     pub user_id: String,
 }
 
+/// see [Chime::get_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserResponse {
@@ -2432,6 +2596,7 @@ pub struct GetUserResponse {
     pub user: Option<User>,
 }
 
+/// see [Chime::get_user_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserSettingsRequest {
@@ -2443,6 +2608,7 @@ pub struct GetUserSettingsRequest {
     pub user_id: String,
 }
 
+/// see [Chime::get_user_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserSettingsResponse {
@@ -2452,6 +2618,7 @@ pub struct GetUserSettingsResponse {
     pub user_settings: Option<UserSettings>,
 }
 
+/// see [Chime::get_voice_connector_emergency_calling_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorEmergencyCallingConfigurationRequest {
@@ -2460,6 +2627,7 @@ pub struct GetVoiceConnectorEmergencyCallingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector_emergency_calling_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorEmergencyCallingConfigurationResponse {
@@ -2469,6 +2637,7 @@ pub struct GetVoiceConnectorEmergencyCallingConfigurationResponse {
     pub emergency_calling_configuration: Option<EmergencyCallingConfiguration>,
 }
 
+/// see [Chime::get_voice_connector_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorGroupRequest {
@@ -2477,6 +2646,7 @@ pub struct GetVoiceConnectorGroupRequest {
     pub voice_connector_group_id: String,
 }
 
+/// see [Chime::get_voice_connector_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorGroupResponse {
@@ -2486,6 +2656,7 @@ pub struct GetVoiceConnectorGroupResponse {
     pub voice_connector_group: Option<VoiceConnectorGroup>,
 }
 
+/// see [Chime::get_voice_connector_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorLoggingConfigurationRequest {
@@ -2494,6 +2665,7 @@ pub struct GetVoiceConnectorLoggingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorLoggingConfigurationResponse {
@@ -2503,6 +2675,7 @@ pub struct GetVoiceConnectorLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
+/// see [Chime::get_voice_connector_origination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorOriginationRequest {
@@ -2511,6 +2684,7 @@ pub struct GetVoiceConnectorOriginationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector_origination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorOriginationResponse {
@@ -2520,6 +2694,7 @@ pub struct GetVoiceConnectorOriginationResponse {
     pub origination: Option<Origination>,
 }
 
+/// see [Chime::get_voice_connector_proxy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorProxyRequest {
@@ -2528,6 +2703,7 @@ pub struct GetVoiceConnectorProxyRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector_proxy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorProxyResponse {
@@ -2537,6 +2713,7 @@ pub struct GetVoiceConnectorProxyResponse {
     pub proxy: Option<Proxy>,
 }
 
+/// see [Chime::get_voice_connector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorRequest {
@@ -2545,6 +2722,7 @@ pub struct GetVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorResponse {
@@ -2554,6 +2732,7 @@ pub struct GetVoiceConnectorResponse {
     pub voice_connector: Option<VoiceConnector>,
 }
 
+/// see [Chime::get_voice_connector_streaming_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorStreamingConfigurationRequest {
@@ -2562,6 +2741,7 @@ pub struct GetVoiceConnectorStreamingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector_streaming_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorStreamingConfigurationResponse {
@@ -2571,6 +2751,7 @@ pub struct GetVoiceConnectorStreamingConfigurationResponse {
     pub streaming_configuration: Option<StreamingConfiguration>,
 }
 
+/// see [Chime::get_voice_connector_termination_health]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorTerminationHealthRequest {
@@ -2579,6 +2760,7 @@ pub struct GetVoiceConnectorTerminationHealthRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector_termination_health]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorTerminationHealthResponse {
@@ -2588,6 +2770,7 @@ pub struct GetVoiceConnectorTerminationHealthResponse {
     pub termination_health: Option<TerminationHealth>,
 }
 
+/// see [Chime::get_voice_connector_termination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorTerminationRequest {
@@ -2596,6 +2779,7 @@ pub struct GetVoiceConnectorTerminationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::get_voice_connector_termination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorTerminationResponse {
@@ -2641,6 +2825,7 @@ pub struct Invite {
     pub status: Option<String>,
 }
 
+/// see [Chime::invite_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteUsersRequest {
@@ -2656,6 +2841,7 @@ pub struct InviteUsersRequest {
     pub user_type: Option<String>,
 }
 
+/// see [Chime::invite_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteUsersResponse {
@@ -2665,6 +2851,7 @@ pub struct InviteUsersResponse {
     pub invites: Option<Vec<Invite>>,
 }
 
+/// see [Chime::list_accounts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountsRequest {
@@ -2686,6 +2873,15 @@ pub struct ListAccountsRequest {
     pub user_email: Option<String>,
 }
 
+impl PagedRequest for ListAccountsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Chime::list_accounts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsResponse {
@@ -2699,6 +2895,31 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAccountsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Account>> {
+        Some(self.accounts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAccountsResponse {
+    type Item = Account;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Account> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Chime::list_app_instance_admins]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppInstanceAdminsRequest {
@@ -2715,6 +2936,7 @@ pub struct ListAppInstanceAdminsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_app_instance_admins]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppInstanceAdminsResponse {
@@ -2732,6 +2954,7 @@ pub struct ListAppInstanceAdminsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_app_instance_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppInstanceUsersRequest {
@@ -2748,6 +2971,7 @@ pub struct ListAppInstanceUsersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_app_instance_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppInstanceUsersResponse {
@@ -2765,6 +2989,7 @@ pub struct ListAppInstanceUsersResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_app_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppInstancesRequest {
@@ -2778,6 +3003,7 @@ pub struct ListAppInstancesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_app_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppInstancesResponse {
@@ -2791,6 +3017,7 @@ pub struct ListAppInstancesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_attendee_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttendeeTagsRequest {
@@ -2802,6 +3029,7 @@ pub struct ListAttendeeTagsRequest {
     pub meeting_id: String,
 }
 
+/// see [Chime::list_attendee_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttendeeTagsResponse {
@@ -2811,6 +3039,7 @@ pub struct ListAttendeeTagsResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Chime::list_attendees]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttendeesRequest {
@@ -2827,6 +3056,7 @@ pub struct ListAttendeesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_attendees]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttendeesResponse {
@@ -2840,6 +3070,7 @@ pub struct ListAttendeesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_bots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBotsRequest {
@@ -2856,6 +3087,7 @@ pub struct ListBotsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_bots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBotsResponse {
@@ -2869,6 +3101,7 @@ pub struct ListBotsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_bans]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelBansRequest {
@@ -2885,6 +3118,7 @@ pub struct ListChannelBansRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_bans]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelBansResponse {
@@ -2902,6 +3136,7 @@ pub struct ListChannelBansResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_memberships_for_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelMembershipsForAppInstanceUserRequest {
@@ -2919,6 +3154,7 @@ pub struct ListChannelMembershipsForAppInstanceUserRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_memberships_for_app_instance_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelMembershipsForAppInstanceUserResponse {
@@ -2932,6 +3168,7 @@ pub struct ListChannelMembershipsForAppInstanceUserResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_memberships]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelMembershipsRequest {
@@ -2952,6 +3189,7 @@ pub struct ListChannelMembershipsRequest {
     pub type_: Option<String>,
 }
 
+/// see [Chime::list_channel_memberships]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelMembershipsResponse {
@@ -2969,6 +3207,7 @@ pub struct ListChannelMembershipsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_messages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelMessagesRequest {
@@ -2997,6 +3236,7 @@ pub struct ListChannelMessagesRequest {
     pub sort_order: Option<String>,
 }
 
+/// see [Chime::list_channel_messages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelMessagesResponse {
@@ -3014,6 +3254,7 @@ pub struct ListChannelMessagesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_moderators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelModeratorsRequest {
@@ -3030,6 +3271,7 @@ pub struct ListChannelModeratorsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channel_moderators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelModeratorsResponse {
@@ -3047,6 +3289,7 @@ pub struct ListChannelModeratorsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channels_moderated_by_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsModeratedByAppInstanceUserRequest {
@@ -3064,6 +3307,7 @@ pub struct ListChannelsModeratedByAppInstanceUserRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channels_moderated_by_app_instance_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsModeratedByAppInstanceUserResponse {
@@ -3077,6 +3321,7 @@ pub struct ListChannelsModeratedByAppInstanceUserResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_channels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
@@ -3097,6 +3342,7 @@ pub struct ListChannelsRequest {
     pub privacy: Option<String>,
 }
 
+/// see [Chime::list_channels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
@@ -3110,6 +3356,7 @@ pub struct ListChannelsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_meeting_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeetingTagsRequest {
@@ -3118,6 +3365,7 @@ pub struct ListMeetingTagsRequest {
     pub meeting_id: String,
 }
 
+/// see [Chime::list_meeting_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMeetingTagsResponse {
@@ -3127,6 +3375,7 @@ pub struct ListMeetingTagsResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Chime::list_meetings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeetingsRequest {
@@ -3140,6 +3389,7 @@ pub struct ListMeetingsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_meetings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMeetingsResponse {
@@ -3153,6 +3403,7 @@ pub struct ListMeetingsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_phone_number_orders]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumberOrdersRequest {
@@ -3166,6 +3417,7 @@ pub struct ListPhoneNumberOrdersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_phone_number_orders]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPhoneNumberOrdersResponse {
@@ -3179,6 +3431,7 @@ pub struct ListPhoneNumberOrdersResponse {
     pub phone_number_orders: Option<Vec<PhoneNumberOrder>>,
 }
 
+/// see [Chime::list_phone_numbers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
@@ -3208,6 +3461,7 @@ pub struct ListPhoneNumbersRequest {
     pub status: Option<String>,
 }
 
+/// see [Chime::list_phone_numbers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPhoneNumbersResponse {
@@ -3221,6 +3475,7 @@ pub struct ListPhoneNumbersResponse {
     pub phone_numbers: Option<Vec<PhoneNumber>>,
 }
 
+/// see [Chime::list_proxy_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProxySessionsRequest {
@@ -3241,6 +3496,7 @@ pub struct ListProxySessionsRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::list_proxy_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProxySessionsResponse {
@@ -3254,6 +3510,7 @@ pub struct ListProxySessionsResponse {
     pub proxy_sessions: Option<Vec<ProxySession>>,
 }
 
+/// see [Chime::list_room_memberships]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoomMembershipsRequest {
@@ -3273,6 +3530,7 @@ pub struct ListRoomMembershipsRequest {
     pub room_id: String,
 }
 
+/// see [Chime::list_room_memberships]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoomMembershipsResponse {
@@ -3286,6 +3544,7 @@ pub struct ListRoomMembershipsResponse {
     pub room_memberships: Option<Vec<RoomMembership>>,
 }
 
+/// see [Chime::list_rooms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoomsRequest {
@@ -3306,6 +3565,7 @@ pub struct ListRoomsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_rooms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoomsResponse {
@@ -3319,6 +3579,7 @@ pub struct ListRoomsResponse {
     pub rooms: Option<Vec<Room>>,
 }
 
+/// see [Chime::list_sip_media_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSipMediaApplicationsRequest {
@@ -3332,6 +3593,7 @@ pub struct ListSipMediaApplicationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_sip_media_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSipMediaApplicationsResponse {
@@ -3345,6 +3607,7 @@ pub struct ListSipMediaApplicationsResponse {
     pub sip_media_applications: Option<Vec<SipMediaApplication>>,
 }
 
+/// see [Chime::list_sip_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSipRulesRequest {
@@ -3362,6 +3625,7 @@ pub struct ListSipRulesRequest {
     pub sip_media_application_id: Option<String>,
 }
 
+/// see [Chime::list_sip_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSipRulesResponse {
@@ -3375,6 +3639,7 @@ pub struct ListSipRulesResponse {
     pub sip_rules: Option<Vec<SipRule>>,
 }
 
+/// see [Chime::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -3383,6 +3648,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Chime::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -3392,6 +3658,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Chime::list_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -3416,6 +3683,15 @@ pub struct ListUsersRequest {
     pub user_type: Option<String>,
 }
 
+impl PagedRequest for ListUsersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Chime::list_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
@@ -3429,6 +3705,31 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
+impl ListUsersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<User>> {
+        Some(self.users.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUsersResponse {
+    type Item = User;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<User> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Chime::list_voice_connector_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorGroupsRequest {
@@ -3442,6 +3743,7 @@ pub struct ListVoiceConnectorGroupsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_voice_connector_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVoiceConnectorGroupsResponse {
@@ -3455,6 +3757,7 @@ pub struct ListVoiceConnectorGroupsResponse {
     pub voice_connector_groups: Option<Vec<VoiceConnectorGroup>>,
 }
 
+/// see [Chime::list_voice_connector_termination_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorTerminationCredentialsRequest {
@@ -3463,6 +3766,7 @@ pub struct ListVoiceConnectorTerminationCredentialsRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::list_voice_connector_termination_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVoiceConnectorTerminationCredentialsResponse {
@@ -3472,6 +3776,7 @@ pub struct ListVoiceConnectorTerminationCredentialsResponse {
     pub usernames: Option<Vec<String>>,
 }
 
+/// see [Chime::list_voice_connectors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorsRequest {
@@ -3485,6 +3790,7 @@ pub struct ListVoiceConnectorsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Chime::list_voice_connectors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVoiceConnectorsResponse {
@@ -3507,6 +3813,7 @@ pub struct LoggingConfiguration {
     pub enable_sip_logs: Option<bool>,
 }
 
+/// see [Chime::logout_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LogoutUserRequest {
@@ -3518,6 +3825,7 @@ pub struct LogoutUserRequest {
     pub user_id: String,
 }
 
+/// see [Chime::logout_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogoutUserResponse {}
@@ -3956,6 +4264,7 @@ pub struct ProxySession {
     pub voice_connector_id: Option<String>,
 }
 
+/// see [Chime::put_app_instance_retention_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppInstanceRetentionSettingsRequest {
@@ -3967,6 +4276,7 @@ pub struct PutAppInstanceRetentionSettingsRequest {
     pub app_instance_retention_settings: AppInstanceRetentionSettings,
 }
 
+/// see [Chime::put_app_instance_retention_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppInstanceRetentionSettingsResponse {
@@ -3980,6 +4290,7 @@ pub struct PutAppInstanceRetentionSettingsResponse {
     pub initiate_deletion_timestamp: Option<f64>,
 }
 
+/// see [Chime::put_app_instance_streaming_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppInstanceStreamingConfigurationsRequest {
@@ -3991,6 +4302,7 @@ pub struct PutAppInstanceStreamingConfigurationsRequest {
     pub app_instance_streaming_configurations: Vec<AppInstanceStreamingConfiguration>,
 }
 
+/// see [Chime::put_app_instance_streaming_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppInstanceStreamingConfigurationsResponse {
@@ -4000,6 +4312,7 @@ pub struct PutAppInstanceStreamingConfigurationsResponse {
     pub app_instance_streaming_configurations: Option<Vec<AppInstanceStreamingConfiguration>>,
 }
 
+/// see [Chime::put_events_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsConfigurationRequest {
@@ -4019,6 +4332,7 @@ pub struct PutEventsConfigurationRequest {
     pub outbound_events_https_endpoint: Option<String>,
 }
 
+/// see [Chime::put_events_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEventsConfigurationResponse {
@@ -4027,6 +4341,7 @@ pub struct PutEventsConfigurationResponse {
     pub events_configuration: Option<EventsConfiguration>,
 }
 
+/// see [Chime::put_retention_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionSettingsRequest {
@@ -4038,6 +4353,7 @@ pub struct PutRetentionSettingsRequest {
     pub retention_settings: RetentionSettings,
 }
 
+/// see [Chime::put_retention_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRetentionSettingsResponse {
@@ -4051,6 +4367,7 @@ pub struct PutRetentionSettingsResponse {
     pub retention_settings: Option<RetentionSettings>,
 }
 
+/// see [Chime::put_sip_media_application_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSipMediaApplicationLoggingConfigurationRequest {
@@ -4064,6 +4381,7 @@ pub struct PutSipMediaApplicationLoggingConfigurationRequest {
         Option<SipMediaApplicationLoggingConfiguration>,
 }
 
+/// see [Chime::put_sip_media_application_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSipMediaApplicationLoggingConfigurationResponse {
@@ -4074,6 +4392,7 @@ pub struct PutSipMediaApplicationLoggingConfigurationResponse {
         Option<SipMediaApplicationLoggingConfiguration>,
 }
 
+/// see [Chime::put_voice_connector_emergency_calling_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorEmergencyCallingConfigurationRequest {
@@ -4085,6 +4404,7 @@ pub struct PutVoiceConnectorEmergencyCallingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::put_voice_connector_emergency_calling_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorEmergencyCallingConfigurationResponse {
@@ -4094,6 +4414,7 @@ pub struct PutVoiceConnectorEmergencyCallingConfigurationResponse {
     pub emergency_calling_configuration: Option<EmergencyCallingConfiguration>,
 }
 
+/// see [Chime::put_voice_connector_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorLoggingConfigurationRequest {
@@ -4105,6 +4426,7 @@ pub struct PutVoiceConnectorLoggingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::put_voice_connector_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorLoggingConfigurationResponse {
@@ -4114,6 +4436,7 @@ pub struct PutVoiceConnectorLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
+/// see [Chime::put_voice_connector_origination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorOriginationRequest {
@@ -4125,6 +4448,7 @@ pub struct PutVoiceConnectorOriginationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::put_voice_connector_origination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorOriginationResponse {
@@ -4134,6 +4458,7 @@ pub struct PutVoiceConnectorOriginationResponse {
     pub origination: Option<Origination>,
 }
 
+/// see [Chime::put_voice_connector_proxy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorProxyRequest {
@@ -4156,6 +4481,7 @@ pub struct PutVoiceConnectorProxyRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::put_voice_connector_proxy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorProxyResponse {
@@ -4165,6 +4491,7 @@ pub struct PutVoiceConnectorProxyResponse {
     pub proxy: Option<Proxy>,
 }
 
+/// see [Chime::put_voice_connector_streaming_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorStreamingConfigurationRequest {
@@ -4176,6 +4503,7 @@ pub struct PutVoiceConnectorStreamingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::put_voice_connector_streaming_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorStreamingConfigurationResponse {
@@ -4185,6 +4513,7 @@ pub struct PutVoiceConnectorStreamingConfigurationResponse {
     pub streaming_configuration: Option<StreamingConfiguration>,
 }
 
+/// see [Chime::put_voice_connector_termination_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorTerminationCredentialsRequest {
@@ -4197,6 +4526,7 @@ pub struct PutVoiceConnectorTerminationCredentialsRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::put_voice_connector_termination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorTerminationRequest {
@@ -4208,6 +4538,7 @@ pub struct PutVoiceConnectorTerminationRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::put_voice_connector_termination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorTerminationResponse {
@@ -4217,6 +4548,7 @@ pub struct PutVoiceConnectorTerminationResponse {
     pub termination: Option<Termination>,
 }
 
+/// see [Chime::redact_channel_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedactChannelMessageRequest {
@@ -4228,6 +4560,7 @@ pub struct RedactChannelMessageRequest {
     pub message_id: String,
 }
 
+/// see [Chime::redact_channel_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RedactChannelMessageResponse {
@@ -4241,6 +4574,7 @@ pub struct RedactChannelMessageResponse {
     pub message_id: Option<String>,
 }
 
+/// see [Chime::redact_conversation_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedactConversationMessageRequest {
@@ -4255,10 +4589,12 @@ pub struct RedactConversationMessageRequest {
     pub message_id: String,
 }
 
+/// see [Chime::redact_conversation_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RedactConversationMessageResponse {}
 
+/// see [Chime::redact_room_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedactRoomMessageRequest {
@@ -4273,10 +4609,12 @@ pub struct RedactRoomMessageRequest {
     pub room_id: String,
 }
 
+/// see [Chime::redact_room_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RedactRoomMessageResponse {}
 
+/// see [Chime::regenerate_security_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegenerateSecurityTokenRequest {
@@ -4288,6 +4626,7 @@ pub struct RegenerateSecurityTokenRequest {
     pub bot_id: String,
 }
 
+/// see [Chime::regenerate_security_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegenerateSecurityTokenResponse {
@@ -4296,6 +4635,7 @@ pub struct RegenerateSecurityTokenResponse {
     pub bot: Option<Bot>,
 }
 
+/// see [Chime::reset_personal_pin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetPersonalPINRequest {
@@ -4307,6 +4647,7 @@ pub struct ResetPersonalPINRequest {
     pub user_id: String,
 }
 
+/// see [Chime::reset_personal_pin]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetPersonalPINResponse {
@@ -4316,6 +4657,7 @@ pub struct ResetPersonalPINResponse {
     pub user: Option<User>,
 }
 
+/// see [Chime::restore_phone_number]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestorePhoneNumberRequest {
@@ -4324,6 +4666,7 @@ pub struct RestorePhoneNumberRequest {
     pub phone_number_id: String,
 }
 
+/// see [Chime::restore_phone_number]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestorePhoneNumberResponse {
@@ -4410,6 +4753,7 @@ pub struct RoomRetentionSettings {
     pub retention_days: Option<i64>,
 }
 
+/// see [Chime::search_available_phone_numbers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAvailablePhoneNumbersRequest {
@@ -4443,6 +4787,7 @@ pub struct SearchAvailablePhoneNumbersRequest {
     pub toll_free_prefix: Option<String>,
 }
 
+/// see [Chime::search_available_phone_numbers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchAvailablePhoneNumbersResponse {
@@ -4452,6 +4797,7 @@ pub struct SearchAvailablePhoneNumbersResponse {
     pub e164_phone_numbers: Option<Vec<String>>,
 }
 
+/// see [Chime::send_channel_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendChannelMessageRequest {
@@ -4476,6 +4822,7 @@ pub struct SendChannelMessageRequest {
     pub type_: String,
 }
 
+/// see [Chime::send_channel_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendChannelMessageResponse {
@@ -4646,6 +4993,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Chime::tag_attendee]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagAttendeeRequest {
@@ -4660,6 +5008,7 @@ pub struct TagAttendeeRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Chime::tag_meeting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagMeetingRequest {
@@ -4671,6 +5020,7 @@ pub struct TagMeetingRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Chime::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -4735,6 +5085,7 @@ pub struct TerminationHealth {
     pub timestamp: Option<f64>,
 }
 
+/// see [Chime::untag_attendee]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagAttendeeRequest {
@@ -4749,6 +5100,7 @@ pub struct UntagAttendeeRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Chime::untag_meeting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagMeetingRequest {
@@ -4760,6 +5112,7 @@ pub struct UntagMeetingRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Chime::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -4771,6 +5124,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Chime::update_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountRequest {
@@ -4783,6 +5137,7 @@ pub struct UpdateAccountRequest {
     pub name: Option<String>,
 }
 
+/// see [Chime::update_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountResponse {
@@ -4791,6 +5146,7 @@ pub struct UpdateAccountResponse {
     pub account: Option<Account>,
 }
 
+/// see [Chime::update_account_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountSettingsRequest {
@@ -4802,10 +5158,12 @@ pub struct UpdateAccountSettingsRequest {
     pub account_settings: AccountSettings,
 }
 
+/// see [Chime::update_account_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountSettingsResponse {}
 
+/// see [Chime::update_app_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppInstanceRequest {
@@ -4821,6 +5179,7 @@ pub struct UpdateAppInstanceRequest {
     pub name: String,
 }
 
+/// see [Chime::update_app_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppInstanceResponse {
@@ -4830,6 +5189,7 @@ pub struct UpdateAppInstanceResponse {
     pub app_instance_arn: Option<String>,
 }
 
+/// see [Chime::update_app_instance_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppInstanceUserRequest {
@@ -4845,6 +5205,7 @@ pub struct UpdateAppInstanceUserRequest {
     pub name: String,
 }
 
+/// see [Chime::update_app_instance_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppInstanceUserResponse {
@@ -4854,6 +5215,7 @@ pub struct UpdateAppInstanceUserResponse {
     pub app_instance_user_arn: Option<String>,
 }
 
+/// see [Chime::update_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBotRequest {
@@ -4869,6 +5231,7 @@ pub struct UpdateBotRequest {
     pub disabled: Option<bool>,
 }
 
+/// see [Chime::update_bot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBotResponse {
@@ -4878,6 +5241,7 @@ pub struct UpdateBotResponse {
     pub bot: Option<Bot>,
 }
 
+/// see [Chime::update_channel_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelMessageRequest {
@@ -4897,6 +5261,7 @@ pub struct UpdateChannelMessageRequest {
     pub metadata: Option<String>,
 }
 
+/// see [Chime::update_channel_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelMessageResponse {
@@ -4910,6 +5275,7 @@ pub struct UpdateChannelMessageResponse {
     pub message_id: Option<String>,
 }
 
+/// see [Chime::update_channel_read_marker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelReadMarkerRequest {
@@ -4918,6 +5284,7 @@ pub struct UpdateChannelReadMarkerRequest {
     pub channel_arn: String,
 }
 
+/// see [Chime::update_channel_read_marker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelReadMarkerResponse {
@@ -4927,6 +5294,7 @@ pub struct UpdateChannelReadMarkerResponse {
     pub channel_arn: Option<String>,
 }
 
+/// see [Chime::update_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
@@ -4945,6 +5313,7 @@ pub struct UpdateChannelRequest {
     pub name: String,
 }
 
+/// see [Chime::update_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelResponse {
@@ -4954,6 +5323,7 @@ pub struct UpdateChannelResponse {
     pub channel_arn: Option<String>,
 }
 
+/// see [Chime::update_global_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalSettingsRequest {
@@ -4965,6 +5335,7 @@ pub struct UpdateGlobalSettingsRequest {
     pub voice_connector: VoiceConnectorSettings,
 }
 
+/// see [Chime::update_phone_number]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberRequest {
@@ -4998,6 +5369,7 @@ pub struct UpdatePhoneNumberRequestItem {
     pub product_type: Option<String>,
 }
 
+/// see [Chime::update_phone_number]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePhoneNumberResponse {
@@ -5007,6 +5379,7 @@ pub struct UpdatePhoneNumberResponse {
     pub phone_number: Option<PhoneNumber>,
 }
 
+/// see [Chime::update_phone_number_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberSettingsRequest {
@@ -5015,6 +5388,7 @@ pub struct UpdatePhoneNumberSettingsRequest {
     pub calling_name: String,
 }
 
+/// see [Chime::update_proxy_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProxySessionRequest {
@@ -5033,6 +5407,7 @@ pub struct UpdateProxySessionRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::update_proxy_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProxySessionResponse {
@@ -5042,6 +5417,7 @@ pub struct UpdateProxySessionResponse {
     pub proxy_session: Option<ProxySession>,
 }
 
+/// see [Chime::update_room_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomMembershipRequest {
@@ -5060,6 +5436,7 @@ pub struct UpdateRoomMembershipRequest {
     pub room_id: String,
 }
 
+/// see [Chime::update_room_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRoomMembershipResponse {
@@ -5069,6 +5446,7 @@ pub struct UpdateRoomMembershipResponse {
     pub room_membership: Option<RoomMembership>,
 }
 
+/// see [Chime::update_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomRequest {
@@ -5084,6 +5462,7 @@ pub struct UpdateRoomRequest {
     pub room_id: String,
 }
 
+/// see [Chime::update_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRoomResponse {
@@ -5093,6 +5472,7 @@ pub struct UpdateRoomResponse {
     pub room: Option<Room>,
 }
 
+/// see [Chime::update_sip_media_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSipMediaApplicationRequest {
@@ -5109,6 +5489,7 @@ pub struct UpdateSipMediaApplicationRequest {
     pub sip_media_application_id: String,
 }
 
+/// see [Chime::update_sip_media_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSipMediaApplicationResponse {
@@ -5118,6 +5499,7 @@ pub struct UpdateSipMediaApplicationResponse {
     pub sip_media_application: Option<SipMediaApplication>,
 }
 
+/// see [Chime::update_sip_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSipRuleRequest {
@@ -5137,6 +5519,7 @@ pub struct UpdateSipRuleRequest {
     pub target_applications: Option<Vec<SipRuleTargetApplication>>,
 }
 
+/// see [Chime::update_sip_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSipRuleResponse {
@@ -5146,6 +5529,7 @@ pub struct UpdateSipRuleResponse {
     pub sip_rule: Option<SipRule>,
 }
 
+/// see [Chime::update_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
@@ -5190,6 +5574,7 @@ pub struct UpdateUserRequestItem {
     pub user_type: Option<String>,
 }
 
+/// see [Chime::update_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
@@ -5199,6 +5584,7 @@ pub struct UpdateUserResponse {
     pub user: Option<User>,
 }
 
+/// see [Chime::update_user_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSettingsRequest {
@@ -5213,6 +5599,7 @@ pub struct UpdateUserSettingsRequest {
     pub user_settings: UserSettings,
 }
 
+/// see [Chime::update_voice_connector_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVoiceConnectorGroupRequest {
@@ -5227,6 +5614,7 @@ pub struct UpdateVoiceConnectorGroupRequest {
     pub voice_connector_items: Vec<VoiceConnectorItem>,
 }
 
+/// see [Chime::update_voice_connector_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVoiceConnectorGroupResponse {
@@ -5236,6 +5624,7 @@ pub struct UpdateVoiceConnectorGroupResponse {
     pub voice_connector_group: Option<VoiceConnectorGroup>,
 }
 
+/// see [Chime::update_voice_connector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVoiceConnectorRequest {
@@ -5250,6 +5639,7 @@ pub struct UpdateVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
+/// see [Chime::update_voice_connector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVoiceConnectorResponse {
@@ -19152,7 +19542,7 @@ impl fmt::Display for UpdateVoiceConnectorGroupError {
 impl Error for UpdateVoiceConnectorGroupError {}
 /// Trait representing the capabilities of the Amazon Chime API. Amazon Chime clients implement this trait.
 #[async_trait]
-pub trait Chime {
+pub trait Chime: Clone + Sync + Send + 'static {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>
     async fn associate_phone_number_with_user(
         &self,
@@ -19843,6 +20233,16 @@ pub trait Chime {
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
+    /// Auto-paginating version of `list_accounts`
+    fn list_accounts_pages(
+        &self,
+        input: ListAccountsRequest,
+    ) -> RusotoStream<Account, ListAccountsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_accounts(state.clone())
+        })
+    }
+
     /// <p>Returns a list of the administrators in the app instance.</p>
     async fn list_app_instance_admins(
         &self,
@@ -19992,6 +20392,13 @@ pub trait Chime {
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
+
+    /// Auto-paginating version of `list_users`
+    fn list_users_pages(&self, input: ListUsersRequest) -> RusotoStream<User, ListUsersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_users(state.clone())
+        })
+    }
 
     /// <p>Lists the Amazon Chime Voice Connector groups for the administrator's AWS account.</p>
     async fn list_voice_connector_groups(

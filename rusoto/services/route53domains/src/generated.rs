@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -52,6 +54,7 @@ impl Route53DomainsClient {
 
 use serde_json;
 /// <p>The AcceptDomainTransferFromAnotherAwsAccount request includes the following elements.</p>
+/// see [Route53Domains::accept_domain_transfer_from_another_aws_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptDomainTransferFromAnotherAwsAccountRequest {
@@ -64,6 +67,7 @@ pub struct AcceptDomainTransferFromAnotherAwsAccountRequest {
 }
 
 /// <p>The AcceptDomainTransferFromAnotherAwsAccount response includes the following element.</p>
+/// see [Route53Domains::accept_domain_transfer_from_another_aws_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptDomainTransferFromAnotherAwsAccountResponse {
@@ -100,6 +104,7 @@ pub struct BillingRecord {
 }
 
 /// <p>The CancelDomainTransferToAnotherAwsAccount request includes the following element.</p>
+/// see [Route53Domains::cancel_domain_transfer_to_another_aws_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelDomainTransferToAnotherAwsAccountRequest {
@@ -109,6 +114,7 @@ pub struct CancelDomainTransferToAnotherAwsAccountRequest {
 }
 
 /// <p>The <code>CancelDomainTransferToAnotherAwsAccount</code> response includes the following element.</p>
+/// see [Route53Domains::cancel_domain_transfer_to_another_aws_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelDomainTransferToAnotherAwsAccountResponse {
@@ -119,6 +125,7 @@ pub struct CancelDomainTransferToAnotherAwsAccountResponse {
 }
 
 /// <p>The CheckDomainAvailability request contains the following elements.</p>
+/// see [Route53Domains::check_domain_availability]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckDomainAvailabilityRequest {
@@ -132,6 +139,7 @@ pub struct CheckDomainAvailabilityRequest {
 }
 
 /// <p>The CheckDomainAvailability response includes the following elements.</p>
+/// see [Route53Domains::check_domain_availability]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckDomainAvailabilityResponse {
@@ -141,6 +149,7 @@ pub struct CheckDomainAvailabilityResponse {
 }
 
 /// <p>The CheckDomainTransferability request contains the following elements.</p>
+/// see [Route53Domains::check_domain_transferability]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckDomainTransferabilityRequest {
@@ -154,6 +163,7 @@ pub struct CheckDomainTransferabilityRequest {
 }
 
 /// <p>The CheckDomainTransferability response includes the following elements.</p>
+/// see [Route53Domains::check_domain_transferability]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckDomainTransferabilityResponse {
@@ -224,6 +234,7 @@ pub struct ContactDetail {
 }
 
 /// <p>The DeleteTagsForDomainRequest includes the following elements.</p>
+/// see [Route53Domains::delete_tags_for_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsForDomainRequest {
@@ -235,10 +246,12 @@ pub struct DeleteTagsForDomainRequest {
     pub tags_to_delete: Vec<String>,
 }
 
+/// see [Route53Domains::delete_tags_for_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsForDomainResponse {}
 
+/// see [Route53Domains::disable_domain_auto_renew]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableDomainAutoRenewRequest {
@@ -247,11 +260,13 @@ pub struct DisableDomainAutoRenewRequest {
     pub domain_name: String,
 }
 
+/// see [Route53Domains::disable_domain_auto_renew]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableDomainAutoRenewResponse {}
 
 /// <p>The DisableDomainTransferLock request includes the following element.</p>
+/// see [Route53Domains::disable_domain_transfer_lock]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableDomainTransferLockRequest {
@@ -261,6 +276,7 @@ pub struct DisableDomainTransferLockRequest {
 }
 
 /// <p>The DisableDomainTransferLock response includes the following element.</p>
+/// see [Route53Domains::disable_domain_transfer_lock]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableDomainTransferLockResponse {
@@ -313,6 +329,7 @@ pub struct DomainTransferability {
     pub transferable: Option<String>,
 }
 
+/// see [Route53Domains::enable_domain_auto_renew]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableDomainAutoRenewRequest {
@@ -321,11 +338,13 @@ pub struct EnableDomainAutoRenewRequest {
     pub domain_name: String,
 }
 
+/// see [Route53Domains::enable_domain_auto_renew]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableDomainAutoRenewResponse {}
 
 /// <p>A request to set the transfer lock for the specified domain.</p>
+/// see [Route53Domains::enable_domain_transfer_lock]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableDomainTransferLockRequest {
@@ -335,6 +354,7 @@ pub struct EnableDomainTransferLockRequest {
 }
 
 /// <p>The EnableDomainTransferLock response includes the following elements.</p>
+/// see [Route53Domains::enable_domain_transfer_lock]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableDomainTransferLockResponse {
@@ -354,6 +374,7 @@ pub struct ExtraParam {
     pub value: String,
 }
 
+/// see [Route53Domains::get_contact_reachability_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactReachabilityStatusRequest {
@@ -363,6 +384,7 @@ pub struct GetContactReachabilityStatusRequest {
     pub domain_name: Option<String>,
 }
 
+/// see [Route53Domains::get_contact_reachability_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactReachabilityStatusResponse {
@@ -377,6 +399,7 @@ pub struct GetContactReachabilityStatusResponse {
 }
 
 /// <p>The GetDomainDetail request includes the following element.</p>
+/// see [Route53Domains::get_domain_detail]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainDetailRequest {
@@ -386,6 +409,7 @@ pub struct GetDomainDetailRequest {
 }
 
 /// <p>The GetDomainDetail response includes the following elements.</p>
+/// see [Route53Domains::get_domain_detail]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainDetailResponse {
@@ -470,6 +494,7 @@ pub struct GetDomainDetailResponse {
     pub who_is_server: Option<String>,
 }
 
+/// see [Route53Domains::get_domain_suggestions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainSuggestionsRequest {
@@ -484,6 +509,7 @@ pub struct GetDomainSuggestionsRequest {
     pub suggestion_count: i64,
 }
 
+/// see [Route53Domains::get_domain_suggestions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainSuggestionsResponse {
@@ -494,6 +520,7 @@ pub struct GetDomainSuggestionsResponse {
 }
 
 /// <p>The <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_GetOperationDetail.html">GetOperationDetail</a> request includes the following element.</p>
+/// see [Route53Domains::get_operation_detail]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationDetailRequest {
@@ -503,6 +530,7 @@ pub struct GetOperationDetailRequest {
 }
 
 /// <p>The GetOperationDetail response includes the following elements.</p>
+/// see [Route53Domains::get_operation_detail]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationDetailResponse {
@@ -533,6 +561,7 @@ pub struct GetOperationDetailResponse {
 }
 
 /// <p>The ListDomains request includes the following elements.</p>
+/// see [Route53Domains::list_domains]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
@@ -546,7 +575,16 @@ pub struct ListDomainsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListDomainsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The ListDomains response includes the following elements.</p>
+/// see [Route53Domains::list_domains]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsResponse {
@@ -559,7 +597,32 @@ pub struct ListDomainsResponse {
     pub next_page_marker: Option<String>,
 }
 
+impl ListDomainsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DomainSummary>> {
+        Some(self.domains.clone())
+    }
+}
+
+impl PagedOutput for ListDomainsResponse {
+    type Item = DomainSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DomainSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The ListOperations request includes the following elements.</p>
+/// see [Route53Domains::list_operations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOperationsRequest {
@@ -577,7 +640,16 @@ pub struct ListOperationsRequest {
     pub submitted_since: Option<f64>,
 }
 
+impl PagedRequest for ListOperationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The ListOperations response includes the following elements.</p>
+/// see [Route53Domains::list_operations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOperationsResponse {
@@ -590,7 +662,32 @@ pub struct ListOperationsResponse {
     pub operations: Vec<OperationSummary>,
 }
 
+impl ListOperationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<OperationSummary>> {
+        Some(self.operations.clone())
+    }
+}
+
+impl PagedOutput for ListOperationsResponse {
+    type Item = OperationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OperationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The ListTagsForDomainRequest includes the following elements.</p>
+/// see [Route53Domains::list_tags_for_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForDomainRequest {
@@ -600,6 +697,7 @@ pub struct ListTagsForDomainRequest {
 }
 
 /// <p>The ListTagsForDomain response includes the following elements.</p>
+/// see [Route53Domains::list_tags_for_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForDomainResponse {
@@ -639,6 +737,7 @@ pub struct OperationSummary {
 }
 
 /// <p>The RegisterDomain request includes the following elements.</p>
+/// see [Route53Domains::register_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDomainRequest {
@@ -680,6 +779,7 @@ pub struct RegisterDomainRequest {
 }
 
 /// <p>The RegisterDomain response includes the following element.</p>
+/// see [Route53Domains::register_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterDomainResponse {
@@ -689,6 +789,7 @@ pub struct RegisterDomainResponse {
 }
 
 /// <p>The RejectDomainTransferFromAnotherAwsAccount request includes the following element.</p>
+/// see [Route53Domains::reject_domain_transfer_from_another_aws_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectDomainTransferFromAnotherAwsAccountRequest {
@@ -698,6 +799,7 @@ pub struct RejectDomainTransferFromAnotherAwsAccountRequest {
 }
 
 /// <p>The RejectDomainTransferFromAnotherAwsAccount response includes the following element.</p>
+/// see [Route53Domains::reject_domain_transfer_from_another_aws_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectDomainTransferFromAnotherAwsAccountResponse {
@@ -708,6 +810,7 @@ pub struct RejectDomainTransferFromAnotherAwsAccountResponse {
 }
 
 /// <p>A <code>RenewDomain</code> request includes the number of years that you want to renew for and the current expiration year.</p>
+/// see [Route53Domains::renew_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewDomainRequest {
@@ -723,6 +826,7 @@ pub struct RenewDomainRequest {
     pub duration_in_years: Option<i64>,
 }
 
+/// see [Route53Domains::renew_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenewDomainResponse {
@@ -731,6 +835,7 @@ pub struct RenewDomainResponse {
     pub operation_id: String,
 }
 
+/// see [Route53Domains::resend_contact_reachability_email]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResendContactReachabilityEmailRequest {
@@ -740,6 +845,7 @@ pub struct ResendContactReachabilityEmailRequest {
     pub domain_name: Option<String>,
 }
 
+/// see [Route53Domains::resend_contact_reachability_email]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResendContactReachabilityEmailResponse {
@@ -758,6 +864,7 @@ pub struct ResendContactReachabilityEmailResponse {
 }
 
 /// <p>A request for the authorization code for the specified domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>
+/// see [Route53Domains::retrieve_domain_auth_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveDomainAuthCodeRequest {
@@ -767,6 +874,7 @@ pub struct RetrieveDomainAuthCodeRequest {
 }
 
 /// <p>The RetrieveDomainAuthCode response includes the following element.</p>
+/// see [Route53Domains::retrieve_domain_auth_code]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetrieveDomainAuthCodeResponse {
@@ -789,6 +897,7 @@ pub struct Tag {
 }
 
 /// <p>The TransferDomain request includes the following elements.</p>
+/// see [Route53Domains::transfer_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransferDomainRequest {
@@ -838,6 +947,7 @@ pub struct TransferDomainRequest {
 }
 
 /// <p>The TransferDomain response includes the following element.</p>
+/// see [Route53Domains::transfer_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransferDomainResponse {
@@ -847,6 +957,7 @@ pub struct TransferDomainResponse {
 }
 
 /// <p>The TransferDomainToAnotherAwsAccount request includes the following elements.</p>
+/// see [Route53Domains::transfer_domain_to_another_aws_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransferDomainToAnotherAwsAccountRequest {
@@ -859,6 +970,7 @@ pub struct TransferDomainToAnotherAwsAccountRequest {
 }
 
 /// <p>The <code>TransferDomainToAnotherAwsAccount</code> response includes the following elements.</p>
+/// see [Route53Domains::transfer_domain_to_another_aws_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransferDomainToAnotherAwsAccountResponse {
@@ -873,6 +985,7 @@ pub struct TransferDomainToAnotherAwsAccountResponse {
 }
 
 /// <p>The UpdateDomainContactPrivacy request includes the following elements.</p>
+/// see [Route53Domains::update_domain_contact_privacy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainContactPrivacyRequest {
@@ -894,6 +1007,7 @@ pub struct UpdateDomainContactPrivacyRequest {
 }
 
 /// <p>The UpdateDomainContactPrivacy response includes the following element.</p>
+/// see [Route53Domains::update_domain_contact_privacy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainContactPrivacyResponse {
@@ -903,6 +1017,7 @@ pub struct UpdateDomainContactPrivacyResponse {
 }
 
 /// <p>The UpdateDomainContact request includes the following elements.</p>
+/// see [Route53Domains::update_domain_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainContactRequest {
@@ -924,6 +1039,7 @@ pub struct UpdateDomainContactRequest {
 }
 
 /// <p>The UpdateDomainContact response includes the following element.</p>
+/// see [Route53Domains::update_domain_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainContactResponse {
@@ -933,6 +1049,7 @@ pub struct UpdateDomainContactResponse {
 }
 
 /// <p>Replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email. </p>
+/// see [Route53Domains::update_domain_nameservers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameserversRequest {
@@ -945,6 +1062,7 @@ pub struct UpdateDomainNameserversRequest {
 }
 
 /// <p>The UpdateDomainNameservers response includes the following element.</p>
+/// see [Route53Domains::update_domain_nameservers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainNameserversResponse {
@@ -954,6 +1072,7 @@ pub struct UpdateDomainNameserversResponse {
 }
 
 /// <p>The UpdateTagsForDomainRequest includes the following elements.</p>
+/// see [Route53Domains::update_tags_for_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTagsForDomainRequest {
@@ -966,11 +1085,13 @@ pub struct UpdateTagsForDomainRequest {
     pub tags_to_update: Option<Vec<Tag>>,
 }
 
+/// see [Route53Domains::update_tags_for_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTagsForDomainResponse {}
 
 /// <p>The ViewBilling request includes the following elements.</p>
+/// see [Route53Domains::view_billing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ViewBillingRequest {
@@ -992,7 +1113,16 @@ pub struct ViewBillingRequest {
     pub start: Option<f64>,
 }
 
+impl PagedRequest for ViewBillingRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The ViewBilling response includes the following elements.</p>
+/// see [Route53Domains::view_billing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ViewBillingResponse {
@@ -1004,6 +1134,30 @@ pub struct ViewBillingResponse {
     #[serde(rename = "NextPageMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_marker: Option<String>,
+}
+
+impl ViewBillingResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BillingRecord>> {
+        Some(self.billing_records.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ViewBillingResponse {
+    type Item = BillingRecord;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BillingRecord> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// Errors returned by AcceptDomainTransferFromAnotherAwsAccount
@@ -2358,7 +2512,7 @@ impl fmt::Display for ViewBillingError {
 impl Error for ViewBillingError {}
 /// Trait representing the capabilities of the Amazon Route 53 Domains API. Amazon Route 53 Domains clients implement this trait.
 #[async_trait]
-pub trait Route53Domains {
+pub trait Route53Domains: Clone + Sync + Send + 'static {
     /// <p>Accepts the transfer of a domain from another AWS account to the current AWS account. You initiate a transfer between AWS accounts using <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_TransferDomainToAnotherAwsAccount.html">TransferDomainToAnotherAwsAccount</a>. </p> <p>Use either <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ListOperations.html">ListOperations</a> or <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_GetOperationDetail.html">GetOperationDetail</a> to determine whether the operation succeeded. <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_GetOperationDetail.html">GetOperationDetail</a> provides additional information, for example, <code>Domain Transfer from Aws Account 111122223333 has been cancelled</code>. </p>
     async fn accept_domain_transfer_from_another_aws_account(
         &self,
@@ -2449,11 +2603,31 @@ pub trait Route53Domains {
         input: ListDomainsRequest,
     ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>>;
 
+    /// Auto-paginating version of `list_domains`
+    fn list_domains_pages(
+        &self,
+        input: ListDomainsRequest,
+    ) -> RusotoStream<DomainSummary, ListDomainsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_domains(state.clone())
+        })
+    }
+
     /// <p>Returns information about all of the operations that return an operation ID and that have ever been performed on domains that were registered by the current account. </p>
     async fn list_operations(
         &self,
         input: ListOperationsRequest,
     ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>>;
+
+    /// Auto-paginating version of `list_operations`
+    fn list_operations_pages(
+        &self,
+        input: ListOperationsRequest,
+    ) -> RusotoStream<OperationSummary, ListOperationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_operations(state.clone())
+        })
+    }
 
     /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
     async fn list_tags_for_domain(
@@ -2541,6 +2715,16 @@ pub trait Route53Domains {
         &self,
         input: ViewBillingRequest,
     ) -> Result<ViewBillingResponse, RusotoError<ViewBillingError>>;
+
+    /// Auto-paginating version of `view_billing`
+    fn view_billing_pages(
+        &self,
+        input: ViewBillingRequest,
+    ) -> RusotoStream<BillingRecord, ViewBillingError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.view_billing(state.clone())
+        })
+    }
 }
 /// A client for the Amazon Route 53 Domains API.
 #[derive(Clone)]

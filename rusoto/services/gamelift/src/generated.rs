@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl GameLiftClient {
 
 use serde_json;
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::accept_match]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptMatchInput {
@@ -65,6 +68,7 @@ pub struct AcceptMatchInput {
     pub ticket_id: String,
 }
 
+/// see [GameLift::accept_match]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptMatchOutput {}
@@ -188,6 +192,7 @@ pub struct CertificateConfiguration {
     pub certificate_type: String,
 }
 
+/// see [GameLift::claim_game_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClaimGameServerInput {
@@ -204,6 +209,7 @@ pub struct ClaimGameServerInput {
     pub game_server_id: Option<String>,
 }
 
+/// see [GameLift::claim_game_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClaimGameServerOutput {
@@ -214,6 +220,7 @@ pub struct ClaimGameServerOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasInput {
@@ -234,6 +241,7 @@ pub struct CreateAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAliasOutput {
@@ -244,6 +252,7 @@ pub struct CreateAliasOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_build]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBuildInput {
@@ -270,6 +279,7 @@ pub struct CreateBuildInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_build]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBuildOutput {
@@ -288,6 +298,7 @@ pub struct CreateBuildOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetInput {
@@ -368,6 +379,7 @@ pub struct CreateFleetInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetOutput {
@@ -377,6 +389,7 @@ pub struct CreateFleetOutput {
     pub fleet_attributes: Option<FleetAttributes>,
 }
 
+/// see [GameLift::create_game_server_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGameServerGroupInput {
@@ -420,6 +433,7 @@ pub struct CreateGameServerGroupInput {
     pub vpc_subnets: Option<Vec<String>>,
 }
 
+/// see [GameLift::create_game_server_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGameServerGroupOutput {
@@ -430,6 +444,7 @@ pub struct CreateGameServerGroupOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_game_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGameSessionInput {
@@ -471,6 +486,7 @@ pub struct CreateGameSessionInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_game_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGameSessionOutput {
@@ -481,6 +497,7 @@ pub struct CreateGameSessionOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_game_session_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGameSessionQueueInput {
@@ -506,6 +523,7 @@ pub struct CreateGameSessionQueueInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_game_session_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGameSessionQueueOutput {
@@ -516,6 +534,7 @@ pub struct CreateGameSessionQueueOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_matchmaking_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMatchmakingConfigurationInput {
@@ -578,6 +597,7 @@ pub struct CreateMatchmakingConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_matchmaking_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMatchmakingConfigurationOutput {
@@ -588,6 +608,7 @@ pub struct CreateMatchmakingConfigurationOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_matchmaking_rule_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMatchmakingRuleSetInput {
@@ -604,6 +625,7 @@ pub struct CreateMatchmakingRuleSetInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_matchmaking_rule_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMatchmakingRuleSetOutput {
@@ -613,6 +635,7 @@ pub struct CreateMatchmakingRuleSetOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_player_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlayerSessionInput {
@@ -629,6 +652,7 @@ pub struct CreatePlayerSessionInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_player_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePlayerSessionOutput {
@@ -639,6 +663,7 @@ pub struct CreatePlayerSessionOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_player_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlayerSessionsInput {
@@ -655,6 +680,7 @@ pub struct CreatePlayerSessionsInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_player_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePlayerSessionsOutput {
@@ -664,6 +690,7 @@ pub struct CreatePlayerSessionsOutput {
     pub player_sessions: Option<Vec<PlayerSession>>,
 }
 
+/// see [GameLift::create_script]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScriptInput {
@@ -694,6 +721,7 @@ pub struct CreateScriptInput {
     pub zip_file: Option<bytes::Bytes>,
 }
 
+/// see [GameLift::create_script]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateScriptOutput {
@@ -704,6 +732,7 @@ pub struct CreateScriptOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_vpc_peering_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcPeeringAuthorizationInput {
@@ -716,6 +745,7 @@ pub struct CreateVpcPeeringAuthorizationInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::create_vpc_peering_authorization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVpcPeeringAuthorizationOutput {
@@ -726,6 +756,7 @@ pub struct CreateVpcPeeringAuthorizationOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::create_vpc_peering_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcPeeringConnectionInput {
@@ -740,11 +771,13 @@ pub struct CreateVpcPeeringConnectionInput {
     pub peer_vpc_id: String,
 }
 
+/// see [GameLift::create_vpc_peering_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVpcPeeringConnectionOutput {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasInput {
@@ -754,6 +787,7 @@ pub struct DeleteAliasInput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_build]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBuildInput {
@@ -763,6 +797,7 @@ pub struct DeleteBuildInput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetInput {
@@ -771,6 +806,7 @@ pub struct DeleteFleetInput {
     pub fleet_id: String,
 }
 
+/// see [GameLift::delete_game_server_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGameServerGroupInput {
@@ -783,6 +819,7 @@ pub struct DeleteGameServerGroupInput {
     pub game_server_group_name: String,
 }
 
+/// see [GameLift::delete_game_server_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGameServerGroupOutput {
@@ -793,6 +830,7 @@ pub struct DeleteGameServerGroupOutput {
 }
 
 /// <p>Represents the input for a request operation. </p>
+/// see [GameLift::delete_game_session_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGameSessionQueueInput {
@@ -801,11 +839,13 @@ pub struct DeleteGameSessionQueueInput {
     pub name: String,
 }
 
+/// see [GameLift::delete_game_session_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGameSessionQueueOutput {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_matchmaking_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMatchmakingConfigurationInput {
@@ -814,11 +854,13 @@ pub struct DeleteMatchmakingConfigurationInput {
     pub name: String,
 }
 
+/// see [GameLift::delete_matchmaking_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMatchmakingConfigurationOutput {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_matchmaking_rule_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMatchmakingRuleSetInput {
@@ -828,11 +870,13 @@ pub struct DeleteMatchmakingRuleSetInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::delete_matchmaking_rule_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMatchmakingRuleSetOutput {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScalingPolicyInput {
@@ -844,6 +888,7 @@ pub struct DeleteScalingPolicyInput {
     pub name: String,
 }
 
+/// see [GameLift::delete_script]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScriptInput {
@@ -853,6 +898,7 @@ pub struct DeleteScriptInput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_vpc_peering_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcPeeringAuthorizationInput {
@@ -864,11 +910,13 @@ pub struct DeleteVpcPeeringAuthorizationInput {
     pub peer_vpc_id: String,
 }
 
+/// see [GameLift::delete_vpc_peering_authorization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVpcPeeringAuthorizationOutput {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::delete_vpc_peering_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcPeeringConnectionInput {
@@ -880,10 +928,12 @@ pub struct DeleteVpcPeeringConnectionInput {
     pub vpc_peering_connection_id: String,
 }
 
+/// see [GameLift::delete_vpc_peering_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVpcPeeringConnectionOutput {}
 
+/// see [GameLift::deregister_game_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterGameServerInput {
@@ -896,6 +946,7 @@ pub struct DeregisterGameServerInput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAliasInput {
@@ -905,6 +956,7 @@ pub struct DescribeAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAliasOutput {
@@ -915,6 +967,7 @@ pub struct DescribeAliasOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_build]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBuildInput {
@@ -924,6 +977,7 @@ pub struct DescribeBuildInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_build]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBuildOutput {
@@ -934,6 +988,7 @@ pub struct DescribeBuildOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_ec2_instance_limits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEC2InstanceLimitsInput {
@@ -944,6 +999,7 @@ pub struct DescribeEC2InstanceLimitsInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_ec2_instance_limits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEC2InstanceLimitsOutput {
@@ -954,6 +1010,7 @@ pub struct DescribeEC2InstanceLimitsOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_fleet_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetAttributesInput {
@@ -971,7 +1028,16 @@ pub struct DescribeFleetAttributesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeFleetAttributesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_fleet_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetAttributesOutput {
@@ -985,7 +1051,32 @@ pub struct DescribeFleetAttributesOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeFleetAttributesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<FleetAttributes>> {
+        Some(self.fleet_attributes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeFleetAttributesOutput {
+    type Item = FleetAttributes;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FleetAttributes> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_fleet_capacity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetCapacityInput {
@@ -1003,7 +1094,16 @@ pub struct DescribeFleetCapacityInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeFleetCapacityInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_fleet_capacity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetCapacityOutput {
@@ -1017,7 +1117,32 @@ pub struct DescribeFleetCapacityOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeFleetCapacityOutput {
+    fn pagination_page_opt(self) -> Option<Vec<FleetCapacity>> {
+        Some(self.fleet_capacity.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeFleetCapacityOutput {
+    type Item = FleetCapacity;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FleetCapacity> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_fleet_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetEventsInput {
@@ -1042,7 +1167,16 @@ pub struct DescribeFleetEventsInput {
     pub start_time: Option<f64>,
 }
 
+impl PagedRequest for DescribeFleetEventsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_fleet_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetEventsOutput {
@@ -1056,7 +1190,32 @@ pub struct DescribeFleetEventsOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeFleetEventsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeFleetEventsOutput {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_fleet_port_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetPortSettingsInput {
@@ -1066,6 +1225,7 @@ pub struct DescribeFleetPortSettingsInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_fleet_port_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetPortSettingsOutput {
@@ -1076,6 +1236,7 @@ pub struct DescribeFleetPortSettingsOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_fleet_utilization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetUtilizationInput {
@@ -1093,7 +1254,16 @@ pub struct DescribeFleetUtilizationInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeFleetUtilizationInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_fleet_utilization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetUtilizationOutput {
@@ -1107,6 +1277,31 @@ pub struct DescribeFleetUtilizationOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeFleetUtilizationOutput {
+    fn pagination_page_opt(self) -> Option<Vec<FleetUtilization>> {
+        Some(self.fleet_utilization.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeFleetUtilizationOutput {
+    type Item = FleetUtilization;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FleetUtilization> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GameLift::describe_game_server_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameServerGroupInput {
@@ -1115,6 +1310,7 @@ pub struct DescribeGameServerGroupInput {
     pub game_server_group_name: String,
 }
 
+/// see [GameLift::describe_game_server_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameServerGroupOutput {
@@ -1124,6 +1320,7 @@ pub struct DescribeGameServerGroupOutput {
     pub game_server_group: Option<GameServerGroup>,
 }
 
+/// see [GameLift::describe_game_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameServerInput {
@@ -1135,6 +1332,7 @@ pub struct DescribeGameServerInput {
     pub game_server_id: String,
 }
 
+/// see [GameLift::describe_game_server_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameServerInstancesInput {
@@ -1155,6 +1353,15 @@ pub struct DescribeGameServerInstancesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeGameServerInstancesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GameLift::describe_game_server_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameServerInstancesOutput {
@@ -1168,6 +1375,31 @@ pub struct DescribeGameServerInstancesOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeGameServerInstancesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<GameServerInstance>> {
+        Some(self.game_server_instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeGameServerInstancesOutput {
+    type Item = GameServerInstance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GameServerInstance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GameLift::describe_game_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameServerOutput {
@@ -1178,6 +1410,7 @@ pub struct DescribeGameServerOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_game_session_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionDetailsInput {
@@ -1207,7 +1440,16 @@ pub struct DescribeGameSessionDetailsInput {
     pub status_filter: Option<String>,
 }
 
+impl PagedRequest for DescribeGameSessionDetailsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_game_session_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionDetailsOutput {
@@ -1221,7 +1463,32 @@ pub struct DescribeGameSessionDetailsOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeGameSessionDetailsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<GameSessionDetail>> {
+        Some(self.game_session_details.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeGameSessionDetailsOutput {
+    type Item = GameSessionDetail;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GameSessionDetail> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_game_session_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionPlacementInput {
@@ -1231,6 +1498,7 @@ pub struct DescribeGameSessionPlacementInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_game_session_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionPlacementOutput {
@@ -1241,6 +1509,7 @@ pub struct DescribeGameSessionPlacementOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_game_session_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionQueuesInput {
@@ -1258,7 +1527,16 @@ pub struct DescribeGameSessionQueuesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeGameSessionQueuesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_game_session_queues]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionQueuesOutput {
@@ -1272,7 +1550,32 @@ pub struct DescribeGameSessionQueuesOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeGameSessionQueuesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<GameSessionQueue>> {
+        Some(self.game_session_queues.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeGameSessionQueuesOutput {
+    type Item = GameSessionQueue;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GameSessionQueue> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_game_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionsInput {
@@ -1302,7 +1605,16 @@ pub struct DescribeGameSessionsInput {
     pub status_filter: Option<String>,
 }
 
+impl PagedRequest for DescribeGameSessionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_game_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionsOutput {
@@ -1316,7 +1628,32 @@ pub struct DescribeGameSessionsOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeGameSessionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<GameSession>> {
+        Some(self.game_sessions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeGameSessionsOutput {
+    type Item = GameSession;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GameSession> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesInput {
@@ -1337,7 +1674,16 @@ pub struct DescribeInstancesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeInstancesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancesOutput {
@@ -1351,7 +1697,32 @@ pub struct DescribeInstancesOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeInstancesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Instance>> {
+        Some(self.instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeInstancesOutput {
+    type Item = Instance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Instance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_matchmaking_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMatchmakingConfigurationsInput {
@@ -1373,7 +1744,16 @@ pub struct DescribeMatchmakingConfigurationsInput {
     pub rule_set_name: Option<String>,
 }
 
+impl PagedRequest for DescribeMatchmakingConfigurationsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_matchmaking_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMatchmakingConfigurationsOutput {
@@ -1387,7 +1767,32 @@ pub struct DescribeMatchmakingConfigurationsOutput {
     pub next_token: Option<String>,
 }
 
+impl DescribeMatchmakingConfigurationsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<MatchmakingConfiguration>> {
+        Some(self.configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeMatchmakingConfigurationsOutput {
+    type Item = MatchmakingConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MatchmakingConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_matchmaking]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMatchmakingInput {
@@ -1397,6 +1802,7 @@ pub struct DescribeMatchmakingInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_matchmaking]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMatchmakingOutput {
@@ -1407,6 +1813,7 @@ pub struct DescribeMatchmakingOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_matchmaking_rule_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMatchmakingRuleSetsInput {
@@ -1424,7 +1831,16 @@ pub struct DescribeMatchmakingRuleSetsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeMatchmakingRuleSetsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_matchmaking_rule_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMatchmakingRuleSetsOutput {
@@ -1437,7 +1853,32 @@ pub struct DescribeMatchmakingRuleSetsOutput {
     pub rule_sets: Vec<MatchmakingRuleSet>,
 }
 
+impl DescribeMatchmakingRuleSetsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<MatchmakingRuleSet>> {
+        Some(self.rule_sets.clone())
+    }
+}
+
+impl PagedOutput for DescribeMatchmakingRuleSetsOutput {
+    type Item = MatchmakingRuleSet;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MatchmakingRuleSet> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_player_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlayerSessionsInput {
@@ -1467,7 +1908,16 @@ pub struct DescribePlayerSessionsInput {
     pub player_session_status_filter: Option<String>,
 }
 
+impl PagedRequest for DescribePlayerSessionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_player_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePlayerSessionsOutput {
@@ -1481,7 +1931,32 @@ pub struct DescribePlayerSessionsOutput {
     pub player_sessions: Option<Vec<PlayerSession>>,
 }
 
+impl DescribePlayerSessionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<PlayerSession>> {
+        Some(self.player_sessions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribePlayerSessionsOutput {
+    type Item = PlayerSession;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PlayerSession> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_runtime_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRuntimeConfigurationInput {
@@ -1491,6 +1966,7 @@ pub struct DescribeRuntimeConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_runtime_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRuntimeConfigurationOutput {
@@ -1501,6 +1977,7 @@ pub struct DescribeRuntimeConfigurationOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_scaling_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPoliciesInput {
@@ -1521,7 +1998,16 @@ pub struct DescribeScalingPoliciesInput {
     pub status_filter: Option<String>,
 }
 
+impl PagedRequest for DescribeScalingPoliciesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_scaling_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScalingPoliciesOutput {
@@ -1535,6 +2021,31 @@ pub struct DescribeScalingPoliciesOutput {
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
+impl DescribeScalingPoliciesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ScalingPolicy>> {
+        Some(self.scaling_policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeScalingPoliciesOutput {
+    type Item = ScalingPolicy;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ScalingPolicy> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GameLift::describe_script]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScriptInput {
@@ -1543,6 +2054,7 @@ pub struct DescribeScriptInput {
     pub script_id: String,
 }
 
+/// see [GameLift::describe_script]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScriptOutput {
@@ -1552,10 +2064,12 @@ pub struct DescribeScriptOutput {
     pub script: Option<Script>,
 }
 
+/// see [GameLift::describe_vpc_peering_authorizations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcPeeringAuthorizationsInput {}
 
+/// see [GameLift::describe_vpc_peering_authorizations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVpcPeeringAuthorizationsOutput {
@@ -1566,6 +2080,7 @@ pub struct DescribeVpcPeeringAuthorizationsOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::describe_vpc_peering_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcPeeringConnectionsInput {
@@ -1576,6 +2091,7 @@ pub struct DescribeVpcPeeringConnectionsInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::describe_vpc_peering_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVpcPeeringConnectionsOutput {
@@ -2205,6 +2721,7 @@ pub struct GameSessionQueueDestination {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::get_game_session_log_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGameSessionLogUrlInput {
@@ -2214,6 +2731,7 @@ pub struct GetGameSessionLogUrlInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::get_game_session_log_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGameSessionLogUrlOutput {
@@ -2224,6 +2742,7 @@ pub struct GetGameSessionLogUrlOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::get_instance_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceAccessInput {
@@ -2236,6 +2755,7 @@ pub struct GetInstanceAccessInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::get_instance_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceAccessOutput {
@@ -2371,6 +2891,7 @@ pub struct LaunchTemplateSpecification {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::list_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesInput {
@@ -2392,7 +2913,16 @@ pub struct ListAliasesInput {
     pub routing_strategy_type: Option<String>,
 }
 
+impl PagedRequest for ListAliasesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::list_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesOutput {
@@ -2406,7 +2936,32 @@ pub struct ListAliasesOutput {
     pub next_token: Option<String>,
 }
 
+impl ListAliasesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Alias>> {
+        Some(self.aliases.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAliasesOutput {
+    type Item = Alias;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Alias> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::list_builds]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildsInput {
@@ -2424,7 +2979,16 @@ pub struct ListBuildsInput {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListBuildsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::list_builds]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsOutput {
@@ -2438,7 +3002,32 @@ pub struct ListBuildsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListBuildsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Build>> {
+        Some(self.builds.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBuildsOutput {
+    type Item = Build;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Build> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::list_fleets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFleetsInput {
@@ -2460,7 +3049,16 @@ pub struct ListFleetsInput {
     pub script_id: Option<String>,
 }
 
+impl PagedRequest for ListFleetsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::list_fleets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFleetsOutput {
@@ -2474,6 +3072,31 @@ pub struct ListFleetsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListFleetsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.fleet_ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFleetsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GameLift::list_game_server_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGameServerGroupsInput {
@@ -2487,6 +3110,15 @@ pub struct ListGameServerGroupsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListGameServerGroupsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GameLift::list_game_server_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGameServerGroupsOutput {
@@ -2500,6 +3132,31 @@ pub struct ListGameServerGroupsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListGameServerGroupsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<GameServerGroup>> {
+        Some(self.game_server_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGameServerGroupsOutput {
+    type Item = GameServerGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GameServerGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GameLift::list_game_servers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGameServersInput {
@@ -2520,6 +3177,15 @@ pub struct ListGameServersInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListGameServersInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GameLift::list_game_servers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGameServersOutput {
@@ -2533,6 +3199,31 @@ pub struct ListGameServersOutput {
     pub next_token: Option<String>,
 }
 
+impl ListGameServersOutput {
+    fn pagination_page_opt(self) -> Option<Vec<GameServer>> {
+        Some(self.game_servers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGameServersOutput {
+    type Item = GameServer;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GameServer> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GameLift::list_scripts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListScriptsInput {
@@ -2546,6 +3237,15 @@ pub struct ListScriptsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListScriptsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GameLift::list_scripts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListScriptsOutput {
@@ -2559,6 +3259,31 @@ pub struct ListScriptsOutput {
     pub scripts: Option<Vec<Script>>,
 }
 
+impl ListScriptsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Script>> {
+        Some(self.scripts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListScriptsOutput {
+    type Item = Script;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Script> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GameLift::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2567,6 +3292,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [GameLift::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2855,6 +3581,7 @@ pub struct PlayerSession {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::put_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutScalingPolicyInput {
@@ -2898,6 +3625,7 @@ pub struct PutScalingPolicyInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::put_scaling_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutScalingPolicyOutput {
@@ -2907,6 +3635,7 @@ pub struct PutScalingPolicyOutput {
     pub name: Option<String>,
 }
 
+/// see [GameLift::register_game_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterGameServerInput {
@@ -2929,6 +3658,7 @@ pub struct RegisterGameServerInput {
     pub instance_id: String,
 }
 
+/// see [GameLift::register_game_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterGameServerOutput {
@@ -2939,6 +3669,7 @@ pub struct RegisterGameServerOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::request_upload_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestUploadCredentialsInput {
@@ -2948,6 +3679,7 @@ pub struct RequestUploadCredentialsInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::request_upload_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestUploadCredentialsOutput {
@@ -2962,6 +3694,7 @@ pub struct RequestUploadCredentialsOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::resolve_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveAliasInput {
@@ -2971,6 +3704,7 @@ pub struct ResolveAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::resolve_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResolveAliasOutput {
@@ -2997,6 +3731,7 @@ pub struct ResourceCreationLimitPolicy {
     pub policy_period_in_minutes: Option<i64>,
 }
 
+/// see [GameLift::resume_game_server_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResumeGameServerGroupInput {
@@ -3008,6 +3743,7 @@ pub struct ResumeGameServerGroupInput {
     pub resume_actions: Vec<String>,
 }
 
+/// see [GameLift::resume_game_server_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResumeGameServerGroupOutput {
@@ -3156,6 +3892,7 @@ pub struct Script {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::search_game_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchGameSessionsInput {
@@ -3185,7 +3922,16 @@ pub struct SearchGameSessionsInput {
     pub sort_expression: Option<String>,
 }
 
+impl PagedRequest for SearchGameSessionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::search_game_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchGameSessionsOutput {
@@ -3197,6 +3943,30 @@ pub struct SearchGameSessionsOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl SearchGameSessionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<GameSession>> {
+        Some(self.game_sessions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SearchGameSessionsOutput {
+    type Item = GameSession;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GameSession> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>A set of instructions for launching server processes on each instance in a fleet. Server processes run either a custom game build executable or a Realtime Servers script. Each instruction set identifies the location of the custom game build executable or Realtime launch script, optional launch parameters, and the number of server processes with this configuration to maintain concurrently on the instance. Server process configurations make up a fleet's <code> <a>RuntimeConfiguration</a> </code>.</p>
@@ -3214,6 +3984,7 @@ pub struct ServerProcess {
     pub parameters: Option<String>,
 }
 
+/// see [GameLift::start_fleet_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFleetActionsInput {
@@ -3225,11 +3996,13 @@ pub struct StartFleetActionsInput {
     pub fleet_id: String,
 }
 
+/// see [GameLift::start_fleet_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartFleetActionsOutput {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::start_game_session_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartGameSessionPlacementInput {
@@ -3265,6 +4038,7 @@ pub struct StartGameSessionPlacementInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::start_game_session_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartGameSessionPlacementOutput {
@@ -3275,6 +4049,7 @@ pub struct StartGameSessionPlacementOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::start_match_backfill]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMatchBackfillInput {
@@ -3295,6 +4070,7 @@ pub struct StartMatchBackfillInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::start_match_backfill]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMatchBackfillOutput {
@@ -3305,6 +4081,7 @@ pub struct StartMatchBackfillOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::start_matchmaking]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMatchmakingInput {
@@ -3321,6 +4098,7 @@ pub struct StartMatchmakingInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::start_matchmaking]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMatchmakingOutput {
@@ -3330,6 +4108,7 @@ pub struct StartMatchmakingOutput {
     pub matchmaking_ticket: Option<MatchmakingTicket>,
 }
 
+/// see [GameLift::stop_fleet_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopFleetActionsInput {
@@ -3341,11 +4120,13 @@ pub struct StopFleetActionsInput {
     pub fleet_id: String,
 }
 
+/// see [GameLift::stop_fleet_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopFleetActionsOutput {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::stop_game_session_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopGameSessionPlacementInput {
@@ -3355,6 +4136,7 @@ pub struct StopGameSessionPlacementInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::stop_game_session_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopGameSessionPlacementOutput {
@@ -3365,6 +4147,7 @@ pub struct StopGameSessionPlacementOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::stop_matchmaking]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMatchmakingInput {
@@ -3373,10 +4156,12 @@ pub struct StopMatchmakingInput {
     pub ticket_id: String,
 }
 
+/// see [GameLift::stop_matchmaking]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMatchmakingOutput {}
 
+/// see [GameLift::suspend_game_server_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SuspendGameServerGroupInput {
@@ -3388,6 +4173,7 @@ pub struct SuspendGameServerGroupInput {
     pub suspend_actions: Vec<String>,
 }
 
+/// see [GameLift::suspend_game_server_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SuspendGameServerGroupOutput {
@@ -3408,6 +4194,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [GameLift::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -3419,6 +4206,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [GameLift::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -3440,6 +4228,7 @@ pub struct TargetTrackingConfiguration {
     pub target_value: f64,
 }
 
+/// see [GameLift::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3451,11 +4240,13 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [GameLift::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAliasInput {
@@ -3477,6 +4268,7 @@ pub struct UpdateAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAliasOutput {
@@ -3487,6 +4279,7 @@ pub struct UpdateAliasOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_build]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBuildInput {
@@ -3504,6 +4297,7 @@ pub struct UpdateBuildInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_build]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBuildOutput {
@@ -3514,6 +4308,7 @@ pub struct UpdateBuildOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_fleet_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetAttributesInput {
@@ -3543,6 +4338,7 @@ pub struct UpdateFleetAttributesInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_fleet_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetAttributesOutput {
@@ -3553,6 +4349,7 @@ pub struct UpdateFleetAttributesOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_fleet_capacity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetCapacityInput {
@@ -3574,6 +4371,7 @@ pub struct UpdateFleetCapacityInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_fleet_capacity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetCapacityOutput {
@@ -3584,6 +4382,7 @@ pub struct UpdateFleetCapacityOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_fleet_port_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetPortSettingsInput {
@@ -3601,6 +4400,7 @@ pub struct UpdateFleetPortSettingsInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_fleet_port_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetPortSettingsOutput {
@@ -3610,6 +4410,7 @@ pub struct UpdateFleetPortSettingsOutput {
     pub fleet_id: Option<String>,
 }
 
+/// see [GameLift::update_game_server_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGameServerGroupInput {
@@ -3634,6 +4435,7 @@ pub struct UpdateGameServerGroupInput {
     pub role_arn: Option<String>,
 }
 
+/// see [GameLift::update_game_server_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGameServerGroupOutput {
@@ -3643,6 +4445,7 @@ pub struct UpdateGameServerGroupOutput {
     pub game_server_group: Option<GameServerGroup>,
 }
 
+/// see [GameLift::update_game_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGameServerInput {
@@ -3666,6 +4469,7 @@ pub struct UpdateGameServerInput {
     pub utilization_status: Option<String>,
 }
 
+/// see [GameLift::update_game_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGameServerOutput {
@@ -3676,6 +4480,7 @@ pub struct UpdateGameServerOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_game_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGameSessionInput {
@@ -3701,6 +4506,7 @@ pub struct UpdateGameSessionInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_game_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGameSessionOutput {
@@ -3711,6 +4517,7 @@ pub struct UpdateGameSessionOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_game_session_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGameSessionQueueInput {
@@ -3732,6 +4539,7 @@ pub struct UpdateGameSessionQueueInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_game_session_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGameSessionQueueOutput {
@@ -3742,6 +4550,7 @@ pub struct UpdateGameSessionQueueOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_matchmaking_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMatchmakingConfigurationInput {
@@ -3803,6 +4612,7 @@ pub struct UpdateMatchmakingConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_matchmaking_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMatchmakingConfigurationOutput {
@@ -3813,6 +4623,7 @@ pub struct UpdateMatchmakingConfigurationOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::update_runtime_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuntimeConfigurationInput {
@@ -3825,6 +4636,7 @@ pub struct UpdateRuntimeConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::update_runtime_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuntimeConfigurationOutput {
@@ -3834,6 +4646,7 @@ pub struct UpdateRuntimeConfigurationOutput {
     pub runtime_configuration: Option<RuntimeConfiguration>,
 }
 
+/// see [GameLift::update_script]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScriptInput {
@@ -3863,6 +4676,7 @@ pub struct UpdateScriptInput {
     pub zip_file: Option<bytes::Bytes>,
 }
 
+/// see [GameLift::update_script]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateScriptOutput {
@@ -3873,6 +4687,7 @@ pub struct UpdateScriptOutput {
 }
 
 /// <p>Represents the input for a request operation.</p>
+/// see [GameLift::validate_matchmaking_rule_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateMatchmakingRuleSetInput {
@@ -3882,6 +4697,7 @@ pub struct ValidateMatchmakingRuleSetInput {
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
+/// see [GameLift::validate_matchmaking_rule_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidateMatchmakingRuleSetOutput {
@@ -8919,7 +9735,7 @@ impl fmt::Display for ValidateMatchmakingRuleSetError {
 impl Error for ValidateMatchmakingRuleSetError {}
 /// Trait representing the capabilities of the Amazon GameLift API. Amazon GameLift clients implement this trait.
 #[async_trait]
-pub trait GameLift {
+pub trait GameLift: Clone + Sync + Send + 'static {
     /// <p><p>Registers a player&#39;s acceptance or rejection of a proposed FlexMatch match. A matchmaking configuration may require player acceptance; if so, then matches built with that configuration cannot be completed unless all players accept the proposed match within a specified time limit. </p> <p>When FlexMatch builds a match, all the matchmaking tickets involved in the proposed match are placed into status <code>REQUIRES_ACCEPTANCE</code>. This is a trigger for your game to get acceptance from all players in the ticket. Acceptances are only valid for tickets when they are in this status; all other acceptances result in an error.</p> <p>To register acceptance, specify the ticket ID, a response, and one or more players. Once all players have registered acceptance, the matchmaking tickets advance to status <code>PLACING</code>, where a new game session is created for the match. </p> <p>If any player rejects the match, or if acceptances are not received before a specified timeout, the proposed match is dropped. The matchmaking tickets are then handled in one of two ways: For tickets where one or more players rejected the match, the ticket status is returned to <code>SEARCHING</code> to find a new match. For tickets where one or more players failed to respond, the ticket status is set to <code>CANCELLED</code>, and processing is terminated. A new matchmaking request for these players can be submitted as needed. </p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-client.html"> Add FlexMatch to a Game Client</a> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-events.html"> FlexMatch Events Reference</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> <li> <p> <a>StartMatchBackfill</a> </p> </li> </ul></p>
     async fn accept_match(
         &self,
@@ -9112,17 +9928,47 @@ pub trait GameLift {
         input: DescribeFleetAttributesInput,
     ) -> Result<DescribeFleetAttributesOutput, RusotoError<DescribeFleetAttributesError>>;
 
+    /// Auto-paginating version of `describe_fleet_attributes`
+    fn describe_fleet_attributes_pages(
+        &self,
+        input: DescribeFleetAttributesInput,
+    ) -> RusotoStream<FleetAttributes, DescribeFleetAttributesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_fleet_attributes(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves the current capacity statistics for one or more fleets. These statistics present a snapshot of the fleet&#39;s instances and provide insight on current or imminent scaling activity. To get statistics on game hosting activity in the fleet, see <a>DescribeFleetUtilization</a>.</p> <p>You can request capacity for all fleets or specify a list of one or more fleet identifiers. When requesting multiple fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetCapacity</a> object is returned for each requested fleet ID. When a list of fleet IDs is provided, attribute objects are returned only for fleets that currently exist.</p> <note> <p>Some API operations may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p> </note> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html">Setting up GameLift Fleets</a> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html#gamelift-metrics-fleet">GameLift Metrics for Fleets</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
     async fn describe_fleet_capacity(
         &self,
         input: DescribeFleetCapacityInput,
     ) -> Result<DescribeFleetCapacityOutput, RusotoError<DescribeFleetCapacityError>>;
 
+    /// Auto-paginating version of `describe_fleet_capacity`
+    fn describe_fleet_capacity_pages(
+        &self,
+        input: DescribeFleetCapacityInput,
+    ) -> RusotoStream<FleetCapacity, DescribeFleetCapacityError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_fleet_capacity(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves entries from the specified fleet&#39;s event log. You can specify a time range to limit the result set. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a collection of event log entries matching the request are returned.</p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html">Setting up GameLift Fleets</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
     async fn describe_fleet_events(
         &self,
         input: DescribeFleetEventsInput,
     ) -> Result<DescribeFleetEventsOutput, RusotoError<DescribeFleetEventsError>>;
+
+    /// Auto-paginating version of `describe_fleet_events`
+    fn describe_fleet_events_pages(
+        &self,
+        input: DescribeFleetEventsInput,
+    ) -> RusotoStream<Event, DescribeFleetEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_fleet_events(state.clone())
+        })
+    }
 
     /// <p><p>Retrieves a fleet&#39;s inbound connection permissions. Connection permissions specify the range of IP addresses and port settings that incoming traffic can use to access server processes in the fleet. Game sessions that are running on instances in the fleet use connections that fall in this range. </p> <p>To get a fleet&#39;s inbound connection permissions, specify the fleet&#39;s unique identifier. If successful, a collection of <a>IpPermission</a> objects is returned for the requested fleet ID. If the requested fleet has been deleted, the result set is empty.</p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html">Setting up GameLift Fleets</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
     async fn describe_fleet_port_settings(
@@ -9135,6 +9981,16 @@ pub trait GameLift {
         &self,
         input: DescribeFleetUtilizationInput,
     ) -> Result<DescribeFleetUtilizationOutput, RusotoError<DescribeFleetUtilizationError>>;
+
+    /// Auto-paginating version of `describe_fleet_utilization`
+    fn describe_fleet_utilization_pages(
+        &self,
+        input: DescribeFleetUtilizationInput,
+    ) -> RusotoStream<FleetUtilization, DescribeFleetUtilizationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_fleet_utilization(state.clone())
+        })
+    }
 
     /// <p><p> <b>This operation is used with the Amazon GameLift FleetIQ solution and game server groups.</b> </p> <p>Retrieves information for a registered game server. Information includes game server status, health check info, and the instance that the game server is running on. </p> <p>To retrieve game server information, specify the game server ID. If successful, the requested game server object is returned. </p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/fleetiqguide/gsg-intro.html">GameLift FleetIQ Guide</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>RegisterGameServer</a> </p> </li> <li> <p> <a>ListGameServers</a> </p> </li> <li> <p> <a>ClaimGameServer</a> </p> </li> <li> <p> <a>DescribeGameServer</a> </p> </li> <li> <p> <a>UpdateGameServer</a> </p> </li> <li> <p> <a>DeregisterGameServer</a> </p> </li> </ul></p>
     async fn describe_game_server(
@@ -9154,11 +10010,31 @@ pub trait GameLift {
         input: DescribeGameServerInstancesInput,
     ) -> Result<DescribeGameServerInstancesOutput, RusotoError<DescribeGameServerInstancesError>>;
 
+    /// Auto-paginating version of `describe_game_server_instances`
+    fn describe_game_server_instances_pages(
+        &self,
+        input: DescribeGameServerInstancesInput,
+    ) -> RusotoStream<GameServerInstance, DescribeGameServerInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_game_server_instances(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves properties, including the protection policy in force, for one or more game sessions. This operation can be used in several ways: (1) provide a <code>GameSessionId</code> or <code>GameSessionArn</code> to request details for a specific game session; (2) provide either a <code>FleetId</code> or an <code>AliasId</code> to request properties for all game sessions running on a fleet. </p> <p>To get game session record(s), specify just one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSessionDetail</a> object is returned for each session matching the request.</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
     async fn describe_game_session_details(
         &self,
         input: DescribeGameSessionDetailsInput,
     ) -> Result<DescribeGameSessionDetailsOutput, RusotoError<DescribeGameSessionDetailsError>>;
+
+    /// Auto-paginating version of `describe_game_session_details`
+    fn describe_game_session_details_pages(
+        &self,
+        input: DescribeGameSessionDetailsInput,
+    ) -> RusotoStream<GameSessionDetail, DescribeGameSessionDetailsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_game_session_details(state.clone())
+        })
+    }
 
     /// <p><p>Retrieves properties and current status of a game session placement request. To get game session placement details, specify the placement ID. If successful, a <a>GameSessionPlacement</a> object is returned.</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
     async fn describe_game_session_placement(
@@ -9172,17 +10048,47 @@ pub trait GameLift {
         input: DescribeGameSessionQueuesInput,
     ) -> Result<DescribeGameSessionQueuesOutput, RusotoError<DescribeGameSessionQueuesError>>;
 
+    /// Auto-paginating version of `describe_game_session_queues`
+    fn describe_game_session_queues_pages(
+        &self,
+        input: DescribeGameSessionQueuesInput,
+    ) -> RusotoStream<GameSessionQueue, DescribeGameSessionQueuesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_game_session_queues(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves a set of one or more game sessions. Request a specific game session or request all game sessions on a fleet. Alternatively, use <a>SearchGameSessions</a> to request a set of active game sessions that are filtered by certain criteria. To retrieve protection policy settings for game sessions, use <a>DescribeGameSessionDetails</a>.</p> <p>To get game sessions, specify one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSession</a> object is returned for each game session matching the request.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
     async fn describe_game_sessions(
         &self,
         input: DescribeGameSessionsInput,
     ) -> Result<DescribeGameSessionsOutput, RusotoError<DescribeGameSessionsError>>;
 
+    /// Auto-paginating version of `describe_game_sessions`
+    fn describe_game_sessions_pages(
+        &self,
+        input: DescribeGameSessionsInput,
+    ) -> RusotoStream<GameSession, DescribeGameSessionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_game_sessions(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves information about a fleet&#39;s instances, including instance IDs. Use this operation to get details on all instances in the fleet or get details on one specific instance.</p> <p>To get a specific instance, specify fleet ID and instance ID. To get all instances in a fleet, specify a fleet ID only. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, an <a>Instance</a> object is returned for each result.</p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-remote-access.html">Remotely Access Fleet Instances</a> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-creating-debug.html">Debug Fleet Issues</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>DescribeInstances</a> </p> </li> <li> <p> <a>GetInstanceAccess</a> </p> </li> </ul></p>
     async fn describe_instances(
         &self,
         input: DescribeInstancesInput,
     ) -> Result<DescribeInstancesOutput, RusotoError<DescribeInstancesError>>;
+
+    /// Auto-paginating version of `describe_instances`
+    fn describe_instances_pages(
+        &self,
+        input: DescribeInstancesInput,
+    ) -> RusotoStream<Instance, DescribeInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_instances(state.clone())
+        })
+    }
 
     /// <p><p>Retrieves one or more matchmaking tickets. Use this operation to retrieve ticket information, including--after a successful match is made--connection information for the resulting new game session. </p> <p>To request matchmaking tickets, provide a list of up to 10 ticket IDs. If the request is successful, a ticket object is returned for each requested ID that currently exists.</p> <p>This operation is not designed to be continually called to track matchmaking ticket status. This practice can cause you to exceed your API limit, which results in errors. Instead, as a best practice, set up an Amazon Simple Notification Service (SNS) to receive notifications, and provide the topic ARN in the matchmaking configuration. Continuously poling ticket status with <a>DescribeMatchmaking</a> should only be used for games in development with low matchmaking usage.</p> <p/> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-client.html"> Add FlexMatch to a Game Client</a> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-notification.html"> Set Up FlexMatch Event Notification</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> <li> <p> <a>StartMatchBackfill</a> </p> </li> </ul></p>
     async fn describe_matchmaking(
@@ -9199,17 +10105,47 @@ pub trait GameLift {
         RusotoError<DescribeMatchmakingConfigurationsError>,
     >;
 
+    /// Auto-paginating version of `describe_matchmaking_configurations`
+    fn describe_matchmaking_configurations_pages(
+        &self,
+        input: DescribeMatchmakingConfigurationsInput,
+    ) -> RusotoStream<MatchmakingConfiguration, DescribeMatchmakingConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_matchmaking_configurations(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves the details for FlexMatch matchmaking rule sets. You can request all existing rule sets for the Region, or provide a list of one or more rule set names. When requesting multiple items, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a rule set is returned for each requested name. </p> <p> <b>Learn more</b> </p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-rulesets.html">Build a Rule Set</a> </p> </li> </ul> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DeleteMatchmakingRuleSet</a> </p> </li> </ul></p>
     async fn describe_matchmaking_rule_sets(
         &self,
         input: DescribeMatchmakingRuleSetsInput,
     ) -> Result<DescribeMatchmakingRuleSetsOutput, RusotoError<DescribeMatchmakingRuleSetsError>>;
 
+    /// Auto-paginating version of `describe_matchmaking_rule_sets`
+    fn describe_matchmaking_rule_sets_pages(
+        &self,
+        input: DescribeMatchmakingRuleSetsInput,
+    ) -> RusotoStream<MatchmakingRuleSet, DescribeMatchmakingRuleSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_matchmaking_rule_sets(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves properties for one or more player sessions. This operation can be used in several ways: (1) provide a <code>PlayerSessionId</code> to request properties for a specific player session; (2) provide a <code>GameSessionId</code> to request properties for all player sessions in the specified game session; (3) provide a <code>PlayerId</code> to request properties for all player sessions of a specified player. </p> <p>To get game session record(s), specify only one of the following: a player session ID, a game session ID, or a player ID. You can filter this request by player session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>PlayerSession</a> object is returned for each session matching the request.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
     async fn describe_player_sessions(
         &self,
         input: DescribePlayerSessionsInput,
     ) -> Result<DescribePlayerSessionsOutput, RusotoError<DescribePlayerSessionsError>>;
+
+    /// Auto-paginating version of `describe_player_sessions`
+    fn describe_player_sessions_pages(
+        &self,
+        input: DescribePlayerSessionsInput,
+    ) -> RusotoStream<PlayerSession, DescribePlayerSessionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_player_sessions(state.clone())
+        })
+    }
 
     /// <p><p>Retrieves a fleet&#39;s runtime configuration settings. The runtime configuration tells Amazon GameLift which server processes to run (and how) on each instance in the fleet.</p> <p>To get a runtime configuration, specify the fleet&#39;s unique identifier. If successful, a <a>RuntimeConfiguration</a> object is returned for the requested fleet. If the requested fleet has been deleted, the result set is empty.</p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html">Setting up GameLift Fleets</a> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-multiprocess.html">Running Multiple Processes on a Fleet</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
     async fn describe_runtime_configuration(
@@ -9222,6 +10158,16 @@ pub trait GameLift {
         &self,
         input: DescribeScalingPoliciesInput,
     ) -> Result<DescribeScalingPoliciesOutput, RusotoError<DescribeScalingPoliciesError>>;
+
+    /// Auto-paginating version of `describe_scaling_policies`
+    fn describe_scaling_policies_pages(
+        &self,
+        input: DescribeScalingPoliciesInput,
+    ) -> RusotoStream<ScalingPolicy, DescribeScalingPoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_scaling_policies(state.clone())
+        })
+    }
 
     /// <p><p>Retrieves properties for a Realtime script. </p> <p>To request a script record, specify the script ID. If successful, an object containing the script properties is returned.</p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/realtime-intro.html">Amazon GameLift Realtime Servers</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateScript</a> </p> </li> <li> <p> <a>ListScripts</a> </p> </li> <li> <p> <a>DescribeScript</a> </p> </li> <li> <p> <a>UpdateScript</a> </p> </li> <li> <p> <a>DeleteScript</a> </p> </li> </ul></p>
     async fn describe_script(
@@ -9261,11 +10207,25 @@ pub trait GameLift {
         input: ListAliasesInput,
     ) -> Result<ListAliasesOutput, RusotoError<ListAliasesError>>;
 
+    /// Auto-paginating version of `list_aliases`
+    fn list_aliases_pages(&self, input: ListAliasesInput) -> RusotoStream<Alias, ListAliasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_aliases(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves build resources for all builds associated with the AWS account in use. You can limit results to builds that are in a specific status by using the <code>Status</code> parameter. Use the pagination parameters to retrieve results in a set of sequential pages. </p> <note> <p>Build resources are not listed in any particular order.</p> </note> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-intro.html"> Upload a Custom Server Build</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul></p>
     async fn list_builds(
         &self,
         input: ListBuildsInput,
     ) -> Result<ListBuildsOutput, RusotoError<ListBuildsError>>;
+
+    /// Auto-paginating version of `list_builds`
+    fn list_builds_pages(&self, input: ListBuildsInput) -> RusotoStream<Build, ListBuildsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_builds(state.clone())
+        })
+    }
 
     /// <p><p>Retrieves a collection of fleet resources for this AWS account. You can filter the result set to find only those fleets that are deployed with a specific build or script. Use the pagination parameters to retrieve results in sequential pages.</p> <note> <p>Fleet resources are not listed in a particular order.</p> </note> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html">Setting up GameLift Fleets</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
     async fn list_fleets(
@@ -9273,11 +10233,28 @@ pub trait GameLift {
         input: ListFleetsInput,
     ) -> Result<ListFleetsOutput, RusotoError<ListFleetsError>>;
 
+    /// Auto-paginating version of `list_fleets`
+    fn list_fleets_pages(&self, input: ListFleetsInput) -> RusotoStream<String, ListFleetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_fleets(state.clone())
+        })
+    }
+
     /// <p><p> <b>This operation is used with the Amazon GameLift FleetIQ solution and game server groups.</b> </p> <p>Retrieves information on all game servers groups that exist in the current AWS account for the selected Region. Use the pagination parameters to retrieve results in a set of sequential segments. </p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/fleetiqguide/gsg-intro.html">GameLift FleetIQ Guide</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateGameServerGroup</a> </p> </li> <li> <p> <a>ListGameServerGroups</a> </p> </li> <li> <p> <a>DescribeGameServerGroup</a> </p> </li> <li> <p> <a>UpdateGameServerGroup</a> </p> </li> <li> <p> <a>DeleteGameServerGroup</a> </p> </li> <li> <p> <a>ResumeGameServerGroup</a> </p> </li> <li> <p> <a>SuspendGameServerGroup</a> </p> </li> <li> <p> <a>DescribeGameServerInstances</a> </p> </li> </ul></p>
     async fn list_game_server_groups(
         &self,
         input: ListGameServerGroupsInput,
     ) -> Result<ListGameServerGroupsOutput, RusotoError<ListGameServerGroupsError>>;
+
+    /// Auto-paginating version of `list_game_server_groups`
+    fn list_game_server_groups_pages(
+        &self,
+        input: ListGameServerGroupsInput,
+    ) -> RusotoStream<GameServerGroup, ListGameServerGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_game_server_groups(state.clone())
+        })
+    }
 
     /// <p><p> <b>This operation is used with the Amazon GameLift FleetIQ solution and game server groups.</b> </p> <p>Retrieves information on all game servers that are currently active in a specified game server group. You can opt to sort the list by game server age. Use the pagination parameters to retrieve results in a set of sequential segments. </p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/fleetiqguide/gsg-intro.html">GameLift FleetIQ Guide</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>RegisterGameServer</a> </p> </li> <li> <p> <a>ListGameServers</a> </p> </li> <li> <p> <a>ClaimGameServer</a> </p> </li> <li> <p> <a>DescribeGameServer</a> </p> </li> <li> <p> <a>UpdateGameServer</a> </p> </li> <li> <p> <a>DeregisterGameServer</a> </p> </li> </ul></p>
     async fn list_game_servers(
@@ -9285,11 +10262,31 @@ pub trait GameLift {
         input: ListGameServersInput,
     ) -> Result<ListGameServersOutput, RusotoError<ListGameServersError>>;
 
+    /// Auto-paginating version of `list_game_servers`
+    fn list_game_servers_pages(
+        &self,
+        input: ListGameServersInput,
+    ) -> RusotoStream<GameServer, ListGameServersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_game_servers(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves script records for all Realtime scripts that are associated with the AWS account in use. </p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/realtime-intro.html">Amazon GameLift Realtime Servers</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateScript</a> </p> </li> <li> <p> <a>ListScripts</a> </p> </li> <li> <p> <a>DescribeScript</a> </p> </li> <li> <p> <a>UpdateScript</a> </p> </li> <li> <p> <a>DeleteScript</a> </p> </li> </ul></p>
     async fn list_scripts(
         &self,
         input: ListScriptsInput,
     ) -> Result<ListScriptsOutput, RusotoError<ListScriptsError>>;
+
+    /// Auto-paginating version of `list_scripts`
+    fn list_scripts_pages(
+        &self,
+        input: ListScriptsInput,
+    ) -> RusotoStream<Script, ListScriptsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_scripts(state.clone())
+        })
+    }
 
     /// <p><p> Retrieves all tags that are assigned to a GameLift resource. Resource tags are used to organize AWS resources for a range of purposes. This operation handles the permissions necessary to manage tags for the following GameLift resource types:</p> <ul> <li> <p>Build</p> </li> <li> <p>Script</p> </li> <li> <p>Fleet</p> </li> <li> <p>Alias</p> </li> <li> <p>GameSessionQueue</p> </li> <li> <p>MatchmakingConfiguration</p> </li> <li> <p>MatchmakingRuleSet</p> </li> </ul> <p>To list tags for a resource, specify the unique ARN value for the resource.</p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a> in the <i>AWS General Reference</i> </p> <p> <a href="http://aws.amazon.com/answers/account-management/aws-tagging-strategies/"> AWS Tagging Strategies</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>TagResource</a> </p> </li> <li> <p> <a>UntagResource</a> </p> </li> <li> <p> <a>ListTagsForResource</a> </p> </li> </ul></p>
     async fn list_tags_for_resource(
@@ -9332,6 +10329,16 @@ pub trait GameLift {
         &self,
         input: SearchGameSessionsInput,
     ) -> Result<SearchGameSessionsOutput, RusotoError<SearchGameSessionsError>>;
+
+    /// Auto-paginating version of `search_game_sessions`
+    fn search_game_sessions_pages(
+        &self,
+        input: SearchGameSessionsInput,
+    ) -> RusotoStream<GameSession, SearchGameSessionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.search_game_sessions(state.clone())
+        })
+    }
 
     /// <p><p>Resumes activity on a fleet that was suspended with <a>StopFleetActions</a>. Currently, this operation is used to restart a fleet&#39;s auto-scaling activity. </p> <p>To start fleet actions, specify the fleet ID and the type of actions to restart. When auto-scaling fleet actions are restarted, Amazon GameLift once again initiates scaling events as triggered by the fleet&#39;s scaling policies. If actions on the fleet were never stopped, this operation will have no effect. You can view a fleet&#39;s stopped actions using <a>DescribeFleetAttributes</a>.</p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html">Setting up GameLift Fleets</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
     async fn start_fleet_actions(

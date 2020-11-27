@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -145,6 +147,7 @@ pub struct AncillarySourceSettings {
     pub terminate_captions: Option<String>,
 }
 
+/// see [MediaConvert::associate_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCertificateRequest {
@@ -153,6 +156,7 @@ pub struct AssociateCertificateRequest {
     pub arn: String,
 }
 
+/// see [MediaConvert::associate_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCertificateResponse {}
@@ -562,6 +566,7 @@ pub struct BurninDestinationSettings {
     pub y_position: Option<i64>,
 }
 
+/// see [MediaConvert::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
@@ -570,6 +575,7 @@ pub struct CancelJobRequest {
     pub id: String,
 }
 
+/// see [MediaConvert::cancel_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {}
@@ -939,6 +945,7 @@ pub struct ContainerSettings {
     pub mxf_settings: Option<MxfSettings>,
 }
 
+/// see [MediaConvert::create_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
@@ -994,6 +1001,7 @@ pub struct CreateJobRequest {
     pub user_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaConvert::create_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
@@ -1003,6 +1011,7 @@ pub struct CreateJobResponse {
     pub job: Option<Job>,
 }
 
+/// see [MediaConvert::create_job_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobTemplateRequest {
@@ -1046,6 +1055,7 @@ pub struct CreateJobTemplateRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaConvert::create_job_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobTemplateResponse {
@@ -1055,6 +1065,7 @@ pub struct CreateJobTemplateResponse {
     pub job_template: Option<JobTemplate>,
 }
 
+/// see [MediaConvert::create_preset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresetRequest {
@@ -1078,6 +1089,7 @@ pub struct CreatePresetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaConvert::create_preset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresetResponse {
@@ -1087,6 +1099,7 @@ pub struct CreatePresetResponse {
     pub preset: Option<Preset>,
 }
 
+/// see [MediaConvert::create_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQueueRequest {
@@ -1115,6 +1128,7 @@ pub struct CreateQueueRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaConvert::create_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateQueueResponse {
@@ -1226,6 +1240,7 @@ pub struct Deinterlacer {
     pub mode: Option<String>,
 }
 
+/// see [MediaConvert::delete_job_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobTemplateRequest {
@@ -1234,10 +1249,12 @@ pub struct DeleteJobTemplateRequest {
     pub name: String,
 }
 
+/// see [MediaConvert::delete_job_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobTemplateResponse {}
 
+/// see [MediaConvert::delete_preset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePresetRequest {
@@ -1246,10 +1263,12 @@ pub struct DeletePresetRequest {
     pub name: String,
 }
 
+/// see [MediaConvert::delete_preset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePresetResponse {}
 
+/// see [MediaConvert::delete_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueueRequest {
@@ -1258,11 +1277,13 @@ pub struct DeleteQueueRequest {
     pub name: String,
 }
 
+/// see [MediaConvert::delete_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQueueResponse {}
 
 /// <p>DescribeEndpointsRequest</p>
+/// see [MediaConvert::describe_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointsRequest {
@@ -1280,6 +1301,15 @@ pub struct DescribeEndpointsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeEndpointsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaConvert::describe_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointsResponse {
@@ -1293,6 +1323,30 @@ pub struct DescribeEndpointsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeEndpointsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Endpoint>> {
+        Some(self.endpoints.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEndpointsResponse {
+    type Item = Endpoint;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Endpoint> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Settings associated with the destination. Will vary based on the type of destination</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DestinationSettings {
@@ -1302,6 +1356,7 @@ pub struct DestinationSettings {
     pub s3_settings: Option<S3DestinationSettings>,
 }
 
+/// see [MediaConvert::disassociate_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCertificateRequest {
@@ -1310,6 +1365,7 @@ pub struct DisassociateCertificateRequest {
     pub arn: String,
 }
 
+/// see [MediaConvert::disassociate_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCertificateResponse {}
@@ -1782,6 +1838,7 @@ pub struct FrameCaptureSettings {
     pub quality: Option<i64>,
 }
 
+/// see [MediaConvert::get_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
@@ -1790,6 +1847,7 @@ pub struct GetJobRequest {
     pub id: String,
 }
 
+/// see [MediaConvert::get_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResponse {
@@ -1799,6 +1857,7 @@ pub struct GetJobResponse {
     pub job: Option<Job>,
 }
 
+/// see [MediaConvert::get_job_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobTemplateRequest {
@@ -1807,6 +1866,7 @@ pub struct GetJobTemplateRequest {
     pub name: String,
 }
 
+/// see [MediaConvert::get_job_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobTemplateResponse {
@@ -1816,6 +1876,7 @@ pub struct GetJobTemplateResponse {
     pub job_template: Option<JobTemplate>,
 }
 
+/// see [MediaConvert::get_preset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPresetRequest {
@@ -1824,6 +1885,7 @@ pub struct GetPresetRequest {
     pub name: String,
 }
 
+/// see [MediaConvert::get_preset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPresetResponse {
@@ -1833,6 +1895,7 @@ pub struct GetPresetResponse {
     pub preset: Option<Preset>,
 }
 
+/// see [MediaConvert::get_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueueRequest {
@@ -1841,6 +1904,7 @@ pub struct GetQueueRequest {
     pub name: String,
 }
 
+/// see [MediaConvert::get_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueueResponse {
@@ -3017,6 +3081,7 @@ pub struct JobTemplateSettings {
     pub timed_metadata_insertion: Option<TimedMetadataInsertion>,
 }
 
+/// see [MediaConvert::list_job_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobTemplatesRequest {
@@ -3042,6 +3107,15 @@ pub struct ListJobTemplatesRequest {
     pub order: Option<String>,
 }
 
+impl PagedRequest for ListJobTemplatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaConvert::list_job_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobTemplatesResponse {
@@ -3055,6 +3129,31 @@ pub struct ListJobTemplatesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListJobTemplatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<JobTemplate>> {
+        Some(self.job_templates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobTemplatesResponse {
+    type Item = JobTemplate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<JobTemplate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaConvert::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -3080,6 +3179,15 @@ pub struct ListJobsRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaConvert::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
@@ -3093,6 +3201,31 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Job>> {
+        Some(self.jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobsResponse {
+    type Item = Job;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Job> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaConvert::list_presets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPresetsRequest {
@@ -3118,6 +3251,15 @@ pub struct ListPresetsRequest {
     pub order: Option<String>,
 }
 
+impl PagedRequest for ListPresetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaConvert::list_presets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPresetsResponse {
@@ -3131,6 +3273,31 @@ pub struct ListPresetsResponse {
     pub presets: Option<Vec<Preset>>,
 }
 
+impl ListPresetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Preset>> {
+        Some(self.presets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPresetsResponse {
+    type Item = Preset;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Preset> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaConvert::list_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
@@ -3152,6 +3319,15 @@ pub struct ListQueuesRequest {
     pub order: Option<String>,
 }
 
+impl PagedRequest for ListQueuesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaConvert::list_queues]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQueuesResponse {
@@ -3165,6 +3341,31 @@ pub struct ListQueuesResponse {
     pub queues: Option<Vec<Queue>>,
 }
 
+impl ListQueuesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Queue>> {
+        Some(self.queues.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListQueuesResponse {
+    type Item = Queue;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Queue> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaConvert::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -3173,6 +3374,7 @@ pub struct ListTagsForResourceRequest {
     pub arn: String,
 }
 
+/// see [MediaConvert::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -4482,6 +4684,7 @@ pub struct StaticKeyProvider {
     pub url: Option<String>,
 }
 
+/// see [MediaConvert::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -4493,6 +4696,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [MediaConvert::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -4602,6 +4806,7 @@ pub struct TtmlDestinationSettings {
     pub style_passthrough: Option<String>,
 }
 
+/// see [MediaConvert::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -4614,10 +4819,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Option<Vec<String>>,
 }
 
+/// see [MediaConvert::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [MediaConvert::update_job_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobTemplateRequest {
@@ -4658,6 +4865,7 @@ pub struct UpdateJobTemplateRequest {
     pub status_update_interval: Option<String>,
 }
 
+/// see [MediaConvert::update_job_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobTemplateResponse {
@@ -4667,6 +4875,7 @@ pub struct UpdateJobTemplateResponse {
     pub job_template: Option<JobTemplate>,
 }
 
+/// see [MediaConvert::update_preset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePresetRequest {
@@ -4687,6 +4896,7 @@ pub struct UpdatePresetRequest {
     pub settings: Option<PresetSettings>,
 }
 
+/// see [MediaConvert::update_preset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePresetResponse {
@@ -4696,6 +4906,7 @@ pub struct UpdatePresetResponse {
     pub preset: Option<Preset>,
 }
 
+/// see [MediaConvert::update_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQueueRequest {
@@ -4716,6 +4927,7 @@ pub struct UpdateQueueRequest {
     pub status: Option<String>,
 }
 
+/// see [MediaConvert::update_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateQueueResponse {
@@ -6626,7 +6838,7 @@ impl fmt::Display for UpdateQueueError {
 impl Error for UpdateQueueError {}
 /// Trait representing the capabilities of the MediaConvert API. MediaConvert clients implement this trait.
 #[async_trait]
-pub trait MediaConvert {
+pub trait MediaConvert: Clone + Sync + Send + 'static {
     /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>
     async fn associate_certificate(
         &self,
@@ -6687,6 +6899,16 @@ pub trait MediaConvert {
         input: DescribeEndpointsRequest,
     ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
 
+    /// Auto-paginating version of `describe_endpoints`
+    fn describe_endpoints_pages(
+        &self,
+        input: DescribeEndpointsRequest,
+    ) -> RusotoStream<Endpoint, DescribeEndpointsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_endpoints(state.clone())
+        })
+    }
+
     /// <p>Removes an association between the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate and an AWS Elemental MediaConvert resource.</p>
     async fn disassociate_certificate(
         &self,
@@ -6723,11 +6945,28 @@ pub trait MediaConvert {
         input: ListJobTemplatesRequest,
     ) -> Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>>;
 
+    /// Auto-paginating version of `list_job_templates`
+    fn list_job_templates_pages(
+        &self,
+        input: ListJobTemplatesRequest,
+    ) -> RusotoStream<JobTemplate, ListJobTemplatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_job_templates(state.clone())
+        })
+    }
+
     /// <p>Retrieve a JSON array of up to twenty of your most recently created jobs. This array includes in-process, completed, and errored jobs. This will return the jobs themselves, not just a list of the jobs. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.</p>
     async fn list_jobs(
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
+
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<Job, ListJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_jobs(state.clone())
+        })
+    }
 
     /// <p>Retrieve a JSON array of up to twenty of your presets. This will return the presets themselves, not just a list of them. To retrieve the next twenty presets, use the nextToken string returned with the array.</p>
     async fn list_presets(
@@ -6735,11 +6974,28 @@ pub trait MediaConvert {
         input: ListPresetsRequest,
     ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>>;
 
+    /// Auto-paginating version of `list_presets`
+    fn list_presets_pages(
+        &self,
+        input: ListPresetsRequest,
+    ) -> RusotoStream<Preset, ListPresetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_presets(state.clone())
+        })
+    }
+
     /// <p>Retrieve a JSON array of up to twenty of your queues. This will return the queues themselves, not just a list of them. To retrieve the next twenty queues, use the nextToken string returned with the array.</p>
     async fn list_queues(
         &self,
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>>;
+
+    /// Auto-paginating version of `list_queues`
+    fn list_queues_pages(&self, input: ListQueuesRequest) -> RusotoStream<Queue, ListQueuesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_queues(state.clone())
+        })
+    }
 
     /// <p>Retrieve the tags for a MediaConvert resource.</p>
     async fn list_tags_for_resource(

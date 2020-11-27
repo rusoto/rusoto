@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -139,6 +141,7 @@ pub struct ByteMatchTuple {
     pub text_transformation: String,
 }
 
+/// see [Waf::create_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateByteMatchSetRequest {
@@ -150,6 +153,7 @@ pub struct CreateByteMatchSetRequest {
     pub name: String,
 }
 
+/// see [Waf::create_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateByteMatchSetResponse {
@@ -163,6 +167,7 @@ pub struct CreateByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::create_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGeoMatchSetRequest {
@@ -174,6 +179,7 @@ pub struct CreateGeoMatchSetRequest {
     pub name: String,
 }
 
+/// see [Waf::create_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGeoMatchSetResponse {
@@ -187,6 +193,7 @@ pub struct CreateGeoMatchSetResponse {
     pub geo_match_set: Option<GeoMatchSet>,
 }
 
+/// see [Waf::create_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
@@ -198,6 +205,7 @@ pub struct CreateIPSetRequest {
     pub name: String,
 }
 
+/// see [Waf::create_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIPSetResponse {
@@ -211,6 +219,7 @@ pub struct CreateIPSetResponse {
     pub ip_set: Option<IPSet>,
 }
 
+/// see [Waf::create_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRateBasedRuleRequest {
@@ -235,6 +244,7 @@ pub struct CreateRateBasedRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Waf::create_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRateBasedRuleResponse {
@@ -248,6 +258,7 @@ pub struct CreateRateBasedRuleResponse {
     pub rule: Option<RateBasedRule>,
 }
 
+/// see [Waf::create_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegexMatchSetRequest {
@@ -259,6 +270,7 @@ pub struct CreateRegexMatchSetRequest {
     pub name: String,
 }
 
+/// see [Waf::create_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRegexMatchSetResponse {
@@ -272,6 +284,7 @@ pub struct CreateRegexMatchSetResponse {
     pub regex_match_set: Option<RegexMatchSet>,
 }
 
+/// see [Waf::create_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegexPatternSetRequest {
@@ -283,6 +296,7 @@ pub struct CreateRegexPatternSetRequest {
     pub name: String,
 }
 
+/// see [Waf::create_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRegexPatternSetResponse {
@@ -296,6 +310,7 @@ pub struct CreateRegexPatternSetResponse {
     pub regex_pattern_set: Option<RegexPatternSet>,
 }
 
+/// see [Waf::create_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleGroupRequest {
@@ -314,6 +329,7 @@ pub struct CreateRuleGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Waf::create_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRuleGroupResponse {
@@ -327,6 +343,7 @@ pub struct CreateRuleGroupResponse {
     pub rule_group: Option<RuleGroup>,
 }
 
+/// see [Waf::create_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleRequest {
@@ -345,6 +362,7 @@ pub struct CreateRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Waf::create_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRuleResponse {
@@ -358,6 +376,7 @@ pub struct CreateRuleResponse {
     pub rule: Option<Rule>,
 }
 
+/// see [Waf::create_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSizeConstraintSetRequest {
@@ -369,6 +388,7 @@ pub struct CreateSizeConstraintSetRequest {
     pub name: String,
 }
 
+/// see [Waf::create_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSizeConstraintSetResponse {
@@ -383,6 +403,7 @@ pub struct CreateSizeConstraintSetResponse {
 }
 
 /// <p>A request to create a <a>SqlInjectionMatchSet</a>.</p>
+/// see [Waf::create_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSqlInjectionMatchSetRequest {
@@ -395,6 +416,7 @@ pub struct CreateSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to a <code>CreateSqlInjectionMatchSet</code> request.</p>
+/// see [Waf::create_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSqlInjectionMatchSetResponse {
@@ -408,6 +430,7 @@ pub struct CreateSqlInjectionMatchSetResponse {
     pub sql_injection_match_set: Option<SqlInjectionMatchSet>,
 }
 
+/// see [Waf::create_web_acl_migration_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebACLMigrationStackRequest {
@@ -422,6 +445,7 @@ pub struct CreateWebACLMigrationStackRequest {
     pub web_acl_id: String,
 }
 
+/// see [Waf::create_web_acl_migration_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebACLMigrationStackResponse {
@@ -430,6 +454,7 @@ pub struct CreateWebACLMigrationStackResponse {
     pub s3_object_url: String,
 }
 
+/// see [Waf::create_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebACLRequest {
@@ -451,6 +476,7 @@ pub struct CreateWebACLRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Waf::create_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebACLResponse {
@@ -465,6 +491,7 @@ pub struct CreateWebACLResponse {
 }
 
 /// <p>A request to create an <a>XssMatchSet</a>.</p>
+/// see [Waf::create_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateXssMatchSetRequest {
@@ -477,6 +504,7 @@ pub struct CreateXssMatchSetRequest {
 }
 
 /// <p>The response to a <code>CreateXssMatchSet</code> request.</p>
+/// see [Waf::create_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateXssMatchSetResponse {
@@ -490,6 +518,7 @@ pub struct CreateXssMatchSetResponse {
     pub xss_match_set: Option<XssMatchSet>,
 }
 
+/// see [Waf::delete_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteByteMatchSetRequest {
@@ -501,6 +530,7 @@ pub struct DeleteByteMatchSetRequest {
     pub change_token: String,
 }
 
+/// see [Waf::delete_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteByteMatchSetResponse {
@@ -510,6 +540,7 @@ pub struct DeleteByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGeoMatchSetRequest {
@@ -521,6 +552,7 @@ pub struct DeleteGeoMatchSetRequest {
     pub geo_match_set_id: String,
 }
 
+/// see [Waf::delete_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGeoMatchSetResponse {
@@ -530,6 +562,7 @@ pub struct DeleteGeoMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIPSetRequest {
@@ -541,6 +574,7 @@ pub struct DeleteIPSetRequest {
     pub ip_set_id: String,
 }
 
+/// see [Waf::delete_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIPSetResponse {
@@ -550,6 +584,7 @@ pub struct DeleteIPSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoggingConfigurationRequest {
@@ -558,10 +593,12 @@ pub struct DeleteLoggingConfigurationRequest {
     pub resource_arn: String,
 }
 
+/// see [Waf::delete_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoggingConfigurationResponse {}
 
+/// see [Waf::delete_permission_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePermissionPolicyRequest {
@@ -570,10 +607,12 @@ pub struct DeletePermissionPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [Waf::delete_permission_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePermissionPolicyResponse {}
 
+/// see [Waf::delete_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRateBasedRuleRequest {
@@ -585,6 +624,7 @@ pub struct DeleteRateBasedRuleRequest {
     pub rule_id: String,
 }
 
+/// see [Waf::delete_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRateBasedRuleResponse {
@@ -594,6 +634,7 @@ pub struct DeleteRateBasedRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegexMatchSetRequest {
@@ -605,6 +646,7 @@ pub struct DeleteRegexMatchSetRequest {
     pub regex_match_set_id: String,
 }
 
+/// see [Waf::delete_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegexMatchSetResponse {
@@ -614,6 +656,7 @@ pub struct DeleteRegexMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegexPatternSetRequest {
@@ -625,6 +668,7 @@ pub struct DeleteRegexPatternSetRequest {
     pub regex_pattern_set_id: String,
 }
 
+/// see [Waf::delete_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegexPatternSetResponse {
@@ -634,6 +678,7 @@ pub struct DeleteRegexPatternSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleGroupRequest {
@@ -645,6 +690,7 @@ pub struct DeleteRuleGroupRequest {
     pub rule_group_id: String,
 }
 
+/// see [Waf::delete_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRuleGroupResponse {
@@ -654,6 +700,7 @@ pub struct DeleteRuleGroupResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleRequest {
@@ -665,6 +712,7 @@ pub struct DeleteRuleRequest {
     pub rule_id: String,
 }
 
+/// see [Waf::delete_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRuleResponse {
@@ -674,6 +722,7 @@ pub struct DeleteRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSizeConstraintSetRequest {
@@ -685,6 +734,7 @@ pub struct DeleteSizeConstraintSetRequest {
     pub size_constraint_set_id: String,
 }
 
+/// see [Waf::delete_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSizeConstraintSetResponse {
@@ -695,6 +745,7 @@ pub struct DeleteSizeConstraintSetResponse {
 }
 
 /// <p>A request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>
+/// see [Waf::delete_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSqlInjectionMatchSetRequest {
@@ -707,6 +758,7 @@ pub struct DeleteSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to a request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>
+/// see [Waf::delete_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSqlInjectionMatchSetResponse {
@@ -716,6 +768,7 @@ pub struct DeleteSqlInjectionMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::delete_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebACLRequest {
@@ -727,6 +780,7 @@ pub struct DeleteWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [Waf::delete_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebACLResponse {
@@ -737,6 +791,7 @@ pub struct DeleteWebACLResponse {
 }
 
 /// <p>A request to delete an <a>XssMatchSet</a> from AWS WAF.</p>
+/// see [Waf::delete_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteXssMatchSetRequest {
@@ -749,6 +804,7 @@ pub struct DeleteXssMatchSetRequest {
 }
 
 /// <p>The response to a request to delete an <a>XssMatchSet</a> from AWS WAF.</p>
+/// see [Waf::delete_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteXssMatchSetResponse {
@@ -829,6 +885,7 @@ pub struct GeoMatchSetUpdate {
     pub geo_match_constraint: GeoMatchConstraint,
 }
 
+/// see [Waf::get_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetByteMatchSetRequest {
@@ -837,6 +894,7 @@ pub struct GetByteMatchSetRequest {
     pub byte_match_set_id: String,
 }
 
+/// see [Waf::get_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetByteMatchSetResponse {
@@ -846,10 +904,12 @@ pub struct GetByteMatchSetResponse {
     pub byte_match_set: Option<ByteMatchSet>,
 }
 
+/// see [Waf::get_change_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChangeTokenRequest {}
 
+/// see [Waf::get_change_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetChangeTokenResponse {
@@ -859,6 +919,7 @@ pub struct GetChangeTokenResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::get_change_token_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChangeTokenStatusRequest {
@@ -867,6 +928,7 @@ pub struct GetChangeTokenStatusRequest {
     pub change_token: String,
 }
 
+/// see [Waf::get_change_token_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetChangeTokenStatusResponse {
@@ -876,6 +938,7 @@ pub struct GetChangeTokenStatusResponse {
     pub change_token_status: Option<String>,
 }
 
+/// see [Waf::get_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGeoMatchSetRequest {
@@ -884,6 +947,7 @@ pub struct GetGeoMatchSetRequest {
     pub geo_match_set_id: String,
 }
 
+/// see [Waf::get_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGeoMatchSetResponse {
@@ -893,6 +957,7 @@ pub struct GetGeoMatchSetResponse {
     pub geo_match_set: Option<GeoMatchSet>,
 }
 
+/// see [Waf::get_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
@@ -901,6 +966,7 @@ pub struct GetIPSetRequest {
     pub ip_set_id: String,
 }
 
+/// see [Waf::get_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIPSetResponse {
@@ -910,6 +976,7 @@ pub struct GetIPSetResponse {
     pub ip_set: Option<IPSet>,
 }
 
+/// see [Waf::get_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggingConfigurationRequest {
@@ -918,6 +985,7 @@ pub struct GetLoggingConfigurationRequest {
     pub resource_arn: String,
 }
 
+/// see [Waf::get_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggingConfigurationResponse {
@@ -927,6 +995,7 @@ pub struct GetLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
+/// see [Waf::get_permission_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPermissionPolicyRequest {
@@ -935,6 +1004,7 @@ pub struct GetPermissionPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [Waf::get_permission_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPermissionPolicyResponse {
@@ -944,6 +1014,7 @@ pub struct GetPermissionPolicyResponse {
     pub policy: Option<String>,
 }
 
+/// see [Waf::get_rate_based_rule_managed_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRateBasedRuleManagedKeysRequest {
@@ -956,6 +1027,15 @@ pub struct GetRateBasedRuleManagedKeysRequest {
     pub rule_id: String,
 }
 
+impl PagedRequest for GetRateBasedRuleManagedKeysRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::get_rate_based_rule_managed_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRateBasedRuleManagedKeysResponse {
@@ -969,6 +1049,31 @@ pub struct GetRateBasedRuleManagedKeysResponse {
     pub next_marker: Option<String>,
 }
 
+impl GetRateBasedRuleManagedKeysResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.managed_keys.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetRateBasedRuleManagedKeysResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::get_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRateBasedRuleRequest {
@@ -977,6 +1082,7 @@ pub struct GetRateBasedRuleRequest {
     pub rule_id: String,
 }
 
+/// see [Waf::get_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRateBasedRuleResponse {
@@ -986,6 +1092,7 @@ pub struct GetRateBasedRuleResponse {
     pub rule: Option<RateBasedRule>,
 }
 
+/// see [Waf::get_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegexMatchSetRequest {
@@ -994,6 +1101,7 @@ pub struct GetRegexMatchSetRequest {
     pub regex_match_set_id: String,
 }
 
+/// see [Waf::get_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegexMatchSetResponse {
@@ -1003,6 +1111,7 @@ pub struct GetRegexMatchSetResponse {
     pub regex_match_set: Option<RegexMatchSet>,
 }
 
+/// see [Waf::get_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegexPatternSetRequest {
@@ -1011,6 +1120,7 @@ pub struct GetRegexPatternSetRequest {
     pub regex_pattern_set_id: String,
 }
 
+/// see [Waf::get_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegexPatternSetResponse {
@@ -1020,6 +1130,7 @@ pub struct GetRegexPatternSetResponse {
     pub regex_pattern_set: Option<RegexPatternSet>,
 }
 
+/// see [Waf::get_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRuleGroupRequest {
@@ -1028,6 +1139,7 @@ pub struct GetRuleGroupRequest {
     pub rule_group_id: String,
 }
 
+/// see [Waf::get_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRuleGroupResponse {
@@ -1037,6 +1149,7 @@ pub struct GetRuleGroupResponse {
     pub rule_group: Option<RuleGroup>,
 }
 
+/// see [Waf::get_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRuleRequest {
@@ -1045,6 +1158,7 @@ pub struct GetRuleRequest {
     pub rule_id: String,
 }
 
+/// see [Waf::get_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRuleResponse {
@@ -1054,6 +1168,7 @@ pub struct GetRuleResponse {
     pub rule: Option<Rule>,
 }
 
+/// see [Waf::get_sampled_requests]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSampledRequestsRequest {
@@ -1071,6 +1186,7 @@ pub struct GetSampledRequestsRequest {
     pub web_acl_id: String,
 }
 
+/// see [Waf::get_sampled_requests]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSampledRequestsResponse {
@@ -1088,6 +1204,7 @@ pub struct GetSampledRequestsResponse {
     pub time_window: Option<TimeWindow>,
 }
 
+/// see [Waf::get_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSizeConstraintSetRequest {
@@ -1096,6 +1213,7 @@ pub struct GetSizeConstraintSetRequest {
     pub size_constraint_set_id: String,
 }
 
+/// see [Waf::get_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSizeConstraintSetResponse {
@@ -1106,6 +1224,7 @@ pub struct GetSizeConstraintSetResponse {
 }
 
 /// <p>A request to get a <a>SqlInjectionMatchSet</a>.</p>
+/// see [Waf::get_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSqlInjectionMatchSetRequest {
@@ -1115,6 +1234,7 @@ pub struct GetSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to a <a>GetSqlInjectionMatchSet</a> request.</p>
+/// see [Waf::get_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSqlInjectionMatchSetResponse {
@@ -1124,6 +1244,7 @@ pub struct GetSqlInjectionMatchSetResponse {
     pub sql_injection_match_set: Option<SqlInjectionMatchSet>,
 }
 
+/// see [Waf::get_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebACLRequest {
@@ -1132,6 +1253,7 @@ pub struct GetWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [Waf::get_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWebACLResponse {
@@ -1142,6 +1264,7 @@ pub struct GetWebACLResponse {
 }
 
 /// <p>A request to get an <a>XssMatchSet</a>.</p>
+/// see [Waf::get_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetXssMatchSetRequest {
@@ -1151,6 +1274,7 @@ pub struct GetXssMatchSetRequest {
 }
 
 /// <p>The response to a <a>GetXssMatchSet</a> request.</p>
+/// see [Waf::get_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetXssMatchSetResponse {
@@ -1255,6 +1379,7 @@ pub struct IPSetUpdate {
     pub ip_set_descriptor: IPSetDescriptor,
 }
 
+/// see [Waf::list_activated_rules_in_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActivatedRulesInRuleGroupRequest {
@@ -1272,6 +1397,15 @@ pub struct ListActivatedRulesInRuleGroupRequest {
     pub rule_group_id: Option<String>,
 }
 
+impl PagedRequest for ListActivatedRulesInRuleGroupRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_activated_rules_in_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActivatedRulesInRuleGroupResponse {
@@ -1285,6 +1419,31 @@ pub struct ListActivatedRulesInRuleGroupResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListActivatedRulesInRuleGroupResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ActivatedRule>> {
+        Some(self.activated_rules.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListActivatedRulesInRuleGroupResponse {
+    type Item = ActivatedRule;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ActivatedRule> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_byte_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListByteMatchSetsRequest {
@@ -1298,6 +1457,15 @@ pub struct ListByteMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListByteMatchSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_byte_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListByteMatchSetsResponse {
@@ -1311,6 +1479,31 @@ pub struct ListByteMatchSetsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListByteMatchSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ByteMatchSetSummary>> {
+        Some(self.byte_match_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListByteMatchSetsResponse {
+    type Item = ByteMatchSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ByteMatchSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_geo_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGeoMatchSetsRequest {
@@ -1324,6 +1517,15 @@ pub struct ListGeoMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListGeoMatchSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_geo_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGeoMatchSetsResponse {
@@ -1337,6 +1539,31 @@ pub struct ListGeoMatchSetsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListGeoMatchSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GeoMatchSetSummary>> {
+        Some(self.geo_match_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGeoMatchSetsResponse {
+    type Item = GeoMatchSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GeoMatchSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_ip_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
@@ -1350,6 +1577,15 @@ pub struct ListIPSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListIPSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_ip_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIPSetsResponse {
@@ -1363,6 +1599,31 @@ pub struct ListIPSetsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListIPSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<IPSetSummary>> {
+        Some(self.ip_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListIPSetsResponse {
+    type Item = IPSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<IPSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_logging_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggingConfigurationsRequest {
@@ -1376,6 +1637,15 @@ pub struct ListLoggingConfigurationsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListLoggingConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_logging_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggingConfigurationsResponse {
@@ -1389,6 +1659,31 @@ pub struct ListLoggingConfigurationsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListLoggingConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LoggingConfiguration>> {
+        Some(self.logging_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLoggingConfigurationsResponse {
+    type Item = LoggingConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LoggingConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_rate_based_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRateBasedRulesRequest {
@@ -1402,6 +1697,15 @@ pub struct ListRateBasedRulesRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListRateBasedRulesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_rate_based_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRateBasedRulesResponse {
@@ -1415,6 +1719,31 @@ pub struct ListRateBasedRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
+impl ListRateBasedRulesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RuleSummary>> {
+        Some(self.rules.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRateBasedRulesResponse {
+    type Item = RuleSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RuleSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_regex_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegexMatchSetsRequest {
@@ -1428,6 +1757,15 @@ pub struct ListRegexMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListRegexMatchSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_regex_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRegexMatchSetsResponse {
@@ -1441,6 +1779,31 @@ pub struct ListRegexMatchSetsResponse {
     pub regex_match_sets: Option<Vec<RegexMatchSetSummary>>,
 }
 
+impl ListRegexMatchSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RegexMatchSetSummary>> {
+        Some(self.regex_match_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRegexMatchSetsResponse {
+    type Item = RegexMatchSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RegexMatchSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_regex_pattern_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegexPatternSetsRequest {
@@ -1454,6 +1817,15 @@ pub struct ListRegexPatternSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListRegexPatternSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_regex_pattern_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRegexPatternSetsResponse {
@@ -1467,6 +1839,31 @@ pub struct ListRegexPatternSetsResponse {
     pub regex_pattern_sets: Option<Vec<RegexPatternSetSummary>>,
 }
 
+impl ListRegexPatternSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RegexPatternSetSummary>> {
+        Some(self.regex_pattern_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRegexPatternSetsResponse {
+    type Item = RegexPatternSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RegexPatternSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_rule_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRuleGroupsRequest {
@@ -1480,6 +1877,15 @@ pub struct ListRuleGroupsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListRuleGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_rule_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRuleGroupsResponse {
@@ -1493,6 +1899,31 @@ pub struct ListRuleGroupsResponse {
     pub rule_groups: Option<Vec<RuleGroupSummary>>,
 }
 
+impl ListRuleGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RuleGroupSummary>> {
+        Some(self.rule_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRuleGroupsResponse {
+    type Item = RuleGroupSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RuleGroupSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesRequest {
@@ -1506,6 +1937,15 @@ pub struct ListRulesRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListRulesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRulesResponse {
@@ -1519,6 +1959,31 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
+impl ListRulesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RuleSummary>> {
+        Some(self.rules.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRulesResponse {
+    type Item = RuleSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RuleSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_size_constraint_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSizeConstraintSetsRequest {
@@ -1532,6 +1997,15 @@ pub struct ListSizeConstraintSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListSizeConstraintSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_size_constraint_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSizeConstraintSetsResponse {
@@ -1545,7 +2019,32 @@ pub struct ListSizeConstraintSetsResponse {
     pub size_constraint_sets: Option<Vec<SizeConstraintSetSummary>>,
 }
 
+impl ListSizeConstraintSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SizeConstraintSetSummary>> {
+        Some(self.size_constraint_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSizeConstraintSetsResponse {
+    type Item = SizeConstraintSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SizeConstraintSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>A request to list the <a>SqlInjectionMatchSet</a> objects created by the current AWS account.</p>
+/// see [Waf::list_sql_injection_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSqlInjectionMatchSetsRequest {
@@ -1559,7 +2058,16 @@ pub struct ListSqlInjectionMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListSqlInjectionMatchSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
 /// <p>The response to a <a>ListSqlInjectionMatchSets</a> request.</p>
+/// see [Waf::list_sql_injection_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSqlInjectionMatchSetsResponse {
@@ -1573,6 +2081,31 @@ pub struct ListSqlInjectionMatchSetsResponse {
     pub sql_injection_match_sets: Option<Vec<SqlInjectionMatchSetSummary>>,
 }
 
+impl ListSqlInjectionMatchSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SqlInjectionMatchSetSummary>> {
+        Some(self.sql_injection_match_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSqlInjectionMatchSetsResponse {
+    type Item = SqlInjectionMatchSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SqlInjectionMatchSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_subscribed_rule_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscribedRuleGroupsRequest {
@@ -1586,6 +2119,15 @@ pub struct ListSubscribedRuleGroupsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListSubscribedRuleGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_subscribed_rule_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscribedRuleGroupsResponse {
@@ -1599,6 +2141,31 @@ pub struct ListSubscribedRuleGroupsResponse {
     pub rule_groups: Option<Vec<SubscribedRuleGroupSummary>>,
 }
 
+impl ListSubscribedRuleGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SubscribedRuleGroupSummary>> {
+        Some(self.rule_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSubscribedRuleGroupsResponse {
+    type Item = SubscribedRuleGroupSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SubscribedRuleGroupSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Waf::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1615,6 +2182,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Waf::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1628,6 +2196,7 @@ pub struct ListTagsForResourceResponse {
     pub tag_info_for_resource: Option<TagInfoForResource>,
 }
 
+/// see [Waf::list_web_ac_ls]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebACLsRequest {
@@ -1641,6 +2210,15 @@ pub struct ListWebACLsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListWebACLsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
+/// see [Waf::list_web_ac_ls]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebACLsResponse {
@@ -1654,7 +2232,32 @@ pub struct ListWebACLsResponse {
     pub web_ac_ls: Option<Vec<WebACLSummary>>,
 }
 
+impl ListWebACLsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<WebACLSummary>> {
+        Some(self.web_ac_ls.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListWebACLsResponse {
+    type Item = WebACLSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<WebACLSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>A request to list the <a>XssMatchSet</a> objects created by the current AWS account.</p>
+/// see [Waf::list_xss_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListXssMatchSetsRequest {
@@ -1668,7 +2271,16 @@ pub struct ListXssMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+impl PagedRequest for ListXssMatchSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_marker = key;
+        self
+    }
+}
+
 /// <p>The response to a <a>ListXssMatchSets</a> request.</p>
+/// see [Waf::list_xss_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListXssMatchSetsResponse {
@@ -1680,6 +2292,30 @@ pub struct ListXssMatchSetsResponse {
     #[serde(rename = "XssMatchSets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub xss_match_sets: Option<Vec<XssMatchSetSummary>>,
+}
+
+impl ListXssMatchSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<XssMatchSetSummary>> {
+        Some(self.xss_match_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListXssMatchSetsResponse {
+    type Item = XssMatchSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<XssMatchSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>The Amazon Kinesis Data Firehose, <code>RedactedFields</code> information, and the web ACL Amazon Resource Name (ARN).</p></p>
@@ -1711,6 +2347,7 @@ pub struct Predicate {
     pub type_: String,
 }
 
+/// see [Waf::put_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingConfigurationRequest {
@@ -1719,6 +2356,7 @@ pub struct PutLoggingConfigurationRequest {
     pub logging_configuration: LoggingConfiguration,
 }
 
+/// see [Waf::put_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLoggingConfigurationResponse {
@@ -1728,6 +2366,7 @@ pub struct PutLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
+/// see [Waf::put_permission_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPermissionPolicyRequest {
@@ -1739,6 +2378,7 @@ pub struct PutPermissionPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [Waf::put_permission_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPermissionPolicyResponse {}
@@ -2122,6 +2762,7 @@ pub struct TagInfoForResource {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [Waf::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2133,6 +2774,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Waf::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2148,6 +2790,7 @@ pub struct TimeWindow {
     pub start_time: f64,
 }
 
+/// see [Waf::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2159,10 +2802,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Waf::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Waf::update_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateByteMatchSetRequest {
@@ -2177,6 +2822,7 @@ pub struct UpdateByteMatchSetRequest {
     pub updates: Vec<ByteMatchSetUpdate>,
 }
 
+/// see [Waf::update_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateByteMatchSetResponse {
@@ -2186,6 +2832,7 @@ pub struct UpdateByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGeoMatchSetRequest {
@@ -2200,6 +2847,7 @@ pub struct UpdateGeoMatchSetRequest {
     pub updates: Vec<GeoMatchSetUpdate>,
 }
 
+/// see [Waf::update_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGeoMatchSetResponse {
@@ -2209,6 +2857,7 @@ pub struct UpdateGeoMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
@@ -2223,6 +2872,7 @@ pub struct UpdateIPSetRequest {
     pub updates: Vec<IPSetUpdate>,
 }
 
+/// see [Waf::update_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIPSetResponse {
@@ -2232,6 +2882,7 @@ pub struct UpdateIPSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRateBasedRuleRequest {
@@ -2249,6 +2900,7 @@ pub struct UpdateRateBasedRuleRequest {
     pub updates: Vec<RuleUpdate>,
 }
 
+/// see [Waf::update_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRateBasedRuleResponse {
@@ -2258,6 +2910,7 @@ pub struct UpdateRateBasedRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegexMatchSetRequest {
@@ -2272,6 +2925,7 @@ pub struct UpdateRegexMatchSetRequest {
     pub updates: Vec<RegexMatchSetUpdate>,
 }
 
+/// see [Waf::update_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRegexMatchSetResponse {
@@ -2281,6 +2935,7 @@ pub struct UpdateRegexMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegexPatternSetRequest {
@@ -2295,6 +2950,7 @@ pub struct UpdateRegexPatternSetRequest {
     pub updates: Vec<RegexPatternSetUpdate>,
 }
 
+/// see [Waf::update_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRegexPatternSetResponse {
@@ -2304,6 +2960,7 @@ pub struct UpdateRegexPatternSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleGroupRequest {
@@ -2318,6 +2975,7 @@ pub struct UpdateRuleGroupRequest {
     pub updates: Vec<RuleGroupUpdate>,
 }
 
+/// see [Waf::update_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleGroupResponse {
@@ -2327,6 +2985,7 @@ pub struct UpdateRuleGroupResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleRequest {
@@ -2341,6 +3000,7 @@ pub struct UpdateRuleRequest {
     pub updates: Vec<RuleUpdate>,
 }
 
+/// see [Waf::update_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleResponse {
@@ -2350,6 +3010,7 @@ pub struct UpdateRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSizeConstraintSetRequest {
@@ -2364,6 +3025,7 @@ pub struct UpdateSizeConstraintSetRequest {
     pub updates: Vec<SizeConstraintSetUpdate>,
 }
 
+/// see [Waf::update_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSizeConstraintSetResponse {
@@ -2374,6 +3036,7 @@ pub struct UpdateSizeConstraintSetResponse {
 }
 
 /// <p>A request to update a <a>SqlInjectionMatchSet</a>.</p>
+/// see [Waf::update_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSqlInjectionMatchSetRequest {
@@ -2389,6 +3052,7 @@ pub struct UpdateSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to an <a>UpdateSqlInjectionMatchSets</a> request.</p>
+/// see [Waf::update_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSqlInjectionMatchSetResponse {
@@ -2398,6 +3062,7 @@ pub struct UpdateSqlInjectionMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [Waf::update_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebACLRequest {
@@ -2417,6 +3082,7 @@ pub struct UpdateWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [Waf::update_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebACLResponse {
@@ -2427,6 +3093,7 @@ pub struct UpdateWebACLResponse {
 }
 
 /// <p>A request to update an <a>XssMatchSet</a>.</p>
+/// see [Waf::update_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateXssMatchSetRequest {
@@ -2442,6 +3109,7 @@ pub struct UpdateXssMatchSetRequest {
 }
 
 /// <p>The response to an <a>UpdateXssMatchSets</a> request.</p>
+/// see [Waf::update_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateXssMatchSetResponse {
@@ -7099,7 +7767,7 @@ impl fmt::Display for UpdateXssMatchSetError {
 impl Error for UpdateXssMatchSetError {}
 /// Trait representing the capabilities of the WAF API. WAF clients implement this trait.
 #[async_trait]
-pub trait Waf {
+pub trait Waf: Clone + Sync + Send + 'static {
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Creates a <code>ByteMatchSet</code>. You then use <a>UpdateByteMatchSet</a> to identify the part of a web request that you want AWS WAF to inspect, such as the values of the <code>User-Agent</code> header or the query string. For example, you can create a <code>ByteMatchSet</code> that matches any requests with <code>User-Agent</code> headers that contain the string <code>BadBot</code>. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>ByteMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateByteMatchSet</code> request.</p> </li> <li> <p>Submit a <code>CreateByteMatchSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateByteMatchSet</code> request.</p> </li> <li> <p>Submit an <a>UpdateByteMatchSet</a> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p></p>
     async fn create_byte_match_set(
         &self,
@@ -7315,6 +7983,16 @@ pub trait Waf {
         input: GetRateBasedRuleManagedKeysRequest,
     ) -> Result<GetRateBasedRuleManagedKeysResponse, RusotoError<GetRateBasedRuleManagedKeysError>>;
 
+    /// Auto-paginating version of `get_rate_based_rule_managed_keys`
+    fn get_rate_based_rule_managed_keys_pages(
+        &self,
+        input: GetRateBasedRuleManagedKeysRequest,
+    ) -> RusotoStream<String, GetRateBasedRuleManagedKeysError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_rate_based_rule_managed_keys(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns the <a>RegexMatchSet</a> specified by <code>RegexMatchSetId</code>.</p></p>
     async fn get_regex_match_set(
         &self,
@@ -7378,11 +8056,31 @@ pub trait Waf {
         RusotoError<ListActivatedRulesInRuleGroupError>,
     >;
 
+    /// Auto-paginating version of `list_activated_rules_in_rule_group`
+    fn list_activated_rules_in_rule_group_pages(
+        &self,
+        input: ListActivatedRulesInRuleGroupRequest,
+    ) -> RusotoStream<ActivatedRule, ListActivatedRulesInRuleGroupError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_activated_rules_in_rule_group(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>ByteMatchSetSummary</a> objects.</p></p>
     async fn list_byte_match_sets(
         &self,
         input: ListByteMatchSetsRequest,
     ) -> Result<ListByteMatchSetsResponse, RusotoError<ListByteMatchSetsError>>;
+
+    /// Auto-paginating version of `list_byte_match_sets`
+    fn list_byte_match_sets_pages(
+        &self,
+        input: ListByteMatchSetsRequest,
+    ) -> RusotoStream<ByteMatchSetSummary, ListByteMatchSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_byte_match_sets(state.clone())
+        })
+    }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>GeoMatchSetSummary</a> objects in the response.</p></p>
     async fn list_geo_match_sets(
@@ -7390,11 +8088,31 @@ pub trait Waf {
         input: ListGeoMatchSetsRequest,
     ) -> Result<ListGeoMatchSetsResponse, RusotoError<ListGeoMatchSetsError>>;
 
+    /// Auto-paginating version of `list_geo_match_sets`
+    fn list_geo_match_sets_pages(
+        &self,
+        input: ListGeoMatchSetsRequest,
+    ) -> RusotoStream<GeoMatchSetSummary, ListGeoMatchSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_geo_match_sets(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>IPSetSummary</a> objects in the response.</p></p>
     async fn list_ip_sets(
         &self,
         input: ListIPSetsRequest,
     ) -> Result<ListIPSetsResponse, RusotoError<ListIPSetsError>>;
+
+    /// Auto-paginating version of `list_ip_sets`
+    fn list_ip_sets_pages(
+        &self,
+        input: ListIPSetsRequest,
+    ) -> RusotoStream<IPSetSummary, ListIPSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_ip_sets(state.clone())
+        })
+    }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>LoggingConfiguration</a> objects.</p></p>
     async fn list_logging_configurations(
@@ -7402,11 +8120,31 @@ pub trait Waf {
         input: ListLoggingConfigurationsRequest,
     ) -> Result<ListLoggingConfigurationsResponse, RusotoError<ListLoggingConfigurationsError>>;
 
+    /// Auto-paginating version of `list_logging_configurations`
+    fn list_logging_configurations_pages(
+        &self,
+        input: ListLoggingConfigurationsRequest,
+    ) -> RusotoStream<LoggingConfiguration, ListLoggingConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_logging_configurations(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleSummary</a> objects.</p></p>
     async fn list_rate_based_rules(
         &self,
         input: ListRateBasedRulesRequest,
     ) -> Result<ListRateBasedRulesResponse, RusotoError<ListRateBasedRulesError>>;
+
+    /// Auto-paginating version of `list_rate_based_rules`
+    fn list_rate_based_rules_pages(
+        &self,
+        input: ListRateBasedRulesRequest,
+    ) -> RusotoStream<RuleSummary, ListRateBasedRulesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_rate_based_rules(state.clone())
+        })
+    }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RegexMatchSetSummary</a> objects.</p></p>
     async fn list_regex_match_sets(
@@ -7414,11 +8152,31 @@ pub trait Waf {
         input: ListRegexMatchSetsRequest,
     ) -> Result<ListRegexMatchSetsResponse, RusotoError<ListRegexMatchSetsError>>;
 
+    /// Auto-paginating version of `list_regex_match_sets`
+    fn list_regex_match_sets_pages(
+        &self,
+        input: ListRegexMatchSetsRequest,
+    ) -> RusotoStream<RegexMatchSetSummary, ListRegexMatchSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_regex_match_sets(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RegexPatternSetSummary</a> objects.</p></p>
     async fn list_regex_pattern_sets(
         &self,
         input: ListRegexPatternSetsRequest,
     ) -> Result<ListRegexPatternSetsResponse, RusotoError<ListRegexPatternSetsError>>;
+
+    /// Auto-paginating version of `list_regex_pattern_sets`
+    fn list_regex_pattern_sets_pages(
+        &self,
+        input: ListRegexPatternSetsRequest,
+    ) -> RusotoStream<RegexPatternSetSummary, ListRegexPatternSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_regex_pattern_sets(state.clone())
+        })
+    }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleGroup</a> objects.</p></p>
     async fn list_rule_groups(
@@ -7426,11 +8184,31 @@ pub trait Waf {
         input: ListRuleGroupsRequest,
     ) -> Result<ListRuleGroupsResponse, RusotoError<ListRuleGroupsError>>;
 
+    /// Auto-paginating version of `list_rule_groups`
+    fn list_rule_groups_pages(
+        &self,
+        input: ListRuleGroupsRequest,
+    ) -> RusotoStream<RuleGroupSummary, ListRuleGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_rule_groups(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleSummary</a> objects.</p></p>
     async fn list_rules(
         &self,
         input: ListRulesRequest,
     ) -> Result<ListRulesResponse, RusotoError<ListRulesError>>;
+
+    /// Auto-paginating version of `list_rules`
+    fn list_rules_pages(
+        &self,
+        input: ListRulesRequest,
+    ) -> RusotoStream<RuleSummary, ListRulesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_rules(state.clone())
+        })
+    }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>SizeConstraintSetSummary</a> objects.</p></p>
     async fn list_size_constraint_sets(
@@ -7438,17 +8216,47 @@ pub trait Waf {
         input: ListSizeConstraintSetsRequest,
     ) -> Result<ListSizeConstraintSetsResponse, RusotoError<ListSizeConstraintSetsError>>;
 
+    /// Auto-paginating version of `list_size_constraint_sets`
+    fn list_size_constraint_sets_pages(
+        &self,
+        input: ListSizeConstraintSetsRequest,
+    ) -> RusotoStream<SizeConstraintSetSummary, ListSizeConstraintSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_size_constraint_sets(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>SqlInjectionMatchSet</a> objects.</p></p>
     async fn list_sql_injection_match_sets(
         &self,
         input: ListSqlInjectionMatchSetsRequest,
     ) -> Result<ListSqlInjectionMatchSetsResponse, RusotoError<ListSqlInjectionMatchSetsError>>;
 
+    /// Auto-paginating version of `list_sql_injection_match_sets`
+    fn list_sql_injection_match_sets_pages(
+        &self,
+        input: ListSqlInjectionMatchSetsRequest,
+    ) -> RusotoStream<SqlInjectionMatchSetSummary, ListSqlInjectionMatchSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_sql_injection_match_sets(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleGroup</a> objects that you are subscribed to.</p></p>
     async fn list_subscribed_rule_groups(
         &self,
         input: ListSubscribedRuleGroupsRequest,
     ) -> Result<ListSubscribedRuleGroupsResponse, RusotoError<ListSubscribedRuleGroupsError>>;
+
+    /// Auto-paginating version of `list_subscribed_rule_groups`
+    fn list_subscribed_rule_groups_pages(
+        &self,
+        input: ListSubscribedRuleGroupsRequest,
+    ) -> RusotoStream<SubscribedRuleGroupSummary, ListSubscribedRuleGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_subscribed_rule_groups(state.clone())
+        })
+    }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Retrieves the tags associated with the specified AWS resource. Tags are key:value pairs that you can use to categorize and manage your resources, for purposes like billing. For example, you might set the tag key to &quot;customer&quot; and the value to the customer name or ID. You can specify one or more tags to add to each AWS resource, up to 50 tags for a resource.</p> <p>Tagging is only available through the API, SDKs, and CLI. You can&#39;t manage or view tags through the AWS WAF Classic console. You can tag the AWS resources that you manage through AWS WAF Classic: web ACLs, rule groups, and rules. </p></p>
     async fn list_tags_for_resource(
@@ -7462,11 +8270,31 @@ pub trait Waf {
         input: ListWebACLsRequest,
     ) -> Result<ListWebACLsResponse, RusotoError<ListWebACLsError>>;
 
+    /// Auto-paginating version of `list_web_ac_ls`
+    fn list_web_ac_ls_pages(
+        &self,
+        input: ListWebACLsRequest,
+    ) -> RusotoStream<WebACLSummary, ListWebACLsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_web_ac_ls(state.clone())
+        })
+    }
+
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>XssMatchSet</a> objects.</p></p>
     async fn list_xss_match_sets(
         &self,
         input: ListXssMatchSetsRequest,
     ) -> Result<ListXssMatchSetsResponse, RusotoError<ListXssMatchSetsError>>;
+
+    /// Auto-paginating version of `list_xss_match_sets`
+    fn list_xss_match_sets_pages(
+        &self,
+        input: ListXssMatchSetsRequest,
+    ) -> RusotoStream<XssMatchSetSummary, ListXssMatchSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_xss_match_sets(state.clone())
+        })
+    }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose. </p> <p>Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia). </p> <note> <p>Do not create the data firehose using a <code>Kinesis stream</code> as your source.</p> </note> </li> <li> <p>Associate that firehose to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/logging.html">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p></p>
     async fn put_logging_configuration(

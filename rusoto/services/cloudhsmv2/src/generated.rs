@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -205,6 +207,7 @@ pub struct Cluster {
     pub vpc_id: Option<String>,
 }
 
+/// see [CloudHsmv2::copy_backup_to_region]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyBackupToRegionRequest {
@@ -220,6 +223,7 @@ pub struct CopyBackupToRegionRequest {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [CloudHsmv2::copy_backup_to_region]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyBackupToRegionResponse {
@@ -229,6 +233,7 @@ pub struct CopyBackupToRegionResponse {
     pub destination_backup: Option<DestinationBackup>,
 }
 
+/// see [CloudHsmv2::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -252,6 +257,7 @@ pub struct CreateClusterRequest {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [CloudHsmv2::create_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResponse {
@@ -261,6 +267,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [CloudHsmv2::create_hsm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHsmRequest {
@@ -276,6 +283,7 @@ pub struct CreateHsmRequest {
     pub ip_address: Option<String>,
 }
 
+/// see [CloudHsmv2::create_hsm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHsmResponse {
@@ -285,6 +293,7 @@ pub struct CreateHsmResponse {
     pub hsm: Option<Hsm>,
 }
 
+/// see [CloudHsmv2::delete_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupRequest {
@@ -293,6 +302,7 @@ pub struct DeleteBackupRequest {
     pub backup_id: String,
 }
 
+/// see [CloudHsmv2::delete_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackupResponse {
@@ -302,6 +312,7 @@ pub struct DeleteBackupResponse {
     pub backup: Option<Backup>,
 }
 
+/// see [CloudHsmv2::delete_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
@@ -310,6 +321,7 @@ pub struct DeleteClusterRequest {
     pub cluster_id: String,
 }
 
+/// see [CloudHsmv2::delete_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClusterResponse {
@@ -319,6 +331,7 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [CloudHsmv2::delete_hsm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHsmRequest {
@@ -339,6 +352,7 @@ pub struct DeleteHsmRequest {
     pub hsm_id: Option<String>,
 }
 
+/// see [CloudHsmv2::delete_hsm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHsmResponse {
@@ -348,6 +362,7 @@ pub struct DeleteHsmResponse {
     pub hsm_id: Option<String>,
 }
 
+/// see [CloudHsmv2::describe_backups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupsRequest {
@@ -369,6 +384,15 @@ pub struct DescribeBackupsRequest {
     pub sort_ascending: Option<bool>,
 }
 
+impl PagedRequest for DescribeBackupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudHsmv2::describe_backups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupsResponse {
@@ -382,6 +406,31 @@ pub struct DescribeBackupsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBackupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Backup>> {
+        Some(self.backups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeBackupsResponse {
+    type Item = Backup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Backup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudHsmv2::describe_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClustersRequest {
@@ -399,6 +448,15 @@ pub struct DescribeClustersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeClustersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudHsmv2::describe_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClustersResponse {
@@ -410,6 +468,30 @@ pub struct DescribeClustersResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl DescribeClustersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Cluster>> {
+        Some(self.clusters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeClustersResponse {
+    type Item = Cluster;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Cluster> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Contains information about the backup that will be copied and created by the <a>CopyBackupToRegion</a> operation.</p>
@@ -471,6 +553,7 @@ pub struct Hsm {
     pub subnet_id: Option<String>,
 }
 
+/// see [CloudHsmv2::initialize_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitializeClusterRequest {
@@ -485,6 +568,7 @@ pub struct InitializeClusterRequest {
     pub trust_anchor: String,
 }
 
+/// see [CloudHsmv2::initialize_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitializeClusterResponse {
@@ -498,6 +582,7 @@ pub struct InitializeClusterResponse {
     pub state_message: Option<String>,
 }
 
+/// see [CloudHsmv2::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -514,6 +599,15 @@ pub struct ListTagsRequest {
     pub resource_id: String,
 }
 
+impl PagedRequest for ListTagsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudHsmv2::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
@@ -526,6 +620,31 @@ pub struct ListTagsResponse {
     pub tag_list: Vec<Tag>,
 }
 
+impl ListTagsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tag_list.clone())
+    }
+}
+
+impl PagedOutput for ListTagsResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudHsmv2::modify_backup_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyBackupAttributesRequest {
@@ -537,6 +656,7 @@ pub struct ModifyBackupAttributesRequest {
     pub never_expires: bool,
 }
 
+/// see [CloudHsmv2::modify_backup_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyBackupAttributesResponse {
@@ -545,6 +665,7 @@ pub struct ModifyBackupAttributesResponse {
     pub backup: Option<Backup>,
 }
 
+/// see [CloudHsmv2::modify_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterRequest {
@@ -556,6 +677,7 @@ pub struct ModifyClusterRequest {
     pub cluster_id: String,
 }
 
+/// see [CloudHsmv2::modify_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyClusterResponse {
@@ -564,6 +686,7 @@ pub struct ModifyClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [CloudHsmv2::restore_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreBackupRequest {
@@ -572,6 +695,7 @@ pub struct RestoreBackupRequest {
     pub backup_id: String,
 }
 
+/// see [CloudHsmv2::restore_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreBackupResponse {
@@ -592,6 +716,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [CloudHsmv2::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -603,10 +728,12 @@ pub struct TagResourceRequest {
     pub tag_list: Vec<Tag>,
 }
 
+/// see [CloudHsmv2::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [CloudHsmv2::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -618,6 +745,7 @@ pub struct UntagResourceRequest {
     pub tag_key_list: Vec<String>,
 }
 
+/// see [CloudHsmv2::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -1558,7 +1686,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the CloudHSM V2 API. CloudHSM V2 clients implement this trait.
 #[async_trait]
-pub trait CloudHsmv2 {
+pub trait CloudHsmv2: Clone + Sync + Send + 'static {
     /// <p>Copy an AWS CloudHSM cluster backup to a different region.</p>
     async fn copy_backup_to_region(
         &self,
@@ -1601,11 +1729,31 @@ pub trait CloudHsmv2 {
         input: DescribeBackupsRequest,
     ) -> Result<DescribeBackupsResponse, RusotoError<DescribeBackupsError>>;
 
+    /// Auto-paginating version of `describe_backups`
+    fn describe_backups_pages(
+        &self,
+        input: DescribeBackupsRequest,
+    ) -> RusotoStream<Backup, DescribeBackupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_backups(state.clone())
+        })
+    }
+
     /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
     async fn describe_clusters(
         &self,
         input: DescribeClustersRequest,
     ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>>;
+
+    /// Auto-paginating version of `describe_clusters`
+    fn describe_clusters_pages(
+        &self,
+        input: DescribeClustersRequest,
+    ) -> RusotoStream<Cluster, DescribeClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_clusters(state.clone())
+        })
+    }
 
     /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
     async fn initialize_cluster(
@@ -1618,6 +1766,13 @@ pub trait CloudHsmv2 {
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
+
+    /// Auto-paginating version of `list_tags`
+    fn list_tags_pages(&self, input: ListTagsRequest) -> RusotoStream<Tag, ListTagsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags(state.clone())
+        })
+    }
 
     /// <p>Modifies attributes for AWS CloudHSM backup.</p>
     async fn modify_backup_attributes(

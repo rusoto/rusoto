@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -93,6 +95,7 @@ pub struct BackfillError {
     pub partitions: Option<Vec<PartitionValueList>>,
 }
 
+/// see [Glue::batch_create_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreatePartitionRequest {
@@ -111,6 +114,7 @@ pub struct BatchCreatePartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::batch_create_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreatePartitionResponse {
@@ -120,6 +124,7 @@ pub struct BatchCreatePartitionResponse {
     pub errors: Option<Vec<PartitionError>>,
 }
 
+/// see [Glue::batch_delete_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteConnectionRequest {
@@ -132,6 +137,7 @@ pub struct BatchDeleteConnectionRequest {
     pub connection_name_list: Vec<String>,
 }
 
+/// see [Glue::batch_delete_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteConnectionResponse {
@@ -145,6 +151,7 @@ pub struct BatchDeleteConnectionResponse {
     pub succeeded: Option<Vec<String>>,
 }
 
+/// see [Glue::batch_delete_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeletePartitionRequest {
@@ -163,6 +170,7 @@ pub struct BatchDeletePartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::batch_delete_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeletePartitionResponse {
@@ -172,6 +180,7 @@ pub struct BatchDeletePartitionResponse {
     pub errors: Option<Vec<PartitionError>>,
 }
 
+/// see [Glue::batch_delete_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteTableRequest {
@@ -187,6 +196,7 @@ pub struct BatchDeleteTableRequest {
     pub tables_to_delete: Vec<String>,
 }
 
+/// see [Glue::batch_delete_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteTableResponse {
@@ -196,6 +206,7 @@ pub struct BatchDeleteTableResponse {
     pub errors: Option<Vec<TableError>>,
 }
 
+/// see [Glue::batch_delete_table_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteTableVersionRequest {
@@ -214,6 +225,7 @@ pub struct BatchDeleteTableVersionRequest {
     pub version_ids: Vec<String>,
 }
 
+/// see [Glue::batch_delete_table_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteTableVersionResponse {
@@ -223,6 +235,7 @@ pub struct BatchDeleteTableVersionResponse {
     pub errors: Option<Vec<TableVersionError>>,
 }
 
+/// see [Glue::batch_get_crawlers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetCrawlersRequest {
@@ -231,6 +244,7 @@ pub struct BatchGetCrawlersRequest {
     pub crawler_names: Vec<String>,
 }
 
+/// see [Glue::batch_get_crawlers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetCrawlersResponse {
@@ -244,6 +258,7 @@ pub struct BatchGetCrawlersResponse {
     pub crawlers_not_found: Option<Vec<String>>,
 }
 
+/// see [Glue::batch_get_dev_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDevEndpointsRequest {
@@ -252,6 +267,7 @@ pub struct BatchGetDevEndpointsRequest {
     pub dev_endpoint_names: Vec<String>,
 }
 
+/// see [Glue::batch_get_dev_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDevEndpointsResponse {
@@ -265,6 +281,7 @@ pub struct BatchGetDevEndpointsResponse {
     pub dev_endpoints_not_found: Option<Vec<String>>,
 }
 
+/// see [Glue::batch_get_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetJobsRequest {
@@ -273,6 +290,7 @@ pub struct BatchGetJobsRequest {
     pub job_names: Vec<String>,
 }
 
+/// see [Glue::batch_get_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetJobsResponse {
@@ -286,6 +304,7 @@ pub struct BatchGetJobsResponse {
     pub jobs_not_found: Option<Vec<String>>,
 }
 
+/// see [Glue::batch_get_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetPartitionRequest {
@@ -304,6 +323,7 @@ pub struct BatchGetPartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::batch_get_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetPartitionResponse {
@@ -317,6 +337,7 @@ pub struct BatchGetPartitionResponse {
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
 }
 
+/// see [Glue::batch_get_triggers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetTriggersRequest {
@@ -325,6 +346,7 @@ pub struct BatchGetTriggersRequest {
     pub trigger_names: Vec<String>,
 }
 
+/// see [Glue::batch_get_triggers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetTriggersResponse {
@@ -338,6 +360,7 @@ pub struct BatchGetTriggersResponse {
     pub triggers_not_found: Option<Vec<String>>,
 }
 
+/// see [Glue::batch_get_workflows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetWorkflowsRequest {
@@ -350,6 +373,7 @@ pub struct BatchGetWorkflowsRequest {
     pub names: Vec<String>,
 }
 
+/// see [Glue::batch_get_workflows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetWorkflowsResponse {
@@ -381,6 +405,7 @@ pub struct BatchStopJobRunError {
     pub job_run_id: Option<String>,
 }
 
+/// see [Glue::batch_stop_job_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchStopJobRunRequest {
@@ -392,6 +417,7 @@ pub struct BatchStopJobRunRequest {
     pub job_run_ids: Vec<String>,
 }
 
+/// see [Glue::batch_stop_job_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchStopJobRunResponse {
@@ -433,6 +459,7 @@ pub struct BatchUpdatePartitionFailureEntry {
     pub partition_value_list: Option<Vec<String>>,
 }
 
+/// see [Glue::batch_update_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdatePartitionRequest {
@@ -463,6 +490,7 @@ pub struct BatchUpdatePartitionRequestEntry {
     pub partition_value_list: Vec<String>,
 }
 
+/// see [Glue::batch_update_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdatePartitionResponse {
@@ -500,6 +528,7 @@ pub struct BooleanColumnStatisticsData {
     pub number_of_trues: i64,
 }
 
+/// see [Glue::cancel_ml_task_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelMLTaskRunRequest {
@@ -511,6 +540,7 @@ pub struct CancelMLTaskRunRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::cancel_ml_task_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelMLTaskRunResponse {
@@ -569,6 +599,7 @@ pub struct CatalogTarget {
     pub tables: Vec<String>,
 }
 
+/// see [Glue::check_schema_version_validity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckSchemaVersionValidityInput {
@@ -580,6 +611,7 @@ pub struct CheckSchemaVersionValidityInput {
     pub schema_definition: String,
 }
 
+/// see [Glue::check_schema_version_validity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckSchemaVersionValidityResponse {
@@ -1113,6 +1145,7 @@ pub struct CrawlerTargets {
     pub s3_targets: Option<Vec<S3Target>>,
 }
 
+/// see [Glue::create_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClassifierRequest {
@@ -1134,10 +1167,12 @@ pub struct CreateClassifierRequest {
     pub xml_classifier: Option<CreateXMLClassifierRequest>,
 }
 
+/// see [Glue::create_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClassifierResponse {}
 
+/// see [Glue::create_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionRequest {
@@ -1150,10 +1185,12 @@ pub struct CreateConnectionRequest {
     pub connection_input: ConnectionInput,
 }
 
+/// see [Glue::create_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectionResponse {}
 
+/// see [Glue::create_crawler]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCrawlerRequest {
@@ -1212,6 +1249,7 @@ pub struct CreateCrawlerRequest {
     pub targets: CrawlerTargets,
 }
 
+/// see [Glue::create_crawler]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCrawlerResponse {}
@@ -1249,6 +1287,7 @@ pub struct CreateCsvClassifierRequest {
     pub quote_symbol: Option<String>,
 }
 
+/// see [Glue::create_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatabaseRequest {
@@ -1261,10 +1300,12 @@ pub struct CreateDatabaseRequest {
     pub database_input: DatabaseInput,
 }
 
+/// see [Glue::create_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatabaseResponse {}
 
+/// see [Glue::create_dev_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDevEndpointRequest {
@@ -1328,6 +1369,7 @@ pub struct CreateDevEndpointRequest {
     pub worker_type: Option<String>,
 }
 
+/// see [Glue::create_dev_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDevEndpointResponse {
@@ -1428,6 +1470,7 @@ pub struct CreateGrokClassifierRequest {
     pub name: String,
 }
 
+/// see [Glue::create_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
@@ -1502,6 +1545,7 @@ pub struct CreateJobRequest {
     pub worker_type: Option<String>,
 }
 
+/// see [Glue::create_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
@@ -1523,6 +1567,7 @@ pub struct CreateJsonClassifierRequest {
     pub name: String,
 }
 
+/// see [Glue::create_ml_transform]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMLTransformRequest {
@@ -1576,6 +1621,7 @@ pub struct CreateMLTransformRequest {
     pub worker_type: Option<String>,
 }
 
+/// see [Glue::create_ml_transform]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMLTransformResponse {
@@ -1585,6 +1631,7 @@ pub struct CreateMLTransformResponse {
     pub transform_id: Option<String>,
 }
 
+/// see [Glue::create_partition_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePartitionIndexRequest {
@@ -1603,10 +1650,12 @@ pub struct CreatePartitionIndexRequest {
     pub table_name: String,
 }
 
+/// see [Glue::create_partition_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePartitionIndexResponse {}
 
+/// see [Glue::create_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePartitionRequest {
@@ -1625,10 +1674,12 @@ pub struct CreatePartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::create_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePartitionResponse {}
 
+/// see [Glue::create_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegistryInput {
@@ -1645,6 +1696,7 @@ pub struct CreateRegistryInput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::create_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRegistryResponse {
@@ -1666,6 +1718,7 @@ pub struct CreateRegistryResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::create_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaInput {
@@ -1697,6 +1750,7 @@ pub struct CreateSchemaInput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::create_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
@@ -1758,6 +1812,7 @@ pub struct CreateSchemaResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::create_script]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScriptRequest {
@@ -1775,6 +1830,7 @@ pub struct CreateScriptRequest {
     pub language: Option<String>,
 }
 
+/// see [Glue::create_script]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateScriptResponse {
@@ -1788,6 +1844,7 @@ pub struct CreateScriptResponse {
     pub scala_code: Option<String>,
 }
 
+/// see [Glue::create_security_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityConfigurationRequest {
@@ -1799,6 +1856,7 @@ pub struct CreateSecurityConfigurationRequest {
     pub name: String,
 }
 
+/// see [Glue::create_security_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecurityConfigurationResponse {
@@ -1812,6 +1870,7 @@ pub struct CreateSecurityConfigurationResponse {
     pub name: Option<String>,
 }
 
+/// see [Glue::create_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTableRequest {
@@ -1831,10 +1890,12 @@ pub struct CreateTableRequest {
     pub table_input: TableInput,
 }
 
+/// see [Glue::create_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTableResponse {}
 
+/// see [Glue::create_trigger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTriggerRequest {
@@ -1873,6 +1934,7 @@ pub struct CreateTriggerRequest {
     pub workflow_name: Option<String>,
 }
 
+/// see [Glue::create_trigger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTriggerResponse {
@@ -1882,6 +1944,7 @@ pub struct CreateTriggerResponse {
     pub name: Option<String>,
 }
 
+/// see [Glue::create_user_defined_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserDefinedFunctionRequest {
@@ -1897,10 +1960,12 @@ pub struct CreateUserDefinedFunctionRequest {
     pub function_input: UserDefinedFunctionInput,
 }
 
+/// see [Glue::create_user_defined_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserDefinedFunctionResponse {}
 
+/// see [Glue::create_workflow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkflowRequest {
@@ -1925,6 +1990,7 @@ pub struct CreateWorkflowRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::create_workflow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkflowResponse {
@@ -2150,6 +2216,7 @@ pub struct DecimalNumber {
     pub unscaled_value: bytes::Bytes,
 }
 
+/// see [Glue::delete_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClassifierRequest {
@@ -2158,10 +2225,12 @@ pub struct DeleteClassifierRequest {
     pub name: String,
 }
 
+/// see [Glue::delete_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClassifierResponse {}
 
+/// see [Glue::delete_column_statistics_for_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteColumnStatisticsForPartitionRequest {
@@ -2183,10 +2252,12 @@ pub struct DeleteColumnStatisticsForPartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::delete_column_statistics_for_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteColumnStatisticsForPartitionResponse {}
 
+/// see [Glue::delete_column_statistics_for_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteColumnStatisticsForTableRequest {
@@ -2205,10 +2276,12 @@ pub struct DeleteColumnStatisticsForTableRequest {
     pub table_name: String,
 }
 
+/// see [Glue::delete_column_statistics_for_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteColumnStatisticsForTableResponse {}
 
+/// see [Glue::delete_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
@@ -2221,10 +2294,12 @@ pub struct DeleteConnectionRequest {
     pub connection_name: String,
 }
 
+/// see [Glue::delete_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionResponse {}
 
+/// see [Glue::delete_crawler]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCrawlerRequest {
@@ -2233,10 +2308,12 @@ pub struct DeleteCrawlerRequest {
     pub name: String,
 }
 
+/// see [Glue::delete_crawler]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCrawlerResponse {}
 
+/// see [Glue::delete_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatabaseRequest {
@@ -2249,10 +2326,12 @@ pub struct DeleteDatabaseRequest {
     pub name: String,
 }
 
+/// see [Glue::delete_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDatabaseResponse {}
 
+/// see [Glue::delete_dev_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDevEndpointRequest {
@@ -2261,10 +2340,12 @@ pub struct DeleteDevEndpointRequest {
     pub endpoint_name: String,
 }
 
+/// see [Glue::delete_dev_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDevEndpointResponse {}
 
+/// see [Glue::delete_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
@@ -2273,6 +2354,7 @@ pub struct DeleteJobRequest {
     pub job_name: String,
 }
 
+/// see [Glue::delete_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobResponse {
@@ -2282,6 +2364,7 @@ pub struct DeleteJobResponse {
     pub job_name: Option<String>,
 }
 
+/// see [Glue::delete_ml_transform]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMLTransformRequest {
@@ -2290,6 +2373,7 @@ pub struct DeleteMLTransformRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::delete_ml_transform]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMLTransformResponse {
@@ -2299,6 +2383,7 @@ pub struct DeleteMLTransformResponse {
     pub transform_id: Option<String>,
 }
 
+/// see [Glue::delete_partition_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePartitionIndexRequest {
@@ -2317,10 +2402,12 @@ pub struct DeletePartitionIndexRequest {
     pub table_name: String,
 }
 
+/// see [Glue::delete_partition_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePartitionIndexResponse {}
 
+/// see [Glue::delete_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePartitionRequest {
@@ -2339,10 +2426,12 @@ pub struct DeletePartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::delete_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePartitionResponse {}
 
+/// see [Glue::delete_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegistryInput {
@@ -2351,6 +2440,7 @@ pub struct DeleteRegistryInput {
     pub registry_id: RegistryId,
 }
 
+/// see [Glue::delete_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegistryResponse {
@@ -2368,6 +2458,7 @@ pub struct DeleteRegistryResponse {
     pub status: Option<String>,
 }
 
+/// see [Glue::delete_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
@@ -2381,10 +2472,12 @@ pub struct DeleteResourcePolicyRequest {
     pub resource_arn: Option<String>,
 }
 
+/// see [Glue::delete_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcePolicyResponse {}
 
+/// see [Glue::delete_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaInput {
@@ -2393,6 +2486,7 @@ pub struct DeleteSchemaInput {
     pub schema_id: SchemaId,
 }
 
+/// see [Glue::delete_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSchemaResponse {
@@ -2410,6 +2504,7 @@ pub struct DeleteSchemaResponse {
     pub status: Option<String>,
 }
 
+/// see [Glue::delete_schema_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaVersionsInput {
@@ -2421,6 +2516,7 @@ pub struct DeleteSchemaVersionsInput {
     pub versions: String,
 }
 
+/// see [Glue::delete_schema_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSchemaVersionsResponse {
@@ -2430,6 +2526,7 @@ pub struct DeleteSchemaVersionsResponse {
     pub schema_version_errors: Option<Vec<SchemaVersionErrorItem>>,
 }
 
+/// see [Glue::delete_security_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityConfigurationRequest {
@@ -2438,10 +2535,12 @@ pub struct DeleteSecurityConfigurationRequest {
     pub name: String,
 }
 
+/// see [Glue::delete_security_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecurityConfigurationResponse {}
 
+/// see [Glue::delete_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTableRequest {
@@ -2457,10 +2556,12 @@ pub struct DeleteTableRequest {
     pub name: String,
 }
 
+/// see [Glue::delete_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTableResponse {}
 
+/// see [Glue::delete_table_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTableVersionRequest {
@@ -2479,10 +2580,12 @@ pub struct DeleteTableVersionRequest {
     pub version_id: String,
 }
 
+/// see [Glue::delete_table_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTableVersionResponse {}
 
+/// see [Glue::delete_trigger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTriggerRequest {
@@ -2491,6 +2594,7 @@ pub struct DeleteTriggerRequest {
     pub name: String,
 }
 
+/// see [Glue::delete_trigger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTriggerResponse {
@@ -2500,6 +2604,7 @@ pub struct DeleteTriggerResponse {
     pub name: Option<String>,
 }
 
+/// see [Glue::delete_user_defined_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserDefinedFunctionRequest {
@@ -2515,10 +2620,12 @@ pub struct DeleteUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
+/// see [Glue::delete_user_defined_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserDefinedFunctionResponse {}
 
+/// see [Glue::delete_workflow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkflowRequest {
@@ -2527,6 +2634,7 @@ pub struct DeleteWorkflowRequest {
     pub name: String,
 }
 
+/// see [Glue::delete_workflow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkflowResponse {
@@ -2864,6 +2972,7 @@ pub struct FindMatchesTaskRunProperties {
     pub job_run_id: Option<String>,
 }
 
+/// see [Glue::get_catalog_import_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCatalogImportStatusRequest {
@@ -2873,6 +2982,7 @@ pub struct GetCatalogImportStatusRequest {
     pub catalog_id: Option<String>,
 }
 
+/// see [Glue::get_catalog_import_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCatalogImportStatusResponse {
@@ -2882,6 +2992,7 @@ pub struct GetCatalogImportStatusResponse {
     pub import_status: Option<CatalogImportStatus>,
 }
 
+/// see [Glue::get_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClassifierRequest {
@@ -2890,6 +3001,7 @@ pub struct GetClassifierRequest {
     pub name: String,
 }
 
+/// see [Glue::get_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetClassifierResponse {
@@ -2899,6 +3011,7 @@ pub struct GetClassifierResponse {
     pub classifier: Option<Classifier>,
 }
 
+/// see [Glue::get_classifiers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClassifiersRequest {
@@ -2912,6 +3025,15 @@ pub struct GetClassifiersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetClassifiersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_classifiers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetClassifiersResponse {
@@ -2925,6 +3047,31 @@ pub struct GetClassifiersResponse {
     pub next_token: Option<String>,
 }
 
+impl GetClassifiersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Classifier>> {
+        Some(self.classifiers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetClassifiersResponse {
+    type Item = Classifier;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Classifier> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_column_statistics_for_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetColumnStatisticsForPartitionRequest {
@@ -2946,6 +3093,7 @@ pub struct GetColumnStatisticsForPartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::get_column_statistics_for_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetColumnStatisticsForPartitionResponse {
@@ -2959,6 +3107,7 @@ pub struct GetColumnStatisticsForPartitionResponse {
     pub errors: Option<Vec<ColumnError>>,
 }
 
+/// see [Glue::get_column_statistics_for_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetColumnStatisticsForTableRequest {
@@ -2977,6 +3126,7 @@ pub struct GetColumnStatisticsForTableRequest {
     pub table_name: String,
 }
 
+/// see [Glue::get_column_statistics_for_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetColumnStatisticsForTableResponse {
@@ -2990,6 +3140,7 @@ pub struct GetColumnStatisticsForTableResponse {
     pub errors: Option<Vec<ColumnError>>,
 }
 
+/// see [Glue::get_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionRequest {
@@ -3006,6 +3157,7 @@ pub struct GetConnectionRequest {
     pub name: String,
 }
 
+/// see [Glue::get_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionResponse {
@@ -3029,6 +3181,7 @@ pub struct GetConnectionsFilter {
     pub match_criteria: Option<Vec<String>>,
 }
 
+/// see [Glue::get_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionsRequest {
@@ -3054,6 +3207,15 @@ pub struct GetConnectionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetConnectionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionsResponse {
@@ -3067,6 +3229,31 @@ pub struct GetConnectionsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetConnectionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Connection>> {
+        Some(self.connection_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetConnectionsResponse {
+    type Item = Connection;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Connection> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_crawler_metrics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlerMetricsRequest {
@@ -3084,6 +3271,15 @@ pub struct GetCrawlerMetricsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetCrawlerMetricsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_crawler_metrics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCrawlerMetricsResponse {
@@ -3097,6 +3293,31 @@ pub struct GetCrawlerMetricsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetCrawlerMetricsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<CrawlerMetrics>> {
+        Some(self.crawler_metrics_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetCrawlerMetricsResponse {
+    type Item = CrawlerMetrics;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CrawlerMetrics> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_crawler]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlerRequest {
@@ -3105,6 +3326,7 @@ pub struct GetCrawlerRequest {
     pub name: String,
 }
 
+/// see [Glue::get_crawler]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCrawlerResponse {
@@ -3114,6 +3336,7 @@ pub struct GetCrawlerResponse {
     pub crawler: Option<Crawler>,
 }
 
+/// see [Glue::get_crawlers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlersRequest {
@@ -3127,6 +3350,15 @@ pub struct GetCrawlersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetCrawlersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_crawlers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCrawlersResponse {
@@ -3140,6 +3372,31 @@ pub struct GetCrawlersResponse {
     pub next_token: Option<String>,
 }
 
+impl GetCrawlersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Crawler>> {
+        Some(self.crawlers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetCrawlersResponse {
+    type Item = Crawler;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Crawler> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_data_catalog_encryption_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataCatalogEncryptionSettingsRequest {
@@ -3149,6 +3406,7 @@ pub struct GetDataCatalogEncryptionSettingsRequest {
     pub catalog_id: Option<String>,
 }
 
+/// see [Glue::get_data_catalog_encryption_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataCatalogEncryptionSettingsResponse {
@@ -3158,6 +3416,7 @@ pub struct GetDataCatalogEncryptionSettingsResponse {
     pub data_catalog_encryption_settings: Option<DataCatalogEncryptionSettings>,
 }
 
+/// see [Glue::get_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatabaseRequest {
@@ -3170,6 +3429,7 @@ pub struct GetDatabaseRequest {
     pub name: String,
 }
 
+/// see [Glue::get_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatabaseResponse {
@@ -3179,6 +3439,7 @@ pub struct GetDatabaseResponse {
     pub database: Option<Database>,
 }
 
+/// see [Glue::get_databases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatabasesRequest {
@@ -3200,6 +3461,15 @@ pub struct GetDatabasesRequest {
     pub resource_share_type: Option<String>,
 }
 
+impl PagedRequest for GetDatabasesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_databases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatabasesResponse {
@@ -3212,6 +3482,31 @@ pub struct GetDatabasesResponse {
     pub next_token: Option<String>,
 }
 
+impl GetDatabasesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Database>> {
+        Some(self.database_list.clone())
+    }
+}
+
+impl PagedOutput for GetDatabasesResponse {
+    type Item = Database;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Database> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_dataflow_graph]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataflowGraphRequest {
@@ -3221,6 +3516,7 @@ pub struct GetDataflowGraphRequest {
     pub python_script: Option<String>,
 }
 
+/// see [Glue::get_dataflow_graph]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataflowGraphResponse {
@@ -3234,6 +3530,7 @@ pub struct GetDataflowGraphResponse {
     pub dag_nodes: Option<Vec<CodeGenNode>>,
 }
 
+/// see [Glue::get_dev_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevEndpointRequest {
@@ -3242,6 +3539,7 @@ pub struct GetDevEndpointRequest {
     pub endpoint_name: String,
 }
 
+/// see [Glue::get_dev_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevEndpointResponse {
@@ -3251,6 +3549,7 @@ pub struct GetDevEndpointResponse {
     pub dev_endpoint: Option<DevEndpoint>,
 }
 
+/// see [Glue::get_dev_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevEndpointsRequest {
@@ -3264,6 +3563,15 @@ pub struct GetDevEndpointsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetDevEndpointsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_dev_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevEndpointsResponse {
@@ -3277,6 +3585,31 @@ pub struct GetDevEndpointsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetDevEndpointsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DevEndpoint>> {
+        Some(self.dev_endpoints.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetDevEndpointsResponse {
+    type Item = DevEndpoint;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DevEndpoint> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_job_bookmark]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobBookmarkRequest {
@@ -3289,6 +3622,7 @@ pub struct GetJobBookmarkRequest {
     pub run_id: Option<String>,
 }
 
+/// see [Glue::get_job_bookmark]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobBookmarkResponse {
@@ -3298,6 +3632,7 @@ pub struct GetJobBookmarkResponse {
     pub job_bookmark_entry: Option<JobBookmarkEntry>,
 }
 
+/// see [Glue::get_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
@@ -3306,6 +3641,7 @@ pub struct GetJobRequest {
     pub job_name: String,
 }
 
+/// see [Glue::get_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResponse {
@@ -3315,6 +3651,7 @@ pub struct GetJobResponse {
     pub job: Option<Job>,
 }
 
+/// see [Glue::get_job_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRunRequest {
@@ -3330,6 +3667,7 @@ pub struct GetJobRunRequest {
     pub run_id: String,
 }
 
+/// see [Glue::get_job_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobRunResponse {
@@ -3339,6 +3677,7 @@ pub struct GetJobRunResponse {
     pub job_run: Option<JobRun>,
 }
 
+/// see [Glue::get_job_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRunsRequest {
@@ -3355,6 +3694,15 @@ pub struct GetJobRunsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetJobRunsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_job_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobRunsResponse {
@@ -3368,6 +3716,31 @@ pub struct GetJobRunsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetJobRunsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<JobRun>> {
+        Some(self.job_runs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetJobRunsResponse {
+    type Item = JobRun;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<JobRun> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobsRequest {
@@ -3381,6 +3754,15 @@ pub struct GetJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobsResponse {
@@ -3394,6 +3776,31 @@ pub struct GetJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Job>> {
+        Some(self.jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetJobsResponse {
+    type Item = Job;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Job> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_ml_task_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTaskRunRequest {
@@ -3405,6 +3812,7 @@ pub struct GetMLTaskRunRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::get_ml_task_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTaskRunResponse {
@@ -3450,6 +3858,7 @@ pub struct GetMLTaskRunResponse {
     pub transform_id: Option<String>,
 }
 
+/// see [Glue::get_ml_task_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTaskRunsRequest {
@@ -3474,6 +3883,7 @@ pub struct GetMLTaskRunsRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::get_ml_task_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTaskRunsResponse {
@@ -3487,6 +3897,7 @@ pub struct GetMLTaskRunsResponse {
     pub task_runs: Option<Vec<TaskRun>>,
 }
 
+/// see [Glue::get_ml_transform]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTransformRequest {
@@ -3495,6 +3906,7 @@ pub struct GetMLTransformRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::get_ml_transform]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTransformResponse {
@@ -3576,6 +3988,7 @@ pub struct GetMLTransformResponse {
     pub worker_type: Option<String>,
 }
 
+/// see [Glue::get_ml_transforms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTransformsRequest {
@@ -3597,6 +4010,7 @@ pub struct GetMLTransformsRequest {
     pub sort: Option<TransformSortCriteria>,
 }
 
+/// see [Glue::get_ml_transforms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTransformsResponse {
@@ -3609,6 +4023,7 @@ pub struct GetMLTransformsResponse {
     pub transforms: Vec<MLTransform>,
 }
 
+/// see [Glue::get_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMappingRequest {
@@ -3625,6 +4040,7 @@ pub struct GetMappingRequest {
     pub source: CatalogEntry,
 }
 
+/// see [Glue::get_mapping]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMappingResponse {
@@ -3633,6 +4049,7 @@ pub struct GetMappingResponse {
     pub mapping: Vec<MappingEntry>,
 }
 
+/// see [Glue::get_partition_indexes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPartitionIndexesRequest {
@@ -3652,6 +4069,15 @@ pub struct GetPartitionIndexesRequest {
     pub table_name: String,
 }
 
+impl PagedRequest for GetPartitionIndexesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_partition_indexes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPartitionIndexesResponse {
@@ -3665,6 +4091,31 @@ pub struct GetPartitionIndexesResponse {
     pub partition_index_descriptor_list: Option<Vec<PartitionIndexDescriptor>>,
 }
 
+impl GetPartitionIndexesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PartitionIndexDescriptor>> {
+        Some(self.partition_index_descriptor_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetPartitionIndexesResponse {
+    type Item = PartitionIndexDescriptor;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PartitionIndexDescriptor> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPartitionRequest {
@@ -3683,6 +4134,7 @@ pub struct GetPartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::get_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPartitionResponse {
@@ -3692,6 +4144,7 @@ pub struct GetPartitionResponse {
     pub partition: Option<Partition>,
 }
 
+/// see [Glue::get_partitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPartitionsRequest {
@@ -3723,6 +4176,15 @@ pub struct GetPartitionsRequest {
     pub table_name: String,
 }
 
+impl PagedRequest for GetPartitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_partitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPartitionsResponse {
@@ -3736,6 +4198,31 @@ pub struct GetPartitionsResponse {
     pub partitions: Option<Vec<Partition>>,
 }
 
+impl GetPartitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Partition>> {
+        Some(self.partitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetPartitionsResponse {
+    type Item = Partition;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Partition> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlanRequest {
@@ -3763,6 +4250,7 @@ pub struct GetPlanRequest {
     pub source: CatalogEntry,
 }
 
+/// see [Glue::get_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPlanResponse {
@@ -3776,6 +4264,7 @@ pub struct GetPlanResponse {
     pub scala_code: Option<String>,
 }
 
+/// see [Glue::get_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegistryInput {
@@ -3784,6 +4273,7 @@ pub struct GetRegistryInput {
     pub registry_id: RegistryId,
 }
 
+/// see [Glue::get_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegistryResponse {
@@ -3813,6 +4303,7 @@ pub struct GetRegistryResponse {
     pub updated_time: Option<String>,
 }
 
+/// see [Glue::get_resource_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePoliciesRequest {
@@ -3826,6 +4317,15 @@ pub struct GetResourcePoliciesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetResourcePoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_resource_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePoliciesResponse {
@@ -3839,6 +4339,31 @@ pub struct GetResourcePoliciesResponse {
     pub next_token: Option<String>,
 }
 
+impl GetResourcePoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GluePolicy>> {
+        Some(self.get_resource_policies_response_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetResourcePoliciesResponse {
+    type Item = GluePolicy;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GluePolicy> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePolicyRequest {
@@ -3848,6 +4373,7 @@ pub struct GetResourcePolicyRequest {
     pub resource_arn: Option<String>,
 }
 
+/// see [Glue::get_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePolicyResponse {
@@ -3869,6 +4395,7 @@ pub struct GetResourcePolicyResponse {
     pub update_time: Option<f64>,
 }
 
+/// see [Glue::get_schema_by_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaByDefinitionInput {
@@ -3880,6 +4407,7 @@ pub struct GetSchemaByDefinitionInput {
     pub schema_id: SchemaId,
 }
 
+/// see [Glue::get_schema_by_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaByDefinitionResponse {
@@ -3905,6 +4433,7 @@ pub struct GetSchemaByDefinitionResponse {
     pub status: Option<String>,
 }
 
+/// see [Glue::get_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaInput {
@@ -3913,6 +4442,7 @@ pub struct GetSchemaInput {
     pub schema_id: SchemaId,
 }
 
+/// see [Glue::get_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaResponse {
@@ -3970,6 +4500,7 @@ pub struct GetSchemaResponse {
     pub updated_time: Option<String>,
 }
 
+/// see [Glue::get_schema_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaVersionInput {
@@ -3987,6 +4518,7 @@ pub struct GetSchemaVersionInput {
     pub schema_version_number: Option<SchemaVersionNumber>,
 }
 
+/// see [Glue::get_schema_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaVersionResponse {
@@ -4020,6 +4552,7 @@ pub struct GetSchemaVersionResponse {
     pub version_number: Option<i64>,
 }
 
+/// see [Glue::get_schema_versions_diff]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaVersionsDiffInput {
@@ -4037,6 +4570,7 @@ pub struct GetSchemaVersionsDiffInput {
     pub second_schema_version_number: SchemaVersionNumber,
 }
 
+/// see [Glue::get_schema_versions_diff]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaVersionsDiffResponse {
@@ -4046,6 +4580,7 @@ pub struct GetSchemaVersionsDiffResponse {
     pub diff: Option<String>,
 }
 
+/// see [Glue::get_security_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSecurityConfigurationRequest {
@@ -4054,6 +4589,7 @@ pub struct GetSecurityConfigurationRequest {
     pub name: String,
 }
 
+/// see [Glue::get_security_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSecurityConfigurationResponse {
@@ -4063,6 +4599,7 @@ pub struct GetSecurityConfigurationResponse {
     pub security_configuration: Option<SecurityConfiguration>,
 }
 
+/// see [Glue::get_security_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSecurityConfigurationsRequest {
@@ -4076,6 +4613,15 @@ pub struct GetSecurityConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetSecurityConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_security_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSecurityConfigurationsResponse {
@@ -4089,6 +4635,31 @@ pub struct GetSecurityConfigurationsResponse {
     pub security_configurations: Option<Vec<SecurityConfiguration>>,
 }
 
+impl GetSecurityConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SecurityConfiguration>> {
+        Some(self.security_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetSecurityConfigurationsResponse {
+    type Item = SecurityConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SecurityConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableRequest {
@@ -4104,6 +4675,7 @@ pub struct GetTableRequest {
     pub name: String,
 }
 
+/// see [Glue::get_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTableResponse {
@@ -4113,6 +4685,7 @@ pub struct GetTableResponse {
     pub table: Option<Table>,
 }
 
+/// see [Glue::get_table_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableVersionRequest {
@@ -4132,6 +4705,7 @@ pub struct GetTableVersionRequest {
     pub version_id: Option<String>,
 }
 
+/// see [Glue::get_table_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTableVersionResponse {
@@ -4141,6 +4715,7 @@ pub struct GetTableVersionResponse {
     pub table_version: Option<TableVersion>,
 }
 
+/// see [Glue::get_table_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableVersionsRequest {
@@ -4164,6 +4739,15 @@ pub struct GetTableVersionsRequest {
     pub table_name: String,
 }
 
+impl PagedRequest for GetTableVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_table_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTableVersionsResponse {
@@ -4177,6 +4761,31 @@ pub struct GetTableVersionsResponse {
     pub table_versions: Option<Vec<TableVersion>>,
 }
 
+impl GetTableVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<TableVersion>> {
+        Some(self.table_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetTableVersionsResponse {
+    type Item = TableVersion;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TableVersion> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_tables]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTablesRequest {
@@ -4201,6 +4810,15 @@ pub struct GetTablesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetTablesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_tables]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTablesResponse {
@@ -4214,6 +4832,31 @@ pub struct GetTablesResponse {
     pub table_list: Option<Vec<Table>>,
 }
 
+impl GetTablesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Table>> {
+        Some(self.table_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetTablesResponse {
+    type Item = Table;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Table> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
@@ -4222,6 +4865,7 @@ pub struct GetTagsRequest {
     pub resource_arn: String,
 }
 
+/// see [Glue::get_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsResponse {
@@ -4231,6 +4875,7 @@ pub struct GetTagsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::get_trigger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTriggerRequest {
@@ -4239,6 +4884,7 @@ pub struct GetTriggerRequest {
     pub name: String,
 }
 
+/// see [Glue::get_trigger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTriggerResponse {
@@ -4248,6 +4894,7 @@ pub struct GetTriggerResponse {
     pub trigger: Option<Trigger>,
 }
 
+/// see [Glue::get_triggers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTriggersRequest {
@@ -4265,6 +4912,15 @@ pub struct GetTriggersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetTriggersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_triggers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTriggersResponse {
@@ -4278,6 +4934,31 @@ pub struct GetTriggersResponse {
     pub triggers: Option<Vec<Trigger>>,
 }
 
+impl GetTriggersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Trigger>> {
+        Some(self.triggers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetTriggersResponse {
+    type Item = Trigger;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Trigger> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_user_defined_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserDefinedFunctionRequest {
@@ -4293,6 +4974,7 @@ pub struct GetUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
+/// see [Glue::get_user_defined_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserDefinedFunctionResponse {
@@ -4302,6 +4984,7 @@ pub struct GetUserDefinedFunctionResponse {
     pub user_defined_function: Option<UserDefinedFunction>,
 }
 
+/// see [Glue::get_user_defined_functions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserDefinedFunctionsRequest {
@@ -4326,6 +5009,15 @@ pub struct GetUserDefinedFunctionsRequest {
     pub pattern: String,
 }
 
+impl PagedRequest for GetUserDefinedFunctionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::get_user_defined_functions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserDefinedFunctionsResponse {
@@ -4339,6 +5031,31 @@ pub struct GetUserDefinedFunctionsResponse {
     pub user_defined_functions: Option<Vec<UserDefinedFunction>>,
 }
 
+impl GetUserDefinedFunctionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UserDefinedFunction>> {
+        Some(self.user_defined_functions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetUserDefinedFunctionsResponse {
+    type Item = UserDefinedFunction;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserDefinedFunction> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::get_workflow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRequest {
@@ -4351,6 +5068,7 @@ pub struct GetWorkflowRequest {
     pub name: String,
 }
 
+/// see [Glue::get_workflow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowResponse {
@@ -4360,6 +5078,7 @@ pub struct GetWorkflowResponse {
     pub workflow: Option<Workflow>,
 }
 
+/// see [Glue::get_workflow_run_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunPropertiesRequest {
@@ -4371,6 +5090,7 @@ pub struct GetWorkflowRunPropertiesRequest {
     pub run_id: String,
 }
 
+/// see [Glue::get_workflow_run_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowRunPropertiesResponse {
@@ -4380,6 +5100,7 @@ pub struct GetWorkflowRunPropertiesResponse {
     pub run_properties: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::get_workflow_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunRequest {
@@ -4395,6 +5116,7 @@ pub struct GetWorkflowRunRequest {
     pub run_id: String,
 }
 
+/// see [Glue::get_workflow_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowRunResponse {
@@ -4404,6 +5126,7 @@ pub struct GetWorkflowRunResponse {
     pub run: Option<WorkflowRun>,
 }
 
+/// see [Glue::get_workflow_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunsRequest {
@@ -4424,6 +5147,7 @@ pub struct GetWorkflowRunsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Glue::get_workflow_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowRunsResponse {
@@ -4509,6 +5233,7 @@ pub struct GrokClassifier {
     pub version: Option<i64>,
 }
 
+/// see [Glue::import_catalog_to_glue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCatalogToGlueRequest {
@@ -4518,6 +5243,7 @@ pub struct ImportCatalogToGlueRequest {
     pub catalog_id: Option<String>,
 }
 
+/// see [Glue::import_catalog_to_glue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportCatalogToGlueResponse {}
@@ -4954,6 +5680,7 @@ pub struct LineageConfiguration {
     pub crawler_lineage_settings: Option<String>,
 }
 
+/// see [Glue::list_crawlers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCrawlersRequest {
@@ -4971,6 +5698,7 @@ pub struct ListCrawlersRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::list_crawlers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCrawlersResponse {
@@ -4984,6 +5712,7 @@ pub struct ListCrawlersResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Glue::list_dev_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevEndpointsRequest {
@@ -5001,6 +5730,7 @@ pub struct ListDevEndpointsRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::list_dev_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevEndpointsResponse {
@@ -5014,6 +5744,7 @@ pub struct ListDevEndpointsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Glue::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -5031,6 +5762,7 @@ pub struct ListJobsRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
@@ -5044,6 +5776,7 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Glue::list_ml_transforms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMLTransformsRequest {
@@ -5069,6 +5802,7 @@ pub struct ListMLTransformsRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::list_ml_transforms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMLTransformsResponse {
@@ -5081,6 +5815,7 @@ pub struct ListMLTransformsResponse {
     pub transform_ids: Vec<String>,
 }
 
+/// see [Glue::list_registries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegistriesInput {
@@ -5094,6 +5829,15 @@ pub struct ListRegistriesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListRegistriesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::list_registries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRegistriesResponse {
@@ -5107,6 +5851,31 @@ pub struct ListRegistriesResponse {
     pub registries: Option<Vec<RegistryListItem>>,
 }
 
+impl ListRegistriesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RegistryListItem>> {
+        Some(self.registries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRegistriesResponse {
+    type Item = RegistryListItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RegistryListItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::list_schema_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemaVersionsInput {
@@ -5123,6 +5892,15 @@ pub struct ListSchemaVersionsInput {
     pub schema_id: SchemaId,
 }
 
+impl PagedRequest for ListSchemaVersionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::list_schema_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemaVersionsResponse {
@@ -5136,6 +5914,31 @@ pub struct ListSchemaVersionsResponse {
     pub schemas: Option<Vec<SchemaVersionListItem>>,
 }
 
+impl ListSchemaVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SchemaVersionListItem>> {
+        Some(self.schemas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSchemaVersionsResponse {
+    type Item = SchemaVersionListItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SchemaVersionListItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::list_schemas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemasInput {
@@ -5153,6 +5956,15 @@ pub struct ListSchemasInput {
     pub registry_id: Option<RegistryId>,
 }
 
+impl PagedRequest for ListSchemasInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Glue::list_schemas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemasResponse {
@@ -5166,6 +5978,31 @@ pub struct ListSchemasResponse {
     pub schemas: Option<Vec<SchemaListItem>>,
 }
 
+impl ListSchemasResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SchemaListItem>> {
+        Some(self.schemas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSchemasResponse {
+    type Item = SchemaListItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SchemaListItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Glue::list_triggers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTriggersRequest {
@@ -5187,6 +6024,7 @@ pub struct ListTriggersRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Glue::list_triggers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTriggersResponse {
@@ -5200,6 +6038,7 @@ pub struct ListTriggersResponse {
     pub trigger_names: Option<Vec<String>>,
 }
 
+/// see [Glue::list_workflows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkflowsRequest {
@@ -5213,6 +6052,7 @@ pub struct ListWorkflowsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Glue::list_workflows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkflowsResponse {
@@ -5677,6 +6517,7 @@ pub struct PropertyPredicate {
     pub value: Option<String>,
 }
 
+/// see [Glue::put_data_catalog_encryption_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDataCatalogEncryptionSettingsRequest {
@@ -5689,10 +6530,12 @@ pub struct PutDataCatalogEncryptionSettingsRequest {
     pub data_catalog_encryption_settings: DataCatalogEncryptionSettings,
 }
 
+/// see [Glue::put_data_catalog_encryption_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDataCatalogEncryptionSettingsResponse {}
 
+/// see [Glue::put_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
@@ -5717,6 +6560,7 @@ pub struct PutResourcePolicyRequest {
     pub resource_arn: Option<String>,
 }
 
+/// see [Glue::put_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyResponse {
@@ -5726,6 +6570,7 @@ pub struct PutResourcePolicyResponse {
     pub policy_hash: Option<String>,
 }
 
+/// see [Glue::put_schema_version_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSchemaVersionMetadataInput {
@@ -5746,6 +6591,7 @@ pub struct PutSchemaVersionMetadataInput {
     pub schema_version_number: Option<SchemaVersionNumber>,
 }
 
+/// see [Glue::put_schema_version_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSchemaVersionMetadataResponse {
@@ -5783,6 +6629,7 @@ pub struct PutSchemaVersionMetadataResponse {
     pub version_number: Option<i64>,
 }
 
+/// see [Glue::put_workflow_run_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutWorkflowRunPropertiesRequest {
@@ -5797,10 +6644,12 @@ pub struct PutWorkflowRunPropertiesRequest {
     pub run_properties: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Glue::put_workflow_run_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutWorkflowRunPropertiesResponse {}
 
+/// see [Glue::query_schema_version_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QuerySchemaVersionMetadataInput {
@@ -5830,6 +6679,7 @@ pub struct QuerySchemaVersionMetadataInput {
     pub schema_version_number: Option<SchemaVersionNumber>,
 }
 
+/// see [Glue::query_schema_version_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QuerySchemaVersionMetadataResponse {
@@ -5856,6 +6706,7 @@ pub struct RecrawlPolicy {
     pub recrawl_behavior: Option<String>,
 }
 
+/// see [Glue::register_schema_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterSchemaVersionInput {
@@ -5867,6 +6718,7 @@ pub struct RegisterSchemaVersionInput {
     pub schema_id: SchemaId,
 }
 
+/// see [Glue::register_schema_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterSchemaVersionResponse {
@@ -5928,6 +6780,7 @@ pub struct RegistryListItem {
     pub updated_time: Option<String>,
 }
 
+/// see [Glue::remove_schema_version_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveSchemaVersionMetadataInput {
@@ -5948,6 +6801,7 @@ pub struct RemoveSchemaVersionMetadataInput {
     pub schema_version_number: Option<SchemaVersionNumber>,
 }
 
+/// see [Glue::remove_schema_version_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveSchemaVersionMetadataResponse {
@@ -5985,6 +6839,7 @@ pub struct RemoveSchemaVersionMetadataResponse {
     pub version_number: Option<i64>,
 }
 
+/// see [Glue::reset_job_bookmark]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetJobBookmarkRequest {
@@ -5997,6 +6852,7 @@ pub struct ResetJobBookmarkRequest {
     pub run_id: Option<String>,
 }
 
+/// see [Glue::reset_job_bookmark]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetJobBookmarkResponse {
@@ -6019,6 +6875,7 @@ pub struct ResourceUri {
     pub uri: Option<String>,
 }
 
+/// see [Glue::resume_workflow_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResumeWorkflowRunRequest {
@@ -6033,6 +6890,7 @@ pub struct ResumeWorkflowRunRequest {
     pub run_id: String,
 }
 
+/// see [Glue::resume_workflow_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResumeWorkflowRunResponse {
@@ -6238,6 +7096,7 @@ pub struct SchemaVersionNumber {
     pub version_number: Option<i64>,
 }
 
+/// see [Glue::search_tables]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchTablesRequest {
@@ -6271,6 +7130,7 @@ pub struct SearchTablesRequest {
     pub sort_criteria: Option<Vec<SortCriterion>>,
 }
 
+/// see [Glue::search_tables]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchTablesResponse {
@@ -6362,6 +7222,7 @@ pub struct SortCriterion {
     pub sort: Option<String>,
 }
 
+/// see [Glue::start_crawler]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCrawlerRequest {
@@ -6370,10 +7231,12 @@ pub struct StartCrawlerRequest {
     pub name: String,
 }
 
+/// see [Glue::start_crawler]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartCrawlerResponse {}
 
+/// see [Glue::start_crawler_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCrawlerScheduleRequest {
@@ -6382,10 +7245,12 @@ pub struct StartCrawlerScheduleRequest {
     pub crawler_name: String,
 }
 
+/// see [Glue::start_crawler_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartCrawlerScheduleResponse {}
 
+/// see [Glue::start_export_labels_task_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExportLabelsTaskRunRequest {
@@ -6397,6 +7262,7 @@ pub struct StartExportLabelsTaskRunRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::start_export_labels_task_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartExportLabelsTaskRunResponse {
@@ -6406,6 +7272,7 @@ pub struct StartExportLabelsTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
+/// see [Glue::start_import_labels_task_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportLabelsTaskRunRequest {
@@ -6421,6 +7288,7 @@ pub struct StartImportLabelsTaskRunRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::start_import_labels_task_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImportLabelsTaskRunResponse {
@@ -6430,6 +7298,7 @@ pub struct StartImportLabelsTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
+/// see [Glue::start_job_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRunRequest {
@@ -6470,6 +7339,7 @@ pub struct StartJobRunRequest {
     pub worker_type: Option<String>,
 }
 
+/// see [Glue::start_job_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobRunResponse {
@@ -6479,6 +7349,7 @@ pub struct StartJobRunResponse {
     pub job_run_id: Option<String>,
 }
 
+/// see [Glue::start_ml_evaluation_task_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMLEvaluationTaskRunRequest {
@@ -6487,6 +7358,7 @@ pub struct StartMLEvaluationTaskRunRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::start_ml_evaluation_task_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMLEvaluationTaskRunResponse {
@@ -6496,6 +7368,7 @@ pub struct StartMLEvaluationTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
+/// see [Glue::start_ml_labeling_set_generation_task_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMLLabelingSetGenerationTaskRunRequest {
@@ -6507,6 +7380,7 @@ pub struct StartMLLabelingSetGenerationTaskRunRequest {
     pub transform_id: String,
 }
 
+/// see [Glue::start_ml_labeling_set_generation_task_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMLLabelingSetGenerationTaskRunResponse {
@@ -6516,6 +7390,7 @@ pub struct StartMLLabelingSetGenerationTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
+/// see [Glue::start_trigger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTriggerRequest {
@@ -6524,6 +7399,7 @@ pub struct StartTriggerRequest {
     pub name: String,
 }
 
+/// see [Glue::start_trigger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTriggerResponse {
@@ -6533,6 +7409,7 @@ pub struct StartTriggerResponse {
     pub name: Option<String>,
 }
 
+/// see [Glue::start_workflow_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkflowRunRequest {
@@ -6541,6 +7418,7 @@ pub struct StartWorkflowRunRequest {
     pub name: String,
 }
 
+/// see [Glue::start_workflow_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartWorkflowRunResponse {
@@ -6550,6 +7428,7 @@ pub struct StartWorkflowRunResponse {
     pub run_id: Option<String>,
 }
 
+/// see [Glue::stop_crawler]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCrawlerRequest {
@@ -6558,10 +7437,12 @@ pub struct StopCrawlerRequest {
     pub name: String,
 }
 
+/// see [Glue::stop_crawler]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopCrawlerResponse {}
 
+/// see [Glue::stop_crawler_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCrawlerScheduleRequest {
@@ -6570,10 +7451,12 @@ pub struct StopCrawlerScheduleRequest {
     pub crawler_name: String,
 }
 
+/// see [Glue::stop_crawler_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopCrawlerScheduleResponse {}
 
+/// see [Glue::stop_trigger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTriggerRequest {
@@ -6582,6 +7465,7 @@ pub struct StopTriggerRequest {
     pub name: String,
 }
 
+/// see [Glue::stop_trigger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTriggerResponse {
@@ -6591,6 +7475,7 @@ pub struct StopTriggerResponse {
     pub name: Option<String>,
 }
 
+/// see [Glue::stop_workflow_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopWorkflowRunRequest {
@@ -6602,6 +7487,7 @@ pub struct StopWorkflowRunRequest {
     pub run_id: String,
 }
 
+/// see [Glue::stop_workflow_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopWorkflowRunResponse {}
@@ -6881,6 +7767,7 @@ pub struct TableVersionError {
     pub version_id: Option<String>,
 }
 
+/// see [Glue::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -6892,6 +7779,7 @@ pub struct TagResourceRequest {
     pub tags_to_add: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Glue::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -7159,6 +8047,7 @@ pub struct TriggerUpdate {
     pub schedule: Option<String>,
 }
 
+/// see [Glue::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -7170,10 +8059,12 @@ pub struct UntagResourceRequest {
     pub tags_to_remove: Vec<String>,
 }
 
+/// see [Glue::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Glue::update_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClassifierRequest {
@@ -7195,10 +8086,12 @@ pub struct UpdateClassifierRequest {
     pub xml_classifier: Option<UpdateXMLClassifierRequest>,
 }
 
+/// see [Glue::update_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClassifierResponse {}
 
+/// see [Glue::update_column_statistics_for_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateColumnStatisticsForPartitionRequest {
@@ -7220,6 +8113,7 @@ pub struct UpdateColumnStatisticsForPartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::update_column_statistics_for_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateColumnStatisticsForPartitionResponse {
@@ -7229,6 +8123,7 @@ pub struct UpdateColumnStatisticsForPartitionResponse {
     pub errors: Option<Vec<ColumnStatisticsError>>,
 }
 
+/// see [Glue::update_column_statistics_for_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateColumnStatisticsForTableRequest {
@@ -7247,6 +8142,7 @@ pub struct UpdateColumnStatisticsForTableRequest {
     pub table_name: String,
 }
 
+/// see [Glue::update_column_statistics_for_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateColumnStatisticsForTableResponse {
@@ -7256,6 +8152,7 @@ pub struct UpdateColumnStatisticsForTableResponse {
     pub errors: Option<Vec<ColumnStatisticsError>>,
 }
 
+/// see [Glue::update_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectionRequest {
@@ -7271,10 +8168,12 @@ pub struct UpdateConnectionRequest {
     pub name: String,
 }
 
+/// see [Glue::update_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectionResponse {}
 
+/// see [Glue::update_crawler]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCrawlerRequest {
@@ -7331,10 +8230,12 @@ pub struct UpdateCrawlerRequest {
     pub targets: Option<CrawlerTargets>,
 }
 
+/// see [Glue::update_crawler]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCrawlerResponse {}
 
+/// see [Glue::update_crawler_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCrawlerScheduleRequest {
@@ -7347,6 +8248,7 @@ pub struct UpdateCrawlerScheduleRequest {
     pub schedule: Option<String>,
 }
 
+/// see [Glue::update_crawler_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCrawlerScheduleResponse {}
@@ -7384,6 +8286,7 @@ pub struct UpdateCsvClassifierRequest {
     pub quote_symbol: Option<String>,
 }
 
+/// see [Glue::update_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatabaseRequest {
@@ -7399,10 +8302,12 @@ pub struct UpdateDatabaseRequest {
     pub name: String,
 }
 
+/// see [Glue::update_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDatabaseResponse {}
 
+/// see [Glue::update_dev_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevEndpointRequest {
@@ -7439,6 +8344,7 @@ pub struct UpdateDevEndpointRequest {
     pub update_etl_libraries: Option<bool>,
 }
 
+/// see [Glue::update_dev_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevEndpointResponse {}
@@ -7464,6 +8370,7 @@ pub struct UpdateGrokClassifierRequest {
     pub name: String,
 }
 
+/// see [Glue::update_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
@@ -7475,6 +8382,7 @@ pub struct UpdateJobRequest {
     pub job_update: JobUpdate,
 }
 
+/// see [Glue::update_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobResponse {
@@ -7497,6 +8405,7 @@ pub struct UpdateJsonClassifierRequest {
     pub name: String,
 }
 
+/// see [Glue::update_ml_transform]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMLTransformRequest {
@@ -7545,6 +8454,7 @@ pub struct UpdateMLTransformRequest {
     pub worker_type: Option<String>,
 }
 
+/// see [Glue::update_ml_transform]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMLTransformResponse {
@@ -7554,6 +8464,7 @@ pub struct UpdateMLTransformResponse {
     pub transform_id: Option<String>,
 }
 
+/// see [Glue::update_partition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePartitionRequest {
@@ -7575,10 +8486,12 @@ pub struct UpdatePartitionRequest {
     pub table_name: String,
 }
 
+/// see [Glue::update_partition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePartitionResponse {}
 
+/// see [Glue::update_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegistryInput {
@@ -7590,6 +8503,7 @@ pub struct UpdateRegistryInput {
     pub registry_id: RegistryId,
 }
 
+/// see [Glue::update_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRegistryResponse {
@@ -7603,6 +8517,7 @@ pub struct UpdateRegistryResponse {
     pub registry_name: Option<String>,
 }
 
+/// see [Glue::update_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSchemaInput {
@@ -7623,6 +8538,7 @@ pub struct UpdateSchemaInput {
     pub schema_version_number: Option<SchemaVersionNumber>,
 }
 
+/// see [Glue::update_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSchemaResponse {
@@ -7640,6 +8556,7 @@ pub struct UpdateSchemaResponse {
     pub schema_name: Option<String>,
 }
 
+/// see [Glue::update_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTableRequest {
@@ -7659,10 +8576,12 @@ pub struct UpdateTableRequest {
     pub table_input: TableInput,
 }
 
+/// see [Glue::update_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTableResponse {}
 
+/// see [Glue::update_trigger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTriggerRequest {
@@ -7674,6 +8593,7 @@ pub struct UpdateTriggerRequest {
     pub trigger_update: TriggerUpdate,
 }
 
+/// see [Glue::update_trigger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTriggerResponse {
@@ -7683,6 +8603,7 @@ pub struct UpdateTriggerResponse {
     pub trigger: Option<Trigger>,
 }
 
+/// see [Glue::update_user_defined_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserDefinedFunctionRequest {
@@ -7701,10 +8622,12 @@ pub struct UpdateUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
+/// see [Glue::update_user_defined_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserDefinedFunctionResponse {}
 
+/// see [Glue::update_workflow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkflowRequest {
@@ -7725,6 +8648,7 @@ pub struct UpdateWorkflowRequest {
     pub name: String,
 }
 
+/// see [Glue::update_workflow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkflowResponse {
@@ -16329,7 +17253,7 @@ impl fmt::Display for UpdateWorkflowError {
 impl Error for UpdateWorkflowError {}
 /// Trait representing the capabilities of the AWS Glue API. AWS Glue clients implement this trait.
 #[async_trait]
-pub trait Glue {
+pub trait Glue: Clone + Sync + Send + 'static {
     /// <p>Creates one or more partitions in a batch operation.</p>
     async fn batch_create_partition(
         &self,
@@ -16672,6 +17596,16 @@ pub trait Glue {
         input: GetClassifiersRequest,
     ) -> Result<GetClassifiersResponse, RusotoError<GetClassifiersError>>;
 
+    /// Auto-paginating version of `get_classifiers`
+    fn get_classifiers_pages(
+        &self,
+        input: GetClassifiersRequest,
+    ) -> RusotoStream<Classifier, GetClassifiersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_classifiers(state.clone())
+        })
+    }
+
     /// <p>Retrieves partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetPartition</code>.</p>
     async fn get_column_statistics_for_partition(
         &self,
@@ -16699,6 +17633,16 @@ pub trait Glue {
         input: GetConnectionsRequest,
     ) -> Result<GetConnectionsResponse, RusotoError<GetConnectionsError>>;
 
+    /// Auto-paginating version of `get_connections`
+    fn get_connections_pages(
+        &self,
+        input: GetConnectionsRequest,
+    ) -> RusotoStream<Connection, GetConnectionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_connections(state.clone())
+        })
+    }
+
     /// <p>Retrieves metadata for a specified crawler.</p>
     async fn get_crawler(
         &self,
@@ -16711,11 +17655,31 @@ pub trait Glue {
         input: GetCrawlerMetricsRequest,
     ) -> Result<GetCrawlerMetricsResponse, RusotoError<GetCrawlerMetricsError>>;
 
+    /// Auto-paginating version of `get_crawler_metrics`
+    fn get_crawler_metrics_pages(
+        &self,
+        input: GetCrawlerMetricsRequest,
+    ) -> RusotoStream<CrawlerMetrics, GetCrawlerMetricsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_crawler_metrics(state.clone())
+        })
+    }
+
     /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
     async fn get_crawlers(
         &self,
         input: GetCrawlersRequest,
     ) -> Result<GetCrawlersResponse, RusotoError<GetCrawlersError>>;
+
+    /// Auto-paginating version of `get_crawlers`
+    fn get_crawlers_pages(
+        &self,
+        input: GetCrawlersRequest,
+    ) -> RusotoStream<Crawler, GetCrawlersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_crawlers(state.clone())
+        })
+    }
 
     /// <p>Retrieves the security configuration for a specified catalog.</p>
     async fn get_data_catalog_encryption_settings(
@@ -16738,6 +17702,16 @@ pub trait Glue {
         input: GetDatabasesRequest,
     ) -> Result<GetDatabasesResponse, RusotoError<GetDatabasesError>>;
 
+    /// Auto-paginating version of `get_databases`
+    fn get_databases_pages(
+        &self,
+        input: GetDatabasesRequest,
+    ) -> RusotoStream<Database, GetDatabasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_databases(state.clone())
+        })
+    }
+
     /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
     async fn get_dataflow_graph(
         &self,
@@ -16755,6 +17729,16 @@ pub trait Glue {
         &self,
         input: GetDevEndpointsRequest,
     ) -> Result<GetDevEndpointsResponse, RusotoError<GetDevEndpointsError>>;
+
+    /// Auto-paginating version of `get_dev_endpoints`
+    fn get_dev_endpoints_pages(
+        &self,
+        input: GetDevEndpointsRequest,
+    ) -> RusotoStream<DevEndpoint, GetDevEndpointsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_dev_endpoints(state.clone())
+        })
+    }
 
     /// <p>Retrieves an existing job definition.</p>
     async fn get_job(
@@ -16780,11 +17764,28 @@ pub trait Glue {
         input: GetJobRunsRequest,
     ) -> Result<GetJobRunsResponse, RusotoError<GetJobRunsError>>;
 
+    /// Auto-paginating version of `get_job_runs`
+    fn get_job_runs_pages(
+        &self,
+        input: GetJobRunsRequest,
+    ) -> RusotoStream<JobRun, GetJobRunsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_job_runs(state.clone())
+        })
+    }
+
     /// <p>Retrieves all current job definitions.</p>
     async fn get_jobs(
         &self,
         input: GetJobsRequest,
     ) -> Result<GetJobsResponse, RusotoError<GetJobsError>>;
+
+    /// Auto-paginating version of `get_jobs`
+    fn get_jobs_pages(&self, input: GetJobsRequest) -> RusotoStream<Job, GetJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_jobs(state.clone())
+        })
+    }
 
     /// <p>Gets details for a specific task run on a machine learning transform. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can check the stats of any task run by calling <code>GetMLTaskRun</code> with the <code>TaskRunID</code> and its parent transform's <code>TransformID</code>.</p>
     async fn get_ml_task_run(
@@ -16828,11 +17829,31 @@ pub trait Glue {
         input: GetPartitionIndexesRequest,
     ) -> Result<GetPartitionIndexesResponse, RusotoError<GetPartitionIndexesError>>;
 
+    /// Auto-paginating version of `get_partition_indexes`
+    fn get_partition_indexes_pages(
+        &self,
+        input: GetPartitionIndexesRequest,
+    ) -> RusotoStream<PartitionIndexDescriptor, GetPartitionIndexesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_partition_indexes(state.clone())
+        })
+    }
+
     /// <p>Retrieves information about the partitions in a table.</p>
     async fn get_partitions(
         &self,
         input: GetPartitionsRequest,
     ) -> Result<GetPartitionsResponse, RusotoError<GetPartitionsError>>;
+
+    /// Auto-paginating version of `get_partitions`
+    fn get_partitions_pages(
+        &self,
+        input: GetPartitionsRequest,
+    ) -> RusotoStream<Partition, GetPartitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_partitions(state.clone())
+        })
+    }
 
     /// <p>Gets code to perform a specified mapping.</p>
     async fn get_plan(
@@ -16851,6 +17872,16 @@ pub trait Glue {
         &self,
         input: GetResourcePoliciesRequest,
     ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>>;
+
+    /// Auto-paginating version of `get_resource_policies`
+    fn get_resource_policies_pages(
+        &self,
+        input: GetResourcePoliciesRequest,
+    ) -> RusotoStream<GluePolicy, GetResourcePoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_resource_policies(state.clone())
+        })
+    }
 
     /// <p>Retrieves a specified resource policy.</p>
     async fn get_resource_policy(
@@ -16894,6 +17925,16 @@ pub trait Glue {
         input: GetSecurityConfigurationsRequest,
     ) -> Result<GetSecurityConfigurationsResponse, RusotoError<GetSecurityConfigurationsError>>;
 
+    /// Auto-paginating version of `get_security_configurations`
+    fn get_security_configurations_pages(
+        &self,
+        input: GetSecurityConfigurationsRequest,
+    ) -> RusotoStream<SecurityConfiguration, GetSecurityConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_security_configurations(state.clone())
+        })
+    }
+
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
     async fn get_table(
         &self,
@@ -16912,11 +17953,28 @@ pub trait Glue {
         input: GetTableVersionsRequest,
     ) -> Result<GetTableVersionsResponse, RusotoError<GetTableVersionsError>>;
 
+    /// Auto-paginating version of `get_table_versions`
+    fn get_table_versions_pages(
+        &self,
+        input: GetTableVersionsRequest,
+    ) -> RusotoStream<TableVersion, GetTableVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_table_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
     async fn get_tables(
         &self,
         input: GetTablesRequest,
     ) -> Result<GetTablesResponse, RusotoError<GetTablesError>>;
+
+    /// Auto-paginating version of `get_tables`
+    fn get_tables_pages(&self, input: GetTablesRequest) -> RusotoStream<Table, GetTablesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_tables(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of tags associated with a resource.</p>
     async fn get_tags(
@@ -16936,6 +17994,16 @@ pub trait Glue {
         input: GetTriggersRequest,
     ) -> Result<GetTriggersResponse, RusotoError<GetTriggersError>>;
 
+    /// Auto-paginating version of `get_triggers`
+    fn get_triggers_pages(
+        &self,
+        input: GetTriggersRequest,
+    ) -> RusotoStream<Trigger, GetTriggersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_triggers(state.clone())
+        })
+    }
+
     /// <p>Retrieves a specified function definition from the Data Catalog.</p>
     async fn get_user_defined_function(
         &self,
@@ -16947,6 +18015,16 @@ pub trait Glue {
         &self,
         input: GetUserDefinedFunctionsRequest,
     ) -> Result<GetUserDefinedFunctionsResponse, RusotoError<GetUserDefinedFunctionsError>>;
+
+    /// Auto-paginating version of `get_user_defined_functions`
+    fn get_user_defined_functions_pages(
+        &self,
+        input: GetUserDefinedFunctionsRequest,
+    ) -> RusotoStream<UserDefinedFunction, GetUserDefinedFunctionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_user_defined_functions(state.clone())
+        })
+    }
 
     /// <p>Retrieves resource metadata for a workflow.</p>
     async fn get_workflow(
@@ -17008,17 +18086,47 @@ pub trait Glue {
         input: ListRegistriesInput,
     ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>>;
 
+    /// Auto-paginating version of `list_registries`
+    fn list_registries_pages(
+        &self,
+        input: ListRegistriesInput,
+    ) -> RusotoStream<RegistryListItem, ListRegistriesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_registries(state.clone())
+        })
+    }
+
     /// <p>Returns a list of schema versions that you have created, with minimal information. Schema versions in Deleted status will not be included in the results. Empty results will be returned if there are no schema versions available.</p>
     async fn list_schema_versions(
         &self,
         input: ListSchemaVersionsInput,
     ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>>;
 
+    /// Auto-paginating version of `list_schema_versions`
+    fn list_schema_versions_pages(
+        &self,
+        input: ListSchemaVersionsInput,
+    ) -> RusotoStream<SchemaVersionListItem, ListSchemaVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_schema_versions(state.clone())
+        })
+    }
+
     /// <p>Returns a list of schemas with minimal details. Schemas in Deleting status will not be included in the results. Empty results will be returned if there are no schemas available.</p> <p>When the <code>RegistryId</code> is not provided, all the schemas across registries will be part of the API response.</p>
     async fn list_schemas(
         &self,
         input: ListSchemasInput,
     ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>>;
+
+    /// Auto-paginating version of `list_schemas`
+    fn list_schemas_pages(
+        &self,
+        input: ListSchemasInput,
+    ) -> RusotoStream<SchemaListItem, ListSchemasError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_schemas(state.clone())
+        })
+    }
 
     /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     async fn list_triggers(

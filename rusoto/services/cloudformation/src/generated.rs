@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -312,6 +314,7 @@ impl BoxedIntegerDeserializer {
     }
 }
 /// <p>The input for the <a>CancelUpdateStack</a> action.</p>
+/// see [CloudFormation::cancel_update_stack]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelUpdateStackInput {
@@ -629,6 +632,7 @@ impl ClientRequestTokenDeserializer {
     }
 }
 /// <p>The input for the <a>ContinueUpdateRollback</a> action.</p>
+/// see [CloudFormation::continue_update_rollback]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContinueUpdateRollbackInput {
@@ -669,6 +673,7 @@ impl ContinueUpdateRollbackInputSerializer {
 }
 
 /// <p>The output for a <a>ContinueUpdateRollback</a> action.</p>
+/// see [CloudFormation::continue_update_rollback]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ContinueUpdateRollbackOutput {}
@@ -691,6 +696,7 @@ impl ContinueUpdateRollbackOutputDeserializer {
     }
 }
 /// <p>The input for the <a>CreateChangeSet</a> action.</p>
+/// see [CloudFormation::create_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChangeSetInput {
@@ -823,6 +829,7 @@ impl CreateChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>CreateChangeSet</a> action.</p>
+/// see [CloudFormation::create_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateChangeSetOutput {
@@ -855,6 +862,7 @@ impl CreateChangeSetOutputDeserializer {
     }
 }
 /// <p>The input for <a>CreateStack</a> action.</p>
+/// see [CloudFormation::create_stack]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackInput {
@@ -978,6 +986,7 @@ impl CreateStackInputSerializer {
     }
 }
 
+/// see [CloudFormation::create_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackInstancesInput {
@@ -1045,6 +1054,7 @@ impl CreateStackInstancesInputSerializer {
     }
 }
 
+/// see [CloudFormation::create_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStackInstancesOutput {
@@ -1079,6 +1089,7 @@ impl CreateStackInstancesOutputDeserializer {
     }
 }
 /// <p>The output for a <a>CreateStack</a> action.</p>
+/// see [CloudFormation::create_stack]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStackOutput {
@@ -1105,6 +1116,7 @@ impl CreateStackOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::create_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackSetInput {
@@ -1198,6 +1210,7 @@ impl CreateStackSetInputSerializer {
     }
 }
 
+/// see [CloudFormation::create_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStackSetOutput {
@@ -1234,6 +1247,7 @@ impl CreationTimeDeserializer {
     }
 }
 /// <p>The input for the <a>DeleteChangeSet</a> action.</p>
+/// see [CloudFormation::delete_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChangeSetInput {
@@ -1263,6 +1277,7 @@ impl DeleteChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>DeleteChangeSet</a> action.</p>
+/// see [CloudFormation::delete_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteChangeSetOutput {}
@@ -1285,6 +1300,7 @@ impl DeleteChangeSetOutputDeserializer {
     }
 }
 /// <p>The input for <a>DeleteStack</a> action.</p>
+/// see [CloudFormation::delete_stack]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackInput {
@@ -1324,6 +1340,7 @@ impl DeleteStackInputSerializer {
     }
 }
 
+/// see [CloudFormation::delete_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackInstancesInput {
@@ -1385,6 +1402,7 @@ impl DeleteStackInstancesInputSerializer {
     }
 }
 
+/// see [CloudFormation::delete_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteStackInstancesOutput {
@@ -1418,6 +1436,7 @@ impl DeleteStackInstancesOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::delete_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackSetInput {
@@ -1441,6 +1460,7 @@ impl DeleteStackSetInputSerializer {
     }
 }
 
+/// see [CloudFormation::delete_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteStackSetOutput {}
@@ -1545,6 +1565,7 @@ impl DeprecatedStatusDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [CloudFormation::deregister_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTypeInput {
@@ -1582,6 +1603,7 @@ impl DeregisterTypeInputSerializer {
     }
 }
 
+/// see [CloudFormation::deregister_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterTypeOutput {}
@@ -1604,11 +1626,20 @@ impl DeregisterTypeOutputDeserializer {
     }
 }
 /// <p>The input for the <a>DescribeAccountLimits</a> action.</p>
+/// see [CloudFormation::describe_account_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountLimitsInput {
     /// <p>A string that identifies the next page of limits that you want to retrieve.</p>
     pub next_token: Option<String>,
+}
+
+impl PagedRequest for DescribeAccountLimitsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `DescribeAccountLimitsInput` contents to a `SignedRequest`.
@@ -1627,6 +1658,7 @@ impl DescribeAccountLimitsInputSerializer {
 }
 
 /// <p>The output for the <a>DescribeAccountLimits</a> action.</p>
+/// see [CloudFormation::describe_account_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsOutput {
@@ -1634,6 +1666,30 @@ pub struct DescribeAccountLimitsOutput {
     pub account_limits: Option<Vec<AccountLimit>>,
     /// <p>If the output exceeds 1 MB in size, a string that identifies the next page of limits. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
+}
+
+impl DescribeAccountLimitsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<AccountLimit>> {
+        Some(self.account_limits.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAccountLimitsOutput {
+    type Item = AccountLimit;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AccountLimit> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1666,6 +1722,7 @@ impl DescribeAccountLimitsOutputDeserializer {
     }
 }
 /// <p>The input for the <a>DescribeChangeSet</a> action.</p>
+/// see [CloudFormation::describe_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChangeSetInput {
@@ -1675,6 +1732,14 @@ pub struct DescribeChangeSetInput {
     pub next_token: Option<String>,
     /// <p>If you specified the name of a change set, specify the stack name or ID (ARN) of the change set you want to describe.</p>
     pub stack_name: Option<String>,
+}
+
+impl PagedRequest for DescribeChangeSetInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `DescribeChangeSetInput` contents to a `SignedRequest`.
@@ -1700,6 +1765,7 @@ impl DescribeChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>DescribeChangeSet</a> action.</p>
+/// see [CloudFormation::describe_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeChangeSetOutput {
@@ -1741,6 +1807,30 @@ pub struct DescribeChangeSetOutput {
     pub status_reason: Option<String>,
     /// <p>If you execute the change set, the tags that will be associated with the stack.</p>
     pub tags: Option<Vec<Tag>>,
+}
+
+impl DescribeChangeSetOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Change>> {
+        Some(self.changes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeChangeSetOutput {
+    type Item = Change;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Change> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1861,6 +1951,7 @@ impl DescribeChangeSetOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::describe_stack_drift_detection_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackDriftDetectionStatusInput {
@@ -1884,6 +1975,7 @@ impl DescribeStackDriftDetectionStatusInputSerializer {
     }
 }
 
+/// see [CloudFormation::describe_stack_drift_detection_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackDriftDetectionStatusOutput {
@@ -1963,6 +2055,7 @@ impl DescribeStackDriftDetectionStatusOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStackEvents</a> action.</p>
+/// see [CloudFormation::describe_stack_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackEventsInput {
@@ -1970,6 +2063,14 @@ pub struct DescribeStackEventsInput {
     pub next_token: Option<String>,
     /// <p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>
     pub stack_name: Option<String>,
+}
+
+impl PagedRequest for DescribeStackEventsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `DescribeStackEventsInput` contents to a `SignedRequest`.
@@ -1991,6 +2092,7 @@ impl DescribeStackEventsInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStackEvents</a> action.</p>
+/// see [CloudFormation::describe_stack_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackEventsOutput {
@@ -1998,6 +2100,30 @@ pub struct DescribeStackEventsOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>StackEvents</code> structures.</p>
     pub stack_events: Option<Vec<StackEvent>>,
+}
+
+impl DescribeStackEventsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StackEvent>> {
+        Some(self.stack_events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeStackEventsOutput {
+    type Item = StackEvent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StackEvent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2029,6 +2155,7 @@ impl DescribeStackEventsOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::describe_stack_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackInstanceInput {
@@ -2064,6 +2191,7 @@ impl DescribeStackInstanceInputSerializer {
     }
 }
 
+/// see [CloudFormation::describe_stack_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackInstanceOutput {
@@ -2097,6 +2225,7 @@ impl DescribeStackInstanceOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::describe_stack_resource_drifts]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackResourceDriftsInput {
@@ -2136,6 +2265,7 @@ impl DescribeStackResourceDriftsInputSerializer {
     }
 }
 
+/// see [CloudFormation::describe_stack_resource_drifts]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackResourceDriftsOutput {
@@ -2178,6 +2308,7 @@ impl DescribeStackResourceDriftsOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStackResource</a> action.</p>
+/// see [CloudFormation::describe_stack_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackResourceInput {
@@ -2205,6 +2336,7 @@ impl DescribeStackResourceInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStackResource</a> action.</p>
+/// see [CloudFormation::describe_stack_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackResourceOutput {
@@ -2240,6 +2372,7 @@ impl DescribeStackResourceOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStackResources</a> action.</p>
+/// see [CloudFormation::describe_stack_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackResourcesInput {
@@ -2273,6 +2406,7 @@ impl DescribeStackResourcesInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStackResources</a> action.</p>
+/// see [CloudFormation::describe_stack_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackResourcesOutput {
@@ -2305,6 +2439,7 @@ impl DescribeStackResourcesOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::describe_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackSetInput {
@@ -2328,6 +2463,7 @@ impl DescribeStackSetInputSerializer {
     }
 }
 
+/// see [CloudFormation::describe_stack_set_operation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackSetOperationInput {
@@ -2354,6 +2490,7 @@ impl DescribeStackSetOperationInputSerializer {
     }
 }
 
+/// see [CloudFormation::describe_stack_set_operation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackSetOperationOutput {
@@ -2387,6 +2524,7 @@ impl DescribeStackSetOperationOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::describe_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackSetOutput {
@@ -2414,6 +2552,7 @@ impl DescribeStackSetOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStacks</a> action.</p>
+/// see [CloudFormation::describe_stacks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStacksInput {
@@ -2421,6 +2560,14 @@ pub struct DescribeStacksInput {
     pub next_token: Option<String>,
     /// <p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>
     pub stack_name: Option<String>,
+}
+
+impl PagedRequest for DescribeStacksInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `DescribeStacksInput` contents to a `SignedRequest`.
@@ -2442,6 +2589,7 @@ impl DescribeStacksInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStacks</a> action.</p>
+/// see [CloudFormation::describe_stacks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStacksOutput {
@@ -2449,6 +2597,30 @@ pub struct DescribeStacksOutput {
     pub next_token: Option<String>,
     /// <p>A list of stack structures.</p>
     pub stacks: Option<Vec<Stack>>,
+}
+
+impl DescribeStacksOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Stack>> {
+        Some(self.stacks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeStacksOutput {
+    type Item = Stack;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Stack> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2475,6 +2647,7 @@ impl DescribeStacksOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::describe_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTypeInput {
@@ -2512,6 +2685,7 @@ impl DescribeTypeInputSerializer {
     }
 }
 
+/// see [CloudFormation::describe_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTypeOutput {
@@ -2639,6 +2813,7 @@ impl DescribeTypeOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::describe_type_registration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTypeRegistrationInput {
@@ -2662,6 +2837,7 @@ impl DescribeTypeRegistrationInputSerializer {
     }
 }
 
+/// see [CloudFormation::describe_type_registration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTypeRegistrationOutput {
@@ -2720,6 +2896,7 @@ impl DescriptionDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [CloudFormation::detect_stack_drift]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectStackDriftInput {
@@ -2749,6 +2926,7 @@ impl DetectStackDriftInputSerializer {
     }
 }
 
+/// see [CloudFormation::detect_stack_drift]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetectStackDriftOutput {
@@ -2778,6 +2956,7 @@ impl DetectStackDriftOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::detect_stack_resource_drift]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectStackResourceDriftInput {
@@ -2804,6 +2983,7 @@ impl DetectStackResourceDriftInputSerializer {
     }
 }
 
+/// see [CloudFormation::detect_stack_resource_drift]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetectStackResourceDriftOutput {
@@ -2837,6 +3017,7 @@ impl DetectStackResourceDriftOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::detect_stack_set_drift]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectStackSetDriftInput {
@@ -2873,6 +3054,7 @@ impl DetectStackSetDriftInputSerializer {
     }
 }
 
+/// see [CloudFormation::detect_stack_set_drift]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetectStackSetDriftOutput {
@@ -2939,6 +3121,7 @@ impl EnableTerminationProtectionDeserializer {
     }
 }
 /// <p>The input for an <a>EstimateTemplateCost</a> action.</p>
+/// see [CloudFormation::estimate_template_cost]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EstimateTemplateCostInput {
@@ -2976,6 +3159,7 @@ impl EstimateTemplateCostInputSerializer {
 }
 
 /// <p>The output for a <a>EstimateTemplateCost</a> action.</p>
+/// see [CloudFormation::estimate_template_cost]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EstimateTemplateCostOutput {
@@ -3023,6 +3207,7 @@ impl EventIdDeserializer {
     }
 }
 /// <p>The input for the <a>ExecuteChangeSet</a> action.</p>
+/// see [CloudFormation::execute_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteChangeSetInput {
@@ -3057,6 +3242,7 @@ impl ExecuteChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>ExecuteChangeSet</a> action.</p>
+/// see [CloudFormation::execute_change_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExecuteChangeSetOutput {}
@@ -3188,6 +3374,7 @@ impl FailureTolerancePercentageDeserializer {
     }
 }
 /// <p>The input for the <a>GetStackPolicy</a> action.</p>
+/// see [CloudFormation::get_stack_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStackPolicyInput {
@@ -3209,6 +3396,7 @@ impl GetStackPolicyInputSerializer {
 }
 
 /// <p>The output for the <a>GetStackPolicy</a> action.</p>
+/// see [CloudFormation::get_stack_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStackPolicyOutput {
@@ -3239,6 +3427,7 @@ impl GetStackPolicyOutputDeserializer {
     }
 }
 /// <p>The input for a <a>GetTemplate</a> action.</p>
+/// see [CloudFormation::get_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTemplateInput {
@@ -3272,6 +3461,7 @@ impl GetTemplateInputSerializer {
 }
 
 /// <p>The output for <a>GetTemplate</a> action.</p>
+/// see [CloudFormation::get_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTemplateOutput {
@@ -3309,6 +3499,7 @@ impl GetTemplateOutputDeserializer {
     }
 }
 /// <p>The input for the <a>GetTemplateSummary</a> action.</p>
+/// see [CloudFormation::get_template_summary]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTemplateSummaryInput {
@@ -3347,6 +3538,7 @@ impl GetTemplateSummaryInputSerializer {
 }
 
 /// <p>The output for the <a>GetTemplateSummary</a> action.</p>
+/// see [CloudFormation::get_template_summary]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTemplateSummaryOutput {
@@ -3518,6 +3710,7 @@ impl LimitValueDeserializer {
     }
 }
 /// <p>The input for the <a>ListChangeSets</a> action.</p>
+/// see [CloudFormation::list_change_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangeSetsInput {
@@ -3525,6 +3718,14 @@ pub struct ListChangeSetsInput {
     pub next_token: Option<String>,
     /// <p>The name or the Amazon Resource Name (ARN) of the stack for which you want to list change sets.</p>
     pub stack_name: String,
+}
+
+impl PagedRequest for ListChangeSetsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListChangeSetsInput` contents to a `SignedRequest`.
@@ -3544,6 +3745,7 @@ impl ListChangeSetsInputSerializer {
 }
 
 /// <p>The output for the <a>ListChangeSets</a> action.</p>
+/// see [CloudFormation::list_change_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListChangeSetsOutput {
@@ -3551,6 +3753,30 @@ pub struct ListChangeSetsOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>ChangeSetSummary</code> structures that provides the ID and status of each change set for the specified stack.</p>
     pub summaries: Option<Vec<ChangeSetSummary>>,
+}
+
+impl ListChangeSetsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ChangeSetSummary>> {
+        Some(self.summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListChangeSetsOutput {
+    type Item = ChangeSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ChangeSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3577,11 +3803,20 @@ impl ListChangeSetsOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::list_exports]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExportsInput {
     /// <p>A string (provided by the <a>ListExports</a> response output) that identifies the next page of exported output values that you asked to retrieve.</p>
     pub next_token: Option<String>,
+}
+
+impl PagedRequest for ListExportsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListExportsInput` contents to a `SignedRequest`.
@@ -3599,6 +3834,7 @@ impl ListExportsInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_exports]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListExportsOutput {
@@ -3606,6 +3842,30 @@ pub struct ListExportsOutput {
     pub exports: Option<Vec<Export>>,
     /// <p>If the output exceeds 100 exported output values, a string that identifies the next page of exports. If there is no additional page, this value is null.</p>
     pub next_token: Option<String>,
+}
+
+impl ListExportsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Export>> {
+        Some(self.exports.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListExportsOutput {
+    type Item = Export;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Export> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3632,6 +3892,7 @@ impl ListExportsOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::list_imports]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImportsInput {
@@ -3639,6 +3900,14 @@ pub struct ListImportsInput {
     pub export_name: String,
     /// <p>A string (provided by the <a>ListImports</a> response output) that identifies the next page of stacks that are importing the specified exported output value. </p>
     pub next_token: Option<String>,
+}
+
+impl PagedRequest for ListImportsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListImportsInput` contents to a `SignedRequest`.
@@ -3657,6 +3926,7 @@ impl ListImportsInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_imports]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListImportsOutput {
@@ -3664,6 +3934,30 @@ pub struct ListImportsOutput {
     pub imports: Option<Vec<String>>,
     /// <p>A string that identifies the next page of exports. If there is no additional page, this value is null.</p>
     pub next_token: Option<String>,
+}
+
+impl ListImportsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.imports.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListImportsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3690,6 +3984,7 @@ impl ListImportsOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::list_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackInstancesInput {
@@ -3705,6 +4000,14 @@ pub struct ListStackInstancesInput {
     pub stack_instance_region: Option<String>,
     /// <p>The name or unique ID of the stack set that you want to list stack instances for.</p>
     pub stack_set_name: String,
+}
+
+impl PagedRequest for ListStackInstancesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListStackInstancesInput` contents to a `SignedRequest`.
@@ -3748,6 +4051,7 @@ impl ListStackInstancesInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackInstancesOutput {
@@ -3755,6 +4059,30 @@ pub struct ListStackInstancesOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>StackInstanceSummary</code> structures that contain information about the specified stack instances.</p>
     pub summaries: Option<Vec<StackInstanceSummary>>,
+}
+
+impl ListStackInstancesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StackInstanceSummary>> {
+        Some(self.summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStackInstancesOutput {
+    type Item = StackInstanceSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StackInstanceSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3787,6 +4115,7 @@ impl ListStackInstancesOutputDeserializer {
     }
 }
 /// <p>The input for the <a>ListStackResource</a> action.</p>
+/// see [CloudFormation::list_stack_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackResourcesInput {
@@ -3794,6 +4123,14 @@ pub struct ListStackResourcesInput {
     pub next_token: Option<String>,
     /// <p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>
     pub stack_name: String,
+}
+
+impl PagedRequest for ListStackResourcesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListStackResourcesInput` contents to a `SignedRequest`.
@@ -3813,6 +4150,7 @@ impl ListStackResourcesInputSerializer {
 }
 
 /// <p>The output for a <a>ListStackResources</a> action.</p>
+/// see [CloudFormation::list_stack_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackResourcesOutput {
@@ -3820,6 +4158,30 @@ pub struct ListStackResourcesOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>StackResourceSummary</code> structures.</p>
     pub stack_resource_summaries: Option<Vec<StackResourceSummary>>,
+}
+
+impl ListStackResourcesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StackResourceSummary>> {
+        Some(self.stack_resource_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStackResourcesOutput {
+    type Item = StackResourceSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StackResourceSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3854,6 +4216,7 @@ impl ListStackResourcesOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::list_stack_set_operation_results]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackSetOperationResultsInput {
@@ -3865,6 +4228,14 @@ pub struct ListStackSetOperationResultsInput {
     pub operation_id: String,
     /// <p>The name or unique ID of the stack set that you want to get operation results for.</p>
     pub stack_set_name: String,
+}
+
+impl PagedRequest for ListStackSetOperationResultsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListStackSetOperationResultsInput` contents to a `SignedRequest`.
@@ -3890,6 +4261,7 @@ impl ListStackSetOperationResultsInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_stack_set_operation_results]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackSetOperationResultsOutput {
@@ -3897,6 +4269,30 @@ pub struct ListStackSetOperationResultsOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>StackSetOperationResultSummary</code> structures that contain information about the specified operation results, for accounts and Regions that are included in the operation.</p>
     pub summaries: Option<Vec<StackSetOperationResultSummary>>,
+}
+
+impl ListStackSetOperationResultsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StackSetOperationResultSummary>> {
+        Some(self.summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStackSetOperationResultsOutput {
+    type Item = StackSetOperationResultSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StackSetOperationResultSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3931,6 +4327,7 @@ impl ListStackSetOperationResultsOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::list_stack_set_operations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackSetOperationsInput {
@@ -3940,6 +4337,14 @@ pub struct ListStackSetOperationsInput {
     pub next_token: Option<String>,
     /// <p>The name or unique ID of the stack set that you want to get operation summaries for.</p>
     pub stack_set_name: String,
+}
+
+impl PagedRequest for ListStackSetOperationsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListStackSetOperationsInput` contents to a `SignedRequest`.
@@ -3964,6 +4369,7 @@ impl ListStackSetOperationsInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_stack_set_operations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackSetOperationsOutput {
@@ -3971,6 +4377,30 @@ pub struct ListStackSetOperationsOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>StackSetOperationSummary</code> structures that contain summary information about operations for the specified stack set.</p>
     pub summaries: Option<Vec<StackSetOperationSummary>>,
+}
+
+impl ListStackSetOperationsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StackSetOperationSummary>> {
+        Some(self.summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStackSetOperationsOutput {
+    type Item = StackSetOperationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StackSetOperationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4005,6 +4435,7 @@ impl ListStackSetOperationsOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::list_stack_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackSetsInput {
@@ -4014,6 +4445,14 @@ pub struct ListStackSetsInput {
     pub next_token: Option<String>,
     /// <p>The status of the stack sets that you want to get summary information about.</p>
     pub status: Option<String>,
+}
+
+impl PagedRequest for ListStackSetsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListStackSetsInput` contents to a `SignedRequest`.
@@ -4037,6 +4476,7 @@ impl ListStackSetsInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_stack_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStackSetsOutput {
@@ -4044,6 +4484,30 @@ pub struct ListStackSetsOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>StackSetSummary</code> structures that contain information about the user's stack sets.</p>
     pub summaries: Option<Vec<StackSetSummary>>,
+}
+
+impl ListStackSetsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StackSetSummary>> {
+        Some(self.summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStackSetsOutput {
+    type Item = StackSetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StackSetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4071,6 +4535,7 @@ impl ListStackSetsOutputDeserializer {
     }
 }
 /// <p>The input for <a>ListStacks</a> action.</p>
+/// see [CloudFormation::list_stacks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStacksInput {
@@ -4078,6 +4543,14 @@ pub struct ListStacksInput {
     pub next_token: Option<String>,
     /// <p>Stack status to use as a filter. Specify one or more stack status codes to list only stacks with the specified status codes. For a complete list of stack status codes, see the <code>StackStatus</code> parameter of the <a>Stack</a> data type.</p>
     pub stack_status_filter: Option<Vec<String>>,
+}
+
+impl PagedRequest for ListStacksInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListStacksInput` contents to a `SignedRequest`.
@@ -4103,6 +4576,7 @@ impl ListStacksInputSerializer {
 }
 
 /// <p>The output for <a>ListStacks</a> action.</p>
+/// see [CloudFormation::list_stacks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStacksOutput {
@@ -4110,6 +4584,30 @@ pub struct ListStacksOutput {
     pub next_token: Option<String>,
     /// <p>A list of <code>StackSummary</code> structures containing information about the specified stacks.</p>
     pub stack_summaries: Option<Vec<StackSummary>>,
+}
+
+impl ListStacksOutput {
+    fn pagination_page_opt(self) -> Option<Vec<StackSummary>> {
+        Some(self.stack_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStacksOutput {
+    type Item = StackSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StackSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4136,6 +4634,7 @@ impl ListStacksOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::list_type_registrations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypeRegistrationsInput {
@@ -4186,6 +4685,7 @@ impl ListTypeRegistrationsInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_type_registrations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTypeRegistrationsOutput {
@@ -4227,6 +4727,7 @@ impl ListTypeRegistrationsOutputDeserializer {
         )
     }
 }
+/// see [CloudFormation::list_type_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypeVersionsInput {
@@ -4274,6 +4775,7 @@ impl ListTypeVersionsInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_type_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTypeVersionsOutput {
@@ -4310,6 +4812,7 @@ impl ListTypeVersionsOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::list_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypesInput {
@@ -4357,6 +4860,7 @@ impl ListTypesInputSerializer {
     }
 }
 
+/// see [CloudFormation::list_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTypesOutput {
@@ -5181,6 +5685,7 @@ impl ReasonDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [CloudFormation::record_handler_progress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecordHandlerProgressInput {
@@ -5235,6 +5740,7 @@ impl RecordHandlerProgressInputSerializer {
     }
 }
 
+/// see [CloudFormation::record_handler_progress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RecordHandlerProgressOutput {}
@@ -5294,6 +5800,7 @@ impl RegionListSerializer {
     }
 }
 
+/// see [CloudFormation::register_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTypeInput {
@@ -5344,6 +5851,7 @@ impl RegisterTypeInputSerializer {
     }
 }
 
+/// see [CloudFormation::register_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterTypeOutput {
@@ -6085,6 +6593,7 @@ impl ScopeDeserializer {
     }
 }
 /// <p>The input for the <a>SetStackPolicy</a> action.</p>
+/// see [CloudFormation::set_stack_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetStackPolicyInput {
@@ -6115,6 +6624,7 @@ impl SetStackPolicyInputSerializer {
     }
 }
 
+/// see [CloudFormation::set_type_default_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTypeDefaultVersionInput {
@@ -6152,6 +6662,7 @@ impl SetTypeDefaultVersionInputSerializer {
     }
 }
 
+/// see [CloudFormation::set_type_default_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetTypeDefaultVersionOutput {}
@@ -6174,6 +6685,7 @@ impl SetTypeDefaultVersionOutputDeserializer {
     }
 }
 /// <p>The input for the <a>SignalResource</a> action.</p>
+/// see [CloudFormation::signal_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignalResourceInput {
@@ -8422,6 +8934,7 @@ impl StageListDeserializer {
         })
     }
 }
+/// see [CloudFormation::stop_stack_set_operation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStackSetOperationInput {
@@ -8448,6 +8961,7 @@ impl StopStackSetOperationInputSerializer {
     }
 }
 
+/// see [CloudFormation::stop_stack_set_operation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopStackSetOperationOutput {}
@@ -8908,6 +9422,7 @@ impl TypeVersionSummaryDeserializer {
     }
 }
 /// <p>The input for an <a>UpdateStack</a> action.</p>
+/// see [CloudFormation::update_stack]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackInput {
@@ -9032,6 +9547,7 @@ impl UpdateStackInputSerializer {
     }
 }
 
+/// see [CloudFormation::update_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackInstancesInput {
@@ -9099,6 +9615,7 @@ impl UpdateStackInstancesInputSerializer {
     }
 }
 
+/// see [CloudFormation::update_stack_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStackInstancesOutput {
@@ -9133,6 +9650,7 @@ impl UpdateStackInstancesOutputDeserializer {
     }
 }
 /// <p>The output for an <a>UpdateStack</a> action.</p>
+/// see [CloudFormation::update_stack]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStackOutput {
@@ -9159,6 +9677,7 @@ impl UpdateStackOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::update_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackSetInput {
@@ -9296,6 +9815,7 @@ impl UpdateStackSetInputSerializer {
     }
 }
 
+/// see [CloudFormation::update_stack_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStackSetOutput {
@@ -9325,6 +9845,7 @@ impl UpdateStackSetOutputDeserializer {
         })
     }
 }
+/// see [CloudFormation::update_termination_protection]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTerminationProtectionInput {
@@ -9351,6 +9872,7 @@ impl UpdateTerminationProtectionInputSerializer {
     }
 }
 
+/// see [CloudFormation::update_termination_protection]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateTerminationProtectionOutput {
@@ -9398,6 +9920,7 @@ impl UsePreviousValueDeserializer {
     }
 }
 /// <p>The input for <a>ValidateTemplate</a> action.</p>
+/// see [CloudFormation::validate_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateTemplateInput {
@@ -9426,6 +9949,7 @@ impl ValidateTemplateInputSerializer {
 }
 
 /// <p>The output for <a>ValidateTemplate</a> action.</p>
+/// see [CloudFormation::validate_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ValidateTemplateOutput {
@@ -12088,7 +12612,7 @@ impl fmt::Display for ValidateTemplateError {
 impl Error for ValidateTemplateError {}
 /// Trait representing the capabilities of the AWS CloudFormation API. AWS CloudFormation clients implement this trait.
 #[async_trait]
-pub trait CloudFormation {
+pub trait CloudFormation: Clone + Sync + Send + 'static {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     async fn cancel_update_stack(
         &self,
@@ -12161,11 +12685,31 @@ pub trait CloudFormation {
         input: DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
+    /// Auto-paginating version of `describe_account_limits`
+    fn describe_account_limits_pages(
+        &self,
+        input: DescribeAccountLimitsInput,
+    ) -> RusotoStream<AccountLimit, DescribeAccountLimitsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_account_limits(state.clone())
+        })
+    }
+
     /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
     async fn describe_change_set(
         &self,
         input: DescribeChangeSetInput,
     ) -> Result<DescribeChangeSetOutput, RusotoError<DescribeChangeSetError>>;
+
+    /// Auto-paginating version of `describe_change_set`
+    fn describe_change_set_pages(
+        &self,
+        input: DescribeChangeSetInput,
+    ) -> RusotoStream<Change, DescribeChangeSetError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_change_set(state.clone())
+        })
+    }
 
     /// <p>Returns information about a stack drift detection operation. A stack drift detection operation detects whether a stack's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. A stack is considered to have drifted if one or more of its resources have drifted. For more information on stack and resource drift, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <a>DetectStackDrift</a> to initiate a stack drift detection operation. <code>DetectStackDrift</code> returns a <code>StackDriftDetectionId</code> you can use to monitor the progress of the operation using <code>DescribeStackDriftDetectionStatus</code>. Once the drift detection operation has completed, use <a>DescribeStackResourceDrifts</a> to return drift information about the stack and its resources.</p>
     async fn describe_stack_drift_detection_status(
@@ -12181,6 +12725,16 @@ pub trait CloudFormation {
         &self,
         input: DescribeStackEventsInput,
     ) -> Result<DescribeStackEventsOutput, RusotoError<DescribeStackEventsError>>;
+
+    /// Auto-paginating version of `describe_stack_events`
+    fn describe_stack_events_pages(
+        &self,
+        input: DescribeStackEventsInput,
+    ) -> RusotoStream<StackEvent, DescribeStackEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_stack_events(state.clone())
+        })
+    }
 
     /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and Region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
     async fn describe_stack_instance(
@@ -12223,6 +12777,16 @@ pub trait CloudFormation {
         &self,
         input: DescribeStacksInput,
     ) -> Result<DescribeStacksOutput, RusotoError<DescribeStacksError>>;
+
+    /// Auto-paginating version of `describe_stacks`
+    fn describe_stacks_pages(
+        &self,
+        input: DescribeStacksInput,
+    ) -> RusotoStream<Stack, DescribeStacksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_stacks(state.clone())
+        })
+    }
 
     /// <p>Returns detailed information about a type that has been registered.</p> <p>If you specify a <code>VersionId</code>, <code>DescribeType</code> returns information about that specific type version. Otherwise, it returns information about the default type version.</p>
     async fn describe_type(
@@ -12290,11 +12854,31 @@ pub trait CloudFormation {
         input: ListChangeSetsInput,
     ) -> Result<ListChangeSetsOutput, RusotoError<ListChangeSetsError>>;
 
+    /// Auto-paginating version of `list_change_sets`
+    fn list_change_sets_pages(
+        &self,
+        input: ListChangeSetsInput,
+    ) -> RusotoStream<ChangeSetSummary, ListChangeSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_change_sets(state.clone())
+        })
+    }
+
     /// <p>Lists all exported output values in the account and Region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
     async fn list_exports(
         &self,
         input: ListExportsInput,
     ) -> Result<ListExportsOutput, RusotoError<ListExportsError>>;
+
+    /// Auto-paginating version of `list_exports`
+    fn list_exports_pages(
+        &self,
+        input: ListExportsInput,
+    ) -> RusotoStream<Export, ListExportsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_exports(state.clone())
+        })
+    }
 
     /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
     async fn list_imports(
@@ -12302,11 +12886,31 @@ pub trait CloudFormation {
         input: ListImportsInput,
     ) -> Result<ListImportsOutput, RusotoError<ListImportsError>>;
 
+    /// Auto-paginating version of `list_imports`
+    fn list_imports_pages(
+        &self,
+        input: ListImportsInput,
+    ) -> RusotoStream<String, ListImportsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_imports(state.clone())
+        })
+    }
+
     /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or Region, or that have a specific status.</p>
     async fn list_stack_instances(
         &self,
         input: ListStackInstancesInput,
     ) -> Result<ListStackInstancesOutput, RusotoError<ListStackInstancesError>>;
+
+    /// Auto-paginating version of `list_stack_instances`
+    fn list_stack_instances_pages(
+        &self,
+        input: ListStackInstancesInput,
+    ) -> RusotoStream<StackInstanceSummary, ListStackInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_stack_instances(state.clone())
+        })
+    }
 
     /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
     async fn list_stack_resources(
@@ -12314,11 +12918,31 @@ pub trait CloudFormation {
         input: ListStackResourcesInput,
     ) -> Result<ListStackResourcesOutput, RusotoError<ListStackResourcesError>>;
 
+    /// Auto-paginating version of `list_stack_resources`
+    fn list_stack_resources_pages(
+        &self,
+        input: ListStackResourcesInput,
+    ) -> RusotoStream<StackResourceSummary, ListStackResourcesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_stack_resources(state.clone())
+        })
+    }
+
     /// <p>Returns summary information about the results of a stack set operation. </p>
     async fn list_stack_set_operation_results(
         &self,
         input: ListStackSetOperationResultsInput,
     ) -> Result<ListStackSetOperationResultsOutput, RusotoError<ListStackSetOperationResultsError>>;
+
+    /// Auto-paginating version of `list_stack_set_operation_results`
+    fn list_stack_set_operation_results_pages(
+        &self,
+        input: ListStackSetOperationResultsInput,
+    ) -> RusotoStream<StackSetOperationResultSummary, ListStackSetOperationResultsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_stack_set_operation_results(state.clone())
+        })
+    }
 
     /// <p>Returns summary information about operations performed on a stack set. </p>
     async fn list_stack_set_operations(
@@ -12326,17 +12950,47 @@ pub trait CloudFormation {
         input: ListStackSetOperationsInput,
     ) -> Result<ListStackSetOperationsOutput, RusotoError<ListStackSetOperationsError>>;
 
+    /// Auto-paginating version of `list_stack_set_operations`
+    fn list_stack_set_operations_pages(
+        &self,
+        input: ListStackSetOperationsInput,
+    ) -> RusotoStream<StackSetOperationSummary, ListStackSetOperationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_stack_set_operations(state.clone())
+        })
+    }
+
     /// <p>Returns summary information about stack sets that are associated with the user.</p>
     async fn list_stack_sets(
         &self,
         input: ListStackSetsInput,
     ) -> Result<ListStackSetsOutput, RusotoError<ListStackSetsError>>;
 
+    /// Auto-paginating version of `list_stack_sets`
+    fn list_stack_sets_pages(
+        &self,
+        input: ListStackSetsInput,
+    ) -> RusotoStream<StackSetSummary, ListStackSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_stack_sets(state.clone())
+        })
+    }
+
     /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
     async fn list_stacks(
         &self,
         input: ListStacksInput,
     ) -> Result<ListStacksOutput, RusotoError<ListStacksError>>;
+
+    /// Auto-paginating version of `list_stacks`
+    fn list_stacks_pages(
+        &self,
+        input: ListStacksInput,
+    ) -> RusotoStream<StackSummary, ListStacksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_stacks(state.clone())
+        })
+    }
 
     /// <p>Returns a list of registration tokens for the specified type(s).</p>
     async fn list_type_registrations(

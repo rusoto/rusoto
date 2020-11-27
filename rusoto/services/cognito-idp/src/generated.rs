@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -100,6 +102,7 @@ pub struct AccountTakeoverRiskConfigurationType {
 }
 
 /// <p>Represents the request to add custom attributes.</p>
+/// see [CognitoIdentityProvider::add_custom_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCustomAttributesRequest {
@@ -112,10 +115,12 @@ pub struct AddCustomAttributesRequest {
 }
 
 /// <p>Represents the response from the server for the request to add custom attributes.</p>
+/// see [CognitoIdentityProvider::add_custom_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddCustomAttributesResponse {}
 
+/// see [CognitoIdentityProvider::admin_add_user_to_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminAddUserToGroupRequest {
@@ -131,6 +136,7 @@ pub struct AdminAddUserToGroupRequest {
 }
 
 /// <p>Represents the request to confirm user registration.</p>
+/// see [CognitoIdentityProvider::admin_confirm_sign_up]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminConfirmSignUpRequest {
@@ -147,6 +153,7 @@ pub struct AdminConfirmSignUpRequest {
 }
 
 /// <p>Represents the response from the server for the request to confirm registration.</p>
+/// see [CognitoIdentityProvider::admin_confirm_sign_up]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminConfirmSignUpResponse {}
@@ -169,6 +176,7 @@ pub struct AdminCreateUserConfigType {
 }
 
 /// <p>Represents the request to create a user in the specified user pool.</p>
+/// see [CognitoIdentityProvider::admin_create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminCreateUserRequest {
@@ -209,6 +217,7 @@ pub struct AdminCreateUserRequest {
 }
 
 /// <p>Represents the response from the server to the request to create the user.</p>
+/// see [CognitoIdentityProvider::admin_create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminCreateUserResponse {
@@ -219,6 +228,7 @@ pub struct AdminCreateUserResponse {
 }
 
 /// <p>Represents the request to delete user attributes as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_delete_user_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDeleteUserAttributesRequest {
@@ -234,11 +244,13 @@ pub struct AdminDeleteUserAttributesRequest {
 }
 
 /// <p>Represents the response received from the server for a request to delete user attributes.</p>
+/// see [CognitoIdentityProvider::admin_delete_user_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminDeleteUserAttributesResponse {}
 
 /// <p>Represents the request to delete a user as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDeleteUserRequest {
@@ -250,6 +262,7 @@ pub struct AdminDeleteUserRequest {
     pub username: String,
 }
 
+/// see [CognitoIdentityProvider::admin_disable_provider_for_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDisableProviderForUserRequest {
@@ -261,11 +274,13 @@ pub struct AdminDisableProviderForUserRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::admin_disable_provider_for_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminDisableProviderForUserResponse {}
 
 /// <p>Represents the request to disable any user as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_disable_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDisableUserRequest {
@@ -278,11 +293,13 @@ pub struct AdminDisableUserRequest {
 }
 
 /// <p>Represents the response received from the server to disable the user as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_disable_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminDisableUserResponse {}
 
 /// <p>Represents the request that enables the user as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_enable_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminEnableUserRequest {
@@ -295,11 +312,13 @@ pub struct AdminEnableUserRequest {
 }
 
 /// <p>Represents the response from the server for the request to enable a user as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_enable_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminEnableUserResponse {}
 
 /// <p>Sends the forgot device request, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_forget_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminForgetDeviceRequest {
@@ -315,6 +334,7 @@ pub struct AdminForgetDeviceRequest {
 }
 
 /// <p>Represents the request to get the device, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_get_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminGetDeviceRequest {
@@ -330,6 +350,7 @@ pub struct AdminGetDeviceRequest {
 }
 
 /// <p>Gets the device response, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_get_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminGetDeviceResponse {
@@ -339,6 +360,7 @@ pub struct AdminGetDeviceResponse {
 }
 
 /// <p>Represents the request to get the specified user as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_get_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminGetUserRequest {
@@ -351,6 +373,7 @@ pub struct AdminGetUserRequest {
 }
 
 /// <p>Represents the response from the server from the request to get the specified user as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_get_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminGetUserResponse {
@@ -392,6 +415,7 @@ pub struct AdminGetUserResponse {
 }
 
 /// <p>Initiates the authorization request, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_initiate_auth]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminInitiateAuthRequest {
@@ -423,6 +447,7 @@ pub struct AdminInitiateAuthRequest {
 }
 
 /// <p>Initiates the authentication response, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_initiate_auth]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminInitiateAuthResponse {
@@ -444,6 +469,7 @@ pub struct AdminInitiateAuthResponse {
     pub session: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::admin_link_provider_for_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminLinkProviderForUserRequest {
@@ -458,11 +484,13 @@ pub struct AdminLinkProviderForUserRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::admin_link_provider_for_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminLinkProviderForUserResponse {}
 
 /// <p>Represents the request to list devices, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_list_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminListDevicesRequest {
@@ -483,6 +511,7 @@ pub struct AdminListDevicesRequest {
 }
 
 /// <p>Lists the device's response, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_list_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminListDevicesResponse {
@@ -496,6 +525,7 @@ pub struct AdminListDevicesResponse {
     pub pagination_token: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::admin_list_groups_for_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminListGroupsForUserRequest {
@@ -515,6 +545,15 @@ pub struct AdminListGroupsForUserRequest {
     pub username: String,
 }
 
+impl PagedRequest for AdminListGroupsForUserRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CognitoIdentityProvider::admin_list_groups_for_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminListGroupsForUserResponse {
@@ -528,6 +567,31 @@ pub struct AdminListGroupsForUserResponse {
     pub next_token: Option<String>,
 }
 
+impl AdminListGroupsForUserResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GroupType>> {
+        Some(self.groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for AdminListGroupsForUserResponse {
+    type Item = GroupType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GroupType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CognitoIdentityProvider::admin_list_user_auth_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminListUserAuthEventsRequest {
@@ -547,6 +611,15 @@ pub struct AdminListUserAuthEventsRequest {
     pub username: String,
 }
 
+impl PagedRequest for AdminListUserAuthEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CognitoIdentityProvider::admin_list_user_auth_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminListUserAuthEventsResponse {
@@ -560,6 +633,31 @@ pub struct AdminListUserAuthEventsResponse {
     pub next_token: Option<String>,
 }
 
+impl AdminListUserAuthEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AuthEventType>> {
+        Some(self.auth_events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for AdminListUserAuthEventsResponse {
+    type Item = AuthEventType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AuthEventType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CognitoIdentityProvider::admin_remove_user_from_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminRemoveUserFromGroupRequest {
@@ -575,6 +673,7 @@ pub struct AdminRemoveUserFromGroupRequest {
 }
 
 /// <p>Represents the request to reset a user's password as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_reset_user_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminResetUserPasswordRequest {
@@ -591,11 +690,13 @@ pub struct AdminResetUserPasswordRequest {
 }
 
 /// <p>Represents the response from the server to reset a user password as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_reset_user_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminResetUserPasswordResponse {}
 
 /// <p>The request to respond to the authentication challenge, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_respond_to_auth_challenge]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminRespondToAuthChallengeRequest {
@@ -631,6 +732,7 @@ pub struct AdminRespondToAuthChallengeRequest {
 }
 
 /// <p>Responds to the authentication challenge, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_respond_to_auth_challenge]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminRespondToAuthChallengeResponse {
@@ -652,6 +754,7 @@ pub struct AdminRespondToAuthChallengeResponse {
     pub session: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::admin_set_user_mfa_preference]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminSetUserMFAPreferenceRequest {
@@ -671,10 +774,12 @@ pub struct AdminSetUserMFAPreferenceRequest {
     pub username: String,
 }
 
+/// see [CognitoIdentityProvider::admin_set_user_mfa_preference]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminSetUserMFAPreferenceResponse {}
 
+/// see [CognitoIdentityProvider::admin_set_user_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminSetUserPasswordRequest {
@@ -693,11 +798,13 @@ pub struct AdminSetUserPasswordRequest {
     pub username: String,
 }
 
+/// see [CognitoIdentityProvider::admin_set_user_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminSetUserPasswordResponse {}
 
 /// <p>You can use this parameter to set an MFA configuration that uses the SMS delivery medium.</p>
+/// see [CognitoIdentityProvider::admin_set_user_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminSetUserSettingsRequest {
@@ -713,10 +820,12 @@ pub struct AdminSetUserSettingsRequest {
 }
 
 /// <p>Represents the response from the server to set user settings as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_set_user_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminSetUserSettingsResponse {}
 
+/// see [CognitoIdentityProvider::admin_update_auth_event_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUpdateAuthEventFeedbackRequest {
@@ -734,11 +843,13 @@ pub struct AdminUpdateAuthEventFeedbackRequest {
     pub username: String,
 }
 
+/// see [CognitoIdentityProvider::admin_update_auth_event_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUpdateAuthEventFeedbackResponse {}
 
 /// <p>The request to update the device status, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_update_device_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUpdateDeviceStatusRequest {
@@ -758,11 +869,13 @@ pub struct AdminUpdateDeviceStatusRequest {
 }
 
 /// <p>The status response from the request to update the device, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_update_device_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUpdateDeviceStatusResponse {}
 
 /// <p>Represents the request to update the user's attributes as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_update_user_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUpdateUserAttributesRequest {
@@ -782,11 +895,13 @@ pub struct AdminUpdateUserAttributesRequest {
 }
 
 /// <p>Represents the response from the server for the request to update user attributes as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_update_user_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUpdateUserAttributesResponse {}
 
 /// <p>The request to sign out of all devices, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_user_global_sign_out]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUserGlobalSignOutRequest {
@@ -799,6 +914,7 @@ pub struct AdminUserGlobalSignOutRequest {
 }
 
 /// <p>The global sign-out response, as an administrator.</p>
+/// see [CognitoIdentityProvider::admin_user_global_sign_out]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUserGlobalSignOutResponse {}
@@ -838,6 +954,7 @@ pub struct AnalyticsMetadataType {
     pub analytics_endpoint_id: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::associate_software_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSoftwareTokenRequest {
@@ -851,6 +968,7 @@ pub struct AssociateSoftwareTokenRequest {
     pub session: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::associate_software_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSoftwareTokenResponse {
@@ -959,6 +1077,7 @@ pub struct ChallengeResponseType {
 }
 
 /// <p>Represents the request to change a user password.</p>
+/// see [CognitoIdentityProvider::change_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangePasswordRequest {
@@ -974,6 +1093,7 @@ pub struct ChangePasswordRequest {
 }
 
 /// <p>The response from the server to the change password request.</p>
+/// see [CognitoIdentityProvider::change_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangePasswordResponse {}
@@ -1017,6 +1137,7 @@ pub struct CompromisedCredentialsRiskConfigurationType {
 }
 
 /// <p>Confirms the device request.</p>
+/// see [CognitoIdentityProvider::confirm_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmDeviceRequest {
@@ -1037,6 +1158,7 @@ pub struct ConfirmDeviceRequest {
 }
 
 /// <p>Confirms the device response.</p>
+/// see [CognitoIdentityProvider::confirm_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmDeviceResponse {
@@ -1047,6 +1169,7 @@ pub struct ConfirmDeviceResponse {
 }
 
 /// <p>The request representing the confirmation for a password reset.</p>
+/// see [CognitoIdentityProvider::confirm_forgot_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmForgotPasswordRequest {
@@ -1081,11 +1204,13 @@ pub struct ConfirmForgotPasswordRequest {
 }
 
 /// <p>The response from the server that results from a user's request to retrieve a forgotten password.</p>
+/// see [CognitoIdentityProvider::confirm_forgot_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmForgotPasswordResponse {}
 
 /// <p>Represents the request to confirm registration of a user.</p>
+/// see [CognitoIdentityProvider::confirm_sign_up]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmSignUpRequest {
@@ -1121,6 +1246,7 @@ pub struct ConfirmSignUpRequest {
 }
 
 /// <p>Represents the response from the server for the registration confirmation.</p>
+/// see [CognitoIdentityProvider::confirm_sign_up]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmSignUpResponse {}
@@ -1147,6 +1273,7 @@ pub struct ContextDataType {
     pub server_path: String,
 }
 
+/// see [CognitoIdentityProvider::create_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
@@ -1170,6 +1297,7 @@ pub struct CreateGroupRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::create_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
@@ -1179,6 +1307,7 @@ pub struct CreateGroupResponse {
     pub group: Option<GroupType>,
 }
 
+/// see [CognitoIdentityProvider::create_identity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIdentityProviderRequest {
@@ -1204,6 +1333,7 @@ pub struct CreateIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::create_identity_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIdentityProviderResponse {
@@ -1212,6 +1342,7 @@ pub struct CreateIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
+/// see [CognitoIdentityProvider::create_resource_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceServerRequest {
@@ -1230,6 +1361,7 @@ pub struct CreateResourceServerRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::create_resource_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceServerResponse {
@@ -1239,6 +1371,7 @@ pub struct CreateResourceServerResponse {
 }
 
 /// <p>Represents the request to create the user import job.</p>
+/// see [CognitoIdentityProvider::create_user_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserImportJobRequest {
@@ -1254,6 +1387,7 @@ pub struct CreateUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to create the user import job.</p>
+/// see [CognitoIdentityProvider::create_user_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserImportJobResponse {
@@ -1264,6 +1398,7 @@ pub struct CreateUserImportJobResponse {
 }
 
 /// <p>Represents the request to create a user pool client.</p>
+/// see [CognitoIdentityProvider::create_user_pool_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolClientRequest {
@@ -1344,6 +1479,7 @@ pub struct CreateUserPoolClientRequest {
 }
 
 /// <p>Represents the response from the server to create a user pool client.</p>
+/// see [CognitoIdentityProvider::create_user_pool_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserPoolClientResponse {
@@ -1353,6 +1489,7 @@ pub struct CreateUserPoolClientResponse {
     pub user_pool_client: Option<UserPoolClientType>,
 }
 
+/// see [CognitoIdentityProvider::create_user_pool_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolDomainRequest {
@@ -1368,6 +1505,7 @@ pub struct CreateUserPoolDomainRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::create_user_pool_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserPoolDomainResponse {
@@ -1378,6 +1516,7 @@ pub struct CreateUserPoolDomainResponse {
 }
 
 /// <p>Represents the request to create a user pool.</p>
+/// see [CognitoIdentityProvider::create_user_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolRequest {
@@ -1467,6 +1606,7 @@ pub struct CreateUserPoolRequest {
 }
 
 /// <p>Represents the response from the server for the request to create a user pool.</p>
+/// see [CognitoIdentityProvider::create_user_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserPoolResponse {
@@ -1506,6 +1646,7 @@ pub struct CustomSMSLambdaVersionConfigType {
     pub lambda_version: String,
 }
 
+/// see [CognitoIdentityProvider::delete_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
@@ -1517,6 +1658,7 @@ pub struct DeleteGroupRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::delete_identity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentityProviderRequest {
@@ -1528,6 +1670,7 @@ pub struct DeleteIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::delete_resource_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceServerRequest {
@@ -1540,6 +1683,7 @@ pub struct DeleteResourceServerRequest {
 }
 
 /// <p>Represents the request to delete user attributes.</p>
+/// see [CognitoIdentityProvider::delete_user_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserAttributesRequest {
@@ -1552,11 +1696,13 @@ pub struct DeleteUserAttributesRequest {
 }
 
 /// <p>Represents the response from the server to delete user attributes.</p>
+/// see [CognitoIdentityProvider::delete_user_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserAttributesResponse {}
 
 /// <p>Represents the request to delete a user pool client.</p>
+/// see [CognitoIdentityProvider::delete_user_pool_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPoolClientRequest {
@@ -1568,6 +1714,7 @@ pub struct DeleteUserPoolClientRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::delete_user_pool_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPoolDomainRequest {
@@ -1579,11 +1726,13 @@ pub struct DeleteUserPoolDomainRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::delete_user_pool_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserPoolDomainResponse {}
 
 /// <p>Represents the request to delete a user pool.</p>
+/// see [CognitoIdentityProvider::delete_user_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPoolRequest {
@@ -1593,6 +1742,7 @@ pub struct DeleteUserPoolRequest {
 }
 
 /// <p>Represents the request to delete a user.</p>
+/// see [CognitoIdentityProvider::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -1601,6 +1751,7 @@ pub struct DeleteUserRequest {
     pub access_token: String,
 }
 
+/// see [CognitoIdentityProvider::describe_identity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityProviderRequest {
@@ -1612,6 +1763,7 @@ pub struct DescribeIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::describe_identity_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityProviderResponse {
@@ -1620,6 +1772,7 @@ pub struct DescribeIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
+/// see [CognitoIdentityProvider::describe_resource_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceServerRequest {
@@ -1631,6 +1784,7 @@ pub struct DescribeResourceServerRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::describe_resource_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceServerResponse {
@@ -1639,6 +1793,7 @@ pub struct DescribeResourceServerResponse {
     pub resource_server: ResourceServerType,
 }
 
+/// see [CognitoIdentityProvider::describe_risk_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRiskConfigurationRequest {
@@ -1651,6 +1806,7 @@ pub struct DescribeRiskConfigurationRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::describe_risk_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRiskConfigurationResponse {
@@ -1660,6 +1816,7 @@ pub struct DescribeRiskConfigurationResponse {
 }
 
 /// <p>Represents the request to describe the user import job.</p>
+/// see [CognitoIdentityProvider::describe_user_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserImportJobRequest {
@@ -1672,6 +1829,7 @@ pub struct DescribeUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to describe the user import job.</p>
+/// see [CognitoIdentityProvider::describe_user_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserImportJobResponse {
@@ -1682,6 +1840,7 @@ pub struct DescribeUserImportJobResponse {
 }
 
 /// <p>Represents the request to describe a user pool client.</p>
+/// see [CognitoIdentityProvider::describe_user_pool_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserPoolClientRequest {
@@ -1694,6 +1853,7 @@ pub struct DescribeUserPoolClientRequest {
 }
 
 /// <p>Represents the response from the server from a request to describe the user pool client.</p>
+/// see [CognitoIdentityProvider::describe_user_pool_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserPoolClientResponse {
@@ -1703,6 +1863,7 @@ pub struct DescribeUserPoolClientResponse {
     pub user_pool_client: Option<UserPoolClientType>,
 }
 
+/// see [CognitoIdentityProvider::describe_user_pool_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserPoolDomainRequest {
@@ -1711,6 +1872,7 @@ pub struct DescribeUserPoolDomainRequest {
     pub domain: String,
 }
 
+/// see [CognitoIdentityProvider::describe_user_pool_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserPoolDomainResponse {
@@ -1721,6 +1883,7 @@ pub struct DescribeUserPoolDomainResponse {
 }
 
 /// <p>Represents the request to describe the user pool.</p>
+/// see [CognitoIdentityProvider::describe_user_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserPoolRequest {
@@ -1730,6 +1893,7 @@ pub struct DescribeUserPoolRequest {
 }
 
 /// <p>Represents the response to describe the user pool.</p>
+/// see [CognitoIdentityProvider::describe_user_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserPoolResponse {
@@ -1916,6 +2080,7 @@ pub struct EventRiskType {
 }
 
 /// <p>Represents the request to forget the device.</p>
+/// see [CognitoIdentityProvider::forget_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForgetDeviceRequest {
@@ -1929,6 +2094,7 @@ pub struct ForgetDeviceRequest {
 }
 
 /// <p>Represents the request to reset a user's password.</p>
+/// see [CognitoIdentityProvider::forgot_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForgotPasswordRequest {
@@ -1957,6 +2123,7 @@ pub struct ForgotPasswordRequest {
 }
 
 /// <p>Respresents the response from the server regarding the request to reset a password.</p>
+/// see [CognitoIdentityProvider::forgot_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ForgotPasswordResponse {
@@ -1967,6 +2134,7 @@ pub struct ForgotPasswordResponse {
 }
 
 /// <p>Represents the request to get the header information for the .csv file for the user import job.</p>
+/// see [CognitoIdentityProvider::get_csv_header]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCSVHeaderRequest {
@@ -1976,6 +2144,7 @@ pub struct GetCSVHeaderRequest {
 }
 
 /// <p>Represents the response from the server to the request to get the header information for the .csv file for the user import job.</p>
+/// see [CognitoIdentityProvider::get_csv_header]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCSVHeaderResponse {
@@ -1990,6 +2159,7 @@ pub struct GetCSVHeaderResponse {
 }
 
 /// <p>Represents the request to get the device.</p>
+/// see [CognitoIdentityProvider::get_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
@@ -2003,6 +2173,7 @@ pub struct GetDeviceRequest {
 }
 
 /// <p>Gets the device response.</p>
+/// see [CognitoIdentityProvider::get_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceResponse {
@@ -2011,6 +2182,7 @@ pub struct GetDeviceResponse {
     pub device: DeviceType,
 }
 
+/// see [CognitoIdentityProvider::get_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
@@ -2022,6 +2194,7 @@ pub struct GetGroupRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::get_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResponse {
@@ -2031,6 +2204,7 @@ pub struct GetGroupResponse {
     pub group: Option<GroupType>,
 }
 
+/// see [CognitoIdentityProvider::get_identity_provider_by_identifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityProviderByIdentifierRequest {
@@ -2042,6 +2216,7 @@ pub struct GetIdentityProviderByIdentifierRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::get_identity_provider_by_identifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdentityProviderByIdentifierResponse {
@@ -2051,6 +2226,7 @@ pub struct GetIdentityProviderByIdentifierResponse {
 }
 
 /// <p>Request to get a signing certificate from Cognito.</p>
+/// see [CognitoIdentityProvider::get_signing_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSigningCertificateRequest {
@@ -2060,6 +2236,7 @@ pub struct GetSigningCertificateRequest {
 }
 
 /// <p>Response from Cognito for a signing certificate request.</p>
+/// see [CognitoIdentityProvider::get_signing_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSigningCertificateResponse {
@@ -2069,6 +2246,7 @@ pub struct GetSigningCertificateResponse {
     pub certificate: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::get_ui_customization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUICustomizationRequest {
@@ -2081,6 +2259,7 @@ pub struct GetUICustomizationRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::get_ui_customization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUICustomizationResponse {
@@ -2090,6 +2269,7 @@ pub struct GetUICustomizationResponse {
 }
 
 /// <p>Represents the request to get user attribute verification.</p>
+/// see [CognitoIdentityProvider::get_user_attribute_verification_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserAttributeVerificationCodeRequest {
@@ -2106,6 +2286,7 @@ pub struct GetUserAttributeVerificationCodeRequest {
 }
 
 /// <p>The verification code response returned by the server response to get the user attribute verification code.</p>
+/// see [CognitoIdentityProvider::get_user_attribute_verification_code]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserAttributeVerificationCodeResponse {
@@ -2115,6 +2296,7 @@ pub struct GetUserAttributeVerificationCodeResponse {
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
 }
 
+/// see [CognitoIdentityProvider::get_user_pool_mfa_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserPoolMfaConfigRequest {
@@ -2123,6 +2305,7 @@ pub struct GetUserPoolMfaConfigRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::get_user_pool_mfa_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserPoolMfaConfigResponse {
@@ -2141,6 +2324,7 @@ pub struct GetUserPoolMfaConfigResponse {
 }
 
 /// <p>Represents the request to get information about the user.</p>
+/// see [CognitoIdentityProvider::get_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserRequest {
@@ -2150,6 +2334,7 @@ pub struct GetUserRequest {
 }
 
 /// <p>Represents the response from the server from the request to get information about the user.</p>
+/// see [CognitoIdentityProvider::get_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserResponse {
@@ -2174,6 +2359,7 @@ pub struct GetUserResponse {
 }
 
 /// <p>Represents the request to sign out all devices.</p>
+/// see [CognitoIdentityProvider::global_sign_out]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GlobalSignOutRequest {
@@ -2183,6 +2369,7 @@ pub struct GlobalSignOutRequest {
 }
 
 /// <p>The response to the request to sign out all devices.</p>
+/// see [CognitoIdentityProvider::global_sign_out]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GlobalSignOutResponse {}
@@ -2274,6 +2461,7 @@ pub struct IdentityProviderType {
 }
 
 /// <p>Initiates the authentication request.</p>
+/// see [CognitoIdentityProvider::initiate_auth]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateAuthRequest {
@@ -2302,6 +2490,7 @@ pub struct InitiateAuthRequest {
 }
 
 /// <p>Initiates the authentication response.</p>
+/// see [CognitoIdentityProvider::initiate_auth]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateAuthResponse {
@@ -2381,6 +2570,7 @@ pub struct LambdaConfigType {
 }
 
 /// <p>Represents the request to list the devices.</p>
+/// see [CognitoIdentityProvider::list_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
@@ -2398,6 +2588,7 @@ pub struct ListDevicesRequest {
 }
 
 /// <p>Represents the response to list devices.</p>
+/// see [CognitoIdentityProvider::list_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
@@ -2411,6 +2602,7 @@ pub struct ListDevicesResponse {
     pub pagination_token: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::list_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
@@ -2427,6 +2619,15 @@ pub struct ListGroupsRequest {
     pub user_pool_id: String,
 }
 
+impl PagedRequest for ListGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CognitoIdentityProvider::list_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
@@ -2440,6 +2641,31 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GroupType>> {
+        Some(self.groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGroupsResponse {
+    type Item = GroupType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GroupType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CognitoIdentityProvider::list_identity_providers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentityProvidersRequest {
@@ -2456,6 +2682,15 @@ pub struct ListIdentityProvidersRequest {
     pub user_pool_id: String,
 }
 
+impl PagedRequest for ListIdentityProvidersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CognitoIdentityProvider::list_identity_providers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentityProvidersResponse {
@@ -2468,6 +2703,31 @@ pub struct ListIdentityProvidersResponse {
     pub providers: Vec<ProviderDescription>,
 }
 
+impl ListIdentityProvidersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ProviderDescription>> {
+        Some(self.providers.clone())
+    }
+}
+
+impl PagedOutput for ListIdentityProvidersResponse {
+    type Item = ProviderDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProviderDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CognitoIdentityProvider::list_resource_servers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceServersRequest {
@@ -2484,6 +2744,15 @@ pub struct ListResourceServersRequest {
     pub user_pool_id: String,
 }
 
+impl PagedRequest for ListResourceServersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CognitoIdentityProvider::list_resource_servers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceServersResponse {
@@ -2496,6 +2765,31 @@ pub struct ListResourceServersResponse {
     pub resource_servers: Vec<ResourceServerType>,
 }
 
+impl ListResourceServersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceServerType>> {
+        Some(self.resource_servers.clone())
+    }
+}
+
+impl PagedOutput for ListResourceServersResponse {
+    type Item = ResourceServerType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceServerType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CognitoIdentityProvider::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2504,6 +2798,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [CognitoIdentityProvider::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2514,6 +2809,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Represents the request to list the user import jobs.</p>
+/// see [CognitoIdentityProvider::list_user_import_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserImportJobsRequest {
@@ -2530,6 +2826,7 @@ pub struct ListUserImportJobsRequest {
 }
 
 /// <p>Represents the response from the server to the request to list the user import jobs.</p>
+/// see [CognitoIdentityProvider::list_user_import_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserImportJobsResponse {
@@ -2544,6 +2841,7 @@ pub struct ListUserImportJobsResponse {
 }
 
 /// <p>Represents the request to list the user pool clients.</p>
+/// see [CognitoIdentityProvider::list_user_pool_clients]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserPoolClientsRequest {
@@ -2560,7 +2858,16 @@ pub struct ListUserPoolClientsRequest {
     pub user_pool_id: String,
 }
 
+impl PagedRequest for ListUserPoolClientsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the response from the server that lists user pool clients.</p>
+/// see [CognitoIdentityProvider::list_user_pool_clients]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserPoolClientsResponse {
@@ -2574,7 +2881,32 @@ pub struct ListUserPoolClientsResponse {
     pub user_pool_clients: Option<Vec<UserPoolClientDescription>>,
 }
 
+impl ListUserPoolClientsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UserPoolClientDescription>> {
+        Some(self.user_pool_clients.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUserPoolClientsResponse {
+    type Item = UserPoolClientDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserPoolClientDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the request to list user pools.</p>
+/// see [CognitoIdentityProvider::list_user_pools]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserPoolsRequest {
@@ -2587,7 +2919,16 @@ pub struct ListUserPoolsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListUserPoolsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the response to list user pools.</p>
+/// see [CognitoIdentityProvider::list_user_pools]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserPoolsResponse {
@@ -2601,6 +2942,31 @@ pub struct ListUserPoolsResponse {
     pub user_pools: Option<Vec<UserPoolDescriptionType>>,
 }
 
+impl ListUserPoolsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UserPoolDescriptionType>> {
+        Some(self.user_pools.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUserPoolsResponse {
+    type Item = UserPoolDescriptionType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserPoolDescriptionType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CognitoIdentityProvider::list_users_in_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersInGroupRequest {
@@ -2620,6 +2986,15 @@ pub struct ListUsersInGroupRequest {
     pub user_pool_id: String,
 }
 
+impl PagedRequest for ListUsersInGroupRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CognitoIdentityProvider::list_users_in_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersInGroupResponse {
@@ -2633,7 +3008,32 @@ pub struct ListUsersInGroupResponse {
     pub users: Option<Vec<UserType>>,
 }
 
+impl ListUsersInGroupResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UserType>> {
+        Some(self.users.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUsersInGroupResponse {
+    type Item = UserType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the request to list users.</p>
+/// see [CognitoIdentityProvider::list_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -2658,7 +3058,16 @@ pub struct ListUsersRequest {
     pub user_pool_id: String,
 }
 
+impl PagedRequest for ListUsersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.pagination_token = key;
+        self
+    }
+}
+
 /// <p>The response from the request to list users.</p>
+/// see [CognitoIdentityProvider::list_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
@@ -2670,6 +3079,30 @@ pub struct ListUsersResponse {
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<UserType>>,
+}
+
+impl ListUsersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UserType>> {
+        Some(self.users.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUsersResponse {
+    type Item = UserType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.pagination_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p> <i>This data type is no longer supported.</i> You can use it only for SMS MFA configurations. You can't use it for TOTP software token MFA configurations.</p>
@@ -2854,6 +3287,7 @@ pub struct RecoveryOptionType {
 }
 
 /// <p>Represents the request to resend the confirmation code.</p>
+/// see [CognitoIdentityProvider::resend_confirmation_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResendConfirmationCodeRequest {
@@ -2882,6 +3316,7 @@ pub struct ResendConfirmationCodeRequest {
 }
 
 /// <p>The response from the server when the Amazon Cognito Your User Pools service makes the request to resend a confirmation code.</p>
+/// see [CognitoIdentityProvider::resend_confirmation_code]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResendConfirmationCodeResponse {
@@ -2925,6 +3360,7 @@ pub struct ResourceServerType {
 }
 
 /// <p>The request to respond to an authentication challenge.</p>
+/// see [CognitoIdentityProvider::respond_to_auth_challenge]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondToAuthChallengeRequest {
@@ -2957,6 +3393,7 @@ pub struct RespondToAuthChallengeRequest {
 }
 
 /// <p>The response to respond to the authentication challenge.</p>
+/// see [CognitoIdentityProvider::respond_to_auth_challenge]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RespondToAuthChallengeResponse {
@@ -3069,6 +3506,7 @@ pub struct SchemaAttributeType {
     pub string_attribute_constraints: Option<StringAttributeConstraintsType>,
 }
 
+/// see [CognitoIdentityProvider::set_risk_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetRiskConfigurationRequest {
@@ -3094,6 +3532,7 @@ pub struct SetRiskConfigurationRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::set_risk_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetRiskConfigurationResponse {
@@ -3102,6 +3541,7 @@ pub struct SetRiskConfigurationResponse {
     pub risk_configuration: RiskConfigurationType,
 }
 
+/// see [CognitoIdentityProvider::set_ui_customization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUICustomizationRequest {
@@ -3127,6 +3567,7 @@ pub struct SetUICustomizationRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::set_ui_customization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUICustomizationResponse {
@@ -3135,6 +3576,7 @@ pub struct SetUICustomizationResponse {
     pub ui_customization: UICustomizationType,
 }
 
+/// see [CognitoIdentityProvider::set_user_mfa_preference]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUserMFAPreferenceRequest {
@@ -3151,10 +3593,12 @@ pub struct SetUserMFAPreferenceRequest {
     pub software_token_mfa_settings: Option<SoftwareTokenMfaSettingsType>,
 }
 
+/// see [CognitoIdentityProvider::set_user_mfa_preference]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUserMFAPreferenceResponse {}
 
+/// see [CognitoIdentityProvider::set_user_pool_mfa_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUserPoolMfaConfigRequest {
@@ -3175,6 +3619,7 @@ pub struct SetUserPoolMfaConfigRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::set_user_pool_mfa_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUserPoolMfaConfigResponse {
@@ -3193,6 +3638,7 @@ pub struct SetUserPoolMfaConfigResponse {
 }
 
 /// <p>Represents the request to set user settings.</p>
+/// see [CognitoIdentityProvider::set_user_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUserSettingsRequest {
@@ -3205,11 +3651,13 @@ pub struct SetUserSettingsRequest {
 }
 
 /// <p>The response from the server for a set user settings request.</p>
+/// see [CognitoIdentityProvider::set_user_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUserSettingsResponse {}
 
 /// <p>Represents the request to register a user.</p>
+/// see [CognitoIdentityProvider::sign_up]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignUpRequest {
@@ -3249,6 +3697,7 @@ pub struct SignUpRequest {
 }
 
 /// <p>The response from the server for a registration request.</p>
+/// see [CognitoIdentityProvider::sign_up]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignUpResponse {
@@ -3313,6 +3762,7 @@ pub struct SoftwareTokenMfaSettingsType {
 }
 
 /// <p>Represents the request to start the user import job.</p>
+/// see [CognitoIdentityProvider::start_user_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartUserImportJobRequest {
@@ -3325,6 +3775,7 @@ pub struct StartUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to start the user import job.</p>
+/// see [CognitoIdentityProvider::start_user_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartUserImportJobResponse {
@@ -3335,6 +3786,7 @@ pub struct StartUserImportJobResponse {
 }
 
 /// <p>Represents the request to stop the user import job.</p>
+/// see [CognitoIdentityProvider::stop_user_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopUserImportJobRequest {
@@ -3347,6 +3799,7 @@ pub struct StopUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to stop the user import job.</p>
+/// see [CognitoIdentityProvider::stop_user_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopUserImportJobResponse {
@@ -3369,6 +3822,7 @@ pub struct StringAttributeConstraintsType {
     pub min_length: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -3380,6 +3834,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [CognitoIdentityProvider::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -3435,6 +3890,7 @@ pub struct UICustomizationType {
     pub user_pool_id: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3446,10 +3902,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CognitoIdentityProvider::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [CognitoIdentityProvider::update_auth_event_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthEventFeedbackRequest {
@@ -3470,11 +3928,13 @@ pub struct UpdateAuthEventFeedbackRequest {
     pub username: String,
 }
 
+/// see [CognitoIdentityProvider::update_auth_event_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthEventFeedbackResponse {}
 
 /// <p>Represents the request to update the device status.</p>
+/// see [CognitoIdentityProvider::update_device_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceStatusRequest {
@@ -3491,10 +3951,12 @@ pub struct UpdateDeviceStatusRequest {
 }
 
 /// <p>The response to the request to update the device status.</p>
+/// see [CognitoIdentityProvider::update_device_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceStatusResponse {}
 
+/// see [CognitoIdentityProvider::update_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
@@ -3518,6 +3980,7 @@ pub struct UpdateGroupRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::update_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResponse {
@@ -3527,6 +3990,7 @@ pub struct UpdateGroupResponse {
     pub group: Option<GroupType>,
 }
 
+/// see [CognitoIdentityProvider::update_identity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIdentityProviderRequest {
@@ -3550,6 +4014,7 @@ pub struct UpdateIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::update_identity_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIdentityProviderResponse {
@@ -3558,6 +4023,7 @@ pub struct UpdateIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
+/// see [CognitoIdentityProvider::update_resource_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceServerRequest {
@@ -3576,6 +4042,7 @@ pub struct UpdateResourceServerRequest {
     pub user_pool_id: String,
 }
 
+/// see [CognitoIdentityProvider::update_resource_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceServerResponse {
@@ -3585,6 +4052,7 @@ pub struct UpdateResourceServerResponse {
 }
 
 /// <p>Represents the request to update user attributes.</p>
+/// see [CognitoIdentityProvider::update_user_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserAttributesRequest {
@@ -3601,6 +4069,7 @@ pub struct UpdateUserAttributesRequest {
 }
 
 /// <p>Represents the response from the server for the request to update user attributes.</p>
+/// see [CognitoIdentityProvider::update_user_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserAttributesResponse {
@@ -3611,6 +4080,7 @@ pub struct UpdateUserAttributesResponse {
 }
 
 /// <p>Represents the request to update the user pool client.</p>
+/// see [CognitoIdentityProvider::update_user_pool_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolClientRequest {
@@ -3691,6 +4161,7 @@ pub struct UpdateUserPoolClientRequest {
 }
 
 /// <p>Represents the response from the server to the request to update the user pool client.</p>
+/// see [CognitoIdentityProvider::update_user_pool_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserPoolClientResponse {
@@ -3701,6 +4172,7 @@ pub struct UpdateUserPoolClientResponse {
 }
 
 /// <p>The UpdateUserPoolDomain request input.</p>
+/// see [CognitoIdentityProvider::update_user_pool_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolDomainRequest {
@@ -3716,6 +4188,7 @@ pub struct UpdateUserPoolDomainRequest {
 }
 
 /// <p>The UpdateUserPoolDomain response output.</p>
+/// see [CognitoIdentityProvider::update_user_pool_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserPoolDomainResponse {
@@ -3726,6 +4199,7 @@ pub struct UpdateUserPoolDomainResponse {
 }
 
 /// <p>Represents the request to update the user pool.</p>
+/// see [CognitoIdentityProvider::update_user_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolRequest {
@@ -3799,6 +4273,7 @@ pub struct UpdateUserPoolRequest {
 }
 
 /// <p>Represents the response from the server when you make a request to update the user pool.</p>
+/// see [CognitoIdentityProvider::update_user_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserPoolResponse {}
@@ -4231,6 +4706,7 @@ pub struct VerificationMessageTemplateType {
     pub sms_message: Option<String>,
 }
 
+/// see [CognitoIdentityProvider::verify_software_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifySoftwareTokenRequest {
@@ -4251,6 +4727,7 @@ pub struct VerifySoftwareTokenRequest {
     pub user_code: String,
 }
 
+/// see [CognitoIdentityProvider::verify_software_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VerifySoftwareTokenResponse {
@@ -4265,6 +4742,7 @@ pub struct VerifySoftwareTokenResponse {
 }
 
 /// <p>Represents the request to verify user attributes.</p>
+/// see [CognitoIdentityProvider::verify_user_attribute]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyUserAttributeRequest {
@@ -4280,6 +4758,7 @@ pub struct VerifyUserAttributeRequest {
 }
 
 /// <p>A container representing the response from the server from the request to verify user attributes.</p>
+/// see [CognitoIdentityProvider::verify_user_attribute]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VerifyUserAttributeResponse {}
@@ -12214,7 +12693,7 @@ impl fmt::Display for VerifyUserAttributeError {
 impl Error for VerifyUserAttributeError {}
 /// Trait representing the capabilities of the Amazon Cognito Identity Provider API. Amazon Cognito Identity Provider clients implement this trait.
 #[async_trait]
-pub trait CognitoIdentityProvider {
+pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     /// <p>Adds additional user attributes to the user pool schema.</p>
     async fn add_custom_attributes(
         &self,
@@ -12311,11 +12790,31 @@ pub trait CognitoIdentityProvider {
         input: AdminListGroupsForUserRequest,
     ) -> Result<AdminListGroupsForUserResponse, RusotoError<AdminListGroupsForUserError>>;
 
+    /// Auto-paginating version of `admin_list_groups_for_user`
+    fn admin_list_groups_for_user_pages(
+        &self,
+        input: AdminListGroupsForUserRequest,
+    ) -> RusotoStream<GroupType, AdminListGroupsForUserError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.admin_list_groups_for_user(state.clone())
+        })
+    }
+
     /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
     async fn admin_list_user_auth_events(
         &self,
         input: AdminListUserAuthEventsRequest,
     ) -> Result<AdminListUserAuthEventsResponse, RusotoError<AdminListUserAuthEventsError>>;
+
+    /// Auto-paginating version of `admin_list_user_auth_events`
+    fn admin_list_user_auth_events_pages(
+        &self,
+        input: AdminListUserAuthEventsRequest,
+    ) -> RusotoStream<AuthEventType, AdminListUserAuthEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.admin_list_user_auth_events(state.clone())
+        })
+    }
 
     /// <p>Removes the specified user from the specified group.</p> <p>Calling this action requires developer credentials.</p>
     async fn admin_remove_user_from_group(
@@ -12635,17 +13134,47 @@ pub trait CognitoIdentityProvider {
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
+    /// Auto-paginating version of `list_groups`
+    fn list_groups_pages(
+        &self,
+        input: ListGroupsRequest,
+    ) -> RusotoStream<GroupType, ListGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_groups(state.clone())
+        })
+    }
+
     /// <p>Lists information about all identity providers for a user pool.</p>
     async fn list_identity_providers(
         &self,
         input: ListIdentityProvidersRequest,
     ) -> Result<ListIdentityProvidersResponse, RusotoError<ListIdentityProvidersError>>;
 
+    /// Auto-paginating version of `list_identity_providers`
+    fn list_identity_providers_pages(
+        &self,
+        input: ListIdentityProvidersRequest,
+    ) -> RusotoStream<ProviderDescription, ListIdentityProvidersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_identity_providers(state.clone())
+        })
+    }
+
     /// <p>Lists the resource servers for a user pool.</p>
     async fn list_resource_servers(
         &self,
         input: ListResourceServersRequest,
     ) -> Result<ListResourceServersResponse, RusotoError<ListResourceServersError>>;
+
+    /// Auto-paginating version of `list_resource_servers`
+    fn list_resource_servers_pages(
+        &self,
+        input: ListResourceServersRequest,
+    ) -> RusotoStream<ResourceServerType, ListResourceServersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resource_servers(state.clone())
+        })
+    }
 
     /// <p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
     async fn list_tags_for_resource(
@@ -12665,11 +13194,31 @@ pub trait CognitoIdentityProvider {
         input: ListUserPoolClientsRequest,
     ) -> Result<ListUserPoolClientsResponse, RusotoError<ListUserPoolClientsError>>;
 
+    /// Auto-paginating version of `list_user_pool_clients`
+    fn list_user_pool_clients_pages(
+        &self,
+        input: ListUserPoolClientsRequest,
+    ) -> RusotoStream<UserPoolClientDescription, ListUserPoolClientsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_user_pool_clients(state.clone())
+        })
+    }
+
     /// <p>Lists the user pools associated with an AWS account.</p>
     async fn list_user_pools(
         &self,
         input: ListUserPoolsRequest,
     ) -> Result<ListUserPoolsResponse, RusotoError<ListUserPoolsError>>;
+
+    /// Auto-paginating version of `list_user_pools`
+    fn list_user_pools_pages(
+        &self,
+        input: ListUserPoolsRequest,
+    ) -> RusotoStream<UserPoolDescriptionType, ListUserPoolsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_user_pools(state.clone())
+        })
+    }
 
     /// <p>Lists the users in the Amazon Cognito user pool.</p>
     async fn list_users(
@@ -12677,11 +13226,28 @@ pub trait CognitoIdentityProvider {
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
+    /// Auto-paginating version of `list_users`
+    fn list_users_pages(&self, input: ListUsersRequest) -> RusotoStream<UserType, ListUsersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_users(state.clone())
+        })
+    }
+
     /// <p>Lists the users in the specified group.</p> <p>Calling this action requires developer credentials.</p>
     async fn list_users_in_group(
         &self,
         input: ListUsersInGroupRequest,
     ) -> Result<ListUsersInGroupResponse, RusotoError<ListUsersInGroupError>>;
+
+    /// Auto-paginating version of `list_users_in_group`
+    fn list_users_in_group_pages(
+        &self,
+        input: ListUsersInGroupRequest,
+    ) -> RusotoStream<UserType, ListUsersInGroupError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_users_in_group(state.clone())
+        })
+    }
 
     /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>
     async fn resend_confirmation_code(

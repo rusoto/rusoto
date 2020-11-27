@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl DirectoryServiceClient {
 }
 
 use serde_json;
+/// see [DirectoryService::accept_shared_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptSharedDirectoryRequest {
@@ -58,6 +61,7 @@ pub struct AcceptSharedDirectoryRequest {
     pub shared_directory_id: String,
 }
 
+/// see [DirectoryService::accept_shared_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptSharedDirectoryResult {
@@ -67,6 +71,7 @@ pub struct AcceptSharedDirectoryResult {
     pub shared_directory: Option<SharedDirectory>,
 }
 
+/// see [DirectoryService::add_ip_routes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddIpRoutesRequest {
@@ -82,10 +87,12 @@ pub struct AddIpRoutesRequest {
     pub update_security_group_for_directory_controllers: Option<bool>,
 }
 
+/// see [DirectoryService::add_ip_routes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddIpRoutesResult {}
 
+/// see [DirectoryService::add_region]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddRegionRequest {
@@ -99,10 +106,12 @@ pub struct AddRegionRequest {
     pub vpc_settings: DirectoryVpcSettings,
 }
 
+/// see [DirectoryService::add_region]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddRegionResult {}
 
+/// see [DirectoryService::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceRequest {
@@ -114,6 +123,7 @@ pub struct AddTagsToResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [DirectoryService::add_tags_to_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResult {}
@@ -131,6 +141,7 @@ pub struct Attribute {
     pub value: Option<String>,
 }
 
+/// see [DirectoryService::cancel_schema_extension]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSchemaExtensionRequest {
@@ -142,6 +153,7 @@ pub struct CancelSchemaExtensionRequest {
     pub schema_extension_id: String,
 }
 
+/// see [DirectoryService::cancel_schema_extension]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSchemaExtensionResult {}
@@ -256,6 +268,7 @@ pub struct ConditionalForwarder {
 }
 
 /// <p>Contains the inputs for the <a>ConnectDirectory</a> operation.</p>
+/// see [DirectoryService::connect_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectDirectoryRequest {
@@ -286,6 +299,7 @@ pub struct ConnectDirectoryRequest {
 }
 
 /// <p>Contains the results of the <a>ConnectDirectory</a> operation.</p>
+/// see [DirectoryService::connect_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConnectDirectoryResult {
@@ -296,6 +310,7 @@ pub struct ConnectDirectoryResult {
 }
 
 /// <p>Contains the inputs for the <a>CreateAlias</a> operation.</p>
+/// see [DirectoryService::create_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
@@ -308,6 +323,7 @@ pub struct CreateAliasRequest {
 }
 
 /// <p>Contains the results of the <a>CreateAlias</a> operation.</p>
+/// see [DirectoryService::create_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAliasResult {
@@ -322,6 +338,7 @@ pub struct CreateAliasResult {
 }
 
 /// <p>Contains the inputs for the <a>CreateComputer</a> operation.</p>
+/// see [DirectoryService::create_computer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComputerRequest {
@@ -345,6 +362,7 @@ pub struct CreateComputerRequest {
 }
 
 /// <p>Contains the results for the <a>CreateComputer</a> operation.</p>
+/// see [DirectoryService::create_computer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateComputerResult {
@@ -355,6 +373,7 @@ pub struct CreateComputerResult {
 }
 
 /// <p>Initiates the creation of a conditional forwarder for your AWS Directory Service for Microsoft Active Directory. Conditional forwarders are required in order to set up a trust relationship with another domain.</p>
+/// see [DirectoryService::create_conditional_forwarder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConditionalForwarderRequest {
@@ -370,11 +389,13 @@ pub struct CreateConditionalForwarderRequest {
 }
 
 /// <p>The result of a CreateConditinalForwarder request.</p>
+/// see [DirectoryService::create_conditional_forwarder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConditionalForwarderResult {}
 
 /// <p>Contains the inputs for the <a>CreateDirectory</a> operation. </p>
+/// see [DirectoryService::create_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectoryRequest {
@@ -406,6 +427,7 @@ pub struct CreateDirectoryRequest {
 }
 
 /// <p>Contains the results of the <a>CreateDirectory</a> operation.</p>
+/// see [DirectoryService::create_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectoryResult {
@@ -415,6 +437,7 @@ pub struct CreateDirectoryResult {
     pub directory_id: Option<String>,
 }
 
+/// see [DirectoryService::create_log_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogSubscriptionRequest {
@@ -426,11 +449,13 @@ pub struct CreateLogSubscriptionRequest {
     pub log_group_name: String,
 }
 
+/// see [DirectoryService::create_log_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLogSubscriptionResult {}
 
 /// <p>Creates an AWS Managed Microsoft AD directory.</p>
+/// see [DirectoryService::create_microsoft_ad]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMicrosoftADRequest {
@@ -462,6 +487,7 @@ pub struct CreateMicrosoftADRequest {
 }
 
 /// <p>Result of a CreateMicrosoftAD request.</p>
+/// see [DirectoryService::create_microsoft_ad]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMicrosoftADResult {
@@ -472,6 +498,7 @@ pub struct CreateMicrosoftADResult {
 }
 
 /// <p>Contains the inputs for the <a>CreateSnapshot</a> operation.</p>
+/// see [DirectoryService::create_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotRequest {
@@ -485,6 +512,7 @@ pub struct CreateSnapshotRequest {
 }
 
 /// <p>Contains the results of the <a>CreateSnapshot</a> operation.</p>
+/// see [DirectoryService::create_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSnapshotResult {
@@ -495,6 +523,7 @@ pub struct CreateSnapshotResult {
 }
 
 /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your AWS Managed Microsoft AD directory, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between an AWS Managed Microsoft AD directory and an external domain.</p>
+/// see [DirectoryService::create_trust]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrustRequest {
@@ -525,6 +554,7 @@ pub struct CreateTrustRequest {
 }
 
 /// <p>The result of a CreateTrust request.</p>
+/// see [DirectoryService::create_trust]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTrustResult {
@@ -535,6 +565,7 @@ pub struct CreateTrustResult {
 }
 
 /// <p>Deletes a conditional forwarder.</p>
+/// see [DirectoryService::delete_conditional_forwarder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConditionalForwarderRequest {
@@ -547,11 +578,13 @@ pub struct DeleteConditionalForwarderRequest {
 }
 
 /// <p>The result of a DeleteConditionalForwarder request.</p>
+/// see [DirectoryService::delete_conditional_forwarder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConditionalForwarderResult {}
 
 /// <p>Contains the inputs for the <a>DeleteDirectory</a> operation.</p>
+/// see [DirectoryService::delete_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectoryRequest {
@@ -561,6 +594,7 @@ pub struct DeleteDirectoryRequest {
 }
 
 /// <p>Contains the results of the <a>DeleteDirectory</a> operation.</p>
+/// see [DirectoryService::delete_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectoryResult {
@@ -570,6 +604,7 @@ pub struct DeleteDirectoryResult {
     pub directory_id: Option<String>,
 }
 
+/// see [DirectoryService::delete_log_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogSubscriptionRequest {
@@ -578,11 +613,13 @@ pub struct DeleteLogSubscriptionRequest {
     pub directory_id: String,
 }
 
+/// see [DirectoryService::delete_log_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLogSubscriptionResult {}
 
 /// <p>Contains the inputs for the <a>DeleteSnapshot</a> operation.</p>
+/// see [DirectoryService::delete_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotRequest {
@@ -592,6 +629,7 @@ pub struct DeleteSnapshotRequest {
 }
 
 /// <p>Contains the results of the <a>DeleteSnapshot</a> operation.</p>
+/// see [DirectoryService::delete_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSnapshotResult {
@@ -602,6 +640,7 @@ pub struct DeleteSnapshotResult {
 }
 
 /// <p>Deletes the local side of an existing trust relationship between the AWS Managed Microsoft AD directory and the external domain.</p>
+/// see [DirectoryService::delete_trust]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrustRequest {
@@ -615,6 +654,7 @@ pub struct DeleteTrustRequest {
 }
 
 /// <p>The result of a DeleteTrust request.</p>
+/// see [DirectoryService::delete_trust]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTrustResult {
@@ -624,6 +664,7 @@ pub struct DeleteTrustResult {
     pub trust_id: Option<String>,
 }
 
+/// see [DirectoryService::deregister_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterCertificateRequest {
@@ -635,11 +676,13 @@ pub struct DeregisterCertificateRequest {
     pub directory_id: String,
 }
 
+/// see [DirectoryService::deregister_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterCertificateResult {}
 
 /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
+/// see [DirectoryService::deregister_event_topic]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterEventTopicRequest {
@@ -652,10 +695,12 @@ pub struct DeregisterEventTopicRequest {
 }
 
 /// <p>The result of a DeregisterEventTopic request.</p>
+/// see [DirectoryService::deregister_event_topic]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterEventTopicResult {}
 
+/// see [DirectoryService::describe_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateRequest {
@@ -667,6 +712,7 @@ pub struct DescribeCertificateRequest {
     pub directory_id: String,
 }
 
+/// see [DirectoryService::describe_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificateResult {
@@ -677,6 +723,7 @@ pub struct DescribeCertificateResult {
 }
 
 /// <p>Describes a conditional forwarder.</p>
+/// see [DirectoryService::describe_conditional_forwarders]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConditionalForwardersRequest {
@@ -690,6 +737,7 @@ pub struct DescribeConditionalForwardersRequest {
 }
 
 /// <p>The result of a DescribeConditionalForwarder request.</p>
+/// see [DirectoryService::describe_conditional_forwarders]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConditionalForwardersResult {
@@ -700,6 +748,7 @@ pub struct DescribeConditionalForwardersResult {
 }
 
 /// <p>Contains the inputs for the <a>DescribeDirectories</a> operation.</p>
+/// see [DirectoryService::describe_directories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectoriesRequest {
@@ -717,7 +766,16 @@ pub struct DescribeDirectoriesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeDirectoriesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Contains the results of the <a>DescribeDirectories</a> operation.</p>
+/// see [DirectoryService::describe_directories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectoriesResult {
@@ -731,6 +789,31 @@ pub struct DescribeDirectoriesResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeDirectoriesResult {
+    fn pagination_page_opt(self) -> Option<Vec<DirectoryDescription>> {
+        Some(self.directory_descriptions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDirectoriesResult {
+    type Item = DirectoryDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DirectoryDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DirectoryService::describe_domain_controllers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainControllersRequest {
@@ -751,6 +834,15 @@ pub struct DescribeDomainControllersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeDomainControllersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectoryService::describe_domain_controllers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainControllersResult {
@@ -764,7 +856,32 @@ pub struct DescribeDomainControllersResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeDomainControllersResult {
+    fn pagination_page_opt(self) -> Option<Vec<DomainController>> {
+        Some(self.domain_controllers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDomainControllersResult {
+    type Item = DomainController;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DomainController> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Describes event topics.</p>
+/// see [DirectoryService::describe_event_topics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventTopicsRequest {
@@ -779,6 +896,7 @@ pub struct DescribeEventTopicsRequest {
 }
 
 /// <p>The result of a DescribeEventTopic request.</p>
+/// see [DirectoryService::describe_event_topics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventTopicsResult {
@@ -788,6 +906,7 @@ pub struct DescribeEventTopicsResult {
     pub event_topics: Option<Vec<EventTopic>>,
 }
 
+/// see [DirectoryService::describe_ldaps_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLDAPSSettingsRequest {
@@ -808,6 +927,7 @@ pub struct DescribeLDAPSSettingsRequest {
     pub type_: Option<String>,
 }
 
+/// see [DirectoryService::describe_ldaps_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLDAPSSettingsResult {
@@ -821,6 +941,7 @@ pub struct DescribeLDAPSSettingsResult {
     pub next_token: Option<String>,
 }
 
+/// see [DirectoryService::describe_regions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRegionsRequest {
@@ -837,6 +958,7 @@ pub struct DescribeRegionsRequest {
     pub region_name: Option<String>,
 }
 
+/// see [DirectoryService::describe_regions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRegionsResult {
@@ -850,6 +972,7 @@ pub struct DescribeRegionsResult {
     pub regions_description: Option<Vec<RegionDescription>>,
 }
 
+/// see [DirectoryService::describe_shared_directories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSharedDirectoriesRequest {
@@ -870,6 +993,15 @@ pub struct DescribeSharedDirectoriesRequest {
     pub shared_directory_ids: Option<Vec<String>>,
 }
 
+impl PagedRequest for DescribeSharedDirectoriesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectoryService::describe_shared_directories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSharedDirectoriesResult {
@@ -883,7 +1015,32 @@ pub struct DescribeSharedDirectoriesResult {
     pub shared_directories: Option<Vec<SharedDirectory>>,
 }
 
+impl DescribeSharedDirectoriesResult {
+    fn pagination_page_opt(self) -> Option<Vec<SharedDirectory>> {
+        Some(self.shared_directories.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSharedDirectoriesResult {
+    type Item = SharedDirectory;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SharedDirectory> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Contains the inputs for the <a>DescribeSnapshots</a> operation.</p>
+/// see [DirectoryService::describe_snapshots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotsRequest {
@@ -905,7 +1062,16 @@ pub struct DescribeSnapshotsRequest {
     pub snapshot_ids: Option<Vec<String>>,
 }
 
+impl PagedRequest for DescribeSnapshotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Contains the results of the <a>DescribeSnapshots</a> operation.</p>
+/// see [DirectoryService::describe_snapshots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSnapshotsResult {
@@ -919,7 +1085,32 @@ pub struct DescribeSnapshotsResult {
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
+impl DescribeSnapshotsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Snapshot>> {
+        Some(self.snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSnapshotsResult {
+    type Item = Snapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Snapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Describes the trust relationships for a particular AWS Managed Microsoft AD directory. If no input parameters are are provided, such as directory ID or trust ID, this request describes all the trust relationships.</p>
+/// see [DirectoryService::describe_trusts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustsRequest {
@@ -941,7 +1132,16 @@ pub struct DescribeTrustsRequest {
     pub trust_ids: Option<Vec<String>>,
 }
 
+impl PagedRequest for DescribeTrustsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The result of a DescribeTrust request.</p>
+/// see [DirectoryService::describe_trusts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrustsResult {
@@ -953,6 +1153,30 @@ pub struct DescribeTrustsResult {
     #[serde(rename = "Trusts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trusts: Option<Vec<Trust>>,
+}
+
+impl DescribeTrustsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Trust>> {
+        Some(self.trusts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeTrustsResult {
+    type Item = Trust;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Trust> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Contains information for the <a>ConnectDirectory</a> operation when an AD Connector directory is being created.</p>
@@ -1184,6 +1408,7 @@ pub struct DirectoryVpcSettingsDescription {
     pub vpc_id: Option<String>,
 }
 
+/// see [DirectoryService::disable_client_authentication]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableClientAuthenticationRequest {
@@ -1195,10 +1420,12 @@ pub struct DisableClientAuthenticationRequest {
     pub type_: String,
 }
 
+/// see [DirectoryService::disable_client_authentication]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableClientAuthenticationResult {}
 
+/// see [DirectoryService::disable_ldaps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableLDAPSRequest {
@@ -1210,11 +1437,13 @@ pub struct DisableLDAPSRequest {
     pub type_: String,
 }
 
+/// see [DirectoryService::disable_ldaps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableLDAPSResult {}
 
 /// <p>Contains the inputs for the <a>DisableRadius</a> operation.</p>
+/// see [DirectoryService::disable_radius]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableRadiusRequest {
@@ -1224,11 +1453,13 @@ pub struct DisableRadiusRequest {
 }
 
 /// <p>Contains the results of the <a>DisableRadius</a> operation.</p>
+/// see [DirectoryService::disable_radius]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableRadiusResult {}
 
 /// <p>Contains the inputs for the <a>DisableSso</a> operation.</p>
+/// see [DirectoryService::disable_sso]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableSsoRequest {
@@ -1246,6 +1477,7 @@ pub struct DisableSsoRequest {
 }
 
 /// <p>Contains the results of the <a>DisableSso</a> operation.</p>
+/// see [DirectoryService::disable_sso]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableSsoResult {}
@@ -1296,6 +1528,7 @@ pub struct DomainController {
     pub vpc_id: Option<String>,
 }
 
+/// see [DirectoryService::enable_client_authentication]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableClientAuthenticationRequest {
@@ -1307,10 +1540,12 @@ pub struct EnableClientAuthenticationRequest {
     pub type_: String,
 }
 
+/// see [DirectoryService::enable_client_authentication]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableClientAuthenticationResult {}
 
+/// see [DirectoryService::enable_ldaps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableLDAPSRequest {
@@ -1322,11 +1557,13 @@ pub struct EnableLDAPSRequest {
     pub type_: String,
 }
 
+/// see [DirectoryService::enable_ldaps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableLDAPSResult {}
 
 /// <p>Contains the inputs for the <a>EnableRadius</a> operation.</p>
+/// see [DirectoryService::enable_radius]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableRadiusRequest {
@@ -1339,11 +1576,13 @@ pub struct EnableRadiusRequest {
 }
 
 /// <p>Contains the results of the <a>EnableRadius</a> operation.</p>
+/// see [DirectoryService::enable_radius]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableRadiusResult {}
 
 /// <p>Contains the inputs for the <a>EnableSso</a> operation.</p>
+/// see [DirectoryService::enable_sso]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSsoRequest {
@@ -1361,6 +1600,7 @@ pub struct EnableSsoRequest {
 }
 
 /// <p>Contains the results of the <a>EnableSso</a> operation.</p>
+/// see [DirectoryService::enable_sso]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableSsoResult {}
@@ -1392,11 +1632,13 @@ pub struct EventTopic {
 }
 
 /// <p>Contains the inputs for the <a>GetDirectoryLimits</a> operation.</p>
+/// see [DirectoryService::get_directory_limits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDirectoryLimitsRequest {}
 
 /// <p>Contains the results of the <a>GetDirectoryLimits</a> operation.</p>
+/// see [DirectoryService::get_directory_limits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDirectoryLimitsResult {
@@ -1407,6 +1649,7 @@ pub struct GetDirectoryLimitsResult {
 }
 
 /// <p>Contains the inputs for the <a>GetSnapshotLimits</a> operation.</p>
+/// see [DirectoryService::get_snapshot_limits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSnapshotLimitsRequest {
@@ -1416,6 +1659,7 @@ pub struct GetSnapshotLimitsRequest {
 }
 
 /// <p>Contains the results of the <a>GetSnapshotLimits</a> operation.</p>
+/// see [DirectoryService::get_snapshot_limits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSnapshotLimitsResult {
@@ -1487,6 +1731,7 @@ pub struct LDAPSSettingInfo {
     pub last_updated_date_time: Option<f64>,
 }
 
+/// see [DirectoryService::list_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesRequest {
@@ -1503,6 +1748,7 @@ pub struct ListCertificatesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [DirectoryService::list_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCertificatesResult {
@@ -1516,6 +1762,7 @@ pub struct ListCertificatesResult {
     pub next_token: Option<String>,
 }
 
+/// see [DirectoryService::list_ip_routes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIpRoutesRequest {
@@ -1532,6 +1779,15 @@ pub struct ListIpRoutesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListIpRoutesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectoryService::list_ip_routes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIpRoutesResult {
@@ -1545,6 +1801,31 @@ pub struct ListIpRoutesResult {
     pub next_token: Option<String>,
 }
 
+impl ListIpRoutesResult {
+    fn pagination_page_opt(self) -> Option<Vec<IpRouteInfo>> {
+        Some(self.ip_routes_info.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListIpRoutesResult {
+    type Item = IpRouteInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<IpRouteInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DirectoryService::list_log_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLogSubscriptionsRequest {
@@ -1562,6 +1843,15 @@ pub struct ListLogSubscriptionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLogSubscriptionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectoryService::list_log_subscriptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLogSubscriptionsResult {
@@ -1575,6 +1865,31 @@ pub struct ListLogSubscriptionsResult {
     pub next_token: Option<String>,
 }
 
+impl ListLogSubscriptionsResult {
+    fn pagination_page_opt(self) -> Option<Vec<LogSubscription>> {
+        Some(self.log_subscriptions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLogSubscriptionsResult {
+    type Item = LogSubscription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LogSubscription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DirectoryService::list_schema_extensions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemaExtensionsRequest {
@@ -1591,6 +1906,15 @@ pub struct ListSchemaExtensionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSchemaExtensionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectoryService::list_schema_extensions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemaExtensionsResult {
@@ -1604,6 +1928,31 @@ pub struct ListSchemaExtensionsResult {
     pub schema_extensions_info: Option<Vec<SchemaExtensionInfo>>,
 }
 
+impl ListSchemaExtensionsResult {
+    fn pagination_page_opt(self) -> Option<Vec<SchemaExtensionInfo>> {
+        Some(self.schema_extensions_info.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSchemaExtensionsResult {
+    type Item = SchemaExtensionInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SchemaExtensionInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DirectoryService::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1620,6 +1969,15 @@ pub struct ListTagsForResourceRequest {
     pub resource_id: String,
 }
 
+impl PagedRequest for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DirectoryService::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResult {
@@ -1631,6 +1989,30 @@ pub struct ListTagsForResourceResult {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl ListTagsForResourceResult {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResult {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents a log subscription, which tracks real-time data from a chosen log group to a specified destination.</p>
@@ -1773,6 +2155,7 @@ pub struct RegionsInfo {
     pub primary_region: Option<String>,
 }
 
+/// see [DirectoryService::register_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCertificateRequest {
@@ -1792,6 +2175,7 @@ pub struct RegisterCertificateRequest {
     pub type_: Option<String>,
 }
 
+/// see [DirectoryService::register_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterCertificateResult {
@@ -1802,6 +2186,7 @@ pub struct RegisterCertificateResult {
 }
 
 /// <p>Registers a new event topic.</p>
+/// see [DirectoryService::register_event_topic]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterEventTopicRequest {
@@ -1814,10 +2199,12 @@ pub struct RegisterEventTopicRequest {
 }
 
 /// <p>The result of a RegisterEventTopic request.</p>
+/// see [DirectoryService::register_event_topic]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterEventTopicResult {}
 
+/// see [DirectoryService::reject_shared_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectSharedDirectoryRequest {
@@ -1826,6 +2213,7 @@ pub struct RejectSharedDirectoryRequest {
     pub shared_directory_id: String,
 }
 
+/// see [DirectoryService::reject_shared_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectSharedDirectoryResult {
@@ -1835,6 +2223,7 @@ pub struct RejectSharedDirectoryResult {
     pub shared_directory_id: Option<String>,
 }
 
+/// see [DirectoryService::remove_ip_routes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveIpRoutesRequest {
@@ -1846,10 +2235,12 @@ pub struct RemoveIpRoutesRequest {
     pub directory_id: String,
 }
 
+/// see [DirectoryService::remove_ip_routes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveIpRoutesResult {}
 
+/// see [DirectoryService::remove_region]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveRegionRequest {
@@ -1858,10 +2249,12 @@ pub struct RemoveRegionRequest {
     pub directory_id: String,
 }
 
+/// see [DirectoryService::remove_region]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveRegionResult {}
 
+/// see [DirectoryService::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceRequest {
@@ -1873,10 +2266,12 @@ pub struct RemoveTagsFromResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [DirectoryService::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResult {}
 
+/// see [DirectoryService::reset_user_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetUserPasswordRequest {
@@ -1891,11 +2286,13 @@ pub struct ResetUserPasswordRequest {
     pub user_name: String,
 }
 
+/// see [DirectoryService::reset_user_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetUserPasswordResult {}
 
 /// <p>An object representing the inputs for the <a>RestoreFromSnapshot</a> operation.</p>
+/// see [DirectoryService::restore_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreFromSnapshotRequest {
@@ -1905,6 +2302,7 @@ pub struct RestoreFromSnapshotRequest {
 }
 
 /// <p>Contains the results of the <a>RestoreFromSnapshot</a> operation.</p>
+/// see [DirectoryService::restore_from_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreFromSnapshotResult {}
@@ -1943,6 +2341,7 @@ pub struct SchemaExtensionInfo {
     pub start_date_time: Option<f64>,
 }
 
+/// see [DirectoryService::share_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ShareDirectoryRequest {
@@ -1961,6 +2360,7 @@ pub struct ShareDirectoryRequest {
     pub share_target: ShareTarget,
 }
 
+/// see [DirectoryService::share_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ShareDirectoryResult {
@@ -2072,6 +2472,7 @@ pub struct SnapshotLimits {
     pub manual_snapshots_limit_reached: Option<bool>,
 }
 
+/// see [DirectoryService::start_schema_extension]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSchemaExtensionRequest {
@@ -2089,6 +2490,7 @@ pub struct StartSchemaExtensionRequest {
     pub ldif_content: String,
 }
 
+/// see [DirectoryService::start_schema_extension]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSchemaExtensionResult {
@@ -2159,6 +2561,7 @@ pub struct Trust {
     pub trust_type: Option<String>,
 }
 
+/// see [DirectoryService::unshare_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnshareDirectoryRequest {
@@ -2170,6 +2573,7 @@ pub struct UnshareDirectoryRequest {
     pub unshare_target: UnshareTarget,
 }
 
+/// see [DirectoryService::unshare_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnshareDirectoryResult {
@@ -2192,6 +2596,7 @@ pub struct UnshareTarget {
 }
 
 /// <p>Updates a conditional forwarder.</p>
+/// see [DirectoryService::update_conditional_forwarder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConditionalForwarderRequest {
@@ -2207,10 +2612,12 @@ pub struct UpdateConditionalForwarderRequest {
 }
 
 /// <p>The result of an UpdateConditionalForwarder request.</p>
+/// see [DirectoryService::update_conditional_forwarder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConditionalForwarderResult {}
 
+/// see [DirectoryService::update_number_of_domain_controllers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNumberOfDomainControllersRequest {
@@ -2222,11 +2629,13 @@ pub struct UpdateNumberOfDomainControllersRequest {
     pub directory_id: String,
 }
 
+/// see [DirectoryService::update_number_of_domain_controllers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNumberOfDomainControllersResult {}
 
 /// <p>Contains the inputs for the <a>UpdateRadius</a> operation.</p>
+/// see [DirectoryService::update_radius]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRadiusRequest {
@@ -2239,10 +2648,12 @@ pub struct UpdateRadiusRequest {
 }
 
 /// <p>Contains the results of the <a>UpdateRadius</a> operation.</p>
+/// see [DirectoryService::update_radius]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRadiusResult {}
 
+/// see [DirectoryService::update_trust]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrustRequest {
@@ -2255,6 +2666,7 @@ pub struct UpdateTrustRequest {
     pub trust_id: String,
 }
 
+/// see [DirectoryService::update_trust]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTrustResult {
@@ -2268,6 +2680,7 @@ pub struct UpdateTrustResult {
 }
 
 /// <p>Initiates the verification of an existing trust relationship between an AWS Managed Microsoft AD directory and an external domain.</p>
+/// see [DirectoryService::verify_trust]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyTrustRequest {
@@ -2277,6 +2690,7 @@ pub struct VerifyTrustRequest {
 }
 
 /// <p>Result of a VerifyTrust request.</p>
+/// see [DirectoryService::verify_trust]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VerifyTrustResult {
@@ -6108,7 +6522,7 @@ impl fmt::Display for VerifyTrustError {
 impl Error for VerifyTrustError {}
 /// Trait representing the capabilities of the Directory Service API. Directory Service clients implement this trait.
 #[async_trait]
-pub trait DirectoryService {
+pub trait DirectoryService: Clone + Sync + Send + 'static {
     /// <p>Accepts a directory sharing request that was sent from the directory owner account.</p>
     async fn accept_shared_directory(
         &self,
@@ -6253,11 +6667,31 @@ pub trait DirectoryService {
         input: DescribeDirectoriesRequest,
     ) -> Result<DescribeDirectoriesResult, RusotoError<DescribeDirectoriesError>>;
 
+    /// Auto-paginating version of `describe_directories`
+    fn describe_directories_pages(
+        &self,
+        input: DescribeDirectoriesRequest,
+    ) -> RusotoStream<DirectoryDescription, DescribeDirectoriesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_directories(state.clone())
+        })
+    }
+
     /// <p>Provides information about any domain controllers in your directory.</p>
     async fn describe_domain_controllers(
         &self,
         input: DescribeDomainControllersRequest,
     ) -> Result<DescribeDomainControllersResult, RusotoError<DescribeDomainControllersError>>;
+
+    /// Auto-paginating version of `describe_domain_controllers`
+    fn describe_domain_controllers_pages(
+        &self,
+        input: DescribeDomainControllersRequest,
+    ) -> RusotoStream<DomainController, DescribeDomainControllersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_domain_controllers(state.clone())
+        })
+    }
 
     /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
     async fn describe_event_topics(
@@ -6283,17 +6717,47 @@ pub trait DirectoryService {
         input: DescribeSharedDirectoriesRequest,
     ) -> Result<DescribeSharedDirectoriesResult, RusotoError<DescribeSharedDirectoriesError>>;
 
+    /// Auto-paginating version of `describe_shared_directories`
+    fn describe_shared_directories_pages(
+        &self,
+        input: DescribeSharedDirectoriesRequest,
+    ) -> RusotoStream<SharedDirectory, DescribeSharedDirectoriesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_shared_directories(state.clone())
+        })
+    }
+
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     async fn describe_snapshots(
         &self,
         input: DescribeSnapshotsRequest,
     ) -> Result<DescribeSnapshotsResult, RusotoError<DescribeSnapshotsError>>;
 
+    /// Auto-paginating version of `describe_snapshots`
+    fn describe_snapshots_pages(
+        &self,
+        input: DescribeSnapshotsRequest,
+    ) -> RusotoStream<Snapshot, DescribeSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_snapshots(state.clone())
+        })
+    }
+
     /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
     async fn describe_trusts(
         &self,
         input: DescribeTrustsRequest,
     ) -> Result<DescribeTrustsResult, RusotoError<DescribeTrustsError>>;
+
+    /// Auto-paginating version of `describe_trusts`
+    fn describe_trusts_pages(
+        &self,
+        input: DescribeTrustsRequest,
+    ) -> RusotoStream<Trust, DescribeTrustsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_trusts(state.clone())
+        })
+    }
 
     /// <p>Disables alternative client authentication methods for the specified directory. </p>
     async fn disable_client_authentication(
@@ -6366,11 +6830,31 @@ pub trait DirectoryService {
         input: ListIpRoutesRequest,
     ) -> Result<ListIpRoutesResult, RusotoError<ListIpRoutesError>>;
 
+    /// Auto-paginating version of `list_ip_routes`
+    fn list_ip_routes_pages(
+        &self,
+        input: ListIpRoutesRequest,
+    ) -> RusotoStream<IpRouteInfo, ListIpRoutesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_ip_routes(state.clone())
+        })
+    }
+
     /// <p>Lists the active log subscriptions for the AWS account.</p>
     async fn list_log_subscriptions(
         &self,
         input: ListLogSubscriptionsRequest,
     ) -> Result<ListLogSubscriptionsResult, RusotoError<ListLogSubscriptionsError>>;
+
+    /// Auto-paginating version of `list_log_subscriptions`
+    fn list_log_subscriptions_pages(
+        &self,
+        input: ListLogSubscriptionsRequest,
+    ) -> RusotoStream<LogSubscription, ListLogSubscriptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_log_subscriptions(state.clone())
+        })
+    }
 
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
     async fn list_schema_extensions(
@@ -6378,11 +6862,31 @@ pub trait DirectoryService {
         input: ListSchemaExtensionsRequest,
     ) -> Result<ListSchemaExtensionsResult, RusotoError<ListSchemaExtensionsError>>;
 
+    /// Auto-paginating version of `list_schema_extensions`
+    fn list_schema_extensions_pages(
+        &self,
+        input: ListSchemaExtensionsRequest,
+    ) -> RusotoStream<SchemaExtensionInfo, ListSchemaExtensionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_schema_extensions(state.clone())
+        })
+    }
+
     /// <p>Lists all tags on a directory.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
+
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoStream<Tag, ListTagsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_for_resource(state.clone())
+        })
+    }
 
     /// <p>Registers a certificate for a secure LDAP or client certificate authentication.</p>
     async fn register_certificate(

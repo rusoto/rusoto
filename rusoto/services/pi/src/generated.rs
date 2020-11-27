@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -62,6 +64,7 @@ pub struct DataPoint {
     pub value: f64,
 }
 
+/// see [PerformanceInsights::describe_dimension_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDimensionKeysRequest {
@@ -105,6 +108,7 @@ pub struct DescribeDimensionKeysRequest {
     pub start_time: f64,
 }
 
+/// see [PerformanceInsights::describe_dimension_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDimensionKeysResponse {
@@ -165,6 +169,7 @@ pub struct DimensionKeyDescription {
     pub total: Option<f64>,
 }
 
+/// see [PerformanceInsights::get_resource_metrics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceMetricsRequest {
@@ -197,6 +202,7 @@ pub struct GetResourceMetricsRequest {
     pub start_time: f64,
 }
 
+/// see [PerformanceInsights::get_resource_metrics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceMetricsResponse {
@@ -367,7 +373,7 @@ impl fmt::Display for GetResourceMetricsError {
 impl Error for GetResourceMetricsError {}
 /// Trait representing the capabilities of the AWS PI API. AWS PI clients implement this trait.
 #[async_trait]
-pub trait PerformanceInsights {
+pub trait PerformanceInsights: Clone + Sync + Send + 'static {
     /// <p><p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>
     async fn describe_dimension_keys(
         &self,

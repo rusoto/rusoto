@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -102,6 +104,7 @@ pub struct DateTimeRange {
     pub to: Option<f64>,
 }
 
+/// see [AWSHealth::describe_affected_accounts_for_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAffectedAccountsForOrganizationRequest {
@@ -118,6 +121,15 @@ pub struct DescribeAffectedAccountsForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeAffectedAccountsForOrganizationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AWSHealth::describe_affected_accounts_for_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAffectedAccountsForOrganizationResponse {
@@ -135,6 +147,31 @@ pub struct DescribeAffectedAccountsForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeAffectedAccountsForOrganizationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.affected_accounts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAffectedAccountsForOrganizationResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AWSHealth::describe_affected_entities_for_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAffectedEntitiesForOrganizationRequest {
@@ -155,6 +192,15 @@ pub struct DescribeAffectedEntitiesForOrganizationRequest {
     pub organization_entity_filters: Vec<EventAccountFilter>,
 }
 
+impl PagedRequest for DescribeAffectedEntitiesForOrganizationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AWSHealth::describe_affected_entities_for_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAffectedEntitiesForOrganizationResponse {
@@ -172,6 +218,31 @@ pub struct DescribeAffectedEntitiesForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeAffectedEntitiesForOrganizationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AffectedEntity>> {
+        Some(self.entities.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAffectedEntitiesForOrganizationResponse {
+    type Item = AffectedEntity;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AffectedEntity> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AWSHealth::describe_affected_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAffectedEntitiesRequest {
@@ -192,6 +263,15 @@ pub struct DescribeAffectedEntitiesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeAffectedEntitiesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AWSHealth::describe_affected_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAffectedEntitiesResponse {
@@ -205,6 +285,31 @@ pub struct DescribeAffectedEntitiesResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeAffectedEntitiesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AffectedEntity>> {
+        Some(self.entities.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAffectedEntitiesResponse {
+    type Item = AffectedEntity;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AffectedEntity> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AWSHealth::describe_entity_aggregates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityAggregatesRequest {
@@ -214,6 +319,7 @@ pub struct DescribeEntityAggregatesRequest {
     pub event_arns: Option<Vec<String>>,
 }
 
+/// see [AWSHealth::describe_entity_aggregates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntityAggregatesResponse {
@@ -223,6 +329,7 @@ pub struct DescribeEntityAggregatesResponse {
     pub entity_aggregates: Option<Vec<EntityAggregate>>,
 }
 
+/// see [AWSHealth::describe_event_aggregates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventAggregatesRequest {
@@ -243,6 +350,15 @@ pub struct DescribeEventAggregatesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeEventAggregatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AWSHealth::describe_event_aggregates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventAggregatesResponse {
@@ -256,6 +372,31 @@ pub struct DescribeEventAggregatesResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeEventAggregatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<EventAggregate>> {
+        Some(self.event_aggregates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventAggregatesResponse {
+    type Item = EventAggregate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EventAggregate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AWSHealth::describe_event_details_for_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventDetailsForOrganizationRequest {
@@ -268,6 +409,7 @@ pub struct DescribeEventDetailsForOrganizationRequest {
     pub organization_event_detail_filters: Vec<EventAccountFilter>,
 }
 
+/// see [AWSHealth::describe_event_details_for_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventDetailsForOrganizationResponse {
@@ -281,6 +423,7 @@ pub struct DescribeEventDetailsForOrganizationResponse {
     pub successful_set: Option<Vec<OrganizationEventDetails>>,
 }
 
+/// see [AWSHealth::describe_event_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventDetailsRequest {
@@ -293,6 +436,7 @@ pub struct DescribeEventDetailsRequest {
     pub locale: Option<String>,
 }
 
+/// see [AWSHealth::describe_event_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventDetailsResponse {
@@ -306,6 +450,7 @@ pub struct DescribeEventDetailsResponse {
     pub successful_set: Option<Vec<EventDetails>>,
 }
 
+/// see [AWSHealth::describe_event_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventTypesRequest {
@@ -327,6 +472,15 @@ pub struct DescribeEventTypesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeEventTypesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AWSHealth::describe_event_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventTypesResponse {
@@ -340,6 +494,31 @@ pub struct DescribeEventTypesResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeEventTypesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.event_types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventTypesResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AWSHealth::describe_events_for_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsForOrganizationRequest {
@@ -361,6 +540,15 @@ pub struct DescribeEventsForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeEventsForOrganizationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AWSHealth::describe_events_for_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsForOrganizationResponse {
@@ -374,6 +562,31 @@ pub struct DescribeEventsForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeEventsForOrganizationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<OrganizationEvent>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventsForOrganizationResponse {
+    type Item = OrganizationEvent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OrganizationEvent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AWSHealth::describe_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsRequest {
@@ -395,6 +608,15 @@ pub struct DescribeEventsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AWSHealth::describe_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsResponse {
@@ -408,6 +630,31 @@ pub struct DescribeEventsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventsResponse {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AWSHealth::describe_health_service_status_for_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHealthServiceStatusForOrganizationResponse {
@@ -1284,7 +1531,7 @@ impl fmt::Display for EnableHealthServiceAccessForOrganizationError {
 impl Error for EnableHealthServiceAccessForOrganizationError {}
 /// Trait representing the capabilities of the AWSHealth API. AWSHealth clients implement this trait.
 #[async_trait]
-pub trait AWSHealth {
+pub trait AWSHealth: Clone + Sync + Send + 'static {
     /// <p><p>Returns a list of accounts in the organization from AWS Organizations that are affected by the provided event. For more information about the different types of AWS Health events, see <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html">Event</a>. </p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html">EnableHealthServiceAccessForOrganization</a> operation from your organization&#39;s master account.</p> <note> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </note></p>
     async fn describe_affected_accounts_for_organization(
         &self,
@@ -1294,11 +1541,31 @@ pub trait AWSHealth {
         RusotoError<DescribeAffectedAccountsForOrganizationError>,
     >;
 
+    /// Auto-paginating version of `describe_affected_accounts_for_organization`
+    fn describe_affected_accounts_for_organization_pages(
+        &self,
+        input: DescribeAffectedAccountsForOrganizationRequest,
+    ) -> RusotoStream<String, DescribeAffectedAccountsForOrganizationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_affected_accounts_for_organization(state.clone())
+        })
+    }
+
     /// <p><p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p> <note> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </note></p>
     async fn describe_affected_entities(
         &self,
         input: DescribeAffectedEntitiesRequest,
     ) -> Result<DescribeAffectedEntitiesResponse, RusotoError<DescribeAffectedEntitiesError>>;
+
+    /// Auto-paginating version of `describe_affected_entities`
+    fn describe_affected_entities_pages(
+        &self,
+        input: DescribeAffectedEntitiesRequest,
+    ) -> RusotoStream<AffectedEntity, DescribeAffectedEntitiesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_affected_entities(state.clone())
+        })
+    }
 
     /// <p><p>Returns a list of entities that have been affected by one or more events for one or more accounts in your organization in AWS Organizations, based on the filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service.</p> <p>At least one event Amazon Resource Name (ARN) and account ID are required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html">EnableHealthServiceAccessForOrganization</a> operation from your organization&#39;s master account. </p> <note> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </note></p>
     async fn describe_affected_entities_for_organization(
@@ -1308,6 +1575,16 @@ pub trait AWSHealth {
         DescribeAffectedEntitiesForOrganizationResponse,
         RusotoError<DescribeAffectedEntitiesForOrganizationError>,
     >;
+
+    /// Auto-paginating version of `describe_affected_entities_for_organization`
+    fn describe_affected_entities_for_organization_pages(
+        &self,
+        input: DescribeAffectedEntitiesForOrganizationRequest,
+    ) -> RusotoStream<AffectedEntity, DescribeAffectedEntitiesForOrganizationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_affected_entities_for_organization(state.clone())
+        })
+    }
 
     /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
     async fn describe_entity_aggregates(
@@ -1320,6 +1597,16 @@ pub trait AWSHealth {
         &self,
         input: DescribeEventAggregatesRequest,
     ) -> Result<DescribeEventAggregatesResponse, RusotoError<DescribeEventAggregatesError>>;
+
+    /// Auto-paginating version of `describe_event_aggregates`
+    fn describe_event_aggregates_pages(
+        &self,
+        input: DescribeEventAggregatesRequest,
+    ) -> RusotoStream<EventAggregate, DescribeEventAggregatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_event_aggregates(state.clone())
+        })
+    }
 
     /// <p>Returns detailed information about one or more specified events. Information includes standard event data (Region, service, and so on, as returned by <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included. To retrieve those, use the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntities.html">DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
     async fn describe_event_details(
@@ -1342,11 +1629,31 @@ pub trait AWSHealth {
         input: DescribeEventTypesRequest,
     ) -> Result<DescribeEventTypesResponse, RusotoError<DescribeEventTypesError>>;
 
+    /// Auto-paginating version of `describe_event_types`
+    fn describe_event_types_pages(
+        &self,
+        input: DescribeEventTypesRequest,
+    ) -> RusotoStream<String, DescribeEventTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_event_types(state.clone())
+        })
+    }
+
     /// <p><p> Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetails.html">DescribeEventDetails</a> and <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntities.html">DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent event.</p> <note> <ul> <li> <p>When you call the <code>DescribeEvents</code> operation and specify an entity for the <code>entityValues</code> parameter, AWS Health might return public events that aren&#39;t specific to that resource. For example, if you call <code>DescribeEvents</code> and specify an ID for an Amazon Elastic Compute Cloud (Amazon EC2) instance, AWS Health might return events that aren&#39;t specific to that resource or service. To get events that are specific to a service, use the <code>services</code> parameter in the <code>filter</code> object. For more information, see <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html">Event</a>.</p> </li> <li> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </li> </ul> </note></p>
     async fn describe_events(
         &self,
         input: DescribeEventsRequest,
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsRequest,
+    ) -> RusotoStream<Event, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
 
     /// <p><p>Returns information about events across your organization in AWS Organizations. You can use the<code>filters</code> parameter to specify the events that you want to return. Events are returned in a summary form and don&#39;t include the affected accounts, detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the following operations:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedAccountsForOrganization.html">DescribeAffectedAccountsForOrganization</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetailsForOrganization.html">DescribeEventDetailsForOrganization</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntitiesForOrganization.html">DescribeAffectedEntitiesForOrganization</a> </p> </li> </ul> <p>If you don&#39;t specify a <code>filter</code>, the <code>DescribeEventsForOrganizations</code> returns all events across your organization. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent event. </p> <p>For more information about the different types of AWS Health events, see <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html">Event</a>.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html">EnableHealthServiceAccessForOrganization</a> operation from your organization&#39;s master AWS account.</p> <note> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </note></p>
     async fn describe_events_for_organization(
@@ -1356,6 +1663,16 @@ pub trait AWSHealth {
         DescribeEventsForOrganizationResponse,
         RusotoError<DescribeEventsForOrganizationError>,
     >;
+
+    /// Auto-paginating version of `describe_events_for_organization`
+    fn describe_events_for_organization_pages(
+        &self,
+        input: DescribeEventsForOrganizationRequest,
+    ) -> RusotoStream<OrganizationEvent, DescribeEventsForOrganizationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events_for_organization(state.clone())
+        })
+    }
 
     /// <p>This operation provides status information on enabling or disabling AWS Health to work with your organization. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>
     async fn describe_health_service_status_for_organization(

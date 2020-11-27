@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -85,6 +87,7 @@ pub struct Connection {
     pub provider_type: Option<String>,
 }
 
+/// see [CodeStarConnections::create_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionInput {
@@ -105,6 +108,7 @@ pub struct CreateConnectionInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [CodeStarConnections::create_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectionOutput {
@@ -117,6 +121,7 @@ pub struct CreateConnectionOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [CodeStarConnections::create_host]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHostInput {
@@ -135,6 +140,7 @@ pub struct CreateHostInput {
     pub vpc_configuration: Option<VpcConfiguration>,
 }
 
+/// see [CodeStarConnections::create_host]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHostOutput {
@@ -144,6 +150,7 @@ pub struct CreateHostOutput {
     pub host_arn: Option<String>,
 }
 
+/// see [CodeStarConnections::delete_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionInput {
@@ -152,10 +159,12 @@ pub struct DeleteConnectionInput {
     pub connection_arn: String,
 }
 
+/// see [CodeStarConnections::delete_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionOutput {}
 
+/// see [CodeStarConnections::delete_host]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHostInput {
@@ -164,10 +173,12 @@ pub struct DeleteHostInput {
     pub host_arn: String,
 }
 
+/// see [CodeStarConnections::delete_host]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHostOutput {}
 
+/// see [CodeStarConnections::get_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionInput {
@@ -176,6 +187,7 @@ pub struct GetConnectionInput {
     pub connection_arn: String,
 }
 
+/// see [CodeStarConnections::get_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionOutput {
@@ -185,6 +197,7 @@ pub struct GetConnectionOutput {
     pub connection: Option<Connection>,
 }
 
+/// see [CodeStarConnections::get_host]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostInput {
@@ -193,6 +206,7 @@ pub struct GetHostInput {
     pub host_arn: String,
 }
 
+/// see [CodeStarConnections::get_host]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHostOutput {
@@ -252,6 +266,7 @@ pub struct Host {
     pub vpc_configuration: Option<VpcConfiguration>,
 }
 
+/// see [CodeStarConnections::list_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectionsInput {
@@ -273,6 +288,7 @@ pub struct ListConnectionsInput {
     pub provider_type_filter: Option<String>,
 }
 
+/// see [CodeStarConnections::list_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConnectionsOutput {
@@ -286,6 +302,7 @@ pub struct ListConnectionsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [CodeStarConnections::list_hosts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHostsInput {
@@ -299,6 +316,7 @@ pub struct ListHostsInput {
     pub next_token: Option<String>,
 }
 
+/// see [CodeStarConnections::list_hosts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHostsOutput {
@@ -312,6 +330,7 @@ pub struct ListHostsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [CodeStarConnections::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -320,6 +339,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// see [CodeStarConnections::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -340,6 +360,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [CodeStarConnections::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -351,10 +372,12 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [CodeStarConnections::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
+/// see [CodeStarConnections::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -366,10 +389,12 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CodeStarConnections::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
+/// see [CodeStarConnections::update_host]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHostInput {
@@ -386,6 +411,7 @@ pub struct UpdateHostInput {
     pub vpc_configuration: Option<VpcConfiguration>,
 }
 
+/// see [CodeStarConnections::update_host]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateHostOutput {}
@@ -812,7 +838,7 @@ impl fmt::Display for UpdateHostError {
 impl Error for UpdateHostError {}
 /// Trait representing the capabilities of the AWS CodeStar connections API. AWS CodeStar connections clients implement this trait.
 #[async_trait]
-pub trait CodeStarConnections {
+pub trait CodeStarConnections: Clone + Sync + Send + 'static {
     /// <p>Creates a connection that can then be given to other AWS services like CodePipeline so that it can access third-party code repositories. The connection is in pending status until the third-party connection handshake is completed from the console.</p>
     async fn create_connection(
         &self,

@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl TextractClient {
 }
 
 use serde_json;
+/// see [Textract::analyze_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyzeDocumentRequest {
@@ -65,6 +68,7 @@ pub struct AnalyzeDocumentRequest {
     pub human_loop_config: Option<HumanLoopConfig>,
 }
 
+/// see [Textract::analyze_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AnalyzeDocumentResponse {
@@ -170,6 +174,7 @@ pub struct BoundingBox {
     pub width: Option<f32>,
 }
 
+/// see [Textract::detect_document_text]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectDocumentTextRequest {
@@ -178,6 +183,7 @@ pub struct DetectDocumentTextRequest {
     pub document: Document,
 }
 
+/// see [Textract::detect_document_text]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectDocumentTextResponse {
@@ -248,6 +254,7 @@ pub struct Geometry {
     pub polygon: Option<Vec<Point>>,
 }
 
+/// see [Textract::get_document_analysis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentAnalysisRequest {
@@ -264,6 +271,7 @@ pub struct GetDocumentAnalysisRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Textract::get_document_analysis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentAnalysisResponse {
@@ -297,6 +305,7 @@ pub struct GetDocumentAnalysisResponse {
     pub warnings: Option<Vec<Warning>>,
 }
 
+/// see [Textract::get_document_text_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentTextDetectionRequest {
@@ -313,6 +322,7 @@ pub struct GetDocumentTextDetectionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Textract::get_document_text_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentTextDetectionResponse {
@@ -461,6 +471,7 @@ pub struct S3Object {
     pub version: Option<String>,
 }
 
+/// see [Textract::start_document_analysis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDocumentAnalysisRequest {
@@ -492,6 +503,7 @@ pub struct StartDocumentAnalysisRequest {
     pub output_config: Option<OutputConfig>,
 }
 
+/// see [Textract::start_document_analysis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDocumentAnalysisResponse {
@@ -501,6 +513,7 @@ pub struct StartDocumentAnalysisResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Textract::start_document_text_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDocumentTextDetectionRequest {
@@ -529,6 +542,7 @@ pub struct StartDocumentTextDetectionRequest {
     pub output_config: Option<OutputConfig>,
 }
 
+/// see [Textract::start_document_text_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDocumentTextDetectionResponse {
@@ -1128,7 +1142,7 @@ impl fmt::Display for StartDocumentTextDetectionError {
 impl Error for StartDocumentTextDetectionError {}
 /// Trait representing the capabilities of the Amazon Textract API. Amazon Textract clients implement this trait.
 #[async_trait]
-pub trait Textract {
+pub trait Textract: Clone + Sync + Send + 'static {
     /// <p>Analyzes an input document for relationships between detected items. </p> <p>The types of information returned are as follows: </p> <ul> <li> <p>Form data (key-value pairs). The related information is returned in two <a>Block</a> objects, each of type <code>KEY_VALUE_SET</code>: a KEY <code>Block</code> object and a VALUE <code>Block</code> object. For example, <i>Name: Ana Silva Carolina</i> contains a key and value. <i>Name:</i> is the key. <i>Ana Silva Carolina</i> is the value.</p> </li> <li> <p>Table and table cell data. A TABLE <code>Block</code> object contains information about a detected table. A CELL <code>Block</code> object is returned for each cell in a table.</p> </li> <li> <p>Lines and words of text. A LINE <code>Block</code> object contains one or more WORD <code>Block</code> objects. All lines and words that are detected in the document are returned (including text that doesn't have a relationship with the value of <code>FeatureTypes</code>). </p> </li> </ul> <p>Selection elements such as check boxes and option buttons (radio buttons) can be detected in form data and in tables. A SELECTION_ELEMENT <code>Block</code> object contains information about a selection element, including the selection status.</p> <p>You can choose which type of analysis to perform by specifying the <code>FeatureTypes</code> list. </p> <p>The output is returned in a list of <code>Block</code> objects.</p> <p> <code>AnalyzeDocument</code> is a synchronous operation. To analyze documents asynchronously, use <a>StartDocumentAnalysis</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/textract/latest/dg/how-it-works-analyzing.html">Document Text Analysis</a>.</p>
     async fn analyze_document(
         &self,

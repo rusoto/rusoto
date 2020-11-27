@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl Cloud9Client {
 }
 
 use serde_json;
+/// see [Cloud9::create_environment_ec2]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentEC2Request {
@@ -89,6 +92,7 @@ pub struct CreateEnvironmentEC2Request {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Cloud9::create_environment_ec2]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEnvironmentEC2Result {
@@ -98,6 +102,7 @@ pub struct CreateEnvironmentEC2Result {
     pub environment_id: Option<String>,
 }
 
+/// see [Cloud9::create_environment_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentMembershipRequest {
@@ -112,6 +117,7 @@ pub struct CreateEnvironmentMembershipRequest {
     pub user_arn: String,
 }
 
+/// see [Cloud9::create_environment_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEnvironmentMembershipResult {
@@ -121,6 +127,7 @@ pub struct CreateEnvironmentMembershipResult {
     pub membership: Option<EnvironmentMember>,
 }
 
+/// see [Cloud9::delete_environment_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentMembershipRequest {
@@ -132,10 +139,12 @@ pub struct DeleteEnvironmentMembershipRequest {
     pub user_arn: String,
 }
 
+/// see [Cloud9::delete_environment_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEnvironmentMembershipResult {}
 
+/// see [Cloud9::delete_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentRequest {
@@ -144,10 +153,12 @@ pub struct DeleteEnvironmentRequest {
     pub environment_id: String,
 }
 
+/// see [Cloud9::delete_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEnvironmentResult {}
 
+/// see [Cloud9::describe_environment_memberships]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentMembershipsRequest {
@@ -173,6 +184,15 @@ pub struct DescribeEnvironmentMembershipsRequest {
     pub user_arn: Option<String>,
 }
 
+impl PagedRequest for DescribeEnvironmentMembershipsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Cloud9::describe_environment_memberships]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEnvironmentMembershipsResult {
@@ -186,6 +206,31 @@ pub struct DescribeEnvironmentMembershipsResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeEnvironmentMembershipsResult {
+    fn pagination_page_opt(self) -> Option<Vec<EnvironmentMember>> {
+        Some(self.memberships.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEnvironmentMembershipsResult {
+    type Item = EnvironmentMember;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EnvironmentMember> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Cloud9::describe_environment_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentStatusRequest {
@@ -194,6 +239,7 @@ pub struct DescribeEnvironmentStatusRequest {
     pub environment_id: String,
 }
 
+/// see [Cloud9::describe_environment_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEnvironmentStatusResult {
@@ -207,6 +253,7 @@ pub struct DescribeEnvironmentStatusResult {
     pub status: Option<String>,
 }
 
+/// see [Cloud9::describe_environments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentsRequest {
@@ -215,6 +262,7 @@ pub struct DescribeEnvironmentsRequest {
     pub environment_ids: Vec<String>,
 }
 
+/// see [Cloud9::describe_environments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEnvironmentsResult {
@@ -306,6 +354,7 @@ pub struct EnvironmentMember {
     pub user_id: Option<String>,
 }
 
+/// see [Cloud9::list_environments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEnvironmentsRequest {
@@ -319,6 +368,15 @@ pub struct ListEnvironmentsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListEnvironmentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Cloud9::list_environments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEnvironmentsResult {
@@ -332,6 +390,31 @@ pub struct ListEnvironmentsResult {
     pub next_token: Option<String>,
 }
 
+impl ListEnvironmentsResult {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.environment_ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListEnvironmentsResult {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Cloud9::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -340,6 +423,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Cloud9::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -360,6 +444,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Cloud9::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -371,10 +456,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Cloud9::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Cloud9::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -386,10 +473,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Cloud9::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Cloud9::update_environment_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentMembershipRequest {
@@ -404,6 +493,7 @@ pub struct UpdateEnvironmentMembershipRequest {
     pub user_arn: String,
 }
 
+/// see [Cloud9::update_environment_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEnvironmentMembershipResult {
@@ -413,6 +503,7 @@ pub struct UpdateEnvironmentMembershipResult {
     pub membership: Option<EnvironmentMember>,
 }
 
+/// see [Cloud9::update_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentRequest {
@@ -429,6 +520,7 @@ pub struct UpdateEnvironmentRequest {
     pub name: Option<String>,
 }
 
+/// see [Cloud9::update_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEnvironmentResult {}
@@ -1333,7 +1425,7 @@ impl fmt::Display for UpdateEnvironmentMembershipError {
 impl Error for UpdateEnvironmentMembershipError {}
 /// Trait representing the capabilities of the AWS Cloud9 API. AWS Cloud9 clients implement this trait.
 #[async_trait]
-pub trait Cloud9 {
+pub trait Cloud9: Clone + Sync + Send + 'static {
     /// <p>Creates an AWS Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
     async fn create_environment_ec2(
         &self,
@@ -1367,6 +1459,16 @@ pub trait Cloud9 {
         RusotoError<DescribeEnvironmentMembershipsError>,
     >;
 
+    /// Auto-paginating version of `describe_environment_memberships`
+    fn describe_environment_memberships_pages(
+        &self,
+        input: DescribeEnvironmentMembershipsRequest,
+    ) -> RusotoStream<EnvironmentMember, DescribeEnvironmentMembershipsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_environment_memberships(state.clone())
+        })
+    }
+
     /// <p>Gets status information for an AWS Cloud9 development environment.</p>
     async fn describe_environment_status(
         &self,
@@ -1384,6 +1486,16 @@ pub trait Cloud9 {
         &self,
         input: ListEnvironmentsRequest,
     ) -> Result<ListEnvironmentsResult, RusotoError<ListEnvironmentsError>>;
+
+    /// Auto-paginating version of `list_environments`
+    fn list_environments_pages(
+        &self,
+        input: ListEnvironmentsRequest,
+    ) -> RusotoStream<String, ListEnvironmentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_environments(state.clone())
+        })
+    }
 
     /// <p>Gets a list of the tags associated with an AWS Cloud9 development environment.</p>
     async fn list_tags_for_resource(

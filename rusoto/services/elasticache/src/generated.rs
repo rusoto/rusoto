@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -61,6 +63,7 @@ impl ElastiCacheClient {
 }
 
 /// <p>Represents the input of an AddTagsToResource operation.</p>
+/// see [ElastiCache::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
@@ -93,6 +96,7 @@ impl AllowedNodeGroupIdDeserializer {
     }
 }
 /// <p>Represents the allowed node types you can use to modify your cluster or replication group.</p>
+/// see [ElastiCache::list_allowed_node_type_modifications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AllowedNodeTypeModificationsMessage {
@@ -184,6 +188,7 @@ impl AuthenticationTypeDeserializer {
     }
 }
 /// <p>Represents the input of an AuthorizeCacheSecurityGroupIngress operation.</p>
+/// see [ElastiCache::authorize_cache_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeCacheSecurityGroupIngressMessage {
@@ -219,6 +224,7 @@ impl AuthorizeCacheSecurityGroupIngressMessageSerializer {
     }
 }
 
+/// see [ElastiCache::authorize_cache_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizeCacheSecurityGroupIngressResult {
@@ -317,6 +323,7 @@ impl AvailabilityZonesListSerializer {
     }
 }
 
+/// see [ElastiCache::batch_apply_update_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchApplyUpdateActionMessage {
@@ -358,6 +365,7 @@ impl BatchApplyUpdateActionMessageSerializer {
     }
 }
 
+/// see [ElastiCache::batch_stop_update_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchStopUpdateActionMessage {
@@ -686,6 +694,7 @@ impl CacheClusterListDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeCacheClusters</code> operation.</p>
+/// see [ElastiCache::describe_cache_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheClusterMessage {
@@ -693,6 +702,30 @@ pub struct CacheClusterMessage {
     pub cache_clusters: Option<Vec<CacheCluster>>,
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     pub marker: Option<String>,
+}
+
+impl CacheClusterMessage {
+    fn pagination_page_opt(self) -> Option<Vec<CacheCluster>> {
+        Some(self.cache_clusters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for CacheClusterMessage {
+    type Item = CacheCluster;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CacheCluster> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -798,6 +831,7 @@ impl CacheEngineVersionListDeserializer {
     }
 }
 /// <p>Represents the output of a <a>DescribeCacheEngineVersions</a> operation.</p>
+/// see [ElastiCache::describe_cache_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheEngineVersionMessage {
@@ -805,6 +839,30 @@ pub struct CacheEngineVersionMessage {
     pub cache_engine_versions: Option<Vec<CacheEngineVersion>>,
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     pub marker: Option<String>,
+}
+
+impl CacheEngineVersionMessage {
+    fn pagination_page_opt(self) -> Option<Vec<CacheEngineVersion>> {
+        Some(self.cache_engine_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for CacheEngineVersionMessage {
+    type Item = CacheEngineVersion;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CacheEngineVersion> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1282,6 +1340,7 @@ impl CacheParameterGroupDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeCacheParameters</code> operation.</p>
+/// see [ElastiCache::describe_cache_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheParameterGroupDetails {
@@ -1291,6 +1350,30 @@ pub struct CacheParameterGroupDetails {
     pub marker: Option<String>,
     /// <p>A list of <a>Parameter</a> instances.</p>
     pub parameters: Option<Vec<Parameter>>,
+}
+
+impl CacheParameterGroupDetails {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for CacheParameterGroupDetails {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1353,6 +1436,8 @@ impl CacheParameterGroupListDeserializer {
     }
 }
 /// <p><p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>ModifyCacheParameterGroup</code> </p> </li> <li> <p> <code>ResetCacheParameterGroup</code> </p> </li> </ul></p>
+/// see [ElastiCache::modify_cache_parameter_group]
+/// see [ElastiCache::reset_cache_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheParameterGroupNameMessage {
@@ -1439,6 +1524,7 @@ impl CacheParameterGroupStatusDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeCacheParameterGroups</code> operation.</p>
+/// see [ElastiCache::describe_cache_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheParameterGroupsMessage {
@@ -1446,6 +1532,30 @@ pub struct CacheParameterGroupsMessage {
     pub cache_parameter_groups: Option<Vec<CacheParameterGroup>>,
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     pub marker: Option<String>,
+}
+
+impl CacheParameterGroupsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<CacheParameterGroup>> {
+        Some(self.cache_parameter_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for CacheParameterGroupsMessage {
+    type Item = CacheParameterGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CacheParameterGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1592,6 +1702,7 @@ impl CacheSecurityGroupMembershipListDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeCacheSecurityGroups</code> operation.</p>
+/// see [ElastiCache::describe_cache_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheSecurityGroupMessage {
@@ -1599,6 +1710,30 @@ pub struct CacheSecurityGroupMessage {
     pub cache_security_groups: Option<Vec<CacheSecurityGroup>>,
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     pub marker: Option<String>,
+}
+
+impl CacheSecurityGroupMessage {
+    fn pagination_page_opt(self) -> Option<Vec<CacheSecurityGroup>> {
+        Some(self.cache_security_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for CacheSecurityGroupMessage {
+    type Item = CacheSecurityGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CacheSecurityGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1721,6 +1856,7 @@ impl CacheSubnetGroupDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeCacheSubnetGroups</code> operation.</p>
+/// see [ElastiCache::describe_cache_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheSubnetGroupMessage {
@@ -1728,6 +1864,30 @@ pub struct CacheSubnetGroupMessage {
     pub cache_subnet_groups: Option<Vec<CacheSubnetGroup>>,
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     pub marker: Option<String>,
+}
+
+impl CacheSubnetGroupMessage {
+    fn pagination_page_opt(self) -> Option<Vec<CacheSubnetGroup>> {
+        Some(self.cache_subnet_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for CacheSubnetGroupMessage {
+    type Item = CacheSubnetGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CacheSubnetGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1805,6 +1965,7 @@ impl ClusterIdListDeserializer {
         })
     }
 }
+/// see [ElastiCache::complete_migration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteMigrationMessage {
@@ -1833,6 +1994,7 @@ impl CompleteMigrationMessageSerializer {
     }
 }
 
+/// see [ElastiCache::complete_migration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CompleteMigrationResponse {
@@ -1911,6 +2073,7 @@ impl ConfigureShardSerializer {
 }
 
 /// <p>Represents the input of a <code>CopySnapshotMessage</code> operation.</p>
+/// see [ElastiCache::copy_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotMessage {
@@ -1950,6 +2113,7 @@ impl CopySnapshotMessageSerializer {
     }
 }
 
+/// see [ElastiCache::copy_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopySnapshotResult {
@@ -1976,6 +2140,7 @@ impl CopySnapshotResultDeserializer {
     }
 }
 /// <p>Represents the input of a CreateCacheCluster operation.</p>
+/// see [ElastiCache::create_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCacheClusterMessage {
@@ -2168,6 +2333,7 @@ impl CreateCacheClusterMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCacheClusterResult {
@@ -2201,6 +2367,7 @@ impl CreateCacheClusterResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>CreateCacheParameterGroup</code> operation.</p>
+/// see [ElastiCache::create_cache_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCacheParameterGroupMessage {
@@ -2233,6 +2400,7 @@ impl CreateCacheParameterGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_cache_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCacheParameterGroupResult {
@@ -2267,6 +2435,7 @@ impl CreateCacheParameterGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>CreateCacheSecurityGroup</code> operation.</p>
+/// see [ElastiCache::create_cache_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCacheSecurityGroupMessage {
@@ -2293,6 +2462,7 @@ impl CreateCacheSecurityGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_cache_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCacheSecurityGroupResult {
@@ -2327,6 +2497,7 @@ impl CreateCacheSecurityGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>CreateCacheSubnetGroup</code> operation.</p>
+/// see [ElastiCache::create_cache_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCacheSubnetGroupMessage {
@@ -2363,6 +2534,7 @@ impl CreateCacheSubnetGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_cache_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCacheSubnetGroupResult {
@@ -2395,6 +2567,7 @@ impl CreateCacheSubnetGroupResultDeserializer {
         )
     }
 }
+/// see [ElastiCache::create_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGlobalReplicationGroupMessage {
@@ -2432,6 +2605,7 @@ impl CreateGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateGlobalReplicationGroupResult {
@@ -2466,6 +2640,7 @@ impl CreateGlobalReplicationGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>CreateReplicationGroup</code> operation.</p>
+/// see [ElastiCache::create_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationGroupMessage {
@@ -2702,6 +2877,7 @@ impl CreateReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReplicationGroupResult {
@@ -2735,6 +2911,7 @@ impl CreateReplicationGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>CreateSnapshot</code> operation.</p>
+/// see [ElastiCache::create_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotMessage {
@@ -2770,6 +2947,7 @@ impl CreateSnapshotMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSnapshotResult {
@@ -2795,6 +2973,7 @@ impl CreateSnapshotResultDeserializer {
         })
     }
 }
+/// see [ElastiCache::create_user_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserGroupMessage {
@@ -2827,6 +3006,7 @@ impl CreateUserGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::create_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserMessage {
@@ -2909,6 +3089,7 @@ impl CustomerNodeEndpointListSerializer {
     }
 }
 
+/// see [ElastiCache::decrease_node_groups_in_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseNodeGroupsInGlobalReplicationGroupMessage {
@@ -2966,6 +3147,7 @@ impl DecreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::decrease_node_groups_in_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DecreaseNodeGroupsInGlobalReplicationGroupResult {
@@ -2999,6 +3181,7 @@ impl DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer {
         )
     }
 }
+/// see [ElastiCache::decrease_replica_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseReplicaCountMessage {
@@ -3051,6 +3234,7 @@ impl DecreaseReplicaCountMessageSerializer {
     }
 }
 
+/// see [ElastiCache::decrease_replica_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DecreaseReplicaCountResult {
@@ -3084,6 +3268,7 @@ impl DecreaseReplicaCountResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>DeleteCacheCluster</code> operation.</p>
+/// see [ElastiCache::delete_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCacheClusterMessage {
@@ -3115,6 +3300,7 @@ impl DeleteCacheClusterMessageSerializer {
     }
 }
 
+/// see [ElastiCache::delete_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteCacheClusterResult {
@@ -3148,6 +3334,7 @@ impl DeleteCacheClusterResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>DeleteCacheParameterGroup</code> operation.</p>
+/// see [ElastiCache::delete_cache_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCacheParameterGroupMessage {
@@ -3172,6 +3359,7 @@ impl DeleteCacheParameterGroupMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DeleteCacheSecurityGroup</code> operation.</p>
+/// see [ElastiCache::delete_cache_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCacheSecurityGroupMessage {
@@ -3196,6 +3384,7 @@ impl DeleteCacheSecurityGroupMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DeleteCacheSubnetGroup</code> operation.</p>
+/// see [ElastiCache::delete_cache_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCacheSubnetGroupMessage {
@@ -3219,6 +3408,7 @@ impl DeleteCacheSubnetGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::delete_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGlobalReplicationGroupMessage {
@@ -3248,6 +3438,7 @@ impl DeleteGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::delete_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteGlobalReplicationGroupResult {
@@ -3282,6 +3473,7 @@ impl DeleteGlobalReplicationGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>DeleteReplicationGroup</code> operation.</p>
+/// see [ElastiCache::delete_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationGroupMessage {
@@ -3321,6 +3513,7 @@ impl DeleteReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::delete_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReplicationGroupResult {
@@ -3354,6 +3547,7 @@ impl DeleteReplicationGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>DeleteSnapshot</code> operation.</p>
+/// see [ElastiCache::delete_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotMessage {
@@ -3374,6 +3568,7 @@ impl DeleteSnapshotMessageSerializer {
     }
 }
 
+/// see [ElastiCache::delete_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteSnapshotResult {
@@ -3399,6 +3594,7 @@ impl DeleteSnapshotResultDeserializer {
         })
     }
 }
+/// see [ElastiCache::delete_user_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserGroupMessage {
@@ -3419,6 +3615,7 @@ impl DeleteUserGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::delete_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserMessage {
@@ -3440,6 +3637,7 @@ impl DeleteUserMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeCacheClusters</code> operation.</p>
+/// see [ElastiCache::describe_cache_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheClustersMessage {
@@ -3453,6 +3651,14 @@ pub struct DescribeCacheClustersMessage {
     pub show_cache_clusters_not_in_replication_groups: Option<bool>,
     /// <p>An optional flag that can be included in the <code>DescribeCacheCluster</code> request to retrieve information about the individual cache nodes.</p>
     pub show_cache_node_info: Option<bool>,
+}
+
+impl PagedRequest for DescribeCacheClustersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeCacheClustersMessage` contents to a `SignedRequest`.
@@ -3486,6 +3692,7 @@ impl DescribeCacheClustersMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeCacheEngineVersions</code> operation.</p>
+/// see [ElastiCache::describe_cache_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheEngineVersionsMessage {
@@ -3501,6 +3708,14 @@ pub struct DescribeCacheEngineVersionsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeCacheEngineVersionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeCacheEngineVersionsMessage` contents to a `SignedRequest`.
@@ -3537,6 +3752,7 @@ impl DescribeCacheEngineVersionsMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeCacheParameterGroups</code> operation.</p>
+/// see [ElastiCache::describe_cache_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheParameterGroupsMessage {
@@ -3546,6 +3762,14 @@ pub struct DescribeCacheParameterGroupsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeCacheParameterGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeCacheParameterGroupsMessage` contents to a `SignedRequest`.
@@ -3573,6 +3797,7 @@ impl DescribeCacheParameterGroupsMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeCacheParameters</code> operation.</p>
+/// see [ElastiCache::describe_cache_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheParametersMessage {
@@ -3584,6 +3809,14 @@ pub struct DescribeCacheParametersMessage {
     pub max_records: Option<i64>,
     /// <p>The parameter types to return.</p> <p>Valid values: <code>user</code> | <code>system</code> | <code>engine-default</code> </p>
     pub source: Option<String>,
+}
+
+impl PagedRequest for DescribeCacheParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeCacheParametersMessage` contents to a `SignedRequest`.
@@ -3612,6 +3845,7 @@ impl DescribeCacheParametersMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeCacheSecurityGroups</code> operation.</p>
+/// see [ElastiCache::describe_cache_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheSecurityGroupsMessage {
@@ -3621,6 +3855,14 @@ pub struct DescribeCacheSecurityGroupsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeCacheSecurityGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeCacheSecurityGroupsMessage` contents to a `SignedRequest`.
@@ -3648,6 +3890,7 @@ impl DescribeCacheSecurityGroupsMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeCacheSubnetGroups</code> operation.</p>
+/// see [ElastiCache::describe_cache_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheSubnetGroupsMessage {
@@ -3657,6 +3900,14 @@ pub struct DescribeCacheSubnetGroupsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeCacheSubnetGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeCacheSubnetGroupsMessage` contents to a `SignedRequest`.
@@ -3684,6 +3935,7 @@ impl DescribeCacheSubnetGroupsMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeEngineDefaultParameters</code> operation.</p>
+/// see [ElastiCache::describe_engine_default_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultParametersMessage {
@@ -3693,6 +3945,14 @@ pub struct DescribeEngineDefaultParametersMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeEngineDefaultParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEngineDefaultParametersMessage` contents to a `SignedRequest`.
@@ -3717,10 +3977,35 @@ impl DescribeEngineDefaultParametersMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_engine_default_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
+}
+
+impl DescribeEngineDefaultParametersResult {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.engine_defaults.as_ref()?.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEngineDefaultParametersResult {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.engine_defaults.as_ref()?.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3750,6 +4035,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>DescribeEvents</code> operation.</p>
+/// see [ElastiCache::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
@@ -3767,6 +4053,14 @@ pub struct DescribeEventsMessage {
     pub source_type: Option<String>,
     /// <p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>
     pub start_time: Option<String>,
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
@@ -3802,6 +4096,7 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_global_replication_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalReplicationGroupsMessage {
@@ -3813,6 +4108,14 @@ pub struct DescribeGlobalReplicationGroupsMessage {
     pub max_records: Option<i64>,
     /// <p>Returns the list of members that comprise the Global Datastore.</p>
     pub show_member_info: Option<bool>,
+}
+
+impl PagedRequest for DescribeGlobalReplicationGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeGlobalReplicationGroupsMessage` contents to a `SignedRequest`.
@@ -3842,6 +4145,7 @@ impl DescribeGlobalReplicationGroupsMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_global_replication_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeGlobalReplicationGroupsResult {
@@ -3849,6 +4153,30 @@ pub struct DescribeGlobalReplicationGroupsResult {
     pub global_replication_groups: Option<Vec<GlobalReplicationGroup>>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by MaxRecords. &gt;</p>
     pub marker: Option<String>,
+}
+
+impl DescribeGlobalReplicationGroupsResult {
+    fn pagination_page_opt(self) -> Option<Vec<GlobalReplicationGroup>> {
+        Some(self.global_replication_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeGlobalReplicationGroupsResult {
+    type Item = GlobalReplicationGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GlobalReplicationGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3883,6 +4211,7 @@ impl DescribeGlobalReplicationGroupsResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>DescribeReplicationGroups</code> operation.</p>
+/// see [ElastiCache::describe_replication_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationGroupsMessage {
@@ -3892,6 +4221,14 @@ pub struct DescribeReplicationGroupsMessage {
     pub max_records: Option<i64>,
     /// <p>The identifier for the replication group to be described. This parameter is not case sensitive.</p> <p>If you do not specify this parameter, information about all replication groups is returned.</p>
     pub replication_group_id: Option<String>,
+}
+
+impl PagedRequest for DescribeReplicationGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeReplicationGroupsMessage` contents to a `SignedRequest`.
@@ -3916,6 +4253,7 @@ impl DescribeReplicationGroupsMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeReservedCacheNodes</code> operation.</p>
+/// see [ElastiCache::describe_reserved_cache_nodes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedCacheNodesMessage {
@@ -3935,6 +4273,14 @@ pub struct DescribeReservedCacheNodesMessage {
     pub reserved_cache_node_id: Option<String>,
     /// <p>The offering identifier filter value. Use this parameter to show only purchased reservations matching the specified offering identifier.</p>
     pub reserved_cache_nodes_offering_id: Option<String>,
+}
+
+impl PagedRequest for DescribeReservedCacheNodesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeReservedCacheNodesMessage` contents to a `SignedRequest`.
@@ -3980,6 +4326,7 @@ impl DescribeReservedCacheNodesMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>
+/// see [ElastiCache::describe_reserved_cache_nodes_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedCacheNodesOfferingsMessage {
@@ -3997,6 +4344,14 @@ pub struct DescribeReservedCacheNodesOfferingsMessage {
     pub product_description: Option<String>,
     /// <p>The offering identifier filter value. Use this parameter to show only the available offering that matches the specified reservation identifier.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>
     pub reserved_cache_nodes_offering_id: Option<String>,
+}
+
+impl PagedRequest for DescribeReservedCacheNodesOfferingsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeReservedCacheNodesOfferingsMessage` contents to a `SignedRequest`.
@@ -4039,6 +4394,7 @@ impl DescribeReservedCacheNodesOfferingsMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_service_updates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceUpdatesMessage {
@@ -4050,6 +4406,14 @@ pub struct DescribeServiceUpdatesMessage {
     pub service_update_name: Option<String>,
     /// <p>The status of the service update</p>
     pub service_update_status: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeServiceUpdatesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeServiceUpdatesMessage` contents to a `SignedRequest`.
@@ -4081,6 +4445,7 @@ impl DescribeServiceUpdatesMessageSerializer {
 }
 
 /// <p>Represents the output of a <code>DescribeSnapshots</code> operation.</p>
+/// see [ElastiCache::describe_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSnapshotsListMessage {
@@ -4088,6 +4453,30 @@ pub struct DescribeSnapshotsListMessage {
     pub marker: Option<String>,
     /// <p>A list of snapshots. Each item in the list contains detailed information about one snapshot.</p>
     pub snapshots: Option<Vec<Snapshot>>,
+}
+
+impl DescribeSnapshotsListMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Snapshot>> {
+        Some(self.snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSnapshotsListMessage {
+    type Item = Snapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Snapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4119,6 +4508,7 @@ impl DescribeSnapshotsListMessageDeserializer {
     }
 }
 /// <p>Represents the input of a <code>DescribeSnapshotsMessage</code> operation.</p>
+/// see [ElastiCache::describe_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotsMessage {
@@ -4136,6 +4526,14 @@ pub struct DescribeSnapshotsMessage {
     pub snapshot_name: Option<String>,
     /// <p>If set to <code>system</code>, the output shows snapshots that were automatically created by ElastiCache. If set to <code>user</code> the output shows snapshots that were manually created. If omitted, the output shows both automatically and manually created snapshots.</p>
     pub snapshot_source: Option<String>,
+}
+
+impl PagedRequest for DescribeSnapshotsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeSnapshotsMessage` contents to a `SignedRequest`.
@@ -4174,6 +4572,7 @@ impl DescribeSnapshotsMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_update_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUpdateActionsMessage {
@@ -4197,6 +4596,14 @@ pub struct DescribeUpdateActionsMessage {
     pub show_node_level_update_status: Option<bool>,
     /// <p>The status of the update action.</p>
     pub update_action_status: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeUpdateActionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeUpdateActionsMessage` contents to a `SignedRequest`.
@@ -4264,6 +4671,7 @@ impl DescribeUpdateActionsMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_user_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserGroupsMessage {
@@ -4273,6 +4681,14 @@ pub struct DescribeUserGroupsMessage {
     pub max_records: Option<i64>,
     /// <p>The ID of the user group.</p>
     pub user_group_id: Option<String>,
+}
+
+impl PagedRequest for DescribeUserGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeUserGroupsMessage` contents to a `SignedRequest`.
@@ -4296,6 +4712,7 @@ impl DescribeUserGroupsMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_user_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeUserGroupsResult {
@@ -4303,6 +4720,30 @@ pub struct DescribeUserGroupsResult {
     pub marker: Option<String>,
     /// <p>Returns a list of user groups.</p>
     pub user_groups: Option<Vec<UserGroup>>,
+}
+
+impl DescribeUserGroupsResult {
+    fn pagination_page_opt(self) -> Option<Vec<UserGroup>> {
+        Some(self.user_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeUserGroupsResult {
+    type Item = UserGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4333,6 +4774,7 @@ impl DescribeUserGroupsResultDeserializer {
         )
     }
 }
+/// see [ElastiCache::describe_users]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsersMessage {
@@ -4346,6 +4788,14 @@ pub struct DescribeUsersMessage {
     pub max_records: Option<i64>,
     /// <p>The ID of the user.</p>
     pub user_id: Option<String>,
+}
+
+impl PagedRequest for DescribeUsersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeUsersMessage` contents to a `SignedRequest`.
@@ -4379,6 +4829,7 @@ impl DescribeUsersMessageSerializer {
     }
 }
 
+/// see [ElastiCache::describe_users]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeUsersResult {
@@ -4386,6 +4837,30 @@ pub struct DescribeUsersResult {
     pub marker: Option<String>,
     /// <p>A list of users.</p>
     pub users: Option<Vec<User>>,
+}
+
+impl DescribeUsersResult {
+    fn pagination_page_opt(self) -> Option<Vec<User>> {
+        Some(self.users.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeUsersResult {
+    type Item = User;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<User> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4412,6 +4887,7 @@ impl DescribeUsersResultDeserializer {
         })
     }
 }
+/// see [ElastiCache::disassociate_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateGlobalReplicationGroupMessage {
@@ -4447,6 +4923,7 @@ impl DisassociateGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::disassociate_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisassociateGlobalReplicationGroupResult {
@@ -4706,6 +5183,7 @@ impl EventListDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeEvents</code> operation.</p>
+/// see [ElastiCache::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
@@ -4713,6 +5191,30 @@ pub struct EventsMessage {
     pub events: Option<Vec<Event>>,
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     pub marker: Option<String>,
+}
+
+impl EventsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for EventsMessage {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4739,6 +5241,7 @@ impl EventsMessageDeserializer {
         })
     }
 }
+/// see [ElastiCache::failover_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailoverGlobalReplicationGroupMessage {
@@ -4774,6 +5277,7 @@ impl FailoverGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::failover_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FailoverGlobalReplicationGroupResult {
@@ -5183,6 +5687,7 @@ impl GlobalReplicationGroupMemberListDeserializer {
         })
     }
 }
+/// see [ElastiCache::increase_node_groups_in_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IncreaseNodeGroupsInGlobalReplicationGroupMessage {
@@ -5231,6 +5736,7 @@ impl IncreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::increase_node_groups_in_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IncreaseNodeGroupsInGlobalReplicationGroupResult {
@@ -5264,6 +5770,7 @@ impl IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer {
         )
     }
 }
+/// see [ElastiCache::increase_replica_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IncreaseReplicaCountMessage {
@@ -5307,6 +5814,7 @@ impl IncreaseReplicaCountMessageSerializer {
     }
 }
 
+/// see [ElastiCache::increase_replica_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IncreaseReplicaCountResult {
@@ -5368,6 +5876,7 @@ impl KeyListSerializer {
 }
 
 /// <p>The input parameters for the <code>ListAllowedNodeTypeModifications</code> operation.</p>
+/// see [ElastiCache::list_allowed_node_type_modifications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAllowedNodeTypeModificationsMessage {
@@ -5396,6 +5905,7 @@ impl ListAllowedNodeTypeModificationsMessageSerializer {
 }
 
 /// <p>The input parameters for the <code>ListTagsForResource</code> operation.</p>
+/// see [ElastiCache::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
@@ -5417,6 +5927,7 @@ impl ListTagsForResourceMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>ModifyCacheCluster</code> operation.</p>
+/// see [ElastiCache::modify_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCacheClusterMessage {
@@ -5567,6 +6078,7 @@ impl ModifyCacheClusterMessageSerializer {
     }
 }
 
+/// see [ElastiCache::modify_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyCacheClusterResult {
@@ -5600,6 +6112,7 @@ impl ModifyCacheClusterResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>ModifyCacheParameterGroup</code> operation.</p>
+/// see [ElastiCache::modify_cache_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCacheParameterGroupMessage {
@@ -5631,6 +6144,7 @@ impl ModifyCacheParameterGroupMessageSerializer {
 }
 
 /// <p>Represents the input of a <code>ModifyCacheSubnetGroup</code> operation.</p>
+/// see [ElastiCache::modify_cache_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCacheSubnetGroupMessage {
@@ -5671,6 +6185,7 @@ impl ModifyCacheSubnetGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::modify_cache_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyCacheSubnetGroupResult {
@@ -5703,6 +6218,7 @@ impl ModifyCacheSubnetGroupResultDeserializer {
         )
     }
 }
+/// see [ElastiCache::modify_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyGlobalReplicationGroupMessage {
@@ -5758,6 +6274,7 @@ impl ModifyGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::modify_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyGlobalReplicationGroupResult {
@@ -5792,6 +6309,7 @@ impl ModifyGlobalReplicationGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>ModifyReplicationGroups</code> operation.</p>
+/// see [ElastiCache::modify_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationGroupMessage {
@@ -5972,6 +6490,7 @@ impl ModifyReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::modify_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyReplicationGroupResult {
@@ -6005,6 +6524,7 @@ impl ModifyReplicationGroupResultDeserializer {
     }
 }
 /// <p>Represents the input for a <code>ModifyReplicationGroupShardConfiguration</code> operation.</p>
+/// see [ElastiCache::modify_replication_group_shard_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationGroupShardConfigurationMessage {
@@ -6071,6 +6591,7 @@ impl ModifyReplicationGroupShardConfigurationMessageSerializer {
     }
 }
 
+/// see [ElastiCache::modify_replication_group_shard_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyReplicationGroupShardConfigurationResult {
@@ -6103,6 +6624,7 @@ impl ModifyReplicationGroupShardConfigurationResultDeserializer {
         )
     }
 }
+/// see [ElastiCache::modify_user_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyUserGroupMessage {
@@ -6141,6 +6663,7 @@ impl ModifyUserGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::modify_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyUserMessage {
@@ -7170,6 +7693,7 @@ impl ProcessedUpdateActionListDeserializer {
     }
 }
 /// <p>Represents the input of a <code>PurchaseReservedCacheNodesOffering</code> operation.</p>
+/// see [ElastiCache::purchase_reserved_cache_nodes_offering]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseReservedCacheNodesOfferingMessage {
@@ -7206,6 +7730,7 @@ impl PurchaseReservedCacheNodesOfferingMessageSerializer {
     }
 }
 
+/// see [ElastiCache::purchase_reserved_cache_nodes_offering]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PurchaseReservedCacheNodesOfferingResult {
@@ -7238,6 +7763,7 @@ impl PurchaseReservedCacheNodesOfferingResultDeserializer {
         )
     }
 }
+/// see [ElastiCache::rebalance_slots_in_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebalanceSlotsInGlobalReplicationGroupMessage {
@@ -7271,6 +7797,7 @@ impl RebalanceSlotsInGlobalReplicationGroupMessageSerializer {
     }
 }
 
+/// see [ElastiCache::rebalance_slots_in_global_replication_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebalanceSlotsInGlobalReplicationGroupResult {
@@ -7305,6 +7832,7 @@ impl RebalanceSlotsInGlobalReplicationGroupResultDeserializer {
     }
 }
 /// <p>Represents the input of a <code>RebootCacheCluster</code> operation.</p>
+/// see [ElastiCache::reboot_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootCacheClusterMessage {
@@ -7335,6 +7863,7 @@ impl RebootCacheClusterMessageSerializer {
     }
 }
 
+/// see [ElastiCache::reboot_cache_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootCacheClusterResult {
@@ -7486,6 +8015,7 @@ impl RemoveReplicasListSerializer {
 }
 
 /// <p>Represents the input of a <code>RemoveTagsFromResource</code> operation.</p>
+/// see [ElastiCache::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
@@ -7744,6 +8274,7 @@ impl ReplicationGroupListDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeReplicationGroups</code> operation.</p>
+/// see [ElastiCache::describe_replication_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplicationGroupMessage {
@@ -7751,6 +8282,30 @@ pub struct ReplicationGroupMessage {
     pub marker: Option<String>,
     /// <p>A list of replication groups. Each item in the list contains detailed information about one replication group.</p>
     pub replication_groups: Option<Vec<ReplicationGroup>>,
+}
+
+impl ReplicationGroupMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ReplicationGroup>> {
+        Some(self.replication_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ReplicationGroupMessage {
+    type Item = ReplicationGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReplicationGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7995,6 +8550,7 @@ impl ReservedCacheNodeListDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeReservedCacheNodes</code> operation.</p>
+/// see [ElastiCache::describe_reserved_cache_nodes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedCacheNodeMessage {
@@ -8002,6 +8558,30 @@ pub struct ReservedCacheNodeMessage {
     pub marker: Option<String>,
     /// <p>A list of reserved cache nodes. Each element in the list contains detailed information about one node.</p>
     pub reserved_cache_nodes: Option<Vec<ReservedCacheNode>>,
+}
+
+impl ReservedCacheNodeMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ReservedCacheNode>> {
+        Some(self.reserved_cache_nodes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ReservedCacheNodeMessage {
+    type Item = ReservedCacheNode;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReservedCacheNode> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8137,6 +8717,7 @@ impl ReservedCacheNodesOfferingListDeserializer {
     }
 }
 /// <p>Represents the output of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>
+/// see [ElastiCache::describe_reserved_cache_nodes_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedCacheNodesOfferingMessage {
@@ -8144,6 +8725,30 @@ pub struct ReservedCacheNodesOfferingMessage {
     pub marker: Option<String>,
     /// <p>A list of reserved cache node offerings. Each element in the list contains detailed information about one offering.</p>
     pub reserved_cache_nodes_offerings: Option<Vec<ReservedCacheNodesOffering>>,
+}
+
+impl ReservedCacheNodesOfferingMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ReservedCacheNodesOffering>> {
+        Some(self.reserved_cache_nodes_offerings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ReservedCacheNodesOfferingMessage {
+    type Item = ReservedCacheNodesOffering;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReservedCacheNodesOffering> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8178,6 +8783,7 @@ impl ReservedCacheNodesOfferingMessageDeserializer {
     }
 }
 /// <p>Represents the input of a <code>ResetCacheParameterGroup</code> operation.</p>
+/// see [ElastiCache::reset_cache_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetCacheParameterGroupMessage {
@@ -8289,6 +8895,7 @@ impl ReshardingStatusDeserializer {
     }
 }
 /// <p>Represents the input of a <code>RevokeCacheSecurityGroupIngress</code> operation.</p>
+/// see [ElastiCache::revoke_cache_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeCacheSecurityGroupIngressMessage {
@@ -8324,6 +8931,7 @@ impl RevokeCacheSecurityGroupIngressMessageSerializer {
     }
 }
 
+/// see [ElastiCache::revoke_cache_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevokeCacheSecurityGroupIngressResult {
@@ -8597,6 +9205,7 @@ impl ServiceUpdateTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [ElastiCache::describe_service_updates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceUpdatesMessage {
@@ -8604,6 +9213,30 @@ pub struct ServiceUpdatesMessage {
     pub marker: Option<String>,
     /// <p>A list of service updates</p>
     pub service_updates: Option<Vec<ServiceUpdate>>,
+}
+
+impl ServiceUpdatesMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ServiceUpdate>> {
+        Some(self.service_updates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ServiceUpdatesMessage {
+    type Item = ServiceUpdate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ServiceUpdate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8912,6 +9545,7 @@ impl SourceTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [ElastiCache::start_migration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMigrationMessage {
@@ -8942,6 +9576,7 @@ impl StartMigrationMessageSerializer {
     }
 }
 
+/// see [ElastiCache::start_migration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartMigrationResponse {
@@ -9165,6 +9800,9 @@ impl TagListSerializer {
 }
 
 /// <p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsForResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>
+/// see [ElastiCache::add_tags_to_resource]
+/// see [ElastiCache::list_tags_for_resource]
+/// see [ElastiCache::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagListMessage {
@@ -9193,6 +9831,7 @@ impl TagListMessageDeserializer {
         })
     }
 }
+/// see [ElastiCache::test_failover]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestFailoverMessage {
@@ -9219,6 +9858,7 @@ impl TestFailoverMessageSerializer {
     }
 }
 
+/// see [ElastiCache::test_failover]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TestFailoverResult {
@@ -9544,6 +10184,8 @@ impl UpdateActionListDeserializer {
         })
     }
 }
+/// see [ElastiCache::batch_apply_update_action]
+/// see [ElastiCache::batch_stop_update_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateActionResultsMessage {
@@ -9609,6 +10251,7 @@ impl UpdateActionStatusListSerializer {
     }
 }
 
+/// see [ElastiCache::describe_update_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateActionsMessage {
@@ -9616,6 +10259,30 @@ pub struct UpdateActionsMessage {
     pub marker: Option<String>,
     /// <p>Returns a list of update actions</p>
     pub update_actions: Option<Vec<UpdateAction>>,
+}
+
+impl UpdateActionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<UpdateAction>> {
+        Some(self.update_actions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for UpdateActionsMessage {
+    type Item = UpdateAction;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UpdateAction> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -9642,6 +10309,9 @@ impl UpdateActionsMessageDeserializer {
         })
     }
 }
+/// see [ElastiCache::create_user]
+/// see [ElastiCache::delete_user]
+/// see [ElastiCache::modify_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct User {
@@ -9706,6 +10376,9 @@ impl UserDeserializer {
         })
     }
 }
+/// see [ElastiCache::create_user_group]
+/// see [ElastiCache::delete_user_group]
+/// see [ElastiCache::modify_user_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UserGroup {
@@ -15340,7 +16013,7 @@ impl fmt::Display for TestFailoverError {
 impl Error for TestFailoverError {}
 /// Trait representing the capabilities of the Amazon ElastiCache API. Amazon ElastiCache clients implement this trait.
 #[async_trait]
-pub trait ElastiCache {
+pub trait ElastiCache: Clone + Sync + Send + 'static {
     /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
     async fn add_tags_to_resource(
         &self,
@@ -15509,11 +16182,31 @@ pub trait ElastiCache {
         input: DescribeCacheClustersMessage,
     ) -> Result<CacheClusterMessage, RusotoError<DescribeCacheClustersError>>;
 
+    /// Auto-paginating version of `describe_cache_clusters`
+    fn describe_cache_clusters_pages(
+        &self,
+        input: DescribeCacheClustersMessage,
+    ) -> RusotoStream<CacheCluster, DescribeCacheClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cache_clusters(state.clone())
+        })
+    }
+
     /// <p>Returns a list of the available cache engines and their versions.</p>
     async fn describe_cache_engine_versions(
         &self,
         input: DescribeCacheEngineVersionsMessage,
     ) -> Result<CacheEngineVersionMessage, RusotoError<DescribeCacheEngineVersionsError>>;
+
+    /// Auto-paginating version of `describe_cache_engine_versions`
+    fn describe_cache_engine_versions_pages(
+        &self,
+        input: DescribeCacheEngineVersionsMessage,
+    ) -> RusotoStream<CacheEngineVersion, DescribeCacheEngineVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cache_engine_versions(state.clone())
+        })
+    }
 
     /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
     async fn describe_cache_parameter_groups(
@@ -15521,11 +16214,31 @@ pub trait ElastiCache {
         input: DescribeCacheParameterGroupsMessage,
     ) -> Result<CacheParameterGroupsMessage, RusotoError<DescribeCacheParameterGroupsError>>;
 
+    /// Auto-paginating version of `describe_cache_parameter_groups`
+    fn describe_cache_parameter_groups_pages(
+        &self,
+        input: DescribeCacheParameterGroupsMessage,
+    ) -> RusotoStream<CacheParameterGroup, DescribeCacheParameterGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cache_parameter_groups(state.clone())
+        })
+    }
+
     /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
     async fn describe_cache_parameters(
         &self,
         input: DescribeCacheParametersMessage,
     ) -> Result<CacheParameterGroupDetails, RusotoError<DescribeCacheParametersError>>;
+
+    /// Auto-paginating version of `describe_cache_parameters`
+    fn describe_cache_parameters_pages(
+        &self,
+        input: DescribeCacheParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeCacheParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cache_parameters(state.clone())
+        })
+    }
 
     /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group. This applicable only when you have ElastiCache in Classic setup </p>
     async fn describe_cache_security_groups(
@@ -15533,11 +16246,31 @@ pub trait ElastiCache {
         input: DescribeCacheSecurityGroupsMessage,
     ) -> Result<CacheSecurityGroupMessage, RusotoError<DescribeCacheSecurityGroupsError>>;
 
+    /// Auto-paginating version of `describe_cache_security_groups`
+    fn describe_cache_security_groups_pages(
+        &self,
+        input: DescribeCacheSecurityGroupsMessage,
+    ) -> RusotoStream<CacheSecurityGroup, DescribeCacheSecurityGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cache_security_groups(state.clone())
+        })
+    }
+
     /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group. This is applicable only when you have ElastiCache in VPC setup. All ElastiCache clusters now launch in VPC by default. </p>
     async fn describe_cache_subnet_groups(
         &self,
         input: DescribeCacheSubnetGroupsMessage,
     ) -> Result<CacheSubnetGroupMessage, RusotoError<DescribeCacheSubnetGroupsError>>;
+
+    /// Auto-paginating version of `describe_cache_subnet_groups`
+    fn describe_cache_subnet_groups_pages(
+        &self,
+        input: DescribeCacheSubnetGroupsMessage,
+    ) -> RusotoStream<CacheSubnetGroup, DescribeCacheSubnetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cache_subnet_groups(state.clone())
+        })
+    }
 
     /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
     async fn describe_engine_default_parameters(
@@ -15548,11 +16281,31 @@ pub trait ElastiCache {
         RusotoError<DescribeEngineDefaultParametersError>,
     >;
 
+    /// Auto-paginating version of `describe_engine_default_parameters`
+    fn describe_engine_default_parameters_pages(
+        &self,
+        input: DescribeEngineDefaultParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeEngineDefaultParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_engine_default_parameters(state.clone())
+        })
+    }
+
     /// <p>Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsMessage,
+    ) -> RusotoStream<Event, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
 
     /// <p>Returns information about a particular global replication group. If no identifier is specified, returns information about all Global Datastores. </p>
     async fn describe_global_replication_groups(
@@ -15563,17 +16316,47 @@ pub trait ElastiCache {
         RusotoError<DescribeGlobalReplicationGroupsError>,
     >;
 
+    /// Auto-paginating version of `describe_global_replication_groups`
+    fn describe_global_replication_groups_pages(
+        &self,
+        input: DescribeGlobalReplicationGroupsMessage,
+    ) -> RusotoStream<GlobalReplicationGroup, DescribeGlobalReplicationGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_global_replication_groups(state.clone())
+        })
+    }
+
     /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn describe_replication_groups(
         &self,
         input: DescribeReplicationGroupsMessage,
     ) -> Result<ReplicationGroupMessage, RusotoError<DescribeReplicationGroupsError>>;
 
+    /// Auto-paginating version of `describe_replication_groups`
+    fn describe_replication_groups_pages(
+        &self,
+        input: DescribeReplicationGroupsMessage,
+    ) -> RusotoStream<ReplicationGroup, DescribeReplicationGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_replication_groups(state.clone())
+        })
+    }
+
     /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
     async fn describe_reserved_cache_nodes(
         &self,
         input: DescribeReservedCacheNodesMessage,
     ) -> Result<ReservedCacheNodeMessage, RusotoError<DescribeReservedCacheNodesError>>;
+
+    /// Auto-paginating version of `describe_reserved_cache_nodes`
+    fn describe_reserved_cache_nodes_pages(
+        &self,
+        input: DescribeReservedCacheNodesMessage,
+    ) -> RusotoStream<ReservedCacheNode, DescribeReservedCacheNodesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_reserved_cache_nodes(state.clone())
+        })
+    }
 
     /// <p>Lists available reserved cache node offerings.</p>
     async fn describe_reserved_cache_nodes_offerings(
@@ -15584,11 +16367,31 @@ pub trait ElastiCache {
         RusotoError<DescribeReservedCacheNodesOfferingsError>,
     >;
 
+    /// Auto-paginating version of `describe_reserved_cache_nodes_offerings`
+    fn describe_reserved_cache_nodes_offerings_pages(
+        &self,
+        input: DescribeReservedCacheNodesOfferingsMessage,
+    ) -> RusotoStream<ReservedCacheNodesOffering, DescribeReservedCacheNodesOfferingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_reserved_cache_nodes_offerings(state.clone())
+        })
+    }
+
     /// <p>Returns details of the service updates</p>
     async fn describe_service_updates(
         &self,
         input: DescribeServiceUpdatesMessage,
     ) -> Result<ServiceUpdatesMessage, RusotoError<DescribeServiceUpdatesError>>;
+
+    /// Auto-paginating version of `describe_service_updates`
+    fn describe_service_updates_pages(
+        &self,
+        input: DescribeServiceUpdatesMessage,
+    ) -> RusotoStream<ServiceUpdate, DescribeServiceUpdatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_service_updates(state.clone())
+        })
+    }
 
     /// <p><p>Returns information about cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn describe_snapshots(
@@ -15596,11 +16399,31 @@ pub trait ElastiCache {
         input: DescribeSnapshotsMessage,
     ) -> Result<DescribeSnapshotsListMessage, RusotoError<DescribeSnapshotsError>>;
 
+    /// Auto-paginating version of `describe_snapshots`
+    fn describe_snapshots_pages(
+        &self,
+        input: DescribeSnapshotsMessage,
+    ) -> RusotoStream<Snapshot, DescribeSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_snapshots(state.clone())
+        })
+    }
+
     /// <p>Returns details of the update actions </p>
     async fn describe_update_actions(
         &self,
         input: DescribeUpdateActionsMessage,
     ) -> Result<UpdateActionsMessage, RusotoError<DescribeUpdateActionsError>>;
+
+    /// Auto-paginating version of `describe_update_actions`
+    fn describe_update_actions_pages(
+        &self,
+        input: DescribeUpdateActionsMessage,
+    ) -> RusotoStream<UpdateAction, DescribeUpdateActionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_update_actions(state.clone())
+        })
+    }
 
     /// <p>Returns a list of user groups.</p>
     async fn describe_user_groups(
@@ -15608,11 +16431,31 @@ pub trait ElastiCache {
         input: DescribeUserGroupsMessage,
     ) -> Result<DescribeUserGroupsResult, RusotoError<DescribeUserGroupsError>>;
 
+    /// Auto-paginating version of `describe_user_groups`
+    fn describe_user_groups_pages(
+        &self,
+        input: DescribeUserGroupsMessage,
+    ) -> RusotoStream<UserGroup, DescribeUserGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_user_groups(state.clone())
+        })
+    }
+
     /// <p>Returns a list of users.</p>
     async fn describe_users(
         &self,
         input: DescribeUsersMessage,
     ) -> Result<DescribeUsersResult, RusotoError<DescribeUsersError>>;
+
+    /// Auto-paginating version of `describe_users`
+    fn describe_users_pages(
+        &self,
+        input: DescribeUsersMessage,
+    ) -> RusotoStream<User, DescribeUsersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_users(state.clone())
+        })
+    }
 
     /// <p>Remove a secondary cluster from the Global Datastore using the Global Datastore name. The secondary cluster will no longer receive updates from the primary cluster, but will remain as a standalone cluster in that AWS region.</p>
     async fn disassociate_global_replication_group(

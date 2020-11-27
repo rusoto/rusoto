@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -128,6 +130,7 @@ pub struct CmafPackageCreateOrUpdateParameters {
 }
 
 /// <p>the option to configure log subscription.</p>
+/// see [MediaPackage::configure_logs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigureLogsRequest {
@@ -142,6 +145,7 @@ pub struct ConfigureLogsRequest {
     pub ingress_access_logs: Option<IngressAccessLogs>,
 }
 
+/// see [MediaPackage::configure_logs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigureLogsResponse {
@@ -172,6 +176,7 @@ pub struct ConfigureLogsResponse {
 }
 
 /// <p>A new Channel configuration.</p>
+/// see [MediaPackage::create_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
@@ -188,6 +193,7 @@ pub struct CreateChannelRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackage::create_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
@@ -218,6 +224,7 @@ pub struct CreateChannelResponse {
 }
 
 /// <p>Configuration parameters used to create a new HarvestJob.</p>
+/// see [MediaPackage::create_harvest_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHarvestJobRequest {
@@ -239,6 +246,7 @@ pub struct CreateHarvestJobRequest {
     pub start_time: String,
 }
 
+/// see [MediaPackage::create_harvest_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHarvestJobResponse {
@@ -284,6 +292,7 @@ pub struct CreateHarvestJobResponse {
 }
 
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
+/// see [MediaPackage::create_origin_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOriginEndpointRequest {
@@ -343,6 +352,7 @@ pub struct CreateOriginEndpointRequest {
     pub whitelist: Option<Vec<String>>,
 }
 
+/// see [MediaPackage::create_origin_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOriginEndpointResponse {
@@ -486,6 +496,7 @@ pub struct DashPackage {
     pub utc_timing_uri: Option<String>,
 }
 
+/// see [MediaPackage::delete_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
@@ -494,10 +505,12 @@ pub struct DeleteChannelRequest {
     pub id: String,
 }
 
+/// see [MediaPackage::delete_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteChannelResponse {}
 
+/// see [MediaPackage::delete_origin_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOriginEndpointRequest {
@@ -506,10 +519,12 @@ pub struct DeleteOriginEndpointRequest {
     pub id: String,
 }
 
+/// see [MediaPackage::delete_origin_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOriginEndpointResponse {}
 
+/// see [MediaPackage::describe_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
@@ -518,6 +533,7 @@ pub struct DescribeChannelRequest {
     pub id: String,
 }
 
+/// see [MediaPackage::describe_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
@@ -547,6 +563,7 @@ pub struct DescribeChannelResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackage::describe_harvest_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHarvestJobRequest {
@@ -555,6 +572,7 @@ pub struct DescribeHarvestJobRequest {
     pub id: String,
 }
 
+/// see [MediaPackage::describe_harvest_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHarvestJobResponse {
@@ -599,6 +617,7 @@ pub struct DescribeHarvestJobResponse {
     pub status: Option<String>,
 }
 
+/// see [MediaPackage::describe_origin_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOriginEndpointRequest {
@@ -607,6 +626,7 @@ pub struct DescribeOriginEndpointRequest {
     pub id: String,
 }
 
+/// see [MediaPackage::describe_origin_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOriginEndpointResponse {
@@ -969,6 +989,7 @@ pub struct IngressAccessLogs {
     pub log_group_name: Option<String>,
 }
 
+/// see [MediaPackage::list_channels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
@@ -982,6 +1003,15 @@ pub struct ListChannelsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListChannelsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaPackage::list_channels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
@@ -995,6 +1025,31 @@ pub struct ListChannelsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListChannelsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Channel>> {
+        Some(self.channels.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListChannelsResponse {
+    type Item = Channel;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Channel> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaPackage::list_harvest_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHarvestJobsRequest {
@@ -1016,6 +1071,15 @@ pub struct ListHarvestJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListHarvestJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaPackage::list_harvest_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHarvestJobsResponse {
@@ -1029,6 +1093,31 @@ pub struct ListHarvestJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListHarvestJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HarvestJob>> {
+        Some(self.harvest_jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListHarvestJobsResponse {
+    type Item = HarvestJob;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HarvestJob> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaPackage::list_origin_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOriginEndpointsRequest {
@@ -1046,6 +1135,15 @@ pub struct ListOriginEndpointsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListOriginEndpointsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaPackage::list_origin_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOriginEndpointsResponse {
@@ -1059,6 +1157,31 @@ pub struct ListOriginEndpointsResponse {
     pub origin_endpoints: Option<Vec<OriginEndpoint>>,
 }
 
+impl ListOriginEndpointsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<OriginEndpoint>> {
+        Some(self.origin_endpoints.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOriginEndpointsResponse {
+    type Item = OriginEndpoint;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OriginEndpoint> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaPackage::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1066,6 +1189,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [MediaPackage::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1168,6 +1292,7 @@ pub struct OriginEndpoint {
     pub whitelist: Option<Vec<String>>,
 }
 
+/// see [MediaPackage::rotate_channel_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateChannelCredentialsRequest {
@@ -1176,6 +1301,7 @@ pub struct RotateChannelCredentialsRequest {
     pub id: String,
 }
 
+/// see [MediaPackage::rotate_channel_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateChannelCredentialsResponse {
@@ -1205,6 +1331,7 @@ pub struct RotateChannelCredentialsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackage::rotate_ingest_endpoint_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateIngestEndpointCredentialsRequest {
@@ -1216,6 +1343,7 @@ pub struct RotateIngestEndpointCredentialsRequest {
     pub ingest_endpoint_id: String,
 }
 
+/// see [MediaPackage::rotate_ingest_endpoint_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateIngestEndpointCredentialsResponse {
@@ -1300,6 +1428,7 @@ pub struct StreamSelection {
     pub stream_order: Option<String>,
 }
 
+/// see [MediaPackage::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1309,6 +1438,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [MediaPackage::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1320,6 +1450,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Configuration parameters used to update the Channel.</p>
+/// see [MediaPackage::update_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
@@ -1332,6 +1463,7 @@ pub struct UpdateChannelRequest {
     pub id: String,
 }
 
+/// see [MediaPackage::update_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelResponse {
@@ -1362,6 +1494,7 @@ pub struct UpdateChannelResponse {
 }
 
 /// <p>Configuration parameters used to update an existing OriginEndpoint.</p>
+/// see [MediaPackage::update_origin_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOriginEndpointRequest {
@@ -1413,6 +1546,7 @@ pub struct UpdateOriginEndpointRequest {
     pub whitelist: Option<Vec<String>>,
 }
 
+/// see [MediaPackage::update_origin_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOriginEndpointResponse {
@@ -2586,7 +2720,7 @@ impl fmt::Display for UpdateOriginEndpointError {
 impl Error for UpdateOriginEndpointError {}
 /// Trait representing the capabilities of the MediaPackage API. MediaPackage clients implement this trait.
 #[async_trait]
-pub trait MediaPackage {
+pub trait MediaPackage: Clone + Sync + Send + 'static {
     /// <p>Changes the Channel&#39;s properities to configure log subscription</p>
     async fn configure_logs(
         &self,
@@ -2647,17 +2781,47 @@ pub trait MediaPackage {
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
 
+    /// Auto-paginating version of `list_channels`
+    fn list_channels_pages(
+        &self,
+        input: ListChannelsRequest,
+    ) -> RusotoStream<Channel, ListChannelsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_channels(state.clone())
+        })
+    }
+
     /// <p>Returns a collection of HarvestJob records.</p>
     async fn list_harvest_jobs(
         &self,
         input: ListHarvestJobsRequest,
     ) -> Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>>;
 
+    /// Auto-paginating version of `list_harvest_jobs`
+    fn list_harvest_jobs_pages(
+        &self,
+        input: ListHarvestJobsRequest,
+    ) -> RusotoStream<HarvestJob, ListHarvestJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_harvest_jobs(state.clone())
+        })
+    }
+
     /// <p>Returns a collection of OriginEndpoint records.</p>
     async fn list_origin_endpoints(
         &self,
         input: ListOriginEndpointsRequest,
     ) -> Result<ListOriginEndpointsResponse, RusotoError<ListOriginEndpointsError>>;
+
+    /// Auto-paginating version of `list_origin_endpoints`
+    fn list_origin_endpoints_pages(
+        &self,
+        input: ListOriginEndpointsRequest,
+    ) -> RusotoStream<OriginEndpoint, ListOriginEndpointsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_origin_endpoints(state.clone())
+        })
+    }
 
     async fn list_tags_for_resource(
         &self,

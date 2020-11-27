@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,9 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [AppConfig::create_application]
+/// see [AppConfig::get_application]
+/// see [AppConfig::update_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Application {
@@ -42,6 +47,7 @@ pub struct Application {
     pub name: Option<String>,
 }
 
+/// see [AppConfig::list_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Applications {
@@ -55,6 +61,7 @@ pub struct Applications {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::get_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Configuration {
     /// <p>The configuration version.</p>
@@ -65,6 +72,9 @@ pub struct Configuration {
     pub content_type: Option<String>,
 }
 
+/// see [AppConfig::create_configuration_profile]
+/// see [AppConfig::get_configuration_profile]
+/// see [AppConfig::update_configuration_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationProfile {
@@ -124,6 +134,7 @@ pub struct ConfigurationProfileSummary {
     pub validator_types: Option<Vec<String>>,
 }
 
+/// see [AppConfig::list_configuration_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationProfiles {
@@ -137,6 +148,7 @@ pub struct ConfigurationProfiles {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::create_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
@@ -153,6 +165,7 @@ pub struct CreateApplicationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [AppConfig::create_configuration_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationProfileRequest {
@@ -183,6 +196,7 @@ pub struct CreateConfigurationProfileRequest {
     pub validators: Option<Vec<Validator>>,
 }
 
+/// see [AppConfig::create_deployment_strategy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentStrategyRequest {
@@ -216,6 +230,7 @@ pub struct CreateDeploymentStrategyRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [AppConfig::create_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentRequest {
@@ -239,6 +254,7 @@ pub struct CreateEnvironmentRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [AppConfig::create_hosted_configuration_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHostedConfigurationVersionRequest {
@@ -269,6 +285,7 @@ pub struct CreateHostedConfigurationVersionRequest {
     pub latest_version_number: Option<i64>,
 }
 
+/// see [AppConfig::delete_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
@@ -277,6 +294,7 @@ pub struct DeleteApplicationRequest {
     pub application_id: String,
 }
 
+/// see [AppConfig::delete_configuration_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationProfileRequest {
@@ -288,6 +306,7 @@ pub struct DeleteConfigurationProfileRequest {
     pub configuration_profile_id: String,
 }
 
+/// see [AppConfig::delete_deployment_strategy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentStrategyRequest {
@@ -296,6 +315,7 @@ pub struct DeleteDeploymentStrategyRequest {
     pub deployment_strategy_id: String,
 }
 
+/// see [AppConfig::delete_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentRequest {
@@ -307,6 +327,7 @@ pub struct DeleteEnvironmentRequest {
     pub environment_id: String,
 }
 
+/// see [AppConfig::delete_hosted_configuration_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHostedConfigurationVersionRequest {
@@ -321,6 +342,9 @@ pub struct DeleteHostedConfigurationVersionRequest {
     pub version_number: i64,
 }
 
+/// see [AppConfig::get_deployment]
+/// see [AppConfig::start_deployment]
+/// see [AppConfig::stop_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
@@ -420,6 +444,7 @@ pub struct DeploymentEvent {
     pub triggered_by: Option<String>,
 }
 
+/// see [AppConfig::list_deployment_strategies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentStrategies {
@@ -433,6 +458,9 @@ pub struct DeploymentStrategies {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::create_deployment_strategy]
+/// see [AppConfig::get_deployment_strategy]
+/// see [AppConfig::update_deployment_strategy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentStrategy {
@@ -520,6 +548,7 @@ pub struct DeploymentSummary {
     pub state: Option<String>,
 }
 
+/// see [AppConfig::list_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployments {
@@ -533,6 +562,9 @@ pub struct Deployments {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::create_environment]
+/// see [AppConfig::get_environment]
+/// see [AppConfig::update_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Environment {
@@ -562,6 +594,7 @@ pub struct Environment {
     pub state: Option<String>,
 }
 
+/// see [AppConfig::list_environments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Environments {
@@ -575,6 +608,7 @@ pub struct Environments {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::get_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRequest {
@@ -583,6 +617,7 @@ pub struct GetApplicationRequest {
     pub application_id: String,
 }
 
+/// see [AppConfig::get_configuration_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationProfileRequest {
@@ -594,6 +629,7 @@ pub struct GetConfigurationProfileRequest {
     pub configuration_profile_id: String,
 }
 
+/// see [AppConfig::get_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationRequest {
@@ -615,6 +651,7 @@ pub struct GetConfigurationRequest {
     pub environment: String,
 }
 
+/// see [AppConfig::get_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
@@ -629,6 +666,7 @@ pub struct GetDeploymentRequest {
     pub environment_id: String,
 }
 
+/// see [AppConfig::get_deployment_strategy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentStrategyRequest {
@@ -637,6 +675,7 @@ pub struct GetDeploymentStrategyRequest {
     pub deployment_strategy_id: String,
 }
 
+/// see [AppConfig::get_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEnvironmentRequest {
@@ -648,6 +687,7 @@ pub struct GetEnvironmentRequest {
     pub environment_id: String,
 }
 
+/// see [AppConfig::get_hosted_configuration_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostedConfigurationVersionRequest {
@@ -662,6 +702,8 @@ pub struct GetHostedConfigurationVersionRequest {
     pub version_number: i64,
 }
 
+/// see [AppConfig::create_hosted_configuration_version]
+/// see [AppConfig::get_hosted_configuration_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct HostedConfigurationVersion {
     /// <p>The application ID.</p>
@@ -704,6 +746,7 @@ pub struct HostedConfigurationVersionSummary {
     pub version_number: Option<i64>,
 }
 
+/// see [AppConfig::list_hosted_configuration_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HostedConfigurationVersions {
@@ -717,6 +760,7 @@ pub struct HostedConfigurationVersions {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::list_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
@@ -730,6 +774,7 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::list_configuration_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationProfilesRequest {
@@ -746,6 +791,7 @@ pub struct ListConfigurationProfilesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::list_deployment_strategies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentStrategiesRequest {
@@ -759,6 +805,7 @@ pub struct ListDeploymentStrategiesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::list_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsRequest {
@@ -778,6 +825,7 @@ pub struct ListDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::list_environments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEnvironmentsRequest {
@@ -794,6 +842,7 @@ pub struct ListEnvironmentsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::list_hosted_configuration_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHostedConfigurationVersionsRequest {
@@ -813,6 +862,7 @@ pub struct ListHostedConfigurationVersionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AppConfig::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -834,6 +884,7 @@ pub struct Monitor {
     pub alarm_role_arn: Option<String>,
 }
 
+/// see [AppConfig::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTags {
@@ -843,6 +894,7 @@ pub struct ResourceTags {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [AppConfig::start_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeploymentRequest {
@@ -871,6 +923,7 @@ pub struct StartDeploymentRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [AppConfig::stop_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeploymentRequest {
@@ -885,6 +938,7 @@ pub struct StopDeploymentRequest {
     pub environment_id: String,
 }
 
+/// see [AppConfig::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -896,6 +950,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [AppConfig::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -907,6 +962,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [AppConfig::update_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
@@ -923,6 +979,7 @@ pub struct UpdateApplicationRequest {
     pub name: Option<String>,
 }
 
+/// see [AppConfig::update_configuration_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationProfileRequest {
@@ -950,6 +1007,7 @@ pub struct UpdateConfigurationProfileRequest {
     pub validators: Option<Vec<Validator>>,
 }
 
+/// see [AppConfig::update_deployment_strategy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentStrategyRequest {
@@ -978,6 +1036,7 @@ pub struct UpdateDeploymentStrategyRequest {
     pub growth_type: Option<String>,
 }
 
+/// see [AppConfig::update_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentRequest {
@@ -1001,6 +1060,7 @@ pub struct UpdateEnvironmentRequest {
     pub name: Option<String>,
 }
 
+/// see [AppConfig::validate_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateConfigurationRequest {
@@ -2538,7 +2598,7 @@ impl fmt::Display for ValidateConfigurationError {
 impl Error for ValidateConfigurationError {}
 /// Trait representing the capabilities of the AppConfig API. AppConfig clients implement this trait.
 #[async_trait]
-pub trait AppConfig {
+pub trait AppConfig: Clone + Sync + Send + 'static {
     /// <p>An application in AppConfig is a logical unit of code that provides capabilities for your customers. For example, an application can be a microservice that runs on Amazon EC2 instances, a mobile application installed by your users, a serverless application using Amazon API Gateway and AWS Lambda, or any system you run on behalf of others.</p>
     async fn create_application(
         &self,

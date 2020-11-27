@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl TransferClient {
 }
 
 use serde_json;
+/// see [Transfer::create_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServerRequest {
@@ -95,6 +98,7 @@ pub struct CreateServerRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Transfer::create_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServerResponse {
@@ -103,6 +107,7 @@ pub struct CreateServerResponse {
     pub server_id: String,
 }
 
+/// see [Transfer::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -141,6 +146,7 @@ pub struct CreateUserRequest {
     pub user_name: String,
 }
 
+/// see [Transfer::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
@@ -152,6 +158,7 @@ pub struct CreateUserResponse {
     pub user_name: String,
 }
 
+/// see [Transfer::delete_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerRequest {
@@ -160,6 +167,7 @@ pub struct DeleteServerRequest {
     pub server_id: String,
 }
 
+/// see [Transfer::delete_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSshPublicKeyRequest {
@@ -174,6 +182,7 @@ pub struct DeleteSshPublicKeyRequest {
     pub user_name: String,
 }
 
+/// see [Transfer::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -185,6 +194,7 @@ pub struct DeleteUserRequest {
     pub user_name: String,
 }
 
+/// see [Transfer::describe_security_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityPolicyRequest {
@@ -193,6 +203,7 @@ pub struct DescribeSecurityPolicyRequest {
     pub security_policy_name: String,
 }
 
+/// see [Transfer::describe_security_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecurityPolicyResponse {
@@ -201,6 +212,7 @@ pub struct DescribeSecurityPolicyResponse {
     pub security_policy: DescribedSecurityPolicy,
 }
 
+/// see [Transfer::describe_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServerRequest {
@@ -209,6 +221,7 @@ pub struct DescribeServerRequest {
     pub server_id: String,
 }
 
+/// see [Transfer::describe_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServerResponse {
@@ -217,6 +230,7 @@ pub struct DescribeServerResponse {
     pub server: DescribedServer,
 }
 
+/// see [Transfer::describe_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
@@ -228,6 +242,7 @@ pub struct DescribeUserRequest {
     pub user_name: String,
 }
 
+/// see [Transfer::describe_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
@@ -419,6 +434,7 @@ pub struct IdentityProviderDetails {
     pub url: Option<String>,
 }
 
+/// see [Transfer::import_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSshPublicKeyRequest {
@@ -434,6 +450,7 @@ pub struct ImportSshPublicKeyRequest {
 }
 
 /// <p>Identifies the user, the server they belong to, and the identifier of the SSH public key associated with that user. A user can have more than one key on each server that they are associated with.</p>
+/// see [Transfer::import_ssh_public_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportSshPublicKeyResponse {
@@ -448,6 +465,7 @@ pub struct ImportSshPublicKeyResponse {
     pub user_name: String,
 }
 
+/// see [Transfer::list_security_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityPoliciesRequest {
@@ -461,6 +479,7 @@ pub struct ListSecurityPoliciesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Transfer::list_security_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityPoliciesResponse {
@@ -473,6 +492,7 @@ pub struct ListSecurityPoliciesResponse {
     pub security_policy_names: Vec<String>,
 }
 
+/// see [Transfer::list_servers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServersRequest {
@@ -486,6 +506,15 @@ pub struct ListServersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListServersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Transfer::list_servers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServersResponse {
@@ -498,6 +527,31 @@ pub struct ListServersResponse {
     pub servers: Vec<ListedServer>,
 }
 
+impl ListServersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ListedServer>> {
+        Some(self.servers.clone())
+    }
+}
+
+impl PagedOutput for ListServersResponse {
+    type Item = ListedServer;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ListedServer> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Transfer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -514,6 +568,7 @@ pub struct ListTagsForResourceRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Transfer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -531,6 +586,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Transfer::list_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -547,6 +603,7 @@ pub struct ListUsersRequest {
     pub server_id: String,
 }
 
+/// see [Transfer::list_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
@@ -639,6 +696,7 @@ pub struct SshPublicKey {
     pub ssh_public_key_id: String,
 }
 
+/// see [Transfer::start_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartServerRequest {
@@ -647,6 +705,7 @@ pub struct StartServerRequest {
     pub server_id: String,
 }
 
+/// see [Transfer::stop_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopServerRequest {
@@ -666,6 +725,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Transfer::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -677,6 +737,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Transfer::test_identity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestIdentityProviderRequest {
@@ -700,6 +761,7 @@ pub struct TestIdentityProviderRequest {
     pub user_password: Option<String>,
 }
 
+/// see [Transfer::test_identity_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestIdentityProviderResponse {
@@ -719,6 +781,7 @@ pub struct TestIdentityProviderResponse {
     pub url: String,
 }
 
+/// see [Transfer::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -730,6 +793,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Transfer::update_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerRequest {
@@ -770,6 +834,7 @@ pub struct UpdateServerRequest {
     pub server_id: String,
 }
 
+/// see [Transfer::update_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServerResponse {
@@ -778,6 +843,7 @@ pub struct UpdateServerResponse {
     pub server_id: String,
 }
 
+/// see [Transfer::update_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
@@ -810,6 +876,7 @@ pub struct UpdateUserRequest {
 }
 
 /// <p> <code>UpdateUserResponse</code> returns the user name and identifier for the request to update a user's properties.</p>
+/// see [Transfer::update_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
@@ -1907,7 +1974,7 @@ impl fmt::Display for UpdateUserError {
 impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the AWS Transfer API. AWS Transfer clients implement this trait.
 #[async_trait]
-pub trait Transfer {
+pub trait Transfer: Clone + Sync + Send + 'static {
     /// <p>Instantiates an autoscaling virtual server based on the selected file transfer protocol in AWS. When you make updates to your file transfer protocol-enabled server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
     async fn create_server(
         &self,
@@ -1973,6 +2040,16 @@ pub trait Transfer {
         &self,
         input: ListServersRequest,
     ) -> Result<ListServersResponse, RusotoError<ListServersError>>;
+
+    /// Auto-paginating version of `list_servers`
+    fn list_servers_pages(
+        &self,
+        input: ListServersRequest,
+    ) -> RusotoStream<ListedServer, ListServersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_servers(state.clone())
+        })
+    }
 
     /// <p>Lists all of the tags associated with the Amazon Resource Number (ARN) you specify. The resource can be a user, server, or role.</p>
     async fn list_tags_for_resource(

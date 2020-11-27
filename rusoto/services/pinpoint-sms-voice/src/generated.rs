@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -48,6 +50,7 @@ pub struct CloudWatchLogsDestination {
 }
 
 /// <p>Create a new event destination in a configuration set.</p>
+/// see [PinpointSmsVoice::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetEventDestinationRequest {
@@ -64,11 +67,13 @@ pub struct CreateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An empty object that indicates that the event destination was created successfully.</p>
+/// see [PinpointSmsVoice::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetEventDestinationResponse {}
 
 /// <p>A request to create a new configuration set.</p>
+/// see [PinpointSmsVoice::create_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetRequest {
@@ -79,10 +84,12 @@ pub struct CreateConfigurationSetRequest {
 }
 
 /// <p>An empty object that indicates that the configuration set was successfully created.</p>
+/// see [PinpointSmsVoice::create_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetResponse {}
 
+/// see [PinpointSmsVoice::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetEventDestinationRequest {
@@ -95,10 +102,12 @@ pub struct DeleteConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An empty object that indicates that the event destination was deleted successfully.</p>
+/// see [PinpointSmsVoice::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetEventDestinationResponse {}
 
+/// see [PinpointSmsVoice::delete_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetRequest {
@@ -108,6 +117,7 @@ pub struct DeleteConfigurationSetRequest {
 }
 
 /// <p>An empty object that indicates that the configuration set was deleted successfully.</p>
+/// see [PinpointSmsVoice::delete_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetResponse {}
@@ -160,6 +170,7 @@ pub struct EventDestinationDefinition {
     pub sns_destination: Option<SnsDestination>,
 }
 
+/// see [PinpointSmsVoice::get_configuration_set_event_destinations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationSetEventDestinationsRequest {
@@ -169,6 +180,7 @@ pub struct GetConfigurationSetEventDestinationsRequest {
 }
 
 /// <p>An object that contains information about an event destination.</p>
+/// see [PinpointSmsVoice::get_configuration_set_event_destinations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigurationSetEventDestinationsResponse {
@@ -227,6 +239,7 @@ pub struct SSMLMessageType {
 }
 
 /// <p>SendVoiceMessageRequest</p>
+/// see [PinpointSmsVoice::send_voice_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendVoiceMessageRequest {
@@ -252,6 +265,7 @@ pub struct SendVoiceMessageRequest {
 }
 
 /// <p>An object that that contains the Message ID of a Voice message that was sent successfully.</p>
+/// see [PinpointSmsVoice::send_voice_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendVoiceMessageResponse {
@@ -271,6 +285,7 @@ pub struct SnsDestination {
 }
 
 /// <p>UpdateConfigurationSetEventDestinationRequest</p>
+/// see [PinpointSmsVoice::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetEventDestinationRequest {
@@ -286,6 +301,7 @@ pub struct UpdateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An empty object that indicates that the event destination was updated successfully.</p>
+/// see [PinpointSmsVoice::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConfigurationSetEventDestinationResponse {}
@@ -749,7 +765,7 @@ impl fmt::Display for UpdateConfigurationSetEventDestinationError {
 impl Error for UpdateConfigurationSetEventDestinationError {}
 /// Trait representing the capabilities of the Pinpoint SMS Voice API. Pinpoint SMS Voice clients implement this trait.
 #[async_trait]
-pub trait PinpointSmsVoice {
+pub trait PinpointSmsVoice: Clone + Sync + Send + 'static {
     /// <p>Create a new configuration set. After you create the configuration set, you can add one or more event destinations to it.</p>
     async fn create_configuration_set(
         &self,

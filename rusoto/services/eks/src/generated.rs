@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -243,6 +245,7 @@ pub struct Compatibility {
     pub platform_versions: Option<Vec<String>>,
 }
 
+/// see [Eks::create_addon]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddonRequest {
@@ -274,6 +277,7 @@ pub struct CreateAddonRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Eks::create_addon]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAddonResponse {
@@ -282,6 +286,7 @@ pub struct CreateAddonResponse {
     pub addon: Option<Addon>,
 }
 
+/// see [Eks::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -320,6 +325,7 @@ pub struct CreateClusterRequest {
     pub version: Option<String>,
 }
 
+/// see [Eks::create_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResponse {
@@ -329,6 +335,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [Eks::create_fargate_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFargateProfileRequest {
@@ -359,6 +366,7 @@ pub struct CreateFargateProfileRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Eks::create_fargate_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFargateProfileResponse {
@@ -368,6 +376,7 @@ pub struct CreateFargateProfileResponse {
     pub fargate_profile: Option<FargateProfile>,
 }
 
+/// see [Eks::create_nodegroup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNodegroupRequest {
@@ -433,6 +442,7 @@ pub struct CreateNodegroupRequest {
     pub version: Option<String>,
 }
 
+/// see [Eks::create_nodegroup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNodegroupResponse {
@@ -442,6 +452,7 @@ pub struct CreateNodegroupResponse {
     pub nodegroup: Option<Nodegroup>,
 }
 
+/// see [Eks::delete_addon]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAddonRequest {
@@ -453,6 +464,7 @@ pub struct DeleteAddonRequest {
     pub cluster_name: String,
 }
 
+/// see [Eks::delete_addon]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAddonResponse {
@@ -461,6 +473,7 @@ pub struct DeleteAddonResponse {
     pub addon: Option<Addon>,
 }
 
+/// see [Eks::delete_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
@@ -469,6 +482,7 @@ pub struct DeleteClusterRequest {
     pub name: String,
 }
 
+/// see [Eks::delete_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClusterResponse {
@@ -478,6 +492,7 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [Eks::delete_fargate_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFargateProfileRequest {
@@ -489,6 +504,7 @@ pub struct DeleteFargateProfileRequest {
     pub fargate_profile_name: String,
 }
 
+/// see [Eks::delete_fargate_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFargateProfileResponse {
@@ -498,6 +514,7 @@ pub struct DeleteFargateProfileResponse {
     pub fargate_profile: Option<FargateProfile>,
 }
 
+/// see [Eks::delete_nodegroup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNodegroupRequest {
@@ -509,6 +526,7 @@ pub struct DeleteNodegroupRequest {
     pub nodegroup_name: String,
 }
 
+/// see [Eks::delete_nodegroup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNodegroupResponse {
@@ -518,6 +536,7 @@ pub struct DeleteNodegroupResponse {
     pub nodegroup: Option<Nodegroup>,
 }
 
+/// see [Eks::describe_addon]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddonRequest {
@@ -529,6 +548,7 @@ pub struct DescribeAddonRequest {
     pub cluster_name: String,
 }
 
+/// see [Eks::describe_addon]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAddonResponse {
@@ -537,6 +557,7 @@ pub struct DescribeAddonResponse {
     pub addon: Option<Addon>,
 }
 
+/// see [Eks::describe_addon_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddonVersionsRequest {
@@ -558,6 +579,15 @@ pub struct DescribeAddonVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeAddonVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Eks::describe_addon_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAddonVersionsResponse {
@@ -571,6 +601,31 @@ pub struct DescribeAddonVersionsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeAddonVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AddonInfo>> {
+        Some(self.addons.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAddonVersionsResponse {
+    type Item = AddonInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AddonInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Eks::describe_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterRequest {
@@ -579,6 +634,7 @@ pub struct DescribeClusterRequest {
     pub name: String,
 }
 
+/// see [Eks::describe_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterResponse {
@@ -588,6 +644,7 @@ pub struct DescribeClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [Eks::describe_fargate_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFargateProfileRequest {
@@ -599,6 +656,7 @@ pub struct DescribeFargateProfileRequest {
     pub fargate_profile_name: String,
 }
 
+/// see [Eks::describe_fargate_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFargateProfileResponse {
@@ -608,6 +666,7 @@ pub struct DescribeFargateProfileResponse {
     pub fargate_profile: Option<FargateProfile>,
 }
 
+/// see [Eks::describe_nodegroup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodegroupRequest {
@@ -619,6 +678,7 @@ pub struct DescribeNodegroupRequest {
     pub nodegroup_name: String,
 }
 
+/// see [Eks::describe_nodegroup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNodegroupResponse {
@@ -628,6 +688,7 @@ pub struct DescribeNodegroupResponse {
     pub nodegroup: Option<Nodegroup>,
 }
 
+/// see [Eks::describe_update]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUpdateRequest {
@@ -647,6 +708,7 @@ pub struct DescribeUpdateRequest {
     pub update_id: String,
 }
 
+/// see [Eks::describe_update]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUpdateResponse {
@@ -807,6 +869,7 @@ pub struct LaunchTemplateSpecification {
     pub version: Option<String>,
 }
 
+/// see [Eks::list_addons]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAddonsRequest {
@@ -823,6 +886,15 @@ pub struct ListAddonsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAddonsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Eks::list_addons]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAddonsResponse {
@@ -836,6 +908,31 @@ pub struct ListAddonsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAddonsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.addons.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAddonsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Eks::list_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
@@ -849,6 +946,15 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListClustersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Eks::list_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClustersResponse {
@@ -862,6 +968,31 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
+impl ListClustersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.clusters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListClustersResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Eks::list_fargate_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFargateProfilesRequest {
@@ -878,6 +1009,15 @@ pub struct ListFargateProfilesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListFargateProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Eks::list_fargate_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFargateProfilesResponse {
@@ -891,6 +1031,31 @@ pub struct ListFargateProfilesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListFargateProfilesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.fargate_profile_names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFargateProfilesResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Eks::list_nodegroups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNodegroupsRequest {
@@ -907,6 +1072,15 @@ pub struct ListNodegroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListNodegroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Eks::list_nodegroups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNodegroupsResponse {
@@ -920,6 +1094,31 @@ pub struct ListNodegroupsResponse {
     pub nodegroups: Option<Vec<String>>,
 }
 
+impl ListNodegroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.nodegroups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListNodegroupsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Eks::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -928,6 +1127,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Eks::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -937,6 +1137,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Eks::list_updates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUpdatesRequest {
@@ -961,6 +1162,15 @@ pub struct ListUpdatesRequest {
     pub nodegroup_name: Option<String>,
 }
 
+impl PagedRequest for ListUpdatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Eks::list_updates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUpdatesResponse {
@@ -972,6 +1182,30 @@ pub struct ListUpdatesResponse {
     #[serde(rename = "updateIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_ids: Option<Vec<String>>,
+}
+
+impl ListUpdatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.update_ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUpdatesResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>An object representing the enabled or disabled Kubernetes control plane logs for your cluster.</p>
@@ -1159,6 +1393,7 @@ pub struct RemoteAccessConfig {
     pub source_security_groups: Option<Vec<String>>,
 }
 
+/// see [Eks::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1170,10 +1405,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Eks::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Eks::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1185,6 +1422,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Eks::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -1219,6 +1457,7 @@ pub struct Update {
     pub type_: Option<String>,
 }
 
+/// see [Eks::update_addon]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAddonRequest {
@@ -1246,6 +1485,7 @@ pub struct UpdateAddonRequest {
     pub service_account_role_arn: Option<String>,
 }
 
+/// see [Eks::update_addon]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAddonResponse {
@@ -1254,6 +1494,7 @@ pub struct UpdateAddonResponse {
     pub update: Option<Update>,
 }
 
+/// see [Eks::update_cluster_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterConfigRequest {
@@ -1273,6 +1514,7 @@ pub struct UpdateClusterConfigRequest {
     pub resources_vpc_config: Option<VpcConfigRequest>,
 }
 
+/// see [Eks::update_cluster_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterConfigResponse {
@@ -1281,6 +1523,7 @@ pub struct UpdateClusterConfigResponse {
     pub update: Option<Update>,
 }
 
+/// see [Eks::update_cluster_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterVersionRequest {
@@ -1296,6 +1539,7 @@ pub struct UpdateClusterVersionRequest {
     pub version: String,
 }
 
+/// see [Eks::update_cluster_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterVersionResponse {
@@ -1319,6 +1563,7 @@ pub struct UpdateLabelsPayload {
     pub remove_labels: Option<Vec<String>>,
 }
 
+/// see [Eks::update_nodegroup_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNodegroupConfigRequest {
@@ -1342,6 +1587,7 @@ pub struct UpdateNodegroupConfigRequest {
     pub scaling_config: Option<NodegroupScalingConfig>,
 }
 
+/// see [Eks::update_nodegroup_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNodegroupConfigResponse {
@@ -1350,6 +1596,7 @@ pub struct UpdateNodegroupConfigResponse {
     pub update: Option<Update>,
 }
 
+/// see [Eks::update_nodegroup_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNodegroupVersionRequest {
@@ -1381,6 +1628,7 @@ pub struct UpdateNodegroupVersionRequest {
     pub version: Option<String>,
 }
 
+/// see [Eks::update_nodegroup_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNodegroupVersionResponse {
@@ -2935,7 +3183,7 @@ impl fmt::Display for UpdateNodegroupVersionError {
 impl Error for UpdateNodegroupVersionError {}
 /// Trait representing the capabilities of the Amazon EKS API. Amazon EKS clients implement this trait.
 #[async_trait]
-pub trait Eks {
+pub trait Eks: Clone + Sync + Send + 'static {
     /// <p>Creates an Amazon EKS add-on.</p> <p>Amazon EKS add-ons help to automate the provisioning and lifecycle management of common operational software for Amazon EKS clusters. Amazon EKS add-ons can only be used with Amazon EKS clusters running version 1.18 with platform version <code>eks.3</code> or later because add-ons rely on the Server-side Apply Kubernetes feature, which is only available in Kubernetes 1.18 and later.</p>
     async fn create_addon(
         &self,
@@ -2996,6 +3244,16 @@ pub trait Eks {
         input: DescribeAddonVersionsRequest,
     ) -> Result<DescribeAddonVersionsResponse, RusotoError<DescribeAddonVersionsError>>;
 
+    /// Auto-paginating version of `describe_addon_versions`
+    fn describe_addon_versions_pages(
+        &self,
+        input: DescribeAddonVersionsRequest,
+    ) -> RusotoStream<AddonInfo, DescribeAddonVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_addon_versions(state.clone())
+        })
+    }
+
     /// <p><p>Returns descriptive information about an Amazon EKS cluster.</p> <p>The API server endpoint and certificate authority data returned by this operation are required for <code>kubelet</code> and <code>kubectl</code> to communicate with your Kubernetes API server. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html">Create a kubeconfig for Amazon EKS</a>.</p> <note> <p>The API server endpoint and certificate authority data aren&#39;t available until the cluster reaches the <code>ACTIVE</code> state.</p> </note></p>
     async fn describe_cluster(
         &self,
@@ -3026,11 +3284,28 @@ pub trait Eks {
         input: ListAddonsRequest,
     ) -> Result<ListAddonsResponse, RusotoError<ListAddonsError>>;
 
+    /// Auto-paginating version of `list_addons`
+    fn list_addons_pages(&self, input: ListAddonsRequest) -> RusotoStream<String, ListAddonsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_addons(state.clone())
+        })
+    }
+
     /// <p>Lists the Amazon EKS clusters in your AWS account in the specified Region.</p>
     async fn list_clusters(
         &self,
         input: ListClustersRequest,
     ) -> Result<ListClustersResponse, RusotoError<ListClustersError>>;
+
+    /// Auto-paginating version of `list_clusters`
+    fn list_clusters_pages(
+        &self,
+        input: ListClustersRequest,
+    ) -> RusotoStream<String, ListClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_clusters(state.clone())
+        })
+    }
 
     /// <p>Lists the AWS Fargate profiles associated with the specified cluster in your AWS account in the specified Region.</p>
     async fn list_fargate_profiles(
@@ -3038,11 +3313,31 @@ pub trait Eks {
         input: ListFargateProfilesRequest,
     ) -> Result<ListFargateProfilesResponse, RusotoError<ListFargateProfilesError>>;
 
+    /// Auto-paginating version of `list_fargate_profiles`
+    fn list_fargate_profiles_pages(
+        &self,
+        input: ListFargateProfilesRequest,
+    ) -> RusotoStream<String, ListFargateProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_fargate_profiles(state.clone())
+        })
+    }
+
     /// <p>Lists the Amazon EKS managed node groups associated with the specified cluster in your AWS account in the specified Region. Self-managed node groups are not listed.</p>
     async fn list_nodegroups(
         &self,
         input: ListNodegroupsRequest,
     ) -> Result<ListNodegroupsResponse, RusotoError<ListNodegroupsError>>;
+
+    /// Auto-paginating version of `list_nodegroups`
+    fn list_nodegroups_pages(
+        &self,
+        input: ListNodegroupsRequest,
+    ) -> RusotoStream<String, ListNodegroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_nodegroups(state.clone())
+        })
+    }
 
     /// <p>List the tags for an Amazon EKS resource.</p>
     async fn list_tags_for_resource(
@@ -3055,6 +3350,16 @@ pub trait Eks {
         &self,
         input: ListUpdatesRequest,
     ) -> Result<ListUpdatesResponse, RusotoError<ListUpdatesError>>;
+
+    /// Auto-paginating version of `list_updates`
+    fn list_updates_pages(
+        &self,
+        input: ListUpdatesRequest,
+    ) -> RusotoStream<String, ListUpdatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_updates(state.clone())
+        })
+    }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well. Tags that you create for Amazon EKS resources do not propagate to any other resources associated with the cluster. For example, if you tag a cluster with this operation, that tag does not automatically propagate to the subnets and worker nodes associated with the cluster.</p>
     async fn tag_resource(

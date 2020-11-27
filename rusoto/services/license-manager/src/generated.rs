@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl LicenseManagerClient {
 }
 
 use serde_json;
+/// see [LicenseManager::accept_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptGrantRequest {
@@ -59,6 +62,7 @@ pub struct AcceptGrantRequest {
     pub grant_arn: String,
 }
 
+/// see [LicenseManager::accept_grant]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptGrantResponse {
@@ -97,6 +101,7 @@ pub struct BorrowConfiguration {
     pub max_time_to_live_in_minutes: i64,
 }
 
+/// see [LicenseManager::check_in_license]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckInLicenseRequest {
@@ -109,10 +114,12 @@ pub struct CheckInLicenseRequest {
     pub license_consumption_token: String,
 }
 
+/// see [LicenseManager::check_in_license]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckInLicenseResponse {}
 
+/// see [LicenseManager::checkout_borrow_license]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckoutBorrowLicenseRequest {
@@ -138,6 +145,7 @@ pub struct CheckoutBorrowLicenseRequest {
     pub node_id: Option<String>,
 }
 
+/// see [LicenseManager::checkout_borrow_license]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckoutBorrowLicenseResponse {
@@ -175,6 +183,7 @@ pub struct CheckoutBorrowLicenseResponse {
     pub signed_token: Option<String>,
 }
 
+/// see [LicenseManager::checkout_license]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckoutLicenseRequest {
@@ -203,6 +212,7 @@ pub struct CheckoutLicenseRequest {
     pub product_sku: String,
 }
 
+/// see [LicenseManager::checkout_license]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckoutLicenseResponse {
@@ -267,6 +277,7 @@ pub struct ConsumptionConfiguration {
     pub renew_type: Option<String>,
 }
 
+/// see [LicenseManager::create_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGrantRequest {
@@ -290,6 +301,7 @@ pub struct CreateGrantRequest {
     pub principals: Vec<String>,
 }
 
+/// see [LicenseManager::create_grant]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGrantResponse {
@@ -307,6 +319,7 @@ pub struct CreateGrantResponse {
     pub version: Option<String>,
 }
 
+/// see [LicenseManager::create_grant_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGrantVersionRequest {
@@ -334,6 +347,7 @@ pub struct CreateGrantVersionRequest {
     pub status: Option<String>,
 }
 
+/// see [LicenseManager::create_grant_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGrantVersionResponse {
@@ -351,6 +365,7 @@ pub struct CreateGrantVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [LicenseManager::create_license_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLicenseConfigurationRequest {
@@ -390,6 +405,7 @@ pub struct CreateLicenseConfigurationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [LicenseManager::create_license_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLicenseConfigurationResponse {
@@ -399,6 +415,7 @@ pub struct CreateLicenseConfigurationResponse {
     pub license_configuration_arn: Option<String>,
 }
 
+/// see [LicenseManager::create_license]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLicenseRequest {
@@ -438,6 +455,7 @@ pub struct CreateLicenseRequest {
     pub validity: DatetimeRange,
 }
 
+/// see [LicenseManager::create_license]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLicenseResponse {
@@ -455,6 +473,7 @@ pub struct CreateLicenseResponse {
     pub version: Option<String>,
 }
 
+/// see [LicenseManager::create_license_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLicenseVersionRequest {
@@ -498,6 +517,7 @@ pub struct CreateLicenseVersionRequest {
     pub validity: DatetimeRange,
 }
 
+/// see [LicenseManager::create_license_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLicenseVersionResponse {
@@ -515,6 +535,7 @@ pub struct CreateLicenseVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [LicenseManager::create_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTokenRequest {
@@ -538,6 +559,7 @@ pub struct CreateTokenRequest {
     pub token_properties: Option<Vec<String>>,
 }
 
+/// see [LicenseManager::create_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTokenResponse {
@@ -567,6 +589,7 @@ pub struct DatetimeRange {
     pub end: Option<String>,
 }
 
+/// see [LicenseManager::delete_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGrantRequest {
@@ -578,6 +601,7 @@ pub struct DeleteGrantRequest {
     pub version: String,
 }
 
+/// see [LicenseManager::delete_grant]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGrantResponse {
@@ -595,6 +619,7 @@ pub struct DeleteGrantResponse {
     pub version: Option<String>,
 }
 
+/// see [LicenseManager::delete_license_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLicenseConfigurationRequest {
@@ -603,10 +628,12 @@ pub struct DeleteLicenseConfigurationRequest {
     pub license_configuration_arn: String,
 }
 
+/// see [LicenseManager::delete_license_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLicenseConfigurationResponse {}
 
+/// see [LicenseManager::delete_license]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLicenseRequest {
@@ -618,6 +645,7 @@ pub struct DeleteLicenseRequest {
     pub source_version: String,
 }
 
+/// see [LicenseManager::delete_license]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLicenseResponse {
@@ -631,6 +659,7 @@ pub struct DeleteLicenseResponse {
     pub status: Option<String>,
 }
 
+/// see [LicenseManager::delete_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTokenRequest {
@@ -639,6 +668,7 @@ pub struct DeleteTokenRequest {
     pub token_id: String,
 }
 
+/// see [LicenseManager::delete_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTokenResponse {}
@@ -704,6 +734,7 @@ pub struct EntitlementUsage {
     pub unit: String,
 }
 
+/// see [LicenseManager::extend_license_consumption]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExtendLicenseConsumptionRequest {
@@ -716,6 +747,7 @@ pub struct ExtendLicenseConsumptionRequest {
     pub license_consumption_token: String,
 }
 
+/// see [LicenseManager::extend_license_consumption]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExtendLicenseConsumptionResponse {
@@ -743,6 +775,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
+/// see [LicenseManager::get_access_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccessTokenRequest {
@@ -755,6 +788,7 @@ pub struct GetAccessTokenRequest {
     pub token_properties: Option<Vec<String>>,
 }
 
+/// see [LicenseManager::get_access_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccessTokenResponse {
@@ -764,6 +798,7 @@ pub struct GetAccessTokenResponse {
     pub access_token: Option<String>,
 }
 
+/// see [LicenseManager::get_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGrantRequest {
@@ -776,6 +811,7 @@ pub struct GetGrantRequest {
     pub version: Option<String>,
 }
 
+/// see [LicenseManager::get_grant]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGrantResponse {
@@ -785,6 +821,7 @@ pub struct GetGrantResponse {
     pub grant: Option<Grant>,
 }
 
+/// see [LicenseManager::get_license_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLicenseConfigurationRequest {
@@ -793,6 +830,7 @@ pub struct GetLicenseConfigurationRequest {
     pub license_configuration_arn: String,
 }
 
+/// see [LicenseManager::get_license_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLicenseConfigurationResponse {
@@ -866,6 +904,7 @@ pub struct GetLicenseConfigurationResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [LicenseManager::get_license]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLicenseRequest {
@@ -878,6 +917,7 @@ pub struct GetLicenseRequest {
     pub version: Option<String>,
 }
 
+/// see [LicenseManager::get_license]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLicenseResponse {
@@ -887,6 +927,7 @@ pub struct GetLicenseResponse {
     pub license: Option<License>,
 }
 
+/// see [LicenseManager::get_license_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLicenseUsageRequest {
@@ -895,6 +936,7 @@ pub struct GetLicenseUsageRequest {
     pub license_arn: String,
 }
 
+/// see [LicenseManager::get_license_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLicenseUsageResponse {
@@ -904,10 +946,12 @@ pub struct GetLicenseUsageResponse {
     pub license_usage: Option<LicenseUsage>,
 }
 
+/// see [LicenseManager::get_service_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceSettingsRequest {}
 
+/// see [LicenseManager::get_service_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceSettingsResponse {
@@ -1331,6 +1375,7 @@ pub struct LicenseUsage {
     pub entitlement_usages: Option<Vec<EntitlementUsage>>,
 }
 
+/// see [LicenseManager::list_associations_for_license_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsForLicenseConfigurationRequest {
@@ -1347,6 +1392,15 @@ pub struct ListAssociationsForLicenseConfigurationRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAssociationsForLicenseConfigurationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LicenseManager::list_associations_for_license_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociationsForLicenseConfigurationResponse {
@@ -1360,6 +1414,31 @@ pub struct ListAssociationsForLicenseConfigurationResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAssociationsForLicenseConfigurationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LicenseConfigurationAssociation>> {
+        Some(self.license_configuration_associations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAssociationsForLicenseConfigurationResponse {
+    type Item = LicenseConfigurationAssociation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LicenseConfigurationAssociation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LicenseManager::list_distributed_grants]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributedGrantsRequest {
@@ -1381,6 +1460,7 @@ pub struct ListDistributedGrantsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_distributed_grants]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDistributedGrantsResponse {
@@ -1394,6 +1474,7 @@ pub struct ListDistributedGrantsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_failures_for_license_configuration_operations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFailuresForLicenseConfigurationOperationsRequest {
@@ -1410,6 +1491,7 @@ pub struct ListFailuresForLicenseConfigurationOperationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_failures_for_license_configuration_operations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFailuresForLicenseConfigurationOperationsResponse {
@@ -1423,6 +1505,7 @@ pub struct ListFailuresForLicenseConfigurationOperationsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_license_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseConfigurationsRequest {
@@ -1444,6 +1527,15 @@ pub struct ListLicenseConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLicenseConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LicenseManager::list_license_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLicenseConfigurationsResponse {
@@ -1457,6 +1549,31 @@ pub struct ListLicenseConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListLicenseConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LicenseConfiguration>> {
+        Some(self.license_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLicenseConfigurationsResponse {
+    type Item = LicenseConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LicenseConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LicenseManager::list_license_specifications_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseSpecificationsForResourceRequest {
@@ -1473,6 +1590,15 @@ pub struct ListLicenseSpecificationsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl PagedRequest for ListLicenseSpecificationsForResourceRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LicenseManager::list_license_specifications_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLicenseSpecificationsForResourceResponse {
@@ -1486,6 +1612,31 @@ pub struct ListLicenseSpecificationsForResourceResponse {
     pub next_token: Option<String>,
 }
 
+impl ListLicenseSpecificationsForResourceResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LicenseSpecification>> {
+        Some(self.license_specifications.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLicenseSpecificationsForResourceResponse {
+    type Item = LicenseSpecification;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LicenseSpecification> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LicenseManager::list_license_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseVersionsRequest {
@@ -1502,6 +1653,7 @@ pub struct ListLicenseVersionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_license_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLicenseVersionsResponse {
@@ -1515,6 +1667,7 @@ pub struct ListLicenseVersionsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_licenses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicensesRequest {
@@ -1536,6 +1689,7 @@ pub struct ListLicensesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_licenses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLicensesResponse {
@@ -1549,6 +1703,7 @@ pub struct ListLicensesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_received_grants]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReceivedGrantsRequest {
@@ -1570,6 +1725,7 @@ pub struct ListReceivedGrantsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_received_grants]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReceivedGrantsResponse {
@@ -1583,6 +1739,7 @@ pub struct ListReceivedGrantsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_received_licenses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReceivedLicensesRequest {
@@ -1604,6 +1761,7 @@ pub struct ListReceivedLicensesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_received_licenses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReceivedLicensesResponse {
@@ -1617,6 +1775,7 @@ pub struct ListReceivedLicensesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [LicenseManager::list_resource_inventory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceInventoryRequest {
@@ -1634,6 +1793,15 @@ pub struct ListResourceInventoryRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListResourceInventoryRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LicenseManager::list_resource_inventory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceInventoryResponse {
@@ -1647,6 +1815,31 @@ pub struct ListResourceInventoryResponse {
     pub resource_inventory_list: Option<Vec<ResourceInventory>>,
 }
 
+impl ListResourceInventoryResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceInventory>> {
+        Some(self.resource_inventory_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListResourceInventoryResponse {
+    type Item = ResourceInventory;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceInventory> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LicenseManager::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1655,6 +1848,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [LicenseManager::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1664,6 +1858,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [LicenseManager::list_tokens]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTokensRequest {
@@ -1685,6 +1880,7 @@ pub struct ListTokensRequest {
     pub token_ids: Option<Vec<String>>,
 }
 
+/// see [LicenseManager::list_tokens]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTokensResponse {
@@ -1698,6 +1894,7 @@ pub struct ListTokensResponse {
     pub tokens: Option<Vec<TokenData>>,
 }
 
+/// see [LicenseManager::list_usage_for_license_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsageForLicenseConfigurationRequest {
@@ -1718,6 +1915,15 @@ pub struct ListUsageForLicenseConfigurationRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListUsageForLicenseConfigurationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LicenseManager::list_usage_for_license_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsageForLicenseConfigurationResponse {
@@ -1729,6 +1935,30 @@ pub struct ListUsageForLicenseConfigurationResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl ListUsageForLicenseConfigurationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LicenseConfigurationUsage>> {
+        Some(self.license_configuration_usage_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUsageForLicenseConfigurationResponse {
+    type Item = LicenseConfigurationUsage;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LicenseConfigurationUsage> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Summary information about a managed resource.</p>
@@ -1813,6 +2043,7 @@ pub struct ReceivedMetadata {
     pub received_status: Option<String>,
 }
 
+/// see [LicenseManager::reject_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectGrantRequest {
@@ -1821,6 +2052,7 @@ pub struct RejectGrantRequest {
     pub grant_arn: String,
 }
 
+/// see [LicenseManager::reject_grant]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectGrantResponse {
@@ -1881,6 +2113,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [LicenseManager::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1892,6 +2125,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [LicenseManager::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1930,6 +2164,7 @@ pub struct TokenData {
     pub token_type: Option<String>,
 }
 
+/// see [LicenseManager::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1941,10 +2176,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [LicenseManager::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [LicenseManager::update_license_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseConfigurationRequest {
@@ -1985,10 +2222,12 @@ pub struct UpdateLicenseConfigurationRequest {
     pub product_information_list: Option<Vec<ProductInformation>>,
 }
 
+/// see [LicenseManager::update_license_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLicenseConfigurationResponse {}
 
+/// see [LicenseManager::update_license_specifications_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseSpecificationsForResourceRequest {
@@ -2005,10 +2244,12 @@ pub struct UpdateLicenseSpecificationsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [LicenseManager::update_license_specifications_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLicenseSpecificationsForResourceResponse {}
 
+/// see [LicenseManager::update_service_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSettingsRequest {
@@ -2030,6 +2271,7 @@ pub struct UpdateServiceSettingsRequest {
     pub sns_topic_arn: Option<String>,
 }
 
+/// see [LicenseManager::update_service_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceSettingsResponse {}
@@ -4690,7 +4932,7 @@ impl fmt::Display for UpdateServiceSettingsError {
 impl Error for UpdateServiceSettingsError {}
 /// Trait representing the capabilities of the AWS License Manager API. AWS License Manager clients implement this trait.
 #[async_trait]
-pub trait LicenseManager {
+pub trait LicenseManager: Clone + Sync + Send + 'static {
     /// <p>Accepts the specified grant.</p>
     async fn accept_grant(
         &self,
@@ -4825,6 +5067,17 @@ pub trait LicenseManager {
         RusotoError<ListAssociationsForLicenseConfigurationError>,
     >;
 
+    /// Auto-paginating version of `list_associations_for_license_configuration`
+    fn list_associations_for_license_configuration_pages(
+        &self,
+        input: ListAssociationsForLicenseConfigurationRequest,
+    ) -> RusotoStream<LicenseConfigurationAssociation, ListAssociationsForLicenseConfigurationError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_associations_for_license_configuration(state.clone())
+        })
+    }
+
     /// <p>Lists the grants distributed for the specified license.</p>
     async fn list_distributed_grants(
         &self,
@@ -4846,6 +5099,16 @@ pub trait LicenseManager {
         input: ListLicenseConfigurationsRequest,
     ) -> Result<ListLicenseConfigurationsResponse, RusotoError<ListLicenseConfigurationsError>>;
 
+    /// Auto-paginating version of `list_license_configurations`
+    fn list_license_configurations_pages(
+        &self,
+        input: ListLicenseConfigurationsRequest,
+    ) -> RusotoStream<LicenseConfiguration, ListLicenseConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_license_configurations(state.clone())
+        })
+    }
+
     /// <p>Describes the license configurations for the specified resource.</p>
     async fn list_license_specifications_for_resource(
         &self,
@@ -4854,6 +5117,16 @@ pub trait LicenseManager {
         ListLicenseSpecificationsForResourceResponse,
         RusotoError<ListLicenseSpecificationsForResourceError>,
     >;
+
+    /// Auto-paginating version of `list_license_specifications_for_resource`
+    fn list_license_specifications_for_resource_pages(
+        &self,
+        input: ListLicenseSpecificationsForResourceRequest,
+    ) -> RusotoStream<LicenseSpecification, ListLicenseSpecificationsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_license_specifications_for_resource(state.clone())
+        })
+    }
 
     /// <p>Lists all versions of the specified license.</p>
     async fn list_license_versions(
@@ -4885,6 +5158,16 @@ pub trait LicenseManager {
         input: ListResourceInventoryRequest,
     ) -> Result<ListResourceInventoryResponse, RusotoError<ListResourceInventoryError>>;
 
+    /// Auto-paginating version of `list_resource_inventory`
+    fn list_resource_inventory_pages(
+        &self,
+        input: ListResourceInventoryRequest,
+    ) -> RusotoStream<ResourceInventory, ListResourceInventoryError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resource_inventory(state.clone())
+        })
+    }
+
     /// <p>Lists the tags for the specified license configuration.</p>
     async fn list_tags_for_resource(
         &self,
@@ -4905,6 +5188,16 @@ pub trait LicenseManager {
         ListUsageForLicenseConfigurationResponse,
         RusotoError<ListUsageForLicenseConfigurationError>,
     >;
+
+    /// Auto-paginating version of `list_usage_for_license_configuration`
+    fn list_usage_for_license_configuration_pages(
+        &self,
+        input: ListUsageForLicenseConfigurationRequest,
+    ) -> RusotoStream<LicenseConfigurationUsage, ListUsageForLicenseConfigurationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_usage_for_license_configuration(state.clone())
+        })
+    }
 
     /// <p>Rejects the specified grant.</p>
     async fn reject_grant(

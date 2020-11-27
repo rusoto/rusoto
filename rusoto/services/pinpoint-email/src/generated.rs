@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -93,6 +95,7 @@ pub struct Content {
 }
 
 /// <p>A request to add an event destination to a configuration set.</p>
+/// see [PinpointEmail::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetEventDestinationRequest {
@@ -108,11 +111,13 @@ pub struct CreateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetEventDestinationResponse {}
 
 /// <p>A request to create a configuration set.</p>
+/// see [PinpointEmail::create_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetRequest {
@@ -142,11 +147,13 @@ pub struct CreateConfigurationSetRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::create_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetResponse {}
 
 /// <p>A request to create a new dedicated IP pool.</p>
+/// see [PinpointEmail::create_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDedicatedIpPoolRequest {
@@ -160,11 +167,13 @@ pub struct CreateDedicatedIpPoolRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::create_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDedicatedIpPoolResponse {}
 
 /// <p>A request to perform a predictive inbox placement test. Predictive inbox placement tests can help you predict how your messages will be handled by various email providers around the world. When you perform a predictive inbox placement test, you provide a sample message that contains the content that you plan to send to your customers. Amazon Pinpoint then sends that message to special email addresses spread across several major email providers. After about 24 hours, the test is complete, and you can use the <code>GetDeliverabilityTestReport</code> operation to view the results of the test.</p>
+/// see [PinpointEmail::create_deliverability_test_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeliverabilityTestReportRequest {
@@ -185,6 +194,7 @@ pub struct CreateDeliverabilityTestReportRequest {
 }
 
 /// <p>Information about the predictive inbox placement test that you created.</p>
+/// see [PinpointEmail::create_deliverability_test_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeliverabilityTestReportResponse {
@@ -197,6 +207,7 @@ pub struct CreateDeliverabilityTestReportResponse {
 }
 
 /// <p>A request to begin the verification process for an email identity (an email address or domain).</p>
+/// see [PinpointEmail::create_email_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEmailIdentityRequest {
@@ -210,6 +221,7 @@ pub struct CreateEmailIdentityRequest {
 }
 
 /// <p>If the email identity is a domain, this object contains tokens that you can use to create a set of CNAME records. To sucessfully verify your domain, you have to add these records to the DNS configuration for your domain.</p> <p>If the email identity is an email address, this object is empty. </p>
+/// see [PinpointEmail::create_email_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEmailIdentityResponse {
@@ -265,6 +277,7 @@ pub struct DedicatedIp {
 }
 
 /// <p>A request to delete an event destination from a configuration set.</p>
+/// see [PinpointEmail::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetEventDestinationRequest {
@@ -277,11 +290,13 @@ pub struct DeleteConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetEventDestinationResponse {}
 
 /// <p>A request to delete a configuration set.</p>
+/// see [PinpointEmail::delete_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetRequest {
@@ -291,11 +306,13 @@ pub struct DeleteConfigurationSetRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::delete_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetResponse {}
 
 /// <p>A request to delete a dedicated IP pool.</p>
+/// see [PinpointEmail::delete_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDedicatedIpPoolRequest {
@@ -305,11 +322,13 @@ pub struct DeleteDedicatedIpPoolRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::delete_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDedicatedIpPoolResponse {}
 
 /// <p>A request to delete an existing email identity. When you delete an identity, you lose the ability to use Amazon Pinpoint to send email from that identity. You can restore your ability to send email by completing the verification process for the identity again.</p>
+/// see [PinpointEmail::delete_email_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEmailIdentityRequest {
@@ -319,6 +338,7 @@ pub struct DeleteEmailIdentityRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::delete_email_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEmailIdentityResponse {}
@@ -588,11 +608,13 @@ pub struct EventDestinationDefinition {
 }
 
 /// <p>A request to obtain information about the email-sending capabilities of your Amazon Pinpoint account.</p>
+/// see [PinpointEmail::get_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {}
 
 /// <p>A list of details about the email-sending capabilities of your Amazon Pinpoint account in the current AWS Region.</p>
+/// see [PinpointEmail::get_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountResponse {
@@ -619,6 +641,7 @@ pub struct GetAccountResponse {
 }
 
 /// <p>A request to retrieve a list of the blacklists that your dedicated IP addresses appear on.</p>
+/// see [PinpointEmail::get_blacklist_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlacklistReportsRequest {
@@ -628,6 +651,7 @@ pub struct GetBlacklistReportsRequest {
 }
 
 /// <p>An object that contains information about blacklist events.</p>
+/// see [PinpointEmail::get_blacklist_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlacklistReportsResponse {
@@ -637,6 +661,7 @@ pub struct GetBlacklistReportsResponse {
 }
 
 /// <p>A request to obtain information about the event destinations for a configuration set.</p>
+/// see [PinpointEmail::get_configuration_set_event_destinations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationSetEventDestinationsRequest {
@@ -646,6 +671,7 @@ pub struct GetConfigurationSetEventDestinationsRequest {
 }
 
 /// <p>Information about an event destination for a configuration set.</p>
+/// see [PinpointEmail::get_configuration_set_event_destinations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigurationSetEventDestinationsResponse {
@@ -656,6 +682,7 @@ pub struct GetConfigurationSetEventDestinationsResponse {
 }
 
 /// <p>A request to obtain information about a configuration set.</p>
+/// see [PinpointEmail::get_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationSetRequest {
@@ -665,6 +692,7 @@ pub struct GetConfigurationSetRequest {
 }
 
 /// <p>Information about a configuration set.</p>
+/// see [PinpointEmail::get_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigurationSetResponse {
@@ -695,6 +723,7 @@ pub struct GetConfigurationSetResponse {
 }
 
 /// <p>A request to obtain more information about a dedicated IP address.</p>
+/// see [PinpointEmail::get_dedicated_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDedicatedIpRequest {
@@ -704,6 +733,7 @@ pub struct GetDedicatedIpRequest {
 }
 
 /// <p>Information about a dedicated IP address.</p>
+/// see [PinpointEmail::get_dedicated_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDedicatedIpResponse {
@@ -714,6 +744,7 @@ pub struct GetDedicatedIpResponse {
 }
 
 /// <p>A request to obtain more information about dedicated IP pools.</p>
+/// see [PinpointEmail::get_dedicated_ips]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDedicatedIpsRequest {
@@ -731,7 +762,16 @@ pub struct GetDedicatedIpsRequest {
     pub pool_name: Option<String>,
 }
 
+impl PagedRequest for GetDedicatedIpsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Information about the dedicated IP addresses that are associated with your Amazon Pinpoint account.</p>
+/// see [PinpointEmail::get_dedicated_ips]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDedicatedIpsResponse {
@@ -745,12 +785,38 @@ pub struct GetDedicatedIpsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetDedicatedIpsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DedicatedIp>> {
+        Some(self.dedicated_ips.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetDedicatedIpsResponse {
+    type Item = DedicatedIp;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DedicatedIp> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Retrieve information about the status of the Deliverability dashboard for your Amazon Pinpoint account. When the Deliverability dashboard is enabled, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
+/// see [PinpointEmail::get_deliverability_dashboard_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeliverabilityDashboardOptionsRequest {}
 
 /// <p>An object that shows the status of the Deliverability dashboard for your Amazon Pinpoint account.</p>
+/// see [PinpointEmail::get_deliverability_dashboard_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeliverabilityDashboardOptionsResponse {
@@ -776,6 +842,7 @@ pub struct GetDeliverabilityDashboardOptionsResponse {
 }
 
 /// <p>A request to retrieve the results of a predictive inbox placement test.</p>
+/// see [PinpointEmail::get_deliverability_test_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeliverabilityTestReportRequest {
@@ -785,6 +852,7 @@ pub struct GetDeliverabilityTestReportRequest {
 }
 
 /// <p>The results of the predictive inbox placement test.</p>
+/// see [PinpointEmail::get_deliverability_test_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeliverabilityTestReportResponse {
@@ -808,6 +876,7 @@ pub struct GetDeliverabilityTestReportResponse {
 }
 
 /// <p>Retrieve all the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for (<code>PutDeliverabilityDashboardOption</code> operation).</p>
+/// see [PinpointEmail::get_domain_deliverability_campaign]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainDeliverabilityCampaignRequest {
@@ -817,6 +886,7 @@ pub struct GetDomainDeliverabilityCampaignRequest {
 }
 
 /// <p>An object that contains all the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for (<code>PutDeliverabilityDashboardOption</code> operation).</p>
+/// see [PinpointEmail::get_domain_deliverability_campaign]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainDeliverabilityCampaignResponse {
@@ -826,6 +896,7 @@ pub struct GetDomainDeliverabilityCampaignResponse {
 }
 
 /// <p>A request to obtain deliverability metrics for a domain.</p>
+/// see [PinpointEmail::get_domain_statistics_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainStatisticsReportRequest {
@@ -841,6 +912,7 @@ pub struct GetDomainStatisticsReportRequest {
 }
 
 /// <p>An object that includes statistics that are related to the domain that you specified.</p>
+/// see [PinpointEmail::get_domain_statistics_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainStatisticsReportResponse {
@@ -853,6 +925,7 @@ pub struct GetDomainStatisticsReportResponse {
 }
 
 /// <p>A request to return details about an email identity.</p>
+/// see [PinpointEmail::get_email_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEmailIdentityRequest {
@@ -862,6 +935,7 @@ pub struct GetEmailIdentityRequest {
 }
 
 /// <p>Details about an email identity.</p>
+/// see [PinpointEmail::get_email_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEmailIdentityResponse {
@@ -948,6 +1022,7 @@ pub struct KinesisFirehoseDestination {
 }
 
 /// <p>A request to obtain a list of configuration sets for your Amazon Pinpoint account in the current AWS Region.</p>
+/// see [PinpointEmail::list_configuration_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationSetsRequest {
@@ -961,7 +1036,16 @@ pub struct ListConfigurationSetsRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListConfigurationSetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>A list of configuration sets in your Amazon Pinpoint account in the current AWS Region.</p>
+/// see [PinpointEmail::list_configuration_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationSetsResponse {
@@ -975,7 +1059,32 @@ pub struct ListConfigurationSetsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListConfigurationSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.configuration_sets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListConfigurationSetsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>A request to obtain a list of dedicated IP pools.</p>
+/// see [PinpointEmail::list_dedicated_ip_pools]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDedicatedIpPoolsRequest {
@@ -989,7 +1098,16 @@ pub struct ListDedicatedIpPoolsRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListDedicatedIpPoolsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>A list of dedicated IP pools.</p>
+/// see [PinpointEmail::list_dedicated_ip_pools]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDedicatedIpPoolsResponse {
@@ -1003,7 +1121,32 @@ pub struct ListDedicatedIpPoolsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDedicatedIpPoolsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.dedicated_ip_pools.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDedicatedIpPoolsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>A request to list all of the predictive inbox placement tests that you've performed.</p>
+/// see [PinpointEmail::list_deliverability_test_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeliverabilityTestReportsRequest {
@@ -1017,7 +1160,16 @@ pub struct ListDeliverabilityTestReportsRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListDeliverabilityTestReportsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>A list of the predictive inbox placement test reports that are available for your account, regardless of whether or not those tests are complete.</p>
+/// see [PinpointEmail::list_deliverability_test_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeliverabilityTestReportsResponse {
@@ -1030,7 +1182,32 @@ pub struct ListDeliverabilityTestReportsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDeliverabilityTestReportsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DeliverabilityTestReport>> {
+        Some(self.deliverability_test_reports.clone())
+    }
+}
+
+impl PagedOutput for ListDeliverabilityTestReportsResponse {
+    type Item = DeliverabilityTestReport;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DeliverabilityTestReport> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard (<code>PutDeliverabilityDashboardOption</code> operation) for the domain.</p>
+/// see [PinpointEmail::list_domain_deliverability_campaigns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainDeliverabilityCampaignsRequest {
@@ -1054,6 +1231,7 @@ pub struct ListDomainDeliverabilityCampaignsRequest {
 }
 
 /// <p>An array of objects that provide deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard (<code>PutDeliverabilityDashboardOption</code> operation) for the domain.</p>
+/// see [PinpointEmail::list_domain_deliverability_campaigns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainDeliverabilityCampaignsResponse {
@@ -1067,6 +1245,7 @@ pub struct ListDomainDeliverabilityCampaignsResponse {
 }
 
 /// <p>A request to list all of the email identities associated with your Amazon Pinpoint account. This list includes identities that you've already verified, identities that are unverified, and identities that were verified in the past, but are no longer verified.</p>
+/// see [PinpointEmail::list_email_identities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEmailIdentitiesRequest {
@@ -1080,7 +1259,16 @@ pub struct ListEmailIdentitiesRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListEmailIdentitiesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>A list of all of the identities that you've attempted to verify for use with Amazon Pinpoint, regardless of whether or not those identities were successfully verified.</p>
+/// see [PinpointEmail::list_email_identities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEmailIdentitiesResponse {
@@ -1094,6 +1282,31 @@ pub struct ListEmailIdentitiesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListEmailIdentitiesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<IdentityInfo>> {
+        Some(self.email_identities.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListEmailIdentitiesResponse {
+    type Item = IdentityInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<IdentityInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [PinpointEmail::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1102,6 +1315,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [PinpointEmail::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1203,6 +1417,7 @@ pub struct PlacementStatistics {
 }
 
 /// <p>A request to enable or disable the automatic IP address warm-up feature.</p>
+/// see [PinpointEmail::put_account_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountDedicatedIpWarmupAttributesRequest {
@@ -1213,11 +1428,13 @@ pub struct PutAccountDedicatedIpWarmupAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_account_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountDedicatedIpWarmupAttributesResponse {}
 
 /// <p>A request to change the ability of your account to send email.</p>
+/// see [PinpointEmail::put_account_sending_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountSendingAttributesRequest {
@@ -1228,11 +1445,13 @@ pub struct PutAccountSendingAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_account_sending_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountSendingAttributesResponse {}
 
 /// <p>A request to associate a configuration set with a dedicated IP pool.</p>
+/// see [PinpointEmail::put_configuration_set_delivery_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetDeliveryOptionsRequest {
@@ -1250,11 +1469,13 @@ pub struct PutConfigurationSetDeliveryOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_configuration_set_delivery_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetDeliveryOptionsResponse {}
 
 /// <p>A request to enable or disable tracking of reputation metrics for a configuration set.</p>
+/// see [PinpointEmail::put_configuration_set_reputation_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetReputationOptionsRequest {
@@ -1268,11 +1489,13 @@ pub struct PutConfigurationSetReputationOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_configuration_set_reputation_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetReputationOptionsResponse {}
 
 /// <p>A request to enable or disable the ability of Amazon Pinpoint to send emails that use a specific configuration set.</p>
+/// see [PinpointEmail::put_configuration_set_sending_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetSendingOptionsRequest {
@@ -1286,11 +1509,13 @@ pub struct PutConfigurationSetSendingOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_configuration_set_sending_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetSendingOptionsResponse {}
 
 /// <p>A request to add a custom domain for tracking open and click events to a configuration set.</p>
+/// see [PinpointEmail::put_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetTrackingOptionsRequest {
@@ -1304,11 +1529,13 @@ pub struct PutConfigurationSetTrackingOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetTrackingOptionsResponse {}
 
 /// <p>A request to move a dedicated IP address to a dedicated IP pool.</p>
+/// see [PinpointEmail::put_dedicated_ip_in_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDedicatedIpInPoolRequest {
@@ -1321,11 +1548,13 @@ pub struct PutDedicatedIpInPoolRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_dedicated_ip_in_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDedicatedIpInPoolResponse {}
 
 /// <p>A request to change the warm-up attributes for a dedicated IP address. This operation is useful when you want to resume the warm-up process for an existing IP address.</p>
+/// see [PinpointEmail::put_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDedicatedIpWarmupAttributesRequest {
@@ -1338,11 +1567,13 @@ pub struct PutDedicatedIpWarmupAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDedicatedIpWarmupAttributesResponse {}
 
 /// <p>Enable or disable the Deliverability dashboard for your Amazon Pinpoint account. When you enable the Deliverability dashboard, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
+/// see [PinpointEmail::put_deliverability_dashboard_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDeliverabilityDashboardOptionRequest {
@@ -1356,11 +1587,13 @@ pub struct PutDeliverabilityDashboardOptionRequest {
 }
 
 /// <p>A response that indicates whether the Deliverability dashboard is enabled for your Amazon Pinpoint account.</p>
+/// see [PinpointEmail::put_deliverability_dashboard_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDeliverabilityDashboardOptionResponse {}
 
 /// <p>A request to enable or disable DKIM signing of email that you send from an email identity.</p>
+/// see [PinpointEmail::put_email_identity_dkim_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEmailIdentityDkimAttributesRequest {
@@ -1374,11 +1607,13 @@ pub struct PutEmailIdentityDkimAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_email_identity_dkim_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEmailIdentityDkimAttributesResponse {}
 
 /// <p>A request to set the attributes that control how bounce and complaint events are processed.</p>
+/// see [PinpointEmail::put_email_identity_feedback_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEmailIdentityFeedbackAttributesRequest {
@@ -1392,11 +1627,13 @@ pub struct PutEmailIdentityFeedbackAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_email_identity_feedback_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEmailIdentityFeedbackAttributesResponse {}
 
 /// <p>A request to configure the custom MAIL FROM domain for a verified identity.</p>
+/// see [PinpointEmail::put_email_identity_mail_from_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEmailIdentityMailFromAttributesRequest {
@@ -1414,6 +1651,7 @@ pub struct PutEmailIdentityMailFromAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::put_email_identity_mail_from_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEmailIdentityMailFromAttributesResponse {}
@@ -1446,6 +1684,7 @@ pub struct ReputationOptions {
 }
 
 /// <p>A request to send an email message.</p>
+/// see [PinpointEmail::send_email]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendEmailRequest {
@@ -1478,6 +1717,7 @@ pub struct SendEmailRequest {
 }
 
 /// <p>A unique message ID that you receive when Amazon Pinpoint accepts an email for sending.</p>
+/// see [PinpointEmail::send_email]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendEmailResponse {
@@ -1533,6 +1773,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [PinpointEmail::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1544,6 +1785,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [PinpointEmail::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1569,6 +1811,7 @@ pub struct TrackingOptions {
     pub custom_redirect_domain: String,
 }
 
+/// see [PinpointEmail::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1580,11 +1823,13 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [PinpointEmail::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>A request to change the settings for an event destination for a configuration set.</p>
+/// see [PinpointEmail::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetEventDestinationRequest {
@@ -1600,6 +1845,7 @@ pub struct UpdateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [PinpointEmail::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConfigurationSetEventDestinationResponse {}
@@ -3822,7 +4068,7 @@ impl fmt::Display for UpdateConfigurationSetEventDestinationError {
 impl Error for UpdateConfigurationSetEventDestinationError {}
 /// Trait representing the capabilities of the Pinpoint Email API. Pinpoint Email clients implement this trait.
 #[async_trait]
-pub trait PinpointEmail {
+pub trait PinpointEmail: Clone + Sync + Send + 'static {
     /// <p>Create a configuration set. <i>Configuration sets</i> are groups of rules that you can apply to the emails you send using Amazon Pinpoint. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email. </p>
     async fn create_configuration_set(
         &self,
@@ -3922,6 +4168,16 @@ pub trait PinpointEmail {
         input: GetDedicatedIpsRequest,
     ) -> Result<GetDedicatedIpsResponse, RusotoError<GetDedicatedIpsError>>;
 
+    /// Auto-paginating version of `get_dedicated_ips`
+    fn get_dedicated_ips_pages(
+        &self,
+        input: GetDedicatedIpsRequest,
+    ) -> RusotoStream<DedicatedIp, GetDedicatedIpsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_dedicated_ips(state.clone())
+        })
+    }
+
     /// <p>Retrieve information about the status of the Deliverability dashboard for your Amazon Pinpoint account. When the Deliverability dashboard is enabled, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
     async fn get_deliverability_dashboard_options(
         &self,
@@ -3963,11 +4219,31 @@ pub trait PinpointEmail {
         input: ListConfigurationSetsRequest,
     ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
 
+    /// Auto-paginating version of `list_configuration_sets`
+    fn list_configuration_sets_pages(
+        &self,
+        input: ListConfigurationSetsRequest,
+    ) -> RusotoStream<String, ListConfigurationSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_configuration_sets(state.clone())
+        })
+    }
+
     /// <p>List all of the dedicated IP pools that exist in your Amazon Pinpoint account in the current AWS Region.</p>
     async fn list_dedicated_ip_pools(
         &self,
         input: ListDedicatedIpPoolsRequest,
     ) -> Result<ListDedicatedIpPoolsResponse, RusotoError<ListDedicatedIpPoolsError>>;
+
+    /// Auto-paginating version of `list_dedicated_ip_pools`
+    fn list_dedicated_ip_pools_pages(
+        &self,
+        input: ListDedicatedIpPoolsRequest,
+    ) -> RusotoStream<String, ListDedicatedIpPoolsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dedicated_ip_pools(state.clone())
+        })
+    }
 
     /// <p>Show a list of the predictive inbox placement tests that you've performed, regardless of their statuses. For predictive inbox placement tests that are complete, you can use the <code>GetDeliverabilityTestReport</code> operation to view the results.</p>
     async fn list_deliverability_test_reports(
@@ -3977,6 +4253,16 @@ pub trait PinpointEmail {
         ListDeliverabilityTestReportsResponse,
         RusotoError<ListDeliverabilityTestReportsError>,
     >;
+
+    /// Auto-paginating version of `list_deliverability_test_reports`
+    fn list_deliverability_test_reports_pages(
+        &self,
+        input: ListDeliverabilityTestReportsRequest,
+    ) -> RusotoStream<DeliverabilityTestReport, ListDeliverabilityTestReportsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deliverability_test_reports(state.clone())
+        })
+    }
 
     /// <p>Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard (<code>PutDeliverabilityDashboardOption</code> operation) for the domain.</p>
     async fn list_domain_deliverability_campaigns(
@@ -3992,6 +4278,16 @@ pub trait PinpointEmail {
         &self,
         input: ListEmailIdentitiesRequest,
     ) -> Result<ListEmailIdentitiesResponse, RusotoError<ListEmailIdentitiesError>>;
+
+    /// Auto-paginating version of `list_email_identities`
+    fn list_email_identities_pages(
+        &self,
+        input: ListEmailIdentitiesRequest,
+    ) -> RusotoStream<IdentityInfo, ListEmailIdentitiesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_email_identities(state.clone())
+        })
+    }
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource in Amazon Pinpoint. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
     async fn list_tags_for_resource(

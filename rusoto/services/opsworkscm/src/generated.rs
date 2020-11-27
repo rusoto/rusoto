@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -68,6 +70,7 @@ pub struct AccountAttribute {
     pub used: Option<i64>,
 }
 
+/// see [OpsWorksCM::associate_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateNodeRequest {
@@ -82,6 +85,7 @@ pub struct AssociateNodeRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::associate_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateNodeResponse {
@@ -185,6 +189,7 @@ pub struct Backup {
     pub user_arn: Option<String>,
 }
 
+/// see [OpsWorksCM::create_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupRequest {
@@ -201,6 +206,7 @@ pub struct CreateBackupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [OpsWorksCM::create_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupResponse {
@@ -210,6 +216,7 @@ pub struct CreateBackupResponse {
     pub backup: Option<Backup>,
 }
 
+/// see [OpsWorksCM::create_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServerRequest {
@@ -294,6 +301,7 @@ pub struct CreateServerRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [OpsWorksCM::create_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServerResponse {
@@ -303,6 +311,7 @@ pub struct CreateServerResponse {
     pub server: Option<Server>,
 }
 
+/// see [OpsWorksCM::delete_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupRequest {
@@ -311,10 +320,12 @@ pub struct DeleteBackupRequest {
     pub backup_id: String,
 }
 
+/// see [OpsWorksCM::delete_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackupResponse {}
 
+/// see [OpsWorksCM::delete_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerRequest {
@@ -323,14 +334,17 @@ pub struct DeleteServerRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::delete_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServerResponse {}
 
+/// see [OpsWorksCM::describe_account_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesRequest {}
 
+/// see [OpsWorksCM::describe_account_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountAttributesResponse {
@@ -340,6 +354,7 @@ pub struct DescribeAccountAttributesResponse {
     pub attributes: Option<Vec<AccountAttribute>>,
 }
 
+/// see [OpsWorksCM::describe_backups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupsRequest {
@@ -361,6 +376,15 @@ pub struct DescribeBackupsRequest {
     pub server_name: Option<String>,
 }
 
+impl PagedRequest for DescribeBackupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [OpsWorksCM::describe_backups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupsResponse {
@@ -374,6 +398,31 @@ pub struct DescribeBackupsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBackupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Backup>> {
+        Some(self.backups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeBackupsResponse {
+    type Item = Backup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Backup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [OpsWorksCM::describe_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsRequest {
@@ -390,6 +439,15 @@ pub struct DescribeEventsRequest {
     pub server_name: String,
 }
 
+impl PagedRequest for DescribeEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [OpsWorksCM::describe_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsResponse {
@@ -403,6 +461,31 @@ pub struct DescribeEventsResponse {
     pub server_events: Option<Vec<ServerEvent>>,
 }
 
+impl DescribeEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ServerEvent>> {
+        Some(self.server_events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventsResponse {
+    type Item = ServerEvent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ServerEvent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [OpsWorksCM::describe_node_association_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodeAssociationStatusRequest {
@@ -414,6 +497,7 @@ pub struct DescribeNodeAssociationStatusRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::describe_node_association_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNodeAssociationStatusResponse {
@@ -427,6 +511,7 @@ pub struct DescribeNodeAssociationStatusResponse {
     pub node_association_status: Option<String>,
 }
 
+/// see [OpsWorksCM::describe_servers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServersRequest {
@@ -444,6 +529,15 @@ pub struct DescribeServersRequest {
     pub server_name: Option<String>,
 }
 
+impl PagedRequest for DescribeServersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [OpsWorksCM::describe_servers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServersResponse {
@@ -457,6 +551,31 @@ pub struct DescribeServersResponse {
     pub servers: Option<Vec<Server>>,
 }
 
+impl DescribeServersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Server>> {
+        Some(self.servers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeServersResponse {
+    type Item = Server;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Server> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [OpsWorksCM::disassociate_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateNodeRequest {
@@ -472,6 +591,7 @@ pub struct DisassociateNodeRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::disassociate_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateNodeResponse {
@@ -494,6 +614,7 @@ pub struct EngineAttribute {
     pub value: Option<String>,
 }
 
+/// see [OpsWorksCM::export_server_engine_attribute]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportServerEngineAttributeRequest {
@@ -509,6 +630,7 @@ pub struct ExportServerEngineAttributeRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::export_server_engine_attribute]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportServerEngineAttributeResponse {
@@ -522,6 +644,7 @@ pub struct ExportServerEngineAttributeResponse {
     pub server_name: Option<String>,
 }
 
+/// see [OpsWorksCM::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -538,6 +661,15 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl PagedRequest for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [OpsWorksCM::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -551,6 +683,31 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl ListTagsForResourceResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [OpsWorksCM::restore_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreServerRequest {
@@ -570,6 +727,7 @@ pub struct RestoreServerRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::restore_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreServerResponse {}
@@ -698,6 +856,7 @@ pub struct ServerEvent {
     pub server_name: Option<String>,
 }
 
+/// see [OpsWorksCM::start_maintenance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMaintenanceRequest {
@@ -710,6 +869,7 @@ pub struct StartMaintenanceRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::start_maintenance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMaintenanceResponse {
@@ -730,6 +890,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [OpsWorksCM::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -741,10 +902,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [OpsWorksCM::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [OpsWorksCM::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -756,10 +919,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [OpsWorksCM::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [OpsWorksCM::update_server_engine_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerEngineAttributesRequest {
@@ -775,6 +940,7 @@ pub struct UpdateServerEngineAttributesRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::update_server_engine_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServerEngineAttributesResponse {
@@ -784,6 +950,7 @@ pub struct UpdateServerEngineAttributesResponse {
     pub server: Option<Server>,
 }
 
+/// see [OpsWorksCM::update_server]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerRequest {
@@ -806,6 +973,7 @@ pub struct UpdateServerRequest {
     pub server_name: String,
 }
 
+/// see [OpsWorksCM::update_server]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServerResponse {
@@ -1509,7 +1677,7 @@ impl fmt::Display for UpdateServerEngineAttributesError {
 impl Error for UpdateServerEngineAttributesError {}
 /// Trait representing the capabilities of the OpsWorksCM API. OpsWorksCM clients implement this trait.
 #[async_trait]
-pub trait OpsWorksCM {
+pub trait OpsWorksCM: Clone + Sync + Send + 'static {
     /// <p> Associates a new node with the server. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> On a Chef server: This command is an alternative to <code>knife bootstrap</code>.</p> <p> Example (Chef): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>CHEF_ORGANIZATION</i>,Value=default" "Name=<i>CHEF_NODE_PUBLIC_KEY</i>,Value=<i>public-key-pem</i>"</code> </p> <p> On a Puppet server, this command is an alternative to the <code>puppet cert sign</code> command that signs a Puppet node CSR. </p> <p> Example (Puppet): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>PUPPET_NODE_CSR</i>,Value=<i>csr-pem</i>"</code> </p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p>
     async fn associate_node(
         &self,
@@ -1551,11 +1719,31 @@ pub trait OpsWorksCM {
         input: DescribeBackupsRequest,
     ) -> Result<DescribeBackupsResponse, RusotoError<DescribeBackupsError>>;
 
+    /// Auto-paginating version of `describe_backups`
+    fn describe_backups_pages(
+        &self,
+        input: DescribeBackupsRequest,
+    ) -> RusotoStream<Backup, DescribeBackupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_backups(state.clone())
+        })
+    }
+
     /// <p> Describes events for a specified server. Results are ordered by time, with newest events first. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     async fn describe_events(
         &self,
         input: DescribeEventsRequest,
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsRequest,
+    ) -> RusotoStream<ServerEvent, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
 
     /// <p> Returns the current status of an existing association or disassociation request. </p> <p> A <code>ResourceNotFoundException</code> is thrown when no recent association or disassociation request with the specified token is found, or when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     async fn describe_node_association_status(
@@ -1571,6 +1759,16 @@ pub trait OpsWorksCM {
         &self,
         input: DescribeServersRequest,
     ) -> Result<DescribeServersResponse, RusotoError<DescribeServersError>>;
+
+    /// Auto-paginating version of `describe_servers`
+    fn describe_servers_pages(
+        &self,
+        input: DescribeServersRequest,
+    ) -> RusotoStream<Server, DescribeServersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_servers(state.clone())
+        })
+    }
 
     /// <p> Disassociates a node from an AWS OpsWorks CM server, and removes the node from the server's managed nodes. After a node is disassociated, the node key pair is no longer valid for accessing the configuration manager's API. For more information about how to associate a node, see <a>AssociateNode</a>. </p> <p>A node can can only be disassociated from a server that is in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     async fn disassociate_node(
@@ -1589,6 +1787,16 @@ pub trait OpsWorksCM {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoStream<Tag, ListTagsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_for_resource(state.clone())
+        })
+    }
 
     /// <p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p>Restoring from a backup is performed by creating a new EC2 instance. If restoration is successful, and the server is in a <code>HEALTHY</code> state, AWS OpsWorks CM switches traffic over to the new instance. After restoration is finished, the old EC2 instance is maintained in a <code>Running</code> or <code>Stopped</code> state, but is eventually terminated.</p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     async fn restore_server(

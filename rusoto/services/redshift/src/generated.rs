@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -60,6 +62,7 @@ impl RedshiftClient {
     }
 }
 
+/// see [Redshift::accept_reserved_node_exchange]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptReservedNodeExchangeInputMessage {
@@ -89,6 +92,7 @@ impl AcceptReservedNodeExchangeInputMessageSerializer {
     }
 }
 
+/// see [Redshift::accept_reserved_node_exchange]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AcceptReservedNodeExchangeOutputMessage {
@@ -157,6 +161,7 @@ impl AccountAttributeDeserializer {
         })
     }
 }
+/// see [Redshift::describe_account_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountAttributeList {
@@ -347,6 +352,7 @@ impl AttributeValueTargetDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::authorize_cluster_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeClusterSecurityGroupIngressMessage {
@@ -395,6 +401,7 @@ impl AuthorizeClusterSecurityGroupIngressMessageSerializer {
     }
 }
 
+/// see [Redshift::authorize_cluster_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizeClusterSecurityGroupIngressResult {
@@ -429,6 +436,7 @@ impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::authorize_snapshot_access]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeSnapshotAccessMessage {
@@ -466,6 +474,7 @@ impl AuthorizeSnapshotAccessMessageSerializer {
     }
 }
 
+/// see [Redshift::authorize_snapshot_access]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizeSnapshotAccessResult {
@@ -553,6 +562,7 @@ impl AvailabilityZoneListDeserializer {
         })
     }
 }
+/// see [Redshift::batch_delete_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteClusterSnapshotsRequest {
@@ -577,6 +587,7 @@ impl BatchDeleteClusterSnapshotsRequestSerializer {
     }
 }
 
+/// see [Redshift::batch_delete_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BatchDeleteClusterSnapshotsResult {
@@ -618,6 +629,7 @@ impl BatchDeleteClusterSnapshotsResultDeserializer {
         )
     }
 }
+/// see [Redshift::batch_modify_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchModifyClusterSnapshotsMessage {
@@ -655,6 +667,7 @@ impl BatchModifyClusterSnapshotsMessageSerializer {
     }
 }
 
+/// see [Redshift::batch_modify_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BatchModifyClusterSnapshotsOutputMessage {
@@ -752,6 +765,7 @@ impl BooleanOptionalDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [Redshift::cancel_resize]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelResizeMessage {
@@ -1188,6 +1202,7 @@ impl ClusterAssociatedToScheduleDeserializer {
     }
 }
 /// <p>Temporary credentials with authorization to log on to an Amazon Redshift database. </p>
+/// see [Redshift::get_cluster_credentials]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterCredentials {
@@ -1299,6 +1314,7 @@ impl ClusterDbRevisionsListDeserializer {
         })
     }
 }
+/// see [Redshift::describe_cluster_db_revisions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterDbRevisionsMessage {
@@ -1306,6 +1322,30 @@ pub struct ClusterDbRevisionsMessage {
     pub cluster_db_revisions: Option<Vec<ClusterDbRevision>>,
     /// <p>A string representing the starting point for the next set of revisions. If a value is returned in a response, you can retrieve the next set of revisions by providing the value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all revisions have already been returned.</p>
     pub marker: Option<String>,
+}
+
+impl ClusterDbRevisionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ClusterDbRevision>> {
+        Some(self.cluster_db_revisions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ClusterDbRevisionsMessage {
+    type Item = ClusterDbRevision;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ClusterDbRevision> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1518,6 +1558,7 @@ impl ClusterParameterGroupDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterParameters</a> action. </p>
+/// see [Redshift::describe_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroupDetails {
@@ -1525,6 +1566,30 @@ pub struct ClusterParameterGroupDetails {
     pub marker: Option<String>,
     /// <p>A list of <a>Parameter</a> instances. Each instance lists the parameters of one cluster parameter group. </p>
     pub parameters: Option<Vec<Parameter>>,
+}
+
+impl ClusterParameterGroupDetails {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ClusterParameterGroupDetails {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1556,6 +1621,8 @@ impl ClusterParameterGroupDetailsDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::modify_cluster_parameter_group]
+/// see [Redshift::reset_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroupNameMessage {
@@ -1671,6 +1738,7 @@ impl ClusterParameterGroupStatusListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterParameterGroups</a> action. </p>
+/// see [Redshift::describe_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroupsMessage {
@@ -1678,6 +1746,30 @@ pub struct ClusterParameterGroupsMessage {
     pub marker: Option<String>,
     /// <p>A list of <a>ClusterParameterGroup</a> instances. Each instance describes one cluster parameter group. </p>
     pub parameter_groups: Option<Vec<ClusterParameterGroup>>,
+}
+
+impl ClusterParameterGroupsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ClusterParameterGroup>> {
+        Some(self.parameter_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ClusterParameterGroupsMessage {
+    type Item = ClusterParameterGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ClusterParameterGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1889,6 +1981,7 @@ impl ClusterSecurityGroupMembershipListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_cluster_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSecurityGroupMessage {
@@ -1896,6 +1989,30 @@ pub struct ClusterSecurityGroupMessage {
     pub cluster_security_groups: Option<Vec<ClusterSecurityGroup>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl ClusterSecurityGroupMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ClusterSecurityGroup>> {
+        Some(self.cluster_security_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ClusterSecurityGroupMessage {
+    type Item = ClusterSecurityGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ClusterSecurityGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2078,6 +2195,7 @@ impl ClusterSubnetGroupDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterSubnetGroups</a> action. </p>
+/// see [Redshift::describe_cluster_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSubnetGroupMessage {
@@ -2085,6 +2203,30 @@ pub struct ClusterSubnetGroupMessage {
     pub cluster_subnet_groups: Option<Vec<ClusterSubnetGroup>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl ClusterSubnetGroupMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ClusterSubnetGroup>> {
+        Some(self.cluster_subnet_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ClusterSubnetGroupMessage {
+    type Item = ClusterSubnetGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ClusterSubnetGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2202,6 +2344,7 @@ impl ClusterVersionListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterVersions</a> action. </p>
+/// see [Redshift::describe_cluster_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterVersionsMessage {
@@ -2209,6 +2352,30 @@ pub struct ClusterVersionsMessage {
     pub cluster_versions: Option<Vec<ClusterVersion>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl ClusterVersionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ClusterVersion>> {
+        Some(self.cluster_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ClusterVersionsMessage {
+    type Item = ClusterVersion;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ClusterVersion> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2236,6 +2403,7 @@ impl ClusterVersionsMessageDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusters</a> action. </p>
+/// see [Redshift::describe_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClustersMessage {
@@ -2243,6 +2411,30 @@ pub struct ClustersMessage {
     pub clusters: Option<Vec<Cluster>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl ClustersMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Cluster>> {
+        Some(self.clusters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ClustersMessage {
+    type Item = Cluster;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Cluster> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2270,6 +2462,7 @@ impl ClustersMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::copy_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyClusterSnapshotMessage {
@@ -2315,6 +2508,7 @@ impl CopyClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Redshift::copy_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyClusterSnapshotResult {
@@ -2345,6 +2539,7 @@ impl CopyClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterMessage {
@@ -2564,6 +2759,7 @@ impl CreateClusterMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::create_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterParameterGroupMessage {
@@ -2601,6 +2797,7 @@ impl CreateClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Redshift::create_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterParameterGroupResult {
@@ -2634,6 +2831,7 @@ impl CreateClusterParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Redshift::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterResult {
@@ -2660,6 +2858,7 @@ impl CreateClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::create_cluster_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterSecurityGroupMessage {
@@ -2691,6 +2890,7 @@ impl CreateClusterSecurityGroupMessageSerializer {
     }
 }
 
+/// see [Redshift::create_cluster_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterSecurityGroupResult {
@@ -2725,6 +2925,7 @@ impl CreateClusterSecurityGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::create_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterSnapshotMessage {
@@ -2767,6 +2968,7 @@ impl CreateClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Redshift::create_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterSnapshotResult {
@@ -2797,6 +2999,7 @@ impl CreateClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::create_cluster_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterSubnetGroupMessage {
@@ -2835,6 +3038,7 @@ impl CreateClusterSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Redshift::create_cluster_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterSubnetGroupResult {
@@ -2869,6 +3073,7 @@ impl CreateClusterSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::create_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
@@ -2933,6 +3138,7 @@ impl CreateEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Redshift::create_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEventSubscriptionResult {
@@ -2966,6 +3172,7 @@ impl CreateEventSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::create_hsm_client_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHsmClientCertificateMessage {
@@ -2994,6 +3201,7 @@ impl CreateHsmClientCertificateMessageSerializer {
     }
 }
 
+/// see [Redshift::create_hsm_client_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateHsmClientCertificateResult {
@@ -3028,6 +3236,7 @@ impl CreateHsmClientCertificateResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::create_hsm_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHsmConfigurationMessage {
@@ -3083,6 +3292,7 @@ impl CreateHsmConfigurationMessageSerializer {
     }
 }
 
+/// see [Redshift::create_hsm_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateHsmConfigurationResult {
@@ -3115,6 +3325,7 @@ impl CreateHsmConfigurationResultDeserializer {
         )
     }
 }
+/// see [Redshift::create_scheduled_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScheduledActionMessage {
@@ -3175,6 +3386,7 @@ impl CreateScheduledActionMessageSerializer {
 }
 
 /// <p>The result of the <code>CreateSnapshotCopyGrant</code> action.</p>
+/// see [Redshift::create_snapshot_copy_grant]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotCopyGrantMessage {
@@ -3208,6 +3420,7 @@ impl CreateSnapshotCopyGrantMessageSerializer {
     }
 }
 
+/// see [Redshift::create_snapshot_copy_grant]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSnapshotCopyGrantResult {
@@ -3240,6 +3453,7 @@ impl CreateSnapshotCopyGrantResultDeserializer {
         )
     }
 }
+/// see [Redshift::create_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotScheduleMessage {
@@ -3295,6 +3509,7 @@ impl CreateSnapshotScheduleMessageSerializer {
 }
 
 /// <p>Contains the output from the <code>CreateTags</code> action. </p>
+/// see [Redshift::create_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsMessage {
@@ -3318,6 +3533,7 @@ impl CreateTagsMessageSerializer {
     }
 }
 
+/// see [Redshift::create_usage_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsageLimitMessage {
@@ -3365,6 +3581,7 @@ impl CreateUsageLimitMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_storage]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CustomerStorageMessage {
@@ -3602,6 +3819,7 @@ impl DeferredMaintenanceWindowsListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::delete_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterMessage {
@@ -3650,6 +3868,7 @@ impl DeleteClusterMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::delete_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterParameterGroupMessage {
@@ -3673,6 +3892,7 @@ impl DeleteClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Redshift::delete_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteClusterResult {
@@ -3699,6 +3919,7 @@ impl DeleteClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::delete_cluster_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterSecurityGroupMessage {
@@ -3723,6 +3944,7 @@ impl DeleteClusterSecurityGroupMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::delete_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterSnapshotMessage {
@@ -3765,6 +3987,7 @@ impl DeleteClusterSnapshotMessageListSerializer {
     }
 }
 
+/// see [Redshift::delete_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteClusterSnapshotResult {
@@ -3795,6 +4018,7 @@ impl DeleteClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::delete_cluster_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterSubnetGroupMessage {
@@ -3819,6 +4043,7 @@ impl DeleteClusterSubnetGroupMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::delete_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
@@ -3843,6 +4068,7 @@ impl DeleteEventSubscriptionMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::delete_hsm_client_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHsmClientCertificateMessage {
@@ -3867,6 +4093,7 @@ impl DeleteHsmClientCertificateMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::delete_hsm_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHsmConfigurationMessage {
@@ -3890,6 +4117,7 @@ impl DeleteHsmConfigurationMessageSerializer {
     }
 }
 
+/// see [Redshift::delete_scheduled_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduledActionMessage {
@@ -3914,6 +4142,7 @@ impl DeleteScheduledActionMessageSerializer {
 }
 
 /// <p>The result of the <code>DeleteSnapshotCopyGrant</code> action.</p>
+/// see [Redshift::delete_snapshot_copy_grant]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotCopyGrantMessage {
@@ -3937,6 +4166,7 @@ impl DeleteSnapshotCopyGrantMessageSerializer {
     }
 }
 
+/// see [Redshift::delete_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotScheduleMessage {
@@ -3961,6 +4191,7 @@ impl DeleteSnapshotScheduleMessageSerializer {
 }
 
 /// <p>Contains the output from the <code>DeleteTags</code> action. </p>
+/// see [Redshift::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsMessage {
@@ -3984,6 +4215,7 @@ impl DeleteTagsMessageSerializer {
     }
 }
 
+/// see [Redshift::delete_usage_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsageLimitMessage {
@@ -4007,6 +4239,7 @@ impl DeleteUsageLimitMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_account_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesMessage {
@@ -4033,6 +4266,7 @@ impl DescribeAccountAttributesMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_cluster_db_revisions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterDbRevisionsMessage {
@@ -4042,6 +4276,14 @@ pub struct DescribeClusterDbRevisionsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified MaxRecords value, a value is returned in the <code>marker</code> field of the response. You can retrieve the next set of response records by providing the returned <code>marker</code> value in the <code>marker</code> parameter and retrying the request. </p> <p>Default: 100</p> <p>Constraints: minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeClusterDbRevisionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterDbRevisionsMessage` contents to a `SignedRequest`.
@@ -4066,6 +4308,7 @@ impl DescribeClusterDbRevisionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterParameterGroupsMessage {
@@ -4079,6 +4322,14 @@ pub struct DescribeClusterParameterGroupsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching cluster parameter groups that are associated with the specified tag value or values. For example, suppose that you have parameter groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the parameter groups that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeClusterParameterGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterParameterGroupsMessage` contents to a `SignedRequest`.
@@ -4117,6 +4368,7 @@ impl DescribeClusterParameterGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterParametersMessage {
@@ -4128,6 +4380,14 @@ pub struct DescribeClusterParametersMessage {
     pub parameter_group_name: String,
     /// <p>The parameter types to return. Specify <code>user</code> to show parameters that are different form the default. Similarly, specify <code>engine-default</code> to show parameters that are the same as the default parameter group. </p> <p>Default: All parameter types returned.</p> <p>Valid Values: <code>user</code> | <code>engine-default</code> </p>
     pub source: Option<String>,
+}
+
+impl PagedRequest for DescribeClusterParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterParametersMessage` contents to a `SignedRequest`.
@@ -4156,6 +4416,7 @@ impl DescribeClusterParametersMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_cluster_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterSecurityGroupsMessage {
@@ -4169,6 +4430,14 @@ pub struct DescribeClusterSecurityGroupsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching cluster security groups that are associated with the specified tag value or values. For example, suppose that you have security groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the security groups that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeClusterSecurityGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterSecurityGroupsMessage` contents to a `SignedRequest`.
@@ -4210,6 +4479,7 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterSnapshotsMessage {
@@ -4237,6 +4507,14 @@ pub struct DescribeClusterSnapshotsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching cluster snapshots that are associated with the specified tag value or values. For example, suppose that you have snapshots that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the snapshots that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeClusterSnapshotsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterSnapshotsMessage` contents to a `SignedRequest`.
@@ -4300,6 +4578,7 @@ impl DescribeClusterSnapshotsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_cluster_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterSubnetGroupsMessage {
@@ -4313,6 +4592,14 @@ pub struct DescribeClusterSubnetGroupsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching cluster subnet groups that are associated with the specified tag value or values. For example, suppose that you have subnet groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the subnet groups that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeClusterSubnetGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterSubnetGroupsMessage` contents to a `SignedRequest`.
@@ -4353,6 +4640,7 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_cluster_tracks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterTracksMessage {
@@ -4362,6 +4650,14 @@ pub struct DescribeClusterTracksMessage {
     pub marker: Option<String>,
     /// <p>An integer value for the maximum number of maintenance tracks to return.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeClusterTracksMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterTracksMessage` contents to a `SignedRequest`.
@@ -4389,6 +4685,7 @@ impl DescribeClusterTracksMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_cluster_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterVersionsMessage {
@@ -4400,6 +4697,14 @@ pub struct DescribeClusterVersionsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeClusterVersionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClusterVersionsMessage` contents to a `SignedRequest`.
@@ -4430,6 +4735,7 @@ impl DescribeClusterVersionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClustersMessage {
@@ -4443,6 +4749,14 @@ pub struct DescribeClustersMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching clusters that are associated with the specified tag value or values. For example, suppose that you have clusters that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the clusters that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeClustersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeClustersMessage` contents to a `SignedRequest`.
@@ -4481,6 +4795,7 @@ impl DescribeClustersMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultClusterParametersMessage {
@@ -4490,6 +4805,14 @@ pub struct DescribeDefaultClusterParametersMessage {
     pub max_records: Option<i64>,
     /// <p>The name of the cluster parameter group family.</p>
     pub parameter_group_family: String,
+}
+
+impl PagedRequest for DescribeDefaultClusterParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDefaultClusterParametersMessage` contents to a `SignedRequest`.
@@ -4514,10 +4837,47 @@ impl DescribeDefaultClusterParametersMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDefaultClusterParametersResult {
     pub default_cluster_parameters: Option<DefaultClusterParameters>,
+}
+
+impl DescribeDefaultClusterParametersResult {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(
+            self.default_cluster_parameters
+                .as_ref()?
+                .parameters
+                .as_ref()?
+                .clone(),
+        )
+    }
+}
+
+impl PagedOutput for DescribeDefaultClusterParametersResult {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(
+            self.default_cluster_parameters
+                .as_ref()?
+                .marker
+                .as_ref()?
+                .clone(),
+        )
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4548,6 +4908,7 @@ impl DescribeDefaultClusterParametersResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
@@ -4571,6 +4932,7 @@ impl DescribeEventCategoriesMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
@@ -4584,6 +4946,14 @@ pub struct DescribeEventSubscriptionsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching event notification subscriptions that are associated with the specified tag value or values. For example, suppose that you have subscriptions that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the subscriptions that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeEventSubscriptionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEventSubscriptionsMessage` contents to a `SignedRequest`.
@@ -4622,6 +4992,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
@@ -4639,6 +5010,14 @@ pub struct DescribeEventsMessage {
     pub source_type: Option<String>,
     /// <p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>
     pub start_time: Option<String>,
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
@@ -4675,6 +5054,7 @@ impl DescribeEventsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_hsm_client_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHsmClientCertificatesMessage {
@@ -4688,6 +5068,14 @@ pub struct DescribeHsmClientCertificatesMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching HSM client certificates that are associated with the specified tag value or values. For example, suppose that you have HSM client certificates that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the HSM client certificates that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeHsmClientCertificatesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeHsmClientCertificatesMessage` contents to a `SignedRequest`.
@@ -4729,6 +5117,7 @@ impl DescribeHsmClientCertificatesMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_hsm_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHsmConfigurationsMessage {
@@ -4742,6 +5131,14 @@ pub struct DescribeHsmConfigurationsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching HSM configurations that are associated with the specified tag value or values. For example, suppose that you have HSM configurations that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the HSM configurations that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeHsmConfigurationsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeHsmConfigurationsMessage` contents to a `SignedRequest`.
@@ -4783,6 +5180,7 @@ impl DescribeHsmConfigurationsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_logging_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoggingStatusMessage {
@@ -4806,6 +5204,7 @@ impl DescribeLoggingStatusMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_node_configuration_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodeConfigurationOptionsMessage {
@@ -4823,6 +5222,14 @@ pub struct DescribeNodeConfigurationOptionsMessage {
     pub owner_account: Option<String>,
     /// <p>The identifier of the snapshot to evaluate for possible node configurations.</p>
     pub snapshot_identifier: Option<String>,
+}
+
+impl PagedRequest for DescribeNodeConfigurationOptionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeNodeConfigurationOptionsMessage` contents to a `SignedRequest`.
@@ -4861,6 +5268,7 @@ impl DescribeNodeConfigurationOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_orderable_cluster_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableClusterOptionsMessage {
@@ -4872,6 +5280,14 @@ pub struct DescribeOrderableClusterOptionsMessage {
     pub max_records: Option<i64>,
     /// <p>The node type filter value. Specify this parameter to show only the available offerings matching the specified node type.</p>
     pub node_type: Option<String>,
+}
+
+impl PagedRequest for DescribeOrderableClusterOptionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeOrderableClusterOptionsMessage` contents to a `SignedRequest`.
@@ -4899,6 +5315,7 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_reserved_node_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedNodeOfferingsMessage {
@@ -4908,6 +5325,14 @@ pub struct DescribeReservedNodeOfferingsMessage {
     pub max_records: Option<i64>,
     /// <p>The unique identifier for the offering.</p>
     pub reserved_node_offering_id: Option<String>,
+}
+
+impl PagedRequest for DescribeReservedNodeOfferingsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeReservedNodeOfferingsMessage` contents to a `SignedRequest`.
@@ -4935,6 +5360,7 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_reserved_nodes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedNodesMessage {
@@ -4944,6 +5370,14 @@ pub struct DescribeReservedNodesMessage {
     pub max_records: Option<i64>,
     /// <p>Identifier for the node reservation.</p>
     pub reserved_node_id: Option<String>,
+}
+
+impl PagedRequest for DescribeReservedNodesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeReservedNodesMessage` contents to a `SignedRequest`.
@@ -4968,6 +5402,7 @@ impl DescribeReservedNodesMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_resize]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResizeMessage {
@@ -4991,6 +5426,7 @@ impl DescribeResizeMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_scheduled_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledActionsMessage {
@@ -5010,6 +5446,14 @@ pub struct DescribeScheduledActionsMessage {
     pub start_time: Option<String>,
     /// <p>The type of the scheduled actions to retrieve. </p>
     pub target_action_type: Option<String>,
+}
+
+impl PagedRequest for DescribeScheduledActionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeScheduledActionsMessage` contents to a `SignedRequest`.
@@ -5056,6 +5500,7 @@ impl DescribeScheduledActionsMessageSerializer {
 }
 
 /// <p>The result of the <code>DescribeSnapshotCopyGrants</code> action.</p>
+/// see [Redshift::describe_snapshot_copy_grants]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotCopyGrantsMessage {
@@ -5069,6 +5514,14 @@ pub struct DescribeSnapshotCopyGrantsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching resources that are associated with the specified value or values. For example, suppose that you have resources tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with all resources that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeSnapshotCopyGrantsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeSnapshotCopyGrantsMessage` contents to a `SignedRequest`.
@@ -5109,6 +5562,7 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_snapshot_schedules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotSchedulesMessage {
@@ -5124,6 +5578,14 @@ pub struct DescribeSnapshotSchedulesMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>The value corresponding to the key of the snapshot schedule tag.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeSnapshotSchedulesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeSnapshotSchedulesMessage` contents to a `SignedRequest`.
@@ -5164,6 +5626,7 @@ impl DescribeSnapshotSchedulesMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_snapshot_schedules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSnapshotSchedulesOutputMessage {
@@ -5171,6 +5634,30 @@ pub struct DescribeSnapshotSchedulesOutputMessage {
     pub marker: Option<String>,
     /// <p>A list of SnapshotSchedules.</p>
     pub snapshot_schedules: Option<Vec<SnapshotSchedule>>,
+}
+
+impl DescribeSnapshotSchedulesOutputMessage {
+    fn pagination_page_opt(self) -> Option<Vec<SnapshotSchedule>> {
+        Some(self.snapshot_schedules.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSnapshotSchedulesOutputMessage {
+    type Item = SnapshotSchedule;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SnapshotSchedule> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -5205,6 +5692,7 @@ impl DescribeSnapshotSchedulesOutputMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_table_restore_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTableRestoreStatusMessage {
@@ -5216,6 +5704,14 @@ pub struct DescribeTableRestoreStatusMessage {
     pub max_records: Option<i64>,
     /// <p>The identifier of the table restore request to return status for. If you don't specify a <code>TableRestoreRequestId</code> value, then <code>DescribeTableRestoreStatus</code> returns the status of all in-progress table restore requests.</p>
     pub table_restore_request_id: Option<String>,
+}
+
+impl PagedRequest for DescribeTableRestoreStatusMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeTableRestoreStatusMessage` contents to a `SignedRequest`.
@@ -5246,6 +5742,7 @@ impl DescribeTableRestoreStatusMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsMessage {
@@ -5261,6 +5758,14 @@ pub struct DescribeTagsMessage {
     pub tag_keys: Option<Vec<String>>,
     /// <p>A tag value or values for which you want to return all matching resources that are associated with the specified value or values. For example, suppose that you have resources tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with all resources that have either or both of these tag values associated with them.</p>
     pub tag_values: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeTagsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeTagsMessage` contents to a `SignedRequest`.
@@ -5301,6 +5806,7 @@ impl DescribeTagsMessageSerializer {
     }
 }
 
+/// see [Redshift::describe_usage_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsageLimitsMessage {
@@ -5318,6 +5824,14 @@ pub struct DescribeUsageLimitsMessage {
     pub tag_values: Option<Vec<String>>,
     /// <p>The identifier of the usage limit to describe.</p>
     pub usage_limit_id: Option<String>,
+}
+
+impl PagedRequest for DescribeUsageLimitsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeUsageLimitsMessage` contents to a `SignedRequest`.
@@ -5362,6 +5876,7 @@ impl DescribeUsageLimitsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::disable_logging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableLoggingMessage {
@@ -5386,6 +5901,7 @@ impl DisableLoggingMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::disable_snapshot_copy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableSnapshotCopyMessage {
@@ -5409,6 +5925,7 @@ impl DisableSnapshotCopyMessageSerializer {
     }
 }
 
+/// see [Redshift::disable_snapshot_copy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableSnapshotCopyResult {
@@ -5579,6 +6096,7 @@ impl EligibleTracksToUpdateListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::enable_logging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableLoggingMessage {
@@ -5611,6 +6129,7 @@ impl EnableLoggingMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::enable_snapshot_copy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSnapshotCopyMessage {
@@ -5661,6 +6180,7 @@ impl EnableSnapshotCopyMessageSerializer {
     }
 }
 
+/// see [Redshift::enable_snapshot_copy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableSnapshotCopyResult {
@@ -5873,6 +6393,7 @@ impl EventCategoriesMapListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
@@ -6101,6 +6622,7 @@ impl EventSubscriptionsListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventSubscriptionsMessage {
@@ -6108,6 +6630,30 @@ pub struct EventSubscriptionsMessage {
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl EventSubscriptionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<EventSubscription>> {
+        Some(self.event_subscriptions_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for EventSubscriptionsMessage {
+    type Item = EventSubscription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EventSubscription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -6142,6 +6688,7 @@ impl EventSubscriptionsMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
@@ -6149,6 +6696,30 @@ pub struct EventsMessage {
     pub events: Option<Vec<Event>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl EventsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for EventsMessage {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -6176,6 +6747,7 @@ impl EventsMessageDeserializer {
     }
 }
 /// <p>The request parameters to get cluster credentials.</p>
+/// see [Redshift::get_cluster_credentials]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClusterCredentialsMessage {
@@ -6227,6 +6799,7 @@ impl GetClusterCredentialsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::get_reserved_node_exchange_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservedNodeExchangeOfferingsInputMessage {
@@ -6236,6 +6809,14 @@ pub struct GetReservedNodeExchangeOfferingsInputMessage {
     pub max_records: Option<i64>,
     /// <p>A string representing the node identifier for the DC1 Reserved Node to be exchanged.</p>
     pub reserved_node_id: String,
+}
+
+impl PagedRequest for GetReservedNodeExchangeOfferingsInputMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `GetReservedNodeExchangeOfferingsInputMessage` contents to a `SignedRequest`.
@@ -6264,6 +6845,7 @@ impl GetReservedNodeExchangeOfferingsInputMessageSerializer {
     }
 }
 
+/// see [Redshift::get_reserved_node_exchange_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetReservedNodeExchangeOfferingsOutputMessage {
@@ -6271,6 +6853,30 @@ pub struct GetReservedNodeExchangeOfferingsOutputMessage {
     pub marker: Option<String>,
     /// <p>Returns an array of <a>ReservedNodeOffering</a> objects.</p>
     pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
+}
+
+impl GetReservedNodeExchangeOfferingsOutputMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ReservedNodeOffering>> {
+        Some(self.reserved_node_offerings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetReservedNodeExchangeOfferingsOutputMessage {
+    type Item = ReservedNodeOffering;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReservedNodeOffering> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -6371,6 +6977,7 @@ impl HsmClientCertificateListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_hsm_client_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HsmClientCertificateMessage {
@@ -6378,6 +6985,30 @@ pub struct HsmClientCertificateMessage {
     pub hsm_client_certificates: Option<Vec<HsmClientCertificate>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl HsmClientCertificateMessage {
+    fn pagination_page_opt(self) -> Option<Vec<HsmClientCertificate>> {
+        Some(self.hsm_client_certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for HsmClientCertificateMessage {
+    type Item = HsmClientCertificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HsmClientCertificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -6487,6 +7118,7 @@ impl HsmConfigurationListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_hsm_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HsmConfigurationMessage {
@@ -6494,6 +7126,30 @@ pub struct HsmConfigurationMessage {
     pub hsm_configurations: Option<Vec<HsmConfiguration>>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
+}
+
+impl HsmConfigurationMessage {
+    fn pagination_page_opt(self) -> Option<Vec<HsmConfiguration>> {
+        Some(self.hsm_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for HsmConfigurationMessage {
+    type Item = HsmConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HsmConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -6710,6 +7366,9 @@ impl IntegerOptionalDeserializer {
     }
 }
 /// <p>Describes the status of logging for a cluster.</p>
+/// see [Redshift::describe_logging_status]
+/// see [Redshift::disable_logging]
+/// see [Redshift::enable_logging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoggingStatus {
@@ -6840,6 +7499,7 @@ impl ModeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Redshift::modify_cluster_db_revision]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterDbRevisionMessage {
@@ -6869,6 +7529,7 @@ impl ModifyClusterDbRevisionMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_cluster_db_revision]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterDbRevisionResult {
@@ -6899,6 +7560,7 @@ impl ModifyClusterDbRevisionResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::modify_cluster_iam_roles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterIamRolesMessage {
@@ -6940,6 +7602,7 @@ impl ModifyClusterIamRolesMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_cluster_iam_roles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterIamRolesResult {
@@ -6969,6 +7632,7 @@ impl ModifyClusterIamRolesResultDeserializer {
         )
     }
 }
+/// see [Redshift::modify_cluster_maintenance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterMaintenanceMessage {
@@ -7029,6 +7693,7 @@ impl ModifyClusterMaintenanceMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_cluster_maintenance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterMaintenanceResult {
@@ -7059,6 +7724,7 @@ impl ModifyClusterMaintenanceResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::modify_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterMessage {
@@ -7241,6 +7907,7 @@ impl ModifyClusterMessageSerializer {
 }
 
 /// <p>Describes a modify cluster parameter group operation. </p>
+/// see [Redshift::modify_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterParameterGroupMessage {
@@ -7271,6 +7938,7 @@ impl ModifyClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterResult {
@@ -7296,6 +7964,7 @@ impl ModifyClusterResultDeserializer {
         })
     }
 }
+/// see [Redshift::modify_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterSnapshotMessage {
@@ -7332,6 +8001,7 @@ impl ModifyClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterSnapshotResult {
@@ -7361,6 +8031,7 @@ impl ModifyClusterSnapshotResultDeserializer {
         )
     }
 }
+/// see [Redshift::modify_cluster_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterSnapshotScheduleMessage {
@@ -7398,6 +8069,7 @@ impl ModifyClusterSnapshotScheduleMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::modify_cluster_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterSubnetGroupMessage {
@@ -7433,6 +8105,7 @@ impl ModifyClusterSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_cluster_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterSubnetGroupResult {
@@ -7467,6 +8140,7 @@ impl ModifyClusterSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::modify_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
@@ -7528,6 +8202,7 @@ impl ModifyEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyEventSubscriptionResult {
@@ -7560,6 +8235,7 @@ impl ModifyEventSubscriptionResultDeserializer {
         )
     }
 }
+/// see [Redshift::modify_scheduled_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyScheduledActionMessage {
@@ -7626,6 +8302,7 @@ impl ModifyScheduledActionMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Redshift::modify_snapshot_copy_retention_period]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySnapshotCopyRetentionPeriodMessage {
@@ -7660,6 +8337,7 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_snapshot_copy_retention_period]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifySnapshotCopyRetentionPeriodResult {
@@ -7689,6 +8367,7 @@ impl ModifySnapshotCopyRetentionPeriodResultDeserializer {
         )
     }
 }
+/// see [Redshift::modify_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySnapshotScheduleMessage {
@@ -7719,6 +8398,7 @@ impl ModifySnapshotScheduleMessageSerializer {
     }
 }
 
+/// see [Redshift::modify_usage_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyUsageLimitMessage {
@@ -7872,6 +8552,7 @@ impl NodeConfigurationOptionsFilterListSerializer {
     }
 }
 
+/// see [Redshift::describe_node_configuration_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NodeConfigurationOptionsMessage {
@@ -7879,6 +8560,30 @@ pub struct NodeConfigurationOptionsMessage {
     pub marker: Option<String>,
     /// <p>A list of valid node configurations.</p>
     pub node_configuration_option_list: Option<Vec<NodeConfigurationOption>>,
+}
+
+impl NodeConfigurationOptionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<NodeConfigurationOption>> {
+        Some(self.node_configuration_option_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for NodeConfigurationOptionsMessage {
+    type Item = NodeConfigurationOption;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<NodeConfigurationOption> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7979,6 +8684,7 @@ impl OrderableClusterOptionsListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeOrderableClusterOptions</a> action. </p>
+/// see [Redshift::describe_orderable_cluster_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableClusterOptionsMessage {
@@ -7986,6 +8692,30 @@ pub struct OrderableClusterOptionsMessage {
     pub marker: Option<String>,
     /// <p>An <code>OrderableClusterOption</code> structure containing information about orderable options for the cluster.</p>
     pub orderable_cluster_options: Option<Vec<OrderableClusterOption>>,
+}
+
+impl OrderableClusterOptionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<OrderableClusterOption>> {
+        Some(self.orderable_cluster_options.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for OrderableClusterOptionsMessage {
+    type Item = OrderableClusterOption;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OrderableClusterOption> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8200,6 +8930,7 @@ impl ParametersListSerializer {
 }
 
 /// <p>Describes a pause cluster operation. For example, a scheduled action to run the <code>PauseCluster</code> API operation. </p>
+/// see [Redshift::pause_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8245,6 +8976,7 @@ impl PauseClusterMessageSerializer {
     }
 }
 
+/// see [Redshift::pause_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PauseClusterResult {
@@ -8388,6 +9120,7 @@ impl PendingModifiedValuesDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::purchase_reserved_node_offering]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseReservedNodeOfferingMessage {
@@ -8416,6 +9149,7 @@ impl PurchaseReservedNodeOfferingMessageSerializer {
     }
 }
 
+/// see [Redshift::purchase_reserved_node_offering]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PurchaseReservedNodeOfferingResult {
@@ -8449,6 +9183,7 @@ impl PurchaseReservedNodeOfferingResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::reboot_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootClusterMessage {
@@ -8472,6 +9207,7 @@ impl RebootClusterMessageSerializer {
     }
 }
 
+/// see [Redshift::reboot_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootClusterResult {
@@ -8784,6 +9520,7 @@ impl ReservedNodeOfferingTypeDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_reserved_node_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedNodeOfferingsMessage {
@@ -8791,6 +9528,30 @@ pub struct ReservedNodeOfferingsMessage {
     pub marker: Option<String>,
     /// <p>A list of <code>ReservedNodeOffering</code> objects.</p>
     pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
+}
+
+impl ReservedNodeOfferingsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ReservedNodeOffering>> {
+        Some(self.reserved_node_offerings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ReservedNodeOfferingsMessage {
+    type Item = ReservedNodeOffering;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReservedNodeOffering> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8825,6 +9586,7 @@ impl ReservedNodeOfferingsMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_reserved_nodes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedNodesMessage {
@@ -8832,6 +9594,30 @@ pub struct ReservedNodesMessage {
     pub marker: Option<String>,
     /// <p>The list of <code>ReservedNode</code> objects.</p>
     pub reserved_nodes: Option<Vec<ReservedNode>>,
+}
+
+impl ReservedNodesMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ReservedNode>> {
+        Some(self.reserved_nodes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ReservedNodesMessage {
+    type Item = ReservedNode;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReservedNode> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8859,6 +9645,7 @@ impl ReservedNodesMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::reset_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetClusterParameterGroupMessage {
@@ -8897,6 +9684,7 @@ impl ResetClusterParameterGroupMessageSerializer {
 }
 
 /// <p>Describes a resize cluster operation. For example, a scheduled action to run the <code>ResizeCluster</code> API operation. </p>
+/// see [Redshift::resize_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8977,6 +9765,7 @@ impl ResizeClusterMessageSerializer {
     }
 }
 
+/// see [Redshift::resize_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResizeClusterResult {
@@ -9038,6 +9827,8 @@ impl ResizeInfoDeserializer {
     }
 }
 /// <p>Describes the result of a cluster resize operation.</p>
+/// see [Redshift::cancel_resize]
+/// see [Redshift::describe_resize]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResizeProgressMessage {
@@ -9201,6 +9992,7 @@ impl RestorableNodeTypeListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::restore_from_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreFromClusterSnapshotMessage {
@@ -9403,6 +10195,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Redshift::restore_from_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreFromClusterSnapshotResult {
@@ -9498,6 +10291,7 @@ impl RestoreStatusDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::restore_table_from_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreTableFromClusterSnapshotMessage {
@@ -9560,6 +10354,7 @@ impl RestoreTableFromClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Redshift::restore_table_from_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreTableFromClusterSnapshotResult {
@@ -9594,6 +10389,7 @@ impl RestoreTableFromClusterSnapshotResultDeserializer {
     }
 }
 /// <p>Describes a resume cluster operation. For example, a scheduled action to run the <code>ResumeCluster</code> API operation. </p>
+/// see [Redshift::resume_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -9639,6 +10435,7 @@ impl ResumeClusterMessageSerializer {
     }
 }
 
+/// see [Redshift::resume_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResumeClusterResult {
@@ -9727,6 +10524,7 @@ impl RevisionTargetsListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::revoke_cluster_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeClusterSecurityGroupIngressMessage {
@@ -9771,6 +10569,7 @@ impl RevokeClusterSecurityGroupIngressMessageSerializer {
     }
 }
 
+/// see [Redshift::revoke_cluster_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevokeClusterSecurityGroupIngressResult {
@@ -9805,6 +10604,7 @@ impl RevokeClusterSecurityGroupIngressResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::revoke_snapshot_access]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeSnapshotAccessMessage {
@@ -9842,6 +10642,7 @@ impl RevokeSnapshotAccessMessageSerializer {
     }
 }
 
+/// see [Redshift::revoke_snapshot_access]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevokeSnapshotAccessResult {
@@ -9872,6 +10673,7 @@ impl RevokeSnapshotAccessResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::rotate_encryption_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateEncryptionKeyMessage {
@@ -9895,6 +10697,7 @@ impl RotateEncryptionKeyMessageSerializer {
     }
 }
 
+/// see [Redshift::rotate_encryption_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RotateEncryptionKeyResult {
@@ -9966,6 +10769,8 @@ impl ScheduleStateDeserializer {
     }
 }
 /// <p>Describes a scheduled action. You can use a scheduled action to trigger some Amazon Redshift API operations on a schedule. For information about which API operations can be scheduled, see <a>ScheduledActionType</a>. </p>
+/// see [Redshift::create_scheduled_action]
+/// see [Redshift::modify_scheduled_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledAction {
@@ -10211,6 +11016,7 @@ impl ScheduledActionTypeSerializer {
     }
 }
 
+/// see [Redshift::describe_scheduled_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledActionsMessage {
@@ -10218,6 +11024,30 @@ pub struct ScheduledActionsMessage {
     pub marker: Option<String>,
     /// <p>List of retrieved scheduled actions. </p>
     pub scheduled_actions: Option<Vec<ScheduledAction>>,
+}
+
+impl ScheduledActionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ScheduledAction>> {
+        Some(self.scheduled_actions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ScheduledActionsMessage {
+    type Item = ScheduledAction;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ScheduledAction> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -10599,6 +11429,7 @@ impl SnapshotCopyGrantListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_snapshot_copy_grants]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotCopyGrantMessage {
@@ -10606,6 +11437,30 @@ pub struct SnapshotCopyGrantMessage {
     pub marker: Option<String>,
     /// <p>The list of <code>SnapshotCopyGrant</code> objects.</p>
     pub snapshot_copy_grants: Option<Vec<SnapshotCopyGrant>>,
+}
+
+impl SnapshotCopyGrantMessage {
+    fn pagination_page_opt(self) -> Option<Vec<SnapshotCopyGrant>> {
+        Some(self.snapshot_copy_grants.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SnapshotCopyGrantMessage {
+    type Item = SnapshotCopyGrant;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SnapshotCopyGrant> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -10737,6 +11592,7 @@ impl SnapshotListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterSnapshots</a> action. </p>
+/// see [Redshift::describe_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotMessage {
@@ -10744,6 +11600,30 @@ pub struct SnapshotMessage {
     pub marker: Option<String>,
     /// <p>A list of <a>Snapshot</a> instances. </p>
     pub snapshots: Option<Vec<Snapshot>>,
+}
+
+impl SnapshotMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Snapshot>> {
+        Some(self.snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SnapshotMessage {
+    type Item = Snapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Snapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -10771,6 +11651,8 @@ impl SnapshotMessageDeserializer {
     }
 }
 /// <p>Describes a snapshot schedule. You can set a regular interval for creating snapshots of a cluster. You can also schedule snapshots for specific dates. </p>
+/// see [Redshift::create_snapshot_schedule]
+/// see [Redshift::modify_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotSchedule {
@@ -11319,6 +12201,7 @@ impl TableRestoreStatusListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_table_restore_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TableRestoreStatusMessage {
@@ -11326,6 +12209,30 @@ pub struct TableRestoreStatusMessage {
     pub marker: Option<String>,
     /// <p>A list of status details for one or more table restore requests.</p>
     pub table_restore_status_details: Option<Vec<TableRestoreStatus>>,
+}
+
+impl TableRestoreStatusMessage {
+    fn pagination_page_opt(self) -> Option<Vec<TableRestoreStatus>> {
+        Some(self.table_restore_status_details.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for TableRestoreStatusMessage {
+    type Item = TableRestoreStatus;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TableRestoreStatus> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -11529,6 +12436,7 @@ impl TaggedResourceListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Redshift::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TaggedResourceListMessage {
@@ -11536,6 +12444,30 @@ pub struct TaggedResourceListMessage {
     pub marker: Option<String>,
     /// <p>A list of tags with their associated resources.</p>
     pub tagged_resources: Option<Vec<TaggedResource>>,
+}
+
+impl TaggedResourceListMessage {
+    fn pagination_page_opt(self) -> Option<Vec<TaggedResource>> {
+        Some(self.tagged_resources.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for TaggedResourceListMessage {
+    type Item = TaggedResource;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TaggedResource> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -11587,6 +12519,7 @@ impl TrackListDeserializer {
         })
     }
 }
+/// see [Redshift::describe_cluster_tracks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TrackListMessage {
@@ -11594,6 +12527,30 @@ pub struct TrackListMessage {
     pub maintenance_tracks: Option<Vec<MaintenanceTrack>>,
     /// <p>The starting point to return a set of response tracklist records. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request.</p>
     pub marker: Option<String>,
+}
+
+impl TrackListMessage {
+    fn pagination_page_opt(self) -> Option<Vec<MaintenanceTrack>> {
+        Some(self.maintenance_tracks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for TrackListMessage {
+    type Item = MaintenanceTrack;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MaintenanceTrack> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -11667,6 +12624,8 @@ impl UpdateTargetDeserializer {
     }
 }
 /// <p>Describes a usage limit object for a cluster. </p>
+/// see [Redshift::create_usage_limit]
+/// see [Redshift::modify_usage_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UsageLimit {
@@ -11765,6 +12724,7 @@ impl UsageLimitLimitTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Redshift::describe_usage_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UsageLimitList {
@@ -11772,6 +12732,30 @@ pub struct UsageLimitList {
     pub marker: Option<String>,
     /// <p>Contains the output from the <a>DescribeUsageLimits</a> action. </p>
     pub usage_limits: Option<Vec<UsageLimit>>,
+}
+
+impl UsageLimitList {
+    fn pagination_page_opt(self) -> Option<Vec<UsageLimit>> {
+        Some(self.usage_limits.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for UsageLimitList {
+    type Item = UsageLimit;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UsageLimit> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -18890,7 +19874,7 @@ impl fmt::Display for RotateEncryptionKeyError {
 impl Error for RotateEncryptionKeyError {}
 /// Trait representing the capabilities of the Amazon Redshift API. Amazon Redshift clients implement this trait.
 #[async_trait]
-pub trait Redshift {
+pub trait Redshift: Clone + Sync + Send + 'static {
     /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
     async fn accept_reserved_node_exchange(
         &self,
@@ -19107,11 +20091,31 @@ pub trait Redshift {
         input: DescribeClusterDbRevisionsMessage,
     ) -> Result<ClusterDbRevisionsMessage, RusotoError<DescribeClusterDbRevisionsError>>;
 
+    /// Auto-paginating version of `describe_cluster_db_revisions`
+    fn describe_cluster_db_revisions_pages(
+        &self,
+        input: DescribeClusterDbRevisionsMessage,
+    ) -> RusotoStream<ClusterDbRevision, DescribeClusterDbRevisionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_db_revisions(state.clone())
+        })
+    }
+
     /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_cluster_parameter_groups(
         &self,
         input: DescribeClusterParameterGroupsMessage,
     ) -> Result<ClusterParameterGroupsMessage, RusotoError<DescribeClusterParameterGroupsError>>;
+
+    /// Auto-paginating version of `describe_cluster_parameter_groups`
+    fn describe_cluster_parameter_groups_pages(
+        &self,
+        input: DescribeClusterParameterGroupsMessage,
+    ) -> RusotoStream<ClusterParameterGroup, DescribeClusterParameterGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_parameter_groups(state.clone())
+        })
+    }
 
     /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_cluster_parameters(
@@ -19119,11 +20123,31 @@ pub trait Redshift {
         input: DescribeClusterParametersMessage,
     ) -> Result<ClusterParameterGroupDetails, RusotoError<DescribeClusterParametersError>>;
 
+    /// Auto-paginating version of `describe_cluster_parameters`
+    fn describe_cluster_parameters_pages(
+        &self,
+        input: DescribeClusterParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeClusterParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_parameters(state.clone())
+        })
+    }
+
     /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_cluster_security_groups(
         &self,
         input: DescribeClusterSecurityGroupsMessage,
     ) -> Result<ClusterSecurityGroupMessage, RusotoError<DescribeClusterSecurityGroupsError>>;
+
+    /// Auto-paginating version of `describe_cluster_security_groups`
+    fn describe_cluster_security_groups_pages(
+        &self,
+        input: DescribeClusterSecurityGroupsMessage,
+    ) -> RusotoStream<ClusterSecurityGroup, DescribeClusterSecurityGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_security_groups(state.clone())
+        })
+    }
 
     /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_cluster_snapshots(
@@ -19131,11 +20155,31 @@ pub trait Redshift {
         input: DescribeClusterSnapshotsMessage,
     ) -> Result<SnapshotMessage, RusotoError<DescribeClusterSnapshotsError>>;
 
+    /// Auto-paginating version of `describe_cluster_snapshots`
+    fn describe_cluster_snapshots_pages(
+        &self,
+        input: DescribeClusterSnapshotsMessage,
+    ) -> RusotoStream<Snapshot, DescribeClusterSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_snapshots(state.clone())
+        })
+    }
+
     /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_cluster_subnet_groups(
         &self,
         input: DescribeClusterSubnetGroupsMessage,
     ) -> Result<ClusterSubnetGroupMessage, RusotoError<DescribeClusterSubnetGroupsError>>;
+
+    /// Auto-paginating version of `describe_cluster_subnet_groups`
+    fn describe_cluster_subnet_groups_pages(
+        &self,
+        input: DescribeClusterSubnetGroupsMessage,
+    ) -> RusotoStream<ClusterSubnetGroup, DescribeClusterSubnetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_subnet_groups(state.clone())
+        })
+    }
 
     /// <p>Returns a list of all the available maintenance tracks.</p>
     async fn describe_cluster_tracks(
@@ -19143,17 +20187,47 @@ pub trait Redshift {
         input: DescribeClusterTracksMessage,
     ) -> Result<TrackListMessage, RusotoError<DescribeClusterTracksError>>;
 
+    /// Auto-paginating version of `describe_cluster_tracks`
+    fn describe_cluster_tracks_pages(
+        &self,
+        input: DescribeClusterTracksMessage,
+    ) -> RusotoStream<MaintenanceTrack, DescribeClusterTracksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_tracks(state.clone())
+        })
+    }
+
     /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_cluster_versions(
         &self,
         input: DescribeClusterVersionsMessage,
     ) -> Result<ClusterVersionsMessage, RusotoError<DescribeClusterVersionsError>>;
 
+    /// Auto-paginating version of `describe_cluster_versions`
+    fn describe_cluster_versions_pages(
+        &self,
+        input: DescribeClusterVersionsMessage,
+    ) -> RusotoStream<ClusterVersion, DescribeClusterVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_cluster_versions(state.clone())
+        })
+    }
+
     /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_clusters(
         &self,
         input: DescribeClustersMessage,
     ) -> Result<ClustersMessage, RusotoError<DescribeClustersError>>;
+
+    /// Auto-paginating version of `describe_clusters`
+    fn describe_clusters_pages(
+        &self,
+        input: DescribeClustersMessage,
+    ) -> RusotoStream<Cluster, DescribeClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_clusters(state.clone())
+        })
+    }
 
     /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_default_cluster_parameters(
@@ -19163,6 +20237,16 @@ pub trait Redshift {
         DescribeDefaultClusterParametersResult,
         RusotoError<DescribeDefaultClusterParametersError>,
     >;
+
+    /// Auto-paginating version of `describe_default_cluster_parameters`
+    fn describe_default_cluster_parameters_pages(
+        &self,
+        input: DescribeDefaultClusterParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeDefaultClusterParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_default_cluster_parameters(state.clone())
+        })
+    }
 
     /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     async fn describe_event_categories(
@@ -19176,11 +20260,31 @@ pub trait Redshift {
         input: DescribeEventSubscriptionsMessage,
     ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>>;
 
+    /// Auto-paginating version of `describe_event_subscriptions`
+    fn describe_event_subscriptions_pages(
+        &self,
+        input: DescribeEventSubscriptionsMessage,
+    ) -> RusotoStream<EventSubscription, DescribeEventSubscriptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_event_subscriptions(state.clone())
+        })
+    }
+
     /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsMessage,
+    ) -> RusotoStream<Event, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
 
     /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_hsm_client_certificates(
@@ -19188,11 +20292,31 @@ pub trait Redshift {
         input: DescribeHsmClientCertificatesMessage,
     ) -> Result<HsmClientCertificateMessage, RusotoError<DescribeHsmClientCertificatesError>>;
 
+    /// Auto-paginating version of `describe_hsm_client_certificates`
+    fn describe_hsm_client_certificates_pages(
+        &self,
+        input: DescribeHsmClientCertificatesMessage,
+    ) -> RusotoStream<HsmClientCertificate, DescribeHsmClientCertificatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_hsm_client_certificates(state.clone())
+        })
+    }
+
     /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_hsm_configurations(
         &self,
         input: DescribeHsmConfigurationsMessage,
     ) -> Result<HsmConfigurationMessage, RusotoError<DescribeHsmConfigurationsError>>;
+
+    /// Auto-paginating version of `describe_hsm_configurations`
+    fn describe_hsm_configurations_pages(
+        &self,
+        input: DescribeHsmConfigurationsMessage,
+    ) -> RusotoStream<HsmConfiguration, DescribeHsmConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_hsm_configurations(state.clone())
+        })
+    }
 
     /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
     async fn describe_logging_status(
@@ -19206,11 +20330,31 @@ pub trait Redshift {
         input: DescribeNodeConfigurationOptionsMessage,
     ) -> Result<NodeConfigurationOptionsMessage, RusotoError<DescribeNodeConfigurationOptionsError>>;
 
+    /// Auto-paginating version of `describe_node_configuration_options`
+    fn describe_node_configuration_options_pages(
+        &self,
+        input: DescribeNodeConfigurationOptionsMessage,
+    ) -> RusotoStream<NodeConfigurationOption, DescribeNodeConfigurationOptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_node_configuration_options(state.clone())
+        })
+    }
+
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_orderable_cluster_options(
         &self,
         input: DescribeOrderableClusterOptionsMessage,
     ) -> Result<OrderableClusterOptionsMessage, RusotoError<DescribeOrderableClusterOptionsError>>;
+
+    /// Auto-paginating version of `describe_orderable_cluster_options`
+    fn describe_orderable_cluster_options_pages(
+        &self,
+        input: DescribeOrderableClusterOptionsMessage,
+    ) -> RusotoStream<OrderableClusterOption, DescribeOrderableClusterOptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_orderable_cluster_options(state.clone())
+        })
+    }
 
     /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_reserved_node_offerings(
@@ -19218,11 +20362,31 @@ pub trait Redshift {
         input: DescribeReservedNodeOfferingsMessage,
     ) -> Result<ReservedNodeOfferingsMessage, RusotoError<DescribeReservedNodeOfferingsError>>;
 
+    /// Auto-paginating version of `describe_reserved_node_offerings`
+    fn describe_reserved_node_offerings_pages(
+        &self,
+        input: DescribeReservedNodeOfferingsMessage,
+    ) -> RusotoStream<ReservedNodeOffering, DescribeReservedNodeOfferingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_reserved_node_offerings(state.clone())
+        })
+    }
+
     /// <p>Returns the descriptions of the reserved nodes.</p>
     async fn describe_reserved_nodes(
         &self,
         input: DescribeReservedNodesMessage,
     ) -> Result<ReservedNodesMessage, RusotoError<DescribeReservedNodesError>>;
+
+    /// Auto-paginating version of `describe_reserved_nodes`
+    fn describe_reserved_nodes_pages(
+        &self,
+        input: DescribeReservedNodesMessage,
+    ) -> RusotoStream<ReservedNode, DescribeReservedNodesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_reserved_nodes(state.clone())
+        })
+    }
 
     /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
     async fn describe_resize(
@@ -19236,17 +20400,47 @@ pub trait Redshift {
         input: DescribeScheduledActionsMessage,
     ) -> Result<ScheduledActionsMessage, RusotoError<DescribeScheduledActionsError>>;
 
+    /// Auto-paginating version of `describe_scheduled_actions`
+    fn describe_scheduled_actions_pages(
+        &self,
+        input: DescribeScheduledActionsMessage,
+    ) -> RusotoStream<ScheduledAction, DescribeScheduledActionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_scheduled_actions(state.clone())
+        })
+    }
+
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     async fn describe_snapshot_copy_grants(
         &self,
         input: DescribeSnapshotCopyGrantsMessage,
     ) -> Result<SnapshotCopyGrantMessage, RusotoError<DescribeSnapshotCopyGrantsError>>;
 
+    /// Auto-paginating version of `describe_snapshot_copy_grants`
+    fn describe_snapshot_copy_grants_pages(
+        &self,
+        input: DescribeSnapshotCopyGrantsMessage,
+    ) -> RusotoStream<SnapshotCopyGrant, DescribeSnapshotCopyGrantsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_snapshot_copy_grants(state.clone())
+        })
+    }
+
     /// <p>Returns a list of snapshot schedules. </p>
     async fn describe_snapshot_schedules(
         &self,
         input: DescribeSnapshotSchedulesMessage,
     ) -> Result<DescribeSnapshotSchedulesOutputMessage, RusotoError<DescribeSnapshotSchedulesError>>;
+
+    /// Auto-paginating version of `describe_snapshot_schedules`
+    fn describe_snapshot_schedules_pages(
+        &self,
+        input: DescribeSnapshotSchedulesMessage,
+    ) -> RusotoStream<SnapshotSchedule, DescribeSnapshotSchedulesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_snapshot_schedules(state.clone())
+        })
+    }
 
     /// <p>Returns account level backups storage size and provisional storage.</p>
     async fn describe_storage(
@@ -19259,17 +20453,47 @@ pub trait Redshift {
         input: DescribeTableRestoreStatusMessage,
     ) -> Result<TableRestoreStatusMessage, RusotoError<DescribeTableRestoreStatusError>>;
 
+    /// Auto-paginating version of `describe_table_restore_status`
+    fn describe_table_restore_status_pages(
+        &self,
+        input: DescribeTableRestoreStatusMessage,
+    ) -> RusotoStream<TableRestoreStatus, DescribeTableRestoreStatusError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_table_restore_status(state.clone())
+        })
+    }
+
     /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
     async fn describe_tags(
         &self,
         input: DescribeTagsMessage,
     ) -> Result<TaggedResourceListMessage, RusotoError<DescribeTagsError>>;
 
+    /// Auto-paginating version of `describe_tags`
+    fn describe_tags_pages(
+        &self,
+        input: DescribeTagsMessage,
+    ) -> RusotoStream<TaggedResource, DescribeTagsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_tags(state.clone())
+        })
+    }
+
     /// <p><p>Shows usage limits on a cluster. Results are filtered based on the combination of input usage limit identifier, cluster identifier, and feature type parameters:</p> <ul> <li> <p>If usage limit identifier, cluster identifier, and feature type are not provided, then all usage limit objects for the current account in the current region are returned.</p> </li> <li> <p>If usage limit identifier is provided, then the corresponding usage limit object is returned.</p> </li> <li> <p>If cluster identifier is provided, then all usage limit objects for the specified cluster are returned.</p> </li> <li> <p>If cluster identifier and feature type are provided, then all usage limit objects for the combination of cluster and feature are returned.</p> </li> </ul></p>
     async fn describe_usage_limits(
         &self,
         input: DescribeUsageLimitsMessage,
     ) -> Result<UsageLimitList, RusotoError<DescribeUsageLimitsError>>;
+
+    /// Auto-paginating version of `describe_usage_limits`
+    fn describe_usage_limits_pages(
+        &self,
+        input: DescribeUsageLimitsMessage,
+    ) -> RusotoStream<UsageLimit, DescribeUsageLimitsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_usage_limits(state.clone())
+        })
+    }
 
     /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     async fn disable_logging(
@@ -19309,6 +20533,16 @@ pub trait Redshift {
         GetReservedNodeExchangeOfferingsOutputMessage,
         RusotoError<GetReservedNodeExchangeOfferingsError>,
     >;
+
+    /// Auto-paginating version of `get_reserved_node_exchange_offerings`
+    fn get_reserved_node_exchange_offerings_pages(
+        &self,
+        input: GetReservedNodeExchangeOfferingsInputMessage,
+    ) -> RusotoStream<ReservedNodeOffering, GetReservedNodeExchangeOfferingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_reserved_node_exchange_offerings(state.clone())
+        })
+    }
 
     /// <p>Modifies the settings for a cluster.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p> <p>You can add another security or parameter group, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn modify_cluster(

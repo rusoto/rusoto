@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -79,6 +81,7 @@ pub struct ContinuousParameterRange {
     pub scaling_type: Option<String>,
 }
 
+/// see [Forecast::create_dataset_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetGroupRequest {
@@ -98,6 +101,7 @@ pub struct CreateDatasetGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Forecast::create_dataset_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetGroupResponse {
@@ -107,6 +111,7 @@ pub struct CreateDatasetGroupResponse {
     pub dataset_group_arn: Option<String>,
 }
 
+/// see [Forecast::create_dataset_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetImportJobRequest {
@@ -141,6 +146,7 @@ pub struct CreateDatasetImportJobRequest {
     pub use_geolocation_for_time_zone: Option<bool>,
 }
 
+/// see [Forecast::create_dataset_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetImportJobResponse {
@@ -150,6 +156,7 @@ pub struct CreateDatasetImportJobResponse {
     pub dataset_import_job_arn: Option<String>,
 }
 
+/// see [Forecast::create_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetRequest {
@@ -179,6 +186,7 @@ pub struct CreateDatasetRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Forecast::create_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetResponse {
@@ -188,6 +196,7 @@ pub struct CreateDatasetResponse {
     pub dataset_arn: Option<String>,
 }
 
+/// see [Forecast::create_forecast_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateForecastExportJobRequest {
@@ -206,6 +215,7 @@ pub struct CreateForecastExportJobRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Forecast::create_forecast_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateForecastExportJobResponse {
@@ -215,6 +225,7 @@ pub struct CreateForecastExportJobResponse {
     pub forecast_export_job_arn: Option<String>,
 }
 
+/// see [Forecast::create_forecast]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateForecastRequest {
@@ -234,6 +245,7 @@ pub struct CreateForecastRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Forecast::create_forecast]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateForecastResponse {
@@ -243,6 +255,7 @@ pub struct CreateForecastResponse {
     pub forecast_arn: Option<String>,
 }
 
+/// see [Forecast::create_predictor_backtest_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePredictorBacktestExportJobRequest {
@@ -260,6 +273,7 @@ pub struct CreatePredictorBacktestExportJobRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Forecast::create_predictor_backtest_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePredictorBacktestExportJobResponse {
@@ -269,6 +283,7 @@ pub struct CreatePredictorBacktestExportJobResponse {
     pub predictor_backtest_export_job_arn: Option<String>,
 }
 
+/// see [Forecast::create_predictor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePredictorRequest {
@@ -322,6 +337,7 @@ pub struct CreatePredictorRequest {
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Forecast::create_predictor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePredictorResponse {
@@ -433,6 +449,7 @@ pub struct DatasetSummary {
     pub last_modification_time: Option<f64>,
 }
 
+/// see [Forecast::delete_dataset_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetGroupRequest {
@@ -441,6 +458,7 @@ pub struct DeleteDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
+/// see [Forecast::delete_dataset_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetImportJobRequest {
@@ -449,6 +467,7 @@ pub struct DeleteDatasetImportJobRequest {
     pub dataset_import_job_arn: String,
 }
 
+/// see [Forecast::delete_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
@@ -457,6 +476,7 @@ pub struct DeleteDatasetRequest {
     pub dataset_arn: String,
 }
 
+/// see [Forecast::delete_forecast_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteForecastExportJobRequest {
@@ -465,6 +485,7 @@ pub struct DeleteForecastExportJobRequest {
     pub forecast_export_job_arn: String,
 }
 
+/// see [Forecast::delete_forecast]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteForecastRequest {
@@ -473,6 +494,7 @@ pub struct DeleteForecastRequest {
     pub forecast_arn: String,
 }
 
+/// see [Forecast::delete_predictor_backtest_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePredictorBacktestExportJobRequest {
@@ -481,6 +503,7 @@ pub struct DeletePredictorBacktestExportJobRequest {
     pub predictor_backtest_export_job_arn: String,
 }
 
+/// see [Forecast::delete_predictor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePredictorRequest {
@@ -489,6 +512,7 @@ pub struct DeletePredictorRequest {
     pub predictor_arn: String,
 }
 
+/// see [Forecast::describe_dataset_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetGroupRequest {
@@ -497,6 +521,7 @@ pub struct DescribeDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
+/// see [Forecast::describe_dataset_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetGroupResponse {
@@ -530,6 +555,7 @@ pub struct DescribeDatasetGroupResponse {
     pub status: Option<String>,
 }
 
+/// see [Forecast::describe_dataset_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetImportJobRequest {
@@ -538,6 +564,7 @@ pub struct DescribeDatasetImportJobRequest {
     pub dataset_import_job_arn: String,
 }
 
+/// see [Forecast::describe_dataset_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetImportJobResponse {
@@ -599,6 +626,7 @@ pub struct DescribeDatasetImportJobResponse {
     pub use_geolocation_for_time_zone: Option<bool>,
 }
 
+/// see [Forecast::describe_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
@@ -607,6 +635,7 @@ pub struct DescribeDatasetRequest {
     pub dataset_arn: String,
 }
 
+/// see [Forecast::describe_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
@@ -652,6 +681,7 @@ pub struct DescribeDatasetResponse {
     pub status: Option<String>,
 }
 
+/// see [Forecast::describe_forecast_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeForecastExportJobRequest {
@@ -660,6 +690,7 @@ pub struct DescribeForecastExportJobRequest {
     pub forecast_export_job_arn: String,
 }
 
+/// see [Forecast::describe_forecast_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeForecastExportJobResponse {
@@ -697,6 +728,7 @@ pub struct DescribeForecastExportJobResponse {
     pub status: Option<String>,
 }
 
+/// see [Forecast::describe_forecast]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeForecastRequest {
@@ -705,6 +737,7 @@ pub struct DescribeForecastRequest {
     pub forecast_arn: String,
 }
 
+/// see [Forecast::describe_forecast]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeForecastResponse {
@@ -746,6 +779,7 @@ pub struct DescribeForecastResponse {
     pub status: Option<String>,
 }
 
+/// see [Forecast::describe_predictor_backtest_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePredictorBacktestExportJobRequest {
@@ -754,6 +788,7 @@ pub struct DescribePredictorBacktestExportJobRequest {
     pub predictor_backtest_export_job_arn: String,
 }
 
+/// see [Forecast::describe_predictor_backtest_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePredictorBacktestExportJobResponse {
@@ -790,6 +825,7 @@ pub struct DescribePredictorBacktestExportJobResponse {
     pub status: Option<String>,
 }
 
+/// see [Forecast::describe_predictor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePredictorRequest {
@@ -798,6 +834,7 @@ pub struct DescribePredictorRequest {
     pub predictor_arn: String,
 }
 
+/// see [Forecast::describe_predictor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePredictorResponse {
@@ -1066,6 +1103,7 @@ pub struct ForecastSummary {
     pub status: Option<String>,
 }
 
+/// see [Forecast::get_accuracy_metrics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccuracyMetricsRequest {
@@ -1074,6 +1112,7 @@ pub struct GetAccuracyMetricsRequest {
     pub predictor_arn: String,
 }
 
+/// see [Forecast::get_accuracy_metrics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccuracyMetricsResponse {
@@ -1122,6 +1161,7 @@ pub struct IntegerParameterRange {
     pub scaling_type: Option<String>,
 }
 
+/// see [Forecast::list_dataset_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetGroupsRequest {
@@ -1135,6 +1175,15 @@ pub struct ListDatasetGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDatasetGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Forecast::list_dataset_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetGroupsResponse {
@@ -1148,6 +1197,31 @@ pub struct ListDatasetGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDatasetGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DatasetGroupSummary>> {
+        Some(self.dataset_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDatasetGroupsResponse {
+    type Item = DatasetGroupSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DatasetGroupSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Forecast::list_dataset_import_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetImportJobsRequest {
@@ -1165,6 +1239,15 @@ pub struct ListDatasetImportJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDatasetImportJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Forecast::list_dataset_import_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetImportJobsResponse {
@@ -1178,6 +1261,31 @@ pub struct ListDatasetImportJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDatasetImportJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DatasetImportJobSummary>> {
+        Some(self.dataset_import_jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDatasetImportJobsResponse {
+    type Item = DatasetImportJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DatasetImportJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Forecast::list_datasets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
@@ -1191,6 +1299,15 @@ pub struct ListDatasetsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDatasetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Forecast::list_datasets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
@@ -1204,6 +1321,31 @@ pub struct ListDatasetsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDatasetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DatasetSummary>> {
+        Some(self.datasets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDatasetsResponse {
+    type Item = DatasetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DatasetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Forecast::list_forecast_export_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListForecastExportJobsRequest {
@@ -1221,6 +1363,15 @@ pub struct ListForecastExportJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListForecastExportJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Forecast::list_forecast_export_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListForecastExportJobsResponse {
@@ -1234,6 +1385,31 @@ pub struct ListForecastExportJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListForecastExportJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ForecastExportJobSummary>> {
+        Some(self.forecast_export_jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListForecastExportJobsResponse {
+    type Item = ForecastExportJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ForecastExportJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Forecast::list_forecasts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListForecastsRequest {
@@ -1251,6 +1427,15 @@ pub struct ListForecastsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListForecastsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Forecast::list_forecasts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListForecastsResponse {
@@ -1264,6 +1449,31 @@ pub struct ListForecastsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListForecastsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ForecastSummary>> {
+        Some(self.forecasts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListForecastsResponse {
+    type Item = ForecastSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ForecastSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Forecast::list_predictor_backtest_export_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPredictorBacktestExportJobsRequest {
@@ -1281,6 +1491,15 @@ pub struct ListPredictorBacktestExportJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListPredictorBacktestExportJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Forecast::list_predictor_backtest_export_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPredictorBacktestExportJobsResponse {
@@ -1294,6 +1513,31 @@ pub struct ListPredictorBacktestExportJobsResponse {
     pub predictor_backtest_export_jobs: Option<Vec<PredictorBacktestExportJobSummary>>,
 }
 
+impl ListPredictorBacktestExportJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PredictorBacktestExportJobSummary>> {
+        Some(self.predictor_backtest_export_jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPredictorBacktestExportJobsResponse {
+    type Item = PredictorBacktestExportJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PredictorBacktestExportJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Forecast::list_predictors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPredictorsRequest {
@@ -1311,6 +1555,15 @@ pub struct ListPredictorsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListPredictorsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Forecast::list_predictors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPredictorsResponse {
@@ -1324,6 +1577,31 @@ pub struct ListPredictorsResponse {
     pub predictors: Option<Vec<PredictorSummary>>,
 }
 
+impl ListPredictorsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PredictorSummary>> {
+        Some(self.predictors.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPredictorsResponse {
+    type Item = PredictorSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PredictorSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Forecast::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1332,6 +1610,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Forecast::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1560,6 +1839,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Forecast::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1571,6 +1851,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Forecast::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1597,6 +1878,7 @@ pub struct TestWindowSummary {
     pub test_window_start: Option<f64>,
 }
 
+/// see [Forecast::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1608,10 +1890,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Forecast::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Forecast::update_dataset_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatasetGroupRequest {
@@ -1623,6 +1907,7 @@ pub struct UpdateDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
+/// see [Forecast::update_dataset_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDatasetGroupResponse {}
@@ -3125,7 +3410,7 @@ impl fmt::Display for UpdateDatasetGroupError {
 impl Error for UpdateDatasetGroupError {}
 /// Trait representing the capabilities of the Amazon Forecast Service API. Amazon Forecast Service clients implement this trait.
 #[async_trait]
-pub trait Forecast {
+pub trait Forecast: Clone + Sync + Send + 'static {
     /// <p><p>Creates an Amazon Forecast dataset. The information about the dataset that you provide helps Forecast understand how to consume the data for model training. This includes the following:</p> <ul> <li> <p> <i> <code>DataFrequency</code> </i> - How frequently your historical time-series data is collected.</p> </li> <li> <p> <i> <code>Domain</code> </i> and <i> <code>DatasetType</code> </i> - Each dataset has an associated dataset domain and a type within the domain. Amazon Forecast provides a list of predefined domains and types within each domain. For each unique dataset domain and type within the domain, Amazon Forecast requires your data to include a minimum set of predefined fields.</p> </li> <li> <p> <i> <code>Schema</code> </i> - A schema specifies the fields in the dataset, including the field name and data type.</p> </li> </ul> <p>After creating a dataset, you import your training data into it and add the dataset to a dataset group. You use the dataset group to create a predictor. For more information, see <a>howitworks-datasets-groups</a>.</p> <p>To get a list of all your datasets, use the <a>ListDatasets</a> operation.</p> <p>For example Forecast datasets, see the <a href="https://github.com/aws-samples/amazon-forecast-samples">Amazon Forecast Sample GitHub repository</a>.</p> <note> <p>The <code>Status</code> of a dataset must be <code>ACTIVE</code> before you can import training data. Use the <a>DescribeDataset</a> operation to get the status.</p> </note></p>
     async fn create_dataset(
         &self,
@@ -3270,11 +3555,31 @@ pub trait Forecast {
         input: ListDatasetGroupsRequest,
     ) -> Result<ListDatasetGroupsResponse, RusotoError<ListDatasetGroupsError>>;
 
+    /// Auto-paginating version of `list_dataset_groups`
+    fn list_dataset_groups_pages(
+        &self,
+        input: ListDatasetGroupsRequest,
+    ) -> RusotoStream<DatasetGroupSummary, ListDatasetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dataset_groups(state.clone())
+        })
+    }
+
     /// <p>Returns a list of dataset import jobs created using the <a>CreateDatasetImportJob</a> operation. For each import job, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). You can retrieve the complete set of properties by using the ARN with the <a>DescribeDatasetImportJob</a> operation. You can filter the list by providing an array of <a>Filter</a> objects.</p>
     async fn list_dataset_import_jobs(
         &self,
         input: ListDatasetImportJobsRequest,
     ) -> Result<ListDatasetImportJobsResponse, RusotoError<ListDatasetImportJobsError>>;
+
+    /// Auto-paginating version of `list_dataset_import_jobs`
+    fn list_dataset_import_jobs_pages(
+        &self,
+        input: ListDatasetImportJobsRequest,
+    ) -> RusotoStream<DatasetImportJobSummary, ListDatasetImportJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dataset_import_jobs(state.clone())
+        })
+    }
 
     /// <p>Returns a list of datasets created using the <a>CreateDataset</a> operation. For each dataset, a summary of its properties, including its Amazon Resource Name (ARN), is returned. To retrieve the complete set of properties, use the ARN with the <a>DescribeDataset</a> operation.</p>
     async fn list_datasets(
@@ -3282,17 +3587,47 @@ pub trait Forecast {
         input: ListDatasetsRequest,
     ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>>;
 
+    /// Auto-paginating version of `list_datasets`
+    fn list_datasets_pages(
+        &self,
+        input: ListDatasetsRequest,
+    ) -> RusotoStream<DatasetSummary, ListDatasetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_datasets(state.clone())
+        })
+    }
+
     /// <p>Returns a list of forecast export jobs created using the <a>CreateForecastExportJob</a> operation. For each forecast export job, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). To retrieve the complete set of properties, use the ARN with the <a>DescribeForecastExportJob</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>
     async fn list_forecast_export_jobs(
         &self,
         input: ListForecastExportJobsRequest,
     ) -> Result<ListForecastExportJobsResponse, RusotoError<ListForecastExportJobsError>>;
 
+    /// Auto-paginating version of `list_forecast_export_jobs`
+    fn list_forecast_export_jobs_pages(
+        &self,
+        input: ListForecastExportJobsRequest,
+    ) -> RusotoStream<ForecastExportJobSummary, ListForecastExportJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_forecast_export_jobs(state.clone())
+        })
+    }
+
     /// <p>Returns a list of forecasts created using the <a>CreateForecast</a> operation. For each forecast, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). To retrieve the complete set of properties, specify the ARN with the <a>DescribeForecast</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>
     async fn list_forecasts(
         &self,
         input: ListForecastsRequest,
     ) -> Result<ListForecastsResponse, RusotoError<ListForecastsError>>;
+
+    /// Auto-paginating version of `list_forecasts`
+    fn list_forecasts_pages(
+        &self,
+        input: ListForecastsRequest,
+    ) -> RusotoStream<ForecastSummary, ListForecastsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_forecasts(state.clone())
+        })
+    }
 
     /// <p>Returns a list of predictor backtest export jobs created using the <a>CreatePredictorBacktestExportJob</a> operation. This operation returns a summary for each backtest export job. You can filter the list using an array of <a>Filter</a> objects.</p> <p>To retrieve the complete set of properties for a particular backtest export job, use the ARN with the <a>DescribePredictorBacktestExportJob</a> operation.</p>
     async fn list_predictor_backtest_export_jobs(
@@ -3303,11 +3638,31 @@ pub trait Forecast {
         RusotoError<ListPredictorBacktestExportJobsError>,
     >;
 
+    /// Auto-paginating version of `list_predictor_backtest_export_jobs`
+    fn list_predictor_backtest_export_jobs_pages(
+        &self,
+        input: ListPredictorBacktestExportJobsRequest,
+    ) -> RusotoStream<PredictorBacktestExportJobSummary, ListPredictorBacktestExportJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_predictor_backtest_export_jobs(state.clone())
+        })
+    }
+
     /// <p>Returns a list of predictors created using the <a>CreatePredictor</a> operation. For each predictor, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). You can retrieve the complete set of properties by using the ARN with the <a>DescribePredictor</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>
     async fn list_predictors(
         &self,
         input: ListPredictorsRequest,
     ) -> Result<ListPredictorsResponse, RusotoError<ListPredictorsError>>;
+
+    /// Auto-paginating version of `list_predictors`
+    fn list_predictors_pages(
+        &self,
+        input: ListPredictorsRequest,
+    ) -> RusotoStream<PredictorSummary, ListPredictorsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_predictors(state.clone())
+        })
+    }
 
     /// <p>Lists the tags for an Amazon Forecast resource.</p>
     async fn list_tags_for_resource(

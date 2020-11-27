@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -396,6 +398,7 @@ pub struct ContinuousHyperParameterRange {
     pub name: Option<String>,
 }
 
+/// see [Personalize::create_batch_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchInferenceJobRequest {
@@ -428,6 +431,7 @@ pub struct CreateBatchInferenceJobRequest {
     pub solution_version_arn: String,
 }
 
+/// see [Personalize::create_batch_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBatchInferenceJobResponse {
@@ -437,6 +441,7 @@ pub struct CreateBatchInferenceJobResponse {
     pub batch_inference_job_arn: Option<String>,
 }
 
+/// see [Personalize::create_campaign]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCampaignRequest {
@@ -455,6 +460,7 @@ pub struct CreateCampaignRequest {
     pub solution_version_arn: String,
 }
 
+/// see [Personalize::create_campaign]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCampaignResponse {
@@ -464,6 +470,7 @@ pub struct CreateCampaignResponse {
     pub campaign_arn: Option<String>,
 }
 
+/// see [Personalize::create_dataset_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetGroupRequest {
@@ -480,6 +487,7 @@ pub struct CreateDatasetGroupRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [Personalize::create_dataset_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetGroupResponse {
@@ -489,6 +497,7 @@ pub struct CreateDatasetGroupResponse {
     pub dataset_group_arn: Option<String>,
 }
 
+/// see [Personalize::create_dataset_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetImportJobRequest {
@@ -506,6 +515,7 @@ pub struct CreateDatasetImportJobRequest {
     pub role_arn: String,
 }
 
+/// see [Personalize::create_dataset_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetImportJobResponse {
@@ -515,6 +525,7 @@ pub struct CreateDatasetImportJobResponse {
     pub dataset_import_job_arn: Option<String>,
 }
 
+/// see [Personalize::create_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetRequest {
@@ -532,6 +543,7 @@ pub struct CreateDatasetRequest {
     pub schema_arn: String,
 }
 
+/// see [Personalize::create_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetResponse {
@@ -541,6 +553,7 @@ pub struct CreateDatasetResponse {
     pub dataset_arn: Option<String>,
 }
 
+/// see [Personalize::create_event_tracker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventTrackerRequest {
@@ -552,6 +565,7 @@ pub struct CreateEventTrackerRequest {
     pub name: String,
 }
 
+/// see [Personalize::create_event_tracker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEventTrackerResponse {
@@ -565,6 +579,7 @@ pub struct CreateEventTrackerResponse {
     pub tracking_id: Option<String>,
 }
 
+/// see [Personalize::create_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFilterRequest {
@@ -579,6 +594,7 @@ pub struct CreateFilterRequest {
     pub name: String,
 }
 
+/// see [Personalize::create_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFilterResponse {
@@ -588,6 +604,7 @@ pub struct CreateFilterResponse {
     pub filter_arn: Option<String>,
 }
 
+/// see [Personalize::create_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaRequest {
@@ -599,6 +616,7 @@ pub struct CreateSchemaRequest {
     pub schema: String,
 }
 
+/// see [Personalize::create_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
@@ -608,6 +626,7 @@ pub struct CreateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
+/// see [Personalize::create_solution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSolutionRequest {
@@ -639,6 +658,7 @@ pub struct CreateSolutionRequest {
     pub solution_config: Option<SolutionConfig>,
 }
 
+/// see [Personalize::create_solution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSolutionResponse {
@@ -648,6 +668,7 @@ pub struct CreateSolutionResponse {
     pub solution_arn: Option<String>,
 }
 
+/// see [Personalize::create_solution_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSolutionVersionRequest {
@@ -660,6 +681,7 @@ pub struct CreateSolutionVersionRequest {
     pub training_mode: Option<String>,
 }
 
+/// see [Personalize::create_solution_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSolutionVersionResponse {
@@ -1014,6 +1036,7 @@ pub struct DefaultIntegerHyperParameterRange {
     pub name: Option<String>,
 }
 
+/// see [Personalize::delete_campaign]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCampaignRequest {
@@ -1022,6 +1045,7 @@ pub struct DeleteCampaignRequest {
     pub campaign_arn: String,
 }
 
+/// see [Personalize::delete_dataset_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetGroupRequest {
@@ -1030,6 +1054,7 @@ pub struct DeleteDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
+/// see [Personalize::delete_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
@@ -1038,6 +1063,7 @@ pub struct DeleteDatasetRequest {
     pub dataset_arn: String,
 }
 
+/// see [Personalize::delete_event_tracker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventTrackerRequest {
@@ -1046,6 +1072,7 @@ pub struct DeleteEventTrackerRequest {
     pub event_tracker_arn: String,
 }
 
+/// see [Personalize::delete_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFilterRequest {
@@ -1054,6 +1081,7 @@ pub struct DeleteFilterRequest {
     pub filter_arn: String,
 }
 
+/// see [Personalize::delete_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
@@ -1062,6 +1090,7 @@ pub struct DeleteSchemaRequest {
     pub schema_arn: String,
 }
 
+/// see [Personalize::delete_solution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSolutionRequest {
@@ -1070,6 +1099,7 @@ pub struct DeleteSolutionRequest {
     pub solution_arn: String,
 }
 
+/// see [Personalize::describe_algorithm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlgorithmRequest {
@@ -1078,6 +1108,7 @@ pub struct DescribeAlgorithmRequest {
     pub algorithm_arn: String,
 }
 
+/// see [Personalize::describe_algorithm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAlgorithmResponse {
@@ -1087,6 +1118,7 @@ pub struct DescribeAlgorithmResponse {
     pub algorithm: Option<Algorithm>,
 }
 
+/// see [Personalize::describe_batch_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBatchInferenceJobRequest {
@@ -1095,6 +1127,7 @@ pub struct DescribeBatchInferenceJobRequest {
     pub batch_inference_job_arn: String,
 }
 
+/// see [Personalize::describe_batch_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBatchInferenceJobResponse {
@@ -1104,6 +1137,7 @@ pub struct DescribeBatchInferenceJobResponse {
     pub batch_inference_job: Option<BatchInferenceJob>,
 }
 
+/// see [Personalize::describe_campaign]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCampaignRequest {
@@ -1112,6 +1146,7 @@ pub struct DescribeCampaignRequest {
     pub campaign_arn: String,
 }
 
+/// see [Personalize::describe_campaign]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCampaignResponse {
@@ -1121,6 +1156,7 @@ pub struct DescribeCampaignResponse {
     pub campaign: Option<Campaign>,
 }
 
+/// see [Personalize::describe_dataset_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetGroupRequest {
@@ -1129,6 +1165,7 @@ pub struct DescribeDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
+/// see [Personalize::describe_dataset_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetGroupResponse {
@@ -1138,6 +1175,7 @@ pub struct DescribeDatasetGroupResponse {
     pub dataset_group: Option<DatasetGroup>,
 }
 
+/// see [Personalize::describe_dataset_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetImportJobRequest {
@@ -1146,6 +1184,7 @@ pub struct DescribeDatasetImportJobRequest {
     pub dataset_import_job_arn: String,
 }
 
+/// see [Personalize::describe_dataset_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetImportJobResponse {
@@ -1155,6 +1194,7 @@ pub struct DescribeDatasetImportJobResponse {
     pub dataset_import_job: Option<DatasetImportJob>,
 }
 
+/// see [Personalize::describe_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
@@ -1163,6 +1203,7 @@ pub struct DescribeDatasetRequest {
     pub dataset_arn: String,
 }
 
+/// see [Personalize::describe_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
@@ -1172,6 +1213,7 @@ pub struct DescribeDatasetResponse {
     pub dataset: Option<Dataset>,
 }
 
+/// see [Personalize::describe_event_tracker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventTrackerRequest {
@@ -1180,6 +1222,7 @@ pub struct DescribeEventTrackerRequest {
     pub event_tracker_arn: String,
 }
 
+/// see [Personalize::describe_event_tracker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventTrackerResponse {
@@ -1189,6 +1232,7 @@ pub struct DescribeEventTrackerResponse {
     pub event_tracker: Option<EventTracker>,
 }
 
+/// see [Personalize::describe_feature_transformation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFeatureTransformationRequest {
@@ -1197,6 +1241,7 @@ pub struct DescribeFeatureTransformationRequest {
     pub feature_transformation_arn: String,
 }
 
+/// see [Personalize::describe_feature_transformation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFeatureTransformationResponse {
@@ -1206,6 +1251,7 @@ pub struct DescribeFeatureTransformationResponse {
     pub feature_transformation: Option<FeatureTransformation>,
 }
 
+/// see [Personalize::describe_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFilterRequest {
@@ -1214,6 +1260,7 @@ pub struct DescribeFilterRequest {
     pub filter_arn: String,
 }
 
+/// see [Personalize::describe_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFilterResponse {
@@ -1223,6 +1270,7 @@ pub struct DescribeFilterResponse {
     pub filter: Option<Filter>,
 }
 
+/// see [Personalize::describe_recipe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecipeRequest {
@@ -1231,6 +1279,7 @@ pub struct DescribeRecipeRequest {
     pub recipe_arn: String,
 }
 
+/// see [Personalize::describe_recipe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecipeResponse {
@@ -1240,6 +1289,7 @@ pub struct DescribeRecipeResponse {
     pub recipe: Option<Recipe>,
 }
 
+/// see [Personalize::describe_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemaRequest {
@@ -1248,6 +1298,7 @@ pub struct DescribeSchemaRequest {
     pub schema_arn: String,
 }
 
+/// see [Personalize::describe_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSchemaResponse {
@@ -1257,6 +1308,7 @@ pub struct DescribeSchemaResponse {
     pub schema: Option<DatasetSchema>,
 }
 
+/// see [Personalize::describe_solution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSolutionRequest {
@@ -1265,6 +1317,7 @@ pub struct DescribeSolutionRequest {
     pub solution_arn: String,
 }
 
+/// see [Personalize::describe_solution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSolutionResponse {
@@ -1274,6 +1327,7 @@ pub struct DescribeSolutionResponse {
     pub solution: Option<Solution>,
 }
 
+/// see [Personalize::describe_solution_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSolutionVersionRequest {
@@ -1282,6 +1336,7 @@ pub struct DescribeSolutionVersionRequest {
     pub solution_version_arn: String,
 }
 
+/// see [Personalize::describe_solution_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSolutionVersionResponse {
@@ -1457,6 +1512,7 @@ pub struct FilterSummary {
     pub status: Option<String>,
 }
 
+/// see [Personalize::get_solution_metrics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSolutionMetricsRequest {
@@ -1465,6 +1521,7 @@ pub struct GetSolutionMetricsRequest {
     pub solution_version_arn: String,
 }
 
+/// see [Personalize::get_solution_metrics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSolutionMetricsResponse {
@@ -1559,6 +1616,7 @@ pub struct IntegerHyperParameterRange {
     pub name: Option<String>,
 }
 
+/// see [Personalize::list_batch_inference_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBatchInferenceJobsRequest {
@@ -1576,6 +1634,15 @@ pub struct ListBatchInferenceJobsRequest {
     pub solution_version_arn: Option<String>,
 }
 
+impl PagedRequest for ListBatchInferenceJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_batch_inference_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBatchInferenceJobsResponse {
@@ -1589,6 +1656,31 @@ pub struct ListBatchInferenceJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListBatchInferenceJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BatchInferenceJobSummary>> {
+        Some(self.batch_inference_jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBatchInferenceJobsResponse {
+    type Item = BatchInferenceJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BatchInferenceJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_campaigns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCampaignsRequest {
@@ -1606,6 +1698,15 @@ pub struct ListCampaignsRequest {
     pub solution_arn: Option<String>,
 }
 
+impl PagedRequest for ListCampaignsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_campaigns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCampaignsResponse {
@@ -1619,6 +1720,31 @@ pub struct ListCampaignsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListCampaignsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<CampaignSummary>> {
+        Some(self.campaigns.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCampaignsResponse {
+    type Item = CampaignSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CampaignSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_dataset_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetGroupsRequest {
@@ -1632,6 +1758,15 @@ pub struct ListDatasetGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDatasetGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_dataset_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetGroupsResponse {
@@ -1645,6 +1780,31 @@ pub struct ListDatasetGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDatasetGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DatasetGroupSummary>> {
+        Some(self.dataset_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDatasetGroupsResponse {
+    type Item = DatasetGroupSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DatasetGroupSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_dataset_import_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetImportJobsRequest {
@@ -1662,6 +1822,15 @@ pub struct ListDatasetImportJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDatasetImportJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_dataset_import_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetImportJobsResponse {
@@ -1675,6 +1844,31 @@ pub struct ListDatasetImportJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDatasetImportJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DatasetImportJobSummary>> {
+        Some(self.dataset_import_jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDatasetImportJobsResponse {
+    type Item = DatasetImportJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DatasetImportJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_datasets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
@@ -1692,6 +1886,15 @@ pub struct ListDatasetsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDatasetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_datasets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
@@ -1705,6 +1908,31 @@ pub struct ListDatasetsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDatasetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DatasetSummary>> {
+        Some(self.datasets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDatasetsResponse {
+    type Item = DatasetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DatasetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_event_trackers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventTrackersRequest {
@@ -1722,6 +1950,15 @@ pub struct ListEventTrackersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListEventTrackersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_event_trackers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventTrackersResponse {
@@ -1735,6 +1972,31 @@ pub struct ListEventTrackersResponse {
     pub next_token: Option<String>,
 }
 
+impl ListEventTrackersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<EventTrackerSummary>> {
+        Some(self.event_trackers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListEventTrackersResponse {
+    type Item = EventTrackerSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EventTrackerSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_filters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFiltersRequest {
@@ -1752,6 +2014,7 @@ pub struct ListFiltersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Personalize::list_filters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFiltersResponse {
@@ -1765,6 +2028,7 @@ pub struct ListFiltersResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Personalize::list_recipes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecipesRequest {
@@ -1782,6 +2046,15 @@ pub struct ListRecipesRequest {
     pub recipe_provider: Option<String>,
 }
 
+impl PagedRequest for ListRecipesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_recipes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecipesResponse {
@@ -1795,6 +2068,31 @@ pub struct ListRecipesResponse {
     pub recipes: Option<Vec<RecipeSummary>>,
 }
 
+impl ListRecipesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RecipeSummary>> {
+        Some(self.recipes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRecipesResponse {
+    type Item = RecipeSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RecipeSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_schemas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemasRequest {
@@ -1808,6 +2106,15 @@ pub struct ListSchemasRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSchemasRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_schemas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemasResponse {
@@ -1821,6 +2128,31 @@ pub struct ListSchemasResponse {
     pub schemas: Option<Vec<DatasetSchemaSummary>>,
 }
 
+impl ListSchemasResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DatasetSchemaSummary>> {
+        Some(self.schemas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSchemasResponse {
+    type Item = DatasetSchemaSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DatasetSchemaSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_solution_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSolutionVersionsRequest {
@@ -1838,6 +2170,15 @@ pub struct ListSolutionVersionsRequest {
     pub solution_arn: Option<String>,
 }
 
+impl PagedRequest for ListSolutionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_solution_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSolutionVersionsResponse {
@@ -1851,6 +2192,31 @@ pub struct ListSolutionVersionsResponse {
     pub solution_versions: Option<Vec<SolutionVersionSummary>>,
 }
 
+impl ListSolutionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SolutionVersionSummary>> {
+        Some(self.solution_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSolutionVersionsResponse {
+    type Item = SolutionVersionSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SolutionVersionSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Personalize::list_solutions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSolutionsRequest {
@@ -1868,6 +2234,15 @@ pub struct ListSolutionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSolutionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Personalize::list_solutions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSolutionsResponse {
@@ -1879,6 +2254,30 @@ pub struct ListSolutionsResponse {
     #[serde(rename = "solutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub solutions: Option<Vec<SolutionSummary>>,
+}
+
+impl ListSolutionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SolutionSummary>> {
+        Some(self.solutions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSolutionsResponse {
+    type Item = SolutionSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SolutionSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Provides information about a recipe. Each recipe provides an algorithm that Amazon Personalize uses in model training when you use the <a>CreateSolution</a> operation. </p>
@@ -2172,6 +2571,7 @@ pub struct TunedHPOParams {
     pub algorithm_hyper_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Personalize::update_campaign]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCampaignRequest {
@@ -2192,6 +2592,7 @@ pub struct UpdateCampaignRequest {
     pub solution_version_arn: Option<String>,
 }
 
+/// see [Personalize::update_campaign]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCampaignResponse {
@@ -3999,7 +4400,7 @@ impl fmt::Display for UpdateCampaignError {
 impl Error for UpdateCampaignError {}
 /// Trait representing the capabilities of the Amazon Personalize API. Amazon Personalize clients implement this trait.
 #[async_trait]
-pub trait Personalize {
+pub trait Personalize: Clone + Sync + Send + 'static {
     /// <p>Creates a batch inference job. The operation can handle up to 50 million records and the input file must be in JSON format. For more information, see <a>recommendations-batch</a>.</p>
     async fn create_batch_inference_job(
         &self,
@@ -4195,11 +4596,31 @@ pub trait Personalize {
         input: ListBatchInferenceJobsRequest,
     ) -> Result<ListBatchInferenceJobsResponse, RusotoError<ListBatchInferenceJobsError>>;
 
+    /// Auto-paginating version of `list_batch_inference_jobs`
+    fn list_batch_inference_jobs_pages(
+        &self,
+        input: ListBatchInferenceJobsRequest,
+    ) -> RusotoStream<BatchInferenceJobSummary, ListBatchInferenceJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_batch_inference_jobs(state.clone())
+        })
+    }
+
     /// <p>Returns a list of campaigns that use the given solution. When a solution is not specified, all the campaigns associated with the account are listed. The response provides the properties for each campaign, including the Amazon Resource Name (ARN). For more information on campaigns, see <a>CreateCampaign</a>.</p>
     async fn list_campaigns(
         &self,
         input: ListCampaignsRequest,
     ) -> Result<ListCampaignsResponse, RusotoError<ListCampaignsError>>;
+
+    /// Auto-paginating version of `list_campaigns`
+    fn list_campaigns_pages(
+        &self,
+        input: ListCampaignsRequest,
+    ) -> RusotoStream<CampaignSummary, ListCampaignsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_campaigns(state.clone())
+        })
+    }
 
     /// <p>Returns a list of dataset groups. The response provides the properties for each dataset group, including the Amazon Resource Name (ARN). For more information on dataset groups, see <a>CreateDatasetGroup</a>.</p>
     async fn list_dataset_groups(
@@ -4207,11 +4628,31 @@ pub trait Personalize {
         input: ListDatasetGroupsRequest,
     ) -> Result<ListDatasetGroupsResponse, RusotoError<ListDatasetGroupsError>>;
 
+    /// Auto-paginating version of `list_dataset_groups`
+    fn list_dataset_groups_pages(
+        &self,
+        input: ListDatasetGroupsRequest,
+    ) -> RusotoStream<DatasetGroupSummary, ListDatasetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dataset_groups(state.clone())
+        })
+    }
+
     /// <p>Returns a list of dataset import jobs that use the given dataset. When a dataset is not specified, all the dataset import jobs associated with the account are listed. The response provides the properties for each dataset import job, including the Amazon Resource Name (ARN). For more information on dataset import jobs, see <a>CreateDatasetImportJob</a>. For more information on datasets, see <a>CreateDataset</a>.</p>
     async fn list_dataset_import_jobs(
         &self,
         input: ListDatasetImportJobsRequest,
     ) -> Result<ListDatasetImportJobsResponse, RusotoError<ListDatasetImportJobsError>>;
+
+    /// Auto-paginating version of `list_dataset_import_jobs`
+    fn list_dataset_import_jobs_pages(
+        &self,
+        input: ListDatasetImportJobsRequest,
+    ) -> RusotoStream<DatasetImportJobSummary, ListDatasetImportJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dataset_import_jobs(state.clone())
+        })
+    }
 
     /// <p>Returns the list of datasets contained in the given dataset group. The response provides the properties for each dataset, including the Amazon Resource Name (ARN). For more information on datasets, see <a>CreateDataset</a>.</p>
     async fn list_datasets(
@@ -4219,11 +4660,31 @@ pub trait Personalize {
         input: ListDatasetsRequest,
     ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>>;
 
+    /// Auto-paginating version of `list_datasets`
+    fn list_datasets_pages(
+        &self,
+        input: ListDatasetsRequest,
+    ) -> RusotoStream<DatasetSummary, ListDatasetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_datasets(state.clone())
+        })
+    }
+
     /// <p>Returns the list of event trackers associated with the account. The response provides the properties for each event tracker, including the Amazon Resource Name (ARN) and tracking ID. For more information on event trackers, see <a>CreateEventTracker</a>.</p>
     async fn list_event_trackers(
         &self,
         input: ListEventTrackersRequest,
     ) -> Result<ListEventTrackersResponse, RusotoError<ListEventTrackersError>>;
+
+    /// Auto-paginating version of `list_event_trackers`
+    fn list_event_trackers_pages(
+        &self,
+        input: ListEventTrackersRequest,
+    ) -> RusotoStream<EventTrackerSummary, ListEventTrackersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_event_trackers(state.clone())
+        })
+    }
 
     /// <p>Lists all filters that belong to a given dataset group.</p>
     async fn list_filters(
@@ -4237,11 +4698,31 @@ pub trait Personalize {
         input: ListRecipesRequest,
     ) -> Result<ListRecipesResponse, RusotoError<ListRecipesError>>;
 
+    /// Auto-paginating version of `list_recipes`
+    fn list_recipes_pages(
+        &self,
+        input: ListRecipesRequest,
+    ) -> RusotoStream<RecipeSummary, ListRecipesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_recipes(state.clone())
+        })
+    }
+
     /// <p>Returns the list of schemas associated with the account. The response provides the properties for each schema, including the Amazon Resource Name (ARN). For more information on schemas, see <a>CreateSchema</a>.</p>
     async fn list_schemas(
         &self,
         input: ListSchemasRequest,
     ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>>;
+
+    /// Auto-paginating version of `list_schemas`
+    fn list_schemas_pages(
+        &self,
+        input: ListSchemasRequest,
+    ) -> RusotoStream<DatasetSchemaSummary, ListSchemasError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_schemas(state.clone())
+        })
+    }
 
     /// <p>Returns a list of solution versions for the given solution. When a solution is not specified, all the solution versions associated with the account are listed. The response provides the properties for each solution version, including the Amazon Resource Name (ARN). For more information on solutions, see <a>CreateSolution</a>.</p>
     async fn list_solution_versions(
@@ -4249,11 +4730,31 @@ pub trait Personalize {
         input: ListSolutionVersionsRequest,
     ) -> Result<ListSolutionVersionsResponse, RusotoError<ListSolutionVersionsError>>;
 
+    /// Auto-paginating version of `list_solution_versions`
+    fn list_solution_versions_pages(
+        &self,
+        input: ListSolutionVersionsRequest,
+    ) -> RusotoStream<SolutionVersionSummary, ListSolutionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_solution_versions(state.clone())
+        })
+    }
+
     /// <p>Returns a list of solutions that use the given dataset group. When a dataset group is not specified, all the solutions associated with the account are listed. The response provides the properties for each solution, including the Amazon Resource Name (ARN). For more information on solutions, see <a>CreateSolution</a>.</p>
     async fn list_solutions(
         &self,
         input: ListSolutionsRequest,
     ) -> Result<ListSolutionsResponse, RusotoError<ListSolutionsError>>;
+
+    /// Auto-paginating version of `list_solutions`
+    fn list_solutions_pages(
+        &self,
+        input: ListSolutionsRequest,
+    ) -> RusotoStream<SolutionSummary, ListSolutionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_solutions(state.clone())
+        })
+    }
 
     /// <p>Updates a campaign by either deploying a new solution or changing the value of the campaign's <code>minProvisionedTPS</code> parameter.</p> <p>To update a campaign, the campaign status must be ACTIVE or CREATE FAILED. Check the campaign status using the <a>DescribeCampaign</a> API.</p> <note> <p>You must wait until the <code>status</code> of the updated campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p>For more information on campaigns, see <a>CreateCampaign</a>.</p>
     async fn update_campaign(

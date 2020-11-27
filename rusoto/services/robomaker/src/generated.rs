@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Robomaker::batch_delete_worlds]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteWorldsRequest {
@@ -33,6 +36,7 @@ pub struct BatchDeleteWorldsRequest {
     pub worlds: Vec<String>,
 }
 
+/// see [Robomaker::batch_delete_worlds]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteWorldsResponse {
@@ -42,6 +46,7 @@ pub struct BatchDeleteWorldsResponse {
     pub unprocessed_worlds: Option<Vec<String>>,
 }
 
+/// see [Robomaker::batch_describe_simulation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeSimulationJobRequest {
@@ -50,6 +55,7 @@ pub struct BatchDescribeSimulationJobRequest {
     pub jobs: Vec<String>,
 }
 
+/// see [Robomaker::batch_describe_simulation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDescribeSimulationJobResponse {
@@ -76,6 +82,7 @@ pub struct BatchPolicy {
     pub timeout_in_seconds: Option<i64>,
 }
 
+/// see [Robomaker::cancel_deployment_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelDeploymentJobRequest {
@@ -84,10 +91,12 @@ pub struct CancelDeploymentJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::cancel_deployment_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelDeploymentJobResponse {}
 
+/// see [Robomaker::cancel_simulation_job_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSimulationJobBatchRequest {
@@ -96,10 +105,12 @@ pub struct CancelSimulationJobBatchRequest {
     pub batch: String,
 }
 
+/// see [Robomaker::cancel_simulation_job_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSimulationJobBatchResponse {}
 
+/// see [Robomaker::cancel_simulation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSimulationJobRequest {
@@ -108,10 +119,12 @@ pub struct CancelSimulationJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::cancel_simulation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSimulationJobResponse {}
 
+/// see [Robomaker::cancel_world_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelWorldExportJobRequest {
@@ -120,10 +133,12 @@ pub struct CancelWorldExportJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::cancel_world_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelWorldExportJobResponse {}
 
+/// see [Robomaker::cancel_world_generation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelWorldGenerationJobRequest {
@@ -132,6 +147,7 @@ pub struct CancelWorldGenerationJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::cancel_world_generation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelWorldGenerationJobResponse {}
@@ -155,6 +171,7 @@ pub struct ComputeResponse {
     pub simulation_unit_limit: Option<i64>,
 }
 
+/// see [Robomaker::create_deployment_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentJobRequest {
@@ -177,6 +194,7 @@ pub struct CreateDeploymentJobRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_deployment_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentJobResponse {
@@ -218,6 +236,7 @@ pub struct CreateDeploymentJobResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetRequest {
@@ -230,6 +249,7 @@ pub struct CreateFleetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetResponse {
@@ -251,6 +271,7 @@ pub struct CreateFleetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_robot_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRobotApplicationRequest {
@@ -269,6 +290,7 @@ pub struct CreateRobotApplicationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_robot_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRobotApplicationResponse {
@@ -306,6 +328,7 @@ pub struct CreateRobotApplicationResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::create_robot_application_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRobotApplicationVersionRequest {
@@ -318,6 +341,7 @@ pub struct CreateRobotApplicationVersionRequest {
     pub current_revision_id: Option<String>,
 }
 
+/// see [Robomaker::create_robot_application_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRobotApplicationVersionResponse {
@@ -351,6 +375,7 @@ pub struct CreateRobotApplicationVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::create_robot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRobotRequest {
@@ -369,6 +394,7 @@ pub struct CreateRobotRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_robot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRobotResponse {
@@ -398,6 +424,7 @@ pub struct CreateRobotResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_simulation_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSimulationApplicationRequest {
@@ -423,6 +450,7 @@ pub struct CreateSimulationApplicationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_simulation_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSimulationApplicationResponse {
@@ -468,6 +496,7 @@ pub struct CreateSimulationApplicationResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::create_simulation_application_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSimulationApplicationVersionRequest {
@@ -480,6 +509,7 @@ pub struct CreateSimulationApplicationVersionRequest {
     pub current_revision_id: Option<String>,
 }
 
+/// see [Robomaker::create_simulation_application_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSimulationApplicationVersionResponse {
@@ -521,6 +551,7 @@ pub struct CreateSimulationApplicationVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::create_simulation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSimulationJobRequest {
@@ -572,6 +603,7 @@ pub struct CreateSimulationJobRequest {
     pub vpc_config: Option<VPCConfig>,
 }
 
+/// see [Robomaker::create_simulation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSimulationJobResponse {
@@ -649,6 +681,7 @@ pub struct CreateSimulationJobResponse {
     pub vpc_config: Option<VPCConfigResponse>,
 }
 
+/// see [Robomaker::create_world_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorldExportJobRequest {
@@ -670,6 +703,7 @@ pub struct CreateWorldExportJobRequest {
     pub worlds: Vec<String>,
 }
 
+/// see [Robomaker::create_world_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorldExportJobResponse {
@@ -706,6 +740,7 @@ pub struct CreateWorldExportJobResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_world_generation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorldGenerationJobRequest {
@@ -729,6 +764,7 @@ pub struct CreateWorldGenerationJobRequest {
     pub world_tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_world_generation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorldGenerationJobResponse {
@@ -770,6 +806,7 @@ pub struct CreateWorldGenerationJobResponse {
     pub world_tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::create_world_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorldTemplateRequest {
@@ -795,6 +832,7 @@ pub struct CreateWorldTemplateRequest {
     pub template_location: Option<TemplateLocation>,
 }
 
+/// see [Robomaker::create_world_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorldTemplateResponse {
@@ -852,6 +890,7 @@ pub struct DataSourceConfig {
     pub s_3_keys: Vec<String>,
 }
 
+/// see [Robomaker::delete_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetRequest {
@@ -860,10 +899,12 @@ pub struct DeleteFleetRequest {
     pub fleet: String,
 }
 
+/// see [Robomaker::delete_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFleetResponse {}
 
+/// see [Robomaker::delete_robot_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRobotApplicationRequest {
@@ -876,10 +917,12 @@ pub struct DeleteRobotApplicationRequest {
     pub application_version: Option<String>,
 }
 
+/// see [Robomaker::delete_robot_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRobotApplicationResponse {}
 
+/// see [Robomaker::delete_robot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRobotRequest {
@@ -888,10 +931,12 @@ pub struct DeleteRobotRequest {
     pub robot: String,
 }
 
+/// see [Robomaker::delete_robot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRobotResponse {}
 
+/// see [Robomaker::delete_simulation_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSimulationApplicationRequest {
@@ -904,10 +949,12 @@ pub struct DeleteSimulationApplicationRequest {
     pub application_version: Option<String>,
 }
 
+/// see [Robomaker::delete_simulation_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSimulationApplicationResponse {}
 
+/// see [Robomaker::delete_world_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorldTemplateRequest {
@@ -916,6 +963,7 @@ pub struct DeleteWorldTemplateRequest {
     pub template: String,
 }
 
+/// see [Robomaker::delete_world_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorldTemplateResponse {}
@@ -1016,6 +1064,7 @@ pub struct DeploymentLaunchConfig {
     pub pre_launch_file: Option<String>,
 }
 
+/// see [Robomaker::deregister_robot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterRobotRequest {
@@ -1027,6 +1076,7 @@ pub struct DeregisterRobotRequest {
     pub robot: String,
 }
 
+/// see [Robomaker::deregister_robot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterRobotResponse {
@@ -1040,6 +1090,7 @@ pub struct DeregisterRobotResponse {
     pub robot: Option<String>,
 }
 
+/// see [Robomaker::describe_deployment_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeploymentJobRequest {
@@ -1048,6 +1099,7 @@ pub struct DescribeDeploymentJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::describe_deployment_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeploymentJobResponse {
@@ -1093,6 +1145,7 @@ pub struct DescribeDeploymentJobResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::describe_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetRequest {
@@ -1101,6 +1154,7 @@ pub struct DescribeFleetRequest {
     pub fleet: String,
 }
 
+/// see [Robomaker::describe_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetResponse {
@@ -1138,6 +1192,7 @@ pub struct DescribeFleetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::describe_robot_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRobotApplicationRequest {
@@ -1150,6 +1205,7 @@ pub struct DescribeRobotApplicationRequest {
     pub application_version: Option<String>,
 }
 
+/// see [Robomaker::describe_robot_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRobotApplicationResponse {
@@ -1187,6 +1243,7 @@ pub struct DescribeRobotApplicationResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::describe_robot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRobotRequest {
@@ -1195,6 +1252,7 @@ pub struct DescribeRobotRequest {
     pub robot: String,
 }
 
+/// see [Robomaker::describe_robot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRobotResponse {
@@ -1240,6 +1298,7 @@ pub struct DescribeRobotResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::describe_simulation_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSimulationApplicationRequest {
@@ -1252,6 +1311,7 @@ pub struct DescribeSimulationApplicationRequest {
     pub application_version: Option<String>,
 }
 
+/// see [Robomaker::describe_simulation_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSimulationApplicationResponse {
@@ -1297,6 +1357,7 @@ pub struct DescribeSimulationApplicationResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::describe_simulation_job_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSimulationJobBatchRequest {
@@ -1305,6 +1366,7 @@ pub struct DescribeSimulationJobBatchRequest {
     pub batch: String,
 }
 
+/// see [Robomaker::describe_simulation_job_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSimulationJobBatchResponse {
@@ -1358,6 +1420,7 @@ pub struct DescribeSimulationJobBatchResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::describe_simulation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSimulationJobRequest {
@@ -1366,6 +1429,7 @@ pub struct DescribeSimulationJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::describe_simulation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSimulationJobResponse {
@@ -1455,6 +1519,7 @@ pub struct DescribeSimulationJobResponse {
     pub vpc_config: Option<VPCConfigResponse>,
 }
 
+/// see [Robomaker::describe_world_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorldExportJobRequest {
@@ -1463,6 +1528,7 @@ pub struct DescribeWorldExportJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::describe_world_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorldExportJobResponse {
@@ -1507,6 +1573,7 @@ pub struct DescribeWorldExportJobResponse {
     pub worlds: Option<Vec<String>>,
 }
 
+/// see [Robomaker::describe_world_generation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorldGenerationJobRequest {
@@ -1515,6 +1582,7 @@ pub struct DescribeWorldGenerationJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::describe_world_generation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorldGenerationJobResponse {
@@ -1564,6 +1632,7 @@ pub struct DescribeWorldGenerationJobResponse {
     pub world_tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::describe_world]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorldRequest {
@@ -1572,6 +1641,7 @@ pub struct DescribeWorldRequest {
     pub world: String,
 }
 
+/// see [Robomaker::describe_world]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorldResponse {
@@ -1597,6 +1667,7 @@ pub struct DescribeWorldResponse {
     pub template: Option<String>,
 }
 
+/// see [Robomaker::describe_world_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorldTemplateRequest {
@@ -1605,6 +1676,7 @@ pub struct DescribeWorldTemplateRequest {
     pub template: String,
 }
 
+/// see [Robomaker::describe_world_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorldTemplateResponse {
@@ -1732,6 +1804,7 @@ pub struct Fleet {
     pub name: Option<String>,
 }
 
+/// see [Robomaker::get_world_template_body]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorldTemplateBodyRequest {
@@ -1745,6 +1818,7 @@ pub struct GetWorldTemplateBodyRequest {
     pub template: Option<String>,
 }
 
+/// see [Robomaker::get_world_template_body]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorldTemplateBodyResponse {
@@ -1777,6 +1851,7 @@ pub struct LaunchConfig {
     pub stream_ui: Option<bool>,
 }
 
+/// see [Robomaker::list_deployment_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentJobsRequest {
@@ -1794,6 +1869,15 @@ pub struct ListDeploymentJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeploymentJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_deployment_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentJobsResponse {
@@ -1807,6 +1891,31 @@ pub struct ListDeploymentJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDeploymentJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DeploymentJob>> {
+        Some(self.deployment_jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeploymentJobsResponse {
+    type Item = DeploymentJob;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DeploymentJob> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_fleets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFleetsRequest {
@@ -1824,6 +1933,15 @@ pub struct ListFleetsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListFleetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_fleets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFleetsResponse {
@@ -1837,6 +1955,31 @@ pub struct ListFleetsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListFleetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Fleet>> {
+        Some(self.fleet_details.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFleetsResponse {
+    type Item = Fleet;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Fleet> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_robot_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRobotApplicationsRequest {
@@ -1858,6 +2001,15 @@ pub struct ListRobotApplicationsRequest {
     pub version_qualifier: Option<String>,
 }
 
+impl PagedRequest for ListRobotApplicationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_robot_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRobotApplicationsResponse {
@@ -1871,6 +2023,31 @@ pub struct ListRobotApplicationsResponse {
     pub robot_application_summaries: Option<Vec<RobotApplicationSummary>>,
 }
 
+impl ListRobotApplicationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RobotApplicationSummary>> {
+        Some(self.robot_application_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRobotApplicationsResponse {
+    type Item = RobotApplicationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RobotApplicationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_robots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRobotsRequest {
@@ -1888,6 +2065,15 @@ pub struct ListRobotsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListRobotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_robots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRobotsResponse {
@@ -1901,6 +2087,31 @@ pub struct ListRobotsResponse {
     pub robots: Option<Vec<Robot>>,
 }
 
+impl ListRobotsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Robot>> {
+        Some(self.robots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRobotsResponse {
+    type Item = Robot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Robot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_simulation_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSimulationApplicationsRequest {
@@ -1922,6 +2133,15 @@ pub struct ListSimulationApplicationsRequest {
     pub version_qualifier: Option<String>,
 }
 
+impl PagedRequest for ListSimulationApplicationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_simulation_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationApplicationsResponse {
@@ -1935,6 +2155,31 @@ pub struct ListSimulationApplicationsResponse {
     pub simulation_application_summaries: Option<Vec<SimulationApplicationSummary>>,
 }
 
+impl ListSimulationApplicationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SimulationApplicationSummary>> {
+        Some(self.simulation_application_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSimulationApplicationsResponse {
+    type Item = SimulationApplicationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SimulationApplicationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_simulation_job_batches]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSimulationJobBatchesRequest {
@@ -1952,6 +2197,15 @@ pub struct ListSimulationJobBatchesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSimulationJobBatchesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_simulation_job_batches]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationJobBatchesResponse {
@@ -1965,6 +2219,31 @@ pub struct ListSimulationJobBatchesResponse {
     pub simulation_job_batch_summaries: Option<Vec<SimulationJobBatchSummary>>,
 }
 
+impl ListSimulationJobBatchesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SimulationJobBatchSummary>> {
+        Some(self.simulation_job_batch_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSimulationJobBatchesResponse {
+    type Item = SimulationJobBatchSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SimulationJobBatchSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_simulation_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSimulationJobsRequest {
@@ -1982,6 +2261,15 @@ pub struct ListSimulationJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSimulationJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_simulation_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationJobsResponse {
@@ -1994,6 +2282,31 @@ pub struct ListSimulationJobsResponse {
     pub simulation_job_summaries: Vec<SimulationJobSummary>,
 }
 
+impl ListSimulationJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SimulationJobSummary>> {
+        Some(self.simulation_job_summaries.clone())
+    }
+}
+
+impl PagedOutput for ListSimulationJobsResponse {
+    type Item = SimulationJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SimulationJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2002,6 +2315,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Robomaker::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2011,6 +2325,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::list_world_export_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorldExportJobsRequest {
@@ -2028,6 +2343,15 @@ pub struct ListWorldExportJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListWorldExportJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_world_export_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorldExportJobsResponse {
@@ -2040,6 +2364,31 @@ pub struct ListWorldExportJobsResponse {
     pub world_export_job_summaries: Vec<WorldExportJobSummary>,
 }
 
+impl ListWorldExportJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<WorldExportJobSummary>> {
+        Some(self.world_export_job_summaries.clone())
+    }
+}
+
+impl PagedOutput for ListWorldExportJobsResponse {
+    type Item = WorldExportJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<WorldExportJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_world_generation_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorldGenerationJobsRequest {
@@ -2057,6 +2406,15 @@ pub struct ListWorldGenerationJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListWorldGenerationJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_world_generation_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorldGenerationJobsResponse {
@@ -2069,6 +2427,31 @@ pub struct ListWorldGenerationJobsResponse {
     pub world_generation_job_summaries: Vec<WorldGenerationJobSummary>,
 }
 
+impl ListWorldGenerationJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<WorldGenerationJobSummary>> {
+        Some(self.world_generation_job_summaries.clone())
+    }
+}
+
+impl PagedOutput for ListWorldGenerationJobsResponse {
+    type Item = WorldGenerationJobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<WorldGenerationJobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_world_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorldTemplatesRequest {
@@ -2082,6 +2465,15 @@ pub struct ListWorldTemplatesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListWorldTemplatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_world_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorldTemplatesResponse {
@@ -2095,6 +2487,31 @@ pub struct ListWorldTemplatesResponse {
     pub template_summaries: Option<Vec<TemplateSummary>>,
 }
 
+impl ListWorldTemplatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<TemplateSummary>> {
+        Some(self.template_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListWorldTemplatesResponse {
+    type Item = TemplateSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TemplateSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Robomaker::list_worlds]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorldsRequest {
@@ -2112,6 +2529,15 @@ pub struct ListWorldsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListWorldsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Robomaker::list_worlds]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorldsResponse {
@@ -2123,6 +2549,30 @@ pub struct ListWorldsResponse {
     #[serde(rename = "worldSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub world_summaries: Option<Vec<WorldSummary>>,
+}
+
+impl ListWorldsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<WorldSummary>> {
+        Some(self.world_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListWorldsResponse {
+    type Item = WorldSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<WorldSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>The logging configuration.</p>
@@ -2210,6 +2660,7 @@ pub struct ProgressDetail {
     pub target_resource: Option<String>,
 }
 
+/// see [Robomaker::register_robot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterRobotRequest {
@@ -2221,6 +2672,7 @@ pub struct RegisterRobotRequest {
     pub robot: String,
 }
 
+/// see [Robomaker::register_robot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterRobotResponse {
@@ -2247,6 +2699,7 @@ pub struct RenderingEngine {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::restart_simulation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestartSimulationJobRequest {
@@ -2255,6 +2708,7 @@ pub struct RestartSimulationJobRequest {
     pub job: String,
 }
 
+/// see [Robomaker::restart_simulation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestartSimulationJobResponse {}
@@ -2727,6 +3181,7 @@ pub struct SourceConfig {
     pub s_3_key: Option<String>,
 }
 
+/// see [Robomaker::start_simulation_job_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSimulationJobBatchRequest {
@@ -2747,6 +3202,7 @@ pub struct StartSimulationJobBatchRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::start_simulation_job_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSimulationJobBatchResponse {
@@ -2796,6 +3252,7 @@ pub struct StartSimulationJobBatchResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Robomaker::sync_deployment_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SyncDeploymentJobRequest {
@@ -2807,6 +3264,7 @@ pub struct SyncDeploymentJobRequest {
     pub fleet: String,
 }
 
+/// see [Robomaker::sync_deployment_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SyncDeploymentJobResponse {
@@ -2844,6 +3302,7 @@ pub struct SyncDeploymentJobResponse {
     pub status: Option<String>,
 }
 
+/// see [Robomaker::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2855,6 +3314,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Robomaker::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2893,6 +3353,7 @@ pub struct TemplateSummary {
     pub name: Option<String>,
 }
 
+/// see [Robomaker::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2904,10 +3365,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Robomaker::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Robomaker::update_robot_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRobotApplicationRequest {
@@ -2926,6 +3389,7 @@ pub struct UpdateRobotApplicationRequest {
     pub sources: Vec<SourceConfig>,
 }
 
+/// see [Robomaker::update_robot_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRobotApplicationResponse {
@@ -2959,6 +3423,7 @@ pub struct UpdateRobotApplicationResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::update_simulation_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSimulationApplicationRequest {
@@ -2984,6 +3449,7 @@ pub struct UpdateSimulationApplicationRequest {
     pub sources: Vec<SourceConfig>,
 }
 
+/// see [Robomaker::update_simulation_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSimulationApplicationResponse {
@@ -3025,6 +3491,7 @@ pub struct UpdateSimulationApplicationResponse {
     pub version: Option<String>,
 }
 
+/// see [Robomaker::update_world_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorldTemplateRequest {
@@ -3045,6 +3512,7 @@ pub struct UpdateWorldTemplateRequest {
     pub template_location: Option<TemplateLocation>,
 }
 
+/// see [Robomaker::update_world_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorldTemplateResponse {
@@ -6344,7 +6812,7 @@ impl fmt::Display for UpdateWorldTemplateError {
 impl Error for UpdateWorldTemplateError {}
 /// Trait representing the capabilities of the RoboMaker API. RoboMaker clients implement this trait.
 #[async_trait]
-pub trait Robomaker {
+pub trait Robomaker: Clone + Sync + Send + 'static {
     /// <p>Deletes one or more worlds in a batch operation.</p>
     async fn batch_delete_worlds(
         &self,
@@ -6576,11 +7044,28 @@ pub trait Robomaker {
         input: ListDeploymentJobsRequest,
     ) -> Result<ListDeploymentJobsResponse, RusotoError<ListDeploymentJobsError>>;
 
+    /// Auto-paginating version of `list_deployment_jobs`
+    fn list_deployment_jobs_pages(
+        &self,
+        input: ListDeploymentJobsRequest,
+    ) -> RusotoStream<DeploymentJob, ListDeploymentJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deployment_jobs(state.clone())
+        })
+    }
+
     /// <p>Returns a list of fleets. You can optionally provide filters to retrieve specific fleets. </p>
     async fn list_fleets(
         &self,
         input: ListFleetsRequest,
     ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>>;
+
+    /// Auto-paginating version of `list_fleets`
+    fn list_fleets_pages(&self, input: ListFleetsRequest) -> RusotoStream<Fleet, ListFleetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_fleets(state.clone())
+        })
+    }
 
     /// <p>Returns a list of robot application. You can optionally provide filters to retrieve specific robot applications.</p>
     async fn list_robot_applications(
@@ -6588,11 +7073,28 @@ pub trait Robomaker {
         input: ListRobotApplicationsRequest,
     ) -> Result<ListRobotApplicationsResponse, RusotoError<ListRobotApplicationsError>>;
 
+    /// Auto-paginating version of `list_robot_applications`
+    fn list_robot_applications_pages(
+        &self,
+        input: ListRobotApplicationsRequest,
+    ) -> RusotoStream<RobotApplicationSummary, ListRobotApplicationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_robot_applications(state.clone())
+        })
+    }
+
     /// <p>Returns a list of robots. You can optionally provide filters to retrieve specific robots.</p>
     async fn list_robots(
         &self,
         input: ListRobotsRequest,
     ) -> Result<ListRobotsResponse, RusotoError<ListRobotsError>>;
+
+    /// Auto-paginating version of `list_robots`
+    fn list_robots_pages(&self, input: ListRobotsRequest) -> RusotoStream<Robot, ListRobotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_robots(state.clone())
+        })
+    }
 
     /// <p>Returns a list of simulation applications. You can optionally provide filters to retrieve specific simulation applications. </p>
     async fn list_simulation_applications(
@@ -6600,17 +7102,47 @@ pub trait Robomaker {
         input: ListSimulationApplicationsRequest,
     ) -> Result<ListSimulationApplicationsResponse, RusotoError<ListSimulationApplicationsError>>;
 
+    /// Auto-paginating version of `list_simulation_applications`
+    fn list_simulation_applications_pages(
+        &self,
+        input: ListSimulationApplicationsRequest,
+    ) -> RusotoStream<SimulationApplicationSummary, ListSimulationApplicationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_simulation_applications(state.clone())
+        })
+    }
+
     /// <p>Returns a list simulation job batches. You can optionally provide filters to retrieve specific simulation batch jobs. </p>
     async fn list_simulation_job_batches(
         &self,
         input: ListSimulationJobBatchesRequest,
     ) -> Result<ListSimulationJobBatchesResponse, RusotoError<ListSimulationJobBatchesError>>;
 
+    /// Auto-paginating version of `list_simulation_job_batches`
+    fn list_simulation_job_batches_pages(
+        &self,
+        input: ListSimulationJobBatchesRequest,
+    ) -> RusotoStream<SimulationJobBatchSummary, ListSimulationJobBatchesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_simulation_job_batches(state.clone())
+        })
+    }
+
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
     async fn list_simulation_jobs(
         &self,
         input: ListSimulationJobsRequest,
     ) -> Result<ListSimulationJobsResponse, RusotoError<ListSimulationJobsError>>;
+
+    /// Auto-paginating version of `list_simulation_jobs`
+    fn list_simulation_jobs_pages(
+        &self,
+        input: ListSimulationJobsRequest,
+    ) -> RusotoStream<SimulationJobSummary, ListSimulationJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_simulation_jobs(state.clone())
+        })
+    }
 
     /// <p>Lists all tags on a AWS RoboMaker resource.</p>
     async fn list_tags_for_resource(
@@ -6624,11 +7156,31 @@ pub trait Robomaker {
         input: ListWorldExportJobsRequest,
     ) -> Result<ListWorldExportJobsResponse, RusotoError<ListWorldExportJobsError>>;
 
+    /// Auto-paginating version of `list_world_export_jobs`
+    fn list_world_export_jobs_pages(
+        &self,
+        input: ListWorldExportJobsRequest,
+    ) -> RusotoStream<WorldExportJobSummary, ListWorldExportJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_world_export_jobs(state.clone())
+        })
+    }
+
     /// <p>Lists world generator jobs.</p>
     async fn list_world_generation_jobs(
         &self,
         input: ListWorldGenerationJobsRequest,
     ) -> Result<ListWorldGenerationJobsResponse, RusotoError<ListWorldGenerationJobsError>>;
+
+    /// Auto-paginating version of `list_world_generation_jobs`
+    fn list_world_generation_jobs_pages(
+        &self,
+        input: ListWorldGenerationJobsRequest,
+    ) -> RusotoStream<WorldGenerationJobSummary, ListWorldGenerationJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_world_generation_jobs(state.clone())
+        })
+    }
 
     /// <p>Lists world templates.</p>
     async fn list_world_templates(
@@ -6636,11 +7188,31 @@ pub trait Robomaker {
         input: ListWorldTemplatesRequest,
     ) -> Result<ListWorldTemplatesResponse, RusotoError<ListWorldTemplatesError>>;
 
+    /// Auto-paginating version of `list_world_templates`
+    fn list_world_templates_pages(
+        &self,
+        input: ListWorldTemplatesRequest,
+    ) -> RusotoStream<TemplateSummary, ListWorldTemplatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_world_templates(state.clone())
+        })
+    }
+
     /// <p>Lists worlds.</p>
     async fn list_worlds(
         &self,
         input: ListWorldsRequest,
     ) -> Result<ListWorldsResponse, RusotoError<ListWorldsError>>;
+
+    /// Auto-paginating version of `list_worlds`
+    fn list_worlds_pages(
+        &self,
+        input: ListWorldsRequest,
+    ) -> RusotoStream<WorldSummary, ListWorldsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_worlds(state.clone())
+        })
+    }
 
     /// <p>Registers a robot with a fleet.</p>
     async fn register_robot(

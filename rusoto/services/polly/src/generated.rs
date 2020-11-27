@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Polly::delete_lexicon]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLexiconInput {
@@ -33,10 +36,12 @@ pub struct DeleteLexiconInput {
     pub name: String,
 }
 
+/// see [Polly::delete_lexicon]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLexiconOutput {}
 
+/// see [Polly::describe_voices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVoicesInput {
@@ -58,6 +63,15 @@ pub struct DescribeVoicesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeVoicesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Polly::describe_voices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVoicesOutput {
@@ -71,6 +85,31 @@ pub struct DescribeVoicesOutput {
     pub voices: Option<Vec<Voice>>,
 }
 
+impl DescribeVoicesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Voice>> {
+        Some(self.voices.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeVoicesOutput {
+    type Item = Voice;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Voice> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Polly::get_lexicon]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLexiconInput {
@@ -79,6 +118,7 @@ pub struct GetLexiconInput {
     pub name: String,
 }
 
+/// see [Polly::get_lexicon]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLexiconOutput {
@@ -92,6 +132,7 @@ pub struct GetLexiconOutput {
     pub lexicon_attributes: Option<LexiconAttributes>,
 }
 
+/// see [Polly::get_speech_synthesis_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSpeechSynthesisTaskInput {
@@ -100,6 +141,7 @@ pub struct GetSpeechSynthesisTaskInput {
     pub task_id: String,
 }
 
+/// see [Polly::get_speech_synthesis_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSpeechSynthesisTaskOutput {
@@ -167,6 +209,7 @@ pub struct LexiconDescription {
     pub name: Option<String>,
 }
 
+/// see [Polly::list_lexicons]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLexiconsInput {
@@ -176,6 +219,15 @@ pub struct ListLexiconsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLexiconsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Polly::list_lexicons]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLexiconsOutput {
@@ -189,6 +241,31 @@ pub struct ListLexiconsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListLexiconsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<LexiconDescription>> {
+        Some(self.lexicons.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLexiconsOutput {
+    type Item = LexiconDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LexiconDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Polly::list_speech_synthesis_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSpeechSynthesisTasksInput {
@@ -206,6 +283,15 @@ pub struct ListSpeechSynthesisTasksInput {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListSpeechSynthesisTasksInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Polly::list_speech_synthesis_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSpeechSynthesisTasksOutput {
@@ -219,6 +305,31 @@ pub struct ListSpeechSynthesisTasksOutput {
     pub synthesis_tasks: Option<Vec<SynthesisTask>>,
 }
 
+impl ListSpeechSynthesisTasksOutput {
+    fn pagination_page_opt(self) -> Option<Vec<SynthesisTask>> {
+        Some(self.synthesis_tasks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSpeechSynthesisTasksOutput {
+    type Item = SynthesisTask;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SynthesisTask> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Polly::put_lexicon]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLexiconInput {
@@ -230,10 +341,12 @@ pub struct PutLexiconInput {
     pub name: String,
 }
 
+/// see [Polly::put_lexicon]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLexiconOutput {}
 
+/// see [Polly::start_speech_synthesis_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSpeechSynthesisTaskInput {
@@ -283,6 +396,7 @@ pub struct StartSpeechSynthesisTaskInput {
     pub voice_id: String,
 }
 
+/// see [Polly::start_speech_synthesis_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSpeechSynthesisTaskOutput {
@@ -358,6 +472,7 @@ pub struct SynthesisTask {
     pub voice_id: Option<String>,
 }
 
+/// see [Polly::synthesize_speech]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SynthesizeSpeechInput {
@@ -396,6 +511,7 @@ pub struct SynthesizeSpeechInput {
     pub voice_id: String,
 }
 
+/// see [Polly::synthesize_speech]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct SynthesizeSpeechOutput {
     /// <p> Stream containing the synthesized speech. </p>
@@ -954,7 +1070,7 @@ impl fmt::Display for SynthesizeSpeechError {
 impl Error for SynthesizeSpeechError {}
 /// Trait representing the capabilities of the Amazon Polly API. Amazon Polly clients implement this trait.
 #[async_trait]
-pub trait Polly {
+pub trait Polly: Clone + Sync + Send + 'static {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     async fn delete_lexicon(
         &self,
@@ -966,6 +1082,16 @@ pub trait Polly {
         &self,
         input: DescribeVoicesInput,
     ) -> Result<DescribeVoicesOutput, RusotoError<DescribeVoicesError>>;
+
+    /// Auto-paginating version of `describe_voices`
+    fn describe_voices_pages(
+        &self,
+        input: DescribeVoicesInput,
+    ) -> RusotoStream<Voice, DescribeVoicesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_voices(state.clone())
+        })
+    }
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     async fn get_lexicon(
@@ -985,11 +1111,31 @@ pub trait Polly {
         input: ListLexiconsInput,
     ) -> Result<ListLexiconsOutput, RusotoError<ListLexiconsError>>;
 
+    /// Auto-paginating version of `list_lexicons`
+    fn list_lexicons_pages(
+        &self,
+        input: ListLexiconsInput,
+    ) -> RusotoStream<LexiconDescription, ListLexiconsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_lexicons(state.clone())
+        })
+    }
+
     /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
     async fn list_speech_synthesis_tasks(
         &self,
         input: ListSpeechSynthesisTasksInput,
     ) -> Result<ListSpeechSynthesisTasksOutput, RusotoError<ListSpeechSynthesisTasksError>>;
+
+    /// Auto-paginating version of `list_speech_synthesis_tasks`
+    fn list_speech_synthesis_tasks_pages(
+        &self,
+        input: ListSpeechSynthesisTasksInput,
+    ) -> RusotoStream<SynthesisTask, ListSpeechSynthesisTasksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_speech_synthesis_tasks(state.clone())
+        })
+    }
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     async fn put_lexicon(

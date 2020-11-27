@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -65,6 +67,7 @@ pub struct AccountUsage {
     pub total_code_size: Option<i64>,
 }
 
+/// see [Lambda::add_layer_version_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddLayerVersionPermissionRequest {
@@ -93,6 +96,7 @@ pub struct AddLayerVersionPermissionRequest {
     pub version_number: i64,
 }
 
+/// see [Lambda::add_layer_version_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddLayerVersionPermissionResponse {
@@ -106,6 +110,7 @@ pub struct AddLayerVersionPermissionResponse {
     pub statement: Option<String>,
 }
 
+/// see [Lambda::add_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddPermissionRequest {
@@ -143,6 +148,7 @@ pub struct AddPermissionRequest {
     pub statement_id: String,
 }
 
+/// see [Lambda::add_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddPermissionResponse {
@@ -153,6 +159,9 @@ pub struct AddPermissionResponse {
 }
 
 /// <p>Provides configuration information about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
+/// see [Lambda::create_alias]
+/// see [Lambda::get_alias]
+/// see [Lambda::update_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AliasConfiguration {
@@ -233,6 +242,7 @@ pub struct CodeSigningPolicies {
     pub untrusted_artifact_on_deployment: Option<String>,
 }
 
+/// see [Lambda::put_function_concurrency]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Concurrency {
@@ -242,6 +252,7 @@ pub struct Concurrency {
     pub reserved_concurrent_executions: Option<i64>,
 }
 
+/// see [Lambda::create_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
@@ -264,6 +275,7 @@ pub struct CreateAliasRequest {
     pub routing_config: Option<AliasRoutingConfiguration>,
 }
 
+/// see [Lambda::create_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCodeSigningConfigRequest {
@@ -280,6 +292,7 @@ pub struct CreateCodeSigningConfigRequest {
     pub description: Option<String>,
 }
 
+/// see [Lambda::create_code_signing_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCodeSigningConfigResponse {
@@ -288,6 +301,7 @@ pub struct CreateCodeSigningConfigResponse {
     pub code_signing_config: CodeSigningConfig,
 }
 
+/// see [Lambda::create_event_source_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSourceMappingRequest {
@@ -364,6 +378,7 @@ pub struct CreateEventSourceMappingRequest {
     pub tumbling_window_in_seconds: Option<i64>,
 }
 
+/// see [Lambda::create_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionRequest {
@@ -455,6 +470,7 @@ pub struct DeadLetterConfig {
     pub target_arn: Option<String>,
 }
 
+/// see [Lambda::delete_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
@@ -466,6 +482,7 @@ pub struct DeleteAliasRequest {
     pub name: String,
 }
 
+/// see [Lambda::delete_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCodeSigningConfigRequest {
@@ -474,10 +491,12 @@ pub struct DeleteCodeSigningConfigRequest {
     pub code_signing_config_arn: String,
 }
 
+/// see [Lambda::delete_code_signing_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCodeSigningConfigResponse {}
 
+/// see [Lambda::delete_event_source_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSourceMappingRequest {
@@ -486,6 +505,7 @@ pub struct DeleteEventSourceMappingRequest {
     pub uuid: String,
 }
 
+/// see [Lambda::delete_function_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionCodeSigningConfigRequest {
@@ -494,6 +514,7 @@ pub struct DeleteFunctionCodeSigningConfigRequest {
     pub function_name: String,
 }
 
+/// see [Lambda::delete_function_concurrency]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionConcurrencyRequest {
@@ -502,6 +523,7 @@ pub struct DeleteFunctionConcurrencyRequest {
     pub function_name: String,
 }
 
+/// see [Lambda::delete_function_event_invoke_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionEventInvokeConfigRequest {
@@ -514,6 +536,7 @@ pub struct DeleteFunctionEventInvokeConfigRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::delete_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionRequest {
@@ -526,6 +549,7 @@ pub struct DeleteFunctionRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::delete_layer_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLayerVersionRequest {
@@ -537,6 +561,7 @@ pub struct DeleteLayerVersionRequest {
     pub version_number: i64,
 }
 
+/// see [Lambda::delete_provisioned_concurrency_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisionedConcurrencyConfigRequest {
@@ -600,6 +625,10 @@ pub struct EnvironmentResponse {
 }
 
 /// <p>A mapping between an AWS resource and an AWS Lambda function. See <a>CreateEventSourceMapping</a> for details.</p>
+/// see [Lambda::create_event_source_mapping]
+/// see [Lambda::delete_event_source_mapping]
+/// see [Lambda::get_event_source_mapping]
+/// see [Lambda::update_event_source_mapping]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventSourceMappingConfiguration {
@@ -758,6 +787,11 @@ pub struct FunctionCodeLocation {
 }
 
 /// <p>Details about a function's configuration.</p>
+/// see [Lambda::create_function]
+/// see [Lambda::get_function_configuration]
+/// see [Lambda::publish_version]
+/// see [Lambda::update_function_code]
+/// see [Lambda::update_function_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FunctionConfiguration {
@@ -887,6 +921,9 @@ pub struct FunctionConfiguration {
     pub vpc_config: Option<VpcConfigResponse>,
 }
 
+/// see [Lambda::get_function_event_invoke_config]
+/// see [Lambda::put_function_event_invoke_config]
+/// see [Lambda::update_function_event_invoke_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FunctionEventInvokeConfig {
@@ -912,10 +949,12 @@ pub struct FunctionEventInvokeConfig {
     pub maximum_retry_attempts: Option<i64>,
 }
 
+/// see [Lambda::get_account_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {}
 
+/// see [Lambda::get_account_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountSettingsResponse {
@@ -929,6 +968,7 @@ pub struct GetAccountSettingsResponse {
     pub account_usage: Option<AccountUsage>,
 }
 
+/// see [Lambda::get_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAliasRequest {
@@ -940,6 +980,7 @@ pub struct GetAliasRequest {
     pub name: String,
 }
 
+/// see [Lambda::get_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCodeSigningConfigRequest {
@@ -948,6 +989,7 @@ pub struct GetCodeSigningConfigRequest {
     pub code_signing_config_arn: String,
 }
 
+/// see [Lambda::get_code_signing_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCodeSigningConfigResponse {
@@ -956,6 +998,7 @@ pub struct GetCodeSigningConfigResponse {
     pub code_signing_config: CodeSigningConfig,
 }
 
+/// see [Lambda::get_event_source_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventSourceMappingRequest {
@@ -964,6 +1007,7 @@ pub struct GetEventSourceMappingRequest {
     pub uuid: String,
 }
 
+/// see [Lambda::get_function_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionCodeSigningConfigRequest {
@@ -972,6 +1016,7 @@ pub struct GetFunctionCodeSigningConfigRequest {
     pub function_name: String,
 }
 
+/// see [Lambda::get_function_code_signing_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionCodeSigningConfigResponse {
@@ -983,6 +1028,7 @@ pub struct GetFunctionCodeSigningConfigResponse {
     pub function_name: String,
 }
 
+/// see [Lambda::get_function_concurrency]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionConcurrencyRequest {
@@ -991,6 +1037,7 @@ pub struct GetFunctionConcurrencyRequest {
     pub function_name: String,
 }
 
+/// see [Lambda::get_function_concurrency]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionConcurrencyResponse {
@@ -1000,6 +1047,7 @@ pub struct GetFunctionConcurrencyResponse {
     pub reserved_concurrent_executions: Option<i64>,
 }
 
+/// see [Lambda::get_function_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionConfigurationRequest {
@@ -1012,6 +1060,7 @@ pub struct GetFunctionConfigurationRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::get_function_event_invoke_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionEventInvokeConfigRequest {
@@ -1024,6 +1073,7 @@ pub struct GetFunctionEventInvokeConfigRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::get_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionRequest {
@@ -1036,6 +1086,7 @@ pub struct GetFunctionRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::get_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionResponse {
@@ -1057,6 +1108,7 @@ pub struct GetFunctionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Lambda::get_layer_version_by_arn]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLayerVersionByArnRequest {
@@ -1065,6 +1117,7 @@ pub struct GetLayerVersionByArnRequest {
     pub arn: String,
 }
 
+/// see [Lambda::get_layer_version_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLayerVersionPolicyRequest {
@@ -1076,6 +1129,7 @@ pub struct GetLayerVersionPolicyRequest {
     pub version_number: i64,
 }
 
+/// see [Lambda::get_layer_version_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLayerVersionPolicyResponse {
@@ -1089,6 +1143,7 @@ pub struct GetLayerVersionPolicyResponse {
     pub revision_id: Option<String>,
 }
 
+/// see [Lambda::get_layer_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLayerVersionRequest {
@@ -1100,6 +1155,8 @@ pub struct GetLayerVersionRequest {
     pub version_number: i64,
 }
 
+/// see [Lambda::get_layer_version]
+/// see [Lambda::get_layer_version_by_arn]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLayerVersionResponse {
@@ -1137,6 +1194,7 @@ pub struct GetLayerVersionResponse {
     pub version: Option<i64>,
 }
 
+/// see [Lambda::get_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
@@ -1149,6 +1207,7 @@ pub struct GetPolicyRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::get_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
@@ -1162,6 +1221,7 @@ pub struct GetPolicyResponse {
     pub revision_id: Option<String>,
 }
 
+/// see [Lambda::get_provisioned_concurrency_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProvisionedConcurrencyConfigRequest {
@@ -1173,6 +1233,7 @@ pub struct GetProvisionedConcurrencyConfigRequest {
     pub qualifier: String,
 }
 
+/// see [Lambda::get_provisioned_concurrency_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProvisionedConcurrencyConfigResponse {
@@ -1247,6 +1308,7 @@ pub struct ImageConfigResponse {
     pub image_config: Option<ImageConfig>,
 }
 
+/// see [Lambda::invoke]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvocationRequest {
@@ -1280,6 +1342,7 @@ pub struct InvocationRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::invoke]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct InvocationResponse {
     /// <p>The version of the function that executed. When you invoke a function with an alias, this indicates which version the alias resolved to.</p>
@@ -1294,6 +1357,7 @@ pub struct InvocationResponse {
     pub status_code: Option<i64>,
 }
 
+/// see [Lambda::invoke_async]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeAsyncRequest {
@@ -1311,6 +1375,7 @@ pub struct InvokeAsyncRequest {
 }
 
 /// <p>A success response (<code>202 Accepted</code>) indicates that the request is queued for invocation. </p>
+/// see [Lambda::invoke_async]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvokeAsyncResponse {
@@ -1443,6 +1508,7 @@ pub struct LayersListItem {
     pub layer_name: Option<String>,
 }
 
+/// see [Lambda::list_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesRequest {
@@ -1463,6 +1529,15 @@ pub struct ListAliasesRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListAliasesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesResponse {
@@ -1476,6 +1551,31 @@ pub struct ListAliasesResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListAliasesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AliasConfiguration>> {
+        Some(self.aliases.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAliasesResponse {
+    type Item = AliasConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AliasConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_code_signing_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCodeSigningConfigsRequest {
@@ -1489,6 +1589,15 @@ pub struct ListCodeSigningConfigsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListCodeSigningConfigsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_code_signing_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCodeSigningConfigsResponse {
@@ -1502,6 +1611,31 @@ pub struct ListCodeSigningConfigsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListCodeSigningConfigsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<CodeSigningConfig>> {
+        Some(self.code_signing_configs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCodeSigningConfigsResponse {
+    type Item = CodeSigningConfig;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CodeSigningConfig> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_event_source_mappings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSourceMappingsRequest {
@@ -1523,6 +1657,15 @@ pub struct ListEventSourceMappingsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListEventSourceMappingsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_event_source_mappings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventSourceMappingsResponse {
@@ -1536,6 +1679,31 @@ pub struct ListEventSourceMappingsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListEventSourceMappingsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<EventSourceMappingConfiguration>> {
+        Some(self.event_source_mappings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListEventSourceMappingsResponse {
+    type Item = EventSourceMappingConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EventSourceMappingConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_function_event_invoke_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionEventInvokeConfigsRequest {
@@ -1552,6 +1720,15 @@ pub struct ListFunctionEventInvokeConfigsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListFunctionEventInvokeConfigsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_function_event_invoke_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionEventInvokeConfigsResponse {
@@ -1565,6 +1742,31 @@ pub struct ListFunctionEventInvokeConfigsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListFunctionEventInvokeConfigsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<FunctionEventInvokeConfig>> {
+        Some(self.function_event_invoke_configs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFunctionEventInvokeConfigsResponse {
+    type Item = FunctionEventInvokeConfig;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FunctionEventInvokeConfig> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_functions_by_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionsByCodeSigningConfigRequest {
@@ -1581,6 +1783,15 @@ pub struct ListFunctionsByCodeSigningConfigRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListFunctionsByCodeSigningConfigRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_functions_by_code_signing_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionsByCodeSigningConfigResponse {
@@ -1594,6 +1805,31 @@ pub struct ListFunctionsByCodeSigningConfigResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListFunctionsByCodeSigningConfigResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.function_arns.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFunctionsByCodeSigningConfigResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_functions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionsRequest {
@@ -1615,7 +1851,16 @@ pub struct ListFunctionsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListFunctionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>A list of Lambda functions.</p>
+/// see [Lambda::list_functions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionsResponse {
@@ -1629,6 +1874,31 @@ pub struct ListFunctionsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListFunctionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<FunctionConfiguration>> {
+        Some(self.functions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFunctionsResponse {
+    type Item = FunctionConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FunctionConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_layer_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLayerVersionsRequest {
@@ -1649,6 +1919,15 @@ pub struct ListLayerVersionsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListLayerVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_layer_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLayerVersionsResponse {
@@ -1662,6 +1941,31 @@ pub struct ListLayerVersionsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListLayerVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LayerVersionsListItem>> {
+        Some(self.layer_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLayerVersionsResponse {
+    type Item = LayerVersionsListItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LayerVersionsListItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_layers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLayersRequest {
@@ -1679,6 +1983,15 @@ pub struct ListLayersRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListLayersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_layers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLayersResponse {
@@ -1692,6 +2005,31 @@ pub struct ListLayersResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListLayersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LayersListItem>> {
+        Some(self.layers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLayersResponse {
+    type Item = LayersListItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LayersListItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_provisioned_concurrency_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisionedConcurrencyConfigsRequest {
@@ -1708,6 +2046,15 @@ pub struct ListProvisionedConcurrencyConfigsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListProvisionedConcurrencyConfigsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_provisioned_concurrency_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisionedConcurrencyConfigsResponse {
@@ -1721,6 +2068,31 @@ pub struct ListProvisionedConcurrencyConfigsResponse {
     pub provisioned_concurrency_configs: Option<Vec<ProvisionedConcurrencyConfigListItem>>,
 }
 
+impl ListProvisionedConcurrencyConfigsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ProvisionedConcurrencyConfigListItem>> {
+        Some(self.provisioned_concurrency_configs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListProvisionedConcurrencyConfigsResponse {
+    type Item = ProvisionedConcurrencyConfigListItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProvisionedConcurrencyConfigListItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lambda::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -1729,6 +2101,7 @@ pub struct ListTagsRequest {
     pub resource: String,
 }
 
+/// see [Lambda::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
@@ -1738,6 +2111,7 @@ pub struct ListTagsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Lambda::list_versions_by_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVersionsByFunctionRequest {
@@ -1754,6 +2128,15 @@ pub struct ListVersionsByFunctionRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for ListVersionsByFunctionRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Lambda::list_versions_by_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVersionsByFunctionResponse {
@@ -1765,6 +2148,30 @@ pub struct ListVersionsByFunctionResponse {
     #[serde(rename = "Versions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<FunctionConfiguration>>,
+}
+
+impl ListVersionsByFunctionResponse {
+    fn pagination_page_opt(self) -> Option<Vec<FunctionConfiguration>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListVersionsByFunctionResponse {
+    type Item = FunctionConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FunctionConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>A destination for events that failed processing.</p>
@@ -1819,6 +2226,7 @@ pub struct ProvisionedConcurrencyConfigListItem {
     pub status_reason: Option<String>,
 }
 
+/// see [Lambda::publish_layer_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishLayerVersionRequest {
@@ -1842,6 +2250,7 @@ pub struct PublishLayerVersionRequest {
     pub license_info: Option<String>,
 }
 
+/// see [Lambda::publish_layer_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PublishLayerVersionResponse {
@@ -1879,6 +2288,7 @@ pub struct PublishLayerVersionResponse {
     pub version: Option<i64>,
 }
 
+/// see [Lambda::publish_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishVersionRequest {
@@ -1899,6 +2309,7 @@ pub struct PublishVersionRequest {
     pub revision_id: Option<String>,
 }
 
+/// see [Lambda::put_function_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFunctionCodeSigningConfigRequest {
@@ -1910,6 +2321,7 @@ pub struct PutFunctionCodeSigningConfigRequest {
     pub function_name: String,
 }
 
+/// see [Lambda::put_function_code_signing_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutFunctionCodeSigningConfigResponse {
@@ -1921,6 +2333,7 @@ pub struct PutFunctionCodeSigningConfigResponse {
     pub function_name: String,
 }
 
+/// see [Lambda::put_function_concurrency]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFunctionConcurrencyRequest {
@@ -1932,6 +2345,7 @@ pub struct PutFunctionConcurrencyRequest {
     pub reserved_concurrent_executions: i64,
 }
 
+/// see [Lambda::put_function_event_invoke_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFunctionEventInvokeConfigRequest {
@@ -1956,6 +2370,7 @@ pub struct PutFunctionEventInvokeConfigRequest {
     pub qualifier: Option<String>,
 }
 
+/// see [Lambda::put_provisioned_concurrency_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutProvisionedConcurrencyConfigRequest {
@@ -1970,6 +2385,7 @@ pub struct PutProvisionedConcurrencyConfigRequest {
     pub qualifier: String,
 }
 
+/// see [Lambda::put_provisioned_concurrency_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutProvisionedConcurrencyConfigResponse {
@@ -1999,6 +2415,7 @@ pub struct PutProvisionedConcurrencyConfigResponse {
     pub status_reason: Option<String>,
 }
 
+/// see [Lambda::remove_layer_version_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveLayerVersionPermissionRequest {
@@ -2017,6 +2434,7 @@ pub struct RemoveLayerVersionPermissionRequest {
     pub version_number: i64,
 }
 
+/// see [Lambda::remove_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
@@ -2058,6 +2476,7 @@ pub struct SourceAccessConfiguration {
     pub uri: Option<String>,
 }
 
+/// see [Lambda::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2089,6 +2508,7 @@ pub struct TracingConfigResponse {
     pub mode: Option<String>,
 }
 
+/// see [Lambda::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2100,6 +2520,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Lambda::update_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAliasRequest {
@@ -2127,6 +2548,7 @@ pub struct UpdateAliasRequest {
     pub routing_config: Option<AliasRoutingConfiguration>,
 }
 
+/// see [Lambda::update_code_signing_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCodeSigningConfigRequest {
@@ -2147,6 +2569,7 @@ pub struct UpdateCodeSigningConfigRequest {
     pub description: Option<String>,
 }
 
+/// see [Lambda::update_code_signing_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCodeSigningConfigResponse {
@@ -2155,6 +2578,7 @@ pub struct UpdateCodeSigningConfigResponse {
     pub code_signing_config: CodeSigningConfig,
 }
 
+/// see [Lambda::update_event_source_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEventSourceMappingRequest {
@@ -2211,6 +2635,7 @@ pub struct UpdateEventSourceMappingRequest {
     pub uuid: String,
 }
 
+/// see [Lambda::update_function_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionCodeRequest {
@@ -2256,6 +2681,7 @@ pub struct UpdateFunctionCodeRequest {
     pub zip_file: Option<bytes::Bytes>,
 }
 
+/// see [Lambda::update_function_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionConfigurationRequest {
@@ -2324,6 +2750,7 @@ pub struct UpdateFunctionConfigurationRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Lambda::update_function_event_invoke_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionEventInvokeConfigRequest {
@@ -5942,7 +6369,7 @@ impl fmt::Display for UpdateFunctionEventInvokeConfigError {
 impl Error for UpdateFunctionEventInvokeConfigError {}
 /// Trait representing the capabilities of the AWS Lambda API. AWS Lambda clients implement this trait.
 #[async_trait]
-pub trait Lambda {
+pub trait Lambda: Clone + Sync + Send + 'static {
     /// <p>Adds permissions to the resource-based policy of a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Use this action to grant layer usage permission to other accounts. You can grant permission to a single account, all AWS accounts, or all accounts in an organization.</p> <p>To revoke permission, call <a>RemoveLayerVersionPermission</a> with the statement ID that you specified when you added it.</p>
     async fn add_layer_version_permission(
         &self,
@@ -6137,17 +6564,47 @@ pub trait Lambda {
         input: ListAliasesRequest,
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
+    /// Auto-paginating version of `list_aliases`
+    fn list_aliases_pages(
+        &self,
+        input: ListAliasesRequest,
+    ) -> RusotoStream<AliasConfiguration, ListAliasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_aliases(state.clone())
+        })
+    }
+
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuring-codesigning.html">code signing configurations</a>. A request returns up to 10,000 configurations per call. You can use the <code>MaxItems</code> parameter to return fewer configurations per call. </p>
     async fn list_code_signing_configs(
         &self,
         input: ListCodeSigningConfigsRequest,
     ) -> Result<ListCodeSigningConfigsResponse, RusotoError<ListCodeSigningConfigsError>>;
 
+    /// Auto-paginating version of `list_code_signing_configs`
+    fn list_code_signing_configs_pages(
+        &self,
+        input: ListCodeSigningConfigsRequest,
+    ) -> RusotoStream<CodeSigningConfig, ListCodeSigningConfigsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_code_signing_configs(state.clone())
+        })
+    }
+
     /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
     async fn list_event_source_mappings(
         &self,
         input: ListEventSourceMappingsRequest,
     ) -> Result<ListEventSourceMappingsResponse, RusotoError<ListEventSourceMappingsError>>;
+
+    /// Auto-paginating version of `list_event_source_mappings`
+    fn list_event_source_mappings_pages(
+        &self,
+        input: ListEventSourceMappingsRequest,
+    ) -> RusotoStream<EventSourceMappingConfiguration, ListEventSourceMappingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_event_source_mappings(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of configurations for asynchronous invocation for a function.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
     async fn list_function_event_invoke_configs(
@@ -6158,11 +6615,31 @@ pub trait Lambda {
         RusotoError<ListFunctionEventInvokeConfigsError>,
     >;
 
+    /// Auto-paginating version of `list_function_event_invoke_configs`
+    fn list_function_event_invoke_configs_pages(
+        &self,
+        input: ListFunctionEventInvokeConfigsRequest,
+    ) -> RusotoStream<FunctionEventInvokeConfig, ListFunctionEventInvokeConfigsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_function_event_invoke_configs(state.clone())
+        })
+    }
+
     /// <p>Returns a list of Lambda functions, with the version-specific configuration of each. Lambda returns up to 50 functions per call.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
     async fn list_functions(
         &self,
         input: ListFunctionsRequest,
     ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>;
+
+    /// Auto-paginating version of `list_functions`
+    fn list_functions_pages(
+        &self,
+        input: ListFunctionsRequest,
+    ) -> RusotoStream<FunctionConfiguration, ListFunctionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_functions(state.clone())
+        })
+    }
 
     /// <p>List the functions that use the specified code signing configuration. You can use this method prior to deleting a code signing configuration, to verify that no functions are using it.</p>
     async fn list_functions_by_code_signing_config(
@@ -6173,17 +6650,47 @@ pub trait Lambda {
         RusotoError<ListFunctionsByCodeSigningConfigError>,
     >;
 
+    /// Auto-paginating version of `list_functions_by_code_signing_config`
+    fn list_functions_by_code_signing_config_pages(
+        &self,
+        input: ListFunctionsByCodeSigningConfigRequest,
+    ) -> RusotoStream<String, ListFunctionsByCodeSigningConfigError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_functions_by_code_signing_config(state.clone())
+        })
+    }
+
     /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
     async fn list_layer_versions(
         &self,
         input: ListLayerVersionsRequest,
     ) -> Result<ListLayerVersionsResponse, RusotoError<ListLayerVersionsError>>;
 
+    /// Auto-paginating version of `list_layer_versions`
+    fn list_layer_versions_pages(
+        &self,
+        input: ListLayerVersionsRequest,
+    ) -> RusotoStream<LayerVersionsListItem, ListLayerVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_layer_versions(state.clone())
+        })
+    }
+
     /// <p>Lists <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layers</a> and shows information about the latest version of each. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only layers that indicate that they're compatible with that runtime.</p>
     async fn list_layers(
         &self,
         input: ListLayersRequest,
     ) -> Result<ListLayersResponse, RusotoError<ListLayersError>>;
+
+    /// Auto-paginating version of `list_layers`
+    fn list_layers_pages(
+        &self,
+        input: ListLayersRequest,
+    ) -> RusotoStream<LayersListItem, ListLayersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_layers(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of provisioned concurrency configurations for a function.</p>
     async fn list_provisioned_concurrency_configs(
@@ -6193,6 +6700,17 @@ pub trait Lambda {
         ListProvisionedConcurrencyConfigsResponse,
         RusotoError<ListProvisionedConcurrencyConfigsError>,
     >;
+
+    /// Auto-paginating version of `list_provisioned_concurrency_configs`
+    fn list_provisioned_concurrency_configs_pages(
+        &self,
+        input: ListProvisionedConcurrencyConfigsRequest,
+    ) -> RusotoStream<ProvisionedConcurrencyConfigListItem, ListProvisionedConcurrencyConfigsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_provisioned_concurrency_configs(state.clone())
+        })
+    }
 
     /// <p>Returns a function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a>. You can also view tags with <a>GetFunction</a>.</p>
     async fn list_tags(
@@ -6205,6 +6723,16 @@ pub trait Lambda {
         &self,
         input: ListVersionsByFunctionRequest,
     ) -> Result<ListVersionsByFunctionResponse, RusotoError<ListVersionsByFunctionError>>;
+
+    /// Auto-paginating version of `list_versions_by_function`
+    fn list_versions_by_function_pages(
+        &self,
+        input: ListVersionsByFunctionRequest,
+    ) -> RusotoStream<FunctionConfiguration, ListVersionsByFunctionError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_versions_by_function(state.clone())
+        })
+    }
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same layer name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
     async fn publish_layer_version(

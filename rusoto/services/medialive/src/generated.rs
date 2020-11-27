@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -102,6 +104,7 @@ pub struct Ac3Settings {
 }
 
 /// <p>Placeholder documentation for AcceptInputDeviceTransferRequest</p>
+/// see [MediaLive::accept_input_device_transfer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInputDeviceTransferRequest {
@@ -111,6 +114,7 @@ pub struct AcceptInputDeviceTransferRequest {
 }
 
 /// <p>Placeholder documentation for AcceptInputDeviceTransferResponse</p>
+/// see [MediaLive::accept_input_device_transfer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInputDeviceTransferResponse {}
@@ -431,6 +435,7 @@ pub struct AvailSettings {
 }
 
 /// <p>A request to delete resources</p>
+/// see [MediaLive::batch_delete]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteRequest {
@@ -453,6 +458,7 @@ pub struct BatchDeleteRequest {
 }
 
 /// <p>Placeholder documentation for BatchDeleteResponse</p>
+/// see [MediaLive::batch_delete]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteResponse {
@@ -525,6 +531,7 @@ pub struct BatchScheduleActionDeleteResult {
 }
 
 /// <p>A request to start resources</p>
+/// see [MediaLive::batch_start]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchStartRequest {
@@ -539,6 +546,7 @@ pub struct BatchStartRequest {
 }
 
 /// <p>Placeholder documentation for BatchStartResponse</p>
+/// see [MediaLive::batch_start]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchStartResponse {
@@ -553,6 +561,7 @@ pub struct BatchStartResponse {
 }
 
 /// <p>A request to stop resources</p>
+/// see [MediaLive::batch_stop]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchStopRequest {
@@ -567,6 +576,7 @@ pub struct BatchStopRequest {
 }
 
 /// <p>Placeholder documentation for BatchStopResponse</p>
+/// see [MediaLive::batch_stop]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchStopResponse {
@@ -599,6 +609,7 @@ pub struct BatchSuccessfulResultModel {
 }
 
 /// <p>List of actions to create and list of actions to delete.</p>
+/// see [MediaLive::batch_update_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateScheduleRequest {
@@ -616,6 +627,7 @@ pub struct BatchUpdateScheduleRequest {
 }
 
 /// <p>Placeholder documentation for BatchUpdateScheduleResponse</p>
+/// see [MediaLive::batch_update_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateScheduleResponse {
@@ -728,6 +740,7 @@ pub struct BurnInDestinationSettings {
 }
 
 /// <p>Placeholder documentation for CancelInputDeviceTransferRequest</p>
+/// see [MediaLive::cancel_input_device_transfer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelInputDeviceTransferRequest {
@@ -737,6 +750,7 @@ pub struct CancelInputDeviceTransferRequest {
 }
 
 /// <p>Placeholder documentation for CancelInputDeviceTransferResponse</p>
+/// see [MediaLive::cancel_input_device_transfer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelInputDeviceTransferResponse {}
@@ -1021,6 +1035,7 @@ pub struct ChannelSummary {
 pub struct ColorSpacePassthroughSettings {}
 
 /// <p>A request to create a channel</p>
+/// see [MediaLive::create_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
@@ -1070,6 +1085,7 @@ pub struct CreateChannelRequest {
 }
 
 /// <p>Placeholder documentation for CreateChannelResponse</p>
+/// see [MediaLive::create_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
@@ -1079,6 +1095,7 @@ pub struct CreateChannelResponse {
 }
 
 /// <p>The name of the input</p>
+/// see [MediaLive::create_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputRequest {
@@ -1132,6 +1149,7 @@ pub struct CreateInputRequest {
 }
 
 /// <p>Placeholder documentation for CreateInputResponse</p>
+/// see [MediaLive::create_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputResponse {
@@ -1141,6 +1159,7 @@ pub struct CreateInputResponse {
 }
 
 /// <p>The IPv4 CIDRs to whitelist for this Input Security Group</p>
+/// see [MediaLive::create_input_security_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputSecurityGroupRequest {
@@ -1155,6 +1174,7 @@ pub struct CreateInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for CreateInputSecurityGroupResponse</p>
+/// see [MediaLive::create_input_security_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputSecurityGroupResponse {
@@ -1164,6 +1184,7 @@ pub struct CreateInputSecurityGroupResponse {
 }
 
 /// <p>A request to create a program in a multiplex.</p>
+/// see [MediaLive::create_multiplex_program]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultiplexProgramRequest {
@@ -1183,6 +1204,7 @@ pub struct CreateMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for CreateMultiplexProgramResponse</p>
+/// see [MediaLive::create_multiplex_program]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMultiplexProgramResponse {
@@ -1193,6 +1215,7 @@ pub struct CreateMultiplexProgramResponse {
 }
 
 /// <p>A request to create a multiplex.</p>
+/// see [MediaLive::create_multiplex]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultiplexRequest {
@@ -1216,6 +1239,7 @@ pub struct CreateMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for CreateMultiplexResponse</p>
+/// see [MediaLive::create_multiplex]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMultiplexResponse {
@@ -1226,6 +1250,7 @@ pub struct CreateMultiplexResponse {
 }
 
 /// <p>Placeholder documentation for CreateTagsRequest</p>
+/// see [MediaLive::create_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
@@ -1237,6 +1262,7 @@ pub struct CreateTagsRequest {
 }
 
 /// <p>Placeholder documentation for DeleteChannelRequest</p>
+/// see [MediaLive::delete_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
@@ -1246,6 +1272,7 @@ pub struct DeleteChannelRequest {
 }
 
 /// <p>Placeholder documentation for DeleteChannelResponse</p>
+/// see [MediaLive::delete_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteChannelResponse {
@@ -1316,6 +1343,7 @@ pub struct DeleteChannelResponse {
 }
 
 /// <p>Placeholder documentation for DeleteInputRequest</p>
+/// see [MediaLive::delete_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputRequest {
@@ -1325,11 +1353,13 @@ pub struct DeleteInputRequest {
 }
 
 /// <p>Placeholder documentation for DeleteInputResponse</p>
+/// see [MediaLive::delete_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputResponse {}
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupRequest</p>
+/// see [MediaLive::delete_input_security_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputSecurityGroupRequest {
@@ -1339,11 +1369,13 @@ pub struct DeleteInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupResponse</p>
+/// see [MediaLive::delete_input_security_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputSecurityGroupResponse {}
 
 /// <p>Placeholder documentation for DeleteMultiplexProgramRequest</p>
+/// see [MediaLive::delete_multiplex_program]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMultiplexProgramRequest {
@@ -1356,6 +1388,7 @@ pub struct DeleteMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for DeleteMultiplexProgramResponse</p>
+/// see [MediaLive::delete_multiplex_program]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMultiplexProgramResponse {
@@ -1382,6 +1415,7 @@ pub struct DeleteMultiplexProgramResponse {
 }
 
 /// <p>Placeholder documentation for DeleteMultiplexRequest</p>
+/// see [MediaLive::delete_multiplex]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMultiplexRequest {
@@ -1391,6 +1425,7 @@ pub struct DeleteMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for DeleteMultiplexResponse</p>
+/// see [MediaLive::delete_multiplex]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMultiplexResponse {
@@ -1437,6 +1472,7 @@ pub struct DeleteMultiplexResponse {
 }
 
 /// <p>Placeholder documentation for DeleteReservationRequest</p>
+/// see [MediaLive::delete_reservation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReservationRequest {
@@ -1446,6 +1482,7 @@ pub struct DeleteReservationRequest {
 }
 
 /// <p>Placeholder documentation for DeleteReservationResponse</p>
+/// see [MediaLive::delete_reservation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReservationResponse {
@@ -1524,6 +1561,7 @@ pub struct DeleteReservationResponse {
 }
 
 /// <p>Placeholder documentation for DeleteScheduleRequest</p>
+/// see [MediaLive::delete_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduleRequest {
@@ -1533,11 +1571,13 @@ pub struct DeleteScheduleRequest {
 }
 
 /// <p>Placeholder documentation for DeleteScheduleResponse</p>
+/// see [MediaLive::delete_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteScheduleResponse {}
 
 /// <p>Placeholder documentation for DeleteTagsRequest</p>
+/// see [MediaLive::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
@@ -1549,6 +1589,7 @@ pub struct DeleteTagsRequest {
 }
 
 /// <p>Placeholder documentation for DescribeChannelRequest</p>
+/// see [MediaLive::describe_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
@@ -1558,6 +1599,7 @@ pub struct DescribeChannelRequest {
 }
 
 /// <p>Placeholder documentation for DescribeChannelResponse</p>
+/// see [MediaLive::describe_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
@@ -1628,6 +1670,7 @@ pub struct DescribeChannelResponse {
 }
 
 /// <p>Placeholder documentation for DescribeInputDeviceRequest</p>
+/// see [MediaLive::describe_input_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputDeviceRequest {
@@ -1637,6 +1680,7 @@ pub struct DescribeInputDeviceRequest {
 }
 
 /// <p>Placeholder documentation for DescribeInputDeviceResponse</p>
+/// see [MediaLive::describe_input_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputDeviceResponse {
@@ -1691,6 +1735,7 @@ pub struct DescribeInputDeviceResponse {
 }
 
 /// <p>Placeholder documentation for DescribeInputDeviceThumbnailRequest</p>
+/// see [MediaLive::describe_input_device_thumbnail]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputDeviceThumbnailRequest {
@@ -1703,6 +1748,7 @@ pub struct DescribeInputDeviceThumbnailRequest {
 }
 
 /// <p>Placeholder documentation for DescribeInputDeviceThumbnailResponse</p>
+/// see [MediaLive::describe_input_device_thumbnail]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct DescribeInputDeviceThumbnailResponse {
     /// <p>The binary data for the thumbnail that the Link device has most recently sent to MediaLive.</p>
@@ -1718,6 +1764,7 @@ pub struct DescribeInputDeviceThumbnailResponse {
 }
 
 /// <p>Placeholder documentation for DescribeInputRequest</p>
+/// see [MediaLive::describe_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputRequest {
@@ -1727,6 +1774,7 @@ pub struct DescribeInputRequest {
 }
 
 /// <p>Placeholder documentation for DescribeInputResponse</p>
+/// see [MediaLive::describe_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputResponse {
@@ -1793,6 +1841,7 @@ pub struct DescribeInputResponse {
 }
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupRequest</p>
+/// see [MediaLive::describe_input_security_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputSecurityGroupRequest {
@@ -1802,6 +1851,7 @@ pub struct DescribeInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupResponse</p>
+/// see [MediaLive::describe_input_security_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputSecurityGroupResponse {
@@ -1832,6 +1882,7 @@ pub struct DescribeInputSecurityGroupResponse {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexProgramRequest</p>
+/// see [MediaLive::describe_multiplex_program]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMultiplexProgramRequest {
@@ -1844,6 +1895,7 @@ pub struct DescribeMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexProgramResponse</p>
+/// see [MediaLive::describe_multiplex_program]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMultiplexProgramResponse {
@@ -1870,6 +1922,7 @@ pub struct DescribeMultiplexProgramResponse {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexRequest</p>
+/// see [MediaLive::describe_multiplex]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMultiplexRequest {
@@ -1879,6 +1932,7 @@ pub struct DescribeMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexResponse</p>
+/// see [MediaLive::describe_multiplex]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMultiplexResponse {
@@ -1925,6 +1979,7 @@ pub struct DescribeMultiplexResponse {
 }
 
 /// <p>Placeholder documentation for DescribeOfferingRequest</p>
+/// see [MediaLive::describe_offering]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOfferingRequest {
@@ -1934,6 +1989,7 @@ pub struct DescribeOfferingRequest {
 }
 
 /// <p>Placeholder documentation for DescribeOfferingResponse</p>
+/// see [MediaLive::describe_offering]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOfferingResponse {
@@ -1984,6 +2040,7 @@ pub struct DescribeOfferingResponse {
 }
 
 /// <p>Placeholder documentation for DescribeReservationRequest</p>
+/// see [MediaLive::describe_reservation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservationRequest {
@@ -1993,6 +2050,7 @@ pub struct DescribeReservationRequest {
 }
 
 /// <p>Placeholder documentation for DescribeReservationResponse</p>
+/// see [MediaLive::describe_reservation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservationResponse {
@@ -2071,6 +2129,7 @@ pub struct DescribeReservationResponse {
 }
 
 /// <p>Placeholder documentation for DescribeScheduleRequest</p>
+/// see [MediaLive::describe_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduleRequest {
@@ -2085,7 +2144,16 @@ pub struct DescribeScheduleRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeScheduleRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for DescribeScheduleResponse</p>
+/// see [MediaLive::describe_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScheduleResponse {
@@ -2097,6 +2165,30 @@ pub struct DescribeScheduleResponse {
     #[serde(rename = "ScheduleActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_actions: Option<Vec<ScheduleAction>>,
+}
+
+impl DescribeScheduleResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ScheduleAction>> {
+        Some(self.schedule_actions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeScheduleResponse {
+    type Item = ScheduleAction;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ScheduleAction> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>DVB Network Information Table (NIT)</p>
@@ -3984,6 +4076,7 @@ pub struct KeyProviderSettings {
 }
 
 /// <p>Placeholder documentation for ListChannelsRequest</p>
+/// see [MediaLive::list_channels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
@@ -3995,7 +4088,16 @@ pub struct ListChannelsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListChannelsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListChannelsResponse</p>
+/// see [MediaLive::list_channels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
@@ -4007,7 +4109,32 @@ pub struct ListChannelsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListChannelsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ChannelSummary>> {
+        Some(self.channels.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListChannelsResponse {
+    type Item = ChannelSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ChannelSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListInputDeviceTransfersRequest</p>
+/// see [MediaLive::list_input_device_transfers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputDeviceTransfersRequest {
@@ -4021,7 +4148,16 @@ pub struct ListInputDeviceTransfersRequest {
     pub transfer_type: String,
 }
 
+impl PagedRequest for ListInputDeviceTransfersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListInputDeviceTransfersResponse</p>
+/// see [MediaLive::list_input_device_transfers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputDeviceTransfersResponse {
@@ -4035,7 +4171,32 @@ pub struct ListInputDeviceTransfersResponse {
     pub next_token: Option<String>,
 }
 
+impl ListInputDeviceTransfersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<TransferringInputDeviceSummary>> {
+        Some(self.input_device_transfers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInputDeviceTransfersResponse {
+    type Item = TransferringInputDeviceSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TransferringInputDeviceSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListInputDevicesRequest</p>
+/// see [MediaLive::list_input_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputDevicesRequest {
@@ -4047,7 +4208,16 @@ pub struct ListInputDevicesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListInputDevicesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListInputDevicesResponse</p>
+/// see [MediaLive::list_input_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputDevicesResponse {
@@ -4061,7 +4231,32 @@ pub struct ListInputDevicesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListInputDevicesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<InputDeviceSummary>> {
+        Some(self.input_devices.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInputDevicesResponse {
+    type Item = InputDeviceSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<InputDeviceSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListInputSecurityGroupsRequest</p>
+/// see [MediaLive::list_input_security_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputSecurityGroupsRequest {
@@ -4073,7 +4268,16 @@ pub struct ListInputSecurityGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListInputSecurityGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListInputSecurityGroupsResponse</p>
+/// see [MediaLive::list_input_security_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputSecurityGroupsResponse {
@@ -4086,7 +4290,32 @@ pub struct ListInputSecurityGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListInputSecurityGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<InputSecurityGroup>> {
+        Some(self.input_security_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInputSecurityGroupsResponse {
+    type Item = InputSecurityGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<InputSecurityGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListInputsRequest</p>
+/// see [MediaLive::list_inputs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputsRequest {
@@ -4098,7 +4327,16 @@ pub struct ListInputsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListInputsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListInputsResponse</p>
+/// see [MediaLive::list_inputs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputsResponse {
@@ -4110,7 +4348,32 @@ pub struct ListInputsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListInputsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Input>> {
+        Some(self.inputs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInputsResponse {
+    type Item = Input;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Input> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListMultiplexProgramsRequest</p>
+/// see [MediaLive::list_multiplex_programs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultiplexProgramsRequest {
@@ -4127,7 +4390,16 @@ pub struct ListMultiplexProgramsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListMultiplexProgramsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListMultiplexProgramsResponse</p>
+/// see [MediaLive::list_multiplex_programs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMultiplexProgramsResponse {
@@ -4141,7 +4413,32 @@ pub struct ListMultiplexProgramsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListMultiplexProgramsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<MultiplexProgramSummary>> {
+        Some(self.multiplex_programs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListMultiplexProgramsResponse {
+    type Item = MultiplexProgramSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MultiplexProgramSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListMultiplexesRequest</p>
+/// see [MediaLive::list_multiplexes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultiplexesRequest {
@@ -4155,7 +4452,16 @@ pub struct ListMultiplexesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListMultiplexesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListMultiplexesResponse</p>
+/// see [MediaLive::list_multiplexes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMultiplexesResponse {
@@ -4169,7 +4475,32 @@ pub struct ListMultiplexesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListMultiplexesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<MultiplexSummary>> {
+        Some(self.multiplexes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListMultiplexesResponse {
+    type Item = MultiplexSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MultiplexSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListOfferingsRequest</p>
+/// see [MediaLive::list_offerings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
@@ -4221,7 +4552,16 @@ pub struct ListOfferingsRequest {
     pub video_quality: Option<String>,
 }
 
+impl PagedRequest for ListOfferingsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListOfferingsResponse</p>
+/// see [MediaLive::list_offerings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingsResponse {
@@ -4235,7 +4575,32 @@ pub struct ListOfferingsResponse {
     pub offerings: Option<Vec<Offering>>,
 }
 
+impl ListOfferingsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Offering>> {
+        Some(self.offerings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOfferingsResponse {
+    type Item = Offering;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Offering> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListReservationsRequest</p>
+/// see [MediaLive::list_reservations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReservationsRequest {
@@ -4279,7 +4644,16 @@ pub struct ListReservationsRequest {
     pub video_quality: Option<String>,
 }
 
+impl PagedRequest for ListReservationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Placeholder documentation for ListReservationsResponse</p>
+/// see [MediaLive::list_reservations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReservationsResponse {
@@ -4293,7 +4667,32 @@ pub struct ListReservationsResponse {
     pub reservations: Option<Vec<Reservation>>,
 }
 
+impl ListReservationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Reservation>> {
+        Some(self.reservations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListReservationsResponse {
+    type Item = Reservation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Reservation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Placeholder documentation for ListTagsForResourceRequest</p>
+/// see [MediaLive::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -4302,6 +4701,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>Placeholder documentation for ListTagsForResourceResponse</p>
+/// see [MediaLive::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -5418,6 +5818,7 @@ pub struct PipelinePauseStateSettings {
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingRequest</p>
+/// see [MediaLive::purchase_offering]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
@@ -5446,6 +5847,7 @@ pub struct PurchaseOfferingRequest {
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingResponse</p>
+/// see [MediaLive::purchase_offering]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseOfferingResponse {
@@ -5467,6 +5869,7 @@ pub struct Rec601Settings {}
 pub struct Rec709Settings {}
 
 /// <p>Placeholder documentation for RejectInputDeviceTransferRequest</p>
+/// see [MediaLive::reject_input_device_transfer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectInputDeviceTransferRequest {
@@ -5476,6 +5879,7 @@ pub struct RejectInputDeviceTransferRequest {
 }
 
 /// <p>Placeholder documentation for RejectInputDeviceTransferResponse</p>
+/// see [MediaLive::reject_input_device_transfer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectInputDeviceTransferResponse {}
@@ -5944,6 +6348,7 @@ pub struct StandardHlsSettings {
 }
 
 /// <p>Placeholder documentation for StartChannelRequest</p>
+/// see [MediaLive::start_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChannelRequest {
@@ -5953,6 +6358,7 @@ pub struct StartChannelRequest {
 }
 
 /// <p>Placeholder documentation for StartChannelResponse</p>
+/// see [MediaLive::start_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChannelResponse {
@@ -6023,6 +6429,7 @@ pub struct StartChannelResponse {
 }
 
 /// <p>Placeholder documentation for StartMultiplexRequest</p>
+/// see [MediaLive::start_multiplex]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMultiplexRequest {
@@ -6032,6 +6439,7 @@ pub struct StartMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for StartMultiplexResponse</p>
+/// see [MediaLive::start_multiplex]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMultiplexResponse {
@@ -6156,6 +6564,7 @@ pub struct StaticKeySettings {
 }
 
 /// <p>Placeholder documentation for StopChannelRequest</p>
+/// see [MediaLive::stop_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopChannelRequest {
@@ -6165,6 +6574,7 @@ pub struct StopChannelRequest {
 }
 
 /// <p>Placeholder documentation for StopChannelResponse</p>
+/// see [MediaLive::stop_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopChannelResponse {
@@ -6235,6 +6645,7 @@ pub struct StopChannelResponse {
 }
 
 /// <p>Placeholder documentation for StopMultiplexRequest</p>
+/// see [MediaLive::stop_multiplex]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMultiplexRequest {
@@ -6244,6 +6655,7 @@ pub struct StopMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for StopMultiplexResponse</p>
+/// see [MediaLive::stop_multiplex]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMultiplexResponse {
@@ -6346,6 +6758,7 @@ pub struct TimecodeConfig {
 }
 
 /// <p>A request to transfer an input device.</p>
+/// see [MediaLive::transfer_input_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransferInputDeviceRequest {
@@ -6363,6 +6776,7 @@ pub struct TransferInputDeviceRequest {
 }
 
 /// <p>Placeholder documentation for TransferInputDeviceResponse</p>
+/// see [MediaLive::transfer_input_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransferInputDeviceResponse {}
@@ -6442,6 +6856,7 @@ pub struct UdpOutputSettings {
 }
 
 /// <p>Channel class that the channel should be updated to.</p>
+/// see [MediaLive::update_channel_class]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelClassRequest {
@@ -6458,6 +6873,7 @@ pub struct UpdateChannelClassRequest {
 }
 
 /// <p>Placeholder documentation for UpdateChannelClassResponse</p>
+/// see [MediaLive::update_channel_class]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelClassResponse {
@@ -6467,6 +6883,7 @@ pub struct UpdateChannelClassResponse {
 }
 
 /// <p>A request to update a channel.</p>
+/// see [MediaLive::update_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
@@ -6507,6 +6924,7 @@ pub struct UpdateChannelRequest {
 }
 
 /// <p>Placeholder documentation for UpdateChannelResponse</p>
+/// see [MediaLive::update_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelResponse {
@@ -6516,6 +6934,7 @@ pub struct UpdateChannelResponse {
 }
 
 /// <p>A request to update an input device.</p>
+/// see [MediaLive::update_input_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputDeviceRequest {
@@ -6537,6 +6956,7 @@ pub struct UpdateInputDeviceRequest {
 }
 
 /// <p>Placeholder documentation for UpdateInputDeviceResponse</p>
+/// see [MediaLive::update_input_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputDeviceResponse {
@@ -6591,6 +7011,7 @@ pub struct UpdateInputDeviceResponse {
 }
 
 /// <p>A request to update an input.</p>
+/// see [MediaLive::update_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputRequest {
@@ -6632,6 +7053,7 @@ pub struct UpdateInputRequest {
 }
 
 /// <p>Placeholder documentation for UpdateInputResponse</p>
+/// see [MediaLive::update_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputResponse {
@@ -6641,6 +7063,7 @@ pub struct UpdateInputResponse {
 }
 
 /// <p>The request to update some combination of the Input Security Group name and the IPv4 CIDRs the Input Security Group should allow.</p>
+/// see [MediaLive::update_input_security_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputSecurityGroupRequest {
@@ -6658,6 +7081,7 @@ pub struct UpdateInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for UpdateInputSecurityGroupResponse</p>
+/// see [MediaLive::update_input_security_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputSecurityGroupResponse {
@@ -6667,6 +7091,7 @@ pub struct UpdateInputSecurityGroupResponse {
 }
 
 /// <p>A request to update a program in a multiplex.</p>
+/// see [MediaLive::update_multiplex_program]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMultiplexProgramRequest {
@@ -6683,6 +7108,7 @@ pub struct UpdateMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for UpdateMultiplexProgramResponse</p>
+/// see [MediaLive::update_multiplex_program]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMultiplexProgramResponse {
@@ -6693,6 +7119,7 @@ pub struct UpdateMultiplexProgramResponse {
 }
 
 /// <p>A request to update a multiplex.</p>
+/// see [MediaLive::update_multiplex]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMultiplexRequest {
@@ -6710,6 +7137,7 @@ pub struct UpdateMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for UpdateMultiplexResponse</p>
+/// see [MediaLive::update_multiplex]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMultiplexResponse {
@@ -6720,6 +7148,7 @@ pub struct UpdateMultiplexResponse {
 }
 
 /// <p>Request to update a reservation</p>
+/// see [MediaLive::update_reservation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateReservationRequest {
@@ -6733,6 +7162,7 @@ pub struct UpdateReservationRequest {
 }
 
 /// <p>Placeholder documentation for UpdateReservationResponse</p>
+/// see [MediaLive::update_reservation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateReservationResponse {
@@ -10774,7 +11204,7 @@ impl fmt::Display for UpdateReservationError {
 impl Error for UpdateReservationError {}
 /// Trait representing the capabilities of the MediaLive API. MediaLive clients implement this trait.
 #[async_trait]
-pub trait MediaLive {
+pub trait MediaLive: Clone + Sync + Send + 'static {
     /// <p>Accept an incoming input device transfer. The ownership of the device will transfer to your AWS account.</p>
     async fn accept_input_device_transfer(
         &self,
@@ -10955,11 +11385,31 @@ pub trait MediaLive {
         input: DescribeScheduleRequest,
     ) -> Result<DescribeScheduleResponse, RusotoError<DescribeScheduleError>>;
 
+    /// Auto-paginating version of `describe_schedule`
+    fn describe_schedule_pages(
+        &self,
+        input: DescribeScheduleRequest,
+    ) -> RusotoStream<ScheduleAction, DescribeScheduleError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_schedule(state.clone())
+        })
+    }
+
     /// <p>Produces list of channels that have been created</p>
     async fn list_channels(
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
+
+    /// Auto-paginating version of `list_channels`
+    fn list_channels_pages(
+        &self,
+        input: ListChannelsRequest,
+    ) -> RusotoStream<ChannelSummary, ListChannelsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_channels(state.clone())
+        })
+    }
 
     /// <p>List input devices that are currently being transferred. List input devices that you are transferring from your AWS account or input devices that another AWS account is transferring to you.</p>
     async fn list_input_device_transfers(
@@ -10967,11 +11417,31 @@ pub trait MediaLive {
         input: ListInputDeviceTransfersRequest,
     ) -> Result<ListInputDeviceTransfersResponse, RusotoError<ListInputDeviceTransfersError>>;
 
+    /// Auto-paginating version of `list_input_device_transfers`
+    fn list_input_device_transfers_pages(
+        &self,
+        input: ListInputDeviceTransfersRequest,
+    ) -> RusotoStream<TransferringInputDeviceSummary, ListInputDeviceTransfersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_input_device_transfers(state.clone())
+        })
+    }
+
     /// <p>List input devices</p>
     async fn list_input_devices(
         &self,
         input: ListInputDevicesRequest,
     ) -> Result<ListInputDevicesResponse, RusotoError<ListInputDevicesError>>;
+
+    /// Auto-paginating version of `list_input_devices`
+    fn list_input_devices_pages(
+        &self,
+        input: ListInputDevicesRequest,
+    ) -> RusotoStream<InputDeviceSummary, ListInputDevicesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_input_devices(state.clone())
+        })
+    }
 
     /// <p>Produces a list of Input Security Groups for an account</p>
     async fn list_input_security_groups(
@@ -10979,11 +11449,28 @@ pub trait MediaLive {
         input: ListInputSecurityGroupsRequest,
     ) -> Result<ListInputSecurityGroupsResponse, RusotoError<ListInputSecurityGroupsError>>;
 
+    /// Auto-paginating version of `list_input_security_groups`
+    fn list_input_security_groups_pages(
+        &self,
+        input: ListInputSecurityGroupsRequest,
+    ) -> RusotoStream<InputSecurityGroup, ListInputSecurityGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_input_security_groups(state.clone())
+        })
+    }
+
     /// <p>Produces list of inputs that have been created</p>
     async fn list_inputs(
         &self,
         input: ListInputsRequest,
     ) -> Result<ListInputsResponse, RusotoError<ListInputsError>>;
+
+    /// Auto-paginating version of `list_inputs`
+    fn list_inputs_pages(&self, input: ListInputsRequest) -> RusotoStream<Input, ListInputsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_inputs(state.clone())
+        })
+    }
 
     /// <p>List the programs that currently exist for a specific multiplex.</p>
     async fn list_multiplex_programs(
@@ -10991,11 +11478,31 @@ pub trait MediaLive {
         input: ListMultiplexProgramsRequest,
     ) -> Result<ListMultiplexProgramsResponse, RusotoError<ListMultiplexProgramsError>>;
 
+    /// Auto-paginating version of `list_multiplex_programs`
+    fn list_multiplex_programs_pages(
+        &self,
+        input: ListMultiplexProgramsRequest,
+    ) -> RusotoStream<MultiplexProgramSummary, ListMultiplexProgramsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_multiplex_programs(state.clone())
+        })
+    }
+
     /// <p>Retrieve a list of the existing multiplexes.</p>
     async fn list_multiplexes(
         &self,
         input: ListMultiplexesRequest,
     ) -> Result<ListMultiplexesResponse, RusotoError<ListMultiplexesError>>;
+
+    /// Auto-paginating version of `list_multiplexes`
+    fn list_multiplexes_pages(
+        &self,
+        input: ListMultiplexesRequest,
+    ) -> RusotoStream<MultiplexSummary, ListMultiplexesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_multiplexes(state.clone())
+        })
+    }
 
     /// <p>List offerings available for purchase.</p>
     async fn list_offerings(
@@ -11003,11 +11510,31 @@ pub trait MediaLive {
         input: ListOfferingsRequest,
     ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>>;
 
+    /// Auto-paginating version of `list_offerings`
+    fn list_offerings_pages(
+        &self,
+        input: ListOfferingsRequest,
+    ) -> RusotoStream<Offering, ListOfferingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_offerings(state.clone())
+        })
+    }
+
     /// <p>List purchased reservations.</p>
     async fn list_reservations(
         &self,
         input: ListReservationsRequest,
     ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>>;
+
+    /// Auto-paginating version of `list_reservations`
+    fn list_reservations_pages(
+        &self,
+        input: ListReservationsRequest,
+    ) -> RusotoStream<Reservation, ListReservationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_reservations(state.clone())
+        })
+    }
 
     /// <p>Produces list of tags that have been created for a resource</p>
     async fn list_tags_for_resource(

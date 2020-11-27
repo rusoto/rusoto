@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -117,6 +119,7 @@ pub struct Alias {
 }
 
 /// <p>The request object specifying one or more DNS alias names to associate with an Amazon FSx for Windows File Server file system.</p>
+/// see [Fsx::associate_file_system_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateFileSystemAliasesRequest {
@@ -132,6 +135,7 @@ pub struct AssociateFileSystemAliasesRequest {
 }
 
 /// <p>The system generated response showing the DNS aliases that Amazon FSx is attempting to associate with the file system. Use the API operation to monitor the status of the aliases Amazon FSx is associating with the file system. It can take up to 2.5 minutes for the alias status to change from <code>CREATING</code> to <code>AVAILABLE</code>. </p>
+/// see [Fsx::associate_file_system_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateFileSystemAliasesResponse {
@@ -196,6 +200,7 @@ pub struct BackupFailureDetails {
 }
 
 /// <p>Cancels a data repository task.</p>
+/// see [Fsx::cancel_data_repository_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelDataRepositoryTaskRequest {
@@ -204,6 +209,7 @@ pub struct CancelDataRepositoryTaskRequest {
     pub task_id: String,
 }
 
+/// see [Fsx::cancel_data_repository_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelDataRepositoryTaskResponse {
@@ -238,6 +244,7 @@ pub struct CompletionReport {
 }
 
 /// <p>The request object for the <code>CreateBackup</code> operation.</p>
+/// see [Fsx::create_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupRequest {
@@ -255,6 +262,7 @@ pub struct CreateBackupRequest {
 }
 
 /// <p>The response object for the <code>CreateBackup</code> operation.</p>
+/// see [Fsx::create_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupResponse {
@@ -264,6 +272,7 @@ pub struct CreateBackupResponse {
     pub backup: Option<Backup>,
 }
 
+/// see [Fsx::create_data_repository_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataRepositoryTaskRequest {
@@ -287,6 +296,7 @@ pub struct CreateDataRepositoryTaskRequest {
     pub type_: String,
 }
 
+/// see [Fsx::create_data_repository_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataRepositoryTaskResponse {
@@ -297,6 +307,7 @@ pub struct CreateDataRepositoryTaskResponse {
 }
 
 /// <p>The request object for the <code>CreateFileSystemFromBackup</code> operation.</p>
+/// see [Fsx::create_file_system_from_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemFromBackupRequest {
@@ -331,6 +342,7 @@ pub struct CreateFileSystemFromBackupRequest {
 }
 
 /// <p>The response object for the <code>CreateFileSystemFromBackup</code> operation.</p>
+/// see [Fsx::create_file_system_from_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFileSystemFromBackupResponse {
@@ -389,6 +401,7 @@ pub struct CreateFileSystemLustreConfiguration {
 }
 
 /// <p>The request object used to create a new Amazon FSx file system.</p>
+/// see [Fsx::create_file_system]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemRequest {
@@ -430,6 +443,7 @@ pub struct CreateFileSystemRequest {
 }
 
 /// <p>The response object returned after the file system is created.</p>
+/// see [Fsx::create_file_system]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFileSystemResponse {
@@ -616,6 +630,7 @@ pub struct DataRepositoryTaskStatus {
 }
 
 /// <p>The request object for <code>DeleteBackup</code> operation.</p>
+/// see [Fsx::delete_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupRequest {
@@ -629,6 +644,7 @@ pub struct DeleteBackupRequest {
 }
 
 /// <p>The response object for <code>DeleteBackup</code> operation.</p>
+/// see [Fsx::delete_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackupResponse {
@@ -671,6 +687,7 @@ pub struct DeleteFileSystemLustreResponse {
 }
 
 /// <p>The request object for <code>DeleteFileSystem</code> operation.</p>
+/// see [Fsx::delete_file_system]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileSystemRequest {
@@ -690,6 +707,7 @@ pub struct DeleteFileSystemRequest {
 }
 
 /// <p>The response object for the <code>DeleteFileSystem</code> operation.</p>
+/// see [Fsx::delete_file_system]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFileSystemResponse {
@@ -738,6 +756,7 @@ pub struct DeleteFileSystemWindowsResponse {
 }
 
 /// <p>The request object for <code>DescribeBackups</code> operation.</p>
+/// see [Fsx::describe_backups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupsRequest {
@@ -759,7 +778,16 @@ pub struct DescribeBackupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeBackupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Response object for <code>DescribeBackups</code> operation.</p>
+/// see [Fsx::describe_backups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupsResponse {
@@ -773,6 +801,31 @@ pub struct DescribeBackupsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBackupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Backup>> {
+        Some(self.backups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeBackupsResponse {
+    type Item = Backup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Backup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Fsx::describe_data_repository_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataRepositoryTasksRequest {
@@ -792,6 +845,7 @@ pub struct DescribeDataRepositoryTasksRequest {
     pub task_ids: Option<Vec<String>>,
 }
 
+/// see [Fsx::describe_data_repository_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataRepositoryTasksResponse {
@@ -805,6 +859,7 @@ pub struct DescribeDataRepositoryTasksResponse {
 }
 
 /// <p>The request object for <code>DescribeFileSystemAliases</code> operation.</p>
+/// see [Fsx::describe_file_system_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemAliasesRequest {
@@ -825,6 +880,7 @@ pub struct DescribeFileSystemAliasesRequest {
 }
 
 /// <p>The response object for <code>DescribeFileSystemAliases</code> operation.</p>
+/// see [Fsx::describe_file_system_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFileSystemAliasesResponse {
@@ -839,6 +895,7 @@ pub struct DescribeFileSystemAliasesResponse {
 }
 
 /// <p>The request object for <code>DescribeFileSystems</code> operation.</p>
+/// see [Fsx::describe_file_systems]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemsRequest {
@@ -856,7 +913,16 @@ pub struct DescribeFileSystemsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeFileSystemsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The response object for <code>DescribeFileSystems</code> operation.</p>
+/// see [Fsx::describe_file_systems]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFileSystemsResponse {
@@ -870,7 +936,32 @@ pub struct DescribeFileSystemsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeFileSystemsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<FileSystem>> {
+        Some(self.file_systems.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeFileSystemsResponse {
+    type Item = FileSystem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FileSystem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The request object of DNS aliases to disassociate from an Amazon FSx for Windows File Server file system.</p>
+/// see [Fsx::disassociate_file_system_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFileSystemAliasesRequest {
@@ -886,6 +977,7 @@ pub struct DisassociateFileSystemAliasesRequest {
 }
 
 /// <p>The system generated response showing the DNS aliases that Amazon FSx is attempting to disassociate from the file system. Use the API operation to monitor the status of the aliases Amazon FSx is removing from the file system.</p>
+/// see [Fsx::disassociate_file_system_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateFileSystemAliasesResponse {
@@ -996,6 +1088,7 @@ pub struct Filter {
 }
 
 /// <p>The request object for <code>ListTagsForResource</code> operation.</p>
+/// see [Fsx::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1012,7 +1105,16 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl PagedRequest for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The response object for <code>ListTagsForResource</code> operation.</p>
+/// see [Fsx::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1024,6 +1126,30 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl ListTagsForResourceResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>The configuration for the Amazon FSx for Lustre file system.</p>
@@ -1147,6 +1273,7 @@ pub struct Tag {
 }
 
 /// <p>The request object for the <code>TagResource</code> operation.</p>
+/// see [Fsx::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1159,11 +1286,13 @@ pub struct TagResourceRequest {
 }
 
 /// <p>The response object for the <code>TagResource</code> operation.</p>
+/// see [Fsx::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>The request object for <code>UntagResource</code> action.</p>
+/// see [Fsx::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1176,6 +1305,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>The response object for <code>UntagResource</code> action.</p>
+/// see [Fsx::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -1201,6 +1331,7 @@ pub struct UpdateFileSystemLustreConfiguration {
 }
 
 /// <p>The request object for the <code>UpdateFileSystem</code> operation.</p>
+/// see [Fsx::update_file_system]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemRequest {
@@ -1225,6 +1356,7 @@ pub struct UpdateFileSystemRequest {
 }
 
 /// <p>The response object for the <code>UpdateFileSystem</code> operation.</p>
+/// see [Fsx::update_file_system]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFileSystemResponse {
@@ -2447,7 +2579,7 @@ impl fmt::Display for UpdateFileSystemError {
 impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the Amazon FSx API. Amazon FSx clients implement this trait.
 #[async_trait]
-pub trait Fsx {
+pub trait Fsx: Clone + Sync + Send + 'static {
     /// <p>Use this action to associate one or more Domain Name Server (DNS) aliases with an existing Amazon FSx for Windows File Server file system. A file systen can have a maximum of 50 DNS aliases associated with it at any one time. If you try to associate a DNS alias that is already associated with the file system, FSx takes no action on that alias in the request. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a> and <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/walkthrough05-file-system-custom-CNAME.html">Walkthrough 5: Using DNS aliases to access your file system</a>, including additional steps you must take to be able to access your file system using a DNS alias.</p> <p>The system response shows the DNS aliases that Amazon FSx is attempting to associate with the file system. Use the API operation to monitor the status of the aliases Amazon FSx is associating with the file system.</p>
     async fn associate_file_system_aliases(
         &self,
@@ -2502,6 +2634,16 @@ pub trait Fsx {
         input: DescribeBackupsRequest,
     ) -> Result<DescribeBackupsResponse, RusotoError<DescribeBackupsError>>;
 
+    /// Auto-paginating version of `describe_backups`
+    fn describe_backups_pages(
+        &self,
+        input: DescribeBackupsRequest,
+    ) -> RusotoStream<Backup, DescribeBackupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_backups(state.clone())
+        })
+    }
+
     /// <p>Returns the description of specific Amazon FSx for Lustre data repository tasks, if one or more <code>TaskIds</code> values are provided in the request, or if filters are used in the request. You can use filters to narrow the response to include just tasks for specific file systems, or tasks in a specific lifecycle state. Otherwise, it returns all data repository tasks owned by your AWS account in the AWS Region of the endpoint that you're calling.</p> <p>When retrieving all tasks, you can paginate the response by using the optional <code>MaxResults</code> parameter to limit the number of tasks returned in a response. If more tasks remain, Amazon FSx returns a <code>NextToken</code> value in the response. In this case, send a later request with the <code>NextToken</code> request parameter set to the value of <code>NextToken</code> from the last response.</p>
     async fn describe_data_repository_tasks(
         &self,
@@ -2520,6 +2662,16 @@ pub trait Fsx {
         input: DescribeFileSystemsRequest,
     ) -> Result<DescribeFileSystemsResponse, RusotoError<DescribeFileSystemsError>>;
 
+    /// Auto-paginating version of `describe_file_systems`
+    fn describe_file_systems_pages(
+        &self,
+        input: DescribeFileSystemsRequest,
+    ) -> RusotoStream<FileSystem, DescribeFileSystemsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_file_systems(state.clone())
+        })
+    }
+
     /// <p>Use this action to disassociate, or remove, one or more Domain Name Service (DNS) aliases from an Amazon FSx for Windows File Server file system. If you attempt to disassociate a DNS alias that is not associated with the file system, Amazon FSx responds with a 400 Bad Request. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a>.</p> <p>The system generated response showing the DNS aliases that Amazon FSx is attempting to disassociate from the file system. Use the API operation to monitor the status of the aliases Amazon FSx is disassociating with the file system.</p>
     async fn disassociate_file_system_aliases(
         &self,
@@ -2534,6 +2686,16 @@ pub trait Fsx {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoStream<Tag, ListTagsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_for_resource(state.clone())
+        })
+    }
 
     /// <p>Tags an Amazon FSx resource.</p>
     async fn tag_resource(

@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 /// <p>The input for the DeleteThingShadow operation.</p>
+/// see [IotData::delete_thing_shadow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingShadowRequest {
@@ -38,6 +41,7 @@ pub struct DeleteThingShadowRequest {
 }
 
 /// <p>The output from the DeleteThingShadow operation.</p>
+/// see [IotData::delete_thing_shadow]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct DeleteThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
@@ -45,6 +49,7 @@ pub struct DeleteThingShadowResponse {
 }
 
 /// <p>The input for the GetThingShadow operation.</p>
+/// see [IotData::get_thing_shadow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThingShadowRequest {
@@ -58,12 +63,14 @@ pub struct GetThingShadowRequest {
 }
 
 /// <p>The output from the GetThingShadow operation.</p>
+/// see [IotData::get_thing_shadow]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
     pub payload: Option<bytes::Bytes>,
 }
 
+/// see [IotData::list_named_shadows_for_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamedShadowsForThingRequest {
@@ -80,6 +87,7 @@ pub struct ListNamedShadowsForThingRequest {
     pub thing_name: String,
 }
 
+/// see [IotData::list_named_shadows_for_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNamedShadowsForThingResponse {
@@ -98,6 +106,7 @@ pub struct ListNamedShadowsForThingResponse {
 }
 
 /// <p>The input for the Publish operation.</p>
+/// see [IotData::publish]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishRequest {
@@ -120,6 +129,7 @@ pub struct PublishRequest {
 }
 
 /// <p>The input for the UpdateThingShadow operation.</p>
+/// see [IotData::update_thing_shadow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingShadowRequest {
@@ -141,6 +151,7 @@ pub struct UpdateThingShadowRequest {
 }
 
 /// <p>The output from the UpdateThingShadow operation.</p>
+/// see [IotData::update_thing_shadow]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct UpdateThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
@@ -513,7 +524,7 @@ impl fmt::Display for UpdateThingShadowError {
 impl Error for UpdateThingShadowError {}
 /// Trait representing the capabilities of the AWS IoT Data Plane API. AWS IoT Data Plane clients implement this trait.
 #[async_trait]
-pub trait IotData {
+pub trait IotData: Clone + Sync + Send + 'static {
     /// <p>Deletes the shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_DeleteThingShadow.html">DeleteThingShadow</a> in the AWS IoT Developer Guide.</p>
     async fn delete_thing_shadow(
         &self,

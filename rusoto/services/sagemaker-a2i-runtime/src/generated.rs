@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [SagemakerA2iRuntime::delete_human_loop]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHumanLoopRequest {
@@ -33,10 +36,12 @@ pub struct DeleteHumanLoopRequest {
     pub human_loop_name: String,
 }
 
+/// see [SagemakerA2iRuntime::delete_human_loop]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHumanLoopResponse {}
 
+/// see [SagemakerA2iRuntime::describe_human_loop]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHumanLoopRequest {
@@ -45,6 +50,7 @@ pub struct DescribeHumanLoopRequest {
     pub human_loop_name: String,
 }
 
+/// see [SagemakerA2iRuntime::describe_human_loop]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHumanLoopResponse {
@@ -130,6 +136,7 @@ pub struct HumanLoopSummary {
     pub human_loop_status: Option<String>,
 }
 
+/// see [SagemakerA2iRuntime::list_human_loops]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHumanLoopsRequest {
@@ -158,6 +165,15 @@ pub struct ListHumanLoopsRequest {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListHumanLoopsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [SagemakerA2iRuntime::list_human_loops]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHumanLoopsResponse {
@@ -170,6 +186,31 @@ pub struct ListHumanLoopsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListHumanLoopsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HumanLoopSummary>> {
+        Some(self.human_loop_summaries.clone())
+    }
+}
+
+impl PagedOutput for ListHumanLoopsResponse {
+    type Item = HumanLoopSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HumanLoopSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [SagemakerA2iRuntime::start_human_loop]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartHumanLoopRequest {
@@ -188,6 +229,7 @@ pub struct StartHumanLoopRequest {
     pub human_loop_name: String,
 }
 
+/// see [SagemakerA2iRuntime::start_human_loop]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartHumanLoopResponse {
@@ -197,6 +239,7 @@ pub struct StartHumanLoopResponse {
     pub human_loop_arn: Option<String>,
 }
 
+/// see [SagemakerA2iRuntime::stop_human_loop]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopHumanLoopRequest {
@@ -205,6 +248,7 @@ pub struct StopHumanLoopRequest {
     pub human_loop_name: String,
 }
 
+/// see [SagemakerA2iRuntime::stop_human_loop]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopHumanLoopResponse {}
@@ -427,7 +471,7 @@ impl fmt::Display for StopHumanLoopError {
 impl Error for StopHumanLoopError {}
 /// Trait representing the capabilities of the Amazon Augmented AI Runtime API. Amazon Augmented AI Runtime clients implement this trait.
 #[async_trait]
-pub trait SagemakerA2iRuntime {
+pub trait SagemakerA2iRuntime: Clone + Sync + Send + 'static {
     /// <p>Deletes the specified human loop for a flow definition.</p>
     async fn delete_human_loop(
         &self,
@@ -445,6 +489,16 @@ pub trait SagemakerA2iRuntime {
         &self,
         input: ListHumanLoopsRequest,
     ) -> Result<ListHumanLoopsResponse, RusotoError<ListHumanLoopsError>>;
+
+    /// Auto-paginating version of `list_human_loops`
+    fn list_human_loops_pages(
+        &self,
+        input: ListHumanLoopsRequest,
+    ) -> RusotoStream<HumanLoopSummary, ListHumanLoopsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_human_loops(state.clone())
+        })
+    }
 
     /// <p>Starts a human loop, provided that at least one activation condition is met.</p>
     async fn start_human_loop(

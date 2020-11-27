@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -364,6 +366,7 @@ pub struct BackupSummary {
     pub table_name: Option<String>,
 }
 
+/// see [DynamoDb::batch_execute_statement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchExecuteStatementInput {
@@ -372,6 +375,7 @@ pub struct BatchExecuteStatementInput {
     pub statements: Vec<BatchStatementRequest>,
 }
 
+/// see [DynamoDb::batch_execute_statement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchExecuteStatementOutput {
@@ -382,6 +386,7 @@ pub struct BatchExecuteStatementOutput {
 }
 
 /// <p>Represents the input of a <code>BatchGetItem</code> operation.</p>
+/// see [DynamoDb::batch_get_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetItemInput {
@@ -394,6 +399,7 @@ pub struct BatchGetItemInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetItem</code> operation.</p>
+/// see [DynamoDb::batch_get_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetItemOutput {
@@ -466,6 +472,7 @@ pub struct BatchStatementResponse {
 }
 
 /// <p>Represents the input of a <code>BatchWriteItem</code> operation.</p>
+/// see [DynamoDb::batch_write_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchWriteItemInput {
@@ -482,6 +489,7 @@ pub struct BatchWriteItemInput {
 }
 
 /// <p>Represents the output of a <code>BatchWriteItem</code> operation.</p>
+/// see [DynamoDb::batch_write_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchWriteItemOutput {
@@ -648,6 +656,7 @@ pub struct ContributorInsightsSummary {
     pub table_name: Option<String>,
 }
 
+/// see [DynamoDb::create_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupInput {
@@ -659,6 +668,7 @@ pub struct CreateBackupInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::create_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupOutput {
@@ -687,6 +697,7 @@ pub struct CreateGlobalSecondaryIndexAction {
     pub provisioned_throughput: Option<ProvisionedThroughput>,
 }
 
+/// see [DynamoDb::create_global_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGlobalTableInput {
@@ -698,6 +709,7 @@ pub struct CreateGlobalTableInput {
     pub replication_group: Vec<Replica>,
 }
 
+/// see [DynamoDb::create_global_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGlobalTableOutput {
@@ -738,6 +750,7 @@ pub struct CreateReplicationGroupMemberAction {
 }
 
 /// <p>Represents the input of a <code>CreateTable</code> operation.</p>
+/// see [DynamoDb::create_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTableInput {
@@ -781,6 +794,7 @@ pub struct CreateTableInput {
 }
 
 /// <p>Represents the output of a <code>CreateTable</code> operation.</p>
+/// see [DynamoDb::create_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTableOutput {
@@ -818,6 +832,7 @@ pub struct Delete {
     pub table_name: String,
 }
 
+/// see [DynamoDb::delete_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupInput {
@@ -826,6 +841,7 @@ pub struct DeleteBackupInput {
     pub backup_arn: String,
 }
 
+/// see [DynamoDb::delete_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackupOutput {
@@ -845,6 +861,7 @@ pub struct DeleteGlobalSecondaryIndexAction {
 }
 
 /// <p>Represents the input of a <code>DeleteItem</code> operation.</p>
+/// see [DynamoDb::delete_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteItemInput {
@@ -888,6 +905,7 @@ pub struct DeleteItemInput {
 }
 
 /// <p>Represents the output of a <code>DeleteItem</code> operation.</p>
+/// see [DynamoDb::delete_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteItemOutput {
@@ -932,6 +950,7 @@ pub struct DeleteRequest {
 }
 
 /// <p>Represents the input of a <code>DeleteTable</code> operation.</p>
+/// see [DynamoDb::delete_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTableInput {
@@ -941,6 +960,7 @@ pub struct DeleteTableInput {
 }
 
 /// <p>Represents the output of a <code>DeleteTable</code> operation.</p>
+/// see [DynamoDb::delete_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTableOutput {
@@ -950,6 +970,7 @@ pub struct DeleteTableOutput {
     pub table_description: Option<TableDescription>,
 }
 
+/// see [DynamoDb::describe_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupInput {
@@ -958,6 +979,7 @@ pub struct DescribeBackupInput {
     pub backup_arn: String,
 }
 
+/// see [DynamoDb::describe_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupOutput {
@@ -967,6 +989,7 @@ pub struct DescribeBackupOutput {
     pub backup_description: Option<BackupDescription>,
 }
 
+/// see [DynamoDb::describe_continuous_backups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContinuousBackupsInput {
@@ -975,6 +998,7 @@ pub struct DescribeContinuousBackupsInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::describe_continuous_backups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContinuousBackupsOutput {
@@ -984,6 +1008,7 @@ pub struct DescribeContinuousBackupsOutput {
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
 }
 
+/// see [DynamoDb::describe_contributor_insights]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContributorInsightsInput {
@@ -996,6 +1021,7 @@ pub struct DescribeContributorInsightsInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::describe_contributor_insights]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContributorInsightsOutput {
@@ -1025,10 +1051,12 @@ pub struct DescribeContributorInsightsOutput {
     pub table_name: Option<String>,
 }
 
+/// see [DynamoDb::describe_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointsRequest {}
 
+/// see [DynamoDb::describe_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointsResponse {
@@ -1037,6 +1065,7 @@ pub struct DescribeEndpointsResponse {
     pub endpoints: Vec<Endpoint>,
 }
 
+/// see [DynamoDb::describe_export]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportInput {
@@ -1045,6 +1074,7 @@ pub struct DescribeExportInput {
     pub export_arn: String,
 }
 
+/// see [DynamoDb::describe_export]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExportOutput {
@@ -1054,6 +1084,7 @@ pub struct DescribeExportOutput {
     pub export_description: Option<ExportDescription>,
 }
 
+/// see [DynamoDb::describe_global_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalTableInput {
@@ -1062,6 +1093,7 @@ pub struct DescribeGlobalTableInput {
     pub global_table_name: String,
 }
 
+/// see [DynamoDb::describe_global_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGlobalTableOutput {
@@ -1071,6 +1103,7 @@ pub struct DescribeGlobalTableOutput {
     pub global_table_description: Option<GlobalTableDescription>,
 }
 
+/// see [DynamoDb::describe_global_table_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalTableSettingsInput {
@@ -1079,6 +1112,7 @@ pub struct DescribeGlobalTableSettingsInput {
     pub global_table_name: String,
 }
 
+/// see [DynamoDb::describe_global_table_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGlobalTableSettingsOutput {
@@ -1092,6 +1126,7 @@ pub struct DescribeGlobalTableSettingsOutput {
     pub replica_settings: Option<Vec<ReplicaSettingsDescription>>,
 }
 
+/// see [DynamoDb::describe_kinesis_streaming_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKinesisStreamingDestinationInput {
@@ -1100,6 +1135,7 @@ pub struct DescribeKinesisStreamingDestinationInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::describe_kinesis_streaming_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeKinesisStreamingDestinationOutput {
@@ -1114,11 +1150,13 @@ pub struct DescribeKinesisStreamingDestinationOutput {
 }
 
 /// <p>Represents the input of a <code>DescribeLimits</code> operation. Has no content.</p>
+/// see [DynamoDb::describe_limits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLimitsInput {}
 
 /// <p>Represents the output of a <code>DescribeLimits</code> operation.</p>
+/// see [DynamoDb::describe_limits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLimitsOutput {
@@ -1141,6 +1179,7 @@ pub struct DescribeLimitsOutput {
 }
 
 /// <p>Represents the input of a <code>DescribeTable</code> operation.</p>
+/// see [DynamoDb::describe_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTableInput {
@@ -1150,6 +1189,7 @@ pub struct DescribeTableInput {
 }
 
 /// <p>Represents the output of a <code>DescribeTable</code> operation.</p>
+/// see [DynamoDb::describe_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTableOutput {
@@ -1159,6 +1199,7 @@ pub struct DescribeTableOutput {
     pub table: Option<TableDescription>,
 }
 
+/// see [DynamoDb::describe_table_replica_auto_scaling]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTableReplicaAutoScalingInput {
@@ -1167,6 +1208,7 @@ pub struct DescribeTableReplicaAutoScalingInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::describe_table_replica_auto_scaling]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTableReplicaAutoScalingOutput {
@@ -1176,6 +1218,7 @@ pub struct DescribeTableReplicaAutoScalingOutput {
     pub table_auto_scaling_description: Option<TableAutoScalingDescription>,
 }
 
+/// see [DynamoDb::describe_time_to_live]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTimeToLiveInput {
@@ -1184,6 +1227,7 @@ pub struct DescribeTimeToLiveInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::describe_time_to_live]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTimeToLiveOutput {
@@ -1205,6 +1249,7 @@ pub struct Endpoint {
     pub cache_period_in_minutes: i64,
 }
 
+/// see [DynamoDb::execute_statement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementInput {
@@ -1225,6 +1270,7 @@ pub struct ExecuteStatementInput {
     pub statement: String,
 }
 
+/// see [DynamoDb::execute_statement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteStatementOutput {
@@ -1238,6 +1284,7 @@ pub struct ExecuteStatementOutput {
     pub next_token: Option<String>,
 }
 
+/// see [DynamoDb::execute_transaction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteTransactionInput {
@@ -1250,6 +1297,7 @@ pub struct ExecuteTransactionInput {
     pub transact_statements: Vec<ParameterizedStatement>,
 }
 
+/// see [DynamoDb::execute_transaction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteTransactionOutput {
@@ -1377,6 +1425,7 @@ pub struct ExportSummary {
     pub export_status: Option<String>,
 }
 
+/// see [DynamoDb::export_table_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportTableToPointInTimeInput {
@@ -1416,6 +1465,7 @@ pub struct ExportTableToPointInTimeInput {
     pub table_arn: String,
 }
 
+/// see [DynamoDb::export_table_to_point_in_time]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportTableToPointInTimeOutput {
@@ -1460,6 +1510,7 @@ pub struct Get {
 }
 
 /// <p>Represents the input of a <code>GetItem</code> operation.</p>
+/// see [DynamoDb::get_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetItemInput {
@@ -1491,6 +1542,7 @@ pub struct GetItemInput {
 }
 
 /// <p>Represents the output of a <code>GetItem</code> operation.</p>
+/// see [DynamoDb::get_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetItemOutput {
@@ -1752,6 +1804,8 @@ pub struct KinesisDataStreamDestination {
     pub stream_arn: Option<String>,
 }
 
+/// see [DynamoDb::disable_kinesis_streaming_destination]
+/// see [DynamoDb::enable_kinesis_streaming_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamingDestinationInput {
@@ -1763,6 +1817,8 @@ pub struct KinesisStreamingDestinationInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::disable_kinesis_streaming_destination]
+/// see [DynamoDb::enable_kinesis_streaming_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisStreamingDestinationOutput {
@@ -1780,6 +1836,7 @@ pub struct KinesisStreamingDestinationOutput {
     pub table_name: Option<String>,
 }
 
+/// see [DynamoDb::list_backups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupsInput {
@@ -1809,6 +1866,15 @@ pub struct ListBackupsInput {
     pub time_range_upper_bound: Option<f64>,
 }
 
+impl PagedRequest for ListBackupsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.exclusive_start_backup_arn = key;
+        self
+    }
+}
+
+/// see [DynamoDb::list_backups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupsOutput {
@@ -1822,6 +1888,31 @@ pub struct ListBackupsOutput {
     pub last_evaluated_backup_arn: Option<String>,
 }
 
+impl ListBackupsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<BackupSummary>> {
+        Some(self.backup_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBackupsOutput {
+    type Item = BackupSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.last_evaluated_backup_arn.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BackupSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DynamoDb::list_contributor_insights]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContributorInsightsInput {
@@ -1839,6 +1930,7 @@ pub struct ListContributorInsightsInput {
     pub table_name: Option<String>,
 }
 
+/// see [DynamoDb::list_contributor_insights]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContributorInsightsOutput {
@@ -1852,6 +1944,7 @@ pub struct ListContributorInsightsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [DynamoDb::list_exports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExportsInput {
@@ -1869,6 +1962,7 @@ pub struct ListExportsInput {
     pub table_arn: Option<String>,
 }
 
+/// see [DynamoDb::list_exports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListExportsOutput {
@@ -1882,6 +1976,7 @@ pub struct ListExportsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [DynamoDb::list_global_tables]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGlobalTablesInput {
@@ -1899,6 +1994,7 @@ pub struct ListGlobalTablesInput {
     pub region_name: Option<String>,
 }
 
+/// see [DynamoDb::list_global_tables]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGlobalTablesOutput {
@@ -1913,6 +2009,7 @@ pub struct ListGlobalTablesOutput {
 }
 
 /// <p>Represents the input of a <code>ListTables</code> operation.</p>
+/// see [DynamoDb::list_tables]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTablesInput {
@@ -1926,7 +2023,16 @@ pub struct ListTablesInput {
     pub limit: Option<i64>,
 }
 
+impl PagedRequest for ListTablesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.exclusive_start_table_name = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListTables</code> operation.</p>
+/// see [DynamoDb::list_tables]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTablesOutput {
@@ -1940,6 +2046,31 @@ pub struct ListTablesOutput {
     pub table_names: Option<Vec<String>>,
 }
 
+impl ListTablesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.table_names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTablesOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.last_evaluated_table_name.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DynamoDb::list_tags_of_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsOfResourceInput {
@@ -1952,6 +2083,15 @@ pub struct ListTagsOfResourceInput {
     pub resource_arn: String,
 }
 
+impl PagedRequest for ListTagsOfResourceInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamoDb::list_tags_of_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsOfResourceOutput {
@@ -1963,6 +2103,30 @@ pub struct ListTagsOfResourceOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl ListTagsOfResourceOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsOfResourceOutput {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents the properties of a local secondary index.</p>
@@ -2156,6 +2320,7 @@ pub struct Put {
 }
 
 /// <p>Represents the input of a <code>PutItem</code> operation.</p>
+/// see [DynamoDb::put_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutItemInput {
@@ -2199,6 +2364,7 @@ pub struct PutItemInput {
 }
 
 /// <p>Represents the output of a <code>PutItem</code> operation.</p>
+/// see [DynamoDb::put_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutItemOutput {
@@ -2225,6 +2391,7 @@ pub struct PutRequest {
 }
 
 /// <p>Represents the input of a <code>Query</code> operation.</p>
+/// see [DynamoDb::query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryInput {
@@ -2296,7 +2463,19 @@ pub struct QueryInput {
     pub table_name: String,
 }
 
+impl PagedRequest for QueryInput {
+    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
+    fn with_pagination_token(
+        mut self,
+        key: Option<::std::collections::HashMap<String, AttributeValue>>,
+    ) -> Self {
+        self.exclusive_start_key = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>Query</code> operation.</p>
+/// see [DynamoDb::query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryOutput {
@@ -2320,6 +2499,26 @@ pub struct QueryOutput {
     #[serde(rename = "ScannedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scanned_count: Option<i64>,
+}
+
+impl QueryOutput {}
+
+impl PagedOutput for QueryOutput {
+    type Item = QueryOutput;
+    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
+    fn pagination_token(&self) -> Option<::std::collections::HashMap<String, AttributeValue>> {
+        Some(self.last_evaluated_key.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<QueryOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents the properties of a replica.</p>
@@ -2633,6 +2832,7 @@ pub struct RestoreSummary {
     pub source_table_arn: Option<String>,
 }
 
+/// see [DynamoDb::restore_table_from_backup]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreTableFromBackupInput {
@@ -2664,6 +2864,7 @@ pub struct RestoreTableFromBackupInput {
     pub target_table_name: String,
 }
 
+/// see [DynamoDb::restore_table_from_backup]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreTableFromBackupOutput {
@@ -2673,6 +2874,7 @@ pub struct RestoreTableFromBackupOutput {
     pub table_description: Option<TableDescription>,
 }
 
+/// see [DynamoDb::restore_table_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreTableToPointInTimeInput {
@@ -2717,6 +2919,7 @@ pub struct RestoreTableToPointInTimeInput {
     pub use_latest_restorable_time: Option<bool>,
 }
 
+/// see [DynamoDb::restore_table_to_point_in_time]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreTableToPointInTimeOutput {
@@ -2767,6 +2970,7 @@ pub struct SSESpecification {
 }
 
 /// <p>Represents the input of a <code>Scan</code> operation.</p>
+/// see [DynamoDb::scan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScanInput {
@@ -2834,7 +3038,19 @@ pub struct ScanInput {
     pub total_segments: Option<i64>,
 }
 
+impl PagedRequest for ScanInput {
+    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
+    fn with_pagination_token(
+        mut self,
+        key: Option<::std::collections::HashMap<String, AttributeValue>>,
+    ) -> Self {
+        self.exclusive_start_key = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>Scan</code> operation.</p>
+/// see [DynamoDb::scan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScanOutput {
@@ -2858,6 +3074,26 @@ pub struct ScanOutput {
     #[serde(rename = "ScannedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scanned_count: Option<i64>,
+}
+
+impl ScanOutput {}
+
+impl PagedOutput for ScanOutput {
+    type Item = ScanOutput;
+    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
+    fn pagination_token(&self) -> Option<::std::collections::HashMap<String, AttributeValue>> {
+        Some(self.last_evaluated_key.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ScanOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Contains the details of the table when the backup was created. </p>
@@ -3054,6 +3290,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [DynamoDb::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -3099,6 +3336,7 @@ pub struct TransactGetItem {
     pub get: Get,
 }
 
+/// see [DynamoDb::transact_get_items]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransactGetItemsInput {
@@ -3111,6 +3349,7 @@ pub struct TransactGetItemsInput {
     pub transact_items: Vec<TransactGetItem>,
 }
 
+/// see [DynamoDb::transact_get_items]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransactGetItemsOutput {
@@ -3146,6 +3385,7 @@ pub struct TransactWriteItem {
     pub update: Option<Update>,
 }
 
+/// see [DynamoDb::transact_write_items]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransactWriteItemsInput {
@@ -3165,6 +3405,7 @@ pub struct TransactWriteItemsInput {
     pub transact_items: Vec<TransactWriteItem>,
 }
 
+/// see [DynamoDb::transact_write_items]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransactWriteItemsOutput {
@@ -3179,6 +3420,7 @@ pub struct TransactWriteItemsOutput {
         Option<::std::collections::HashMap<String, Vec<ItemCollectionMetrics>>>,
 }
 
+/// see [DynamoDb::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -3221,6 +3463,7 @@ pub struct Update {
     pub update_expression: String,
 }
 
+/// see [DynamoDb::update_continuous_backups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContinuousBackupsInput {
@@ -3232,6 +3475,7 @@ pub struct UpdateContinuousBackupsInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::update_continuous_backups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContinuousBackupsOutput {
@@ -3241,6 +3485,7 @@ pub struct UpdateContinuousBackupsOutput {
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
 }
 
+/// see [DynamoDb::update_contributor_insights]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContributorInsightsInput {
@@ -3256,6 +3501,7 @@ pub struct UpdateContributorInsightsInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::update_contributor_insights]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContributorInsightsOutput {
@@ -3285,6 +3531,7 @@ pub struct UpdateGlobalSecondaryIndexAction {
     pub provisioned_throughput: ProvisionedThroughput,
 }
 
+/// see [DynamoDb::update_global_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalTableInput {
@@ -3296,6 +3543,7 @@ pub struct UpdateGlobalTableInput {
     pub replica_updates: Vec<ReplicaUpdate>,
 }
 
+/// see [DynamoDb::update_global_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGlobalTableOutput {
@@ -3305,6 +3553,7 @@ pub struct UpdateGlobalTableOutput {
     pub global_table_description: Option<GlobalTableDescription>,
 }
 
+/// see [DynamoDb::update_global_table_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalTableSettingsInput {
@@ -3335,6 +3584,7 @@ pub struct UpdateGlobalTableSettingsInput {
     pub replica_settings_update: Option<Vec<ReplicaSettingsUpdate>>,
 }
 
+/// see [DynamoDb::update_global_table_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGlobalTableSettingsOutput {
@@ -3349,6 +3599,7 @@ pub struct UpdateGlobalTableSettingsOutput {
 }
 
 /// <p>Represents the input of an <code>UpdateItem</code> operation.</p>
+/// see [DynamoDb::update_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateItemInput {
@@ -3400,6 +3651,7 @@ pub struct UpdateItemInput {
 }
 
 /// <p>Represents the output of an <code>UpdateItem</code> operation.</p>
+/// see [DynamoDb::update_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateItemOutput {
@@ -3439,6 +3691,7 @@ pub struct UpdateReplicationGroupMemberAction {
 }
 
 /// <p>Represents the input of an <code>UpdateTable</code> operation.</p>
+/// see [DynamoDb::update_table]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTableInput {
@@ -3476,6 +3729,7 @@ pub struct UpdateTableInput {
 }
 
 /// <p>Represents the output of an <code>UpdateTable</code> operation.</p>
+/// see [DynamoDb::update_table]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTableOutput {
@@ -3485,6 +3739,7 @@ pub struct UpdateTableOutput {
     pub table_description: Option<TableDescription>,
 }
 
+/// see [DynamoDb::update_table_replica_auto_scaling]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTableReplicaAutoScalingInput {
@@ -3504,6 +3759,7 @@ pub struct UpdateTableReplicaAutoScalingInput {
     pub table_name: String,
 }
 
+/// see [DynamoDb::update_table_replica_auto_scaling]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTableReplicaAutoScalingOutput {
@@ -3514,6 +3770,7 @@ pub struct UpdateTableReplicaAutoScalingOutput {
 }
 
 /// <p>Represents the input of an <code>UpdateTimeToLive</code> operation.</p>
+/// see [DynamoDb::update_time_to_live]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTimeToLiveInput {
@@ -3525,6 +3782,7 @@ pub struct UpdateTimeToLiveInput {
     pub time_to_live_specification: TimeToLiveSpecification,
 }
 
+/// see [DynamoDb::update_time_to_live]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTimeToLiveOutput {
@@ -6139,7 +6397,7 @@ impl fmt::Display for UpdateTimeToLiveError {
 impl Error for UpdateTimeToLiveError {}
 /// Trait representing the capabilities of the DynamoDB API. DynamoDB clients implement this trait.
 #[async_trait]
-pub trait DynamoDb {
+pub trait DynamoDb: Clone + Sync + Send + 'static {
     /// <p> This operation allows you to perform batch reads and writes on data stored in DynamoDB, using PartiQL. </p>
     async fn batch_execute_statement(
         &self,
@@ -6318,6 +6576,16 @@ pub trait DynamoDb {
         input: ListBackupsInput,
     ) -> Result<ListBackupsOutput, RusotoError<ListBackupsError>>;
 
+    /// Auto-paginating version of `list_backups`
+    fn list_backups_pages(
+        &self,
+        input: ListBackupsInput,
+    ) -> RusotoStream<BackupSummary, ListBackupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_backups(state.clone())
+        })
+    }
+
     /// <p>Returns a list of ContributorInsightsSummary for a table and all its global secondary indexes.</p>
     async fn list_contributor_insights(
         &self,
@@ -6342,11 +6610,28 @@ pub trait DynamoDb {
         input: ListTablesInput,
     ) -> Result<ListTablesOutput, RusotoError<ListTablesError>>;
 
+    /// Auto-paginating version of `list_tables`
+    fn list_tables_pages(&self, input: ListTablesInput) -> RusotoStream<String, ListTablesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tables(state.clone())
+        })
+    }
+
     /// <p>List all tags on an Amazon DynamoDB resource. You can call ListTagsOfResource up to 10 times per second, per account.</p> <p>For an overview on tagging DynamoDB resources, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     async fn list_tags_of_resource(
         &self,
         input: ListTagsOfResourceInput,
     ) -> Result<ListTagsOfResourceOutput, RusotoError<ListTagsOfResourceError>>;
+
+    /// Auto-paginating version of `list_tags_of_resource`
+    fn list_tags_of_resource_pages(
+        &self,
+        input: ListTagsOfResourceInput,
+    ) -> RusotoStream<Tag, ListTagsOfResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_of_resource(state.clone())
+        })
+    }
 
     /// <p>Creates a new item, or replaces an old item with a new item. If an item that has the same primary key as the new item already exists in the specified table, the new item completely replaces the existing item. You can perform a conditional put operation (add a new item if one with the specified primary key doesn't exist), or replace an existing item if it has certain attribute values. You can return the item's attribute values in the same operation, using the <code>ReturnValues</code> parameter.</p> <important> <p>This topic provides general information about the <code>PutItem</code> API.</p> <p>For information on how to call the <code>PutItem</code> API using the AWS SDK in specific languages, see the following:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/goto/aws-cli/dynamodb-2012-08-10/PutItem"> PutItem in the AWS Command Line Interface</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/DotNetSDKV3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for .NET</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForCpp/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for C++</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForGoV1/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Go</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForJava/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Java</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/AWSJavaScriptSDK/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for JavaScript</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForPHPV3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for PHP V3</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/boto3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Python</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForRubyV2/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Ruby V2</a> </p> </li> </ul> </important> <p>When you add an item, the primary key attributes are the only required attributes. Attribute values cannot be null.</p> <p>Empty String and Binary attribute values are allowed. Attribute values of type String and Binary must have a length greater than zero if the attribute is used as a key attribute for a table or index. Set type attributes cannot be empty. </p> <p>Invalid Requests with empty values will be rejected with a <code>ValidationException</code> exception.</p> <note> <p>To prevent a new item from replacing an existing item, use a conditional expression that contains the <code>attribute_not_exists</code> function with the name of the attribute being used as the partition key for the table. Since every record must contain that attribute, the <code>attribute_not_exists</code> function will only succeed if no matching item exists.</p> </note> <p>For more information about <code>PutItem</code>, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithItems.html">Working with Items</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     async fn put_item(
@@ -6356,6 +6641,13 @@ pub trait DynamoDb {
 
     /// <p>The <code>Query</code> operation finds items based on primary key values. You can query any table or secondary index that has a composite primary key (a partition key and a sort key). </p> <p>Use the <code>KeyConditionExpression</code> parameter to provide a specific value for the partition key. The <code>Query</code> operation will return all of the items from the table or index with that partition key value. You can optionally narrow the scope of the <code>Query</code> operation by specifying a sort key value and a comparison operator in <code>KeyConditionExpression</code>. To further refine the <code>Query</code> results, you can optionally provide a <code>FilterExpression</code>. A <code>FilterExpression</code> determines which items within the results should be returned to you. All of the other results are discarded. </p> <p> A <code>Query</code> operation always returns a result set. If no matching items are found, the result set will be empty. Queries that do not return results consume the minimum number of read capacity units for that type of read operation. </p> <note> <p> DynamoDB calculates the number of read capacity units consumed based on item size, not on the amount of data that is returned to an application. The number of capacity units consumed will be the same whether you request all of the attributes (the default behavior) or just some of them (using a projection expression). The number will also be the same whether or not you use a <code>FilterExpression</code>. </p> </note> <p> <code>Query</code> results are always sorted by the sort key value. If the data type of the sort key is Number, the results are returned in numeric order; otherwise, the results are returned in order of UTF-8 bytes. By default, the sort order is ascending. To reverse the order, set the <code>ScanIndexForward</code> parameter to false. </p> <p> A single <code>Query</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>FilterExpression</code> is applied after a <code>Query</code> finishes, but before the results are returned. A <code>FilterExpression</code> cannot contain partition key or sort key attributes. You need to specify those attributes in the <code>KeyConditionExpression</code>. </p> <note> <p> A <code>Query</code> operation can return an empty result set and a <code>LastEvaluatedKey</code> if all the items read for the page of results are filtered out. </p> </note> <p>You can query a table, a local secondary index, or a global secondary index. For a query on a table or on a local secondary index, you can set the <code>ConsistentRead</code> parameter to <code>true</code> and obtain a strongly consistent result. Global secondary indexes support eventually consistent reads only, so do not specify <code>ConsistentRead</code> when querying a global secondary index.</p>
     async fn query(&self, input: QueryInput) -> Result<QueryOutput, RusotoError<QueryError>>;
+
+    /// Auto-paginating version of `query`
+    fn query_pages(&self, input: QueryInput) -> RusotoStream<QueryOutput, QueryError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.query(state.clone())
+        })
+    }
 
     /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Amazon CloudWatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
     async fn restore_table_from_backup(
@@ -6371,6 +6663,13 @@ pub trait DynamoDb {
 
     /// <p>The <code>Scan</code> operation returns one or more items and item attributes by accessing every item in a table or a secondary index. To have DynamoDB return fewer items, you can provide a <code>FilterExpression</code> operation.</p> <p>If the total number of scanned items exceeds the maximum dataset size limit of 1 MB, the scan stops and results are returned to the user as a <code>LastEvaluatedKey</code> value to continue the scan in a subsequent operation. The results also include the number of items exceeding the limit. A scan can result in no table data meeting the filter criteria. </p> <p>A single <code>Scan</code> operation reads up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you need to paginate the result set. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>Scan</code> operations proceed sequentially; however, for faster performance on a large table or secondary index, applications can request a parallel <code>Scan</code> operation by providing the <code>Segment</code> and <code>TotalSegments</code> parameters. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.ParallelScan">Parallel Scan</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p> <code>Scan</code> uses eventually consistent reads when accessing the data in a table; therefore, the result set might not include the changes to data in the table immediately before the operation began. If you need a consistent copy of the data, as of the time that the <code>Scan</code> begins, you can set the <code>ConsistentRead</code> parameter to <code>true</code>.</p>
     async fn scan(&self, input: ScanInput) -> Result<ScanOutput, RusotoError<ScanError>>;
+
+    /// Auto-paginating version of `scan`
+    fn scan_pages(&self, input: ScanInput) -> RusotoStream<ScanOutput, ScanError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.scan(state.clone())
+        })
+    }
 
     /// <p>Associate a set of tags with an Amazon DynamoDB resource. You can then activate these user-defined tags so that they appear on the Billing and Cost Management console for cost allocation tracking. You can call TagResource up to five times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     async fn tag_resource(

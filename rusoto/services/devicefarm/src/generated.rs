@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -167,6 +169,7 @@ pub struct Counters {
 }
 
 /// <p>Represents a request to the create device pool operation.</p>
+/// see [DeviceFarm::create_device_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDevicePoolRequest {
@@ -190,6 +193,7 @@ pub struct CreateDevicePoolRequest {
 }
 
 /// <p>Represents the result of a create device pool request.</p>
+/// see [DeviceFarm::create_device_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDevicePoolResult {
@@ -199,6 +203,7 @@ pub struct CreateDevicePoolResult {
     pub device_pool: Option<DevicePool>,
 }
 
+/// see [DeviceFarm::create_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceProfileRequest {
@@ -223,6 +228,7 @@ pub struct CreateInstanceProfileRequest {
     pub reboot_after_use: Option<bool>,
 }
 
+/// see [DeviceFarm::create_instance_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceProfileResult {
@@ -232,6 +238,7 @@ pub struct CreateInstanceProfileResult {
     pub instance_profile: Option<InstanceProfile>,
 }
 
+/// see [DeviceFarm::create_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkProfileRequest {
@@ -283,6 +290,7 @@ pub struct CreateNetworkProfileRequest {
     pub uplink_loss_percent: Option<i64>,
 }
 
+/// see [DeviceFarm::create_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNetworkProfileResult {
@@ -293,6 +301,7 @@ pub struct CreateNetworkProfileResult {
 }
 
 /// <p>Represents a request to the create project operation.</p>
+/// see [DeviceFarm::create_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
@@ -306,6 +315,7 @@ pub struct CreateProjectRequest {
 }
 
 /// <p>Represents the result of a create project request.</p>
+/// see [DeviceFarm::create_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResult {
@@ -330,6 +340,7 @@ pub struct CreateRemoteAccessSessionConfiguration {
 }
 
 /// <p>Creates and submits a request to start a remote access session.</p>
+/// see [DeviceFarm::create_remote_access_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRemoteAccessSessionRequest {
@@ -382,6 +393,7 @@ pub struct CreateRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the server response from a request to create a remote access session.</p>
+/// see [DeviceFarm::create_remote_access_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRemoteAccessSessionResult {
@@ -391,6 +403,7 @@ pub struct CreateRemoteAccessSessionResult {
     pub remote_access_session: Option<RemoteAccessSession>,
 }
 
+/// see [DeviceFarm::create_test_grid_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTestGridProjectRequest {
@@ -403,6 +416,7 @@ pub struct CreateTestGridProjectRequest {
     pub name: String,
 }
 
+/// see [DeviceFarm::create_test_grid_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTestGridProjectResult {
@@ -412,6 +426,7 @@ pub struct CreateTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
+/// see [DeviceFarm::create_test_grid_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTestGridUrlRequest {
@@ -423,6 +438,7 @@ pub struct CreateTestGridUrlRequest {
     pub project_arn: String,
 }
 
+/// see [DeviceFarm::create_test_grid_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTestGridUrlResult {
@@ -437,6 +453,7 @@ pub struct CreateTestGridUrlResult {
 }
 
 /// <p>Represents a request to the create upload operation.</p>
+/// see [DeviceFarm::create_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUploadRequest {
@@ -456,6 +473,7 @@ pub struct CreateUploadRequest {
 }
 
 /// <p>Represents the result of a create upload request.</p>
+/// see [DeviceFarm::create_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUploadResult {
@@ -465,6 +483,7 @@ pub struct CreateUploadResult {
     pub upload: Option<Upload>,
 }
 
+/// see [DeviceFarm::create_vpce_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVPCEConfigurationRequest {
@@ -483,6 +502,7 @@ pub struct CreateVPCEConfigurationRequest {
     pub vpce_service_name: String,
 }
 
+/// see [DeviceFarm::create_vpce_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVPCEConfigurationResult {
@@ -510,6 +530,7 @@ pub struct CustomerArtifactPaths {
 }
 
 /// <p>Represents a request to the delete device pool operation.</p>
+/// see [DeviceFarm::delete_device_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDevicePoolRequest {
@@ -519,10 +540,12 @@ pub struct DeleteDevicePoolRequest {
 }
 
 /// <p>Represents the result of a delete device pool request.</p>
+/// see [DeviceFarm::delete_device_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDevicePoolResult {}
 
+/// see [DeviceFarm::delete_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceProfileRequest {
@@ -531,10 +554,12 @@ pub struct DeleteInstanceProfileRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::delete_instance_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInstanceProfileResult {}
 
+/// see [DeviceFarm::delete_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkProfileRequest {
@@ -543,11 +568,13 @@ pub struct DeleteNetworkProfileRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::delete_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNetworkProfileResult {}
 
 /// <p>Represents a request to the delete project operation.</p>
+/// see [DeviceFarm::delete_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
@@ -557,11 +584,13 @@ pub struct DeleteProjectRequest {
 }
 
 /// <p>Represents the result of a delete project request.</p>
+/// see [DeviceFarm::delete_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResult {}
 
 /// <p>Represents the request to delete the specified remote access session.</p>
+/// see [DeviceFarm::delete_remote_access_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemoteAccessSessionRequest {
@@ -571,11 +600,13 @@ pub struct DeleteRemoteAccessSessionRequest {
 }
 
 /// <p>The response from the server when a request is made to delete the remote access session.</p>
+/// see [DeviceFarm::delete_remote_access_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemoteAccessSessionResult {}
 
 /// <p>Represents a request to the delete run operation.</p>
+/// see [DeviceFarm::delete_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRunRequest {
@@ -585,10 +616,12 @@ pub struct DeleteRunRequest {
 }
 
 /// <p>Represents the result of a delete run request.</p>
+/// see [DeviceFarm::delete_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRunResult {}
 
+/// see [DeviceFarm::delete_test_grid_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTestGridProjectRequest {
@@ -597,11 +630,13 @@ pub struct DeleteTestGridProjectRequest {
     pub project_arn: String,
 }
 
+/// see [DeviceFarm::delete_test_grid_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTestGridProjectResult {}
 
 /// <p>Represents a request to the delete upload operation.</p>
+/// see [DeviceFarm::delete_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUploadRequest {
@@ -611,10 +646,12 @@ pub struct DeleteUploadRequest {
 }
 
 /// <p>Represents the result of a delete upload request.</p>
+/// see [DeviceFarm::delete_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUploadResult {}
 
+/// see [DeviceFarm::delete_vpce_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVPCEConfigurationRequest {
@@ -623,6 +660,7 @@ pub struct DeleteVPCEConfigurationRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::delete_vpce_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVPCEConfigurationResult {}
@@ -887,11 +925,13 @@ pub struct ExecutionConfiguration {
 }
 
 /// <p>Represents the request sent to retrieve the account settings.</p>
+/// see [DeviceFarm::get_account_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {}
 
 /// <p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>
+/// see [DeviceFarm::get_account_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountSettingsResult {
@@ -901,6 +941,7 @@ pub struct GetAccountSettingsResult {
     pub account_settings: Option<AccountSettings>,
 }
 
+/// see [DeviceFarm::get_device_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceInstanceRequest {
@@ -909,6 +950,7 @@ pub struct GetDeviceInstanceRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::get_device_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceInstanceResult {
@@ -919,6 +961,7 @@ pub struct GetDeviceInstanceResult {
 }
 
 /// <p>Represents a request to the get device pool compatibility operation.</p>
+/// see [DeviceFarm::get_device_pool_compatibility]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolCompatibilityRequest {
@@ -944,6 +987,7 @@ pub struct GetDevicePoolCompatibilityRequest {
 }
 
 /// <p>Represents the result of describe device pool compatibility request.</p>
+/// see [DeviceFarm::get_device_pool_compatibility]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicePoolCompatibilityResult {
@@ -958,6 +1002,7 @@ pub struct GetDevicePoolCompatibilityResult {
 }
 
 /// <p>Represents a request to the get device pool operation.</p>
+/// see [DeviceFarm::get_device_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolRequest {
@@ -967,6 +1012,7 @@ pub struct GetDevicePoolRequest {
 }
 
 /// <p>Represents the result of a get device pool request.</p>
+/// see [DeviceFarm::get_device_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicePoolResult {
@@ -977,6 +1023,7 @@ pub struct GetDevicePoolResult {
 }
 
 /// <p>Represents a request to the get device request.</p>
+/// see [DeviceFarm::get_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
@@ -986,6 +1033,7 @@ pub struct GetDeviceRequest {
 }
 
 /// <p>Represents the result of a get device request.</p>
+/// see [DeviceFarm::get_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceResult {
@@ -995,6 +1043,7 @@ pub struct GetDeviceResult {
     pub device: Option<Device>,
 }
 
+/// see [DeviceFarm::get_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceProfileRequest {
@@ -1003,6 +1052,7 @@ pub struct GetInstanceProfileRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::get_instance_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceProfileResult {
@@ -1013,6 +1063,7 @@ pub struct GetInstanceProfileResult {
 }
 
 /// <p>Represents a request to the get job operation.</p>
+/// see [DeviceFarm::get_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
@@ -1022,6 +1073,7 @@ pub struct GetJobRequest {
 }
 
 /// <p>Represents the result of a get job request.</p>
+/// see [DeviceFarm::get_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResult {
@@ -1031,6 +1083,7 @@ pub struct GetJobResult {
     pub job: Option<Job>,
 }
 
+/// see [DeviceFarm::get_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkProfileRequest {
@@ -1039,6 +1092,7 @@ pub struct GetNetworkProfileRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::get_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNetworkProfileResult {
@@ -1049,6 +1103,7 @@ pub struct GetNetworkProfileResult {
 }
 
 /// <p>Represents the request to retrieve the offering status for the specified customer or account.</p>
+/// see [DeviceFarm::get_offering_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOfferingStatusRequest {
@@ -1058,7 +1113,16 @@ pub struct GetOfferingStatusRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetOfferingStatusRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Returns the status result for a device offering.</p>
+/// see [DeviceFarm::get_offering_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOfferingStatusResult {
@@ -1076,7 +1140,28 @@ pub struct GetOfferingStatusResult {
     pub next_token: Option<String>,
 }
 
+impl GetOfferingStatusResult {}
+
+impl PagedOutput for GetOfferingStatusResult {
+    type Item = GetOfferingStatusResult;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GetOfferingStatusResult> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the get project operation.</p>
+/// see [DeviceFarm::get_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProjectRequest {
@@ -1086,6 +1171,7 @@ pub struct GetProjectRequest {
 }
 
 /// <p>Represents the result of a get project request.</p>
+/// see [DeviceFarm::get_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProjectResult {
@@ -1096,6 +1182,7 @@ pub struct GetProjectResult {
 }
 
 /// <p>Represents the request to get information about the specified remote access session.</p>
+/// see [DeviceFarm::get_remote_access_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRemoteAccessSessionRequest {
@@ -1105,6 +1192,7 @@ pub struct GetRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server that lists detailed information about the remote access session.</p>
+/// see [DeviceFarm::get_remote_access_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRemoteAccessSessionResult {
@@ -1115,6 +1203,7 @@ pub struct GetRemoteAccessSessionResult {
 }
 
 /// <p>Represents a request to the get run operation.</p>
+/// see [DeviceFarm::get_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRunRequest {
@@ -1124,6 +1213,7 @@ pub struct GetRunRequest {
 }
 
 /// <p>Represents the result of a get run request.</p>
+/// see [DeviceFarm::get_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRunResult {
@@ -1134,6 +1224,7 @@ pub struct GetRunResult {
 }
 
 /// <p>Represents a request to the get suite operation.</p>
+/// see [DeviceFarm::get_suite]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSuiteRequest {
@@ -1143,6 +1234,7 @@ pub struct GetSuiteRequest {
 }
 
 /// <p>Represents the result of a get suite request.</p>
+/// see [DeviceFarm::get_suite]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSuiteResult {
@@ -1152,6 +1244,7 @@ pub struct GetSuiteResult {
     pub suite: Option<Suite>,
 }
 
+/// see [DeviceFarm::get_test_grid_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestGridProjectRequest {
@@ -1160,6 +1253,7 @@ pub struct GetTestGridProjectRequest {
     pub project_arn: String,
 }
 
+/// see [DeviceFarm::get_test_grid_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestGridProjectResult {
@@ -1169,6 +1263,7 @@ pub struct GetTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
+/// see [DeviceFarm::get_test_grid_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestGridSessionRequest {
@@ -1186,6 +1281,7 @@ pub struct GetTestGridSessionRequest {
     pub session_id: Option<String>,
 }
 
+/// see [DeviceFarm::get_test_grid_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestGridSessionResult {
@@ -1196,6 +1292,7 @@ pub struct GetTestGridSessionResult {
 }
 
 /// <p>Represents a request to the get test operation.</p>
+/// see [DeviceFarm::get_test]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestRequest {
@@ -1205,6 +1302,7 @@ pub struct GetTestRequest {
 }
 
 /// <p>Represents the result of a get test request.</p>
+/// see [DeviceFarm::get_test]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestResult {
@@ -1215,6 +1313,7 @@ pub struct GetTestResult {
 }
 
 /// <p>Represents a request to the get upload operation.</p>
+/// see [DeviceFarm::get_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUploadRequest {
@@ -1224,6 +1323,7 @@ pub struct GetUploadRequest {
 }
 
 /// <p>Represents the result of a get upload request.</p>
+/// see [DeviceFarm::get_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUploadResult {
@@ -1233,6 +1333,7 @@ pub struct GetUploadResult {
     pub upload: Option<Upload>,
 }
 
+/// see [DeviceFarm::get_vpce_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVPCEConfigurationRequest {
@@ -1241,6 +1342,7 @@ pub struct GetVPCEConfigurationRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::get_vpce_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVPCEConfigurationResult {
@@ -1265,6 +1367,7 @@ pub struct IncompatibilityMessage {
 }
 
 /// <p>Represents the request to install an Android application (in .apk format) or an iOS application (in .ipa format) as part of a remote access session.</p>
+/// see [DeviceFarm::install_to_remote_access_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstallToRemoteAccessSessionRequest {
@@ -1277,6 +1380,7 @@ pub struct InstallToRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server after AWS Device Farm makes a request to install to a remote access session.</p>
+/// see [DeviceFarm::install_to_remote_access_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstallToRemoteAccessSessionResult {
@@ -1383,6 +1487,7 @@ pub struct Job {
 }
 
 /// <p>Represents a request to the list artifacts operation.</p>
+/// see [DeviceFarm::list_artifacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
@@ -1398,7 +1503,16 @@ pub struct ListArtifactsRequest {
     pub type_: String,
 }
 
+impl PagedRequest for ListArtifactsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list artifacts operation.</p>
+/// see [DeviceFarm::list_artifacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArtifactsResult {
@@ -1412,6 +1526,31 @@ pub struct ListArtifactsResult {
     pub next_token: Option<String>,
 }
 
+impl ListArtifactsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Artifact>> {
+        Some(self.artifacts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListArtifactsResult {
+    type Item = Artifact;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Artifact> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DeviceFarm::list_device_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceInstancesRequest {
@@ -1425,6 +1564,15 @@ pub struct ListDeviceInstancesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeviceInstancesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DeviceFarm::list_device_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceInstancesResult {
@@ -1438,7 +1586,32 @@ pub struct ListDeviceInstancesResult {
     pub next_token: Option<String>,
 }
 
+impl ListDeviceInstancesResult {
+    fn pagination_page_opt(self) -> Option<Vec<DeviceInstance>> {
+        Some(self.device_instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeviceInstancesResult {
+    type Item = DeviceInstance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DeviceInstance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the result of a list device pools request.</p>
+/// see [DeviceFarm::list_device_pools]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicePoolsRequest {
@@ -1455,7 +1628,16 @@ pub struct ListDevicePoolsRequest {
     pub type_: Option<String>,
 }
 
+impl PagedRequest for ListDevicePoolsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list device pools request.</p>
+/// see [DeviceFarm::list_device_pools]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicePoolsResult {
@@ -1469,7 +1651,32 @@ pub struct ListDevicePoolsResult {
     pub next_token: Option<String>,
 }
 
+impl ListDevicePoolsResult {
+    fn pagination_page_opt(self) -> Option<Vec<DevicePool>> {
+        Some(self.device_pools.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDevicePoolsResult {
+    type Item = DevicePool;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DevicePool> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the result of a list devices request.</p>
+/// see [DeviceFarm::list_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
@@ -1487,7 +1694,16 @@ pub struct ListDevicesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDevicesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list devices operation.</p>
+/// see [DeviceFarm::list_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResult {
@@ -1501,6 +1717,31 @@ pub struct ListDevicesResult {
     pub next_token: Option<String>,
 }
 
+impl ListDevicesResult {
+    fn pagination_page_opt(self) -> Option<Vec<Device>> {
+        Some(self.devices.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDevicesResult {
+    type Item = Device;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Device> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DeviceFarm::list_instance_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesRequest {
@@ -1514,6 +1755,15 @@ pub struct ListInstanceProfilesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListInstanceProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DeviceFarm::list_instance_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceProfilesResult {
@@ -1527,7 +1777,32 @@ pub struct ListInstanceProfilesResult {
     pub next_token: Option<String>,
 }
 
+impl ListInstanceProfilesResult {
+    fn pagination_page_opt(self) -> Option<Vec<InstanceProfile>> {
+        Some(self.instance_profiles.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInstanceProfilesResult {
+    type Item = InstanceProfile;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<InstanceProfile> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the list jobs operation.</p>
+/// see [DeviceFarm::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -1540,7 +1815,16 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list jobs request.</p>
+/// see [DeviceFarm::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
@@ -1554,6 +1838,31 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
+impl ListJobsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Job>> {
+        Some(self.jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobsResult {
+    type Item = Job;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Job> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DeviceFarm::list_network_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNetworkProfilesRequest {
@@ -1570,6 +1879,15 @@ pub struct ListNetworkProfilesRequest {
     pub type_: Option<String>,
 }
 
+impl PagedRequest for ListNetworkProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DeviceFarm::list_network_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNetworkProfilesResult {
@@ -1583,6 +1901,31 @@ pub struct ListNetworkProfilesResult {
     pub next_token: Option<String>,
 }
 
+impl ListNetworkProfilesResult {
+    fn pagination_page_opt(self) -> Option<Vec<NetworkProfile>> {
+        Some(self.network_profiles.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListNetworkProfilesResult {
+    type Item = NetworkProfile;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<NetworkProfile> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DeviceFarm::list_offering_promotions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingPromotionsRequest {
@@ -1592,6 +1935,15 @@ pub struct ListOfferingPromotionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListOfferingPromotionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DeviceFarm::list_offering_promotions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingPromotionsResult {
@@ -1605,7 +1957,32 @@ pub struct ListOfferingPromotionsResult {
     pub offering_promotions: Option<Vec<OfferingPromotion>>,
 }
 
+impl ListOfferingPromotionsResult {
+    fn pagination_page_opt(self) -> Option<Vec<OfferingPromotion>> {
+        Some(self.offering_promotions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOfferingPromotionsResult {
+    type Item = OfferingPromotion;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OfferingPromotion> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the request to list the offering transaction history.</p>
+/// see [DeviceFarm::list_offering_transactions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingTransactionsRequest {
@@ -1615,7 +1992,16 @@ pub struct ListOfferingTransactionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListOfferingTransactionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Returns the transaction log of the specified offerings.</p>
+/// see [DeviceFarm::list_offering_transactions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingTransactionsResult {
@@ -1629,7 +2015,32 @@ pub struct ListOfferingTransactionsResult {
     pub offering_transactions: Option<Vec<OfferingTransaction>>,
 }
 
+impl ListOfferingTransactionsResult {
+    fn pagination_page_opt(self) -> Option<Vec<OfferingTransaction>> {
+        Some(self.offering_transactions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOfferingTransactionsResult {
+    type Item = OfferingTransaction;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OfferingTransaction> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the request to list all offerings.</p>
+/// see [DeviceFarm::list_offerings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
@@ -1639,7 +2050,16 @@ pub struct ListOfferingsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListOfferingsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the return values of the list of offerings.</p>
+/// see [DeviceFarm::list_offerings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingsResult {
@@ -1653,7 +2073,32 @@ pub struct ListOfferingsResult {
     pub offerings: Option<Vec<Offering>>,
 }
 
+impl ListOfferingsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Offering>> {
+        Some(self.offerings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOfferingsResult {
+    type Item = Offering;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Offering> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the list projects operation.</p>
+/// see [DeviceFarm::list_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
@@ -1667,7 +2112,16 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListProjectsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list projects request.</p>
+/// see [DeviceFarm::list_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResult {
@@ -1681,7 +2135,32 @@ pub struct ListProjectsResult {
     pub projects: Option<Vec<Project>>,
 }
 
+impl ListProjectsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Project>> {
+        Some(self.projects.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListProjectsResult {
+    type Item = Project;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Project> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the request to return information about the remote access session.</p>
+/// see [DeviceFarm::list_remote_access_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRemoteAccessSessionsRequest {
@@ -1694,7 +2173,16 @@ pub struct ListRemoteAccessSessionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListRemoteAccessSessionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the response from the server after AWS Device Farm makes a request to return information about the remote access session.</p>
+/// see [DeviceFarm::list_remote_access_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRemoteAccessSessionsResult {
@@ -1708,7 +2196,32 @@ pub struct ListRemoteAccessSessionsResult {
     pub remote_access_sessions: Option<Vec<RemoteAccessSession>>,
 }
 
+impl ListRemoteAccessSessionsResult {
+    fn pagination_page_opt(self) -> Option<Vec<RemoteAccessSession>> {
+        Some(self.remote_access_sessions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRemoteAccessSessionsResult {
+    type Item = RemoteAccessSession;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RemoteAccessSession> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the list runs operation.</p>
+/// see [DeviceFarm::list_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRunsRequest {
@@ -1721,7 +2234,16 @@ pub struct ListRunsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListRunsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list runs request.</p>
+/// see [DeviceFarm::list_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRunsResult {
@@ -1735,7 +2257,32 @@ pub struct ListRunsResult {
     pub runs: Option<Vec<Run>>,
 }
 
+impl ListRunsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Run>> {
+        Some(self.runs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRunsResult {
+    type Item = Run;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Run> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the list samples operation.</p>
+/// see [DeviceFarm::list_samples]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSamplesRequest {
@@ -1748,7 +2295,16 @@ pub struct ListSamplesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSamplesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list samples request.</p>
+/// see [DeviceFarm::list_samples]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSamplesResult {
@@ -1762,7 +2318,32 @@ pub struct ListSamplesResult {
     pub samples: Option<Vec<Sample>>,
 }
 
+impl ListSamplesResult {
+    fn pagination_page_opt(self) -> Option<Vec<Sample>> {
+        Some(self.samples.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSamplesResult {
+    type Item = Sample;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Sample> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the list suites operation.</p>
+/// see [DeviceFarm::list_suites]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSuitesRequest {
@@ -1775,7 +2356,16 @@ pub struct ListSuitesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSuitesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list suites request.</p>
+/// see [DeviceFarm::list_suites]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSuitesResult {
@@ -1789,6 +2379,31 @@ pub struct ListSuitesResult {
     pub suites: Option<Vec<Suite>>,
 }
 
+impl ListSuitesResult {
+    fn pagination_page_opt(self) -> Option<Vec<Suite>> {
+        Some(self.suites.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSuitesResult {
+    type Item = Suite;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Suite> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DeviceFarm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1797,6 +2412,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [DeviceFarm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1806,6 +2422,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DeviceFarm::list_test_grid_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridProjectsRequest {
@@ -1819,6 +2436,7 @@ pub struct ListTestGridProjectsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [DeviceFarm::list_test_grid_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridProjectsResult {
@@ -1832,6 +2450,7 @@ pub struct ListTestGridProjectsResult {
     pub test_grid_projects: Option<Vec<TestGridProject>>,
 }
 
+/// see [DeviceFarm::list_test_grid_session_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionActionsRequest {
@@ -1848,6 +2467,7 @@ pub struct ListTestGridSessionActionsRequest {
     pub session_arn: String,
 }
 
+/// see [DeviceFarm::list_test_grid_session_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionActionsResult {
@@ -1861,6 +2481,7 @@ pub struct ListTestGridSessionActionsResult {
     pub next_token: Option<String>,
 }
 
+/// see [DeviceFarm::list_test_grid_session_artifacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionArtifactsRequest {
@@ -1881,6 +2502,7 @@ pub struct ListTestGridSessionArtifactsRequest {
     pub type_: Option<String>,
 }
 
+/// see [DeviceFarm::list_test_grid_session_artifacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionArtifactsResult {
@@ -1894,6 +2516,7 @@ pub struct ListTestGridSessionArtifactsResult {
     pub next_token: Option<String>,
 }
 
+/// see [DeviceFarm::list_test_grid_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionsRequest {
@@ -1930,6 +2553,7 @@ pub struct ListTestGridSessionsRequest {
     pub status: Option<String>,
 }
 
+/// see [DeviceFarm::list_test_grid_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionsResult {
@@ -1944,6 +2568,7 @@ pub struct ListTestGridSessionsResult {
 }
 
 /// <p>Represents a request to the list tests operation.</p>
+/// see [DeviceFarm::list_tests]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestsRequest {
@@ -1956,7 +2581,16 @@ pub struct ListTestsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListTestsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list tests request.</p>
+/// see [DeviceFarm::list_tests]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestsResult {
@@ -1970,7 +2604,32 @@ pub struct ListTestsResult {
     pub tests: Option<Vec<Test>>,
 }
 
+impl ListTestsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Test>> {
+        Some(self.tests.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTestsResult {
+    type Item = Test;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Test> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the list unique problems operation.</p>
+/// see [DeviceFarm::list_unique_problems]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUniqueProblemsRequest {
@@ -1983,7 +2642,16 @@ pub struct ListUniqueProblemsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListUniqueProblemsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list unique problems request.</p>
+/// see [DeviceFarm::list_unique_problems]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUniqueProblemsResult {
@@ -1997,7 +2665,34 @@ pub struct ListUniqueProblemsResult {
     pub unique_problems: Option<::std::collections::HashMap<String, Vec<UniqueProblem>>>,
 }
 
+impl ListUniqueProblemsResult {
+    fn pagination_page_opt(
+        self,
+    ) -> Option<Vec<::std::collections::HashMap<String, Vec<UniqueProblem>>>> {
+        Some(self.unique_problems.as_ref()?.clone()).map(|x| vec![x])
+    }
+}
+
+impl PagedOutput for ListUniqueProblemsResult {
+    type Item = ::std::collections::HashMap<String, Vec<UniqueProblem>>;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<::std::collections::HashMap<String, Vec<UniqueProblem>>> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents a request to the list uploads operation.</p>
+/// see [DeviceFarm::list_uploads]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUploadsRequest {
@@ -2014,7 +2709,16 @@ pub struct ListUploadsRequest {
     pub type_: Option<String>,
 }
 
+impl PagedRequest for ListUploadsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the result of a list uploads request.</p>
+/// see [DeviceFarm::list_uploads]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUploadsResult {
@@ -2028,6 +2732,31 @@ pub struct ListUploadsResult {
     pub uploads: Option<Vec<Upload>>,
 }
 
+impl ListUploadsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Upload>> {
+        Some(self.uploads.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUploadsResult {
+    type Item = Upload;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Upload> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DeviceFarm::list_vpce_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVPCEConfigurationsRequest {
@@ -2041,6 +2770,15 @@ pub struct ListVPCEConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListVPCEConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DeviceFarm::list_vpce_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVPCEConfigurationsResult {
@@ -2052,6 +2790,30 @@ pub struct ListVPCEConfigurationsResult {
     #[serde(rename = "vpceConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpce_configurations: Option<Vec<VPCEConfiguration>>,
+}
+
+impl ListVPCEConfigurationsResult {
+    fn pagination_page_opt(self) -> Option<Vec<VPCEConfiguration>> {
+        Some(self.vpce_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListVPCEConfigurationsResult {
+    type Item = VPCEConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VPCEConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents a latitude and longitude pair, expressed in geographic coordinate system degrees (for example, 47.6204, -122.3491).</p> <p>Elevation is currently not supported.</p>
@@ -2292,6 +3054,7 @@ pub struct Project {
 }
 
 /// <p>Represents a request for a purchase offering.</p>
+/// see [DeviceFarm::purchase_offering]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
@@ -2310,6 +3073,7 @@ pub struct PurchaseOfferingRequest {
 }
 
 /// <p>The result of the purchase offering (for example, success or failure).</p>
+/// see [DeviceFarm::purchase_offering]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseOfferingResult {
@@ -2445,6 +3209,7 @@ pub struct RemoteAccessSession {
 }
 
 /// <p>A request that represents an offering renewal.</p>
+/// see [DeviceFarm::renew_offering]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewOfferingRequest {
@@ -2459,6 +3224,7 @@ pub struct RenewOfferingRequest {
 }
 
 /// <p>The result of a renewal offering.</p>
+/// see [DeviceFarm::renew_offering]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenewOfferingResult {
@@ -2690,6 +3456,7 @@ pub struct ScheduleRunConfiguration {
 }
 
 /// <p>Represents a request to the schedule run operation.</p>
+/// see [DeviceFarm::schedule_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunRequest {
@@ -2726,6 +3493,7 @@ pub struct ScheduleRunRequest {
 }
 
 /// <p>Represents the result of a schedule run request.</p>
+/// see [DeviceFarm::schedule_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduleRunResult {
@@ -2760,6 +3528,7 @@ pub struct ScheduleRunTest {
     pub type_: String,
 }
 
+/// see [DeviceFarm::stop_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
@@ -2768,6 +3537,7 @@ pub struct StopJobRequest {
     pub arn: String,
 }
 
+/// see [DeviceFarm::stop_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopJobResult {
@@ -2778,6 +3548,7 @@ pub struct StopJobResult {
 }
 
 /// <p>Represents the request to stop the remote access session.</p>
+/// see [DeviceFarm::stop_remote_access_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRemoteAccessSessionRequest {
@@ -2787,6 +3558,7 @@ pub struct StopRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server that describes the remote access session when AWS Device Farm stops the session.</p>
+/// see [DeviceFarm::stop_remote_access_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRemoteAccessSessionResult {
@@ -2797,6 +3569,7 @@ pub struct StopRemoteAccessSessionResult {
 }
 
 /// <p>Represents the request to stop a specific run.</p>
+/// see [DeviceFarm::stop_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRunRequest {
@@ -2806,6 +3579,7 @@ pub struct StopRunRequest {
 }
 
 /// <p>Represents the results of your stop run attempt.</p>
+/// see [DeviceFarm::stop_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRunResult {
@@ -2876,6 +3650,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [DeviceFarm::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2887,6 +3662,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [DeviceFarm::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -3065,6 +3841,7 @@ pub struct UniqueProblem {
     pub problems: Option<Vec<Problem>>,
 }
 
+/// see [DeviceFarm::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3076,10 +3853,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [DeviceFarm::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [DeviceFarm::update_device_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceInstanceRequest {
@@ -3096,6 +3875,7 @@ pub struct UpdateDeviceInstanceRequest {
     pub profile_arn: Option<String>,
 }
 
+/// see [DeviceFarm::update_device_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceInstanceResult {
@@ -3106,6 +3886,7 @@ pub struct UpdateDeviceInstanceResult {
 }
 
 /// <p>Represents a request to the update device pool operation.</p>
+/// see [DeviceFarm::update_device_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicePoolRequest {
@@ -3135,6 +3916,7 @@ pub struct UpdateDevicePoolRequest {
 }
 
 /// <p>Represents the result of an update device pool request.</p>
+/// see [DeviceFarm::update_device_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevicePoolResult {
@@ -3144,6 +3926,7 @@ pub struct UpdateDevicePoolResult {
     pub device_pool: Option<DevicePool>,
 }
 
+/// see [DeviceFarm::update_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceProfileRequest {
@@ -3172,6 +3955,7 @@ pub struct UpdateInstanceProfileRequest {
     pub reboot_after_use: Option<bool>,
 }
 
+/// see [DeviceFarm::update_instance_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInstanceProfileResult {
@@ -3181,6 +3965,7 @@ pub struct UpdateInstanceProfileResult {
     pub instance_profile: Option<InstanceProfile>,
 }
 
+/// see [DeviceFarm::update_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNetworkProfileRequest {
@@ -3233,6 +4018,7 @@ pub struct UpdateNetworkProfileRequest {
     pub uplink_loss_percent: Option<i64>,
 }
 
+/// see [DeviceFarm::update_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNetworkProfileResult {
@@ -3243,6 +4029,7 @@ pub struct UpdateNetworkProfileResult {
 }
 
 /// <p>Represents a request to the update project operation.</p>
+/// see [DeviceFarm::update_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
@@ -3260,6 +4047,7 @@ pub struct UpdateProjectRequest {
 }
 
 /// <p>Represents the result of an update project request.</p>
+/// see [DeviceFarm::update_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResult {
@@ -3269,6 +4057,7 @@ pub struct UpdateProjectResult {
     pub project: Option<Project>,
 }
 
+/// see [DeviceFarm::update_test_grid_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTestGridProjectRequest {
@@ -3285,6 +4074,7 @@ pub struct UpdateTestGridProjectRequest {
     pub project_arn: String,
 }
 
+/// see [DeviceFarm::update_test_grid_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTestGridProjectResult {
@@ -3294,6 +4084,7 @@ pub struct UpdateTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
+/// see [DeviceFarm::update_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUploadRequest {
@@ -3314,6 +4105,7 @@ pub struct UpdateUploadRequest {
     pub name: Option<String>,
 }
 
+/// see [DeviceFarm::update_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUploadResult {
@@ -3323,6 +4115,7 @@ pub struct UpdateUploadResult {
     pub upload: Option<Upload>,
 }
 
+/// see [DeviceFarm::update_vpce_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVPCEConfigurationRequest {
@@ -3347,6 +4140,7 @@ pub struct UpdateVPCEConfigurationRequest {
     pub vpce_service_name: Option<String>,
 }
 
+/// see [DeviceFarm::update_vpce_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVPCEConfigurationResult {
@@ -7152,7 +7946,7 @@ impl fmt::Display for UpdateVPCEConfigurationError {
 impl Error for UpdateVPCEConfigurationError {}
 /// Trait representing the capabilities of the AWS Device Farm API. AWS Device Farm clients implement this trait.
 #[async_trait]
-pub trait DeviceFarm {
+pub trait DeviceFarm: Clone + Sync + Send + 'static {
     /// <p>Creates a device pool.</p>
     async fn create_device_pool(
         &self,
@@ -7312,6 +8106,16 @@ pub trait DeviceFarm {
         input: GetOfferingStatusRequest,
     ) -> Result<GetOfferingStatusResult, RusotoError<GetOfferingStatusError>>;
 
+    /// Auto-paginating version of `get_offering_status`
+    fn get_offering_status_pages(
+        &self,
+        input: GetOfferingStatusRequest,
+    ) -> RusotoStream<GetOfferingStatusResult, GetOfferingStatusError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_offering_status(state.clone())
+        })
+    }
+
     /// <p>Gets information about a project.</p>
     async fn get_project(
         &self,
@@ -7376,11 +8180,31 @@ pub trait DeviceFarm {
         input: ListArtifactsRequest,
     ) -> Result<ListArtifactsResult, RusotoError<ListArtifactsError>>;
 
+    /// Auto-paginating version of `list_artifacts`
+    fn list_artifacts_pages(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> RusotoStream<Artifact, ListArtifactsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_artifacts(state.clone())
+        })
+    }
+
     /// <p>Returns information about the private device instances associated with one or more AWS accounts.</p>
     async fn list_device_instances(
         &self,
         input: ListDeviceInstancesRequest,
     ) -> Result<ListDeviceInstancesResult, RusotoError<ListDeviceInstancesError>>;
+
+    /// Auto-paginating version of `list_device_instances`
+    fn list_device_instances_pages(
+        &self,
+        input: ListDeviceInstancesRequest,
+    ) -> RusotoStream<DeviceInstance, ListDeviceInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_device_instances(state.clone())
+        })
+    }
 
     /// <p>Gets information about device pools.</p>
     async fn list_device_pools(
@@ -7388,11 +8212,31 @@ pub trait DeviceFarm {
         input: ListDevicePoolsRequest,
     ) -> Result<ListDevicePoolsResult, RusotoError<ListDevicePoolsError>>;
 
+    /// Auto-paginating version of `list_device_pools`
+    fn list_device_pools_pages(
+        &self,
+        input: ListDevicePoolsRequest,
+    ) -> RusotoStream<DevicePool, ListDevicePoolsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_device_pools(state.clone())
+        })
+    }
+
     /// <p>Gets information about unique device types.</p>
     async fn list_devices(
         &self,
         input: ListDevicesRequest,
     ) -> Result<ListDevicesResult, RusotoError<ListDevicesError>>;
+
+    /// Auto-paginating version of `list_devices`
+    fn list_devices_pages(
+        &self,
+        input: ListDevicesRequest,
+    ) -> RusotoStream<Device, ListDevicesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_devices(state.clone())
+        })
+    }
 
     /// <p>Returns information about all the instance profiles in an AWS account.</p>
     async fn list_instance_profiles(
@@ -7400,11 +8244,28 @@ pub trait DeviceFarm {
         input: ListInstanceProfilesRequest,
     ) -> Result<ListInstanceProfilesResult, RusotoError<ListInstanceProfilesError>>;
 
+    /// Auto-paginating version of `list_instance_profiles`
+    fn list_instance_profiles_pages(
+        &self,
+        input: ListInstanceProfilesRequest,
+    ) -> RusotoStream<InstanceProfile, ListInstanceProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_instance_profiles(state.clone())
+        })
+    }
+
     /// <p>Gets information about jobs for a given test run.</p>
     async fn list_jobs(
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
+
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<Job, ListJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_jobs(state.clone())
+        })
+    }
 
     /// <p>Returns the list of available network profiles.</p>
     async fn list_network_profiles(
@@ -7412,11 +8273,31 @@ pub trait DeviceFarm {
         input: ListNetworkProfilesRequest,
     ) -> Result<ListNetworkProfilesResult, RusotoError<ListNetworkProfilesError>>;
 
+    /// Auto-paginating version of `list_network_profiles`
+    fn list_network_profiles_pages(
+        &self,
+        input: ListNetworkProfilesRequest,
+    ) -> RusotoStream<NetworkProfile, ListNetworkProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_network_profiles(state.clone())
+        })
+    }
+
     /// <p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you must be able to invoke this operation.</p>
     async fn list_offering_promotions(
         &self,
         input: ListOfferingPromotionsRequest,
     ) -> Result<ListOfferingPromotionsResult, RusotoError<ListOfferingPromotionsError>>;
+
+    /// Auto-paginating version of `list_offering_promotions`
+    fn list_offering_promotions_pages(
+        &self,
+        input: ListOfferingPromotionsRequest,
+    ) -> RusotoStream<OfferingPromotion, ListOfferingPromotionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_offering_promotions(state.clone())
+        })
+    }
 
     /// <p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
     async fn list_offering_transactions(
@@ -7424,11 +8305,31 @@ pub trait DeviceFarm {
         input: ListOfferingTransactionsRequest,
     ) -> Result<ListOfferingTransactionsResult, RusotoError<ListOfferingTransactionsError>>;
 
+    /// Auto-paginating version of `list_offering_transactions`
+    fn list_offering_transactions_pages(
+        &self,
+        input: ListOfferingTransactionsRequest,
+    ) -> RusotoStream<OfferingTransaction, ListOfferingTransactionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_offering_transactions(state.clone())
+        })
+    }
+
     /// <p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
     async fn list_offerings(
         &self,
         input: ListOfferingsRequest,
     ) -> Result<ListOfferingsResult, RusotoError<ListOfferingsError>>;
+
+    /// Auto-paginating version of `list_offerings`
+    fn list_offerings_pages(
+        &self,
+        input: ListOfferingsRequest,
+    ) -> RusotoStream<Offering, ListOfferingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_offerings(state.clone())
+        })
+    }
 
     /// <p>Gets information about projects.</p>
     async fn list_projects(
@@ -7436,11 +8337,31 @@ pub trait DeviceFarm {
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
 
+    /// Auto-paginating version of `list_projects`
+    fn list_projects_pages(
+        &self,
+        input: ListProjectsRequest,
+    ) -> RusotoStream<Project, ListProjectsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_projects(state.clone())
+        })
+    }
+
     /// <p>Returns a list of all currently running remote access sessions.</p>
     async fn list_remote_access_sessions(
         &self,
         input: ListRemoteAccessSessionsRequest,
     ) -> Result<ListRemoteAccessSessionsResult, RusotoError<ListRemoteAccessSessionsError>>;
+
+    /// Auto-paginating version of `list_remote_access_sessions`
+    fn list_remote_access_sessions_pages(
+        &self,
+        input: ListRemoteAccessSessionsRequest,
+    ) -> RusotoStream<RemoteAccessSession, ListRemoteAccessSessionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_remote_access_sessions(state.clone())
+        })
+    }
 
     /// <p>Gets information about runs, given an AWS Device Farm project ARN.</p>
     async fn list_runs(
@@ -7448,17 +8369,41 @@ pub trait DeviceFarm {
         input: ListRunsRequest,
     ) -> Result<ListRunsResult, RusotoError<ListRunsError>>;
 
+    /// Auto-paginating version of `list_runs`
+    fn list_runs_pages(&self, input: ListRunsRequest) -> RusotoStream<Run, ListRunsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_runs(state.clone())
+        })
+    }
+
     /// <p>Gets information about samples, given an AWS Device Farm job ARN.</p>
     async fn list_samples(
         &self,
         input: ListSamplesRequest,
     ) -> Result<ListSamplesResult, RusotoError<ListSamplesError>>;
 
+    /// Auto-paginating version of `list_samples`
+    fn list_samples_pages(
+        &self,
+        input: ListSamplesRequest,
+    ) -> RusotoStream<Sample, ListSamplesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_samples(state.clone())
+        })
+    }
+
     /// <p>Gets information about test suites for a given job.</p>
     async fn list_suites(
         &self,
         input: ListSuitesRequest,
     ) -> Result<ListSuitesResult, RusotoError<ListSuitesError>>;
+
+    /// Auto-paginating version of `list_suites`
+    fn list_suites_pages(&self, input: ListSuitesRequest) -> RusotoStream<Suite, ListSuitesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_suites(state.clone())
+        })
+    }
 
     /// <p>List the tags for an AWS Device Farm resource.</p>
     async fn list_tags_for_resource(
@@ -7496,11 +8441,31 @@ pub trait DeviceFarm {
         input: ListTestsRequest,
     ) -> Result<ListTestsResult, RusotoError<ListTestsError>>;
 
+    /// Auto-paginating version of `list_tests`
+    fn list_tests_pages(&self, input: ListTestsRequest) -> RusotoStream<Test, ListTestsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tests(state.clone())
+        })
+    }
+
     /// <p>Gets information about unique problems, such as exceptions or crashes.</p> <p>Unique problems are defined as a single instance of an error across a run, job, or suite. For example, if a call in your application consistently raises an exception (<code>OutOfBoundsException in MyActivity.java:386</code>), <code>ListUniqueProblems</code> returns a single entry instead of many individual entries for that exception.</p>
     async fn list_unique_problems(
         &self,
         input: ListUniqueProblemsRequest,
     ) -> Result<ListUniqueProblemsResult, RusotoError<ListUniqueProblemsError>>;
+
+    /// Auto-paginating version of `list_unique_problems`
+    fn list_unique_problems_pages(
+        &self,
+        input: ListUniqueProblemsRequest,
+    ) -> RusotoStream<
+        ::std::collections::HashMap<String, Vec<UniqueProblem>>,
+        ListUniqueProblemsError,
+    > {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_unique_problems(state.clone())
+        })
+    }
 
     /// <p>Gets information about uploads, given an AWS Device Farm project ARN.</p>
     async fn list_uploads(
@@ -7508,11 +8473,31 @@ pub trait DeviceFarm {
         input: ListUploadsRequest,
     ) -> Result<ListUploadsResult, RusotoError<ListUploadsError>>;
 
+    /// Auto-paginating version of `list_uploads`
+    fn list_uploads_pages(
+        &self,
+        input: ListUploadsRequest,
+    ) -> RusotoStream<Upload, ListUploadsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_uploads(state.clone())
+        })
+    }
+
     /// <p>Returns information about all Amazon Virtual Private Cloud (VPC) endpoint configurations in the AWS account.</p>
     async fn list_vpce_configurations(
         &self,
         input: ListVPCEConfigurationsRequest,
     ) -> Result<ListVPCEConfigurationsResult, RusotoError<ListVPCEConfigurationsError>>;
+
+    /// Auto-paginating version of `list_vpce_configurations`
+    fn list_vpce_configurations_pages(
+        &self,
+        input: ListVPCEConfigurationsRequest,
+    ) -> RusotoStream<VPCEConfiguration, ListVPCEConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_vpce_configurations(state.clone())
+        })
+    }
 
     /// <p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
     async fn purchase_offering(

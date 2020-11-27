@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -86,6 +88,7 @@ pub struct AddressBookData {
     pub name: Option<String>,
 }
 
+/// see [AlexaForBusiness::approve_skill]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApproveSkillRequest {
@@ -94,10 +97,12 @@ pub struct ApproveSkillRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::approve_skill]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApproveSkillResponse {}
 
+/// see [AlexaForBusiness::associate_contact_with_address_book]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateContactWithAddressBookRequest {
@@ -109,10 +114,12 @@ pub struct AssociateContactWithAddressBookRequest {
     pub contact_arn: String,
 }
 
+/// see [AlexaForBusiness::associate_contact_with_address_book]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateContactWithAddressBookResponse {}
 
+/// see [AlexaForBusiness::associate_device_with_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithNetworkProfileRequest {
@@ -124,10 +131,12 @@ pub struct AssociateDeviceWithNetworkProfileRequest {
     pub network_profile_arn: String,
 }
 
+/// see [AlexaForBusiness::associate_device_with_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDeviceWithNetworkProfileResponse {}
 
+/// see [AlexaForBusiness::associate_device_with_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithRoomRequest {
@@ -141,10 +150,12 @@ pub struct AssociateDeviceWithRoomRequest {
     pub room_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::associate_device_with_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDeviceWithRoomResponse {}
 
+/// see [AlexaForBusiness::associate_skill_group_with_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillGroupWithRoomRequest {
@@ -158,10 +169,12 @@ pub struct AssociateSkillGroupWithRoomRequest {
     pub skill_group_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::associate_skill_group_with_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSkillGroupWithRoomResponse {}
 
+/// see [AlexaForBusiness::associate_skill_with_skill_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillWithSkillGroupRequest {
@@ -174,10 +187,12 @@ pub struct AssociateSkillWithSkillGroupRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::associate_skill_with_skill_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSkillWithSkillGroupResponse {}
 
+/// see [AlexaForBusiness::associate_skill_with_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillWithUsersRequest {
@@ -186,6 +201,7 @@ pub struct AssociateSkillWithUsersRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::associate_skill_with_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSkillWithUsersResponse {}
@@ -436,6 +452,7 @@ pub struct Content {
     pub text_list: Option<Vec<Text>>,
 }
 
+/// see [AlexaForBusiness::create_address_book]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddressBookRequest {
@@ -452,6 +469,7 @@ pub struct CreateAddressBookRequest {
     pub name: String,
 }
 
+/// see [AlexaForBusiness::create_address_book]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAddressBookResponse {
@@ -461,6 +479,7 @@ pub struct CreateAddressBookResponse {
     pub address_book_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::create_business_report_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBusinessReportScheduleRequest {
@@ -496,6 +515,7 @@ pub struct CreateBusinessReportScheduleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [AlexaForBusiness::create_business_report_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBusinessReportScheduleResponse {
@@ -505,6 +525,7 @@ pub struct CreateBusinessReportScheduleResponse {
     pub schedule_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::create_conference_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConferenceProviderRequest {
@@ -531,6 +552,7 @@ pub struct CreateConferenceProviderRequest {
     pub pstn_dial_in: Option<PSTNDialIn>,
 }
 
+/// see [AlexaForBusiness::create_conference_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConferenceProviderResponse {
@@ -540,6 +562,7 @@ pub struct CreateConferenceProviderResponse {
     pub conference_provider_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::create_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContactRequest {
@@ -572,6 +595,7 @@ pub struct CreateContactRequest {
     pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
+/// see [AlexaForBusiness::create_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContactResponse {
@@ -596,6 +620,7 @@ pub struct CreateEndOfMeetingReminder {
     pub reminder_type: String,
 }
 
+/// see [AlexaForBusiness::create_gateway_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGatewayGroupRequest {
@@ -611,6 +636,7 @@ pub struct CreateGatewayGroupRequest {
     pub name: String,
 }
 
+/// see [AlexaForBusiness::create_gateway_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGatewayGroupResponse {
@@ -653,6 +679,7 @@ pub struct CreateMeetingRoomConfiguration {
     pub room_utilization_metrics_enabled: Option<bool>,
 }
 
+/// see [AlexaForBusiness::create_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkProfileRequest {
@@ -693,6 +720,7 @@ pub struct CreateNetworkProfileRequest {
     pub trust_anchors: Option<Vec<String>>,
 }
 
+/// see [AlexaForBusiness::create_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNetworkProfileResponse {
@@ -702,6 +730,7 @@ pub struct CreateNetworkProfileResponse {
     pub network_profile_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::create_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProfileRequest {
@@ -753,6 +782,7 @@ pub struct CreateProfileRequest {
     pub wake_word: String,
 }
 
+/// see [AlexaForBusiness::create_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProfileResponse {
@@ -774,6 +804,7 @@ pub struct CreateRequireCheckIn {
     pub release_after_minutes: i64,
 }
 
+/// see [AlexaForBusiness::create_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomRequest {
@@ -802,6 +833,7 @@ pub struct CreateRoomRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [AlexaForBusiness::create_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoomResponse {
@@ -811,6 +843,7 @@ pub struct CreateRoomResponse {
     pub room_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::create_skill_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSkillGroupRequest {
@@ -831,6 +864,7 @@ pub struct CreateSkillGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [AlexaForBusiness::create_skill_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSkillGroupResponse {
@@ -840,6 +874,7 @@ pub struct CreateSkillGroupResponse {
     pub skill_group_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -868,6 +903,7 @@ pub struct CreateUserRequest {
     pub user_id: String,
 }
 
+/// see [AlexaForBusiness::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
@@ -877,6 +913,7 @@ pub struct CreateUserResponse {
     pub user_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::delete_address_book]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAddressBookRequest {
@@ -885,10 +922,12 @@ pub struct DeleteAddressBookRequest {
     pub address_book_arn: String,
 }
 
+/// see [AlexaForBusiness::delete_address_book]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAddressBookResponse {}
 
+/// see [AlexaForBusiness::delete_business_report_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBusinessReportScheduleRequest {
@@ -897,10 +936,12 @@ pub struct DeleteBusinessReportScheduleRequest {
     pub schedule_arn: String,
 }
 
+/// see [AlexaForBusiness::delete_business_report_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBusinessReportScheduleResponse {}
 
+/// see [AlexaForBusiness::delete_conference_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConferenceProviderRequest {
@@ -909,10 +950,12 @@ pub struct DeleteConferenceProviderRequest {
     pub conference_provider_arn: String,
 }
 
+/// see [AlexaForBusiness::delete_conference_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConferenceProviderResponse {}
 
+/// see [AlexaForBusiness::delete_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContactRequest {
@@ -921,10 +964,12 @@ pub struct DeleteContactRequest {
     pub contact_arn: String,
 }
 
+/// see [AlexaForBusiness::delete_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContactResponse {}
 
+/// see [AlexaForBusiness::delete_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceRequest {
@@ -933,10 +978,12 @@ pub struct DeleteDeviceRequest {
     pub device_arn: String,
 }
 
+/// see [AlexaForBusiness::delete_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceResponse {}
 
+/// see [AlexaForBusiness::delete_device_usage_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceUsageDataRequest {
@@ -948,10 +995,12 @@ pub struct DeleteDeviceUsageDataRequest {
     pub device_usage_type: String,
 }
 
+/// see [AlexaForBusiness::delete_device_usage_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceUsageDataResponse {}
 
+/// see [AlexaForBusiness::delete_gateway_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayGroupRequest {
@@ -960,10 +1009,12 @@ pub struct DeleteGatewayGroupRequest {
     pub gateway_group_arn: String,
 }
 
+/// see [AlexaForBusiness::delete_gateway_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGatewayGroupResponse {}
 
+/// see [AlexaForBusiness::delete_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkProfileRequest {
@@ -972,10 +1023,12 @@ pub struct DeleteNetworkProfileRequest {
     pub network_profile_arn: String,
 }
 
+/// see [AlexaForBusiness::delete_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNetworkProfileResponse {}
 
+/// see [AlexaForBusiness::delete_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProfileRequest {
@@ -985,10 +1038,12 @@ pub struct DeleteProfileRequest {
     pub profile_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::delete_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProfileResponse {}
 
+/// see [AlexaForBusiness::delete_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomRequest {
@@ -998,10 +1053,12 @@ pub struct DeleteRoomRequest {
     pub room_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::delete_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRoomResponse {}
 
+/// see [AlexaForBusiness::delete_room_skill_parameter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomSkillParameterRequest {
@@ -1017,10 +1074,12 @@ pub struct DeleteRoomSkillParameterRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::delete_room_skill_parameter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRoomSkillParameterResponse {}
 
+/// see [AlexaForBusiness::delete_skill_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSkillAuthorizationRequest {
@@ -1033,10 +1092,12 @@ pub struct DeleteSkillAuthorizationRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::delete_skill_authorization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSkillAuthorizationResponse {}
 
+/// see [AlexaForBusiness::delete_skill_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSkillGroupRequest {
@@ -1046,10 +1107,12 @@ pub struct DeleteSkillGroupRequest {
     pub skill_group_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::delete_skill_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSkillGroupResponse {}
 
+/// see [AlexaForBusiness::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -1062,6 +1125,7 @@ pub struct DeleteUserRequest {
     pub user_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::delete_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {}
@@ -1260,6 +1324,7 @@ pub struct DeviceStatusInfo {
     pub device_status_details: Option<Vec<DeviceStatusDetail>>,
 }
 
+/// see [AlexaForBusiness::disassociate_contact_from_address_book]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateContactFromAddressBookRequest {
@@ -1271,10 +1336,12 @@ pub struct DisassociateContactFromAddressBookRequest {
     pub contact_arn: String,
 }
 
+/// see [AlexaForBusiness::disassociate_contact_from_address_book]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateContactFromAddressBookResponse {}
 
+/// see [AlexaForBusiness::disassociate_device_from_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDeviceFromRoomRequest {
@@ -1284,10 +1351,12 @@ pub struct DisassociateDeviceFromRoomRequest {
     pub device_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::disassociate_device_from_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDeviceFromRoomResponse {}
 
+/// see [AlexaForBusiness::disassociate_skill_from_skill_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillFromSkillGroupRequest {
@@ -1300,10 +1369,12 @@ pub struct DisassociateSkillFromSkillGroupRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::disassociate_skill_from_skill_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSkillFromSkillGroupResponse {}
 
+/// see [AlexaForBusiness::disassociate_skill_from_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillFromUsersRequest {
@@ -1312,10 +1383,12 @@ pub struct DisassociateSkillFromUsersRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::disassociate_skill_from_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSkillFromUsersResponse {}
 
+/// see [AlexaForBusiness::disassociate_skill_group_from_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillGroupFromRoomRequest {
@@ -1329,6 +1402,7 @@ pub struct DisassociateSkillGroupFromRoomRequest {
     pub skill_group_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::disassociate_skill_group_from_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSkillGroupFromRoomResponse {}
@@ -1363,6 +1437,7 @@ pub struct Filter {
     pub values: Vec<String>,
 }
 
+/// see [AlexaForBusiness::forget_smart_home_appliances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForgetSmartHomeAppliancesRequest {
@@ -1371,6 +1446,7 @@ pub struct ForgetSmartHomeAppliancesRequest {
     pub room_arn: String,
 }
 
+/// see [AlexaForBusiness::forget_smart_home_appliances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ForgetSmartHomeAppliancesResponse {}
@@ -1463,6 +1539,7 @@ pub struct GatewaySummary {
     pub software_version: Option<String>,
 }
 
+/// see [AlexaForBusiness::get_address_book]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAddressBookRequest {
@@ -1471,6 +1548,7 @@ pub struct GetAddressBookRequest {
     pub address_book_arn: String,
 }
 
+/// see [AlexaForBusiness::get_address_book]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAddressBookResponse {
@@ -1480,10 +1558,12 @@ pub struct GetAddressBookResponse {
     pub address_book: Option<AddressBook>,
 }
 
+/// see [AlexaForBusiness::get_conference_preference]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConferencePreferenceRequest {}
 
+/// see [AlexaForBusiness::get_conference_preference]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConferencePreferenceResponse {
@@ -1493,6 +1573,7 @@ pub struct GetConferencePreferenceResponse {
     pub preference: Option<ConferencePreference>,
 }
 
+/// see [AlexaForBusiness::get_conference_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConferenceProviderRequest {
@@ -1501,6 +1582,7 @@ pub struct GetConferenceProviderRequest {
     pub conference_provider_arn: String,
 }
 
+/// see [AlexaForBusiness::get_conference_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConferenceProviderResponse {
@@ -1510,6 +1592,7 @@ pub struct GetConferenceProviderResponse {
     pub conference_provider: Option<ConferenceProvider>,
 }
 
+/// see [AlexaForBusiness::get_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactRequest {
@@ -1518,6 +1601,7 @@ pub struct GetContactRequest {
     pub contact_arn: String,
 }
 
+/// see [AlexaForBusiness::get_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactResponse {
@@ -1527,6 +1611,7 @@ pub struct GetContactResponse {
     pub contact: Option<Contact>,
 }
 
+/// see [AlexaForBusiness::get_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
@@ -1536,6 +1621,7 @@ pub struct GetDeviceRequest {
     pub device_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::get_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceResponse {
@@ -1545,6 +1631,7 @@ pub struct GetDeviceResponse {
     pub device: Option<Device>,
 }
 
+/// see [AlexaForBusiness::get_gateway_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayGroupRequest {
@@ -1553,6 +1640,7 @@ pub struct GetGatewayGroupRequest {
     pub gateway_group_arn: String,
 }
 
+/// see [AlexaForBusiness::get_gateway_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGatewayGroupResponse {
@@ -1561,6 +1649,7 @@ pub struct GetGatewayGroupResponse {
     pub gateway_group: Option<GatewayGroup>,
 }
 
+/// see [AlexaForBusiness::get_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayRequest {
@@ -1569,6 +1658,7 @@ pub struct GetGatewayRequest {
     pub gateway_arn: String,
 }
 
+/// see [AlexaForBusiness::get_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGatewayResponse {
@@ -1578,10 +1668,12 @@ pub struct GetGatewayResponse {
     pub gateway: Option<Gateway>,
 }
 
+/// see [AlexaForBusiness::get_invitation_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationConfigurationRequest {}
 
+/// see [AlexaForBusiness::get_invitation_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInvitationConfigurationResponse {
@@ -1599,6 +1691,7 @@ pub struct GetInvitationConfigurationResponse {
     pub private_skill_ids: Option<Vec<String>>,
 }
 
+/// see [AlexaForBusiness::get_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkProfileRequest {
@@ -1607,6 +1700,7 @@ pub struct GetNetworkProfileRequest {
     pub network_profile_arn: String,
 }
 
+/// see [AlexaForBusiness::get_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNetworkProfileResponse {
@@ -1616,6 +1710,7 @@ pub struct GetNetworkProfileResponse {
     pub network_profile: Option<NetworkProfile>,
 }
 
+/// see [AlexaForBusiness::get_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProfileRequest {
@@ -1625,6 +1720,7 @@ pub struct GetProfileRequest {
     pub profile_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::get_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProfileResponse {
@@ -1634,6 +1730,7 @@ pub struct GetProfileResponse {
     pub profile: Option<Profile>,
 }
 
+/// see [AlexaForBusiness::get_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomRequest {
@@ -1643,6 +1740,7 @@ pub struct GetRoomRequest {
     pub room_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::get_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoomResponse {
@@ -1652,6 +1750,7 @@ pub struct GetRoomResponse {
     pub room: Option<Room>,
 }
 
+/// see [AlexaForBusiness::get_room_skill_parameter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomSkillParameterRequest {
@@ -1667,6 +1766,7 @@ pub struct GetRoomSkillParameterRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::get_room_skill_parameter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoomSkillParameterResponse {
@@ -1676,6 +1776,7 @@ pub struct GetRoomSkillParameterResponse {
     pub room_skill_parameter: Option<RoomSkillParameter>,
 }
 
+/// see [AlexaForBusiness::get_skill_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSkillGroupRequest {
@@ -1685,6 +1786,7 @@ pub struct GetSkillGroupRequest {
     pub skill_group_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::get_skill_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSkillGroupResponse {
@@ -1719,6 +1821,7 @@ pub struct InstantBooking {
     pub enabled: Option<bool>,
 }
 
+/// see [AlexaForBusiness::list_business_report_schedules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBusinessReportSchedulesRequest {
@@ -1732,6 +1835,15 @@ pub struct ListBusinessReportSchedulesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListBusinessReportSchedulesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_business_report_schedules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBusinessReportSchedulesResponse {
@@ -1745,6 +1857,31 @@ pub struct ListBusinessReportSchedulesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListBusinessReportSchedulesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BusinessReportSchedule>> {
+        Some(self.business_report_schedules.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBusinessReportSchedulesResponse {
+    type Item = BusinessReportSchedule;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BusinessReportSchedule> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::list_conference_providers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConferenceProvidersRequest {
@@ -1758,6 +1895,15 @@ pub struct ListConferenceProvidersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListConferenceProvidersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_conference_providers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConferenceProvidersResponse {
@@ -1771,6 +1917,31 @@ pub struct ListConferenceProvidersResponse {
     pub next_token: Option<String>,
 }
 
+impl ListConferenceProvidersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ConferenceProvider>> {
+        Some(self.conference_providers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListConferenceProvidersResponse {
+    type Item = ConferenceProvider;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ConferenceProvider> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::list_device_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceEventsRequest {
@@ -1791,6 +1962,15 @@ pub struct ListDeviceEventsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeviceEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_device_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceEventsResponse {
@@ -1804,6 +1984,31 @@ pub struct ListDeviceEventsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDeviceEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DeviceEvent>> {
+        Some(self.device_events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeviceEventsResponse {
+    type Item = DeviceEvent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DeviceEvent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::list_gateway_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewayGroupsRequest {
@@ -1817,6 +2022,7 @@ pub struct ListGatewayGroupsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AlexaForBusiness::list_gateway_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGatewayGroupsResponse {
@@ -1830,6 +2036,7 @@ pub struct ListGatewayGroupsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [AlexaForBusiness::list_gateways]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewaysRequest {
@@ -1847,6 +2054,7 @@ pub struct ListGatewaysRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AlexaForBusiness::list_gateways]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGatewaysResponse {
@@ -1860,6 +2068,7 @@ pub struct ListGatewaysResponse {
     pub next_token: Option<String>,
 }
 
+/// see [AlexaForBusiness::list_skills]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsRequest {
@@ -1885,6 +2094,15 @@ pub struct ListSkillsRequest {
     pub skill_type: Option<String>,
 }
 
+impl PagedRequest for ListSkillsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_skills]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSkillsResponse {
@@ -1898,6 +2116,31 @@ pub struct ListSkillsResponse {
     pub skill_summaries: Option<Vec<SkillSummary>>,
 }
 
+impl ListSkillsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SkillSummary>> {
+        Some(self.skill_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSkillsResponse {
+    type Item = SkillSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SkillSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::list_skills_store_categories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsStoreCategoriesRequest {
@@ -1911,6 +2154,15 @@ pub struct ListSkillsStoreCategoriesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSkillsStoreCategoriesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_skills_store_categories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSkillsStoreCategoriesResponse {
@@ -1924,6 +2176,31 @@ pub struct ListSkillsStoreCategoriesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListSkillsStoreCategoriesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Category>> {
+        Some(self.category_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSkillsStoreCategoriesResponse {
+    type Item = Category;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Category> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::list_skills_store_skills_by_category]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsStoreSkillsByCategoryRequest {
@@ -1940,6 +2217,15 @@ pub struct ListSkillsStoreSkillsByCategoryRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSkillsStoreSkillsByCategoryRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_skills_store_skills_by_category]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSkillsStoreSkillsByCategoryResponse {
@@ -1953,6 +2239,31 @@ pub struct ListSkillsStoreSkillsByCategoryResponse {
     pub skills_store_skills: Option<Vec<SkillsStoreSkill>>,
 }
 
+impl ListSkillsStoreSkillsByCategoryResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SkillsStoreSkill>> {
+        Some(self.skills_store_skills.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSkillsStoreSkillsByCategoryResponse {
+    type Item = SkillsStoreSkill;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SkillsStoreSkill> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::list_smart_home_appliances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSmartHomeAppliancesRequest {
@@ -1969,6 +2280,15 @@ pub struct ListSmartHomeAppliancesRequest {
     pub room_arn: String,
 }
 
+impl PagedRequest for ListSmartHomeAppliancesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_smart_home_appliances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSmartHomeAppliancesResponse {
@@ -1982,6 +2302,31 @@ pub struct ListSmartHomeAppliancesResponse {
     pub smart_home_appliances: Option<Vec<SmartHomeAppliance>>,
 }
 
+impl ListSmartHomeAppliancesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SmartHomeAppliance>> {
+        Some(self.smart_home_appliances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSmartHomeAppliancesResponse {
+    type Item = SmartHomeAppliance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SmartHomeAppliance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -1998,6 +2343,15 @@ pub struct ListTagsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListTagsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
@@ -2009,6 +2363,30 @@ pub struct ListTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl ListTagsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Meeting room settings of a room profile.</p>
@@ -2253,6 +2631,7 @@ pub struct ProfileData {
     pub wake_word: Option<String>,
 }
 
+/// see [AlexaForBusiness::put_conference_preference]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConferencePreferenceRequest {
@@ -2261,10 +2640,12 @@ pub struct PutConferencePreferenceRequest {
     pub conference_preference: ConferencePreference,
 }
 
+/// see [AlexaForBusiness::put_conference_preference]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConferencePreferenceResponse {}
 
+/// see [AlexaForBusiness::put_invitation_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInvitationConfigurationRequest {
@@ -2281,10 +2662,12 @@ pub struct PutInvitationConfigurationRequest {
     pub private_skill_ids: Option<Vec<String>>,
 }
 
+/// see [AlexaForBusiness::put_invitation_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutInvitationConfigurationResponse {}
 
+/// see [AlexaForBusiness::put_room_skill_parameter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRoomSkillParameterRequest {
@@ -2300,10 +2683,12 @@ pub struct PutRoomSkillParameterRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::put_room_skill_parameter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRoomSkillParameterResponse {}
 
+/// see [AlexaForBusiness::put_skill_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSkillAuthorizationRequest {
@@ -2319,10 +2704,12 @@ pub struct PutSkillAuthorizationRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::put_skill_authorization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSkillAuthorizationResponse {}
 
+/// see [AlexaForBusiness::register_avs_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterAVSDeviceRequest {
@@ -2348,6 +2735,7 @@ pub struct RegisterAVSDeviceRequest {
     pub user_code: String,
 }
 
+/// see [AlexaForBusiness::register_avs_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterAVSDeviceResponse {
@@ -2357,6 +2745,7 @@ pub struct RegisterAVSDeviceResponse {
     pub device_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::reject_skill]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectSkillRequest {
@@ -2365,6 +2754,7 @@ pub struct RejectSkillRequest {
     pub skill_id: String,
 }
 
+/// see [AlexaForBusiness::reject_skill]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectSkillResponse {}
@@ -2383,6 +2773,7 @@ pub struct RequireCheckIn {
     pub release_after_minutes: Option<i64>,
 }
 
+/// see [AlexaForBusiness::resolve_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveRoomRequest {
@@ -2394,6 +2785,7 @@ pub struct ResolveRoomRequest {
     pub user_id: String,
 }
 
+/// see [AlexaForBusiness::resolve_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResolveRoomResponse {
@@ -2411,6 +2803,7 @@ pub struct ResolveRoomResponse {
     pub room_skill_parameters: Option<Vec<RoomSkillParameter>>,
 }
 
+/// see [AlexaForBusiness::revoke_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeInvitationRequest {
@@ -2424,6 +2817,7 @@ pub struct RevokeInvitationRequest {
     pub user_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::revoke_invitation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeInvitationResponse {}
@@ -2495,6 +2889,7 @@ pub struct RoomSkillParameter {
     pub parameter_value: String,
 }
 
+/// see [AlexaForBusiness::search_address_books]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAddressBooksRequest {
@@ -2516,6 +2911,7 @@ pub struct SearchAddressBooksRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+/// see [AlexaForBusiness::search_address_books]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchAddressBooksResponse {
@@ -2533,6 +2929,7 @@ pub struct SearchAddressBooksResponse {
     pub total_count: Option<i64>,
 }
 
+/// see [AlexaForBusiness::search_contacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchContactsRequest {
@@ -2554,6 +2951,7 @@ pub struct SearchContactsRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+/// see [AlexaForBusiness::search_contacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchContactsResponse {
@@ -2571,6 +2969,7 @@ pub struct SearchContactsResponse {
     pub total_count: Option<i64>,
 }
 
+/// see [AlexaForBusiness::search_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchDevicesRequest {
@@ -2592,6 +2991,15 @@ pub struct SearchDevicesRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+impl PagedRequest for SearchDevicesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::search_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchDevicesResponse {
@@ -2609,6 +3017,31 @@ pub struct SearchDevicesResponse {
     pub total_count: Option<i64>,
 }
 
+impl SearchDevicesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DeviceData>> {
+        Some(self.devices.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SearchDevicesResponse {
+    type Item = DeviceData;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DeviceData> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::search_network_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchNetworkProfilesRequest {
@@ -2630,6 +3063,7 @@ pub struct SearchNetworkProfilesRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+/// see [AlexaForBusiness::search_network_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchNetworkProfilesResponse {
@@ -2647,6 +3081,7 @@ pub struct SearchNetworkProfilesResponse {
     pub total_count: Option<i64>,
 }
 
+/// see [AlexaForBusiness::search_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProfilesRequest {
@@ -2668,6 +3103,15 @@ pub struct SearchProfilesRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+impl PagedRequest for SearchProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::search_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchProfilesResponse {
@@ -2685,6 +3129,31 @@ pub struct SearchProfilesResponse {
     pub total_count: Option<i64>,
 }
 
+impl SearchProfilesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ProfileData>> {
+        Some(self.profiles.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SearchProfilesResponse {
+    type Item = ProfileData;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProfileData> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::search_rooms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRoomsRequest {
@@ -2706,6 +3175,15 @@ pub struct SearchRoomsRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+impl PagedRequest for SearchRoomsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::search_rooms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchRoomsResponse {
@@ -2723,6 +3201,31 @@ pub struct SearchRoomsResponse {
     pub total_count: Option<i64>,
 }
 
+impl SearchRoomsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RoomData>> {
+        Some(self.rooms.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SearchRoomsResponse {
+    type Item = RoomData;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RoomData> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::search_skill_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSkillGroupsRequest {
@@ -2744,6 +3247,15 @@ pub struct SearchSkillGroupsRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+impl PagedRequest for SearchSkillGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::search_skill_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSkillGroupsResponse {
@@ -2761,6 +3273,31 @@ pub struct SearchSkillGroupsResponse {
     pub total_count: Option<i64>,
 }
 
+impl SearchSkillGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SkillGroupData>> {
+        Some(self.skill_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SearchSkillGroupsResponse {
+    type Item = SkillGroupData;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SkillGroupData> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::search_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchUsersRequest {
@@ -2782,6 +3319,15 @@ pub struct SearchUsersRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
+impl PagedRequest for SearchUsersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AlexaForBusiness::search_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchUsersResponse {
@@ -2799,6 +3345,31 @@ pub struct SearchUsersResponse {
     pub users: Option<Vec<UserData>>,
 }
 
+impl SearchUsersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UserData>> {
+        Some(self.users.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SearchUsersResponse {
+    type Item = UserData;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserData> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AlexaForBusiness::send_announcement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendAnnouncementRequest {
@@ -2817,6 +3388,7 @@ pub struct SendAnnouncementRequest {
     pub time_to_live_in_seconds: Option<i64>,
 }
 
+/// see [AlexaForBusiness::send_announcement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendAnnouncementResponse {
@@ -2826,6 +3398,7 @@ pub struct SendAnnouncementResponse {
     pub announcement_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::send_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendInvitationRequest {
@@ -2835,6 +3408,7 @@ pub struct SendInvitationRequest {
     pub user_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::send_invitation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendInvitationResponse {}
@@ -3034,6 +3608,7 @@ pub struct Ssml {
     pub value: String,
 }
 
+/// see [AlexaForBusiness::start_device_sync]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeviceSyncRequest {
@@ -3050,10 +3625,12 @@ pub struct StartDeviceSyncRequest {
     pub room_arn: Option<String>,
 }
 
+/// see [AlexaForBusiness::start_device_sync]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDeviceSyncResponse {}
 
+/// see [AlexaForBusiness::start_smart_home_appliance_discovery]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSmartHomeApplianceDiscoveryRequest {
@@ -3062,6 +3639,7 @@ pub struct StartSmartHomeApplianceDiscoveryRequest {
     pub room_arn: String,
 }
 
+/// see [AlexaForBusiness::start_smart_home_appliance_discovery]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSmartHomeApplianceDiscoveryResponse {}
@@ -3077,6 +3655,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [AlexaForBusiness::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -3088,6 +3667,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [AlexaForBusiness::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -3104,6 +3684,7 @@ pub struct Text {
     pub value: String,
 }
 
+/// see [AlexaForBusiness::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3115,10 +3696,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [AlexaForBusiness::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [AlexaForBusiness::update_address_book]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAddressBookRequest {
@@ -3135,10 +3718,12 @@ pub struct UpdateAddressBookRequest {
     pub name: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_address_book]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAddressBookResponse {}
 
+/// see [AlexaForBusiness::update_business_report_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBusinessReportScheduleRequest {
@@ -3167,10 +3752,12 @@ pub struct UpdateBusinessReportScheduleRequest {
     pub schedule_name: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_business_report_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBusinessReportScheduleResponse {}
 
+/// see [AlexaForBusiness::update_conference_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConferenceProviderRequest {
@@ -3193,10 +3780,12 @@ pub struct UpdateConferenceProviderRequest {
     pub pstn_dial_in: Option<PSTNDialIn>,
 }
 
+/// see [AlexaForBusiness::update_conference_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConferenceProviderResponse {}
 
+/// see [AlexaForBusiness::update_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactRequest {
@@ -3229,10 +3818,12 @@ pub struct UpdateContactRequest {
     pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
+/// see [AlexaForBusiness::update_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContactResponse {}
 
+/// see [AlexaForBusiness::update_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceRequest {
@@ -3246,6 +3837,7 @@ pub struct UpdateDeviceRequest {
     pub device_name: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceResponse {}
@@ -3268,6 +3860,7 @@ pub struct UpdateEndOfMeetingReminder {
     pub reminder_type: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_gateway_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayGroupRequest {
@@ -3284,10 +3877,12 @@ pub struct UpdateGatewayGroupRequest {
     pub name: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_gateway_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGatewayGroupResponse {}
 
+/// see [AlexaForBusiness::update_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayRequest {
@@ -3308,6 +3903,7 @@ pub struct UpdateGatewayRequest {
     pub software_version: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGatewayResponse {}
@@ -3348,6 +3944,7 @@ pub struct UpdateMeetingRoomConfiguration {
     pub room_utilization_metrics_enabled: Option<bool>,
 }
 
+/// see [AlexaForBusiness::update_network_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNetworkProfileRequest {
@@ -3380,10 +3977,12 @@ pub struct UpdateNetworkProfileRequest {
     pub trust_anchors: Option<Vec<String>>,
 }
 
+/// see [AlexaForBusiness::update_network_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNetworkProfileResponse {}
 
+/// see [AlexaForBusiness::update_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProfileRequest {
@@ -3441,6 +4040,7 @@ pub struct UpdateProfileRequest {
     pub wake_word: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProfileResponse {}
@@ -3459,6 +4059,7 @@ pub struct UpdateRequireCheckIn {
     pub release_after_minutes: Option<i64>,
 }
 
+/// see [AlexaForBusiness::update_room]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomRequest {
@@ -3484,10 +4085,12 @@ pub struct UpdateRoomRequest {
     pub room_name: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_room]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRoomResponse {}
 
+/// see [AlexaForBusiness::update_skill_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSkillGroupRequest {
@@ -3505,6 +4108,7 @@ pub struct UpdateSkillGroupRequest {
     pub skill_group_name: Option<String>,
 }
 
+/// see [AlexaForBusiness::update_skill_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSkillGroupResponse {}
@@ -6797,7 +7401,7 @@ impl fmt::Display for UpdateSkillGroupError {
 impl Error for UpdateSkillGroupError {}
 /// Trait representing the capabilities of the Alexa For Business API. Alexa For Business clients implement this trait.
 #[async_trait]
-pub trait AlexaForBusiness {
+pub trait AlexaForBusiness: Clone + Sync + Send + 'static {
     /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>
     async fn approve_skill(
         &self,
@@ -7117,17 +7721,47 @@ pub trait AlexaForBusiness {
         input: ListBusinessReportSchedulesRequest,
     ) -> Result<ListBusinessReportSchedulesResponse, RusotoError<ListBusinessReportSchedulesError>>;
 
+    /// Auto-paginating version of `list_business_report_schedules`
+    fn list_business_report_schedules_pages(
+        &self,
+        input: ListBusinessReportSchedulesRequest,
+    ) -> RusotoStream<BusinessReportSchedule, ListBusinessReportSchedulesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_business_report_schedules(state.clone())
+        })
+    }
+
     /// <p>Lists conference providers under a specific AWS account.</p>
     async fn list_conference_providers(
         &self,
         input: ListConferenceProvidersRequest,
     ) -> Result<ListConferenceProvidersResponse, RusotoError<ListConferenceProvidersError>>;
 
+    /// Auto-paginating version of `list_conference_providers`
+    fn list_conference_providers_pages(
+        &self,
+        input: ListConferenceProvidersRequest,
+    ) -> RusotoStream<ConferenceProvider, ListConferenceProvidersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_conference_providers(state.clone())
+        })
+    }
+
     /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
     async fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
     ) -> Result<ListDeviceEventsResponse, RusotoError<ListDeviceEventsError>>;
+
+    /// Auto-paginating version of `list_device_events`
+    fn list_device_events_pages(
+        &self,
+        input: ListDeviceEventsRequest,
+    ) -> RusotoStream<DeviceEvent, ListDeviceEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_device_events(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of gateway group summaries. Use GetGatewayGroup to retrieve details of a specific gateway group.</p>
     async fn list_gateway_groups(
@@ -7147,11 +7781,31 @@ pub trait AlexaForBusiness {
         input: ListSkillsRequest,
     ) -> Result<ListSkillsResponse, RusotoError<ListSkillsError>>;
 
+    /// Auto-paginating version of `list_skills`
+    fn list_skills_pages(
+        &self,
+        input: ListSkillsRequest,
+    ) -> RusotoStream<SkillSummary, ListSkillsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_skills(state.clone())
+        })
+    }
+
     /// <p>Lists all categories in the Alexa skill store.</p>
     async fn list_skills_store_categories(
         &self,
         input: ListSkillsStoreCategoriesRequest,
     ) -> Result<ListSkillsStoreCategoriesResponse, RusotoError<ListSkillsStoreCategoriesError>>;
+
+    /// Auto-paginating version of `list_skills_store_categories`
+    fn list_skills_store_categories_pages(
+        &self,
+        input: ListSkillsStoreCategoriesRequest,
+    ) -> RusotoStream<Category, ListSkillsStoreCategoriesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_skills_store_categories(state.clone())
+        })
+    }
 
     /// <p>Lists all skills in the Alexa skill store by category.</p>
     async fn list_skills_store_skills_by_category(
@@ -7162,17 +7816,44 @@ pub trait AlexaForBusiness {
         RusotoError<ListSkillsStoreSkillsByCategoryError>,
     >;
 
+    /// Auto-paginating version of `list_skills_store_skills_by_category`
+    fn list_skills_store_skills_by_category_pages(
+        &self,
+        input: ListSkillsStoreSkillsByCategoryRequest,
+    ) -> RusotoStream<SkillsStoreSkill, ListSkillsStoreSkillsByCategoryError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_skills_store_skills_by_category(state.clone())
+        })
+    }
+
     /// <p>Lists all of the smart home appliances associated with a room.</p>
     async fn list_smart_home_appliances(
         &self,
         input: ListSmartHomeAppliancesRequest,
     ) -> Result<ListSmartHomeAppliancesResponse, RusotoError<ListSmartHomeAppliancesError>>;
 
+    /// Auto-paginating version of `list_smart_home_appliances`
+    fn list_smart_home_appliances_pages(
+        &self,
+        input: ListSmartHomeAppliancesRequest,
+    ) -> RusotoStream<SmartHomeAppliance, ListSmartHomeAppliancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_smart_home_appliances(state.clone())
+        })
+    }
+
     /// <p>Lists all tags for the specified resource.</p>
     async fn list_tags(
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
+
+    /// Auto-paginating version of `list_tags`
+    fn list_tags_pages(&self, input: ListTagsRequest) -> RusotoStream<Tag, ListTagsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags(state.clone())
+        })
+    }
 
     /// <p>Sets the conference preferences on a specific conference provider at the account level.</p>
     async fn put_conference_preference(
@@ -7240,6 +7921,16 @@ pub trait AlexaForBusiness {
         input: SearchDevicesRequest,
     ) -> Result<SearchDevicesResponse, RusotoError<SearchDevicesError>>;
 
+    /// Auto-paginating version of `search_devices`
+    fn search_devices_pages(
+        &self,
+        input: SearchDevicesRequest,
+    ) -> RusotoStream<DeviceData, SearchDevicesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.search_devices(state.clone())
+        })
+    }
+
     /// <p>Searches network profiles and lists the ones that meet a set of filter and sort criteria.</p>
     async fn search_network_profiles(
         &self,
@@ -7252,11 +7943,31 @@ pub trait AlexaForBusiness {
         input: SearchProfilesRequest,
     ) -> Result<SearchProfilesResponse, RusotoError<SearchProfilesError>>;
 
+    /// Auto-paginating version of `search_profiles`
+    fn search_profiles_pages(
+        &self,
+        input: SearchProfilesRequest,
+    ) -> RusotoStream<ProfileData, SearchProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.search_profiles(state.clone())
+        })
+    }
+
     /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
     async fn search_rooms(
         &self,
         input: SearchRoomsRequest,
     ) -> Result<SearchRoomsResponse, RusotoError<SearchRoomsError>>;
+
+    /// Auto-paginating version of `search_rooms`
+    fn search_rooms_pages(
+        &self,
+        input: SearchRoomsRequest,
+    ) -> RusotoStream<RoomData, SearchRoomsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.search_rooms(state.clone())
+        })
+    }
 
     /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
     async fn search_skill_groups(
@@ -7264,11 +7975,31 @@ pub trait AlexaForBusiness {
         input: SearchSkillGroupsRequest,
     ) -> Result<SearchSkillGroupsResponse, RusotoError<SearchSkillGroupsError>>;
 
+    /// Auto-paginating version of `search_skill_groups`
+    fn search_skill_groups_pages(
+        &self,
+        input: SearchSkillGroupsRequest,
+    ) -> RusotoStream<SkillGroupData, SearchSkillGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.search_skill_groups(state.clone())
+        })
+    }
+
     /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
     async fn search_users(
         &self,
         input: SearchUsersRequest,
     ) -> Result<SearchUsersResponse, RusotoError<SearchUsersError>>;
+
+    /// Auto-paginating version of `search_users`
+    fn search_users_pages(
+        &self,
+        input: SearchUsersRequest,
+    ) -> RusotoStream<UserData, SearchUsersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.search_users(state.clone())
+        })
+    }
 
     /// <p>Triggers an asynchronous flow to send text, SSML, or audio announcements to rooms that are identified by a search or filter. </p>
     async fn send_announcement(

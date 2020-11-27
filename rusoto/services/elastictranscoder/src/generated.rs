@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -109,6 +111,7 @@ pub struct AudioParameters {
 }
 
 /// <p>The <code>CancelJobRequest</code> structure.</p>
+/// see [Ets::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
@@ -118,6 +121,7 @@ pub struct CancelJobRequest {
 }
 
 /// <p>The response body contains a JSON object. If the job is successfully canceled, the value of <code>Success</code> is <code>true</code>.</p>
+/// see [Ets::cancel_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {}
@@ -253,6 +257,7 @@ pub struct CreateJobPlaylist {
 }
 
 /// <p>The <code>CreateJobRequest</code> structure.</p>
+/// see [Ets::create_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
@@ -290,6 +295,7 @@ pub struct CreateJobRequest {
 }
 
 /// <p>The CreateJobResponse structure.</p>
+/// see [Ets::create_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
@@ -300,6 +306,7 @@ pub struct CreateJobResponse {
 }
 
 /// <p>The <code>CreatePipelineRequest</code> structure.</p>
+/// see [Ets::create_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineRequest {
@@ -335,6 +342,7 @@ pub struct CreatePipelineRequest {
 }
 
 /// <p>When you create a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
+/// see [Ets::create_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineResponse {
@@ -349,6 +357,7 @@ pub struct CreatePipelineResponse {
 }
 
 /// <p>The <code>CreatePresetRequest</code> structure.</p>
+/// see [Ets::create_preset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresetRequest {
@@ -377,6 +386,7 @@ pub struct CreatePresetRequest {
 }
 
 /// <p>The <code>CreatePresetResponse</code> structure.</p>
+/// see [Ets::create_preset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresetResponse {
@@ -391,6 +401,7 @@ pub struct CreatePresetResponse {
 }
 
 /// <p>The <code>DeletePipelineRequest</code> structure.</p>
+/// see [Ets::delete_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineRequest {
@@ -400,11 +411,13 @@ pub struct DeletePipelineRequest {
 }
 
 /// <p>The <code>DeletePipelineResponse</code> structure.</p>
+/// see [Ets::delete_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePipelineResponse {}
 
 /// <p>The <code>DeletePresetRequest</code> structure.</p>
+/// see [Ets::delete_preset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePresetRequest {
@@ -414,6 +427,7 @@ pub struct DeletePresetRequest {
 }
 
 /// <p>The <code>DeletePresetResponse</code> structure.</p>
+/// see [Ets::delete_preset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePresetResponse {}
@@ -722,6 +736,7 @@ pub struct JobWatermark {
 }
 
 /// <p>The <code>ListJobsByPipelineRequest</code> structure.</p>
+/// see [Ets::list_jobs_by_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsByPipelineRequest {
@@ -738,7 +753,16 @@ pub struct ListJobsByPipelineRequest {
     pub pipeline_id: String,
 }
 
+impl PagedRequest for ListJobsByPipelineRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
 /// <p>The <code>ListJobsByPipelineResponse</code> structure.</p>
+/// see [Ets::list_jobs_by_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsByPipelineResponse {
@@ -752,7 +776,32 @@ pub struct ListJobsByPipelineResponse {
     pub next_page_token: Option<String>,
 }
 
+impl ListJobsByPipelineResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Job>> {
+        Some(self.jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobsByPipelineResponse {
+    type Item = Job;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Job> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The <code>ListJobsByStatusRequest</code> structure.</p>
+/// see [Ets::list_jobs_by_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsByStatusRequest {
@@ -769,7 +818,16 @@ pub struct ListJobsByStatusRequest {
     pub status: String,
 }
 
+impl PagedRequest for ListJobsByStatusRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
 /// <p> The <code>ListJobsByStatusResponse</code> structure. </p>
+/// see [Ets::list_jobs_by_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsByStatusResponse {
@@ -783,7 +841,32 @@ pub struct ListJobsByStatusResponse {
     pub next_page_token: Option<String>,
 }
 
+impl ListJobsByStatusResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Job>> {
+        Some(self.jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobsByStatusResponse {
+    type Item = Job;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Job> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The <code>ListPipelineRequest</code> structure.</p>
+/// see [Ets::list_pipelines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesRequest {
@@ -797,7 +880,16 @@ pub struct ListPipelinesRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for ListPipelinesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
 /// <p>A list of the pipelines associated with the current AWS account.</p>
+/// see [Ets::list_pipelines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesResponse {
@@ -811,7 +903,32 @@ pub struct ListPipelinesResponse {
     pub pipelines: Option<Vec<Pipeline>>,
 }
 
+impl ListPipelinesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Pipeline>> {
+        Some(self.pipelines.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPipelinesResponse {
+    type Item = Pipeline;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Pipeline> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The <code>ListPresetsRequest</code> structure.</p>
+/// see [Ets::list_presets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPresetsRequest {
@@ -825,7 +942,16 @@ pub struct ListPresetsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for ListPresetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
 /// <p>The <code>ListPresetsResponse</code> structure.</p>
+/// see [Ets::list_presets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPresetsResponse {
@@ -837,6 +963,30 @@ pub struct ListPresetsResponse {
     #[serde(rename = "Presets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presets: Option<Vec<Preset>>,
+}
+
+impl ListPresetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Preset>> {
+        Some(self.presets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPresetsResponse {
+    type Item = Preset;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Preset> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p><p>The Amazon Simple Notification Service (Amazon SNS) topic or topics to notify in order to report job status.</p> <important> <p>To receive notifications, you must also subscribe to the new topic in the Amazon SNS console.</p> </important></p>
@@ -1095,6 +1245,7 @@ pub struct PresetWatermark {
 }
 
 /// <p>The <code>ReadJobRequest</code> structure.</p>
+/// see [Ets::read_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReadJobRequest {
@@ -1104,6 +1255,7 @@ pub struct ReadJobRequest {
 }
 
 /// <p>The <code>ReadJobResponse</code> structure.</p>
+/// see [Ets::read_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReadJobResponse {
@@ -1114,6 +1266,7 @@ pub struct ReadJobResponse {
 }
 
 /// <p>The <code>ReadPipelineRequest</code> structure.</p>
+/// see [Ets::read_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReadPipelineRequest {
@@ -1123,6 +1276,7 @@ pub struct ReadPipelineRequest {
 }
 
 /// <p>The <code>ReadPipelineResponse</code> structure.</p>
+/// see [Ets::read_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReadPipelineResponse {
@@ -1137,6 +1291,7 @@ pub struct ReadPipelineResponse {
 }
 
 /// <p>The <code>ReadPresetRequest</code> structure.</p>
+/// see [Ets::read_preset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReadPresetRequest {
@@ -1146,6 +1301,7 @@ pub struct ReadPresetRequest {
 }
 
 /// <p>The <code>ReadPresetResponse</code> structure.</p>
+/// see [Ets::read_preset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReadPresetResponse {
@@ -1156,6 +1312,7 @@ pub struct ReadPresetResponse {
 }
 
 /// <p> The <code>TestRoleRequest</code> structure. </p>
+/// see [Ets::test_role]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRoleRequest {
@@ -1174,6 +1331,7 @@ pub struct TestRoleRequest {
 }
 
 /// <p>The <code>TestRoleResponse</code> structure.</p>
+/// see [Ets::test_role]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestRoleResponse {
@@ -1256,6 +1414,7 @@ pub struct Timing {
 }
 
 /// <p>The <code>UpdatePipelineNotificationsRequest</code> structure.</p>
+/// see [Ets::update_pipeline_notifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineNotificationsRequest {
@@ -1268,6 +1427,7 @@ pub struct UpdatePipelineNotificationsRequest {
 }
 
 /// <p>The <code>UpdatePipelineNotificationsResponse</code> structure.</p>
+/// see [Ets::update_pipeline_notifications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineNotificationsResponse {
@@ -1278,6 +1438,7 @@ pub struct UpdatePipelineNotificationsResponse {
 }
 
 /// <p>The <code>UpdatePipelineRequest</code> structure.</p>
+/// see [Ets::update_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineRequest {
@@ -1315,6 +1476,7 @@ pub struct UpdatePipelineRequest {
 }
 
 /// <p>When you update a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
+/// see [Ets::update_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineResponse {
@@ -1329,6 +1491,7 @@ pub struct UpdatePipelineResponse {
 }
 
 /// <p>The <code>UpdatePipelineStatusRequest</code> structure.</p>
+/// see [Ets::update_pipeline_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineStatusRequest {
@@ -1341,6 +1504,7 @@ pub struct UpdatePipelineStatusRequest {
 }
 
 /// <p>When you update status for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
+/// see [Ets::update_pipeline_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineStatusResponse {
@@ -2301,7 +2465,7 @@ impl fmt::Display for UpdatePipelineStatusError {
 impl Error for UpdatePipelineStatusError {}
 /// Trait representing the capabilities of the Amazon Elastic Transcoder API. Amazon Elastic Transcoder clients implement this trait.
 #[async_trait]
-pub trait Ets {
+pub trait Ets: Clone + Sync + Send + 'static {
     /// <p><p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you&#39;re getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note></p>
     async fn cancel_job(
         &self,
@@ -2344,11 +2508,31 @@ pub trait Ets {
         input: ListJobsByPipelineRequest,
     ) -> Result<ListJobsByPipelineResponse, RusotoError<ListJobsByPipelineError>>;
 
+    /// Auto-paginating version of `list_jobs_by_pipeline`
+    fn list_jobs_by_pipeline_pages(
+        &self,
+        input: ListJobsByPipelineRequest,
+    ) -> RusotoStream<Job, ListJobsByPipelineError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_jobs_by_pipeline(state.clone())
+        })
+    }
+
     /// <p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>
     async fn list_jobs_by_status(
         &self,
         input: ListJobsByStatusRequest,
     ) -> Result<ListJobsByStatusResponse, RusotoError<ListJobsByStatusError>>;
+
+    /// Auto-paginating version of `list_jobs_by_status`
+    fn list_jobs_by_status_pages(
+        &self,
+        input: ListJobsByStatusRequest,
+    ) -> RusotoStream<Job, ListJobsByStatusError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_jobs_by_status(state.clone())
+        })
+    }
 
     /// <p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>
     async fn list_pipelines(
@@ -2356,11 +2540,31 @@ pub trait Ets {
         input: ListPipelinesRequest,
     ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>;
 
+    /// Auto-paginating version of `list_pipelines`
+    fn list_pipelines_pages(
+        &self,
+        input: ListPipelinesRequest,
+    ) -> RusotoStream<Pipeline, ListPipelinesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_pipelines(state.clone())
+        })
+    }
+
     /// <p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>
     async fn list_presets(
         &self,
         input: ListPresetsRequest,
     ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>>;
+
+    /// Auto-paginating version of `list_presets`
+    fn list_presets_pages(
+        &self,
+        input: ListPresetsRequest,
+    ) -> RusotoStream<Preset, ListPresetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_presets(state.clone())
+        })
+    }
 
     /// <p>The ReadJob operation returns detailed information about a job.</p>
     async fn read_job(

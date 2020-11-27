@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -43,6 +45,7 @@ pub struct BatchPutMessageErrorEntry {
     pub message_id: Option<String>,
 }
 
+/// see [IotEventsData::batch_put_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutMessageRequest {
@@ -51,6 +54,7 @@ pub struct BatchPutMessageRequest {
     pub messages: Vec<Message>,
 }
 
+/// see [IotEventsData::batch_put_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutMessageResponse {
@@ -78,6 +82,7 @@ pub struct BatchUpdateDetectorErrorEntry {
     pub message_id: Option<String>,
 }
 
+/// see [IotEventsData::batch_update_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateDetectorRequest {
@@ -86,6 +91,7 @@ pub struct BatchUpdateDetectorRequest {
     pub detectors: Vec<UpdateDetectorRequest>,
 }
 
+/// see [IotEventsData::batch_update_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateDetectorResponse {
@@ -95,6 +101,7 @@ pub struct BatchUpdateDetectorResponse {
     pub batch_update_detector_error_entries: Option<Vec<BatchUpdateDetectorErrorEntry>>,
 }
 
+/// see [IotEventsData::describe_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectorRequest {
@@ -107,6 +114,7 @@ pub struct DescribeDetectorRequest {
     pub key_value: Option<String>,
 }
 
+/// see [IotEventsData::describe_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectorResponse {
@@ -216,6 +224,7 @@ pub struct DetectorSummary {
     pub state: Option<DetectorStateSummary>,
 }
 
+/// see [IotEventsData::list_detectors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorsRequest {
@@ -236,6 +245,7 @@ pub struct ListDetectorsRequest {
     pub state_name: Option<String>,
 }
 
+/// see [IotEventsData::list_detectors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorsResponse {
@@ -544,7 +554,7 @@ impl fmt::Display for ListDetectorsError {
 impl Error for ListDetectorsError {}
 /// Trait representing the capabilities of the AWS IoT Events Data API. AWS IoT Events Data clients implement this trait.
 #[async_trait]
-pub trait IotEventsData {
+pub trait IotEventsData: Clone + Sync + Send + 'static {
     /// <p>Sends a set of messages to the AWS IoT Events system. Each message payload is transformed into the input you specify (<code>"inputName"</code>) and ingested into any detectors that monitor that input. If multiple messages are sent, the order in which the messages are processed isn't guaranteed. To guarantee ordering, you must send messages one at a time and wait for a successful response.</p>
     async fn batch_put_message(
         &self,

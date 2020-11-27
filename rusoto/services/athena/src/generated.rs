@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl AthenaClient {
 }
 
 use serde_json;
+/// see [Athena::batch_get_named_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetNamedQueryInput {
@@ -58,6 +61,7 @@ pub struct BatchGetNamedQueryInput {
     pub named_query_ids: Vec<String>,
 }
 
+/// see [Athena::batch_get_named_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetNamedQueryOutput {
@@ -71,6 +75,7 @@ pub struct BatchGetNamedQueryOutput {
     pub unprocessed_named_query_ids: Option<Vec<UnprocessedNamedQueryId>>,
 }
 
+/// see [Athena::batch_get_query_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetQueryExecutionInput {
@@ -79,6 +84,7 @@ pub struct BatchGetQueryExecutionInput {
     pub query_execution_ids: Vec<String>,
 }
 
+/// see [Athena::batch_get_query_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetQueryExecutionOutput {
@@ -153,6 +159,7 @@ pub struct ColumnInfo {
     pub type_: String,
 }
 
+/// see [Athena::create_data_catalog]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataCatalogInput {
@@ -176,10 +183,12 @@ pub struct CreateDataCatalogInput {
     pub type_: String,
 }
 
+/// see [Athena::create_data_catalog]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataCatalogOutput {}
 
+/// see [Athena::create_named_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNamedQueryInput {
@@ -206,6 +215,7 @@ pub struct CreateNamedQueryInput {
     pub work_group: Option<String>,
 }
 
+/// see [Athena::create_named_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNamedQueryOutput {
@@ -215,6 +225,7 @@ pub struct CreateNamedQueryOutput {
     pub named_query_id: Option<String>,
 }
 
+/// see [Athena::create_work_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkGroupInput {
@@ -235,6 +246,7 @@ pub struct CreateWorkGroupInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Athena::create_work_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkGroupOutput {}
@@ -300,6 +312,7 @@ pub struct Datum {
     pub var_char_value: Option<String>,
 }
 
+/// see [Athena::delete_data_catalog]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataCatalogInput {
@@ -308,10 +321,12 @@ pub struct DeleteDataCatalogInput {
     pub name: String,
 }
 
+/// see [Athena::delete_data_catalog]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataCatalogOutput {}
 
+/// see [Athena::delete_named_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamedQueryInput {
@@ -320,10 +335,12 @@ pub struct DeleteNamedQueryInput {
     pub named_query_id: String,
 }
 
+/// see [Athena::delete_named_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNamedQueryOutput {}
 
+/// see [Athena::delete_work_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkGroupInput {
@@ -336,6 +353,7 @@ pub struct DeleteWorkGroupInput {
     pub work_group: String,
 }
 
+/// see [Athena::delete_work_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkGroupOutput {}
@@ -352,6 +370,7 @@ pub struct EncryptionConfiguration {
     pub kms_key: Option<String>,
 }
 
+/// see [Athena::get_data_catalog]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataCatalogInput {
@@ -360,6 +379,7 @@ pub struct GetDataCatalogInput {
     pub name: String,
 }
 
+/// see [Athena::get_data_catalog]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataCatalogOutput {
@@ -369,6 +389,7 @@ pub struct GetDataCatalogOutput {
     pub data_catalog: Option<DataCatalog>,
 }
 
+/// see [Athena::get_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatabaseInput {
@@ -380,6 +401,7 @@ pub struct GetDatabaseInput {
     pub database_name: String,
 }
 
+/// see [Athena::get_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatabaseOutput {
@@ -389,6 +411,7 @@ pub struct GetDatabaseOutput {
     pub database: Option<Database>,
 }
 
+/// see [Athena::get_named_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamedQueryInput {
@@ -397,6 +420,7 @@ pub struct GetNamedQueryInput {
     pub named_query_id: String,
 }
 
+/// see [Athena::get_named_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNamedQueryOutput {
@@ -406,6 +430,7 @@ pub struct GetNamedQueryOutput {
     pub named_query: Option<NamedQuery>,
 }
 
+/// see [Athena::get_query_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryExecutionInput {
@@ -414,6 +439,7 @@ pub struct GetQueryExecutionInput {
     pub query_execution_id: String,
 }
 
+/// see [Athena::get_query_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueryExecutionOutput {
@@ -423,6 +449,7 @@ pub struct GetQueryExecutionOutput {
     pub query_execution: Option<QueryExecution>,
 }
 
+/// see [Athena::get_query_results]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryResultsInput {
@@ -439,6 +466,15 @@ pub struct GetQueryResultsInput {
     pub query_execution_id: String,
 }
 
+impl PagedRequest for GetQueryResultsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Athena::get_query_results]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueryResultsOutput {
@@ -456,6 +492,31 @@ pub struct GetQueryResultsOutput {
     pub update_count: Option<i64>,
 }
 
+impl GetQueryResultsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Row>> {
+        Some(self.result_set.as_ref()?.rows.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetQueryResultsOutput {
+    type Item = Row;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Row> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Athena::get_table_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableMetadataInput {
@@ -470,6 +531,7 @@ pub struct GetTableMetadataInput {
     pub table_name: String,
 }
 
+/// see [Athena::get_table_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTableMetadataOutput {
@@ -479,6 +541,7 @@ pub struct GetTableMetadataOutput {
     pub table_metadata: Option<TableMetadata>,
 }
 
+/// see [Athena::get_work_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkGroupInput {
@@ -487,6 +550,7 @@ pub struct GetWorkGroupInput {
     pub work_group: String,
 }
 
+/// see [Athena::get_work_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkGroupOutput {
@@ -496,6 +560,7 @@ pub struct GetWorkGroupOutput {
     pub work_group: Option<WorkGroup>,
 }
 
+/// see [Athena::list_data_catalogs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataCatalogsInput {
@@ -509,6 +574,15 @@ pub struct ListDataCatalogsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDataCatalogsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Athena::list_data_catalogs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataCatalogsOutput {
@@ -522,6 +596,31 @@ pub struct ListDataCatalogsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListDataCatalogsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<DataCatalogSummary>> {
+        Some(self.data_catalogs_summary.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDataCatalogsOutput {
+    type Item = DataCatalogSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DataCatalogSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Athena::list_databases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatabasesInput {
@@ -538,6 +637,15 @@ pub struct ListDatabasesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDatabasesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Athena::list_databases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatabasesOutput {
@@ -551,6 +659,31 @@ pub struct ListDatabasesOutput {
     pub next_token: Option<String>,
 }
 
+impl ListDatabasesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Database>> {
+        Some(self.database_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDatabasesOutput {
+    type Item = Database;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Database> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Athena::list_named_queries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamedQueriesInput {
@@ -568,6 +701,15 @@ pub struct ListNamedQueriesInput {
     pub work_group: Option<String>,
 }
 
+impl PagedRequest for ListNamedQueriesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Athena::list_named_queries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNamedQueriesOutput {
@@ -581,6 +723,31 @@ pub struct ListNamedQueriesOutput {
     pub next_token: Option<String>,
 }
 
+impl ListNamedQueriesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.named_query_ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListNamedQueriesOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Athena::list_query_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueryExecutionsInput {
@@ -598,6 +765,15 @@ pub struct ListQueryExecutionsInput {
     pub work_group: Option<String>,
 }
 
+impl PagedRequest for ListQueryExecutionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Athena::list_query_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQueryExecutionsOutput {
@@ -611,6 +787,31 @@ pub struct ListQueryExecutionsOutput {
     pub query_execution_ids: Option<Vec<String>>,
 }
 
+impl ListQueryExecutionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.query_execution_ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListQueryExecutionsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Athena::list_table_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTableMetadataInput {
@@ -634,6 +835,15 @@ pub struct ListTableMetadataInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListTableMetadataInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Athena::list_table_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTableMetadataOutput {
@@ -647,6 +857,31 @@ pub struct ListTableMetadataOutput {
     pub table_metadata_list: Option<Vec<TableMetadata>>,
 }
 
+impl ListTableMetadataOutput {
+    fn pagination_page_opt(self) -> Option<Vec<TableMetadata>> {
+        Some(self.table_metadata_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTableMetadataOutput {
+    type Item = TableMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TableMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Athena::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -663,6 +898,15 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+impl PagedRequest for ListTagsForResourceInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Athena::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -676,6 +920,31 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl ListTagsForResourceOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsForResourceOutput {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Athena::list_work_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkGroupsInput {
@@ -689,6 +958,7 @@ pub struct ListWorkGroupsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Athena::list_work_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkGroupsOutput {
@@ -905,6 +1175,7 @@ pub struct Row {
     pub data: Option<Vec<Datum>>,
 }
 
+/// see [Athena::start_query_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartQueryExecutionInput {
@@ -929,6 +1200,7 @@ pub struct StartQueryExecutionInput {
     pub work_group: Option<String>,
 }
 
+/// see [Athena::start_query_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartQueryExecutionOutput {
@@ -938,6 +1210,7 @@ pub struct StartQueryExecutionOutput {
     pub query_execution_id: Option<String>,
 }
 
+/// see [Athena::stop_query_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopQueryExecutionInput {
@@ -946,6 +1219,7 @@ pub struct StopQueryExecutionInput {
     pub query_execution_id: String,
 }
 
+/// see [Athena::stop_query_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopQueryExecutionOutput {}
@@ -996,6 +1270,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Athena::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -1007,6 +1282,7 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [Athena::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
@@ -1047,6 +1323,7 @@ pub struct UnprocessedQueryExecutionId {
     pub query_execution_id: Option<String>,
 }
 
+/// see [Athena::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -1058,10 +1335,12 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Athena::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
+/// see [Athena::update_data_catalog]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataCatalogInput {
@@ -1081,10 +1360,12 @@ pub struct UpdateDataCatalogInput {
     pub type_: String,
 }
 
+/// see [Athena::update_data_catalog]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataCatalogOutput {}
 
+/// see [Athena::update_work_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkGroupInput {
@@ -1105,6 +1386,7 @@ pub struct UpdateWorkGroupInput {
     pub work_group: String,
 }
 
+/// see [Athena::update_work_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkGroupOutput {}
@@ -2275,7 +2557,7 @@ impl fmt::Display for UpdateWorkGroupError {
 impl Error for UpdateWorkGroupError {}
 /// Trait representing the capabilities of the Amazon Athena API. Amazon Athena clients implement this trait.
 #[async_trait]
-pub trait Athena {
+pub trait Athena: Clone + Sync + Send + 'static {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
     async fn batch_get_named_query(
         &self,
@@ -2354,6 +2636,16 @@ pub trait Athena {
         input: GetQueryResultsInput,
     ) -> Result<GetQueryResultsOutput, RusotoError<GetQueryResultsError>>;
 
+    /// Auto-paginating version of `get_query_results`
+    fn get_query_results_pages(
+        &self,
+        input: GetQueryResultsInput,
+    ) -> RusotoStream<Row, GetQueryResultsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_query_results(state.clone())
+        })
+    }
+
     /// <p>Returns table metadata for the specified catalog, database, and table.</p>
     async fn get_table_metadata(
         &self,
@@ -2372,11 +2664,31 @@ pub trait Athena {
         input: ListDataCatalogsInput,
     ) -> Result<ListDataCatalogsOutput, RusotoError<ListDataCatalogsError>>;
 
+    /// Auto-paginating version of `list_data_catalogs`
+    fn list_data_catalogs_pages(
+        &self,
+        input: ListDataCatalogsInput,
+    ) -> RusotoStream<DataCatalogSummary, ListDataCatalogsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_data_catalogs(state.clone())
+        })
+    }
+
     /// <p>Lists the databases in the specified data catalog.</p>
     async fn list_databases(
         &self,
         input: ListDatabasesInput,
     ) -> Result<ListDatabasesOutput, RusotoError<ListDatabasesError>>;
+
+    /// Auto-paginating version of `list_databases`
+    fn list_databases_pages(
+        &self,
+        input: ListDatabasesInput,
+    ) -> RusotoStream<Database, ListDatabasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_databases(state.clone())
+        })
+    }
 
     /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the specified workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_named_queries(
@@ -2384,11 +2696,31 @@ pub trait Athena {
         input: ListNamedQueriesInput,
     ) -> Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>>;
 
+    /// Auto-paginating version of `list_named_queries`
+    fn list_named_queries_pages(
+        &self,
+        input: ListNamedQueriesInput,
+    ) -> RusotoStream<String, ListNamedQueriesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_named_queries(state.clone())
+        })
+    }
+
     /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. If a workgroup is not specified, returns a list of query execution IDs for the primary workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_query_executions(
         &self,
         input: ListQueryExecutionsInput,
     ) -> Result<ListQueryExecutionsOutput, RusotoError<ListQueryExecutionsError>>;
+
+    /// Auto-paginating version of `list_query_executions`
+    fn list_query_executions_pages(
+        &self,
+        input: ListQueryExecutionsInput,
+    ) -> RusotoStream<String, ListQueryExecutionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_query_executions(state.clone())
+        })
+    }
 
     /// <p>Lists the metadata for the tables in the specified data catalog database.</p>
     async fn list_table_metadata(
@@ -2396,11 +2728,31 @@ pub trait Athena {
         input: ListTableMetadataInput,
     ) -> Result<ListTableMetadataOutput, RusotoError<ListTableMetadataError>>;
 
+    /// Auto-paginating version of `list_table_metadata`
+    fn list_table_metadata_pages(
+        &self,
+        input: ListTableMetadataInput,
+    ) -> RusotoStream<TableMetadata, ListTableMetadataError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_table_metadata(state.clone())
+        })
+    }
+
     /// <p>Lists the tags associated with an Athena workgroup or data catalog resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
+
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoStream<Tag, ListTagsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_for_resource(state.clone())
+        })
+    }
 
     /// <p>Lists available workgroups for the account.</p>
     async fn list_work_groups(

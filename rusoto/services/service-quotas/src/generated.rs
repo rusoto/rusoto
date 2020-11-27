@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,14 +53,17 @@ impl ServiceQuotasClient {
 }
 
 use serde_json;
+/// see [ServiceQuotas::associate_service_quota_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceQuotaTemplateRequest {}
 
+/// see [ServiceQuotas::associate_service_quota_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateServiceQuotaTemplateResponse {}
 
+/// see [ServiceQuotas::delete_service_quota_increase_request_from_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceQuotaIncreaseRequestFromTemplateRequest {
@@ -73,14 +78,17 @@ pub struct DeleteServiceQuotaIncreaseRequestFromTemplateRequest {
     pub service_code: String,
 }
 
+/// see [ServiceQuotas::delete_service_quota_increase_request_from_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServiceQuotaIncreaseRequestFromTemplateResponse {}
 
+/// see [ServiceQuotas::disassociate_service_quota_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateServiceQuotaTemplateRequest {}
 
+/// see [ServiceQuotas::disassociate_service_quota_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceQuotaTemplateResponse {}
@@ -99,6 +107,7 @@ pub struct ErrorReason {
     pub error_message: Option<String>,
 }
 
+/// see [ServiceQuotas::get_aws_default_service_quota]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAWSDefaultServiceQuotaRequest {
@@ -110,6 +119,7 @@ pub struct GetAWSDefaultServiceQuotaRequest {
     pub service_code: String,
 }
 
+/// see [ServiceQuotas::get_aws_default_service_quota]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAWSDefaultServiceQuotaResponse {
@@ -119,10 +129,12 @@ pub struct GetAWSDefaultServiceQuotaResponse {
     pub quota: Option<ServiceQuota>,
 }
 
+/// see [ServiceQuotas::get_association_for_service_quota_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssociationForServiceQuotaTemplateRequest {}
 
+/// see [ServiceQuotas::get_association_for_service_quota_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssociationForServiceQuotaTemplateResponse {
@@ -132,6 +144,7 @@ pub struct GetAssociationForServiceQuotaTemplateResponse {
     pub service_quota_template_association_status: Option<String>,
 }
 
+/// see [ServiceQuotas::get_requested_service_quota_change]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestedServiceQuotaChangeRequest {
@@ -140,6 +153,7 @@ pub struct GetRequestedServiceQuotaChangeRequest {
     pub request_id: String,
 }
 
+/// see [ServiceQuotas::get_requested_service_quota_change]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRequestedServiceQuotaChangeResponse {
@@ -149,6 +163,7 @@ pub struct GetRequestedServiceQuotaChangeResponse {
     pub requested_quota: Option<RequestedServiceQuotaChange>,
 }
 
+/// see [ServiceQuotas::get_service_quota_increase_request_from_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceQuotaIncreaseRequestFromTemplateRequest {
@@ -163,6 +178,7 @@ pub struct GetServiceQuotaIncreaseRequestFromTemplateRequest {
     pub service_code: String,
 }
 
+/// see [ServiceQuotas::get_service_quota_increase_request_from_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceQuotaIncreaseRequestFromTemplateResponse {
@@ -172,6 +188,7 @@ pub struct GetServiceQuotaIncreaseRequestFromTemplateResponse {
     pub service_quota_increase_request_in_template: Option<ServiceQuotaIncreaseRequestInTemplate>,
 }
 
+/// see [ServiceQuotas::get_service_quota]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceQuotaRequest {
@@ -183,6 +200,7 @@ pub struct GetServiceQuotaRequest {
     pub service_code: String,
 }
 
+/// see [ServiceQuotas::get_service_quota]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceQuotaResponse {
@@ -192,6 +210,7 @@ pub struct GetServiceQuotaResponse {
     pub quota: Option<ServiceQuota>,
 }
 
+/// see [ServiceQuotas::list_aws_default_service_quotas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAWSDefaultServiceQuotasRequest {
@@ -208,6 +227,15 @@ pub struct ListAWSDefaultServiceQuotasRequest {
     pub service_code: String,
 }
 
+impl PagedRequest for ListAWSDefaultServiceQuotasRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ServiceQuotas::list_aws_default_service_quotas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAWSDefaultServiceQuotasResponse {
@@ -221,6 +249,31 @@ pub struct ListAWSDefaultServiceQuotasResponse {
     pub quotas: Option<Vec<ServiceQuota>>,
 }
 
+impl ListAWSDefaultServiceQuotasResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ServiceQuota>> {
+        Some(self.quotas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAWSDefaultServiceQuotasResponse {
+    type Item = ServiceQuota;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ServiceQuota> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ServiceQuotas::list_requested_service_quota_change_history_by_quota]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
@@ -244,6 +297,15 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ServiceQuotas::list_requested_service_quota_change_history_by_quota]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
@@ -257,6 +319,31 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
 }
 
+impl ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RequestedServiceQuotaChange>> {
+        Some(self.requested_quotas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
+    type Item = RequestedServiceQuotaChange;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RequestedServiceQuotaChange> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ServiceQuotas::list_requested_service_quota_change_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryRequest {
@@ -278,6 +365,15 @@ pub struct ListRequestedServiceQuotaChangeHistoryRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListRequestedServiceQuotaChangeHistoryRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ServiceQuotas::list_requested_service_quota_change_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryResponse {
@@ -291,6 +387,31 @@ pub struct ListRequestedServiceQuotaChangeHistoryResponse {
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
 }
 
+impl ListRequestedServiceQuotaChangeHistoryResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RequestedServiceQuotaChange>> {
+        Some(self.requested_quotas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRequestedServiceQuotaChangeHistoryResponse {
+    type Item = RequestedServiceQuotaChange;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RequestedServiceQuotaChange> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ServiceQuotas::list_service_quota_increase_requests_in_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceQuotaIncreaseRequestsInTemplateRequest {
@@ -312,6 +433,15 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateRequest {
     pub service_code: Option<String>,
 }
 
+impl PagedRequest for ListServiceQuotaIncreaseRequestsInTemplateRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ServiceQuotas::list_service_quota_increase_requests_in_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceQuotaIncreaseRequestsInTemplateResponse {
@@ -326,6 +456,35 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateResponse {
         Option<Vec<ServiceQuotaIncreaseRequestInTemplate>>,
 }
 
+impl ListServiceQuotaIncreaseRequestsInTemplateResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ServiceQuotaIncreaseRequestInTemplate>> {
+        Some(
+            self.service_quota_increase_request_in_template_list
+                .as_ref()?
+                .clone(),
+        )
+    }
+}
+
+impl PagedOutput for ListServiceQuotaIncreaseRequestsInTemplateResponse {
+    type Item = ServiceQuotaIncreaseRequestInTemplate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ServiceQuotaIncreaseRequestInTemplate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ServiceQuotas::list_service_quotas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceQuotasRequest {
@@ -342,6 +501,15 @@ pub struct ListServiceQuotasRequest {
     pub service_code: String,
 }
 
+impl PagedRequest for ListServiceQuotasRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ServiceQuotas::list_service_quotas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceQuotasResponse {
@@ -355,6 +523,31 @@ pub struct ListServiceQuotasResponse {
     pub quotas: Option<Vec<ServiceQuota>>,
 }
 
+impl ListServiceQuotasResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ServiceQuota>> {
+        Some(self.quotas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListServiceQuotasResponse {
+    type Item = ServiceQuota;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ServiceQuota> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ServiceQuotas::list_services]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
@@ -368,6 +561,15 @@ pub struct ListServicesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListServicesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ServiceQuotas::list_services]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServicesResponse {
@@ -381,6 +583,31 @@ pub struct ListServicesResponse {
     pub services: Option<Vec<ServiceInfo>>,
 }
 
+impl ListServicesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ServiceInfo>> {
+        Some(self.services.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListServicesResponse {
+    type Item = ServiceInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ServiceInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ServiceQuotas::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -389,6 +616,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [ServiceQuotas::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -420,6 +648,7 @@ pub struct MetricInfo {
     pub metric_statistic_recommendation: Option<String>,
 }
 
+/// see [ServiceQuotas::put_service_quota_increase_request_into_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutServiceQuotaIncreaseRequestIntoTemplateRequest {
@@ -437,6 +666,7 @@ pub struct PutServiceQuotaIncreaseRequestIntoTemplateRequest {
     pub service_code: String,
 }
 
+/// see [ServiceQuotas::put_service_quota_increase_request_into_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutServiceQuotaIncreaseRequestIntoTemplateResponse {
@@ -460,6 +690,7 @@ pub struct QuotaPeriod {
     pub period_value: Option<i64>,
 }
 
+/// see [ServiceQuotas::request_service_quota_increase]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestServiceQuotaIncreaseRequest {
@@ -474,6 +705,7 @@ pub struct RequestServiceQuotaIncreaseRequest {
     pub service_code: String,
 }
 
+/// see [ServiceQuotas::request_service_quota_increase]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestServiceQuotaIncreaseResponse {
@@ -662,6 +894,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [ServiceQuotas::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -673,10 +906,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [ServiceQuotas::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [ServiceQuotas::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -688,6 +923,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [ServiceQuotas::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -2300,7 +2536,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Service Quotas API. Service Quotas clients implement this trait.
 #[async_trait]
-pub trait ServiceQuotas {
+pub trait ServiceQuotas: Clone + Sync + Send + 'static {
     /// <p>Associates your quota request template with your organization. When a new account is created in your organization, the quota increase requests in the template are automatically applied to the account. You can add a quota increase request for any adjustable quota to your template.</p>
     async fn associate_service_quota_template(
         &self,
@@ -2370,6 +2606,16 @@ pub trait ServiceQuotas {
         input: ListAWSDefaultServiceQuotasRequest,
     ) -> Result<ListAWSDefaultServiceQuotasResponse, RusotoError<ListAWSDefaultServiceQuotasError>>;
 
+    /// Auto-paginating version of `list_aws_default_service_quotas`
+    fn list_aws_default_service_quotas_pages(
+        &self,
+        input: ListAWSDefaultServiceQuotasRequest,
+    ) -> RusotoStream<ServiceQuota, ListAWSDefaultServiceQuotasError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_aws_default_service_quotas(state.clone())
+        })
+    }
+
     /// <p>Retrieves the quota increase requests for the specified service.</p>
     async fn list_requested_service_quota_change_history(
         &self,
@@ -2378,6 +2624,17 @@ pub trait ServiceQuotas {
         ListRequestedServiceQuotaChangeHistoryResponse,
         RusotoError<ListRequestedServiceQuotaChangeHistoryError>,
     >;
+
+    /// Auto-paginating version of `list_requested_service_quota_change_history`
+    fn list_requested_service_quota_change_history_pages(
+        &self,
+        input: ListRequestedServiceQuotaChangeHistoryRequest,
+    ) -> RusotoStream<RequestedServiceQuotaChange, ListRequestedServiceQuotaChangeHistoryError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_requested_service_quota_change_history(state.clone())
+        })
+    }
 
     /// <p>Retrieves the quota increase requests for the specified quota.</p>
     async fn list_requested_service_quota_change_history_by_quota(
@@ -2388,6 +2645,17 @@ pub trait ServiceQuotas {
         RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError>,
     >;
 
+    /// Auto-paginating version of `list_requested_service_quota_change_history_by_quota`
+    fn list_requested_service_quota_change_history_by_quota_pages(
+        &self,
+        input: ListRequestedServiceQuotaChangeHistoryByQuotaRequest,
+    ) -> RusotoStream<RequestedServiceQuotaChange, ListRequestedServiceQuotaChangeHistoryByQuotaError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_requested_service_quota_change_history_by_quota(state.clone())
+        })
+    }
+
     /// <p>Lists the quota increase requests in the specified quota request template.</p>
     async fn list_service_quota_increase_requests_in_template(
         &self,
@@ -2397,17 +2665,50 @@ pub trait ServiceQuotas {
         RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError>,
     >;
 
+    /// Auto-paginating version of `list_service_quota_increase_requests_in_template`
+    fn list_service_quota_increase_requests_in_template_pages(
+        &self,
+        input: ListServiceQuotaIncreaseRequestsInTemplateRequest,
+    ) -> RusotoStream<
+        ServiceQuotaIncreaseRequestInTemplate,
+        ListServiceQuotaIncreaseRequestsInTemplateError,
+    > {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_service_quota_increase_requests_in_template(state.clone())
+        })
+    }
+
     /// <p>Lists the applied quota values for the specified AWS service. For some quotas, only the default values are available. If the applied quota value is not available for a quota, the quota is not retrieved.</p>
     async fn list_service_quotas(
         &self,
         input: ListServiceQuotasRequest,
     ) -> Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>>;
 
+    /// Auto-paginating version of `list_service_quotas`
+    fn list_service_quotas_pages(
+        &self,
+        input: ListServiceQuotasRequest,
+    ) -> RusotoStream<ServiceQuota, ListServiceQuotasError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_service_quotas(state.clone())
+        })
+    }
+
     /// <p>Lists the names and codes for the services integrated with Service Quotas.</p>
     async fn list_services(
         &self,
         input: ListServicesRequest,
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
+
+    /// Auto-paginating version of `list_services`
+    fn list_services_pages(
+        &self,
+        input: ListServicesRequest,
+    ) -> RusotoStream<ServiceInfo, ListServicesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_services(state.clone())
+        })
+    }
 
     /// <p>Returns a list of the tags assigned to the specified applied quota.</p>
     async fn list_tags_for_resource(

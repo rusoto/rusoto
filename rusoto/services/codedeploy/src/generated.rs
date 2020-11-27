@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl CodeDeployClient {
 
 use serde_json;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
+/// see [CodeDeploy::add_tags_to_on_premises_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToOnPremisesInstancesInput {
@@ -159,6 +162,7 @@ pub struct AutoScalingGroup {
 }
 
 /// <p>Represents the input of a <code>BatchGetApplicationRevisions</code> operation.</p>
+/// see [CodeDeploy::batch_get_application_revisions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationRevisionsInput {
@@ -171,6 +175,7 @@ pub struct BatchGetApplicationRevisionsInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetApplicationRevisions</code> operation.</p>
+/// see [CodeDeploy::batch_get_application_revisions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationRevisionsOutput {
@@ -189,6 +194,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 }
 
 /// <p>Represents the input of a <code>BatchGetApplications</code> operation.</p>
+/// see [CodeDeploy::batch_get_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationsInput {
@@ -198,6 +204,7 @@ pub struct BatchGetApplicationsInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetApplications</code> operation.</p>
+/// see [CodeDeploy::batch_get_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationsOutput {
@@ -208,6 +215,7 @@ pub struct BatchGetApplicationsOutput {
 }
 
 /// <p>Represents the input of a <code>BatchGetDeploymentGroups</code> operation.</p>
+/// see [CodeDeploy::batch_get_deployment_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentGroupsInput {
@@ -220,6 +228,7 @@ pub struct BatchGetDeploymentGroupsInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetDeploymentGroups</code> operation.</p>
+/// see [CodeDeploy::batch_get_deployment_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentGroupsOutput {
@@ -234,6 +243,7 @@ pub struct BatchGetDeploymentGroupsOutput {
 }
 
 /// <p> Represents the input of a <code>BatchGetDeploymentInstances</code> operation. </p>
+/// see [CodeDeploy::batch_get_deployment_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentInstancesInput {
@@ -246,6 +256,7 @@ pub struct BatchGetDeploymentInstancesInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetDeploymentInstances</code> operation.</p>
+/// see [CodeDeploy::batch_get_deployment_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentInstancesOutput {
@@ -259,6 +270,7 @@ pub struct BatchGetDeploymentInstancesOutput {
     pub instances_summary: Option<Vec<InstanceSummary>>,
 }
 
+/// see [CodeDeploy::batch_get_deployment_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentTargetsInput {
@@ -272,6 +284,7 @@ pub struct BatchGetDeploymentTargetsInput {
     pub target_ids: Option<Vec<String>>,
 }
 
+/// see [CodeDeploy::batch_get_deployment_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentTargetsOutput {
@@ -282,6 +295,7 @@ pub struct BatchGetDeploymentTargetsOutput {
 }
 
 /// <p> Represents the input of a <code>BatchGetDeployments</code> operation. </p>
+/// see [CodeDeploy::batch_get_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentsInput {
@@ -291,6 +305,7 @@ pub struct BatchGetDeploymentsInput {
 }
 
 /// <p> Represents the output of a <code>BatchGetDeployments</code> operation. </p>
+/// see [CodeDeploy::batch_get_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentsOutput {
@@ -301,6 +316,7 @@ pub struct BatchGetDeploymentsOutput {
 }
 
 /// <p>Represents the input of a <code>BatchGetOnPremisesInstances</code> operation.</p>
+/// see [CodeDeploy::batch_get_on_premises_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetOnPremisesInstancesInput {
@@ -310,6 +326,7 @@ pub struct BatchGetOnPremisesInstancesInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetOnPremisesInstances</code> operation.</p>
+/// see [CodeDeploy::batch_get_on_premises_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetOnPremisesInstancesOutput {
@@ -383,6 +400,7 @@ pub struct CloudFormationTarget {
     pub target_version_weight: Option<f64>,
 }
 
+/// see [CodeDeploy::continue_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContinueDeploymentInput {
@@ -397,6 +415,7 @@ pub struct ContinueDeploymentInput {
 }
 
 /// <p>Represents the input of a <code>CreateApplication</code> operation.</p>
+/// see [CodeDeploy::create_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationInput {
@@ -414,6 +433,7 @@ pub struct CreateApplicationInput {
 }
 
 /// <p>Represents the output of a <code>CreateApplication</code> operation.</p>
+/// see [CodeDeploy::create_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationOutput {
@@ -424,6 +444,7 @@ pub struct CreateApplicationOutput {
 }
 
 /// <p>Represents the input of a <code>CreateDeploymentConfig</code> operation.</p>
+/// see [CodeDeploy::create_deployment_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentConfigInput {
@@ -445,6 +466,7 @@ pub struct CreateDeploymentConfigInput {
 }
 
 /// <p>Represents the output of a <code>CreateDeploymentConfig</code> operation.</p>
+/// see [CodeDeploy::create_deployment_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentConfigOutput {
@@ -455,6 +477,7 @@ pub struct CreateDeploymentConfigOutput {
 }
 
 /// <p>Represents the input of a <code>CreateDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::create_deployment_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentGroupInput {
@@ -526,6 +549,7 @@ pub struct CreateDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a <code>CreateDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::create_deployment_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentGroupOutput {
@@ -536,6 +560,7 @@ pub struct CreateDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a <code>CreateDeployment</code> operation.</p>
+/// see [CodeDeploy::create_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentInput {
@@ -581,6 +606,7 @@ pub struct CreateDeploymentInput {
 }
 
 /// <p> Represents the output of a <code>CreateDeployment</code> operation. </p>
+/// see [CodeDeploy::create_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentOutput {
@@ -591,6 +617,7 @@ pub struct CreateDeploymentOutput {
 }
 
 /// <p>Represents the input of a <code>DeleteApplication</code> operation.</p>
+/// see [CodeDeploy::delete_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInput {
@@ -600,6 +627,7 @@ pub struct DeleteApplicationInput {
 }
 
 /// <p>Represents the input of a <code>DeleteDeploymentConfig</code> operation.</p>
+/// see [CodeDeploy::delete_deployment_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentConfigInput {
@@ -609,6 +637,7 @@ pub struct DeleteDeploymentConfigInput {
 }
 
 /// <p>Represents the input of a <code>DeleteDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::delete_deployment_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentGroupInput {
@@ -621,6 +650,7 @@ pub struct DeleteDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a <code>DeleteDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::delete_deployment_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeploymentGroupOutput {
@@ -631,6 +661,7 @@ pub struct DeleteDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a <code>DeleteGitHubAccount</code> operation.</p>
+/// see [CodeDeploy::delete_git_hub_account_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGitHubAccountTokenInput {
@@ -641,6 +672,7 @@ pub struct DeleteGitHubAccountTokenInput {
 }
 
 /// <p>Represents the output of a <code>DeleteGitHubAccountToken</code> operation.</p>
+/// see [CodeDeploy::delete_git_hub_account_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGitHubAccountTokenOutput {
@@ -650,6 +682,7 @@ pub struct DeleteGitHubAccountTokenOutput {
     pub token_name: Option<String>,
 }
 
+/// see [CodeDeploy::delete_resources_by_external_id]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcesByExternalIdInput {
@@ -659,6 +692,7 @@ pub struct DeleteResourcesByExternalIdInput {
     pub external_id: Option<String>,
 }
 
+/// see [CodeDeploy::delete_resources_by_external_id]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcesByExternalIdOutput {}
@@ -983,6 +1017,7 @@ pub struct DeploymentTarget {
 }
 
 /// <p>Represents the input of a <code>DeregisterOnPremisesInstance</code> operation.</p>
+/// see [CodeDeploy::deregister_on_premises_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterOnPremisesInstanceInput {
@@ -1174,6 +1209,7 @@ pub struct GenericRevisionInfo {
 }
 
 /// <p>Represents the input of a <code>GetApplication</code> operation.</p>
+/// see [CodeDeploy::get_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationInput {
@@ -1183,6 +1219,7 @@ pub struct GetApplicationInput {
 }
 
 /// <p>Represents the output of a <code>GetApplication</code> operation.</p>
+/// see [CodeDeploy::get_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationOutput {
@@ -1193,6 +1230,7 @@ pub struct GetApplicationOutput {
 }
 
 /// <p>Represents the input of a <code>GetApplicationRevision</code> operation.</p>
+/// see [CodeDeploy::get_application_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRevisionInput {
@@ -1205,6 +1243,7 @@ pub struct GetApplicationRevisionInput {
 }
 
 /// <p>Represents the output of a <code>GetApplicationRevision</code> operation.</p>
+/// see [CodeDeploy::get_application_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationRevisionOutput {
@@ -1223,6 +1262,7 @@ pub struct GetApplicationRevisionOutput {
 }
 
 /// <p>Represents the input of a <code>GetDeploymentConfig</code> operation.</p>
+/// see [CodeDeploy::get_deployment_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentConfigInput {
@@ -1232,6 +1272,7 @@ pub struct GetDeploymentConfigInput {
 }
 
 /// <p>Represents the output of a <code>GetDeploymentConfig</code> operation.</p>
+/// see [CodeDeploy::get_deployment_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentConfigOutput {
@@ -1242,6 +1283,7 @@ pub struct GetDeploymentConfigOutput {
 }
 
 /// <p>Represents the input of a <code>GetDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::get_deployment_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentGroupInput {
@@ -1254,6 +1296,7 @@ pub struct GetDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a <code>GetDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::get_deployment_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentGroupOutput {
@@ -1264,6 +1307,7 @@ pub struct GetDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a <code>GetDeployment</code> operation.</p>
+/// see [CodeDeploy::get_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInput {
@@ -1273,6 +1317,7 @@ pub struct GetDeploymentInput {
 }
 
 /// <p> Represents the input of a <code>GetDeploymentInstance</code> operation. </p>
+/// see [CodeDeploy::get_deployment_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInstanceInput {
@@ -1285,6 +1330,7 @@ pub struct GetDeploymentInstanceInput {
 }
 
 /// <p> Represents the output of a <code>GetDeploymentInstance</code> operation. </p>
+/// see [CodeDeploy::get_deployment_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentInstanceOutput {
@@ -1295,6 +1341,7 @@ pub struct GetDeploymentInstanceOutput {
 }
 
 /// <p>Represents the output of a <code>GetDeployment</code> operation.</p>
+/// see [CodeDeploy::get_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentOutput {
@@ -1304,6 +1351,7 @@ pub struct GetDeploymentOutput {
     pub deployment_info: Option<DeploymentInfo>,
 }
 
+/// see [CodeDeploy::get_deployment_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentTargetInput {
@@ -1317,6 +1365,7 @@ pub struct GetDeploymentTargetInput {
     pub target_id: Option<String>,
 }
 
+/// see [CodeDeploy::get_deployment_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentTargetOutput {
@@ -1327,6 +1376,7 @@ pub struct GetDeploymentTargetOutput {
 }
 
 /// <p> Represents the input of a <code>GetOnPremisesInstance</code> operation. </p>
+/// see [CodeDeploy::get_on_premises_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOnPremisesInstanceInput {
@@ -1336,6 +1386,7 @@ pub struct GetOnPremisesInstanceInput {
 }
 
 /// <p> Represents the output of a <code>GetOnPremisesInstance</code> operation. </p>
+/// see [CodeDeploy::get_on_premises_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOnPremisesInstanceOutput {
@@ -1574,6 +1625,7 @@ pub struct LifecycleEvent {
 }
 
 /// <p> Represents the input of a <code>ListApplicationRevisions</code> operation. </p>
+/// see [CodeDeploy::list_application_revisions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationRevisionsInput {
@@ -1606,7 +1658,16 @@ pub struct ListApplicationRevisionsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListApplicationRevisionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListApplicationRevisions</code> operation.</p>
+/// see [CodeDeploy::list_application_revisions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationRevisionsOutput {
@@ -1620,7 +1681,32 @@ pub struct ListApplicationRevisionsOutput {
     pub revisions: Option<Vec<RevisionLocation>>,
 }
 
+impl ListApplicationRevisionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<RevisionLocation>> {
+        Some(self.revisions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListApplicationRevisionsOutput {
+    type Item = RevisionLocation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RevisionLocation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListApplications</code> operation.</p>
+/// see [CodeDeploy::list_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsInput {
@@ -1630,7 +1716,16 @@ pub struct ListApplicationsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListApplicationsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a ListApplications operation.</p>
+/// see [CodeDeploy::list_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsOutput {
@@ -1644,7 +1739,32 @@ pub struct ListApplicationsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListApplicationsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.applications.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListApplicationsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListDeploymentConfigs</code> operation.</p>
+/// see [CodeDeploy::list_deployment_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentConfigsInput {
@@ -1654,7 +1774,16 @@ pub struct ListDeploymentConfigsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeploymentConfigsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListDeploymentConfigs</code> operation.</p>
+/// see [CodeDeploy::list_deployment_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentConfigsOutput {
@@ -1668,7 +1797,32 @@ pub struct ListDeploymentConfigsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListDeploymentConfigsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.deployment_configs_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeploymentConfigsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListDeploymentGroups</code> operation.</p>
+/// see [CodeDeploy::list_deployment_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentGroupsInput {
@@ -1681,7 +1835,16 @@ pub struct ListDeploymentGroupsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeploymentGroupsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListDeploymentGroups</code> operation.</p>
+/// see [CodeDeploy::list_deployment_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentGroupsOutput {
@@ -1699,7 +1862,32 @@ pub struct ListDeploymentGroupsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListDeploymentGroupsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.deployment_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeploymentGroupsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p> Represents the input of a <code>ListDeploymentInstances</code> operation. </p>
+/// see [CodeDeploy::list_deployment_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentInstancesInput {
@@ -1720,7 +1908,16 @@ pub struct ListDeploymentInstancesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeploymentInstancesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListDeploymentInstances</code> operation.</p>
+/// see [CodeDeploy::list_deployment_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentInstancesOutput {
@@ -1734,6 +1931,31 @@ pub struct ListDeploymentInstancesOutput {
     pub next_token: Option<String>,
 }
 
+impl ListDeploymentInstancesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.instances_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeploymentInstancesOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeDeploy::list_deployment_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentTargetsInput {
@@ -1751,6 +1973,15 @@ pub struct ListDeploymentTargetsInput {
     pub target_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
+impl PagedRequest for ListDeploymentTargetsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeDeploy::list_deployment_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentTargetsOutput {
@@ -1764,7 +1995,32 @@ pub struct ListDeploymentTargetsOutput {
     pub target_ids: Option<Vec<String>>,
 }
 
+impl ListDeploymentTargetsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.target_ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeploymentTargetsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListDeployments</code> operation.</p>
+/// see [CodeDeploy::list_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsInput {
@@ -1794,7 +2050,16 @@ pub struct ListDeploymentsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeploymentsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListDeployments</code> operation.</p>
+/// see [CodeDeploy::list_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentsOutput {
@@ -1808,7 +2073,32 @@ pub struct ListDeploymentsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListDeploymentsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.deployments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeploymentsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListGitHubAccountTokenNames</code> operation.</p>
+/// see [CodeDeploy::list_git_hub_account_token_names]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGitHubAccountTokenNamesInput {
@@ -1818,7 +2108,16 @@ pub struct ListGitHubAccountTokenNamesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListGitHubAccountTokenNamesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListGitHubAccountTokenNames</code> operation.</p>
+/// see [CodeDeploy::list_git_hub_account_token_names]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGitHubAccountTokenNamesOutput {
@@ -1832,7 +2131,32 @@ pub struct ListGitHubAccountTokenNamesOutput {
     pub token_name_list: Option<Vec<String>>,
 }
 
+impl ListGitHubAccountTokenNamesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.token_name_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGitHubAccountTokenNamesOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListOnPremisesInstances</code> operation.</p>
+/// see [CodeDeploy::list_on_premises_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOnPremisesInstancesInput {
@@ -1850,7 +2174,16 @@ pub struct ListOnPremisesInstancesInput {
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
+impl PagedRequest for ListOnPremisesInstancesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of the list on-premises instances operation.</p>
+/// see [CodeDeploy::list_on_premises_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOnPremisesInstancesOutput {
@@ -1864,6 +2197,31 @@ pub struct ListOnPremisesInstancesOutput {
     pub next_token: Option<String>,
 }
 
+impl ListOnPremisesInstancesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.instance_names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOnPremisesInstancesOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeDeploy::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -1876,6 +2234,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// see [CodeDeploy::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -1928,6 +2287,7 @@ pub struct OnPremisesTagSet {
     pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
 }
 
+/// see [CodeDeploy::put_lifecycle_event_hook_execution_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleEventHookExecutionStatusInput {
@@ -1945,6 +2305,7 @@ pub struct PutLifecycleEventHookExecutionStatusInput {
     pub status: Option<String>,
 }
 
+/// see [CodeDeploy::put_lifecycle_event_hook_execution_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLifecycleEventHookExecutionStatusOutput {
@@ -1968,6 +2329,7 @@ pub struct RawString {
 }
 
 /// <p>Represents the input of a RegisterApplicationRevision operation.</p>
+/// see [CodeDeploy::register_application_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterApplicationRevisionInput {
@@ -1984,6 +2346,7 @@ pub struct RegisterApplicationRevisionInput {
 }
 
 /// <p>Represents the input of the register on-premises instance operation.</p>
+/// see [CodeDeploy::register_on_premises_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterOnPremisesInstanceInput {
@@ -2001,6 +2364,7 @@ pub struct RegisterOnPremisesInstanceInput {
 }
 
 /// <p>Represents the input of a <code>RemoveTagsFromOnPremisesInstances</code> operation.</p>
+/// see [CodeDeploy::remove_tags_from_on_premises_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
@@ -2094,6 +2458,7 @@ pub struct S3Location {
     pub version: Option<String>,
 }
 
+/// see [CodeDeploy::skip_wait_time_for_instance_termination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SkipWaitTimeForInstanceTerminationInput {
@@ -2104,6 +2469,7 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
 }
 
 /// <p> Represents the input of a <code>StopDeployment</code> operation. </p>
+/// see [CodeDeploy::stop_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeploymentInput {
@@ -2117,6 +2483,7 @@ pub struct StopDeploymentInput {
 }
 
 /// <p> Represents the output of a <code>StopDeployment</code> operation. </p>
+/// see [CodeDeploy::stop_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDeploymentOutput {
@@ -2160,6 +2527,7 @@ pub struct TagFilter {
     pub value: Option<String>,
 }
 
+/// see [CodeDeploy::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -2171,6 +2539,7 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [CodeDeploy::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
@@ -2301,6 +2670,7 @@ pub struct TriggerConfig {
     pub trigger_target_arn: Option<String>,
 }
 
+/// see [CodeDeploy::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -2312,11 +2682,13 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CodeDeploy::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 /// <p>Represents the input of an <code>UpdateApplication</code> operation.</p>
+/// see [CodeDeploy::update_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationInput {
@@ -2331,6 +2703,7 @@ pub struct UpdateApplicationInput {
 }
 
 /// <p>Represents the input of an <code>UpdateDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::update_deployment_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentGroupInput {
@@ -2403,6 +2776,7 @@ pub struct UpdateDeploymentGroupInput {
 }
 
 /// <p>Represents the output of an <code>UpdateDeploymentGroup</code> operation.</p>
+/// see [CodeDeploy::update_deployment_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeploymentGroupOutput {
@@ -6428,7 +6802,7 @@ impl fmt::Display for UpdateDeploymentGroupError {
 impl Error for UpdateDeploymentGroupError {}
 /// Trait representing the capabilities of the CodeDeploy API. CodeDeploy clients implement this trait.
 #[async_trait]
-pub trait CodeDeploy {
+pub trait CodeDeploy: Clone + Sync + Send + 'static {
     /// <p>Adds tags to on-premises instances.</p>
     async fn add_tags_to_on_premises_instances(
         &self,
@@ -6597,11 +6971,31 @@ pub trait CodeDeploy {
         input: ListApplicationRevisionsInput,
     ) -> Result<ListApplicationRevisionsOutput, RusotoError<ListApplicationRevisionsError>>;
 
+    /// Auto-paginating version of `list_application_revisions`
+    fn list_application_revisions_pages(
+        &self,
+        input: ListApplicationRevisionsInput,
+    ) -> RusotoStream<RevisionLocation, ListApplicationRevisionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_application_revisions(state.clone())
+        })
+    }
+
     /// <p>Lists the applications registered with the IAM user or AWS account.</p>
     async fn list_applications(
         &self,
         input: ListApplicationsInput,
     ) -> Result<ListApplicationsOutput, RusotoError<ListApplicationsError>>;
+
+    /// Auto-paginating version of `list_applications`
+    fn list_applications_pages(
+        &self,
+        input: ListApplicationsInput,
+    ) -> RusotoStream<String, ListApplicationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_applications(state.clone())
+        })
+    }
 
     /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
     async fn list_deployment_configs(
@@ -6609,11 +7003,31 @@ pub trait CodeDeploy {
         input: ListDeploymentConfigsInput,
     ) -> Result<ListDeploymentConfigsOutput, RusotoError<ListDeploymentConfigsError>>;
 
+    /// Auto-paginating version of `list_deployment_configs`
+    fn list_deployment_configs_pages(
+        &self,
+        input: ListDeploymentConfigsInput,
+    ) -> RusotoStream<String, ListDeploymentConfigsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deployment_configs(state.clone())
+        })
+    }
+
     /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
     async fn list_deployment_groups(
         &self,
         input: ListDeploymentGroupsInput,
     ) -> Result<ListDeploymentGroupsOutput, RusotoError<ListDeploymentGroupsError>>;
+
+    /// Auto-paginating version of `list_deployment_groups`
+    fn list_deployment_groups_pages(
+        &self,
+        input: ListDeploymentGroupsInput,
+    ) -> RusotoStream<String, ListDeploymentGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deployment_groups(state.clone())
+        })
+    }
 
     /// <p><note> <p> The newer <code>BatchGetDeploymentTargets</code> should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
     async fn list_deployment_instances(
@@ -6621,11 +7035,31 @@ pub trait CodeDeploy {
         input: ListDeploymentInstancesInput,
     ) -> Result<ListDeploymentInstancesOutput, RusotoError<ListDeploymentInstancesError>>;
 
+    /// Auto-paginating version of `list_deployment_instances`
+    fn list_deployment_instances_pages(
+        &self,
+        input: ListDeploymentInstancesInput,
+    ) -> RusotoStream<String, ListDeploymentInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deployment_instances(state.clone())
+        })
+    }
+
     /// <p> Returns an array of target IDs that are associated a deployment. </p>
     async fn list_deployment_targets(
         &self,
         input: ListDeploymentTargetsInput,
     ) -> Result<ListDeploymentTargetsOutput, RusotoError<ListDeploymentTargetsError>>;
+
+    /// Auto-paginating version of `list_deployment_targets`
+    fn list_deployment_targets_pages(
+        &self,
+        input: ListDeploymentTargetsInput,
+    ) -> RusotoStream<String, ListDeploymentTargetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deployment_targets(state.clone())
+        })
+    }
 
     /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
     async fn list_deployments(
@@ -6633,17 +7067,47 @@ pub trait CodeDeploy {
         input: ListDeploymentsInput,
     ) -> Result<ListDeploymentsOutput, RusotoError<ListDeploymentsError>>;
 
+    /// Auto-paginating version of `list_deployments`
+    fn list_deployments_pages(
+        &self,
+        input: ListDeploymentsInput,
+    ) -> RusotoStream<String, ListDeploymentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deployments(state.clone())
+        })
+    }
+
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
     async fn list_git_hub_account_token_names(
         &self,
         input: ListGitHubAccountTokenNamesInput,
     ) -> Result<ListGitHubAccountTokenNamesOutput, RusotoError<ListGitHubAccountTokenNamesError>>;
 
+    /// Auto-paginating version of `list_git_hub_account_token_names`
+    fn list_git_hub_account_token_names_pages(
+        &self,
+        input: ListGitHubAccountTokenNamesInput,
+    ) -> RusotoStream<String, ListGitHubAccountTokenNamesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_git_hub_account_token_names(state.clone())
+        })
+    }
+
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     async fn list_on_premises_instances(
         &self,
         input: ListOnPremisesInstancesInput,
     ) -> Result<ListOnPremisesInstancesOutput, RusotoError<ListOnPremisesInstancesError>>;
+
+    /// Auto-paginating version of `list_on_premises_instances`
+    fn list_on_premises_instances_pages(
+        &self,
+        input: ListOnPremisesInstancesInput,
+    ) -> RusotoStream<String, ListOnPremisesInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_on_premises_instances(state.clone())
+        })
+    }
 
     /// <p> Returns a list of tags for the resource identified by a specified Amazon Resource Name (ARN). Tags are used to organize and categorize your CodeDeploy resources. </p>
     async fn list_tags_for_resource(

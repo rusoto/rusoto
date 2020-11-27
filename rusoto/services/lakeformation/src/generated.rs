@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl LakeFormationClient {
 }
 
 use serde_json;
+/// see [LakeFormation::batch_grant_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGrantPermissionsRequest {
@@ -63,6 +66,7 @@ pub struct BatchGrantPermissionsRequest {
     pub entries: Vec<BatchPermissionsRequestEntry>,
 }
 
+/// see [LakeFormation::batch_grant_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGrantPermissionsResponse {
@@ -110,6 +114,7 @@ pub struct BatchPermissionsRequestEntry {
     pub resource: Option<Resource>,
 }
 
+/// see [LakeFormation::batch_revoke_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchRevokePermissionsRequest {
@@ -122,6 +127,7 @@ pub struct BatchRevokePermissionsRequest {
     pub entries: Vec<BatchPermissionsRequestEntry>,
 }
 
+/// see [LakeFormation::batch_revoke_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchRevokePermissionsResponse {
@@ -198,6 +204,7 @@ pub struct DatabaseResource {
     pub name: String,
 }
 
+/// see [LakeFormation::deregister_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterResourceRequest {
@@ -206,10 +213,12 @@ pub struct DeregisterResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [LakeFormation::deregister_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterResourceResponse {}
 
+/// see [LakeFormation::describe_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceRequest {
@@ -218,6 +227,7 @@ pub struct DescribeResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [LakeFormation::describe_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceResponse {
@@ -269,6 +279,7 @@ pub struct FilterCondition {
     pub string_value_list: Option<Vec<String>>,
 }
 
+/// see [LakeFormation::get_data_lake_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataLakeSettingsRequest {
@@ -278,6 +289,7 @@ pub struct GetDataLakeSettingsRequest {
     pub catalog_id: Option<String>,
 }
 
+/// see [LakeFormation::get_data_lake_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataLakeSettingsResponse {
@@ -287,6 +299,7 @@ pub struct GetDataLakeSettingsResponse {
     pub data_lake_settings: Option<DataLakeSettings>,
 }
 
+/// see [LakeFormation::get_effective_permissions_for_path]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEffectivePermissionsForPathRequest {
@@ -307,6 +320,7 @@ pub struct GetEffectivePermissionsForPathRequest {
     pub resource_arn: String,
 }
 
+/// see [LakeFormation::get_effective_permissions_for_path]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEffectivePermissionsForPathResponse {
@@ -320,6 +334,7 @@ pub struct GetEffectivePermissionsForPathResponse {
     pub permissions: Option<Vec<PrincipalResourcePermissions>>,
 }
 
+/// see [LakeFormation::grant_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantPermissionsRequest {
@@ -342,10 +357,12 @@ pub struct GrantPermissionsRequest {
     pub resource: Resource,
 }
 
+/// see [LakeFormation::grant_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantPermissionsResponse {}
 
+/// see [LakeFormation::list_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPermissionsRequest {
@@ -375,6 +392,7 @@ pub struct ListPermissionsRequest {
     pub resource_type: Option<String>,
 }
 
+/// see [LakeFormation::list_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPermissionsResponse {
@@ -388,6 +406,7 @@ pub struct ListPermissionsResponse {
     pub principal_resource_permissions: Option<Vec<PrincipalResourcePermissions>>,
 }
 
+/// see [LakeFormation::list_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
@@ -405,6 +424,7 @@ pub struct ListResourcesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [LakeFormation::list_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResponse {
@@ -457,6 +477,7 @@ pub struct PrincipalResourcePermissions {
     pub resource: Option<Resource>,
 }
 
+/// see [LakeFormation::put_data_lake_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDataLakeSettingsRequest {
@@ -469,10 +490,12 @@ pub struct PutDataLakeSettingsRequest {
     pub data_lake_settings: DataLakeSettings,
 }
 
+/// see [LakeFormation::put_data_lake_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDataLakeSettingsResponse {}
 
+/// see [LakeFormation::register_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterResourceRequest {
@@ -489,6 +512,7 @@ pub struct RegisterResourceRequest {
     pub use_service_linked_role: Option<bool>,
 }
 
+/// see [LakeFormation::register_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterResourceResponse {}
@@ -536,6 +560,7 @@ pub struct ResourceInfo {
     pub role_arn: Option<String>,
 }
 
+/// see [LakeFormation::revoke_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokePermissionsRequest {
@@ -558,6 +583,7 @@ pub struct RevokePermissionsRequest {
     pub resource: Resource,
 }
 
+/// see [LakeFormation::revoke_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokePermissionsResponse {}
@@ -609,6 +635,7 @@ pub struct TableWithColumnsResource {
     pub name: String,
 }
 
+/// see [LakeFormation::update_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
@@ -620,6 +647,7 @@ pub struct UpdateResourceRequest {
     pub role_arn: String,
 }
 
+/// see [LakeFormation::update_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceResponse {}
@@ -1208,7 +1236,7 @@ impl fmt::Display for UpdateResourceError {
 impl Error for UpdateResourceError {}
 /// Trait representing the capabilities of the AWS Lake Formation API. AWS Lake Formation clients implement this trait.
 #[async_trait]
-pub trait LakeFormation {
+pub trait LakeFormation: Clone + Sync + Send + 'static {
     /// <p>Batch operation to grant permissions to the principal.</p>
     async fn batch_grant_permissions(
         &self,

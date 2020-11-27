@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl ShieldClient {
 }
 
 use serde_json;
+/// see [Shield::associate_drt_log_bucket]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDRTLogBucketRequest {
@@ -58,10 +61,12 @@ pub struct AssociateDRTLogBucketRequest {
     pub log_bucket: String,
 }
 
+/// see [Shield::associate_drt_log_bucket]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDRTLogBucketResponse {}
 
+/// see [Shield::associate_drt_role]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDRTRoleRequest {
@@ -70,10 +75,12 @@ pub struct AssociateDRTRoleRequest {
     pub role_arn: String,
 }
 
+/// see [Shield::associate_drt_role]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDRTRoleResponse {}
 
+/// see [Shield::associate_health_check]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateHealthCheckRequest {
@@ -85,10 +92,12 @@ pub struct AssociateHealthCheckRequest {
     pub protection_id: String,
 }
 
+/// see [Shield::associate_health_check]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateHealthCheckResponse {}
 
+/// see [Shield::associate_proactive_engagement_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateProactiveEngagementDetailsRequest {
@@ -97,6 +106,7 @@ pub struct AssociateProactiveEngagementDetailsRequest {
     pub emergency_contact_list: Vec<EmergencyContact>,
 }
 
+/// see [Shield::associate_proactive_engagement_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateProactiveEngagementDetailsResponse {}
@@ -254,6 +264,7 @@ pub struct Contributor {
     pub value: Option<i64>,
 }
 
+/// see [Shield::create_protection_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProtectionGroupRequest {
@@ -276,10 +287,12 @@ pub struct CreateProtectionGroupRequest {
     pub resource_type: Option<String>,
 }
 
+/// see [Shield::create_protection_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProtectionGroupResponse {}
 
+/// see [Shield::create_protection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProtectionRequest {
@@ -291,6 +304,7 @@ pub struct CreateProtectionRequest {
     pub resource_arn: String,
 }
 
+/// see [Shield::create_protection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProtectionResponse {
@@ -300,14 +314,17 @@ pub struct CreateProtectionResponse {
     pub protection_id: Option<String>,
 }
 
+/// see [Shield::create_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionRequest {}
 
+/// see [Shield::create_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionResponse {}
 
+/// see [Shield::delete_protection_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProtectionGroupRequest {
@@ -316,10 +333,12 @@ pub struct DeleteProtectionGroupRequest {
     pub protection_group_id: String,
 }
 
+/// see [Shield::delete_protection_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProtectionGroupResponse {}
 
+/// see [Shield::delete_protection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProtectionRequest {
@@ -328,18 +347,22 @@ pub struct DeleteProtectionRequest {
     pub protection_id: String,
 }
 
+/// see [Shield::delete_protection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProtectionResponse {}
 
+/// see [Shield::delete_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionRequest {}
 
+/// see [Shield::delete_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubscriptionResponse {}
 
+/// see [Shield::describe_attack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAttackRequest {
@@ -348,6 +371,7 @@ pub struct DescribeAttackRequest {
     pub attack_id: String,
 }
 
+/// see [Shield::describe_attack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAttackResponse {
@@ -357,10 +381,12 @@ pub struct DescribeAttackResponse {
     pub attack: Option<AttackDetail>,
 }
 
+/// see [Shield::describe_attack_statistics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAttackStatisticsRequest {}
 
+/// see [Shield::describe_attack_statistics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAttackStatisticsResponse {
@@ -371,10 +397,12 @@ pub struct DescribeAttackStatisticsResponse {
     pub time_range: TimeRange,
 }
 
+/// see [Shield::describe_drt_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDRTAccessRequest {}
 
+/// see [Shield::describe_drt_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDRTAccessResponse {
@@ -388,10 +416,12 @@ pub struct DescribeDRTAccessResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [Shield::describe_emergency_contact_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEmergencyContactSettingsRequest {}
 
+/// see [Shield::describe_emergency_contact_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEmergencyContactSettingsResponse {
@@ -401,6 +431,7 @@ pub struct DescribeEmergencyContactSettingsResponse {
     pub emergency_contact_list: Option<Vec<EmergencyContact>>,
 }
 
+/// see [Shield::describe_protection_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProtectionGroupRequest {
@@ -409,6 +440,7 @@ pub struct DescribeProtectionGroupRequest {
     pub protection_group_id: String,
 }
 
+/// see [Shield::describe_protection_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProtectionGroupResponse {
@@ -417,6 +449,7 @@ pub struct DescribeProtectionGroupResponse {
     pub protection_group: ProtectionGroup,
 }
 
+/// see [Shield::describe_protection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProtectionRequest {
@@ -430,6 +463,7 @@ pub struct DescribeProtectionRequest {
     pub resource_arn: Option<String>,
 }
 
+/// see [Shield::describe_protection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProtectionResponse {
@@ -439,10 +473,12 @@ pub struct DescribeProtectionResponse {
     pub protection: Option<Protection>,
 }
 
+/// see [Shield::describe_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscriptionRequest {}
 
+/// see [Shield::describe_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubscriptionResponse {
@@ -452,14 +488,17 @@ pub struct DescribeSubscriptionResponse {
     pub subscription: Option<Subscription>,
 }
 
+/// see [Shield::disable_proactive_engagement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableProactiveEngagementRequest {}
 
+/// see [Shield::disable_proactive_engagement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableProactiveEngagementResponse {}
 
+/// see [Shield::disassociate_drt_log_bucket]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDRTLogBucketRequest {
@@ -468,18 +507,22 @@ pub struct DisassociateDRTLogBucketRequest {
     pub log_bucket: String,
 }
 
+/// see [Shield::disassociate_drt_log_bucket]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDRTLogBucketResponse {}
 
+/// see [Shield::disassociate_drt_role]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDRTRoleRequest {}
 
+/// see [Shield::disassociate_drt_role]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDRTRoleResponse {}
 
+/// see [Shield::disassociate_health_check]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateHealthCheckRequest {
@@ -491,6 +534,7 @@ pub struct DisassociateHealthCheckRequest {
     pub protection_id: String,
 }
 
+/// see [Shield::disassociate_health_check]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateHealthCheckResponse {}
@@ -511,18 +555,22 @@ pub struct EmergencyContact {
     pub phone_number: Option<String>,
 }
 
+/// see [Shield::enable_proactive_engagement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableProactiveEngagementRequest {}
 
+/// see [Shield::enable_proactive_engagement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableProactiveEngagementResponse {}
 
+/// see [Shield::get_subscription_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionStateRequest {}
 
+/// see [Shield::get_subscription_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSubscriptionStateResponse {
@@ -545,6 +593,7 @@ pub struct Limit {
     pub type_: Option<String>,
 }
 
+/// see [Shield::list_attacks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttacksRequest {
@@ -570,6 +619,15 @@ pub struct ListAttacksRequest {
     pub start_time: Option<TimeRange>,
 }
 
+impl PagedRequest for ListAttacksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Shield::list_attacks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttacksResponse {
@@ -583,6 +641,31 @@ pub struct ListAttacksResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAttacksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AttackSummary>> {
+        Some(self.attack_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAttacksResponse {
+    type Item = AttackSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AttackSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Shield::list_protection_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtectionGroupsRequest {
@@ -596,6 +679,7 @@ pub struct ListProtectionGroupsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Shield::list_protection_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProtectionGroupsResponse {
@@ -608,6 +692,7 @@ pub struct ListProtectionGroupsResponse {
     pub protection_groups: Vec<ProtectionGroup>,
 }
 
+/// see [Shield::list_protections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtectionsRequest {
@@ -621,6 +706,15 @@ pub struct ListProtectionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListProtectionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Shield::list_protections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProtectionsResponse {
@@ -634,6 +728,31 @@ pub struct ListProtectionsResponse {
     pub protections: Option<Vec<Protection>>,
 }
 
+impl ListProtectionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Protection>> {
+        Some(self.protections.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListProtectionsResponse {
+    type Item = Protection;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Protection> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Shield::list_resources_in_protection_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesInProtectionGroupRequest {
@@ -650,6 +769,7 @@ pub struct ListResourcesInProtectionGroupRequest {
     pub protection_group_id: String,
 }
 
+/// see [Shield::list_resources_in_protection_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesInProtectionGroupResponse {
@@ -878,6 +998,7 @@ pub struct TimeRange {
     pub to_exclusive: Option<f64>,
 }
 
+/// see [Shield::update_emergency_contact_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEmergencyContactSettingsRequest {
@@ -887,10 +1008,12 @@ pub struct UpdateEmergencyContactSettingsRequest {
     pub emergency_contact_list: Option<Vec<EmergencyContact>>,
 }
 
+/// see [Shield::update_emergency_contact_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEmergencyContactSettingsResponse {}
 
+/// see [Shield::update_protection_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProtectionGroupRequest {
@@ -913,10 +1036,12 @@ pub struct UpdateProtectionGroupRequest {
     pub resource_type: Option<String>,
 }
 
+/// see [Shield::update_protection_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProtectionGroupResponse {}
 
+/// see [Shield::update_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriptionRequest {
@@ -926,6 +1051,7 @@ pub struct UpdateSubscriptionRequest {
     pub auto_renew: Option<String>,
 }
 
+/// see [Shield::update_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriptionResponse {}
@@ -2505,7 +2631,7 @@ impl fmt::Display for UpdateSubscriptionError {
 impl Error for UpdateSubscriptionError {}
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
 #[async_trait]
-pub trait Shield {
+pub trait Shield: Clone + Sync + Send + 'static {
     /// <p>Authorizes the DDoS Response Team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
     async fn associate_drt_log_bucket(
         &self,
@@ -2646,6 +2772,16 @@ pub trait Shield {
         input: ListAttacksRequest,
     ) -> Result<ListAttacksResponse, RusotoError<ListAttacksError>>;
 
+    /// Auto-paginating version of `list_attacks`
+    fn list_attacks_pages(
+        &self,
+        input: ListAttacksRequest,
+    ) -> RusotoStream<AttackSummary, ListAttacksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_attacks(state.clone())
+        })
+    }
+
     /// <p>Retrieves the <a>ProtectionGroup</a> objects for the account.</p>
     async fn list_protection_groups(
         &self,
@@ -2657,6 +2793,16 @@ pub trait Shield {
         &self,
         input: ListProtectionsRequest,
     ) -> Result<ListProtectionsResponse, RusotoError<ListProtectionsError>>;
+
+    /// Auto-paginating version of `list_protections`
+    fn list_protections_pages(
+        &self,
+        input: ListProtectionsRequest,
+    ) -> RusotoStream<Protection, ListProtectionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_protections(state.clone())
+        })
+    }
 
     /// <p>Retrieves the resources that are included in the protection group. </p>
     async fn list_resources_in_protection_group(

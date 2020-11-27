@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -116,6 +118,7 @@ impl AccountLimitTypeSerializer {
     }
 }
 
+/// see [Route53::activate_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateKeySigningKeyRequest {
@@ -125,6 +128,7 @@ pub struct ActivateKeySigningKeyRequest {
     pub name: String,
 }
 
+/// see [Route53::activate_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActivateKeySigningKeyResponse {
@@ -334,6 +338,7 @@ impl AssociateVPCCommentSerializer {
 }
 
 /// <p>A complex type that contains information about the request to associate a VPC with a private hosted zone.</p>
+/// see [Route53::associate_vpc_with_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateVPCWithHostedZoneRequest {
@@ -366,6 +371,7 @@ impl AssociateVPCWithHostedZoneRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>AssociateVPCWithHostedZone</code> request.</p>
+/// see [Route53::associate_vpc_with_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateVPCWithHostedZoneResponse {
@@ -518,6 +524,7 @@ impl ChangeInfoDeserializer {
     }
 }
 /// <p>A complex type that contains change information for the resource record set.</p>
+/// see [Route53::change_resource_record_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangeResourceRecordSetsRequest {
@@ -545,6 +552,7 @@ impl ChangeResourceRecordSetsRequestSerializer {
     }
 }
 /// <p>A complex type containing the response for the request.</p>
+/// see [Route53::change_resource_record_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ChangeResourceRecordSetsResponse {
@@ -584,6 +592,7 @@ impl ChangeStatusDeserializer {
     }
 }
 /// <p>A complex type that contains information about the tags that you want to add, edit, or delete.</p>
+/// see [Route53::change_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangeTagsForResourceRequest {
@@ -620,6 +629,7 @@ impl ChangeTagsForResourceRequestSerializer {
     }
 }
 /// <p>Empty response for the request.</p>
+/// see [Route53::change_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ChangeTagsForResourceResponse {}
@@ -851,6 +861,7 @@ impl ComparisonOperatorDeserializer {
     }
 }
 /// <p>A complex type that contains the health check request information.</p>
+/// see [Route53::create_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHealthCheckRequest {
@@ -887,6 +898,7 @@ impl CreateHealthCheckRequestSerializer {
     }
 }
 /// <p>A complex type containing the response information for the new health check.</p>
+/// see [Route53::create_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateHealthCheckResponse {
@@ -921,6 +933,7 @@ impl CreateHealthCheckResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a public or private hosted zone.</p>
+/// see [Route53::create_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHostedZoneRequest {
@@ -964,6 +977,7 @@ impl CreateHostedZoneRequestSerializer {
     }
 }
 /// <p>A complex type containing the response information for the hosted zone.</p>
+/// see [Route53::create_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateHostedZoneResponse {
@@ -1012,6 +1026,7 @@ impl CreateHostedZoneResponseDeserializer {
         )
     }
 }
+/// see [Route53::create_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeySigningKeyRequest {
@@ -1052,6 +1067,7 @@ impl CreateKeySigningKeyRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
+/// see [Route53::create_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateKeySigningKeyResponse {
@@ -1089,6 +1105,7 @@ impl CreateKeySigningKeyResponseDeserializer {
         )
     }
 }
+/// see [Route53::create_query_logging_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQueryLoggingConfigRequest {
@@ -1120,6 +1137,7 @@ impl CreateQueryLoggingConfigRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
+/// see [Route53::create_query_logging_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateQueryLoggingConfigResponse {
@@ -1155,6 +1173,7 @@ impl CreateQueryLoggingConfigResponseDeserializer {
         )
     }
 }
+/// see [Route53::create_reusable_delegation_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReusableDelegationSetRequest {
@@ -1184,6 +1203,7 @@ impl CreateReusableDelegationSetRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
+/// see [Route53::create_reusable_delegation_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReusableDelegationSetResponse {
@@ -1218,6 +1238,7 @@ impl CreateReusableDelegationSetResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the resource record sets that you want to create based on a specified traffic policy.</p>
+/// see [Route53::create_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrafficPolicyInstanceRequest {
@@ -1263,6 +1284,7 @@ impl CreateTrafficPolicyInstanceRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>CreateTrafficPolicyInstance</code> request.</p>
+/// see [Route53::create_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTrafficPolicyInstanceResponse {
@@ -1300,6 +1322,7 @@ impl CreateTrafficPolicyInstanceResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the traffic policy that you want to create.</p>
+/// see [Route53::create_traffic_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrafficPolicyRequest {
@@ -1333,6 +1356,7 @@ impl CreateTrafficPolicyRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>CreateTrafficPolicy</code> request.</p>
+/// see [Route53::create_traffic_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTrafficPolicyResponse {
@@ -1367,6 +1391,7 @@ impl CreateTrafficPolicyResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the traffic policy that you want to create a new version for.</p>
+/// see [Route53::create_traffic_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrafficPolicyVersionRequest {
@@ -1399,6 +1424,7 @@ impl CreateTrafficPolicyVersionRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>CreateTrafficPolicyVersion</code> request.</p>
+/// see [Route53::create_traffic_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTrafficPolicyVersionResponse {
@@ -1433,6 +1459,7 @@ impl CreateTrafficPolicyVersionResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to authorize associating a VPC with your private hosted zone. Authorization is only required when a private hosted zone and a VPC were created by using different accounts.</p>
+/// see [Route53::create_vpc_association_authorization]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVPCAssociationAuthorizationRequest {
@@ -1460,6 +1487,7 @@ impl CreateVPCAssociationAuthorizationRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information from a <code>CreateVPCAssociationAuthorization</code> request.</p>
+/// see [Route53::create_vpc_association_authorization]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVPCAssociationAuthorizationResponse {
@@ -1566,6 +1594,7 @@ impl DNSSECStatusDeserializer {
         })
     }
 }
+/// see [Route53::deactivate_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateKeySigningKeyRequest {
@@ -1575,6 +1604,7 @@ pub struct DeactivateKeySigningKeyRequest {
     pub name: String,
 }
 
+/// see [Route53::deactivate_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeactivateKeySigningKeyResponse {
@@ -1686,6 +1716,7 @@ impl DelegationSetsDeserializer {
     }
 }
 /// <p>This action deletes a health check.</p>
+/// see [Route53::delete_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHealthCheckRequest {
@@ -1694,6 +1725,7 @@ pub struct DeleteHealthCheckRequest {
 }
 
 /// <p>An empty element.</p>
+/// see [Route53::delete_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteHealthCheckResponse {}
@@ -1716,6 +1748,7 @@ impl DeleteHealthCheckResponseDeserializer {
     }
 }
 /// <p>A request to delete a hosted zone.</p>
+/// see [Route53::delete_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHostedZoneRequest {
@@ -1724,6 +1757,7 @@ pub struct DeleteHostedZoneRequest {
 }
 
 /// <p>A complex type that contains the response to a <code>DeleteHostedZone</code> request.</p>
+/// see [Route53::delete_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteHostedZoneResponse {
@@ -1754,6 +1788,7 @@ impl DeleteHostedZoneResponseDeserializer {
         )
     }
 }
+/// see [Route53::delete_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKeySigningKeyRequest {
@@ -1763,6 +1798,7 @@ pub struct DeleteKeySigningKeyRequest {
     pub name: String,
 }
 
+/// see [Route53::delete_key_signing_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteKeySigningKeyResponse {
@@ -1792,6 +1828,7 @@ impl DeleteKeySigningKeyResponseDeserializer {
         )
     }
 }
+/// see [Route53::delete_query_logging_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueryLoggingConfigRequest {
@@ -1799,6 +1836,7 @@ pub struct DeleteQueryLoggingConfigRequest {
     pub id: String,
 }
 
+/// see [Route53::delete_query_logging_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteQueryLoggingConfigResponse {}
@@ -1821,6 +1859,7 @@ impl DeleteQueryLoggingConfigResponseDeserializer {
     }
 }
 /// <p>A request to delete a reusable delegation set.</p>
+/// see [Route53::delete_reusable_delegation_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReusableDelegationSetRequest {
@@ -1829,6 +1868,7 @@ pub struct DeleteReusableDelegationSetRequest {
 }
 
 /// <p>An empty element.</p>
+/// see [Route53::delete_reusable_delegation_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReusableDelegationSetResponse {}
@@ -1851,6 +1891,7 @@ impl DeleteReusableDelegationSetResponseDeserializer {
     }
 }
 /// <p>A request to delete a specified traffic policy instance.</p>
+/// see [Route53::delete_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrafficPolicyInstanceRequest {
@@ -1859,6 +1900,7 @@ pub struct DeleteTrafficPolicyInstanceRequest {
 }
 
 /// <p>An empty element.</p>
+/// see [Route53::delete_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTrafficPolicyInstanceResponse {}
@@ -1881,6 +1923,7 @@ impl DeleteTrafficPolicyInstanceResponseDeserializer {
     }
 }
 /// <p>A request to delete a specified traffic policy version.</p>
+/// see [Route53::delete_traffic_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrafficPolicyRequest {
@@ -1891,6 +1934,7 @@ pub struct DeleteTrafficPolicyRequest {
 }
 
 /// <p>An empty element.</p>
+/// see [Route53::delete_traffic_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTrafficPolicyResponse {}
@@ -1913,6 +1957,7 @@ impl DeleteTrafficPolicyResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to remove authorization to associate a VPC that was created by one AWS account with a hosted zone that was created with a different AWS account. </p>
+/// see [Route53::delete_vpc_association_authorization]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVPCAssociationAuthorizationRequest {
@@ -1940,6 +1985,7 @@ impl DeleteVPCAssociationAuthorizationRequestSerializer {
     }
 }
 /// <p>Empty response for the request.</p>
+/// see [Route53::delete_vpc_association_authorization]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteVPCAssociationAuthorizationResponse {}
@@ -2019,6 +2065,7 @@ impl DimensionListDeserializer {
         })
     }
 }
+/// see [Route53::disable_hosted_zone_dnssec]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableHostedZoneDNSSECRequest {
@@ -2026,6 +2073,7 @@ pub struct DisableHostedZoneDNSSECRequest {
     pub hosted_zone_id: String,
 }
 
+/// see [Route53::disable_hosted_zone_dnssec]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableHostedZoneDNSSECResponse {
@@ -2095,6 +2143,7 @@ impl DisassociateVPCCommentSerializer {
 }
 
 /// <p>A complex type that contains information about the VPC that you want to disassociate from a specified private hosted zone.</p>
+/// see [Route53::disassociate_vpc_from_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateVPCFromHostedZoneRequest {
@@ -2127,6 +2176,7 @@ impl DisassociateVPCFromHostedZoneRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the disassociate request.</p>
+/// see [Route53::disassociate_vpc_from_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisassociateVPCFromHostedZoneResponse {
@@ -2157,6 +2207,7 @@ impl DisassociateVPCFromHostedZoneResponseDeserializer {
         )
     }
 }
+/// see [Route53::enable_hosted_zone_dnssec]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableHostedZoneDNSSECRequest {
@@ -2164,6 +2215,7 @@ pub struct EnableHostedZoneDNSSECRequest {
     pub hosted_zone_id: String,
 }
 
+/// see [Route53::enable_hosted_zone_dnssec]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableHostedZoneDNSSECResponse {
@@ -2537,6 +2589,7 @@ impl GeoLocationSubdivisionNameDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
+/// see [Route53::get_account_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountLimitRequest {
@@ -2545,6 +2598,7 @@ pub struct GetAccountLimitRequest {
 }
 
 /// <p>A complex type that contains the requested limit. </p>
+/// see [Route53::get_account_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountLimitResponse {
@@ -2581,6 +2635,7 @@ impl GetAccountLimitResponseDeserializer {
     }
 }
 /// <p>The input for a GetChange request.</p>
+/// see [Route53::get_change]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChangeRequest {
@@ -2589,6 +2644,7 @@ pub struct GetChangeRequest {
 }
 
 /// <p>A complex type that contains the <code>ChangeInfo</code> element.</p>
+/// see [Route53::get_change]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetChangeResponse {
@@ -2616,11 +2672,13 @@ impl GetChangeResponseDeserializer {
     }
 }
 /// <p>Empty request.</p>
+/// see [Route53::get_checker_ip_ranges]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCheckerIpRangesRequest {}
 
 /// <p>A complex type that contains the <code>CheckerIpRanges</code> element.</p>
+/// see [Route53::get_checker_ip_ranges]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCheckerIpRangesResponse {
@@ -2655,6 +2713,7 @@ impl GetCheckerIpRangesResponseDeserializer {
         )
     }
 }
+/// see [Route53::get_dnssec]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDNSSECRequest {
@@ -2662,6 +2721,7 @@ pub struct GetDNSSECRequest {
     pub hosted_zone_id: String,
 }
 
+/// see [Route53::get_dnssec]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDNSSECResponse {
@@ -2698,6 +2758,7 @@ impl GetDNSSECResponseDeserializer {
     }
 }
 /// <p>A request for information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p>
+/// see [Route53::get_geo_location]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGeoLocationRequest {
@@ -2710,6 +2771,7 @@ pub struct GetGeoLocationRequest {
 }
 
 /// <p>A complex type that contains the response information for the specified geolocation code.</p>
+/// see [Route53::get_geo_location]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetGeoLocationResponse {
@@ -2738,11 +2800,13 @@ impl GetGeoLocationResponseDeserializer {
     }
 }
 /// <p>A request for the number of health checks that are associated with the current AWS account.</p>
+/// see [Route53::get_health_check_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHealthCheckCountRequest {}
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheckCount</code> request.</p>
+/// see [Route53::get_health_check_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHealthCheckCountResponse {
@@ -2775,6 +2839,7 @@ impl GetHealthCheckCountResponseDeserializer {
     }
 }
 /// <p>A request for the reason that a health check failed most recently.</p>
+/// see [Route53::get_health_check_last_failure_reason]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHealthCheckLastFailureReasonRequest {
@@ -2783,6 +2848,7 @@ pub struct GetHealthCheckLastFailureReasonRequest {
 }
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheckLastFailureReason</code> request.</p>
+/// see [Route53::get_health_check_last_failure_reason]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHealthCheckLastFailureReasonResponse {
@@ -2819,6 +2885,7 @@ impl GetHealthCheckLastFailureReasonResponseDeserializer {
     }
 }
 /// <p>A request to get information about a specified health check. </p>
+/// see [Route53::get_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHealthCheckRequest {
@@ -2827,6 +2894,7 @@ pub struct GetHealthCheckRequest {
 }
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheck</code> request.</p>
+/// see [Route53::get_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHealthCheckResponse {
@@ -2854,6 +2922,7 @@ impl GetHealthCheckResponseDeserializer {
     }
 }
 /// <p>A request to get the status for a health check.</p>
+/// see [Route53::get_health_check_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHealthCheckStatusRequest {
@@ -2862,6 +2931,7 @@ pub struct GetHealthCheckStatusRequest {
 }
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheck</code> request.</p>
+/// see [Route53::get_health_check_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHealthCheckStatusResponse {
@@ -2898,11 +2968,13 @@ impl GetHealthCheckStatusResponseDeserializer {
     }
 }
 /// <p>A request to retrieve a count of all the hosted zones that are associated with the current AWS account.</p>
+/// see [Route53::get_hosted_zone_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostedZoneCountRequest {}
 
 /// <p>A complex type that contains the response to a <code>GetHostedZoneCount</code> request.</p>
+/// see [Route53::get_hosted_zone_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHostedZoneCountResponse {
@@ -2935,6 +3007,7 @@ impl GetHostedZoneCountResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
+/// see [Route53::get_hosted_zone_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostedZoneLimitRequest {
@@ -2945,6 +3018,7 @@ pub struct GetHostedZoneLimitRequest {
 }
 
 /// <p>A complex type that contains the requested limit. </p>
+/// see [Route53::get_hosted_zone_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHostedZoneLimitResponse {
@@ -2981,6 +3055,7 @@ impl GetHostedZoneLimitResponseDeserializer {
     }
 }
 /// <p>A request to get information about a specified hosted zone. </p>
+/// see [Route53::get_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostedZoneRequest {
@@ -2989,6 +3064,7 @@ pub struct GetHostedZoneRequest {
 }
 
 /// <p>A complex type that contain the response to a <code>GetHostedZone</code> request.</p>
+/// see [Route53::get_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHostedZoneResponse {
@@ -3030,6 +3106,7 @@ impl GetHostedZoneResponseDeserializer {
         })
     }
 }
+/// see [Route53::get_query_logging_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryLoggingConfigRequest {
@@ -3037,6 +3114,7 @@ pub struct GetQueryLoggingConfigRequest {
     pub id: String,
 }
 
+/// see [Route53::get_query_logging_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetQueryLoggingConfigResponse {
@@ -3071,6 +3149,7 @@ impl GetQueryLoggingConfigResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
+/// see [Route53::get_reusable_delegation_set_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReusableDelegationSetLimitRequest {
@@ -3081,6 +3160,7 @@ pub struct GetReusableDelegationSetLimitRequest {
 }
 
 /// <p>A complex type that contains the requested limit. </p>
+/// see [Route53::get_reusable_delegation_set_limit]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetReusableDelegationSetLimitResponse {
@@ -3118,6 +3198,7 @@ impl GetReusableDelegationSetLimitResponseDeserializer {
     }
 }
 /// <p>A request to get information about a specified reusable delegation set.</p>
+/// see [Route53::get_reusable_delegation_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReusableDelegationSetRequest {
@@ -3126,6 +3207,7 @@ pub struct GetReusableDelegationSetRequest {
 }
 
 /// <p>A complex type that contains the response to the <code>GetReusableDelegationSet</code> request.</p>
+/// see [Route53::get_reusable_delegation_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetReusableDelegationSetResponse {
@@ -3158,11 +3240,13 @@ impl GetReusableDelegationSetResponseDeserializer {
     }
 }
 /// <p>Request to get the number of traffic policy instances that are associated with the current AWS account.</p>
+/// see [Route53::get_traffic_policy_instance_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTrafficPolicyInstanceCountRequest {}
 
 /// <p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>
+/// see [Route53::get_traffic_policy_instance_count]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTrafficPolicyInstanceCountResponse {
@@ -3198,6 +3282,7 @@ impl GetTrafficPolicyInstanceCountResponseDeserializer {
     }
 }
 /// <p>Gets information about a specified traffic policy instance.</p>
+/// see [Route53::get_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTrafficPolicyInstanceRequest {
@@ -3206,6 +3291,7 @@ pub struct GetTrafficPolicyInstanceRequest {
 }
 
 /// <p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>
+/// see [Route53::get_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTrafficPolicyInstanceResponse {
@@ -3241,6 +3327,7 @@ impl GetTrafficPolicyInstanceResponseDeserializer {
     }
 }
 /// <p>Gets information about a specific traffic policy version.</p>
+/// see [Route53::get_traffic_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTrafficPolicyRequest {
@@ -3251,6 +3338,7 @@ pub struct GetTrafficPolicyRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::get_traffic_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTrafficPolicyResponse {
@@ -4440,6 +4528,7 @@ impl LinkedServiceDeserializer {
     }
 }
 /// <p>A request to get a list of geographic locations that Amazon Route 53 supports for geolocation resource record sets. </p>
+/// see [Route53::list_geo_locations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGeoLocationsRequest {
@@ -4454,6 +4543,7 @@ pub struct ListGeoLocationsRequest {
 }
 
 /// <p>A complex type containing the response information for the request.</p>
+/// see [Route53::list_geo_locations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListGeoLocationsResponse {
@@ -4528,6 +4618,7 @@ impl ListGeoLocationsResponseDeserializer {
     }
 }
 /// <p>A request to retrieve a list of the health checks that are associated with the current AWS account.</p>
+/// see [Route53::list_health_checks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHealthChecksRequest {
@@ -4537,7 +4628,16 @@ pub struct ListHealthChecksRequest {
     pub max_items: Option<String>,
 }
 
+impl PagedRequest for ListHealthChecksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>A complex type that contains the response to a <code>ListHealthChecks</code> request.</p>
+/// see [Route53::list_health_checks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListHealthChecksResponse {
@@ -4551,6 +4651,34 @@ pub struct ListHealthChecksResponse {
     pub max_items: String,
     /// <p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the first health check that Amazon Route 53 returns if you submit another <code>ListHealthChecks</code> request and specify the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>
     pub next_marker: Option<String>,
+}
+
+impl ListHealthChecksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HealthCheck>> {
+        Some(self.health_checks.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.clone())
+    }
+}
+
+impl PagedOutput for ListHealthChecksResponse {
+    type Item = HealthCheck;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HealthCheck> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4595,6 +4723,7 @@ impl ListHealthChecksResponseDeserializer {
     }
 }
 /// <p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account in ASCII order by domain name. </p>
+/// see [Route53::list_hosted_zones_by_name]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHostedZonesByNameRequest {
@@ -4607,6 +4736,7 @@ pub struct ListHostedZonesByNameRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::list_hosted_zones_by_name]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListHostedZonesByNameResponse {
@@ -4675,6 +4805,7 @@ impl ListHostedZonesByNameResponseDeserializer {
     }
 }
 /// <p>Lists all the private hosted zones that a specified VPC is associated with, regardless of which AWS account created the hosted zones.</p>
+/// see [Route53::list_hosted_zones_by_vpc]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHostedZonesByVPCRequest {
@@ -4688,6 +4819,7 @@ pub struct ListHostedZonesByVPCRequest {
     pub vpc_region: String,
 }
 
+/// see [Route53::list_hosted_zones_by_vpc]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListHostedZonesByVPCResponse {
@@ -4737,6 +4869,7 @@ impl ListHostedZonesByVPCResponseDeserializer {
     }
 }
 /// <p>A request to retrieve a list of the public and private hosted zones that are associated with the current AWS account.</p>
+/// see [Route53::list_hosted_zones]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHostedZonesRequest {
@@ -4748,6 +4881,15 @@ pub struct ListHostedZonesRequest {
     pub max_items: Option<String>,
 }
 
+impl PagedRequest for ListHostedZonesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Route53::list_hosted_zones]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListHostedZonesResponse {
@@ -4761,6 +4903,34 @@ pub struct ListHostedZonesResponse {
     pub max_items: String,
     /// <p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the first hosted zone in the next group of hosted zones. Submit another <code>ListHostedZones</code> request, and specify the value of <code>NextMarker</code> from the response in the <code>marker</code> parameter.</p> <p>This element is present only if <code>IsTruncated</code> is <code>true</code>.</p>
     pub next_marker: Option<String>,
+}
+
+impl ListHostedZonesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HostedZone>> {
+        Some(self.hosted_zones.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.clone())
+    }
+}
+
+impl PagedOutput for ListHostedZonesResponse {
+    type Item = HostedZone;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HostedZone> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4801,6 +4971,7 @@ impl ListHostedZonesResponseDeserializer {
         )
     }
 }
+/// see [Route53::list_query_logging_configs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueryLoggingConfigsRequest {
@@ -4812,6 +4983,15 @@ pub struct ListQueryLoggingConfigsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListQueryLoggingConfigsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Route53::list_query_logging_configs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListQueryLoggingConfigsResponse {
@@ -4819,6 +4999,30 @@ pub struct ListQueryLoggingConfigsResponse {
     pub next_token: Option<String>,
     /// <p>An array that contains one <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_QueryLoggingConfig.html">QueryLoggingConfig</a> element for each configuration for DNS query logging that is associated with the current AWS account.</p>
     pub query_logging_configs: Vec<QueryLoggingConfig>,
+}
+
+impl ListQueryLoggingConfigsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<QueryLoggingConfig>> {
+        Some(self.query_logging_configs.clone())
+    }
+}
+
+impl PagedOutput for ListQueryLoggingConfigsResponse {
+    type Item = QueryLoggingConfig;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<QueryLoggingConfig> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4856,6 +5060,7 @@ impl ListQueryLoggingConfigsResponseDeserializer {
     }
 }
 /// <p>A request for the resource record sets that are associated with a specified hosted zone.</p>
+/// see [Route53::list_resource_record_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceRecordSetsRequest {
@@ -4871,7 +5076,21 @@ pub struct ListResourceRecordSetsRequest {
     pub start_record_type: Option<String>,
 }
 
+impl PagedRequest for ListResourceRecordSetsRequest {
+    type Token = (Option<String>, Option<String>, Option<String>);
+    fn with_pagination_token(
+        mut self,
+        key: (Option<String>, Option<String>, Option<String>),
+    ) -> Self {
+        self.start_record_name = key.0;
+        self.start_record_type = key.1;
+        self.start_record_identifier = key.2;
+        self
+    }
+}
+
 /// <p>A complex type that contains list information for the resource record set.</p>
+/// see [Route53::list_resource_record_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListResourceRecordSetsResponse {
@@ -4887,6 +5106,38 @@ pub struct ListResourceRecordSetsResponse {
     pub next_record_type: Option<String>,
     /// <p>Information about multiple resource record sets.</p>
     pub resource_record_sets: Vec<ResourceRecordSet>,
+}
+
+impl ListResourceRecordSetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceRecordSet>> {
+        Some(self.resource_record_sets.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.clone())
+    }
+}
+
+impl PagedOutput for ListResourceRecordSetsResponse {
+    type Item = ResourceRecordSet;
+    type Token = (Option<String>, Option<String>, Option<String>);
+    fn pagination_token(&self) -> (Option<String>, Option<String>, Option<String>) {
+        (
+            self.next_record_name.clone(),
+            self.next_record_type.clone(),
+            self.next_record_identifier.clone(),
+        )
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceRecordSet> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4940,6 +5191,7 @@ impl ListResourceRecordSetsResponseDeserializer {
     }
 }
 /// <p>A request to get a list of the reusable delegation sets that are associated with the current AWS account.</p>
+/// see [Route53::list_reusable_delegation_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReusableDelegationSetsRequest {
@@ -4950,6 +5202,7 @@ pub struct ListReusableDelegationSetsRequest {
 }
 
 /// <p>A complex type that contains information about the reusable delegation sets that are associated with the current AWS account.</p>
+/// see [Route53::list_reusable_delegation_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListReusableDelegationSetsResponse {
@@ -5007,6 +5260,7 @@ impl ListReusableDelegationSetsResponseDeserializer {
     }
 }
 /// <p>A complex type containing information about a request for a list of the tags that are associated with an individual resource.</p>
+/// see [Route53::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -5017,6 +5271,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>A complex type that contains information about the health checks or hosted zones for which you want to list tags.</p>
+/// see [Route53::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -5049,6 +5304,7 @@ impl ListTagsForResourceResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the health checks or hosted zones for which you want to list tags.</p>
+/// see [Route53::list_tags_for_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourcesRequest {
@@ -5076,6 +5332,7 @@ impl ListTagsForResourcesRequestSerializer {
     }
 }
 /// <p>A complex type containing tags for the specified resources.</p>
+/// see [Route53::list_tags_for_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourcesResponse {
@@ -5111,6 +5368,7 @@ impl ListTagsForResourcesResponseDeserializer {
     }
 }
 /// <p>A complex type that contains the information about the request to list the traffic policies that are associated with the current AWS account.</p>
+/// see [Route53::list_traffic_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrafficPoliciesRequest {
@@ -5121,6 +5379,7 @@ pub struct ListTrafficPoliciesRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::list_traffic_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTrafficPoliciesResponse {
@@ -5176,6 +5435,7 @@ impl ListTrafficPoliciesResponseDeserializer {
     }
 }
 /// <p>A request for the traffic policy instances that you created in a specified hosted zone.</p>
+/// see [Route53::list_traffic_policy_instances_by_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
@@ -5190,6 +5450,7 @@ pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::list_traffic_policy_instances_by_hosted_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTrafficPolicyInstancesByHostedZoneResponse {
@@ -5255,6 +5516,7 @@ impl ListTrafficPolicyInstancesByHostedZoneResponseDeserializer {
     }
 }
 /// <p>A complex type that contains the information about the request to list your traffic policy instances.</p>
+/// see [Route53::list_traffic_policy_instances_by_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrafficPolicyInstancesByPolicyRequest {
@@ -5273,6 +5535,7 @@ pub struct ListTrafficPolicyInstancesByPolicyRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::list_traffic_policy_instances_by_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTrafficPolicyInstancesByPolicyResponse {
@@ -5346,6 +5609,7 @@ impl ListTrafficPolicyInstancesByPolicyResponseDeserializer {
     }
 }
 /// <p>A request to get information about the traffic policy instances that you created by using the current AWS account.</p>
+/// see [Route53::list_traffic_policy_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrafficPolicyInstancesRequest {
@@ -5360,6 +5624,7 @@ pub struct ListTrafficPolicyInstancesRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::list_traffic_policy_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTrafficPolicyInstancesResponse {
@@ -5433,6 +5698,7 @@ impl ListTrafficPolicyInstancesResponseDeserializer {
     }
 }
 /// <p>A complex type that contains the information about the request to list your traffic policies.</p>
+/// see [Route53::list_traffic_policy_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrafficPolicyVersionsRequest {
@@ -5445,6 +5711,7 @@ pub struct ListTrafficPolicyVersionsRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::list_traffic_policy_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTrafficPolicyVersionsResponse {
@@ -5500,6 +5767,7 @@ impl ListTrafficPolicyVersionsResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about that can be associated with your hosted zone.</p>
+/// see [Route53::list_vpc_association_authorizations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVPCAssociationAuthorizationsRequest {
@@ -5511,7 +5779,16 @@ pub struct ListVPCAssociationAuthorizationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListVPCAssociationAuthorizationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>A complex type that contains the response information for the request.</p>
+/// see [Route53::list_vpc_association_authorizations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListVPCAssociationAuthorizationsResponse {
@@ -5521,6 +5798,30 @@ pub struct ListVPCAssociationAuthorizationsResponse {
     pub next_token: Option<String>,
     /// <p>The list of VPCs that are authorized to be associated with the specified hosted zone.</p>
     pub vp_cs: Vec<VPC>,
+}
+
+impl ListVPCAssociationAuthorizationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VPC>> {
+        Some(self.vp_cs.clone())
+    }
+}
+
+impl PagedOutput for ListVPCAssociationAuthorizationsResponse {
+    type Item = VPC;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VPC> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7033,6 +7334,7 @@ impl TagValueSerializer {
 }
 
 /// <p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>
+/// see [Route53::test_dns_answer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestDNSAnswerRequest {
@@ -7051,6 +7353,7 @@ pub struct TestDNSAnswerRequest {
 }
 
 /// <p>A complex type that contains the response to a <code>TestDNSAnswer</code> request. </p>
+/// see [Route53::test_dns_answer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TestDNSAnswerResponse {
@@ -7553,6 +7856,7 @@ impl TransportProtocolDeserializer {
     }
 }
 /// <p>A complex type that contains information about a request to update a health check.</p>
+/// see [Route53::update_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHealthCheckRequest {
@@ -7665,6 +7969,7 @@ impl UpdateHealthCheckRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response to the <code>UpdateHealthCheck</code> request.</p>
+/// see [Route53::update_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateHealthCheckResponse {
@@ -7697,6 +8002,7 @@ impl UpdateHealthCheckResponseDeserializer {
     }
 }
 /// <p>A request to update the comment for a hosted zone.</p>
+/// see [Route53::update_hosted_zone_comment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHostedZoneCommentRequest {
@@ -7726,6 +8032,7 @@ impl UpdateHostedZoneCommentRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response to the <code>UpdateHostedZoneComment</code> request.</p>
+/// see [Route53::update_hosted_zone_comment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateHostedZoneCommentResponse {
@@ -7757,6 +8064,7 @@ impl UpdateHostedZoneCommentResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the traffic policy that you want to update the comment for.</p>
+/// see [Route53::update_traffic_policy_comment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrafficPolicyCommentRequest {
@@ -7786,6 +8094,7 @@ impl UpdateTrafficPolicyCommentRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the traffic policy.</p>
+/// see [Route53::update_traffic_policy_comment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateTrafficPolicyCommentResponse {
@@ -7818,6 +8127,7 @@ impl UpdateTrafficPolicyCommentResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the resource record sets that you want to update based on a specified traffic policy instance.</p>
+/// see [Route53::update_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrafficPolicyInstanceRequest {
@@ -7859,6 +8169,7 @@ impl UpdateTrafficPolicyInstanceRequestSerializer {
     }
 }
 /// <p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>
+/// see [Route53::update_traffic_policy_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateTrafficPolicyInstanceResponse {
@@ -12416,7 +12727,7 @@ impl fmt::Display for UpdateTrafficPolicyInstanceError {
 impl Error for UpdateTrafficPolicyInstanceError {}
 /// Trait representing the capabilities of the Route 53 API. Route 53 clients implement this trait.
 #[async_trait]
-pub trait Route53 {
+pub trait Route53: Clone + Sync + Send + 'static {
     /// <p>Activates a key signing key (KSK) so that it can be used for signing by DNSSEC. This operation changes the KSK status to <code>ACTIVE</code>.</p>
     async fn activate_key_signing_key(
         &self,
@@ -12706,11 +13017,31 @@ pub trait Route53 {
         input: ListHealthChecksRequest,
     ) -> Result<ListHealthChecksResponse, RusotoError<ListHealthChecksError>>;
 
+    /// Auto-paginating version of `list_health_checks`
+    fn list_health_checks_pages(
+        &self,
+        input: ListHealthChecksRequest,
+    ) -> RusotoStream<HealthCheck, ListHealthChecksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_health_checks(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>
     async fn list_hosted_zones(
         &self,
         input: ListHostedZonesRequest,
     ) -> Result<ListHostedZonesResponse, RusotoError<ListHostedZonesError>>;
+
+    /// Auto-paginating version of `list_hosted_zones`
+    fn list_hosted_zones_pages(
+        &self,
+        input: ListHostedZonesRequest,
+    ) -> RusotoStream<HostedZone, ListHostedZonesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_hosted_zones(state.clone())
+        })
+    }
 
     /// <p><p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul></p>
     async fn list_hosted_zones_by_name(
@@ -12730,11 +13061,31 @@ pub trait Route53 {
         input: ListQueryLoggingConfigsRequest,
     ) -> Result<ListQueryLoggingConfigsResponse, RusotoError<ListQueryLoggingConfigsError>>;
 
+    /// Auto-paginating version of `list_query_logging_configs`
+    fn list_query_logging_configs_pages(
+        &self,
+        input: ListQueryLoggingConfigsRequest,
+    ) -> RusotoStream<QueryLoggingConfig, ListQueryLoggingConfigsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_query_logging_configs(state.clone())
+        })
+    }
+
     /// <p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements.</p> <p> <b>Sort order</b> </p> <p> <code>ListResourceRecordSets</code> sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order when the record name contains characters that appear before <code>.</code> (decimal 46) in the ASCII table. These characters include the following: <code>! " # $ % &amp; ' ( ) * + , -</code> </p> <p>When multiple records have the same DNS name, <code>ListResourceRecordSets</code> sorts results by the record type.</p> <p> <b>Specifying where to start listing records</b> </p> <p>You can use the name and type elements to specify the resource record set that the list begins with:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p> <b>Resource record sets that are PENDING</b> </p> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Route 53 DNS servers.</p> <p> <b>Changing resource record sets</b> </p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p> <p> <b>Displaying the next page of results</b> </p> <p>If a <code>ListResourceRecordSets</code> command returns more than one page of results, the value of <code>IsTruncated</code> is <code>true</code>. To display the next page of results, get the values of <code>NextRecordName</code>, <code>NextRecordType</code>, and <code>NextRecordIdentifier</code> (if any) from the response. Then submit another <code>ListResourceRecordSets</code> request, and specify those values for <code>StartRecordName</code>, <code>StartRecordType</code>, and <code>StartRecordIdentifier</code>.</p>
     async fn list_resource_record_sets(
         &self,
         input: ListResourceRecordSetsRequest,
     ) -> Result<ListResourceRecordSetsResponse, RusotoError<ListResourceRecordSetsError>>;
+
+    /// Auto-paginating version of `list_resource_record_sets`
+    fn list_resource_record_sets_pages(
+        &self,
+        input: ListResourceRecordSetsRequest,
+    ) -> RusotoStream<ResourceRecordSet, ListResourceRecordSetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resource_record_sets(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>
     async fn list_reusable_delegation_sets(
@@ -12798,6 +13149,16 @@ pub trait Route53 {
         ListVPCAssociationAuthorizationsResponse,
         RusotoError<ListVPCAssociationAuthorizationsError>,
     >;
+
+    /// Auto-paginating version of `list_vpc_association_authorizations`
+    fn list_vpc_association_authorizations_pages(
+        &self,
+        input: ListVPCAssociationAuthorizationsRequest,
+    ) -> RusotoStream<VPC, ListVPCAssociationAuthorizationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_vpc_association_authorizations(state.clone())
+        })
+    }
 
     /// <p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>
     async fn test_dns_answer(

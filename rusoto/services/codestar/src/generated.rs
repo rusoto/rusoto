@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl CodeStarClient {
 }
 
 use serde_json;
+/// see [CodeStar::associate_team_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTeamMemberRequest {
@@ -72,6 +75,7 @@ pub struct AssociateTeamMemberRequest {
     pub user_arn: String,
 }
 
+/// see [CodeStar::associate_team_member]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTeamMemberResult {
@@ -125,6 +129,7 @@ pub struct CodeSource {
     pub s_3: S3Location,
 }
 
+/// see [CodeStar::create_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
@@ -156,6 +161,7 @@ pub struct CreateProjectRequest {
     pub toolchain: Option<Toolchain>,
 }
 
+/// see [CodeStar::create_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResult {
@@ -175,6 +181,7 @@ pub struct CreateProjectResult {
     pub project_template_id: Option<String>,
 }
 
+/// see [CodeStar::create_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserProfileRequest {
@@ -193,6 +200,7 @@ pub struct CreateUserProfileRequest {
     pub user_arn: String,
 }
 
+/// see [CodeStar::create_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserProfileResult {
@@ -221,6 +229,7 @@ pub struct CreateUserProfileResult {
     pub user_arn: String,
 }
 
+/// see [CodeStar::delete_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
@@ -237,6 +246,7 @@ pub struct DeleteProjectRequest {
     pub id: String,
 }
 
+/// see [CodeStar::delete_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResult {
@@ -250,6 +260,7 @@ pub struct DeleteProjectResult {
     pub stack_id: Option<String>,
 }
 
+/// see [CodeStar::delete_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserProfileRequest {
@@ -258,6 +269,7 @@ pub struct DeleteUserProfileRequest {
     pub user_arn: String,
 }
 
+/// see [CodeStar::delete_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserProfileResult {
@@ -266,6 +278,7 @@ pub struct DeleteUserProfileResult {
     pub user_arn: String,
 }
 
+/// see [CodeStar::describe_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectRequest {
@@ -274,6 +287,7 @@ pub struct DescribeProjectRequest {
     pub id: String,
 }
 
+/// see [CodeStar::describe_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectResult {
@@ -315,6 +329,7 @@ pub struct DescribeProjectResult {
     pub status: Option<ProjectStatus>,
 }
 
+/// see [CodeStar::describe_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserProfileRequest {
@@ -323,6 +338,7 @@ pub struct DescribeUserProfileRequest {
     pub user_arn: String,
 }
 
+/// see [CodeStar::describe_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserProfileResult {
@@ -349,6 +365,7 @@ pub struct DescribeUserProfileResult {
     pub user_arn: String,
 }
 
+/// see [CodeStar::disassociate_team_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTeamMemberRequest {
@@ -360,6 +377,7 @@ pub struct DisassociateTeamMemberRequest {
     pub user_arn: String,
 }
 
+/// see [CodeStar::disassociate_team_member]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateTeamMemberResult {}
@@ -392,6 +410,7 @@ pub struct GitHubCodeDestination {
     pub type_: String,
 }
 
+/// see [CodeStar::list_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
@@ -405,6 +424,15 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListProjectsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeStar::list_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResult {
@@ -417,6 +445,31 @@ pub struct ListProjectsResult {
     pub projects: Vec<ProjectSummary>,
 }
 
+impl ListProjectsResult {
+    fn pagination_page_opt(self) -> Option<Vec<ProjectSummary>> {
+        Some(self.projects.clone())
+    }
+}
+
+impl PagedOutput for ListProjectsResult {
+    type Item = ProjectSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProjectSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeStar::list_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
@@ -433,6 +486,15 @@ pub struct ListResourcesRequest {
     pub project_id: String,
 }
 
+impl PagedRequest for ListResourcesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeStar::list_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResult {
@@ -446,6 +508,31 @@ pub struct ListResourcesResult {
     pub resources: Option<Vec<Resource>>,
 }
 
+impl ListResourcesResult {
+    fn pagination_page_opt(self) -> Option<Vec<Resource>> {
+        Some(self.resources.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListResourcesResult {
+    type Item = Resource;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Resource> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeStar::list_tags_for_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForProjectRequest {
@@ -462,6 +549,7 @@ pub struct ListTagsForProjectRequest {
     pub next_token: Option<String>,
 }
 
+/// see [CodeStar::list_tags_for_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForProjectResult {
@@ -475,6 +563,7 @@ pub struct ListTagsForProjectResult {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [CodeStar::list_team_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTeamMembersRequest {
@@ -491,6 +580,15 @@ pub struct ListTeamMembersRequest {
     pub project_id: String,
 }
 
+impl PagedRequest for ListTeamMembersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeStar::list_team_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTeamMembersResult {
@@ -503,6 +601,31 @@ pub struct ListTeamMembersResult {
     pub team_members: Vec<TeamMember>,
 }
 
+impl ListTeamMembersResult {
+    fn pagination_page_opt(self) -> Option<Vec<TeamMember>> {
+        Some(self.team_members.clone())
+    }
+}
+
+impl PagedOutput for ListTeamMembersResult {
+    type Item = TeamMember;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TeamMember> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodeStar::list_user_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserProfilesRequest {
@@ -516,6 +639,15 @@ pub struct ListUserProfilesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListUserProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodeStar::list_user_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserProfilesResult {
@@ -526,6 +658,30 @@ pub struct ListUserProfilesResult {
     /// <p>All the user profiles configured in AWS CodeStar for an AWS account.</p>
     #[serde(rename = "userProfiles")]
     pub user_profiles: Vec<UserProfileSummary>,
+}
+
+impl ListUserProfilesResult {
+    fn pagination_page_opt(self) -> Option<Vec<UserProfileSummary>> {
+        Some(self.user_profiles.clone())
+    }
+}
+
+impl PagedOutput for ListUserProfilesResult {
+    type Item = UserProfileSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserProfileSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>An indication of whether a project creation or deletion is failed or successful.</p>
@@ -578,6 +734,7 @@ pub struct S3Location {
     pub bucket_name: Option<String>,
 }
 
+/// see [CodeStar::tag_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagProjectRequest {
@@ -589,6 +746,7 @@ pub struct TagProjectRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [CodeStar::tag_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagProjectResult {
@@ -640,6 +798,7 @@ pub struct ToolchainSource {
     pub s_3: S3Location,
 }
 
+/// see [CodeStar::untag_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagProjectRequest {
@@ -651,10 +810,12 @@ pub struct UntagProjectRequest {
     pub tags: Vec<String>,
 }
 
+/// see [CodeStar::untag_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagProjectResult {}
 
+/// see [CodeStar::update_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
@@ -671,10 +832,12 @@ pub struct UpdateProjectRequest {
     pub name: Option<String>,
 }
 
+/// see [CodeStar::update_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResult {}
 
+/// see [CodeStar::update_team_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTeamMemberRequest {
@@ -694,6 +857,7 @@ pub struct UpdateTeamMemberRequest {
     pub user_arn: String,
 }
 
+/// see [CodeStar::update_team_member]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTeamMemberResult {
@@ -711,6 +875,7 @@ pub struct UpdateTeamMemberResult {
     pub user_arn: Option<String>,
 }
 
+/// see [CodeStar::update_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserProfileRequest {
@@ -731,6 +896,7 @@ pub struct UpdateUserProfileRequest {
     pub user_arn: String,
 }
 
+/// see [CodeStar::update_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserProfileResult {
@@ -1519,7 +1685,7 @@ impl fmt::Display for UpdateUserProfileError {
 impl Error for UpdateUserProfileError {}
 /// Trait representing the capabilities of the CodeStar API. CodeStar clients implement this trait.
 #[async_trait]
-pub trait CodeStar {
+pub trait CodeStar: Clone + Sync + Send + 'static {
     /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
     async fn associate_team_member(
         &self,
@@ -1574,11 +1740,31 @@ pub trait CodeStar {
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
 
+    /// Auto-paginating version of `list_projects`
+    fn list_projects_pages(
+        &self,
+        input: ListProjectsRequest,
+    ) -> RusotoStream<ProjectSummary, ListProjectsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_projects(state.clone())
+        })
+    }
+
     /// <p>Lists resources associated with a project in AWS CodeStar.</p>
     async fn list_resources(
         &self,
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResult, RusotoError<ListResourcesError>>;
+
+    /// Auto-paginating version of `list_resources`
+    fn list_resources_pages(
+        &self,
+        input: ListResourcesRequest,
+    ) -> RusotoStream<Resource, ListResourcesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resources(state.clone())
+        })
+    }
 
     /// <p>Gets the tags for a project.</p>
     async fn list_tags_for_project(
@@ -1592,11 +1778,31 @@ pub trait CodeStar {
         input: ListTeamMembersRequest,
     ) -> Result<ListTeamMembersResult, RusotoError<ListTeamMembersError>>;
 
+    /// Auto-paginating version of `list_team_members`
+    fn list_team_members_pages(
+        &self,
+        input: ListTeamMembersRequest,
+    ) -> RusotoStream<TeamMember, ListTeamMembersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_team_members(state.clone())
+        })
+    }
+
     /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
     async fn list_user_profiles(
         &self,
         input: ListUserProfilesRequest,
     ) -> Result<ListUserProfilesResult, RusotoError<ListUserProfilesError>>;
+
+    /// Auto-paginating version of `list_user_profiles`
+    fn list_user_profiles_pages(
+        &self,
+        input: ListUserProfilesRequest,
+    ) -> RusotoStream<UserProfileSummary, ListUserProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_user_profiles(state.clone())
+        })
+    }
 
     /// <p>Adds tags to a project.</p>
     async fn tag_project(

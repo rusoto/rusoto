@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -61,6 +63,7 @@ impl DocdbClient {
 }
 
 /// <p>Represents the input to <a>AddTagsToResource</a>. </p>
+/// see [Docdb::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
@@ -93,6 +96,7 @@ impl ApplyMethodDeserializer {
     }
 }
 /// <p>Represents the input to <a>ApplyPendingMaintenanceAction</a>. </p>
+/// see [Docdb::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
@@ -122,6 +126,7 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
     }
 }
 
+/// see [Docdb::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResult {
@@ -354,6 +359,7 @@ impl CertificateListDeserializer {
         })
     }
 }
+/// see [Docdb::describe_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CertificateMessage {
@@ -361,6 +367,30 @@ pub struct CertificateMessage {
     pub certificates: Option<Vec<Certificate>>,
     /// <p>An optional pagination token provided if the number of records retrieved is greater than <code>MaxRecords</code>. If this parameter is specified, the marker specifies the next record in the list. Including the value of <code>Marker</code> in the next call to <code>DescribeCertificates</code> results in the next page of certificates.</p>
     pub marker: Option<String>,
+}
+
+impl CertificateMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
+        Some(self.certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for CertificateMessage {
+    type Item = Certificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Certificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -424,6 +454,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
 }
 
 /// <p>Represents the input to <a>CopyDBClusterParameterGroup</a>. </p>
+/// see [Docdb::copy_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterParameterGroupMessage {
@@ -464,6 +495,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Docdb::copy_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterParameterGroupResult {
@@ -498,6 +530,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>CopyDBClusterSnapshot</a>. </p>
+/// see [Docdb::copy_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterSnapshotMessage {
@@ -547,6 +580,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Docdb::copy_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterSnapshotResult {
@@ -580,6 +614,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>CreateDBCluster</a>. </p>
+/// see [Docdb::create_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterMessage {
@@ -718,6 +753,7 @@ impl CreateDBClusterMessageSerializer {
 }
 
 /// <p>Represents the input of <a>CreateDBClusterParameterGroup</a>.</p>
+/// see [Docdb::create_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterParameterGroupMessage {
@@ -755,6 +791,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Docdb::create_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterParameterGroupResult {
@@ -788,6 +825,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Docdb::create_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterResult {
@@ -814,6 +852,7 @@ impl CreateDBClusterResultDeserializer {
     }
 }
 /// <p>Represents the input of <a>CreateDBClusterSnapshot</a>.</p>
+/// see [Docdb::create_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterSnapshotMessage {
@@ -848,6 +887,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Docdb::create_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterSnapshotResult {
@@ -881,6 +921,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>CreateDBInstance</a>.</p>
+/// see [Docdb::create_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBInstanceMessage {
@@ -950,6 +991,7 @@ impl CreateDBInstanceMessageSerializer {
     }
 }
 
+/// see [Docdb::create_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBInstanceResult {
@@ -977,6 +1019,7 @@ impl CreateDBInstanceResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>CreateDBSubnetGroup</a>.</p>
+/// see [Docdb::create_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBSubnetGroupMessage {
@@ -1018,6 +1061,7 @@ impl CreateDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Docdb::create_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBSubnetGroupResult {
@@ -1361,6 +1405,7 @@ impl DBClusterMemberListDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeDBClusters</a>.</p>
+/// see [Docdb::describe_db_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterMessage {
@@ -1368,6 +1413,30 @@ pub struct DBClusterMessage {
     pub db_clusters: Option<Vec<DBCluster>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBClusterMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBCluster>> {
+        Some(self.db_clusters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterMessage {
+    type Item = DBCluster;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBCluster> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1450,6 +1519,7 @@ impl DBClusterParameterGroupDeserializer {
     }
 }
 /// <p>Represents the output of <a>DBClusterParameterGroup</a>.</p>
+/// see [Docdb::describe_db_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupDetails {
@@ -1457,6 +1527,30 @@ pub struct DBClusterParameterGroupDetails {
     pub marker: Option<String>,
     /// <p>Provides a list of parameters for the cluster parameter group.</p>
     pub parameters: Option<Vec<Parameter>>,
+}
+
+impl DBClusterParameterGroupDetails {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterParameterGroupDetails {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1509,6 +1603,8 @@ impl DBClusterParameterGroupListDeserializer {
     }
 }
 /// <p>Contains the name of a cluster parameter group.</p>
+/// see [Docdb::modify_db_cluster_parameter_group]
+/// see [Docdb::reset_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupNameMessage {
@@ -1542,6 +1638,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
     }
 }
 /// <p>Represents the output of <a>DBClusterParameterGroups</a>.</p>
+/// see [Docdb::describe_db_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupsMessage {
@@ -1549,6 +1646,30 @@ pub struct DBClusterParameterGroupsMessage {
     pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBClusterParameterGroupsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBClusterParameterGroup>> {
+        Some(self.db_cluster_parameter_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterParameterGroupsMessage {
+    type Item = DBClusterParameterGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBClusterParameterGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1891,6 +2012,7 @@ impl DBClusterSnapshotListDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeDBClusterSnapshots</a>.</p>
+/// see [Docdb::describe_db_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotMessage {
@@ -1898,6 +2020,30 @@ pub struct DBClusterSnapshotMessage {
     pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBClusterSnapshotMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBClusterSnapshot>> {
+        Some(self.db_cluster_snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBClusterSnapshotMessage {
+    type Item = DBClusterSnapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBClusterSnapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2036,6 +2182,7 @@ impl DBEngineVersionListDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeDBEngineVersions</a>.</p>
+/// see [Docdb::describe_db_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBEngineVersionMessage {
@@ -2043,6 +2190,30 @@ pub struct DBEngineVersionMessage {
     pub db_engine_versions: Option<Vec<DBEngineVersion>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBEngineVersionMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBEngineVersion>> {
+        Some(self.db_engine_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBEngineVersionMessage {
+    type Item = DBEngineVersion;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBEngineVersion> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2299,6 +2470,7 @@ impl DBInstanceListDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeDBInstances</a>.</p>
+/// see [Docdb::describe_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceMessage {
@@ -2306,6 +2478,30 @@ pub struct DBInstanceMessage {
     pub db_instances: Option<Vec<DBInstance>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBInstanceMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBInstance>> {
+        Some(self.db_instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBInstanceMessage {
+    type Item = DBInstance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBInstance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2456,6 +2652,7 @@ impl DBSubnetGroupDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeDBSubnetGroups</a>.</p>
+/// see [Docdb::describe_db_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroupMessage {
@@ -2463,6 +2660,30 @@ pub struct DBSubnetGroupMessage {
     pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl DBSubnetGroupMessage {
+    fn pagination_page_opt(self) -> Option<Vec<DBSubnetGroup>> {
+        Some(self.db_subnet_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DBSubnetGroupMessage {
+    type Item = DBSubnetGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DBSubnetGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2511,6 +2732,7 @@ impl DBSubnetGroupsDeserializer {
     }
 }
 /// <p>Represents the input to <a>DeleteDBCluster</a>.</p>
+/// see [Docdb::delete_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterMessage {
@@ -2548,6 +2770,7 @@ impl DeleteDBClusterMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DeleteDBClusterParameterGroup</a>.</p>
+/// see [Docdb::delete_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterParameterGroupMessage {
@@ -2571,6 +2794,7 @@ impl DeleteDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Docdb::delete_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterResult {
@@ -2597,6 +2821,7 @@ impl DeleteDBClusterResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>DeleteDBClusterSnapshot</a>.</p>
+/// see [Docdb::delete_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterSnapshotMessage {
@@ -2620,6 +2845,7 @@ impl DeleteDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Docdb::delete_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterSnapshotResult {
@@ -2653,6 +2879,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>DeleteDBInstance</a>.</p>
+/// see [Docdb::delete_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBInstanceMessage {
@@ -2676,6 +2903,7 @@ impl DeleteDBInstanceMessageSerializer {
     }
 }
 
+/// see [Docdb::delete_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBInstanceResult {
@@ -2703,6 +2931,7 @@ impl DeleteDBInstanceResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>DeleteDBSubnetGroup</a>.</p>
+/// see [Docdb::delete_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBSubnetGroupMessage {
@@ -2726,6 +2955,7 @@ impl DeleteDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Docdb::describe_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificatesMessage {
@@ -2737,6 +2967,14 @@ pub struct DescribeCertificatesMessage {
     pub marker: Option<String>,
     /// <p><p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints:</p> <ul> <li> <p>Minimum: 20</p> </li> <li> <p>Maximum: 100</p> </li> </ul></p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeCertificatesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeCertificatesMessage` contents to a `SignedRequest`.
@@ -2771,6 +3009,7 @@ impl DescribeCertificatesMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeDBClusterParameterGroups</a>.</p>
+/// see [Docdb::describe_db_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParameterGroupsMessage {
@@ -2782,6 +3021,14 @@ pub struct DescribeDBClusterParameterGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token (marker) is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBClusterParameterGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClusterParameterGroupsMessage` contents to a `SignedRequest`.
@@ -2816,6 +3063,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeDBClusterParameters</a>.</p>
+/// see [Docdb::describe_db_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParametersMessage {
@@ -2829,6 +3077,14 @@ pub struct DescribeDBClusterParametersMessage {
     pub max_records: Option<i64>,
     /// <p> A value that indicates to return only parameters for a specific source. Parameter sources can be <code>engine</code>, <code>service</code>, or <code>customer</code>. </p>
     pub source: Option<String>,
+}
+
+impl PagedRequest for DescribeDBClusterParametersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClusterParametersMessage` contents to a `SignedRequest`.
@@ -2864,6 +3120,7 @@ impl DescribeDBClusterParametersMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeDBClusterSnapshotAttributes</a>.</p>
+/// see [Docdb::describe_db_cluster_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotAttributesMessage {
@@ -2891,6 +3148,7 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
     }
 }
 
+/// see [Docdb::describe_db_cluster_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBClusterSnapshotAttributesResult {
@@ -2925,6 +3183,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>DescribeDBClusterSnapshots</a>.</p>
+/// see [Docdb::describe_db_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotsMessage {
@@ -2944,6 +3203,14 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub max_records: Option<i64>,
     /// <p>The type of cluster snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all cluster snapshots that Amazon DocumentDB has automatically created for your AWS account.</p> </li> <li> <p> <code>manual</code> - Return all cluster snapshots that you have manually created for your AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual cluster snapshots that have been shared to your AWS account.</p> </li> <li> <p> <code>public</code> - Return all cluster snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual cluster snapshots are returned. You can include shared cluster snapshots with these results by setting the <code>IncludeShared</code> parameter to <code>true</code>. You can include public cluster snapshots with these results by setting the <code>IncludePublic</code> parameter to <code>true</code>.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>
     pub snapshot_type: Option<String>,
+}
+
+impl PagedRequest for DescribeDBClusterSnapshotsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClusterSnapshotsMessage` contents to a `SignedRequest`.
@@ -2993,6 +3260,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeDBClusters</a>.</p>
+/// see [Docdb::describe_db_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClustersMessage {
@@ -3004,6 +3272,14 @@ pub struct DescribeDBClustersMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token (marker) is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBClustersMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBClustersMessage` contents to a `SignedRequest`.
@@ -3038,6 +3314,7 @@ impl DescribeDBClustersMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeDBEngineVersions</a>.</p>
+/// see [Docdb::describe_db_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBEngineVersionsMessage {
@@ -3059,6 +3336,14 @@ pub struct DescribeDBEngineVersionsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token (marker) is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBEngineVersionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBEngineVersionsMessage` contents to a `SignedRequest`.
@@ -3114,6 +3399,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeDBInstances</a>.</p>
+/// see [Docdb::describe_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBInstancesMessage {
@@ -3125,6 +3411,14 @@ pub struct DescribeDBInstancesMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token (marker) is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBInstancesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBInstancesMessage` contents to a `SignedRequest`.
@@ -3159,6 +3453,7 @@ impl DescribeDBInstancesMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeDBSubnetGroups</a>.</p>
+/// see [Docdb::describe_db_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSubnetGroupsMessage {
@@ -3170,6 +3465,14 @@ pub struct DescribeDBSubnetGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token (marker) is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl PagedRequest for DescribeDBSubnetGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeDBSubnetGroupsMessage` contents to a `SignedRequest`.
@@ -3201,6 +3504,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeEngineDefaultClusterParameters</a>.</p>
+/// see [Docdb::describe_engine_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultClusterParametersMessage {
@@ -3247,6 +3551,7 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
     }
 }
 
+/// see [Docdb::describe_engine_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultClusterParametersResult {
@@ -3280,6 +3585,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>DescribeEventCategories</a>.</p>
+/// see [Docdb::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
@@ -3312,6 +3618,7 @@ impl DescribeEventCategoriesMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeEvents</a>.</p>
+/// see [Docdb::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
@@ -3333,6 +3640,14 @@ pub struct DescribeEventsMessage {
     pub source_type: Option<String>,
     /// <p> The beginning of the time interval to retrieve events for, specified in ISO 8601 format. </p> <p>Example: 2009-07-08T18:00Z</p>
     pub start_time: Option<String>,
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
@@ -3383,6 +3698,7 @@ impl DescribeEventsMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribeOrderableDBInstanceOptions</a>.</p>
+/// see [Docdb::describe_orderable_db_instance_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableDBInstanceOptionsMessage {
@@ -3402,6 +3718,14 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     pub max_records: Option<i64>,
     /// <p>The virtual private cloud (VPC) filter value. Specify this parameter to show only the available VPC or non-VPC offerings.</p>
     pub vpc: Option<bool>,
+}
+
+impl PagedRequest for DescribeOrderableDBInstanceOptionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeOrderableDBInstanceOptionsMessage` contents to a `SignedRequest`.
@@ -3443,6 +3767,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
 }
 
 /// <p>Represents the input to <a>DescribePendingMaintenanceActions</a>.</p>
+/// see [Docdb::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
@@ -3454,6 +3779,14 @@ pub struct DescribePendingMaintenanceActionsMessage {
     pub max_records: Option<i64>,
     /// <p>The ARN of a resource to return pending maintenance actions for.</p>
     pub resource_identifier: Option<String>,
+}
+
+impl PagedRequest for DescribePendingMaintenanceActionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribePendingMaintenanceActionsMessage` contents to a `SignedRequest`.
@@ -3703,6 +4036,7 @@ impl EventCategoriesMapListDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeEventCategories</a>.</p>
+/// see [Docdb::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
@@ -3753,6 +4087,7 @@ impl EventListDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeEvents</a>.</p>
+/// see [Docdb::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
@@ -3760,6 +4095,30 @@ pub struct EventsMessage {
     pub events: Option<Vec<Event>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl EventsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for EventsMessage {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -3787,6 +4146,7 @@ impl EventsMessageDeserializer {
     }
 }
 /// <p>Represents the input to <a>FailoverDBCluster</a>.</p>
+/// see [Docdb::failover_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailoverDBClusterMessage {
@@ -3820,6 +4180,7 @@ impl FailoverDBClusterMessageSerializer {
     }
 }
 
+/// see [Docdb::failover_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FailoverDBClusterResult {
@@ -3929,6 +4290,7 @@ impl KeyListSerializer {
 }
 
 /// <p>Represents the input to <a>ListTagsForResource</a>.</p>
+/// see [Docdb::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
@@ -3989,6 +4351,7 @@ impl LogTypeListSerializer {
 }
 
 /// <p>Represents the input to <a>ModifyDBCluster</a>.</p>
+/// see [Docdb::modify_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterMessage {
@@ -4096,6 +4459,7 @@ impl ModifyDBClusterMessageSerializer {
 }
 
 /// <p>Represents the input to <a>ModifyDBClusterParameterGroup</a>.</p>
+/// see [Docdb::modify_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterParameterGroupMessage {
@@ -4126,6 +4490,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Docdb::modify_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterResult {
@@ -4152,6 +4517,7 @@ impl ModifyDBClusterResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>ModifyDBClusterSnapshotAttribute</a>.</p>
+/// see [Docdb::modify_db_cluster_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
@@ -4199,6 +4565,7 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
     }
 }
 
+/// see [Docdb::modify_db_cluster_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterSnapshotAttributeResult {
@@ -4233,6 +4600,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>ModifyDBInstance</a>.</p>
+/// see [Docdb::modify_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBInstanceMessage {
@@ -4303,6 +4671,7 @@ impl ModifyDBInstanceMessageSerializer {
     }
 }
 
+/// see [Docdb::modify_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBInstanceResult {
@@ -4330,6 +4699,7 @@ impl ModifyDBInstanceResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>ModifyDBSubnetGroup</a>.</p>
+/// see [Docdb::modify_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSubnetGroupMessage {
@@ -4368,6 +4738,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Docdb::modify_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBSubnetGroupResult {
@@ -4486,6 +4857,7 @@ impl OrderableDBInstanceOptionsListDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribeOrderableDBInstanceOptions</a>.</p>
+/// see [Docdb::describe_orderable_db_instance_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableDBInstanceOptionsMessage {
@@ -4493,6 +4865,30 @@ pub struct OrderableDBInstanceOptionsMessage {
     pub marker: Option<String>,
     /// <p>The options that are available for a particular orderable instance.</p>
     pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
+}
+
+impl OrderableDBInstanceOptionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<OrderableDBInstanceOption>> {
+        Some(self.orderable_db_instance_options.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for OrderableDBInstanceOptionsMessage {
+    type Item = OrderableDBInstanceOption;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OrderableDBInstanceOption> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4829,6 +5225,7 @@ impl PendingMaintenanceActionsDeserializer {
     }
 }
 /// <p>Represents the output of <a>DescribePendingMaintenanceActions</a>.</p>
+/// see [Docdb::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingMaintenanceActionsMessage {
@@ -4836,6 +5233,30 @@ pub struct PendingMaintenanceActionsMessage {
     pub marker: Option<String>,
     /// <p>The maintenance actions to be applied.</p>
     pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
+}
+
+impl PendingMaintenanceActionsMessage {
+    fn pagination_page_opt(self) -> Option<Vec<ResourcePendingMaintenanceActions>> {
+        Some(self.pending_maintenance_actions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for PendingMaintenanceActionsMessage {
+    type Item = ResourcePendingMaintenanceActions;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourcePendingMaintenanceActions> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -4986,6 +5407,7 @@ impl PendingModifiedValuesDeserializer {
     }
 }
 /// <p>Represents the input to <a>RebootDBInstance</a>.</p>
+/// see [Docdb::reboot_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootDBInstanceMessage {
@@ -5014,6 +5436,7 @@ impl RebootDBInstanceMessageSerializer {
     }
 }
 
+/// see [Docdb::reboot_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootDBInstanceResult {
@@ -5041,6 +5464,7 @@ impl RebootDBInstanceResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>RemoveTagsFromResource</a>.</p>
+/// see [Docdb::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
@@ -5065,6 +5489,7 @@ impl RemoveTagsFromResourceMessageSerializer {
 }
 
 /// <p>Represents the input to <a>ResetDBClusterParameterGroup</a>.</p>
+/// see [Docdb::reset_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBClusterParameterGroupMessage {
@@ -5147,6 +5572,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
     }
 }
 /// <p>Represents the input to <a>RestoreDBClusterFromSnapshot</a>.</p>
+/// see [Docdb::restore_db_cluster_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterFromSnapshotMessage {
@@ -5236,6 +5662,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
     }
 }
 
+/// see [Docdb::restore_db_cluster_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterFromSnapshotResult {
@@ -5267,6 +5694,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
     }
 }
 /// <p>Represents the input to <a>RestoreDBClusterToPointInTime</a>.</p>
+/// see [Docdb::restore_db_cluster_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterToPointInTimeMessage {
@@ -5352,6 +5780,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
     }
 }
 
+/// see [Docdb::restore_db_cluster_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterToPointInTimeResult {
@@ -5390,6 +5819,7 @@ impl SourceTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Docdb::start_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDBClusterMessage {
@@ -5413,6 +5843,7 @@ impl StartDBClusterMessageSerializer {
     }
 }
 
+/// see [Docdb::start_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartDBClusterResult {
@@ -5438,6 +5869,7 @@ impl StartDBClusterResultDeserializer {
         })
     }
 }
+/// see [Docdb::stop_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDBClusterMessage {
@@ -5461,6 +5893,7 @@ impl StopDBClusterMessageSerializer {
     }
 }
 
+/// see [Docdb::stop_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopDBClusterResult {
@@ -5651,6 +6084,7 @@ impl TagListSerializer {
 }
 
 /// <p>Represents the output of <a>ListTagsForResource</a>.</p>
+/// see [Docdb::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagListMessage {
@@ -9088,7 +9522,7 @@ impl fmt::Display for StopDBClusterError {
 impl Error for StopDBClusterError {}
 /// Trait representing the capabilities of the Amazon DocDB API. Amazon DocDB clients implement this trait.
 #[async_trait]
-pub trait Docdb {
+pub trait Docdb: Clone + Sync + Send + 'static {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
     async fn add_tags_to_resource(
         &self,
@@ -9179,17 +9613,47 @@ pub trait Docdb {
         input: DescribeCertificatesMessage,
     ) -> Result<CertificateMessage, RusotoError<DescribeCertificatesError>>;
 
+    /// Auto-paginating version of `describe_certificates`
+    fn describe_certificates_pages(
+        &self,
+        input: DescribeCertificatesMessage,
+    ) -> RusotoStream<Certificate, DescribeCertificatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_certificates(state.clone())
+        })
+    }
+
     /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified cluster parameter group. </p>
     async fn describe_db_cluster_parameter_groups(
         &self,
         input: DescribeDBClusterParameterGroupsMessage,
     ) -> Result<DBClusterParameterGroupsMessage, RusotoError<DescribeDBClusterParameterGroupsError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_parameter_groups`
+    fn describe_db_cluster_parameter_groups_pages(
+        &self,
+        input: DescribeDBClusterParameterGroupsMessage,
+    ) -> RusotoStream<DBClusterParameterGroup, DescribeDBClusterParameterGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_cluster_parameter_groups(state.clone())
+        })
+    }
+
     /// <p>Returns the detailed parameter list for a particular cluster parameter group.</p>
     async fn describe_db_cluster_parameters(
         &self,
         input: DescribeDBClusterParametersMessage,
     ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>>;
+
+    /// Auto-paginating version of `describe_db_cluster_parameters`
+    fn describe_db_cluster_parameters_pages(
+        &self,
+        input: DescribeDBClusterParametersMessage,
+    ) -> RusotoStream<Parameter, DescribeDBClusterParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_cluster_parameters(state.clone())
+        })
+    }
 
     /// <p>Returns a list of cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
     async fn describe_db_cluster_snapshot_attributes(
@@ -9206,11 +9670,31 @@ pub trait Docdb {
         input: DescribeDBClusterSnapshotsMessage,
     ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_snapshots`
+    fn describe_db_cluster_snapshots_pages(
+        &self,
+        input: DescribeDBClusterSnapshotsMessage,
+    ) -> RusotoStream<DBClusterSnapshot, DescribeDBClusterSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_cluster_snapshots(state.clone())
+        })
+    }
+
     /// <p>Returns information about provisioned Amazon DocumentDB clusters. This API operation supports pagination. For certain management features such as cluster and instance lifecycle management, Amazon DocumentDB leverages operational technology that is shared with Amazon RDS and Amazon Neptune. Use the <code>filterName=engine,Values=docdb</code> filter parameter to return only Amazon DocumentDB clusters.</p>
     async fn describe_db_clusters(
         &self,
         input: DescribeDBClustersMessage,
     ) -> Result<DBClusterMessage, RusotoError<DescribeDBClustersError>>;
+
+    /// Auto-paginating version of `describe_db_clusters`
+    fn describe_db_clusters_pages(
+        &self,
+        input: DescribeDBClustersMessage,
+    ) -> RusotoStream<DBCluster, DescribeDBClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_clusters(state.clone())
+        })
+    }
 
     /// <p>Returns a list of the available engines.</p>
     async fn describe_db_engine_versions(
@@ -9218,17 +9702,47 @@ pub trait Docdb {
         input: DescribeDBEngineVersionsMessage,
     ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>>;
 
+    /// Auto-paginating version of `describe_db_engine_versions`
+    fn describe_db_engine_versions_pages(
+        &self,
+        input: DescribeDBEngineVersionsMessage,
+    ) -> RusotoStream<DBEngineVersion, DescribeDBEngineVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_engine_versions(state.clone())
+        })
+    }
+
     /// <p>Returns information about provisioned Amazon DocumentDB instances. This API supports pagination.</p>
     async fn describe_db_instances(
         &self,
         input: DescribeDBInstancesMessage,
     ) -> Result<DBInstanceMessage, RusotoError<DescribeDBInstancesError>>;
 
+    /// Auto-paginating version of `describe_db_instances`
+    fn describe_db_instances_pages(
+        &self,
+        input: DescribeDBInstancesMessage,
+    ) -> RusotoStream<DBInstance, DescribeDBInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_instances(state.clone())
+        })
+    }
+
     /// <p>Returns a list of <code>DBSubnetGroup</code> descriptions. If a <code>DBSubnetGroupName</code> is specified, the list will contain only the descriptions of the specified <code>DBSubnetGroup</code>.</p>
     async fn describe_db_subnet_groups(
         &self,
         input: DescribeDBSubnetGroupsMessage,
     ) -> Result<DBSubnetGroupMessage, RusotoError<DescribeDBSubnetGroupsError>>;
+
+    /// Auto-paginating version of `describe_db_subnet_groups`
+    fn describe_db_subnet_groups_pages(
+        &self,
+        input: DescribeDBSubnetGroupsMessage,
+    ) -> RusotoStream<DBSubnetGroup, DescribeDBSubnetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_db_subnet_groups(state.clone())
+        })
+    }
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
     async fn describe_engine_default_cluster_parameters(
@@ -9251,6 +9765,16 @@ pub trait Docdb {
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
 
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsMessage,
+    ) -> RusotoStream<Event, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
+
     /// <p>Returns a list of orderable instance options for the specified engine.</p>
     async fn describe_orderable_db_instance_options(
         &self,
@@ -9260,11 +9784,32 @@ pub trait Docdb {
         RusotoError<DescribeOrderableDBInstanceOptionsError>,
     >;
 
+    /// Auto-paginating version of `describe_orderable_db_instance_options`
+    fn describe_orderable_db_instance_options_pages(
+        &self,
+        input: DescribeOrderableDBInstanceOptionsMessage,
+    ) -> RusotoStream<OrderableDBInstanceOption, DescribeOrderableDBInstanceOptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_orderable_db_instance_options(state.clone())
+        })
+    }
+
     /// <p>Returns a list of resources (for example, instances) that have at least one pending maintenance action.</p>
     async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
     ) -> Result<PendingMaintenanceActionsMessage, RusotoError<DescribePendingMaintenanceActionsError>>;
+
+    /// Auto-paginating version of `describe_pending_maintenance_actions`
+    fn describe_pending_maintenance_actions_pages(
+        &self,
+        input: DescribePendingMaintenanceActionsMessage,
+    ) -> RusotoStream<ResourcePendingMaintenanceActions, DescribePendingMaintenanceActionsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_pending_maintenance_actions(state.clone())
+        })
+    }
 
     /// <p>Forces a failover for a cluster.</p> <p>A failover for a cluster promotes one of the Amazon DocumentDB replicas (read-only instances) in the cluster to be the primary instance (the cluster writer).</p> <p>If the primary instance fails, Amazon DocumentDB automatically fails over to an Amazon DocumentDB replica, if one exists. You can force a failover when you want to simulate a failure of a primary instance for testing.</p>
     async fn failover_db_cluster(

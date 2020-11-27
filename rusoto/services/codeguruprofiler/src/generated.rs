@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -26,6 +28,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The structure representing the AddNotificationChannelsRequest.</p>
+/// see [CodeGuruProfiler::add_notification_channels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddNotificationChannelsRequest {
@@ -38,6 +41,7 @@ pub struct AddNotificationChannelsRequest {
 }
 
 /// <p>The structure representing the AddNotificationChannelsResponse.</p>
+/// see [CodeGuruProfiler::add_notification_channels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddNotificationChannelsResponse {
@@ -121,6 +125,7 @@ pub struct AnomalyInstance {
 }
 
 /// <p>The structure representing the BatchGetFrameMetricDataRequest.</p>
+/// see [CodeGuruProfiler::batch_get_frame_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetFrameMetricDataRequest {
@@ -150,6 +155,7 @@ pub struct BatchGetFrameMetricDataRequest {
 }
 
 /// <p>The structure representing the BatchGetFrameMetricDataResponse.</p>
+/// see [CodeGuruProfiler::batch_get_frame_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetFrameMetricDataResponse {
@@ -189,6 +195,7 @@ pub struct Channel {
 }
 
 /// <p>The structure representing the configureAgentRequest.</p>
+/// see [CodeGuruProfiler::configure_agent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigureAgentRequest {
@@ -206,6 +213,7 @@ pub struct ConfigureAgentRequest {
 }
 
 /// <p>The structure representing the configureAgentResponse.</p>
+/// see [CodeGuruProfiler::configure_agent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigureAgentResponse {
@@ -215,6 +223,7 @@ pub struct ConfigureAgentResponse {
 }
 
 /// <p>The structure representing the createProfiliingGroupRequest.</p>
+/// see [CodeGuruProfiler::create_profiling_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProfilingGroupRequest {
@@ -239,6 +248,7 @@ pub struct CreateProfilingGroupRequest {
 }
 
 /// <p>The structure representing the createProfilingGroupResponse.</p>
+/// see [CodeGuruProfiler::create_profiling_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProfilingGroupResponse {
@@ -248,6 +258,7 @@ pub struct CreateProfilingGroupResponse {
 }
 
 /// <p>The structure representing the deleteProfilingGroupRequest.</p>
+/// see [CodeGuruProfiler::delete_profiling_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProfilingGroupRequest {
@@ -257,11 +268,13 @@ pub struct DeleteProfilingGroupRequest {
 }
 
 /// <p>The structure representing the deleteProfilingGroupResponse.</p>
+/// see [CodeGuruProfiler::delete_profiling_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProfilingGroupResponse {}
 
 /// <p>The structure representing the describeProfilingGroupRequest.</p>
+/// see [CodeGuruProfiler::describe_profiling_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProfilingGroupRequest {
@@ -271,6 +284,7 @@ pub struct DescribeProfilingGroupRequest {
 }
 
 /// <p>The structure representing the describeProfilingGroupResponse.</p>
+/// see [CodeGuruProfiler::describe_profiling_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProfilingGroupResponse {
@@ -331,6 +345,7 @@ pub struct FrameMetricDatum {
 }
 
 /// <p>The structure representing the GetFindingsReportAccountSummaryRequest.</p>
+/// see [CodeGuruProfiler::get_findings_report_account_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsReportAccountSummaryRequest {
@@ -349,6 +364,7 @@ pub struct GetFindingsReportAccountSummaryRequest {
 }
 
 /// <p>The structure representing the GetFindingsReportAccountSummaryResponse.</p>
+/// see [CodeGuruProfiler::get_findings_report_account_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsReportAccountSummaryResponse {
@@ -362,6 +378,7 @@ pub struct GetFindingsReportAccountSummaryResponse {
 }
 
 /// <p>The structure representing the GetNotificationConfigurationRequest.</p>
+/// see [CodeGuruProfiler::get_notification_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNotificationConfigurationRequest {
@@ -371,6 +388,7 @@ pub struct GetNotificationConfigurationRequest {
 }
 
 /// <p>The structure representing the GetNotificationConfigurationResponse.</p>
+/// see [CodeGuruProfiler::get_notification_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNotificationConfigurationResponse {
@@ -380,6 +398,7 @@ pub struct GetNotificationConfigurationResponse {
 }
 
 /// <p> The structure representing the <code>getPolicyRequest</code>. </p>
+/// see [CodeGuruProfiler::get_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
@@ -389,6 +408,7 @@ pub struct GetPolicyRequest {
 }
 
 /// <p>The structure representing the <code>getPolicyResponse</code>.</p>
+/// see [CodeGuruProfiler::get_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
@@ -401,6 +421,7 @@ pub struct GetPolicyResponse {
 }
 
 /// <p>The structure representing the getProfileRequest.</p>
+/// see [CodeGuruProfiler::get_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProfileRequest {
@@ -430,6 +451,7 @@ pub struct GetProfileRequest {
 }
 
 /// <p>The structure representing the getProfileResponse.</p>
+/// see [CodeGuruProfiler::get_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetProfileResponse {
     /// <p>The content encoding of the profile.</p>
@@ -441,6 +463,7 @@ pub struct GetProfileResponse {
 }
 
 /// <p>The structure representing the GetRecommendationsRequest.</p>
+/// see [CodeGuruProfiler::get_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationsRequest {
@@ -460,6 +483,7 @@ pub struct GetRecommendationsRequest {
 }
 
 /// <p>The structure representing the GetRecommendationsResponse.</p>
+/// see [CodeGuruProfiler::get_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationsResponse {
@@ -481,6 +505,7 @@ pub struct GetRecommendationsResponse {
 }
 
 /// <p>The structure representing the ListFindingsReportsRequest.</p>
+/// see [CodeGuruProfiler::list_findings_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsReportsRequest {
@@ -508,6 +533,7 @@ pub struct ListFindingsReportsRequest {
 }
 
 /// <p>The structure representing the ListFindingsReportsResponse.</p>
+/// see [CodeGuruProfiler::list_findings_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsReportsResponse {
@@ -521,6 +547,7 @@ pub struct ListFindingsReportsResponse {
 }
 
 /// <p>The structure representing the listProfileTimesRequest.</p>
+/// see [CodeGuruProfiler::list_profile_times]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProfileTimesRequest {
@@ -550,7 +577,16 @@ pub struct ListProfileTimesRequest {
     pub start_time: f64,
 }
 
+impl PagedRequest for ListProfileTimesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The structure representing the listProfileTimesResponse.</p>
+/// see [CodeGuruProfiler::list_profile_times]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProfileTimesResponse {
@@ -563,7 +599,32 @@ pub struct ListProfileTimesResponse {
     pub profile_times: Vec<ProfileTime>,
 }
 
+impl ListProfileTimesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ProfileTime>> {
+        Some(self.profile_times.clone())
+    }
+}
+
+impl PagedOutput for ListProfileTimesResponse {
+    type Item = ProfileTime;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProfileTime> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The structure representing the listProfilingGroupsRequest.</p>
+/// see [CodeGuruProfiler::list_profiling_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProfilingGroupsRequest {
@@ -582,6 +643,7 @@ pub struct ListProfilingGroupsRequest {
 }
 
 /// <p>The structure representing the listProfilingGroupsResponse.</p>
+/// see [CodeGuruProfiler::list_profiling_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProfilingGroupsResponse {
@@ -598,6 +660,7 @@ pub struct ListProfilingGroupsResponse {
     pub profiling_groups: Option<Vec<ProfilingGroupDescription>>,
 }
 
+/// see [CodeGuruProfiler::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -606,6 +669,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [CodeGuruProfiler::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -693,6 +757,7 @@ pub struct Pattern {
 }
 
 /// <p>The structure representing the postAgentProfileRequest.</p>
+/// see [CodeGuruProfiler::post_agent_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostAgentProfileRequest {
@@ -717,6 +782,7 @@ pub struct PostAgentProfileRequest {
 }
 
 /// <p>The structure representing the postAgentProfileResponse.</p>
+/// see [CodeGuruProfiler::post_agent_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostAgentProfileResponse {}
@@ -788,6 +854,7 @@ pub struct ProfilingStatus {
 }
 
 /// <p>The structure representing the <code>putPermissionRequest</code>.</p>
+/// see [CodeGuruProfiler::put_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPermissionRequest {
@@ -807,6 +874,7 @@ pub struct PutPermissionRequest {
 }
 
 /// <p>The structure representing the <code>putPermissionResponse</code>.</p>
+/// see [CodeGuruProfiler::put_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPermissionResponse {
@@ -843,6 +911,7 @@ pub struct Recommendation {
 }
 
 /// <p>The structure representing the RemoveNotificationChannelRequest.</p>
+/// see [CodeGuruProfiler::remove_notification_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveNotificationChannelRequest {
@@ -855,6 +924,7 @@ pub struct RemoveNotificationChannelRequest {
 }
 
 /// <p>The structure representing the RemoveNotificationChannelResponse.</p>
+/// see [CodeGuruProfiler::remove_notification_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveNotificationChannelResponse {
@@ -865,6 +935,7 @@ pub struct RemoveNotificationChannelResponse {
 }
 
 /// <p><p> <pre><code> The structure representing the &lt;code&gt;removePermissionRequest&lt;/code&gt;.&lt;/p&gt; </code></pre></p>
+/// see [CodeGuruProfiler::remove_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
@@ -880,6 +951,7 @@ pub struct RemovePermissionRequest {
 }
 
 /// <p>The structure representing the <code>removePermissionResponse</code>.</p>
+/// see [CodeGuruProfiler::remove_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemovePermissionResponse {
@@ -892,6 +964,7 @@ pub struct RemovePermissionResponse {
 }
 
 /// <p>The structure representing the SubmitFeedbackRequest.</p>
+/// see [CodeGuruProfiler::submit_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitFeedbackRequest {
@@ -911,10 +984,12 @@ pub struct SubmitFeedbackRequest {
 }
 
 /// <p>The structure representing the SubmitFeedbackResponse.</p>
+/// see [CodeGuruProfiler::submit_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubmitFeedbackResponse {}
 
+/// see [CodeGuruProfiler::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -926,6 +1001,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [CodeGuruProfiler::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -939,6 +1015,7 @@ pub struct TimestampStructure {
     pub value: f64,
 }
 
+/// see [CodeGuruProfiler::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -950,11 +1027,13 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CodeGuruProfiler::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>The structure representing the updateProfilingGroupRequest.</p>
+/// see [CodeGuruProfiler::update_profiling_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProfilingGroupRequest {
@@ -967,6 +1046,7 @@ pub struct UpdateProfilingGroupRequest {
 }
 
 /// <p>The structure representing the updateProfilingGroupResponse.</p>
+/// see [CodeGuruProfiler::update_profiling_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProfilingGroupResponse {
@@ -2006,7 +2086,7 @@ impl fmt::Display for UpdateProfilingGroupError {
 impl Error for UpdateProfilingGroupError {}
 /// Trait representing the capabilities of the Amazon CodeGuru Profiler API. Amazon CodeGuru Profiler clients implement this trait.
 #[async_trait]
-pub trait CodeGuruProfiler {
+pub trait CodeGuruProfiler: Clone + Sync + Send + 'static {
     /// <p>Add up to 2 anomaly notifications channels for a profiling group.</p>
     async fn add_notification_channels(
         &self,
@@ -2087,6 +2167,16 @@ pub trait CodeGuruProfiler {
         &self,
         input: ListProfileTimesRequest,
     ) -> Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>>;
+
+    /// Auto-paginating version of `list_profile_times`
+    fn list_profile_times_pages(
+        &self,
+        input: ListProfileTimesRequest,
+    ) -> RusotoStream<ProfileTime, ListProfileTimesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_profile_times(state.clone())
+        })
+    }
 
     /// <p> Returns a list of profiling groups. The profiling groups are returned as <a href="https://docs.aws.amazon.com/codeguru/latest/profiler-api/API_ProfilingGroupDescription.html"> <code>ProfilingGroupDescription</code> </a> objects. </p>
     async fn list_profiling_groups(

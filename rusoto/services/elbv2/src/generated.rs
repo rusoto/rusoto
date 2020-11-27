@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -242,6 +244,7 @@ impl ActionsSerializer {
     }
 }
 
+/// see [Elb::add_listener_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddListenerCertificatesInput {
@@ -269,6 +272,7 @@ impl AddListenerCertificatesInputSerializer {
     }
 }
 
+/// see [Elb::add_listener_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddListenerCertificatesOutput {
@@ -301,6 +305,7 @@ impl AddListenerCertificatesOutputDeserializer {
         )
     }
 }
+/// see [Elb::add_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
@@ -328,6 +333,7 @@ impl AddTagsInputSerializer {
     }
 }
 
+/// see [Elb::add_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddTagsOutput {}
@@ -1224,6 +1230,7 @@ impl ConditionFieldNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Elb::create_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateListenerInput {
@@ -1292,6 +1299,7 @@ impl CreateListenerInputSerializer {
     }
 }
 
+/// see [Elb::create_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateListenerOutput {
@@ -1320,6 +1328,7 @@ impl CreateListenerOutputDeserializer {
         })
     }
 }
+/// see [Elb::create_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerInput {
@@ -1391,6 +1400,7 @@ impl CreateLoadBalancerInputSerializer {
     }
 }
 
+/// see [Elb::create_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoadBalancerOutput {
@@ -1423,6 +1433,7 @@ impl CreateLoadBalancerOutputDeserializer {
         )
     }
 }
+/// see [Elb::create_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleInput {
@@ -1461,6 +1472,7 @@ impl CreateRuleInputSerializer {
     }
 }
 
+/// see [Elb::create_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateRuleOutput {
@@ -1489,6 +1501,7 @@ impl CreateRuleOutputDeserializer {
         })
     }
 }
+/// see [Elb::create_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTargetGroupInput {
@@ -1599,6 +1612,7 @@ impl CreateTargetGroupInputSerializer {
     }
 }
 
+/// see [Elb::create_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTargetGroupOutput {
@@ -1663,6 +1677,7 @@ impl DefaultDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [Elb::delete_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteListenerInput {
@@ -1683,6 +1698,7 @@ impl DeleteListenerInputSerializer {
     }
 }
 
+/// see [Elb::delete_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteListenerOutput {}
@@ -1704,6 +1720,7 @@ impl DeleteListenerOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [Elb::delete_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerInput {
@@ -1727,6 +1744,7 @@ impl DeleteLoadBalancerInputSerializer {
     }
 }
 
+/// see [Elb::delete_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLoadBalancerOutput {}
@@ -1748,6 +1766,7 @@ impl DeleteLoadBalancerOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [Elb::delete_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleInput {
@@ -1768,6 +1787,7 @@ impl DeleteRuleInputSerializer {
     }
 }
 
+/// see [Elb::delete_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteRuleOutput {}
@@ -1789,6 +1809,7 @@ impl DeleteRuleOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [Elb::delete_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTargetGroupInput {
@@ -1812,6 +1833,7 @@ impl DeleteTargetGroupInputSerializer {
     }
 }
 
+/// see [Elb::delete_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTargetGroupOutput {}
@@ -1833,6 +1855,7 @@ impl DeleteTargetGroupOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [Elb::deregister_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTargetsInput {
@@ -1863,6 +1886,7 @@ impl DeregisterTargetsInputSerializer {
     }
 }
 
+/// see [Elb::deregister_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterTargetsOutput {}
@@ -1884,6 +1908,7 @@ impl DeregisterTargetsOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [Elb::describe_account_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountLimitsInput {
@@ -1891,6 +1916,14 @@ pub struct DescribeAccountLimitsInput {
     pub marker: Option<String>,
     /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
+}
+
+impl PagedRequest for DescribeAccountLimitsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeAccountLimitsInput` contents to a `SignedRequest`.
@@ -1911,6 +1944,7 @@ impl DescribeAccountLimitsInputSerializer {
     }
 }
 
+/// see [Elb::describe_account_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsOutput {
@@ -1918,6 +1952,30 @@ pub struct DescribeAccountLimitsOutput {
     pub limits: Option<Vec<Limit>>,
     /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
     pub next_marker: Option<String>,
+}
+
+impl DescribeAccountLimitsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Limit>> {
+        Some(self.limits.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAccountLimitsOutput {
+    type Item = Limit;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Limit> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1949,6 +2007,7 @@ impl DescribeAccountLimitsOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_listener_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeListenerCertificatesInput {
@@ -1958,6 +2017,14 @@ pub struct DescribeListenerCertificatesInput {
     pub marker: Option<String>,
     /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
+}
+
+impl PagedRequest for DescribeListenerCertificatesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeListenerCertificatesInput` contents to a `SignedRequest`.
@@ -1979,6 +2046,7 @@ impl DescribeListenerCertificatesInputSerializer {
     }
 }
 
+/// see [Elb::describe_listener_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeListenerCertificatesOutput {
@@ -1986,6 +2054,30 @@ pub struct DescribeListenerCertificatesOutput {
     pub certificates: Option<Vec<Certificate>>,
     /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
     pub next_marker: Option<String>,
+}
+
+impl DescribeListenerCertificatesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
+        Some(self.certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeListenerCertificatesOutput {
+    type Item = Certificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Certificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2017,6 +2109,7 @@ impl DescribeListenerCertificatesOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_listeners]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeListenersInput {
@@ -2028,6 +2121,14 @@ pub struct DescribeListenersInput {
     pub marker: Option<String>,
     /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
+}
+
+impl PagedRequest for DescribeListenersInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeListenersInput` contents to a `SignedRequest`.
@@ -2058,6 +2159,7 @@ impl DescribeListenersInputSerializer {
     }
 }
 
+/// see [Elb::describe_listeners]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeListenersOutput {
@@ -2065,6 +2167,30 @@ pub struct DescribeListenersOutput {
     pub listeners: Option<Vec<Listener>>,
     /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
     pub next_marker: Option<String>,
+}
+
+impl DescribeListenersOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Listener>> {
+        Some(self.listeners.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeListenersOutput {
+    type Item = Listener;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Listener> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2096,6 +2222,7 @@ impl DescribeListenersOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerAttributesInput {
@@ -2119,6 +2246,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
     }
 }
 
+/// see [Elb::describe_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerAttributesOutput {
@@ -2151,6 +2279,7 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancersInput {
@@ -2162,6 +2291,14 @@ pub struct DescribeLoadBalancersInput {
     pub names: Option<Vec<String>>,
     /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
+}
+
+impl PagedRequest for DescribeLoadBalancersInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeLoadBalancersInput` contents to a `SignedRequest`.
@@ -2196,6 +2333,7 @@ impl DescribeLoadBalancersInputSerializer {
     }
 }
 
+/// see [Elb::describe_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancersOutput {
@@ -2203,6 +2341,30 @@ pub struct DescribeLoadBalancersOutput {
     pub load_balancers: Option<Vec<LoadBalancer>>,
     /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
     pub next_marker: Option<String>,
+}
+
+impl DescribeLoadBalancersOutput {
+    fn pagination_page_opt(self) -> Option<Vec<LoadBalancer>> {
+        Some(self.load_balancers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeLoadBalancersOutput {
+    type Item = LoadBalancer;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LoadBalancer> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2234,6 +2396,7 @@ impl DescribeLoadBalancersOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRulesInput {
@@ -2245,6 +2408,14 @@ pub struct DescribeRulesInput {
     pub page_size: Option<i64>,
     /// <p>The Amazon Resource Names (ARN) of the rules.</p>
     pub rule_arns: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeRulesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeRulesInput` contents to a `SignedRequest`.
@@ -2275,6 +2446,7 @@ impl DescribeRulesInputSerializer {
     }
 }
 
+/// see [Elb::describe_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeRulesOutput {
@@ -2282,6 +2454,30 @@ pub struct DescribeRulesOutput {
     pub next_marker: Option<String>,
     /// <p>Information about the rules.</p>
     pub rules: Option<Vec<Rule>>,
+}
+
+impl DescribeRulesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Rule>> {
+        Some(self.rules.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeRulesOutput {
+    type Item = Rule;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Rule> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2308,6 +2504,7 @@ impl DescribeRulesOutputDeserializer {
         })
     }
 }
+/// see [Elb::describe_ssl_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSSLPoliciesInput {
@@ -2317,6 +2514,14 @@ pub struct DescribeSSLPoliciesInput {
     pub names: Option<Vec<String>>,
     /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
+}
+
+impl PagedRequest for DescribeSSLPoliciesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeSSLPoliciesInput` contents to a `SignedRequest`.
@@ -2344,6 +2549,7 @@ impl DescribeSSLPoliciesInputSerializer {
     }
 }
 
+/// see [Elb::describe_ssl_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSSLPoliciesOutput {
@@ -2351,6 +2557,30 @@ pub struct DescribeSSLPoliciesOutput {
     pub next_marker: Option<String>,
     /// <p>Information about the security policies.</p>
     pub ssl_policies: Option<Vec<SslPolicy>>,
+}
+
+impl DescribeSSLPoliciesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<SslPolicy>> {
+        Some(self.ssl_policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSSLPoliciesOutput {
+    type Item = SslPolicy;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SslPolicy> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2382,6 +2612,7 @@ impl DescribeSSLPoliciesOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsInput {
@@ -2406,6 +2637,7 @@ impl DescribeTagsInputSerializer {
     }
 }
 
+/// see [Elb::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTagsOutput {
@@ -2434,6 +2666,7 @@ impl DescribeTagsOutputDeserializer {
         })
     }
 }
+/// see [Elb::describe_target_group_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTargetGroupAttributesInput {
@@ -2457,6 +2690,7 @@ impl DescribeTargetGroupAttributesInputSerializer {
     }
 }
 
+/// see [Elb::describe_target_group_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTargetGroupAttributesOutput {
@@ -2489,6 +2723,7 @@ impl DescribeTargetGroupAttributesOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTargetGroupsInput {
@@ -2502,6 +2737,14 @@ pub struct DescribeTargetGroupsInput {
     pub page_size: Option<i64>,
     /// <p>The Amazon Resource Names (ARN) of the target groups.</p>
     pub target_group_arns: Option<Vec<String>>,
+}
+
+impl PagedRequest for DescribeTargetGroupsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeTargetGroupsInput` contents to a `SignedRequest`.
@@ -2539,6 +2782,7 @@ impl DescribeTargetGroupsInputSerializer {
     }
 }
 
+/// see [Elb::describe_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTargetGroupsOutput {
@@ -2546,6 +2790,30 @@ pub struct DescribeTargetGroupsOutput {
     pub next_marker: Option<String>,
     /// <p>Information about the target groups.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
+}
+
+impl DescribeTargetGroupsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<TargetGroup>> {
+        Some(self.target_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeTargetGroupsOutput {
+    type Item = TargetGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TargetGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2577,6 +2845,7 @@ impl DescribeTargetGroupsOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_target_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTargetHealthInput {
@@ -2609,6 +2878,7 @@ impl DescribeTargetHealthInputSerializer {
     }
 }
 
+/// see [Elb::describe_target_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTargetHealthOutput {
@@ -3761,6 +4031,7 @@ impl MaxDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Elb::modify_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyListenerInput {
@@ -3823,6 +4094,7 @@ impl ModifyListenerInputSerializer {
     }
 }
 
+/// see [Elb::modify_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyListenerOutput {
@@ -3851,6 +4123,7 @@ impl ModifyListenerOutputDeserializer {
         })
     }
 }
+/// see [Elb::modify_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyLoadBalancerAttributesInput {
@@ -3881,6 +4154,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
     }
 }
 
+/// see [Elb::modify_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyLoadBalancerAttributesOutput {
@@ -3913,6 +4187,7 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
         )
     }
 }
+/// see [Elb::modify_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyRuleInput {
@@ -3947,6 +4222,7 @@ impl ModifyRuleInputSerializer {
     }
 }
 
+/// see [Elb::modify_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyRuleOutput {
@@ -3975,6 +4251,7 @@ impl ModifyRuleOutputDeserializer {
         })
     }
 }
+/// see [Elb::modify_target_group_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTargetGroupAttributesInput {
@@ -4005,6 +4282,7 @@ impl ModifyTargetGroupAttributesInputSerializer {
     }
 }
 
+/// see [Elb::modify_target_group_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTargetGroupAttributesOutput {
@@ -4037,6 +4315,7 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
         )
     }
 }
+/// see [Elb::modify_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTargetGroupInput {
@@ -4120,6 +4399,7 @@ impl ModifyTargetGroupInputSerializer {
     }
 }
 
+/// see [Elb::modify_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTargetGroupOutput {
@@ -4539,6 +4819,7 @@ impl RedirectActionStatusCodeEnumDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Elb::register_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTargetsInput {
@@ -4569,6 +4850,7 @@ impl RegisterTargetsInputSerializer {
     }
 }
 
+/// see [Elb::register_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterTargetsOutput {}
@@ -4590,6 +4872,7 @@ impl RegisterTargetsOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [Elb::remove_listener_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveListenerCertificatesInput {
@@ -4617,6 +4900,7 @@ impl RemoveListenerCertificatesInputSerializer {
     }
 }
 
+/// see [Elb::remove_listener_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveListenerCertificatesOutput {}
@@ -4638,6 +4922,7 @@ impl RemoveListenerCertificatesOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [Elb::remove_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
@@ -4665,6 +4950,7 @@ impl RemoveTagsInputSerializer {
     }
 }
 
+/// see [Elb::remove_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveTagsOutput {}
@@ -5052,6 +5338,7 @@ impl SecurityGroupsSerializer {
     }
 }
 
+/// see [Elb::set_ip_address_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIpAddressTypeInput {
@@ -5081,6 +5368,7 @@ impl SetIpAddressTypeInputSerializer {
     }
 }
 
+/// see [Elb::set_ip_address_type]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIpAddressTypeOutput {
@@ -5110,6 +5398,7 @@ impl SetIpAddressTypeOutputDeserializer {
         })
     }
 }
+/// see [Elb::set_rule_priorities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetRulePrioritiesInput {
@@ -5134,6 +5423,7 @@ impl SetRulePrioritiesInputSerializer {
     }
 }
 
+/// see [Elb::set_rule_priorities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetRulePrioritiesOutput {
@@ -5166,6 +5456,7 @@ impl SetRulePrioritiesOutputDeserializer {
         )
     }
 }
+/// see [Elb::set_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSecurityGroupsInput {
@@ -5196,6 +5487,7 @@ impl SetSecurityGroupsInputSerializer {
     }
 }
 
+/// see [Elb::set_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetSecurityGroupsOutput {
@@ -5228,6 +5520,7 @@ impl SetSecurityGroupsOutputDeserializer {
         )
     }
 }
+/// see [Elb::set_subnets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSubnetsInput {
@@ -5270,6 +5563,7 @@ impl SetSubnetsInputSerializer {
     }
 }
 
+/// see [Elb::set_subnets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetSubnetsOutput {
@@ -8914,7 +9208,7 @@ impl fmt::Display for SetSubnetsError {
 impl Error for SetSubnetsError {}
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
 #[async_trait]
-pub trait Elb {
+pub trait Elb: Clone + Sync + Send + 'static {
     /// <p>Adds the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener.</p> <p>If the certificate in already in the certificate list, the call is successful but the certificate is not added again.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html">HTTPS listeners</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html">TLS listeners</a> in the <i>Network Load Balancers Guide</i>.</p>
     async fn add_listener_certificates(
         &self,
@@ -8987,17 +9281,47 @@ pub trait Elb {
         input: DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
+    /// Auto-paginating version of `describe_account_limits`
+    fn describe_account_limits_pages(
+        &self,
+        input: DescribeAccountLimitsInput,
+    ) -> RusotoStream<Limit, DescribeAccountLimitsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_account_limits(state.clone())
+        })
+    }
+
     /// <p>Describes the default certificate and the certificate list for the specified HTTPS or TLS listener.</p> <p>If the default certificate is also in the certificate list, it appears twice in the results (once with <code>IsDefault</code> set to true and once with <code>IsDefault</code> set to false).</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL certificates</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#tls-listener-certificate">Server certificates</a> in the <i>Network Load Balancers Guide</i>.</p>
     async fn describe_listener_certificates(
         &self,
         input: DescribeListenerCertificatesInput,
     ) -> Result<DescribeListenerCertificatesOutput, RusotoError<DescribeListenerCertificatesError>>;
 
+    /// Auto-paginating version of `describe_listener_certificates`
+    fn describe_listener_certificates_pages(
+        &self,
+        input: DescribeListenerCertificatesInput,
+    ) -> RusotoStream<Certificate, DescribeListenerCertificatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_listener_certificates(state.clone())
+        })
+    }
+
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     async fn describe_listeners(
         &self,
         input: DescribeListenersInput,
     ) -> Result<DescribeListenersOutput, RusotoError<DescribeListenersError>>;
+
+    /// Auto-paginating version of `describe_listeners`
+    fn describe_listeners_pages(
+        &self,
+        input: DescribeListenersInput,
+    ) -> RusotoStream<Listener, DescribeListenersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_listeners(state.clone())
+        })
+    }
 
     /// <p><p>Describes the attributes for the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer.</p> <p>For more information, see the following:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load balancer attributes</a> in the <i>Application Load Balancers Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load balancer attributes</a> in the <i>Network Load Balancers Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/gateway-load-balancers.html#load-balancer-attributes">Load balancer attributes</a> in the <i>Gateway Load Balancers Guide</i> </p> </li> </ul></p>
     async fn describe_load_balancer_attributes(
@@ -9014,17 +9338,47 @@ pub trait Elb {
         input: DescribeLoadBalancersInput,
     ) -> Result<DescribeLoadBalancersOutput, RusotoError<DescribeLoadBalancersError>>;
 
+    /// Auto-paginating version of `describe_load_balancers`
+    fn describe_load_balancers_pages(
+        &self,
+        input: DescribeLoadBalancersInput,
+    ) -> RusotoStream<LoadBalancer, DescribeLoadBalancersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_load_balancers(state.clone())
+        })
+    }
+
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
     async fn describe_rules(
         &self,
         input: DescribeRulesInput,
     ) -> Result<DescribeRulesOutput, RusotoError<DescribeRulesError>>;
 
+    /// Auto-paginating version of `describe_rules`
+    fn describe_rules_pages(
+        &self,
+        input: DescribeRulesInput,
+    ) -> RusotoStream<Rule, DescribeRulesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_rules(state.clone())
+        })
+    }
+
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security policies</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies">Security policies</a> in the <i>Network Load Balancers Guide</i>.</p>
     async fn describe_ssl_policies(
         &self,
         input: DescribeSSLPoliciesInput,
     ) -> Result<DescribeSSLPoliciesOutput, RusotoError<DescribeSSLPoliciesError>>;
+
+    /// Auto-paginating version of `describe_ssl_policies`
+    fn describe_ssl_policies_pages(
+        &self,
+        input: DescribeSSLPoliciesInput,
+    ) -> RusotoStream<SslPolicy, DescribeSSLPoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_ssl_policies(state.clone())
+        })
+    }
 
     /// <p>Describes the tags for the specified Elastic Load Balancing resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, Gateway Load Balancers, target groups, listeners, or rules.</p>
     async fn describe_tags(
@@ -9043,6 +9397,16 @@ pub trait Elb {
         &self,
         input: DescribeTargetGroupsInput,
     ) -> Result<DescribeTargetGroupsOutput, RusotoError<DescribeTargetGroupsError>>;
+
+    /// Auto-paginating version of `describe_target_groups`
+    fn describe_target_groups_pages(
+        &self,
+        input: DescribeTargetGroupsInput,
+    ) -> RusotoStream<TargetGroup, DescribeTargetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_target_groups(state.clone())
+        })
+    }
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
     async fn describe_target_health(

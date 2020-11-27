@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -148,6 +150,7 @@ pub struct CognitoUserPoolConfig {
 }
 
 /// <p>Represents the input of a <code>CreateApiCache</code> operation.</p>
+/// see [AppSync::create_api_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiCacheRequest {
@@ -174,6 +177,7 @@ pub struct CreateApiCacheRequest {
 }
 
 /// <p>Represents the output of a <code>CreateApiCache</code> operation.</p>
+/// see [AppSync::create_api_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiCacheResponse {
@@ -183,6 +187,7 @@ pub struct CreateApiCacheResponse {
     pub api_cache: Option<ApiCache>,
 }
 
+/// see [AppSync::create_api_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiKeyRequest {
@@ -199,6 +204,7 @@ pub struct CreateApiKeyRequest {
     pub expires: Option<i64>,
 }
 
+/// see [AppSync::create_api_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiKeyResponse {
@@ -208,6 +214,7 @@ pub struct CreateApiKeyResponse {
     pub api_key: Option<ApiKey>,
 }
 
+/// see [AppSync::create_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceRequest {
@@ -250,6 +257,7 @@ pub struct CreateDataSourceRequest {
     pub type_: String,
 }
 
+/// see [AppSync::create_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceResponse {
@@ -259,6 +267,7 @@ pub struct CreateDataSourceResponse {
     pub data_source: Option<DataSource>,
 }
 
+/// see [AppSync::create_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionRequest {
@@ -288,6 +297,7 @@ pub struct CreateFunctionRequest {
     pub response_mapping_template: Option<String>,
 }
 
+/// see [AppSync::create_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionResponse {
@@ -297,6 +307,7 @@ pub struct CreateFunctionResponse {
     pub function_configuration: Option<FunctionConfiguration>,
 }
 
+/// see [AppSync::create_graphql_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGraphqlApiRequest {
@@ -332,6 +343,7 @@ pub struct CreateGraphqlApiRequest {
     pub xray_enabled: Option<bool>,
 }
 
+/// see [AppSync::create_graphql_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGraphqlApiResponse {
@@ -341,6 +353,7 @@ pub struct CreateGraphqlApiResponse {
     pub graphql_api: Option<GraphqlApi>,
 }
 
+/// see [AppSync::create_resolver]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverRequest {
@@ -383,6 +396,7 @@ pub struct CreateResolverRequest {
     pub type_name: String,
 }
 
+/// see [AppSync::create_resolver]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResolverResponse {
@@ -392,6 +406,7 @@ pub struct CreateResolverResponse {
     pub resolver: Option<Resolver>,
 }
 
+/// see [AppSync::create_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTypeRequest {
@@ -406,6 +421,7 @@ pub struct CreateTypeRequest {
     pub format: String,
 }
 
+/// see [AppSync::create_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTypeResponse {
@@ -462,6 +478,7 @@ pub struct DataSource {
 }
 
 /// <p>Represents the input of a <code>DeleteApiCache</code> operation.</p>
+/// see [AppSync::delete_api_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiCacheRequest {
@@ -471,10 +488,12 @@ pub struct DeleteApiCacheRequest {
 }
 
 /// <p>Represents the output of a <code>DeleteApiCache</code> operation.</p>
+/// see [AppSync::delete_api_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApiCacheResponse {}
 
+/// see [AppSync::delete_api_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiKeyRequest {
@@ -486,10 +505,12 @@ pub struct DeleteApiKeyRequest {
     pub id: String,
 }
 
+/// see [AppSync::delete_api_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApiKeyResponse {}
 
+/// see [AppSync::delete_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceRequest {
@@ -501,10 +522,12 @@ pub struct DeleteDataSourceRequest {
     pub name: String,
 }
 
+/// see [AppSync::delete_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataSourceResponse {}
 
+/// see [AppSync::delete_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionRequest {
@@ -516,10 +539,12 @@ pub struct DeleteFunctionRequest {
     pub function_id: String,
 }
 
+/// see [AppSync::delete_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFunctionResponse {}
 
+/// see [AppSync::delete_graphql_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGraphqlApiRequest {
@@ -528,10 +553,12 @@ pub struct DeleteGraphqlApiRequest {
     pub api_id: String,
 }
 
+/// see [AppSync::delete_graphql_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGraphqlApiResponse {}
 
+/// see [AppSync::delete_resolver]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResolverRequest {
@@ -546,10 +573,12 @@ pub struct DeleteResolverRequest {
     pub type_name: String,
 }
 
+/// see [AppSync::delete_resolver]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResolverResponse {}
 
+/// see [AppSync::delete_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTypeRequest {
@@ -561,6 +590,7 @@ pub struct DeleteTypeRequest {
     pub type_name: String,
 }
 
+/// see [AppSync::delete_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTypeResponse {}
@@ -617,6 +647,7 @@ pub struct ElasticsearchDataSourceConfig {
 }
 
 /// <p>Represents the input of a <code>FlushApiCache</code> operation.</p>
+/// see [AppSync::flush_api_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlushApiCacheRequest {
@@ -626,6 +657,7 @@ pub struct FlushApiCacheRequest {
 }
 
 /// <p>Represents the output of a <code>FlushApiCache</code> operation.</p>
+/// see [AppSync::flush_api_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlushApiCacheResponse {}
@@ -669,6 +701,7 @@ pub struct FunctionConfiguration {
 }
 
 /// <p>Represents the input of a <code>GetApiCache</code> operation.</p>
+/// see [AppSync::get_api_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiCacheRequest {
@@ -678,6 +711,7 @@ pub struct GetApiCacheRequest {
 }
 
 /// <p>Represents the output of a <code>GetApiCache</code> operation.</p>
+/// see [AppSync::get_api_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiCacheResponse {
@@ -687,6 +721,7 @@ pub struct GetApiCacheResponse {
     pub api_cache: Option<ApiCache>,
 }
 
+/// see [AppSync::get_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataSourceRequest {
@@ -698,6 +733,7 @@ pub struct GetDataSourceRequest {
     pub name: String,
 }
 
+/// see [AppSync::get_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataSourceResponse {
@@ -707,6 +743,7 @@ pub struct GetDataSourceResponse {
     pub data_source: Option<DataSource>,
 }
 
+/// see [AppSync::get_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionRequest {
@@ -718,6 +755,7 @@ pub struct GetFunctionRequest {
     pub function_id: String,
 }
 
+/// see [AppSync::get_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionResponse {
@@ -727,6 +765,7 @@ pub struct GetFunctionResponse {
     pub function_configuration: Option<FunctionConfiguration>,
 }
 
+/// see [AppSync::get_graphql_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGraphqlApiRequest {
@@ -735,6 +774,7 @@ pub struct GetGraphqlApiRequest {
     pub api_id: String,
 }
 
+/// see [AppSync::get_graphql_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGraphqlApiResponse {
@@ -744,6 +784,7 @@ pub struct GetGraphqlApiResponse {
     pub graphql_api: Option<GraphqlApi>,
 }
 
+/// see [AppSync::get_introspection_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntrospectionSchemaRequest {
@@ -759,12 +800,14 @@ pub struct GetIntrospectionSchemaRequest {
     pub include_directives: Option<bool>,
 }
 
+/// see [AppSync::get_introspection_schema]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetIntrospectionSchemaResponse {
     /// <p>The schema, in GraphQL Schema Definition Language (SDL) format.</p> <p>For more information, see the <a href="http://graphql.org/learn/schema/">GraphQL SDL documentation</a>.</p>
     pub schema: Option<bytes::Bytes>,
 }
 
+/// see [AppSync::get_resolver]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverRequest {
@@ -779,6 +822,7 @@ pub struct GetResolverRequest {
     pub type_name: String,
 }
 
+/// see [AppSync::get_resolver]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverResponse {
@@ -788,6 +832,7 @@ pub struct GetResolverResponse {
     pub resolver: Option<Resolver>,
 }
 
+/// see [AppSync::get_schema_creation_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaCreationStatusRequest {
@@ -796,6 +841,7 @@ pub struct GetSchemaCreationStatusRequest {
     pub api_id: String,
 }
 
+/// see [AppSync::get_schema_creation_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaCreationStatusResponse {
@@ -809,6 +855,7 @@ pub struct GetSchemaCreationStatusResponse {
     pub status: Option<String>,
 }
 
+/// see [AppSync::get_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTypeRequest {
@@ -823,6 +870,7 @@ pub struct GetTypeRequest {
     pub type_name: String,
 }
 
+/// see [AppSync::get_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTypeResponse {
@@ -916,6 +964,7 @@ pub struct LambdaDataSourceConfig {
     pub lambda_function_arn: String,
 }
 
+/// see [AppSync::list_api_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApiKeysRequest {
@@ -932,6 +981,15 @@ pub struct ListApiKeysRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListApiKeysRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppSync::list_api_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApiKeysResponse {
@@ -945,6 +1003,31 @@ pub struct ListApiKeysResponse {
     pub next_token: Option<String>,
 }
 
+impl ListApiKeysResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ApiKey>> {
+        Some(self.api_keys.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListApiKeysResponse {
+    type Item = ApiKey;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ApiKey> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppSync::list_data_sources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourcesRequest {
@@ -961,6 +1044,15 @@ pub struct ListDataSourcesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDataSourcesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppSync::list_data_sources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourcesResponse {
@@ -974,6 +1066,31 @@ pub struct ListDataSourcesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDataSourcesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DataSource>> {
+        Some(self.data_sources.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDataSourcesResponse {
+    type Item = DataSource;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DataSource> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppSync::list_functions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionsRequest {
@@ -990,6 +1107,15 @@ pub struct ListFunctionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListFunctionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppSync::list_functions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionsResponse {
@@ -1003,6 +1129,31 @@ pub struct ListFunctionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListFunctionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<FunctionConfiguration>> {
+        Some(self.functions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFunctionsResponse {
+    type Item = FunctionConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FunctionConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppSync::list_graphql_apis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGraphqlApisRequest {
@@ -1016,6 +1167,15 @@ pub struct ListGraphqlApisRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListGraphqlApisRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppSync::list_graphql_apis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGraphqlApisResponse {
@@ -1029,6 +1189,31 @@ pub struct ListGraphqlApisResponse {
     pub next_token: Option<String>,
 }
 
+impl ListGraphqlApisResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GraphqlApi>> {
+        Some(self.graphql_apis.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGraphqlApisResponse {
+    type Item = GraphqlApi;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GraphqlApi> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppSync::list_resolvers_by_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolversByFunctionRequest {
@@ -1048,6 +1233,15 @@ pub struct ListResolversByFunctionRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListResolversByFunctionRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppSync::list_resolvers_by_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolversByFunctionResponse {
@@ -1061,6 +1255,31 @@ pub struct ListResolversByFunctionResponse {
     pub resolvers: Option<Vec<Resolver>>,
 }
 
+impl ListResolversByFunctionResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Resolver>> {
+        Some(self.resolvers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListResolversByFunctionResponse {
+    type Item = Resolver;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Resolver> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppSync::list_resolvers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolversRequest {
@@ -1080,6 +1299,15 @@ pub struct ListResolversRequest {
     pub type_name: String,
 }
 
+impl PagedRequest for ListResolversRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppSync::list_resolvers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolversResponse {
@@ -1093,6 +1321,31 @@ pub struct ListResolversResponse {
     pub resolvers: Option<Vec<Resolver>>,
 }
 
+impl ListResolversResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Resolver>> {
+        Some(self.resolvers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListResolversResponse {
+    type Item = Resolver;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Resolver> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppSync::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1101,6 +1354,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [AppSync::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1110,6 +1364,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [AppSync::list_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypesRequest {
@@ -1129,6 +1384,15 @@ pub struct ListTypesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListTypesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppSync::list_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypesResponse {
@@ -1140,6 +1404,30 @@ pub struct ListTypesResponse {
     #[serde(rename = "types")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub types: Option<Vec<Type>>,
+}
+
+impl ListTypesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Type>> {
+        Some(self.types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTypesResponse {
+    type Item = Type;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Type> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>The CloudWatch Logs configuration.</p>
@@ -1270,6 +1558,7 @@ pub struct Resolver {
     pub type_name: Option<String>,
 }
 
+/// see [AppSync::start_schema_creation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSchemaCreationRequest {
@@ -1286,6 +1575,7 @@ pub struct StartSchemaCreationRequest {
     pub definition: bytes::Bytes,
 }
 
+/// see [AppSync::start_schema_creation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSchemaCreationResponse {
@@ -1312,6 +1602,7 @@ pub struct SyncConfig {
     pub lambda_conflict_handler_config: Option<LambdaConflictHandlerConfig>,
 }
 
+/// see [AppSync::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1323,6 +1614,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [AppSync::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1353,6 +1645,7 @@ pub struct Type {
     pub name: Option<String>,
 }
 
+/// see [AppSync::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1364,11 +1657,13 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [AppSync::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>Represents the input of a <code>UpdateApiCache</code> operation.</p>
+/// see [AppSync::update_api_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiCacheRequest {
@@ -1387,6 +1682,7 @@ pub struct UpdateApiCacheRequest {
 }
 
 /// <p>Represents the output of a <code>UpdateApiCache</code> operation.</p>
+/// see [AppSync::update_api_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiCacheResponse {
@@ -1396,6 +1692,7 @@ pub struct UpdateApiCacheResponse {
     pub api_cache: Option<ApiCache>,
 }
 
+/// see [AppSync::update_api_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiKeyRequest {
@@ -1415,6 +1712,7 @@ pub struct UpdateApiKeyRequest {
     pub id: String,
 }
 
+/// see [AppSync::update_api_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiKeyResponse {
@@ -1424,6 +1722,7 @@ pub struct UpdateApiKeyResponse {
     pub api_key: Option<ApiKey>,
 }
 
+/// see [AppSync::update_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceRequest {
@@ -1466,6 +1765,7 @@ pub struct UpdateDataSourceRequest {
     pub type_: String,
 }
 
+/// see [AppSync::update_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSourceResponse {
@@ -1475,6 +1775,7 @@ pub struct UpdateDataSourceResponse {
     pub data_source: Option<DataSource>,
 }
 
+/// see [AppSync::update_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionRequest {
@@ -1507,6 +1808,7 @@ pub struct UpdateFunctionRequest {
     pub response_mapping_template: Option<String>,
 }
 
+/// see [AppSync::update_function]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFunctionResponse {
@@ -1516,6 +1818,7 @@ pub struct UpdateFunctionResponse {
     pub function_configuration: Option<FunctionConfiguration>,
 }
 
+/// see [AppSync::update_graphql_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGraphqlApiRequest {
@@ -1551,6 +1854,7 @@ pub struct UpdateGraphqlApiRequest {
     pub xray_enabled: Option<bool>,
 }
 
+/// see [AppSync::update_graphql_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGraphqlApiResponse {
@@ -1560,6 +1864,7 @@ pub struct UpdateGraphqlApiResponse {
     pub graphql_api: Option<GraphqlApi>,
 }
 
+/// see [AppSync::update_resolver]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResolverRequest {
@@ -1602,6 +1907,7 @@ pub struct UpdateResolverRequest {
     pub type_name: String,
 }
 
+/// see [AppSync::update_resolver]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResolverResponse {
@@ -1611,6 +1917,7 @@ pub struct UpdateResolverResponse {
     pub resolver: Option<Resolver>,
 }
 
+/// see [AppSync::update_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTypeRequest {
@@ -1629,6 +1936,7 @@ pub struct UpdateTypeRequest {
     pub type_name: String,
 }
 
+/// see [AppSync::update_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTypeResponse {
@@ -3858,7 +4166,7 @@ impl fmt::Display for UpdateTypeError {
 impl Error for UpdateTypeError {}
 /// Trait representing the capabilities of the AWSAppSync API. AWSAppSync clients implement this trait.
 #[async_trait]
-pub trait AppSync {
+pub trait AppSync: Clone + Sync + Send + 'static {
     /// <p>Creates a cache for the GraphQL API.</p>
     async fn create_api_cache(
         &self,
@@ -4003,11 +4311,31 @@ pub trait AppSync {
         input: ListApiKeysRequest,
     ) -> Result<ListApiKeysResponse, RusotoError<ListApiKeysError>>;
 
+    /// Auto-paginating version of `list_api_keys`
+    fn list_api_keys_pages(
+        &self,
+        input: ListApiKeysRequest,
+    ) -> RusotoStream<ApiKey, ListApiKeysError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_api_keys(state.clone())
+        })
+    }
+
     /// <p>Lists the data sources for a given API.</p>
     async fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
     ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>;
+
+    /// Auto-paginating version of `list_data_sources`
+    fn list_data_sources_pages(
+        &self,
+        input: ListDataSourcesRequest,
+    ) -> RusotoStream<DataSource, ListDataSourcesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_data_sources(state.clone())
+        })
+    }
 
     /// <p>List multiple functions.</p>
     async fn list_functions(
@@ -4015,11 +4343,31 @@ pub trait AppSync {
         input: ListFunctionsRequest,
     ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>;
 
+    /// Auto-paginating version of `list_functions`
+    fn list_functions_pages(
+        &self,
+        input: ListFunctionsRequest,
+    ) -> RusotoStream<FunctionConfiguration, ListFunctionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_functions(state.clone())
+        })
+    }
+
     /// <p>Lists your GraphQL APIs.</p>
     async fn list_graphql_apis(
         &self,
         input: ListGraphqlApisRequest,
     ) -> Result<ListGraphqlApisResponse, RusotoError<ListGraphqlApisError>>;
+
+    /// Auto-paginating version of `list_graphql_apis`
+    fn list_graphql_apis_pages(
+        &self,
+        input: ListGraphqlApisRequest,
+    ) -> RusotoStream<GraphqlApi, ListGraphqlApisError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_graphql_apis(state.clone())
+        })
+    }
 
     /// <p>Lists the resolvers for a given API and type.</p>
     async fn list_resolvers(
@@ -4027,11 +4375,31 @@ pub trait AppSync {
         input: ListResolversRequest,
     ) -> Result<ListResolversResponse, RusotoError<ListResolversError>>;
 
+    /// Auto-paginating version of `list_resolvers`
+    fn list_resolvers_pages(
+        &self,
+        input: ListResolversRequest,
+    ) -> RusotoStream<Resolver, ListResolversError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resolvers(state.clone())
+        })
+    }
+
     /// <p>List the resolvers that are associated with a specific function.</p>
     async fn list_resolvers_by_function(
         &self,
         input: ListResolversByFunctionRequest,
     ) -> Result<ListResolversByFunctionResponse, RusotoError<ListResolversByFunctionError>>;
+
+    /// Auto-paginating version of `list_resolvers_by_function`
+    fn list_resolvers_by_function_pages(
+        &self,
+        input: ListResolversByFunctionRequest,
+    ) -> RusotoStream<Resolver, ListResolversByFunctionError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resolvers_by_function(state.clone())
+        })
+    }
 
     /// <p>Lists the tags for a resource.</p>
     async fn list_tags_for_resource(
@@ -4044,6 +4412,13 @@ pub trait AppSync {
         &self,
         input: ListTypesRequest,
     ) -> Result<ListTypesResponse, RusotoError<ListTypesError>>;
+
+    /// Auto-paginating version of `list_types`
+    fn list_types_pages(&self, input: ListTypesRequest) -> RusotoStream<Type, ListTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_types(state.clone())
+        })
+    }
 
     /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
     async fn start_schema_creation(

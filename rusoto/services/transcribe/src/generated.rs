@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -61,6 +63,7 @@ pub struct ContentRedaction {
     pub redaction_type: String,
 }
 
+/// see [Transcribe::create_language_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLanguageModelRequest {
@@ -78,6 +81,7 @@ pub struct CreateLanguageModelRequest {
     pub model_name: String,
 }
 
+/// see [Transcribe::create_language_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLanguageModelResponse {
@@ -103,6 +107,7 @@ pub struct CreateLanguageModelResponse {
     pub model_status: Option<String>,
 }
 
+/// see [Transcribe::create_medical_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMedicalVocabularyRequest {
@@ -117,6 +122,7 @@ pub struct CreateMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::create_medical_vocabulary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMedicalVocabularyResponse {
@@ -142,6 +148,7 @@ pub struct CreateMedicalVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
+/// see [Transcribe::create_vocabulary_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVocabularyFilterRequest {
@@ -161,6 +168,7 @@ pub struct CreateVocabularyFilterRequest {
     pub words: Option<Vec<String>>,
 }
 
+/// see [Transcribe::create_vocabulary_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVocabularyFilterResponse {
@@ -178,6 +186,7 @@ pub struct CreateVocabularyFilterResponse {
     pub vocabulary_filter_name: Option<String>,
 }
 
+/// see [Transcribe::create_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVocabularyRequest {
@@ -197,6 +206,7 @@ pub struct CreateVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::create_vocabulary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVocabularyResponse {
@@ -222,6 +232,7 @@ pub struct CreateVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
+/// see [Transcribe::delete_language_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLanguageModelRequest {
@@ -230,6 +241,7 @@ pub struct DeleteLanguageModelRequest {
     pub model_name: String,
 }
 
+/// see [Transcribe::delete_medical_transcription_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMedicalTranscriptionJobRequest {
@@ -238,6 +250,7 @@ pub struct DeleteMedicalTranscriptionJobRequest {
     pub medical_transcription_job_name: String,
 }
 
+/// see [Transcribe::delete_medical_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMedicalVocabularyRequest {
@@ -246,6 +259,7 @@ pub struct DeleteMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::delete_transcription_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTranscriptionJobRequest {
@@ -254,6 +268,7 @@ pub struct DeleteTranscriptionJobRequest {
     pub transcription_job_name: String,
 }
 
+/// see [Transcribe::delete_vocabulary_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVocabularyFilterRequest {
@@ -262,6 +277,7 @@ pub struct DeleteVocabularyFilterRequest {
     pub vocabulary_filter_name: String,
 }
 
+/// see [Transcribe::delete_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVocabularyRequest {
@@ -270,6 +286,7 @@ pub struct DeleteVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::describe_language_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLanguageModelRequest {
@@ -278,6 +295,7 @@ pub struct DescribeLanguageModelRequest {
     pub model_name: String,
 }
 
+/// see [Transcribe::describe_language_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLanguageModelResponse {
@@ -287,6 +305,7 @@ pub struct DescribeLanguageModelResponse {
     pub language_model: Option<LanguageModel>,
 }
 
+/// see [Transcribe::get_medical_transcription_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMedicalTranscriptionJobRequest {
@@ -295,6 +314,7 @@ pub struct GetMedicalTranscriptionJobRequest {
     pub medical_transcription_job_name: String,
 }
 
+/// see [Transcribe::get_medical_transcription_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMedicalTranscriptionJobResponse {
@@ -304,6 +324,7 @@ pub struct GetMedicalTranscriptionJobResponse {
     pub medical_transcription_job: Option<MedicalTranscriptionJob>,
 }
 
+/// see [Transcribe::get_medical_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMedicalVocabularyRequest {
@@ -312,6 +333,7 @@ pub struct GetMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::get_medical_vocabulary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMedicalVocabularyResponse {
@@ -341,6 +363,7 @@ pub struct GetMedicalVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
+/// see [Transcribe::get_transcription_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTranscriptionJobRequest {
@@ -349,6 +372,7 @@ pub struct GetTranscriptionJobRequest {
     pub transcription_job_name: String,
 }
 
+/// see [Transcribe::get_transcription_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTranscriptionJobResponse {
@@ -358,6 +382,7 @@ pub struct GetTranscriptionJobResponse {
     pub transcription_job: Option<TranscriptionJob>,
 }
 
+/// see [Transcribe::get_vocabulary_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVocabularyFilterRequest {
@@ -366,6 +391,7 @@ pub struct GetVocabularyFilterRequest {
     pub vocabulary_filter_name: String,
 }
 
+/// see [Transcribe::get_vocabulary_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVocabularyFilterResponse {
@@ -387,6 +413,7 @@ pub struct GetVocabularyFilterResponse {
     pub vocabulary_filter_name: Option<String>,
 }
 
+/// see [Transcribe::get_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVocabularyRequest {
@@ -395,6 +422,7 @@ pub struct GetVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::get_vocabulary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVocabularyResponse {
@@ -494,6 +522,7 @@ pub struct LanguageModel {
     pub upgrade_availability: Option<bool>,
 }
 
+/// see [Transcribe::list_language_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLanguageModelsRequest {
@@ -515,6 +544,7 @@ pub struct ListLanguageModelsRequest {
     pub status_equals: Option<String>,
 }
 
+/// see [Transcribe::list_language_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLanguageModelsResponse {
@@ -528,6 +558,7 @@ pub struct ListLanguageModelsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Transcribe::list_medical_transcription_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMedicalTranscriptionJobsRequest {
@@ -549,6 +580,7 @@ pub struct ListMedicalTranscriptionJobsRequest {
     pub status: Option<String>,
 }
 
+/// see [Transcribe::list_medical_transcription_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMedicalTranscriptionJobsResponse {
@@ -566,6 +598,7 @@ pub struct ListMedicalTranscriptionJobsResponse {
     pub status: Option<String>,
 }
 
+/// see [Transcribe::list_medical_vocabularies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMedicalVocabulariesRequest {
@@ -587,6 +620,7 @@ pub struct ListMedicalVocabulariesRequest {
     pub state_equals: Option<String>,
 }
 
+/// see [Transcribe::list_medical_vocabularies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMedicalVocabulariesResponse {
@@ -604,6 +638,7 @@ pub struct ListMedicalVocabulariesResponse {
     pub vocabularies: Option<Vec<VocabularyInfo>>,
 }
 
+/// see [Transcribe::list_transcription_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTranscriptionJobsRequest {
@@ -625,6 +660,7 @@ pub struct ListTranscriptionJobsRequest {
     pub status: Option<String>,
 }
 
+/// see [Transcribe::list_transcription_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTranscriptionJobsResponse {
@@ -642,6 +678,7 @@ pub struct ListTranscriptionJobsResponse {
     pub transcription_job_summaries: Option<Vec<TranscriptionJobSummary>>,
 }
 
+/// see [Transcribe::list_vocabularies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVocabulariesRequest {
@@ -663,6 +700,7 @@ pub struct ListVocabulariesRequest {
     pub state_equals: Option<String>,
 }
 
+/// see [Transcribe::list_vocabularies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVocabulariesResponse {
@@ -680,6 +718,7 @@ pub struct ListVocabulariesResponse {
     pub vocabularies: Option<Vec<VocabularyInfo>>,
 }
 
+/// see [Transcribe::list_vocabulary_filters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVocabularyFiltersRequest {
@@ -697,6 +736,7 @@ pub struct ListVocabularyFiltersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Transcribe::list_vocabulary_filters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVocabularyFiltersResponse {
@@ -911,6 +951,7 @@ pub struct Settings {
     pub vocabulary_name: Option<String>,
 }
 
+/// see [Transcribe::start_medical_transcription_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMedicalTranscriptionJobRequest {
@@ -953,6 +994,7 @@ pub struct StartMedicalTranscriptionJobRequest {
     pub type_: String,
 }
 
+/// see [Transcribe::start_medical_transcription_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMedicalTranscriptionJobResponse {
@@ -962,6 +1004,7 @@ pub struct StartMedicalTranscriptionJobResponse {
     pub medical_transcription_job: Option<MedicalTranscriptionJob>,
 }
 
+/// see [Transcribe::start_transcription_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTranscriptionJobRequest {
@@ -1021,6 +1064,7 @@ pub struct StartTranscriptionJobRequest {
     pub transcription_job_name: String,
 }
 
+/// see [Transcribe::start_transcription_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTranscriptionJobResponse {
@@ -1175,6 +1219,7 @@ pub struct TranscriptionJobSummary {
     pub transcription_job_status: Option<String>,
 }
 
+/// see [Transcribe::update_medical_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMedicalVocabularyRequest {
@@ -1190,6 +1235,7 @@ pub struct UpdateMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::update_medical_vocabulary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMedicalVocabularyResponse {
@@ -1211,6 +1257,7 @@ pub struct UpdateMedicalVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
+/// see [Transcribe::update_vocabulary_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVocabularyFilterRequest {
@@ -1227,6 +1274,7 @@ pub struct UpdateVocabularyFilterRequest {
     pub words: Option<Vec<String>>,
 }
 
+/// see [Transcribe::update_vocabulary_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVocabularyFilterResponse {
@@ -1244,6 +1292,7 @@ pub struct UpdateVocabularyFilterResponse {
     pub vocabulary_filter_name: Option<String>,
 }
 
+/// see [Transcribe::update_vocabulary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVocabularyRequest {
@@ -1263,6 +1312,7 @@ pub struct UpdateVocabularyRequest {
     pub vocabulary_name: String,
 }
 
+/// see [Transcribe::update_vocabulary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVocabularyResponse {
@@ -2658,7 +2708,7 @@ impl fmt::Display for UpdateVocabularyFilterError {
 impl Error for UpdateVocabularyFilterError {}
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
 #[async_trait]
-pub trait Transcribe {
+pub trait Transcribe: Clone + Sync + Send + 'static {
     /// <p>Creates a new custom language model. Use Amazon S3 prefixes to provide the location of your input files. The time it takes to create your model depends on the size of your training data.</p>
     async fn create_language_model(
         &self,

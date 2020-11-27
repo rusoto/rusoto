@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -894,6 +896,7 @@ impl DatapointsToAlarmDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+/// see [CloudWatch::delete_alarms]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAlarmsInput {
@@ -918,6 +921,7 @@ impl DeleteAlarmsInputSerializer {
     }
 }
 
+/// see [CloudWatch::delete_anomaly_detector]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnomalyDetectorInput {
@@ -953,6 +957,7 @@ impl DeleteAnomalyDetectorInputSerializer {
     }
 }
 
+/// see [CloudWatch::delete_anomaly_detector]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteAnomalyDetectorOutput {}
@@ -974,6 +979,7 @@ impl DeleteAnomalyDetectorOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [CloudWatch::delete_dashboards]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDashboardsInput {
@@ -998,6 +1004,7 @@ impl DeleteDashboardsInputSerializer {
     }
 }
 
+/// see [CloudWatch::delete_dashboards]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDashboardsOutput {}
@@ -1019,6 +1026,7 @@ impl DeleteDashboardsOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [CloudWatch::delete_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInsightRulesInput {
@@ -1043,6 +1051,7 @@ impl DeleteInsightRulesInputSerializer {
     }
 }
 
+/// see [CloudWatch::delete_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteInsightRulesOutput {
@@ -1075,6 +1084,7 @@ impl DeleteInsightRulesOutputDeserializer {
         )
     }
 }
+/// see [CloudWatch::describe_alarm_history]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlarmHistoryInput {
@@ -1094,6 +1104,14 @@ pub struct DescribeAlarmHistoryInput {
     pub scan_by: Option<String>,
     /// <p>The starting date to retrieve alarm history.</p>
     pub start_date: Option<String>,
+}
+
+impl PagedRequest for DescribeAlarmHistoryInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `DescribeAlarmHistoryInput` contents to a `SignedRequest`.
@@ -1136,6 +1154,7 @@ impl DescribeAlarmHistoryInputSerializer {
     }
 }
 
+/// see [CloudWatch::describe_alarm_history]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAlarmHistoryOutput {
@@ -1143,6 +1162,30 @@ pub struct DescribeAlarmHistoryOutput {
     pub alarm_history_items: Option<Vec<AlarmHistoryItem>>,
     /// <p>The token that marks the start of the next batch of returned results.</p>
     pub next_token: Option<String>,
+}
+
+impl DescribeAlarmHistoryOutput {
+    fn pagination_page_opt(self) -> Option<Vec<AlarmHistoryItem>> {
+        Some(self.alarm_history_items.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAlarmHistoryOutput {
+    type Item = AlarmHistoryItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AlarmHistoryItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1174,6 +1217,7 @@ impl DescribeAlarmHistoryOutputDeserializer {
         )
     }
 }
+/// see [CloudWatch::describe_alarms_for_metric]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlarmsForMetricInput {
@@ -1226,6 +1270,7 @@ impl DescribeAlarmsForMetricInputSerializer {
     }
 }
 
+/// see [CloudWatch::describe_alarms_for_metric]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAlarmsForMetricOutput {
@@ -1258,6 +1303,7 @@ impl DescribeAlarmsForMetricOutputDeserializer {
         )
     }
 }
+/// see [CloudWatch::describe_alarms]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlarmsInput {
@@ -1279,6 +1325,14 @@ pub struct DescribeAlarmsInput {
     pub parents_of_alarm_name: Option<String>,
     /// <p>Specify this parameter to receive information only about alarms that are currently in the state that you specify.</p>
     pub state_value: Option<String>,
+}
+
+impl PagedRequest for DescribeAlarmsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `DescribeAlarmsInput` contents to a `SignedRequest`.
@@ -1331,6 +1385,7 @@ impl DescribeAlarmsInputSerializer {
     }
 }
 
+/// see [CloudWatch::describe_alarms]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAlarmsOutput {
@@ -1340,6 +1395,26 @@ pub struct DescribeAlarmsOutput {
     pub metric_alarms: Option<Vec<MetricAlarm>>,
     /// <p>The token that marks the start of the next batch of returned results.</p>
     pub next_token: Option<String>,
+}
+
+impl DescribeAlarmsOutput {}
+
+impl PagedOutput for DescribeAlarmsOutput {
+    type Item = DescribeAlarmsOutput;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DescribeAlarmsOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1371,6 +1446,7 @@ impl DescribeAlarmsOutputDeserializer {
         })
     }
 }
+/// see [CloudWatch::describe_anomaly_detectors]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAnomalyDetectorsInput {
@@ -1417,6 +1493,7 @@ impl DescribeAnomalyDetectorsInputSerializer {
     }
 }
 
+/// see [CloudWatch::describe_anomaly_detectors]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAnomalyDetectorsOutput {
@@ -1455,6 +1532,7 @@ impl DescribeAnomalyDetectorsOutputDeserializer {
         )
     }
 }
+/// see [CloudWatch::describe_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInsightRulesInput {
@@ -1482,6 +1560,7 @@ impl DescribeInsightRulesInputSerializer {
     }
 }
 
+/// see [CloudWatch::describe_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInsightRulesOutput {
@@ -1651,6 +1730,7 @@ impl DimensionsSerializer {
     }
 }
 
+/// see [CloudWatch::disable_alarm_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableAlarmActionsInput {
@@ -1675,6 +1755,7 @@ impl DisableAlarmActionsInputSerializer {
     }
 }
 
+/// see [CloudWatch::disable_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableInsightRulesInput {
@@ -1699,6 +1780,7 @@ impl DisableInsightRulesInputSerializer {
     }
 }
 
+/// see [CloudWatch::disable_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableInsightRulesOutput {
@@ -1731,6 +1813,7 @@ impl DisableInsightRulesOutputDeserializer {
         )
     }
 }
+/// see [CloudWatch::enable_alarm_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAlarmActionsInput {
@@ -1755,6 +1838,7 @@ impl EnableAlarmActionsInputSerializer {
     }
 }
 
+/// see [CloudWatch::enable_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableInsightRulesInput {
@@ -1779,6 +1863,7 @@ impl EnableInsightRulesInputSerializer {
     }
 }
 
+/// see [CloudWatch::enable_insight_rules]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableInsightRulesOutput {
@@ -1879,6 +1964,7 @@ impl FailureResourceDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [CloudWatch::get_dashboard]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDashboardInput {
@@ -1902,6 +1988,7 @@ impl GetDashboardInputSerializer {
     }
 }
 
+/// see [CloudWatch::get_dashboard]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDashboardOutput {
@@ -1947,6 +2034,7 @@ impl GetDashboardOutputDeserializer {
         })
     }
 }
+/// see [CloudWatch::get_insight_rule_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightRuleReportInput {
@@ -1998,6 +2086,7 @@ impl GetInsightRuleReportInputSerializer {
     }
 }
 
+/// see [CloudWatch::get_insight_rule_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInsightRuleReportOutput {
@@ -2080,6 +2169,7 @@ impl GetInsightRuleReportOutputDeserializer {
         )
     }
 }
+/// see [CloudWatch::get_metric_data]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricDataInput {
@@ -2095,6 +2185,14 @@ pub struct GetMetricDataInput {
     pub scan_by: Option<String>,
     /// <p>The time stamp indicating the earliest data to be returned.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. </p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul> <p>If you set <code>Period</code> to 5, 10, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15. </p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>StartTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</code>.</p>
     pub start_time: String,
+}
+
+impl PagedRequest for GetMetricDataInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `GetMetricDataInput` contents to a `SignedRequest`.
@@ -2125,6 +2223,7 @@ impl GetMetricDataInputSerializer {
     }
 }
 
+/// see [CloudWatch::get_metric_data]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetMetricDataOutput {
@@ -2134,6 +2233,26 @@ pub struct GetMetricDataOutput {
     pub metric_data_results: Option<Vec<MetricDataResult>>,
     /// <p>A token that marks the next batch of returned results.</p>
     pub next_token: Option<String>,
+}
+
+impl GetMetricDataOutput {}
+
+impl PagedOutput for GetMetricDataOutput {
+    type Item = GetMetricDataOutput;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GetMetricDataOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2165,6 +2284,7 @@ impl GetMetricDataOutputDeserializer {
         })
     }
 }
+/// see [CloudWatch::get_metric_statistics]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricStatisticsInput {
@@ -2229,6 +2349,7 @@ impl GetMetricStatisticsInputSerializer {
     }
 }
 
+/// see [CloudWatch::get_metric_statistics]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetMetricStatisticsOutput {
@@ -2266,6 +2387,7 @@ impl GetMetricStatisticsOutputDeserializer {
         )
     }
 }
+/// see [CloudWatch::get_metric_widget_image]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricWidgetImageInput {
@@ -2291,6 +2413,7 @@ impl GetMetricWidgetImageInputSerializer {
     }
 }
 
+/// see [CloudWatch::get_metric_widget_image]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetMetricWidgetImageOutput {
@@ -2786,6 +2909,7 @@ impl LastModifiedDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [CloudWatch::list_dashboards]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDashboardsInput {
@@ -2793,6 +2917,14 @@ pub struct ListDashboardsInput {
     pub dashboard_name_prefix: Option<String>,
     /// <p>The token returned by a previous call to indicate that there is more data available.</p>
     pub next_token: Option<String>,
+}
+
+impl PagedRequest for ListDashboardsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListDashboardsInput` contents to a `SignedRequest`.
@@ -2816,6 +2948,7 @@ impl ListDashboardsInputSerializer {
     }
 }
 
+/// see [CloudWatch::list_dashboards]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDashboardsOutput {
@@ -2823,6 +2956,30 @@ pub struct ListDashboardsOutput {
     pub dashboard_entries: Option<Vec<DashboardEntry>>,
     /// <p>The token that marks the start of the next batch of returned results.</p>
     pub next_token: Option<String>,
+}
+
+impl ListDashboardsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<DashboardEntry>> {
+        Some(self.dashboard_entries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDashboardsOutput {
+    type Item = DashboardEntry;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DashboardEntry> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2849,6 +3006,7 @@ impl ListDashboardsOutputDeserializer {
         })
     }
 }
+/// see [CloudWatch::list_metrics]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMetricsInput {
@@ -2862,6 +3020,14 @@ pub struct ListMetricsInput {
     pub next_token: Option<String>,
     /// <p>To filter the results to show only metrics that have had data points published in the past three hours, specify this parameter with a value of <code>PT3H</code>. This is the only valid value for this parameter.</p> <p>The results that are returned are an approximation of the value you specify. There is a low probability that the returned results include metrics with last published data as much as 40 minutes more than the specified time interval.</p>
     pub recently_active: Option<String>,
+}
+
+impl PagedRequest for ListMetricsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
 }
 
 /// Serialize `ListMetricsInput` contents to a `SignedRequest`.
@@ -2895,6 +3061,7 @@ impl ListMetricsInputSerializer {
     }
 }
 
+/// see [CloudWatch::list_metrics]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListMetricsOutput {
@@ -2902,6 +3069,30 @@ pub struct ListMetricsOutput {
     pub metrics: Option<Vec<Metric>>,
     /// <p>The token that marks the start of the next batch of returned results. </p>
     pub next_token: Option<String>,
+}
+
+impl ListMetricsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Metric>> {
+        Some(self.metrics.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListMetricsOutput {
+    type Item = Metric;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Metric> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -2928,6 +3119,7 @@ impl ListMetricsOutputDeserializer {
         })
     }
 }
+/// see [CloudWatch::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -2948,6 +3140,7 @@ impl ListTagsForResourceInputSerializer {
     }
 }
 
+/// see [CloudWatch::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -3822,6 +4015,7 @@ impl PeriodDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+/// see [CloudWatch::put_anomaly_detector]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAnomalyDetectorInput {
@@ -3866,6 +4060,7 @@ impl PutAnomalyDetectorInputSerializer {
     }
 }
 
+/// see [CloudWatch::put_anomaly_detector]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutAnomalyDetectorOutput {}
@@ -3887,6 +4082,7 @@ impl PutAnomalyDetectorOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [CloudWatch::put_composite_alarm]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutCompositeAlarmInput {
@@ -3952,6 +4148,7 @@ impl PutCompositeAlarmInputSerializer {
     }
 }
 
+/// see [CloudWatch::put_dashboard]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDashboardInput {
@@ -3981,6 +4178,7 @@ impl PutDashboardInputSerializer {
     }
 }
 
+/// see [CloudWatch::put_dashboard]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutDashboardOutput {
@@ -4012,6 +4210,7 @@ impl PutDashboardOutputDeserializer {
         })
     }
 }
+/// see [CloudWatch::put_insight_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInsightRuleInput {
@@ -4048,6 +4247,7 @@ impl PutInsightRuleInputSerializer {
     }
 }
 
+/// see [CloudWatch::put_insight_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutInsightRuleOutput {}
@@ -4069,6 +4269,7 @@ impl PutInsightRuleOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [CloudWatch::put_metric_alarm]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricAlarmInput {
@@ -4219,6 +4420,7 @@ impl PutMetricAlarmInputSerializer {
     }
 }
 
+/// see [CloudWatch::put_metric_data]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricDataInput {
@@ -4337,6 +4539,7 @@ impl ReturnDataDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [CloudWatch::set_alarm_state]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetAlarmStateInput {
@@ -4568,6 +4771,7 @@ impl TagListSerializer {
     }
 }
 
+/// see [CloudWatch::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -4591,6 +4795,7 @@ impl TagResourceInputSerializer {
     }
 }
 
+/// see [CloudWatch::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagResourceOutput {}
@@ -4662,6 +4867,7 @@ impl TreatMissingDataDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [CloudWatch::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -4685,6 +4891,7 @@ impl UntagResourceInputSerializer {
     }
 }
 
+/// see [CloudWatch::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UntagResourceOutput {}
@@ -6328,7 +6535,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the CloudWatch API. CloudWatch clients implement this trait.
 #[async_trait]
-pub trait CloudWatch {
+pub trait CloudWatch: Clone + Sync + Send + 'static {
     /// <p><p>Deletes the specified alarms. You can delete up to 100 alarms in one operation. However, this total can include no more than one composite alarm. For example, you could delete 99 metric alarms and one composite alarms with one operation, but you can&#39;t delete two composite alarms with one operation.</p> <p> In the event of an error, no alarms are deleted.</p> <note> <p>It is possible to create a loop or cycle of composite alarms, where composite alarm A depends on composite alarm B, and composite alarm B also depends on composite alarm A. In this scenario, you can&#39;t delete any composite alarm that is part of the cycle because there is always still a composite alarm that depends on that alarm that you want to delete.</p> <p>To get out of such a situation, you must break the cycle by changing the rule of one of the composite alarms in the cycle to remove a dependency that creates the cycle. The simplest change to make to break a cycle is to change the <code>AlarmRule</code> of one of the alarms to <code>False</code>. </p> <p>Additionally, the evaluation of composite alarms stops if CloudWatch detects a cycle in the evaluation path. </p> </note></p>
     async fn delete_alarms(
         &self,
@@ -6359,11 +6566,31 @@ pub trait CloudWatch {
         input: DescribeAlarmHistoryInput,
     ) -> Result<DescribeAlarmHistoryOutput, RusotoError<DescribeAlarmHistoryError>>;
 
+    /// Auto-paginating version of `describe_alarm_history`
+    fn describe_alarm_history_pages(
+        &self,
+        input: DescribeAlarmHistoryInput,
+    ) -> RusotoStream<AlarmHistoryItem, DescribeAlarmHistoryError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_alarm_history(state.clone())
+        })
+    }
+
     /// <p>Retrieves the specified alarms. You can filter the results by specifying a prefix for the alarm name, the alarm state, or a prefix for any action.</p>
     async fn describe_alarms(
         &self,
         input: DescribeAlarmsInput,
     ) -> Result<DescribeAlarmsOutput, RusotoError<DescribeAlarmsError>>;
+
+    /// Auto-paginating version of `describe_alarms`
+    fn describe_alarms_pages(
+        &self,
+        input: DescribeAlarmsInput,
+    ) -> RusotoStream<DescribeAlarmsOutput, DescribeAlarmsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_alarms(state.clone())
+        })
+    }
 
     /// <p>Retrieves the alarms for the specified metric. To filter the results, specify a statistic, period, or unit.</p> <p>This operation retrieves only standard alarms that are based on the specified metric. It does not return alarms based on math expressions that use the specified metric, or composite alarms that use the specified metric.</p>
     async fn describe_alarms_for_metric(
@@ -6425,6 +6652,16 @@ pub trait CloudWatch {
         input: GetMetricDataInput,
     ) -> Result<GetMetricDataOutput, RusotoError<GetMetricDataError>>;
 
+    /// Auto-paginating version of `get_metric_data`
+    fn get_metric_data_pages(
+        &self,
+        input: GetMetricDataInput,
+    ) -> RusotoStream<GetMetricDataOutput, GetMetricDataError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_metric_data(state.clone())
+        })
+    }
+
     /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     async fn get_metric_statistics(
         &self,
@@ -6443,11 +6680,31 @@ pub trait CloudWatch {
         input: ListDashboardsInput,
     ) -> Result<ListDashboardsOutput, RusotoError<ListDashboardsError>>;
 
+    /// Auto-paginating version of `list_dashboards`
+    fn list_dashboards_pages(
+        &self,
+        input: ListDashboardsInput,
+    ) -> RusotoStream<DashboardEntry, ListDashboardsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dashboards(state.clone())
+        })
+    }
+
     /// <p>List the specified metrics. You can use the returned metrics with <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to 15 minutes before the metric appears. You can see statistics about the metric sooner by using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a>.</p> <p> <code>ListMetrics</code> doesn't return information about metrics if those metrics haven't reported data in the past two weeks. To retrieve those metrics, use <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a>.</p>
     async fn list_metrics(
         &self,
         input: ListMetricsInput,
     ) -> Result<ListMetricsOutput, RusotoError<ListMetricsError>>;
+
+    /// Auto-paginating version of `list_metrics`
+    fn list_metrics_pages(
+        &self,
+        input: ListMetricsInput,
+    ) -> RusotoStream<Metric, ListMetricsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_metrics(state.clone())
+        })
+    }
 
     /// <p>Displays the tags associated with a CloudWatch resource. Currently, alarms and Contributor Insights rules support tagging.</p>
     async fn list_tags_for_resource(

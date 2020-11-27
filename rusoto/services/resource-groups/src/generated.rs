@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [ResourceGroups::create_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupInput {
@@ -49,6 +52,7 @@ pub struct CreateGroupInput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ResourceGroups::create_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupOutput {
@@ -70,6 +74,7 @@ pub struct CreateGroupOutput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ResourceGroups::delete_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupInput {
@@ -79,6 +84,7 @@ pub struct DeleteGroupInput {
     pub group: Option<String>,
 }
 
+/// see [ResourceGroups::delete_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupOutput {
@@ -106,6 +112,7 @@ pub struct FailedResource {
     pub resource_arn: Option<String>,
 }
 
+/// see [ResourceGroups::get_group_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupConfigurationInput {
@@ -115,6 +122,7 @@ pub struct GetGroupConfigurationInput {
     pub group: Option<String>,
 }
 
+/// see [ResourceGroups::get_group_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupConfigurationOutput {
@@ -124,6 +132,7 @@ pub struct GetGroupConfigurationOutput {
     pub group_configuration: Option<GroupConfiguration>,
 }
 
+/// see [ResourceGroups::get_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupInput {
@@ -133,6 +142,7 @@ pub struct GetGroupInput {
     pub group: Option<String>,
 }
 
+/// see [ResourceGroups::get_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupOutput {
@@ -142,6 +152,7 @@ pub struct GetGroupOutput {
     pub group: Option<Group>,
 }
 
+/// see [ResourceGroups::get_group_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupQueryInput {
@@ -151,6 +162,7 @@ pub struct GetGroupQueryInput {
     pub group: Option<String>,
 }
 
+/// see [ResourceGroups::get_group_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupQueryOutput {
@@ -160,6 +172,7 @@ pub struct GetGroupQueryOutput {
     pub group_query: Option<GroupQuery>,
 }
 
+/// see [ResourceGroups::get_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsInput {
@@ -168,6 +181,7 @@ pub struct GetTagsInput {
     pub arn: String,
 }
 
+/// see [ResourceGroups::get_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsOutput {
@@ -281,6 +295,7 @@ pub struct GroupQuery {
     pub resource_query: ResourceQuery,
 }
 
+/// see [ResourceGroups::group_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GroupResourcesInput {
@@ -292,6 +307,7 @@ pub struct GroupResourcesInput {
     pub resource_arns: Vec<String>,
 }
 
+/// see [ResourceGroups::group_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupResourcesOutput {
@@ -305,6 +321,7 @@ pub struct GroupResourcesOutput {
     pub succeeded: Option<Vec<String>>,
 }
 
+/// see [ResourceGroups::list_group_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupResourcesInput {
@@ -326,6 +343,15 @@ pub struct ListGroupResourcesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListGroupResourcesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ResourceGroups::list_group_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupResourcesOutput {
@@ -343,6 +369,31 @@ pub struct ListGroupResourcesOutput {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
+impl ListGroupResourcesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceIdentifier>> {
+        Some(self.resource_identifiers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGroupResourcesOutput {
+    type Item = ResourceIdentifier;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceIdentifier> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ResourceGroups::list_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsInput {
@@ -360,6 +411,15 @@ pub struct ListGroupsInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListGroupsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ResourceGroups::list_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsOutput {
@@ -371,6 +431,26 @@ pub struct ListGroupsOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl ListGroupsOutput {}
+
+impl PagedOutput for ListGroupsOutput {
+    type Item = ListGroupsOutput;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ListGroupsOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>A two-part error structure that can occur in <code>ListGroupResources</code> or <code>SearchResources</code> operations on CloudFormation stack-based queries. The error occurs if the CloudFormation stack on which the query is based either does not exist, or has a status that renders the stack inactive. A <code>QueryError</code> occurrence does not necessarily mean that AWS Resource Groups could not complete the operation, but the resulting group might have no member resources.</p>
@@ -424,6 +504,7 @@ pub struct ResourceQuery {
     pub type_: String,
 }
 
+/// see [ResourceGroups::search_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchResourcesInput {
@@ -440,6 +521,15 @@ pub struct SearchResourcesInput {
     pub resource_query: ResourceQuery,
 }
 
+impl PagedRequest for SearchResourcesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ResourceGroups::search_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchResourcesOutput {
@@ -457,6 +547,31 @@ pub struct SearchResourcesOutput {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
+impl SearchResourcesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceIdentifier>> {
+        Some(self.resource_identifiers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for SearchResourcesOutput {
+    type Item = ResourceIdentifier;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceIdentifier> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [ResourceGroups::tag]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagInput {
@@ -468,6 +583,7 @@ pub struct TagInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [ResourceGroups::tag]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagOutput {
@@ -481,6 +597,7 @@ pub struct TagOutput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ResourceGroups::ungroup_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UngroupResourcesInput {
@@ -492,6 +609,7 @@ pub struct UngroupResourcesInput {
     pub resource_arns: Vec<String>,
 }
 
+/// see [ResourceGroups::ungroup_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UngroupResourcesOutput {
@@ -505,6 +623,7 @@ pub struct UngroupResourcesOutput {
     pub succeeded: Option<Vec<String>>,
 }
 
+/// see [ResourceGroups::untag]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagInput {
@@ -516,6 +635,7 @@ pub struct UntagInput {
     pub keys: Vec<String>,
 }
 
+/// see [ResourceGroups::untag]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagOutput {
@@ -529,6 +649,7 @@ pub struct UntagOutput {
     pub keys: Option<Vec<String>>,
 }
 
+/// see [ResourceGroups::update_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupInput {
@@ -542,6 +663,7 @@ pub struct UpdateGroupInput {
     pub group: Option<String>,
 }
 
+/// see [ResourceGroups::update_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupOutput {
@@ -551,6 +673,7 @@ pub struct UpdateGroupOutput {
     pub group: Option<Group>,
 }
 
+/// see [ResourceGroups::update_group_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupQueryInput {
@@ -563,6 +686,7 @@ pub struct UpdateGroupQueryInput {
     pub resource_query: ResourceQuery,
 }
 
+/// see [ResourceGroups::update_group_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupQueryOutput {
@@ -1474,7 +1598,7 @@ impl fmt::Display for UpdateGroupQueryError {
 impl Error for UpdateGroupQueryError {}
 /// Trait representing the capabilities of the Resource Groups API. Resource Groups clients implement this trait.
 #[async_trait]
-pub trait ResourceGroups {
+pub trait ResourceGroups: Clone + Sync + Send + 'static {
     /// <p>Creates a resource group with the specified name and description. You can optionally include a resource query, or a service configuration.</p>
     async fn create_group(
         &self,
@@ -1523,17 +1647,47 @@ pub trait ResourceGroups {
         input: ListGroupResourcesInput,
     ) -> Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>>;
 
+    /// Auto-paginating version of `list_group_resources`
+    fn list_group_resources_pages(
+        &self,
+        input: ListGroupResourcesInput,
+    ) -> RusotoStream<ResourceIdentifier, ListGroupResourcesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_group_resources(state.clone())
+        })
+    }
+
     /// <p>Returns a list of existing resource groups in your account.</p>
     async fn list_groups(
         &self,
         input: ListGroupsInput,
     ) -> Result<ListGroupsOutput, RusotoError<ListGroupsError>>;
 
+    /// Auto-paginating version of `list_groups`
+    fn list_groups_pages(
+        &self,
+        input: ListGroupsInput,
+    ) -> RusotoStream<ListGroupsOutput, ListGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_groups(state.clone())
+        })
+    }
+
     /// <p>Returns a list of AWS resource identifiers that matches the specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
     async fn search_resources(
         &self,
         input: SearchResourcesInput,
     ) -> Result<SearchResourcesOutput, RusotoError<SearchResourcesError>>;
+
+    /// Auto-paginating version of `search_resources`
+    fn search_resources_pages(
+        &self,
+        input: SearchResourcesInput,
+    ) -> RusotoStream<ResourceIdentifier, SearchResourcesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.search_resources(state.clone())
+        })
+    }
 
     /// <p><p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p> <important> <p>Do not store personally identifiable information (PII) or other confidential or sensitive information in tags. We use tags to provide you with billing and administration services. Tags are not intended to be used for private or sensitive data.</p> </important></p>
     async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>>;

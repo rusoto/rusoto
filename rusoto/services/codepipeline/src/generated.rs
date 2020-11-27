@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -67,6 +69,7 @@ pub struct AWSSessionCredentials {
 }
 
 /// <p>Represents the input of an AcknowledgeJob action.</p>
+/// see [CodePipeline::acknowledge_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcknowledgeJobInput {
@@ -79,6 +82,7 @@ pub struct AcknowledgeJobInput {
 }
 
 /// <p>Represents the output of an AcknowledgeJob action.</p>
+/// see [CodePipeline::acknowledge_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcknowledgeJobOutput {
@@ -89,6 +93,7 @@ pub struct AcknowledgeJobOutput {
 }
 
 /// <p>Represents the input of an AcknowledgeThirdPartyJob action.</p>
+/// see [CodePipeline::acknowledge_third_party_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcknowledgeThirdPartyJobInput {
@@ -104,6 +109,7 @@ pub struct AcknowledgeThirdPartyJobInput {
 }
 
 /// <p>Represents the output of an AcknowledgeThirdPartyJob action.</p>
+/// see [CodePipeline::acknowledge_third_party_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcknowledgeThirdPartyJobOutput {
@@ -603,6 +609,7 @@ pub struct BlockerDeclaration {
 }
 
 /// <p>Represents the input of a CreateCustomActionType operation.</p>
+/// see [CodePipeline::create_custom_action_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomActionTypeInput {
@@ -636,6 +643,7 @@ pub struct CreateCustomActionTypeInput {
 }
 
 /// <p>Represents the output of a <code>CreateCustomActionType</code> operation.</p>
+/// see [CodePipeline::create_custom_action_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomActionTypeOutput {
@@ -649,6 +657,7 @@ pub struct CreateCustomActionTypeOutput {
 }
 
 /// <p>Represents the input of a <code>CreatePipeline</code> action.</p>
+/// see [CodePipeline::create_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineInput {
@@ -662,6 +671,7 @@ pub struct CreatePipelineInput {
 }
 
 /// <p>Represents the output of a <code>CreatePipeline</code> action.</p>
+/// see [CodePipeline::create_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineOutput {
@@ -696,6 +706,7 @@ pub struct CurrentRevision {
 }
 
 /// <p>Represents the input of a <code>DeleteCustomActionType</code> operation. The custom action will be marked as deleted.</p>
+/// see [CodePipeline::delete_custom_action_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomActionTypeInput {
@@ -711,6 +722,7 @@ pub struct DeleteCustomActionTypeInput {
 }
 
 /// <p>Represents the input of a <code>DeletePipeline</code> action.</p>
+/// see [CodePipeline::delete_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineInput {
@@ -719,6 +731,7 @@ pub struct DeletePipelineInput {
     pub name: String,
 }
 
+/// see [CodePipeline::delete_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookInput {
@@ -727,10 +740,12 @@ pub struct DeleteWebhookInput {
     pub name: String,
 }
 
+/// see [CodePipeline::delete_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookOutput {}
 
+/// see [CodePipeline::deregister_webhook_with_third_party]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterWebhookWithThirdPartyInput {
@@ -740,11 +755,13 @@ pub struct DeregisterWebhookWithThirdPartyInput {
     pub webhook_name: Option<String>,
 }
 
+/// see [CodePipeline::deregister_webhook_with_third_party]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterWebhookWithThirdPartyOutput {}
 
 /// <p>Represents the input of a <code>DisableStageTransition</code> action.</p>
+/// see [CodePipeline::disable_stage_transition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableStageTransitionInput {
@@ -763,6 +780,7 @@ pub struct DisableStageTransitionInput {
 }
 
 /// <p>Represents the input of an <code>EnableStageTransition</code> action.</p>
+/// see [CodePipeline::enable_stage_transition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableStageTransitionInput {
@@ -851,6 +869,7 @@ pub struct FailureDetails {
 }
 
 /// <p>Represents the input of a <code>GetJobDetails</code> action.</p>
+/// see [CodePipeline::get_job_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobDetailsInput {
@@ -860,6 +879,7 @@ pub struct GetJobDetailsInput {
 }
 
 /// <p>Represents the output of a <code>GetJobDetails</code> action.</p>
+/// see [CodePipeline::get_job_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobDetailsOutput {
@@ -870,6 +890,7 @@ pub struct GetJobDetailsOutput {
 }
 
 /// <p>Represents the input of a <code>GetPipelineExecution</code> action.</p>
+/// see [CodePipeline::get_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineExecutionInput {
@@ -882,6 +903,7 @@ pub struct GetPipelineExecutionInput {
 }
 
 /// <p>Represents the output of a <code>GetPipelineExecution</code> action.</p>
+/// see [CodePipeline::get_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineExecutionOutput {
@@ -892,6 +914,7 @@ pub struct GetPipelineExecutionOutput {
 }
 
 /// <p>Represents the input of a <code>GetPipeline</code> action.</p>
+/// see [CodePipeline::get_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineInput {
@@ -905,6 +928,7 @@ pub struct GetPipelineInput {
 }
 
 /// <p>Represents the output of a <code>GetPipeline</code> action.</p>
+/// see [CodePipeline::get_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineOutput {
@@ -919,6 +943,7 @@ pub struct GetPipelineOutput {
 }
 
 /// <p>Represents the input of a <code>GetPipelineState</code> action.</p>
+/// see [CodePipeline::get_pipeline_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineStateInput {
@@ -928,6 +953,7 @@ pub struct GetPipelineStateInput {
 }
 
 /// <p>Represents the output of a <code>GetPipelineState</code> action.</p>
+/// see [CodePipeline::get_pipeline_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineStateOutput {
@@ -954,6 +980,7 @@ pub struct GetPipelineStateOutput {
 }
 
 /// <p>Represents the input of a <code>GetThirdPartyJobDetails</code> action.</p>
+/// see [CodePipeline::get_third_party_job_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThirdPartyJobDetailsInput {
@@ -966,6 +993,7 @@ pub struct GetThirdPartyJobDetailsInput {
 }
 
 /// <p>Represents the output of a <code>GetThirdPartyJobDetails</code> action.</p>
+/// see [CodePipeline::get_third_party_job_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetThirdPartyJobDetailsOutput {
@@ -1061,6 +1089,7 @@ pub struct JobDetails {
     pub id: Option<String>,
 }
 
+/// see [CodePipeline::list_action_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionExecutionsInput {
@@ -1081,6 +1110,15 @@ pub struct ListActionExecutionsInput {
     pub pipeline_name: String,
 }
 
+impl PagedRequest for ListActionExecutionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodePipeline::list_action_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActionExecutionsOutput {
@@ -1094,7 +1132,32 @@ pub struct ListActionExecutionsOutput {
     pub next_token: Option<String>,
 }
 
+impl ListActionExecutionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ActionExecutionDetail>> {
+        Some(self.action_execution_details.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListActionExecutionsOutput {
+    type Item = ActionExecutionDetail;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ActionExecutionDetail> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListActionTypes</code> action.</p>
+/// see [CodePipeline::list_action_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionTypesInput {
@@ -1108,7 +1171,16 @@ pub struct ListActionTypesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListActionTypesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListActionTypes</code> action.</p>
+/// see [CodePipeline::list_action_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActionTypesOutput {
@@ -1121,7 +1193,32 @@ pub struct ListActionTypesOutput {
     pub next_token: Option<String>,
 }
 
+impl ListActionTypesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ActionType>> {
+        Some(self.action_types.clone())
+    }
+}
+
+impl PagedOutput for ListActionTypesOutput {
+    type Item = ActionType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ActionType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListPipelineExecutions</code> action.</p>
+/// see [CodePipeline::list_pipeline_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelineExecutionsInput {
@@ -1138,7 +1235,16 @@ pub struct ListPipelineExecutionsInput {
     pub pipeline_name: String,
 }
 
+impl PagedRequest for ListPipelineExecutionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListPipelineExecutions</code> action.</p>
+/// see [CodePipeline::list_pipeline_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelineExecutionsOutput {
@@ -1152,7 +1258,32 @@ pub struct ListPipelineExecutionsOutput {
     pub pipeline_execution_summaries: Option<Vec<PipelineExecutionSummary>>,
 }
 
+impl ListPipelineExecutionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<PipelineExecutionSummary>> {
+        Some(self.pipeline_execution_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPipelineExecutionsOutput {
+    type Item = PipelineExecutionSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PipelineExecutionSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input of a <code>ListPipelines</code> action.</p>
+/// see [CodePipeline::list_pipelines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesInput {
@@ -1162,7 +1293,16 @@ pub struct ListPipelinesInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListPipelinesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>ListPipelines</code> action.</p>
+/// see [CodePipeline::list_pipelines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesOutput {
@@ -1176,6 +1316,31 @@ pub struct ListPipelinesOutput {
     pub pipelines: Option<Vec<PipelineSummary>>,
 }
 
+impl ListPipelinesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<PipelineSummary>> {
+        Some(self.pipelines.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPipelinesOutput {
+    type Item = PipelineSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PipelineSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CodePipeline::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -1192,6 +1357,15 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+impl PagedRequest for ListTagsForResourceInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodePipeline::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -1203,6 +1377,30 @@ pub struct ListTagsForResourceOutput {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl ListTagsForResourceOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsForResourceOutput {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>The detail returned for each webhook after listing webhooks, such as the webhook URL, the webhook name, and the webhook ARN.</p>
@@ -1237,6 +1435,7 @@ pub struct ListWebhookItem {
     pub url: String,
 }
 
+/// see [CodePipeline::list_webhooks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebhooksInput {
@@ -1250,6 +1449,15 @@ pub struct ListWebhooksInput {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListWebhooksInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CodePipeline::list_webhooks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebhooksOutput {
@@ -1261,6 +1469,30 @@ pub struct ListWebhooksOutput {
     #[serde(rename = "webhooks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub webhooks: Option<Vec<ListWebhookItem>>,
+}
+
+impl ListWebhooksOutput {
+    fn pagination_page_opt(self) -> Option<Vec<ListWebhookItem>> {
+        Some(self.webhooks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListWebhooksOutput {
+    type Item = ListWebhookItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ListWebhookItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents information about the output of an action.</p>
@@ -1424,6 +1656,7 @@ pub struct PipelineSummary {
 }
 
 /// <p>Represents the input of a <code>PollForJobs</code> action.</p>
+/// see [CodePipeline::poll_for_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForJobsInput {
@@ -1441,6 +1674,7 @@ pub struct PollForJobsInput {
 }
 
 /// <p>Represents the output of a <code>PollForJobs</code> action.</p>
+/// see [CodePipeline::poll_for_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PollForJobsOutput {
@@ -1451,6 +1685,7 @@ pub struct PollForJobsOutput {
 }
 
 /// <p>Represents the input of a <code>PollForThirdPartyJobs</code> action.</p>
+/// see [CodePipeline::poll_for_third_party_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForThirdPartyJobsInput {
@@ -1464,6 +1699,7 @@ pub struct PollForThirdPartyJobsInput {
 }
 
 /// <p>Represents the output of a <code>PollForThirdPartyJobs</code> action.</p>
+/// see [CodePipeline::poll_for_third_party_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PollForThirdPartyJobsOutput {
@@ -1474,6 +1710,7 @@ pub struct PollForThirdPartyJobsOutput {
 }
 
 /// <p>Represents the input of a <code>PutActionRevision</code> action.</p>
+/// see [CodePipeline::put_action_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutActionRevisionInput {
@@ -1492,6 +1729,7 @@ pub struct PutActionRevisionInput {
 }
 
 /// <p>Represents the output of a <code>PutActionRevision</code> action.</p>
+/// see [CodePipeline::put_action_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutActionRevisionOutput {
@@ -1506,6 +1744,7 @@ pub struct PutActionRevisionOutput {
 }
 
 /// <p>Represents the input of a <code>PutApprovalResult</code> action.</p>
+/// see [CodePipeline::put_approval_result]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutApprovalResultInput {
@@ -1527,6 +1766,7 @@ pub struct PutApprovalResultInput {
 }
 
 /// <p>Represents the output of a <code>PutApprovalResult</code> action.</p>
+/// see [CodePipeline::put_approval_result]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutApprovalResultOutput {
@@ -1537,6 +1777,7 @@ pub struct PutApprovalResultOutput {
 }
 
 /// <p>Represents the input of a <code>PutJobFailureResult</code> action.</p>
+/// see [CodePipeline::put_job_failure_result]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutJobFailureResultInput {
@@ -1549,6 +1790,7 @@ pub struct PutJobFailureResultInput {
 }
 
 /// <p>Represents the input of a <code>PutJobSuccessResult</code> action.</p>
+/// see [CodePipeline::put_job_success_result]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutJobSuccessResultInput {
@@ -1574,6 +1816,7 @@ pub struct PutJobSuccessResultInput {
 }
 
 /// <p>Represents the input of a <code>PutThirdPartyJobFailureResult</code> action.</p>
+/// see [CodePipeline::put_third_party_job_failure_result]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutThirdPartyJobFailureResultInput {
@@ -1589,6 +1832,7 @@ pub struct PutThirdPartyJobFailureResultInput {
 }
 
 /// <p>Represents the input of a <code>PutThirdPartyJobSuccessResult</code> action.</p>
+/// see [CodePipeline::put_third_party_job_success_result]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutThirdPartyJobSuccessResultInput {
@@ -1612,6 +1856,7 @@ pub struct PutThirdPartyJobSuccessResultInput {
     pub job_id: String,
 }
 
+/// see [CodePipeline::put_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutWebhookInput {
@@ -1624,6 +1869,7 @@ pub struct PutWebhookInput {
     pub webhook: WebhookDefinition,
 }
 
+/// see [CodePipeline::put_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutWebhookOutput {
@@ -1633,6 +1879,7 @@ pub struct PutWebhookOutput {
     pub webhook: Option<ListWebhookItem>,
 }
 
+/// see [CodePipeline::register_webhook_with_third_party]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWebhookWithThirdPartyInput {
@@ -1642,11 +1889,13 @@ pub struct RegisterWebhookWithThirdPartyInput {
     pub webhook_name: Option<String>,
 }
 
+/// see [CodePipeline::register_webhook_with_third_party]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterWebhookWithThirdPartyOutput {}
 
 /// <p>Represents the input of a <code>RetryStageExecution</code> action.</p>
+/// see [CodePipeline::retry_stage_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetryStageExecutionInput {
@@ -1665,6 +1914,7 @@ pub struct RetryStageExecutionInput {
 }
 
 /// <p>Represents the output of a <code>RetryStageExecution</code> action.</p>
+/// see [CodePipeline::retry_stage_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetryStageExecutionOutput {
@@ -1784,6 +2034,7 @@ pub struct StageState {
 }
 
 /// <p>Represents the input of a <code>StartPipelineExecution</code> action.</p>
+/// see [CodePipeline::start_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineExecutionInput {
@@ -1797,6 +2048,7 @@ pub struct StartPipelineExecutionInput {
 }
 
 /// <p>Represents the output of a <code>StartPipelineExecution</code> action.</p>
+/// see [CodePipeline::start_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPipelineExecutionOutput {
@@ -1816,6 +2068,7 @@ pub struct StopExecutionTrigger {
     pub reason: Option<String>,
 }
 
+/// see [CodePipeline::stop_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPipelineExecutionInput {
@@ -1835,6 +2088,7 @@ pub struct StopPipelineExecutionInput {
     pub reason: Option<String>,
 }
 
+/// see [CodePipeline::stop_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopPipelineExecutionOutput {
@@ -1855,6 +2109,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [CodePipeline::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -1866,6 +2121,7 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [CodePipeline::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
@@ -1962,6 +2218,7 @@ pub struct TransitionState {
     pub last_changed_by: Option<String>,
 }
 
+/// see [CodePipeline::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -1973,11 +2230,13 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CodePipeline::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 /// <p>Represents the input of an <code>UpdatePipeline</code> action.</p>
+/// see [CodePipeline::update_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineInput {
@@ -1987,6 +2246,7 @@ pub struct UpdatePipelineInput {
 }
 
 /// <p>Represents the output of an <code>UpdatePipeline</code> action.</p>
+/// see [CodePipeline::update_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineOutput {
@@ -3670,7 +3930,7 @@ impl fmt::Display for UpdatePipelineError {
 impl Error for UpdatePipelineError {}
 /// Trait representing the capabilities of the CodePipeline API. CodePipeline clients implement this trait.
 #[async_trait]
-pub trait CodePipeline {
+pub trait CodePipeline: Clone + Sync + Send + 'static {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Used for custom actions only.</p>
     async fn acknowledge_job(
         &self,
@@ -3770,11 +4030,31 @@ pub trait CodePipeline {
         input: ListActionExecutionsInput,
     ) -> Result<ListActionExecutionsOutput, RusotoError<ListActionExecutionsError>>;
 
+    /// Auto-paginating version of `list_action_executions`
+    fn list_action_executions_pages(
+        &self,
+        input: ListActionExecutionsInput,
+    ) -> RusotoStream<ActionExecutionDetail, ListActionExecutionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_action_executions(state.clone())
+        })
+    }
+
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
     async fn list_action_types(
         &self,
         input: ListActionTypesInput,
     ) -> Result<ListActionTypesOutput, RusotoError<ListActionTypesError>>;
+
+    /// Auto-paginating version of `list_action_types`
+    fn list_action_types_pages(
+        &self,
+        input: ListActionTypesInput,
+    ) -> RusotoStream<ActionType, ListActionTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_action_types(state.clone())
+        })
+    }
 
     /// <p>Gets a summary of the most recent executions for a pipeline.</p>
     async fn list_pipeline_executions(
@@ -3782,11 +4062,31 @@ pub trait CodePipeline {
         input: ListPipelineExecutionsInput,
     ) -> Result<ListPipelineExecutionsOutput, RusotoError<ListPipelineExecutionsError>>;
 
+    /// Auto-paginating version of `list_pipeline_executions`
+    fn list_pipeline_executions_pages(
+        &self,
+        input: ListPipelineExecutionsInput,
+    ) -> RusotoStream<PipelineExecutionSummary, ListPipelineExecutionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_pipeline_executions(state.clone())
+        })
+    }
+
     /// <p>Gets a summary of all of the pipelines associated with your account.</p>
     async fn list_pipelines(
         &self,
         input: ListPipelinesInput,
     ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>>;
+
+    /// Auto-paginating version of `list_pipelines`
+    fn list_pipelines_pages(
+        &self,
+        input: ListPipelinesInput,
+    ) -> RusotoStream<PipelineSummary, ListPipelinesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_pipelines(state.clone())
+        })
+    }
 
     /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
     async fn list_tags_for_resource(
@@ -3794,11 +4094,31 @@ pub trait CodePipeline {
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoStream<Tag, ListTagsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_for_resource(state.clone())
+        })
+    }
+
     /// <p>Gets a listing of all the webhooks in this AWS Region for this account. The output lists all webhooks and includes the webhook URL and ARN and the configuration for each webhook.</p>
     async fn list_webhooks(
         &self,
         input: ListWebhooksInput,
     ) -> Result<ListWebhooksOutput, RusotoError<ListWebhooksError>>;
+
+    /// Auto-paginating version of `list_webhooks`
+    fn list_webhooks_pages(
+        &self,
+        input: ListWebhooksInput,
+    ) -> RusotoStream<ListWebhookItem, ListWebhooksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_webhooks(state.clone())
+        })
+    }
 
     /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn poll_for_jobs(

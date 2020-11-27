@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -27,6 +29,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <pre><code>        &lt;p&gt;Associates sasl scram secrets to cluster.&lt;/p&gt;
 /// </code></pre>
+/// see [Kafka::batch_associate_scram_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateScramSecretRequest {
@@ -40,6 +43,7 @@ pub struct BatchAssociateScramSecretRequest {
     pub secret_arn_list: Vec<String>,
 }
 
+/// see [Kafka::batch_associate_scram_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAssociateScramSecretResponse {
@@ -57,6 +61,7 @@ pub struct BatchAssociateScramSecretResponse {
 
 /// <pre><code>        &lt;p&gt;Disassociates sasl scram secrets to cluster.&lt;/p&gt;
 /// </code></pre>
+/// see [Kafka::batch_disassociate_scram_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateScramSecretRequest {
@@ -70,6 +75,7 @@ pub struct BatchDisassociateScramSecretRequest {
     pub secret_arn_list: Vec<String>,
 }
 
+/// see [Kafka::batch_disassociate_scram_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDisassociateScramSecretResponse {
@@ -498,6 +504,7 @@ pub struct ConfigurationRevision {
     pub revision: i64,
 }
 
+/// see [Kafka::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -552,6 +559,7 @@ pub struct CreateClusterRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Kafka::create_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResponse {
@@ -572,6 +580,7 @@ pub struct CreateClusterResponse {
     pub state: Option<String>,
 }
 
+/// see [Kafka::create_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationRequest {
@@ -601,6 +610,7 @@ pub struct CreateConfigurationRequest {
     pub server_properties: bytes::Bytes,
 }
 
+/// see [Kafka::create_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationResponse {
@@ -631,6 +641,7 @@ pub struct CreateConfigurationResponse {
     pub state: Option<String>,
 }
 
+/// see [Kafka::delete_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
@@ -645,6 +656,7 @@ pub struct DeleteClusterRequest {
     pub current_version: Option<String>,
 }
 
+/// see [Kafka::delete_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClusterResponse {
@@ -660,6 +672,7 @@ pub struct DeleteClusterResponse {
     pub state: Option<String>,
 }
 
+/// see [Kafka::delete_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationRequest {
@@ -669,6 +682,7 @@ pub struct DeleteConfigurationRequest {
     pub arn: String,
 }
 
+/// see [Kafka::delete_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationResponse {
@@ -684,6 +698,7 @@ pub struct DeleteConfigurationResponse {
     pub state: Option<String>,
 }
 
+/// see [Kafka::describe_cluster_operation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterOperationRequest {
@@ -693,6 +708,7 @@ pub struct DescribeClusterOperationRequest {
     pub cluster_operation_arn: String,
 }
 
+/// see [Kafka::describe_cluster_operation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterOperationResponse {
@@ -703,6 +719,7 @@ pub struct DescribeClusterOperationResponse {
     pub cluster_operation_info: Option<ClusterOperationInfo>,
 }
 
+/// see [Kafka::describe_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterRequest {
@@ -712,6 +729,7 @@ pub struct DescribeClusterRequest {
     pub cluster_arn: String,
 }
 
+/// see [Kafka::describe_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterResponse {
@@ -722,6 +740,7 @@ pub struct DescribeClusterResponse {
     pub cluster_info: Option<ClusterInfo>,
 }
 
+/// see [Kafka::describe_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRequest {
@@ -731,6 +750,7 @@ pub struct DescribeConfigurationRequest {
     pub arn: String,
 }
 
+/// see [Kafka::describe_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationResponse {
@@ -771,6 +791,7 @@ pub struct DescribeConfigurationResponse {
     pub state: Option<String>,
 }
 
+/// see [Kafka::describe_configuration_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRevisionRequest {
@@ -784,6 +805,7 @@ pub struct DescribeConfigurationRevisionRequest {
     pub revision: i64,
 }
 
+/// see [Kafka::describe_configuration_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRevisionResponse {
@@ -907,6 +929,7 @@ pub struct Firehose {
     pub enabled: bool,
 }
 
+/// see [Kafka::get_bootstrap_brokers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBootstrapBrokersRequest {
@@ -916,6 +939,7 @@ pub struct GetBootstrapBrokersRequest {
     pub cluster_arn: String,
 }
 
+/// see [Kafka::get_bootstrap_brokers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBootstrapBrokersResponse {
@@ -936,6 +960,7 @@ pub struct GetBootstrapBrokersResponse {
     pub bootstrap_broker_string_tls: Option<String>,
 }
 
+/// see [Kafka::get_compatible_kafka_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCompatibleKafkaVersionsRequest {
@@ -946,6 +971,7 @@ pub struct GetCompatibleKafkaVersionsRequest {
     pub cluster_arn: Option<String>,
 }
 
+/// see [Kafka::get_compatible_kafka_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCompatibleKafkaVersionsResponse {
@@ -989,6 +1015,7 @@ pub struct KafkaVersion {
     pub version: Option<String>,
 }
 
+/// see [Kafka::list_cluster_operations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClusterOperationsRequest {
@@ -1009,6 +1036,15 @@ pub struct ListClusterOperationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListClusterOperationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kafka::list_cluster_operations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClusterOperationsResponse {
@@ -1024,6 +1060,31 @@ pub struct ListClusterOperationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListClusterOperationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ClusterOperationInfo>> {
+        Some(self.cluster_operation_info_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListClusterOperationsResponse {
+    type Item = ClusterOperationInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ClusterOperationInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kafka::list_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
@@ -1045,6 +1106,15 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListClustersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kafka::list_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClustersResponse {
@@ -1061,6 +1131,31 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
+impl ListClustersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ClusterInfo>> {
+        Some(self.cluster_info_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListClustersResponse {
+    type Item = ClusterInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ClusterInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kafka::list_configuration_revisions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationRevisionsRequest {
@@ -1081,6 +1176,15 @@ pub struct ListConfigurationRevisionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListConfigurationRevisionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kafka::list_configuration_revisions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationRevisionsResponse {
@@ -1096,6 +1200,31 @@ pub struct ListConfigurationRevisionsResponse {
     pub revisions: Option<Vec<ConfigurationRevision>>,
 }
 
+impl ListConfigurationRevisionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ConfigurationRevision>> {
+        Some(self.revisions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListConfigurationRevisionsResponse {
+    type Item = ConfigurationRevision;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ConfigurationRevision> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kafka::list_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationsRequest {
@@ -1112,6 +1241,15 @@ pub struct ListConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kafka::list_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationsResponse {
@@ -1128,6 +1266,31 @@ pub struct ListConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Configuration>> {
+        Some(self.configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListConfigurationsResponse {
+    type Item = Configuration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Configuration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kafka::list_kafka_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKafkaVersionsRequest {
@@ -1143,6 +1306,15 @@ pub struct ListKafkaVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListKafkaVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kafka::list_kafka_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKafkaVersionsResponse {
@@ -1154,6 +1326,31 @@ pub struct ListKafkaVersionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListKafkaVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<KafkaVersion>> {
+        Some(self.kafka_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListKafkaVersionsResponse {
+    type Item = KafkaVersion;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<KafkaVersion> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kafka::list_nodes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNodesRequest {
@@ -1174,6 +1371,15 @@ pub struct ListNodesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListNodesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kafka::list_nodes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNodesResponse {
@@ -1190,6 +1396,31 @@ pub struct ListNodesResponse {
     pub node_info_list: Option<Vec<NodeInfo>>,
 }
 
+impl ListNodesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<NodeInfo>> {
+        Some(self.node_info_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListNodesResponse {
+    type Item = NodeInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<NodeInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kafka::list_scram_secrets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListScramSecretsRequest {
@@ -1209,6 +1440,15 @@ pub struct ListScramSecretsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListScramSecretsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kafka::list_scram_secrets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListScramSecretsResponse {
@@ -1224,6 +1464,31 @@ pub struct ListScramSecretsResponse {
     pub secret_arn_list: Option<Vec<String>>,
 }
 
+impl ListScramSecretsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.secret_arn_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListScramSecretsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kafka::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1233,6 +1498,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Kafka::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1405,6 +1671,7 @@ pub struct PrometheusInfo {
 }
 
 /// <p>Reboots a node.</p>
+/// see [Kafka::reboot_broker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootBrokerRequest {
@@ -1418,6 +1685,7 @@ pub struct RebootBrokerRequest {
     pub cluster_arn: String,
 }
 
+/// see [Kafka::reboot_broker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootBrokerResponse {
@@ -1489,6 +1757,7 @@ pub struct StorageInfo {
     pub ebs_storage_info: Option<EBSStorageInfo>,
 }
 
+/// see [Kafka::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1535,6 +1804,7 @@ pub struct UnprocessedScramSecret {
     pub secret_arn: Option<String>,
 }
 
+/// see [Kafka::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1567,6 +1837,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Kafka::update_broker_count]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBrokerCountRequest {
@@ -1584,6 +1855,7 @@ pub struct UpdateBrokerCountRequest {
     pub target_number_of_broker_nodes: i64,
 }
 
+/// see [Kafka::update_broker_count]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBrokerCountResponse {
@@ -1599,6 +1871,7 @@ pub struct UpdateBrokerCountResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
+/// see [Kafka::update_broker_storage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBrokerStorageRequest {
@@ -1616,6 +1889,7 @@ pub struct UpdateBrokerStorageRequest {
     pub target_broker_ebs_volume_info: Vec<BrokerEBSVolumeInfo>,
 }
 
+/// see [Kafka::update_broker_storage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBrokerStorageResponse {
@@ -1631,6 +1905,7 @@ pub struct UpdateBrokerStorageResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
+/// see [Kafka::update_cluster_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterConfigurationRequest {
@@ -1648,6 +1923,7 @@ pub struct UpdateClusterConfigurationRequest {
     pub current_version: String,
 }
 
+/// see [Kafka::update_cluster_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterConfigurationResponse {
@@ -1663,6 +1939,7 @@ pub struct UpdateClusterConfigurationResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
+/// see [Kafka::update_cluster_kafka_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterKafkaVersionRequest {
@@ -1685,6 +1962,7 @@ pub struct UpdateClusterKafkaVersionRequest {
     pub target_kafka_version: String,
 }
 
+/// see [Kafka::update_cluster_kafka_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterKafkaVersionResponse {
@@ -1700,6 +1978,7 @@ pub struct UpdateClusterKafkaVersionResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
+/// see [Kafka::update_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationRequest {
@@ -1724,6 +2003,7 @@ pub struct UpdateConfigurationRequest {
     pub server_properties: bytes::Bytes,
 }
 
+/// see [Kafka::update_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConfigurationResponse {
@@ -1740,6 +2020,7 @@ pub struct UpdateConfigurationResponse {
 }
 
 /// <p>Request body for UpdateMonitoring.</p>
+/// see [Kafka::update_monitoring]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMonitoringRequest {
@@ -1766,6 +2047,7 @@ pub struct UpdateMonitoringRequest {
     pub open_monitoring: Option<OpenMonitoringInfo>,
 }
 
+/// see [Kafka::update_monitoring]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMonitoringResponse {
@@ -3743,7 +4025,7 @@ impl fmt::Display for UpdateMonitoringError {
 impl Error for UpdateMonitoringError {}
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
 #[async_trait]
-pub trait Kafka {
+pub trait Kafka: Clone + Sync + Send + 'static {
     /// <pre><code>        &lt;p&gt;Associates one or more Scram Secrets with an Amazon MSK cluster.&lt;/p&gt;
     /// </code></pre>
     async fn batch_associate_scram_secret(
@@ -3838,12 +4120,32 @@ pub trait Kafka {
         input: ListClusterOperationsRequest,
     ) -> Result<ListClusterOperationsResponse, RusotoError<ListClusterOperationsError>>;
 
+    /// Auto-paginating version of `list_cluster_operations`
+    fn list_cluster_operations_pages(
+        &self,
+        input: ListClusterOperationsRequest,
+    ) -> RusotoStream<ClusterOperationInfo, ListClusterOperationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_cluster_operations(state.clone())
+        })
+    }
+
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK clusters in the current Region.&lt;/p&gt;
     /// </code></pre>
     async fn list_clusters(
         &self,
         input: ListClustersRequest,
     ) -> Result<ListClustersResponse, RusotoError<ListClustersError>>;
+
+    /// Auto-paginating version of `list_clusters`
+    fn list_clusters_pages(
+        &self,
+        input: ListClustersRequest,
+    ) -> RusotoStream<ClusterInfo, ListClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_clusters(state.clone())
+        })
+    }
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
@@ -3852,12 +4154,32 @@ pub trait Kafka {
         input: ListConfigurationRevisionsRequest,
     ) -> Result<ListConfigurationRevisionsResponse, RusotoError<ListConfigurationRevisionsError>>;
 
+    /// Auto-paginating version of `list_configuration_revisions`
+    fn list_configuration_revisions_pages(
+        &self,
+        input: ListConfigurationRevisionsRequest,
+    ) -> RusotoStream<ConfigurationRevision, ListConfigurationRevisionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_configuration_revisions(state.clone())
+        })
+    }
+
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
     async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
     ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
+
+    /// Auto-paginating version of `list_configurations`
+    fn list_configurations_pages(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> RusotoStream<Configuration, ListConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_configurations(state.clone())
+        })
+    }
 
     /// <pre><code>        &lt;p&gt;Returns a list of Kafka versions.&lt;/p&gt;
     /// </code></pre>
@@ -3866,6 +4188,16 @@ pub trait Kafka {
         input: ListKafkaVersionsRequest,
     ) -> Result<ListKafkaVersionsResponse, RusotoError<ListKafkaVersionsError>>;
 
+    /// Auto-paginating version of `list_kafka_versions`
+    fn list_kafka_versions_pages(
+        &self,
+        input: ListKafkaVersionsRequest,
+    ) -> RusotoStream<KafkaVersion, ListKafkaVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_kafka_versions(state.clone())
+        })
+    }
+
     /// <pre><code>        &lt;p&gt;Returns a list of the broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
     async fn list_nodes(
@@ -3873,12 +4205,29 @@ pub trait Kafka {
         input: ListNodesRequest,
     ) -> Result<ListNodesResponse, RusotoError<ListNodesError>>;
 
+    /// Auto-paginating version of `list_nodes`
+    fn list_nodes_pages(&self, input: ListNodesRequest) -> RusotoStream<NodeInfo, ListNodesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_nodes(state.clone())
+        })
+    }
+
     /// <pre><code>        &lt;p&gt;Returns a list of the Scram Secrets associated with an Amazon MSK cluster.&lt;/p&gt;
     /// </code></pre>
     async fn list_scram_secrets(
         &self,
         input: ListScramSecretsRequest,
     ) -> Result<ListScramSecretsResponse, RusotoError<ListScramSecretsError>>;
+
+    /// Auto-paginating version of `list_scram_secrets`
+    fn list_scram_secrets_pages(
+        &self,
+        input: ListScramSecretsRequest,
+    ) -> RusotoStream<String, ListScramSecretsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_scram_secrets(state.clone())
+        })
+    }
 
     /// <pre><code>        &lt;p&gt;Returns a list of the tags associated with the specified resource.&lt;/p&gt;
     /// </code></pre>

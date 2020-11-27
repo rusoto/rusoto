@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -55,6 +57,7 @@ impl Ec2InstanceConnectClient {
 }
 
 use serde_json;
+/// see [Ec2InstanceConnect::send_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendSSHPublicKeyRequest {
@@ -72,6 +75,7 @@ pub struct SendSSHPublicKeyRequest {
     pub ssh_public_key: String,
 }
 
+/// see [Ec2InstanceConnect::send_ssh_public_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendSSHPublicKeyResponse {
@@ -143,7 +147,7 @@ impl fmt::Display for SendSSHPublicKeyError {
 impl Error for SendSSHPublicKeyError {}
 /// Trait representing the capabilities of the EC2 Instance Connect API. EC2 Instance Connect clients implement this trait.
 #[async_trait]
-pub trait Ec2InstanceConnect {
+pub trait Ec2InstanceConnect: Clone + Sync + Send + 'static {
     /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
     async fn send_ssh_public_key(
         &self,

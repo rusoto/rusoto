@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -109,6 +111,7 @@ impl AbortIncompleteMultipartUploadSerializer {
     }
 }
 
+/// see [S3::abort_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AbortMultipartUploadOutput {
@@ -132,6 +135,7 @@ impl AbortMultipartUploadOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::abort_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortMultipartUploadRequest {
@@ -1687,6 +1691,7 @@ impl CommonPrefixListDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::complete_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CompleteMultipartUploadOutput {
@@ -1743,6 +1748,7 @@ impl CompleteMultipartUploadOutputDeserializer {
         )
     }
 }
+/// see [S3::complete_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteMultipartUploadRequest {
@@ -1936,6 +1942,7 @@ impl ContinuationEventDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::copy_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyObjectOutput {
@@ -1979,6 +1986,7 @@ impl CopyObjectOutputDeserializer {
         })
     }
 }
+/// see [S3::copy_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyObjectRequest {
@@ -2160,6 +2168,7 @@ impl CreateBucketConfigurationSerializer {
     }
 }
 
+/// see [S3::create_bucket]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateBucketOutput {
@@ -2184,6 +2193,7 @@ impl CreateBucketOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::create_bucket]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBucketRequest {
@@ -2207,6 +2217,7 @@ pub struct CreateBucketRequest {
     pub object_lock_enabled_for_bucket: Option<bool>,
 }
 
+/// see [S3::create_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateMultipartUploadOutput {
@@ -2266,6 +2277,7 @@ impl CreateMultipartUploadOutputDeserializer {
         )
     }
 }
+/// see [S3::create_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultipartUploadRequest {
@@ -2504,6 +2516,7 @@ impl DeleteSerializer {
     }
 }
 
+/// see [S3::delete_bucket_analytics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
@@ -2515,6 +2528,7 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::delete_bucket_cors]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketCorsRequest {
@@ -2524,6 +2538,7 @@ pub struct DeleteBucketCorsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket_encryption]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketEncryptionRequest {
@@ -2533,6 +2548,7 @@ pub struct DeleteBucketEncryptionRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket_intelligent_tiering_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketIntelligentTieringConfigurationRequest {
@@ -2542,6 +2558,7 @@ pub struct DeleteBucketIntelligentTieringConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::delete_bucket_inventory_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketInventoryConfigurationRequest {
@@ -2553,6 +2570,7 @@ pub struct DeleteBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::delete_bucket_lifecycle]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketLifecycleRequest {
@@ -2562,6 +2580,7 @@ pub struct DeleteBucketLifecycleRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket_metrics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketMetricsConfigurationRequest {
@@ -2573,6 +2592,7 @@ pub struct DeleteBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::delete_bucket_ownership_controls]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketOwnershipControlsRequest {
@@ -2582,6 +2602,7 @@ pub struct DeleteBucketOwnershipControlsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketPolicyRequest {
@@ -2591,6 +2612,7 @@ pub struct DeleteBucketPolicyRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketReplicationRequest {
@@ -2600,6 +2622,7 @@ pub struct DeleteBucketReplicationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketRequest {
@@ -2609,6 +2632,7 @@ pub struct DeleteBucketRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketTaggingRequest {
@@ -2618,6 +2642,7 @@ pub struct DeleteBucketTaggingRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::delete_bucket_website]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketWebsiteRequest {
@@ -2802,6 +2827,7 @@ impl DeleteMarkersDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::delete_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectOutput {
@@ -2829,6 +2855,7 @@ impl DeleteObjectOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::delete_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectRequest {
@@ -2847,6 +2874,7 @@ pub struct DeleteObjectRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::delete_object_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectTaggingOutput {
@@ -2871,6 +2899,7 @@ impl DeleteObjectTaggingOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::delete_object_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectTaggingRequest {
@@ -2884,6 +2913,7 @@ pub struct DeleteObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::delete_objects]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectsOutput {
@@ -2920,6 +2950,7 @@ impl DeleteObjectsOutputDeserializer {
         })
     }
 }
+/// see [S3::delete_objects]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectsRequest {
@@ -2936,6 +2967,7 @@ pub struct DeleteObjectsRequest {
     pub request_payer: Option<String>,
 }
 
+/// see [S3::delete_public_access_block]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicAccessBlockRequest {
@@ -4029,6 +4061,7 @@ impl FilterRuleValueSerializer {
     }
 }
 
+/// see [S3::get_bucket_accelerate_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAccelerateConfigurationOutput {
@@ -4061,6 +4094,7 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
         )
     }
 }
+/// see [S3::get_bucket_accelerate_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAccelerateConfigurationRequest {
@@ -4070,6 +4104,7 @@ pub struct GetBucketAccelerateConfigurationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_acl]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAclOutput {
@@ -4103,6 +4138,7 @@ impl GetBucketAclOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_acl]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAclRequest {
@@ -4112,6 +4148,7 @@ pub struct GetBucketAclRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_analytics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAnalyticsConfigurationOutput {
@@ -4136,6 +4173,7 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_analytics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAnalyticsConfigurationRequest {
@@ -4147,6 +4185,7 @@ pub struct GetBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::get_bucket_cors]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketCorsOutput {
@@ -4175,6 +4214,7 @@ impl GetBucketCorsOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_cors]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketCorsRequest {
@@ -4184,6 +4224,7 @@ pub struct GetBucketCorsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_encryption]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketEncryptionOutput {
@@ -4209,6 +4250,7 @@ impl GetBucketEncryptionOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_encryption]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketEncryptionRequest {
@@ -4218,6 +4260,7 @@ pub struct GetBucketEncryptionRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_intelligent_tiering_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketIntelligentTieringConfigurationOutput {
@@ -4244,6 +4287,7 @@ impl GetBucketIntelligentTieringConfigurationOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_intelligent_tiering_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketIntelligentTieringConfigurationRequest {
@@ -4253,6 +4297,7 @@ pub struct GetBucketIntelligentTieringConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::get_bucket_inventory_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketInventoryConfigurationOutput {
@@ -4277,6 +4322,7 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_inventory_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketInventoryConfigurationRequest {
@@ -4288,6 +4334,7 @@ pub struct GetBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::get_bucket_lifecycle_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLifecycleConfigurationOutput {
@@ -4320,6 +4367,7 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
         )
     }
 }
+/// see [S3::get_bucket_lifecycle_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLifecycleConfigurationRequest {
@@ -4329,6 +4377,7 @@ pub struct GetBucketLifecycleConfigurationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_lifecycle]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLifecycleOutput {
@@ -4361,6 +4410,7 @@ impl GetBucketLifecycleOutputDeserializer {
         )
     }
 }
+/// see [S3::get_bucket_lifecycle]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLifecycleRequest {
@@ -4370,6 +4420,7 @@ pub struct GetBucketLifecycleRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_location]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLocationOutput {
@@ -4393,6 +4444,7 @@ impl GetBucketLocationOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::get_bucket_location]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLocationRequest {
@@ -4402,6 +4454,7 @@ pub struct GetBucketLocationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_logging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLoggingOutput {
@@ -4430,6 +4483,7 @@ impl GetBucketLoggingOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_logging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLoggingRequest {
@@ -4439,6 +4493,7 @@ pub struct GetBucketLoggingRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_metrics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketMetricsConfigurationOutput {
@@ -4463,6 +4518,7 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_metrics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketMetricsConfigurationRequest {
@@ -4474,6 +4530,8 @@ pub struct GetBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::get_bucket_notification]
+/// see [S3::get_bucket_notification_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketNotificationConfigurationRequest {
@@ -4483,6 +4541,7 @@ pub struct GetBucketNotificationConfigurationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_ownership_controls]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketOwnershipControlsOutput {
@@ -4507,6 +4566,7 @@ impl GetBucketOwnershipControlsOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_ownership_controls]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketOwnershipControlsRequest {
@@ -4516,12 +4576,14 @@ pub struct GetBucketOwnershipControlsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetBucketPolicyOutput {
     /// <p>The bucket policy as a JSON document.</p>
     pub policy: Option<String>,
 }
 
+/// see [S3::get_bucket_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketPolicyRequest {
@@ -4531,6 +4593,7 @@ pub struct GetBucketPolicyRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_policy_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketPolicyStatusOutput {
@@ -4555,6 +4618,7 @@ impl GetBucketPolicyStatusOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_policy_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketPolicyStatusRequest {
@@ -4564,6 +4628,7 @@ pub struct GetBucketPolicyStatusRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketReplicationOutput {
@@ -4587,6 +4652,7 @@ impl GetBucketReplicationOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketReplicationRequest {
@@ -4596,6 +4662,7 @@ pub struct GetBucketReplicationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_request_payment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketRequestPaymentOutput {
@@ -4626,6 +4693,7 @@ impl GetBucketRequestPaymentOutputDeserializer {
         )
     }
 }
+/// see [S3::get_bucket_request_payment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketRequestPaymentRequest {
@@ -4635,6 +4703,7 @@ pub struct GetBucketRequestPaymentRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketTaggingOutput {
@@ -4662,6 +4731,7 @@ impl GetBucketTaggingOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketTaggingRequest {
@@ -4671,6 +4741,7 @@ pub struct GetBucketTaggingRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_versioning]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketVersioningOutput {
@@ -4711,6 +4782,7 @@ impl GetBucketVersioningOutputDeserializer {
         )
     }
 }
+/// see [S3::get_bucket_versioning]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketVersioningRequest {
@@ -4720,6 +4792,7 @@ pub struct GetBucketVersioningRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_bucket_website]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketWebsiteOutput {
@@ -4773,6 +4846,7 @@ impl GetBucketWebsiteOutputDeserializer {
         })
     }
 }
+/// see [S3::get_bucket_website]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketWebsiteRequest {
@@ -4782,6 +4856,7 @@ pub struct GetBucketWebsiteRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_object_acl]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectAclOutput {
@@ -4816,6 +4891,7 @@ impl GetObjectAclOutputDeserializer {
         })
     }
 }
+/// see [S3::get_object_acl]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectAclRequest {
@@ -4830,6 +4906,7 @@ pub struct GetObjectAclRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::get_object_legal_hold]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectLegalHoldOutput {
@@ -4854,6 +4931,7 @@ impl GetObjectLegalHoldOutputDeserializer {
         })
     }
 }
+/// see [S3::get_object_legal_hold]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectLegalHoldRequest {
@@ -4868,6 +4946,7 @@ pub struct GetObjectLegalHoldRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::get_object_lock_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectLockConfigurationOutput {
@@ -4892,6 +4971,7 @@ impl GetObjectLockConfigurationOutputDeserializer {
         })
     }
 }
+/// see [S3::get_object_lock_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectLockConfigurationRequest {
@@ -4901,6 +4981,7 @@ pub struct GetObjectLockConfigurationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::get_object]
 #[derive(Debug, Default)]
 pub struct GetObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
@@ -4968,6 +5049,7 @@ pub struct GetObjectOutput {
     pub website_redirect_location: Option<String>,
 }
 
+/// see [S3::get_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectRequest {
@@ -5012,6 +5094,7 @@ pub struct GetObjectRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::get_object_retention]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectRetentionOutput {
@@ -5036,6 +5119,7 @@ impl GetObjectRetentionOutputDeserializer {
         })
     }
 }
+/// see [S3::get_object_retention]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectRetentionRequest {
@@ -5050,6 +5134,7 @@ pub struct GetObjectRetentionRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::get_object_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectTaggingOutput {
@@ -5079,6 +5164,7 @@ impl GetObjectTaggingOutputDeserializer {
         })
     }
 }
+/// see [S3::get_object_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectTaggingRequest {
@@ -5092,6 +5178,7 @@ pub struct GetObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::get_object_torrent]
 #[derive(Debug, Default)]
 pub struct GetObjectTorrentOutput {
     /// <p>A Bencoded dictionary as defined by the BitTorrent specification</p>
@@ -5099,6 +5186,7 @@ pub struct GetObjectTorrentOutput {
     pub request_charged: Option<String>,
 }
 
+/// see [S3::get_object_torrent]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectTorrentRequest {
@@ -5111,6 +5199,7 @@ pub struct GetObjectTorrentRequest {
     pub request_payer: Option<String>,
 }
 
+/// see [S3::get_public_access_block]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicAccessBlockOutput {
@@ -5137,6 +5226,7 @@ impl GetPublicAccessBlockOutputDeserializer {
         })
     }
 }
+/// see [S3::get_public_access_block]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicAccessBlockRequest {
@@ -5346,6 +5436,7 @@ impl GrantsSerializer {
     }
 }
 
+/// see [S3::head_bucket]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HeadBucketRequest {
@@ -5355,6 +5446,7 @@ pub struct HeadBucketRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::head_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HeadObjectOutput {
@@ -5436,6 +5528,7 @@ impl HeadObjectOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::head_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HeadObjectRequest {
@@ -7345,6 +7438,7 @@ impl LifecycleRulesSerializer {
     }
 }
 
+/// see [S3::list_bucket_analytics_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketAnalyticsConfigurationsOutput {
@@ -7400,6 +7494,7 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
         )
     }
 }
+/// see [S3::list_bucket_analytics_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketAnalyticsConfigurationsRequest {
@@ -7411,6 +7506,7 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::list_bucket_intelligent_tiering_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketIntelligentTieringConfigurationsOutput {
@@ -7468,6 +7564,7 @@ impl ListBucketIntelligentTieringConfigurationsOutputDeserializer {
         )
     }
 }
+/// see [S3::list_bucket_intelligent_tiering_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketIntelligentTieringConfigurationsRequest {
@@ -7477,6 +7574,7 @@ pub struct ListBucketIntelligentTieringConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
+/// see [S3::list_bucket_inventory_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketInventoryConfigurationsOutput {
@@ -7532,6 +7630,7 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
         )
     }
 }
+/// see [S3::list_bucket_inventory_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketInventoryConfigurationsRequest {
@@ -7543,6 +7642,7 @@ pub struct ListBucketInventoryConfigurationsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::list_bucket_metrics_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketMetricsConfigurationsOutput {
@@ -7598,6 +7698,7 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
         )
     }
 }
+/// see [S3::list_bucket_metrics_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketMetricsConfigurationsRequest {
@@ -7609,6 +7710,7 @@ pub struct ListBucketMetricsConfigurationsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::list_buckets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketsOutput {
@@ -7642,6 +7744,7 @@ impl ListBucketsOutputDeserializer {
         })
     }
 }
+/// see [S3::list_multipart_uploads]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListMultipartUploadsOutput {
@@ -7669,6 +7772,33 @@ pub struct ListMultipartUploadsOutput {
     pub upload_id_marker: Option<String>,
     /// <p>Container for elements related to a particular multipart upload. A response can contain zero or more <code>Upload</code> elements.</p>
     pub uploads: Option<Vec<MultipartUpload>>,
+}
+
+impl ListMultipartUploadsOutput {
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListMultipartUploadsOutput {
+    type Item = ListMultipartUploadsOutput;
+    type Token = (Option<String>, Option<String>);
+    fn pagination_token(&self) -> (Option<String>, Option<String>) {
+        (
+            self.next_key_marker.clone(),
+            self.next_upload_id_marker.clone(),
+        )
+    }
+
+    fn into_pagination_page(self) -> Vec<ListMultipartUploadsOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7748,6 +7878,7 @@ impl ListMultipartUploadsOutputDeserializer {
         )
     }
 }
+/// see [S3::list_multipart_uploads]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultipartUploadsRequest {
@@ -7768,6 +7899,16 @@ pub struct ListMultipartUploadsRequest {
     pub upload_id_marker: Option<String>,
 }
 
+impl PagedRequest for ListMultipartUploadsRequest {
+    type Token = (Option<String>, Option<String>);
+    fn with_pagination_token(mut self, key: (Option<String>, Option<String>)) -> Self {
+        self.key_marker = key.0;
+        self.upload_id_marker = key.1;
+        self
+    }
+}
+
+/// see [S3::list_object_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectVersionsOutput {
@@ -7797,6 +7938,33 @@ pub struct ListObjectVersionsOutput {
     pub version_id_marker: Option<String>,
     /// <p>Container for version information.</p>
     pub versions: Option<Vec<ObjectVersion>>,
+}
+
+impl ListObjectVersionsOutput {
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListObjectVersionsOutput {
+    type Item = ListObjectVersionsOutput;
+    type Token = (Option<String>, Option<String>);
+    fn pagination_token(&self) -> (Option<String>, Option<String>) {
+        (
+            self.next_key_marker.clone(),
+            self.next_version_id_marker.clone(),
+        )
+    }
+
+    fn into_pagination_page(self) -> Vec<ListObjectVersionsOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7880,6 +8048,7 @@ impl ListObjectVersionsOutputDeserializer {
         )
     }
 }
+/// see [S3::list_object_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectVersionsRequest {
@@ -7900,6 +8069,16 @@ pub struct ListObjectVersionsRequest {
     pub version_id_marker: Option<String>,
 }
 
+impl PagedRequest for ListObjectVersionsRequest {
+    type Token = (Option<String>, Option<String>);
+    fn with_pagination_token(mut self, key: (Option<String>, Option<String>)) -> Self {
+        self.key_marker = key.0;
+        self.version_id_marker = key.1;
+        self
+    }
+}
+
+/// see [S3::list_objects]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectsOutput {
@@ -7923,6 +8102,31 @@ pub struct ListObjectsOutput {
     pub next_marker: Option<String>,
     /// <p>Keys that begin with the indicated prefix.</p>
     pub prefix: Option<String>,
+}
+
+impl ListObjectsOutput {
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListObjectsOutput {
+    type Item = ListObjectsOutput;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+            .or(Some(self.contents.as_ref()?.last()?.key.as_ref()?.clone()))
+    }
+
+    fn into_pagination_page(self) -> Vec<ListObjectsOutput> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -7980,6 +8184,7 @@ impl ListObjectsOutputDeserializer {
         })
     }
 }
+/// see [S3::list_objects]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectsRequest {
@@ -8000,6 +8205,15 @@ pub struct ListObjectsRequest {
     pub request_payer: Option<String>,
 }
 
+impl PagedRequest for ListObjectsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [S3::list_objects_v2]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectsV2Output {
@@ -8027,6 +8241,30 @@ pub struct ListObjectsV2Output {
     pub prefix: Option<String>,
     /// <p>If StartAfter was sent with the request, it is included in the response.</p>
     pub start_after: Option<String>,
+}
+
+impl ListObjectsV2Output {
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListObjectsV2Output {
+    type Item = ListObjectsV2Output;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_continuation_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ListObjectsV2Output> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8094,6 +8332,7 @@ impl ListObjectsV2OutputDeserializer {
         })
     }
 }
+/// see [S3::list_objects_v2]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectsV2Request {
@@ -8119,6 +8358,15 @@ pub struct ListObjectsV2Request {
     pub start_after: Option<String>,
 }
 
+impl PagedRequest for ListObjectsV2Request {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.continuation_token = key;
+        self
+    }
+}
+
+/// see [S3::list_parts]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPartsOutput {
@@ -8149,6 +8397,34 @@ pub struct ListPartsOutput {
     pub storage_class: Option<String>,
     /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
     pub upload_id: Option<String>,
+}
+
+impl ListPartsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Part>> {
+        Some(self.parts.as_ref()?.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.is_truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPartsOutput {
+    type Item = Part;
+    type Token = Option<i64>;
+    fn pagination_token(&self) -> Option<i64> {
+        Some(self.next_part_number_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Part> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -8215,6 +8491,7 @@ impl ListPartsOutputDeserializer {
         })
     }
 }
+/// see [S3::list_parts]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartsRequest {
@@ -8231,6 +8508,14 @@ pub struct ListPartsRequest {
     pub request_payer: Option<String>,
     /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
     pub upload_id: String,
+}
+
+impl PagedRequest for ListPartsRequest {
+    type Token = Option<i64>;
+    fn with_pagination_token(mut self, key: Option<i64>) -> Self {
+        self.part_number_marker = key;
+        self
+    }
 }
 
 #[allow(dead_code)]
@@ -9193,6 +9478,7 @@ impl NoncurrentVersionTransitionListSerializer {
 }
 
 /// <p>A container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off for the bucket.</p>
+/// see [S3::get_bucket_notification_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -9279,6 +9565,7 @@ impl NotificationConfigurationSerializer {
     }
 }
 
+/// see [S3::get_bucket_notification]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -10799,6 +11086,7 @@ impl PublicAccessBlockConfigurationSerializer {
     }
 }
 
+/// see [S3::put_bucket_accelerate_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAccelerateConfigurationRequest {
@@ -10810,6 +11098,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::put_bucket_acl]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAclRequest {
@@ -10835,6 +11124,7 @@ pub struct PutBucketAclRequest {
     pub grant_write_acp: Option<String>,
 }
 
+/// see [S3::put_bucket_analytics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAnalyticsConfigurationRequest {
@@ -10848,6 +11138,7 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
+/// see [S3::put_bucket_cors]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketCorsRequest {
@@ -10861,6 +11152,7 @@ pub struct PutBucketCorsRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::put_bucket_encryption]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketEncryptionRequest {
@@ -10873,6 +11165,7 @@ pub struct PutBucketEncryptionRequest {
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
 
+/// see [S3::put_bucket_intelligent_tiering_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketIntelligentTieringConfigurationRequest {
@@ -10884,6 +11177,7 @@ pub struct PutBucketIntelligentTieringConfigurationRequest {
     pub intelligent_tiering_configuration: IntelligentTieringConfiguration,
 }
 
+/// see [S3::put_bucket_inventory_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketInventoryConfigurationRequest {
@@ -10897,6 +11191,7 @@ pub struct PutBucketInventoryConfigurationRequest {
     pub inventory_configuration: InventoryConfiguration,
 }
 
+/// see [S3::put_bucket_lifecycle_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLifecycleConfigurationRequest {
@@ -10908,6 +11203,7 @@ pub struct PutBucketLifecycleConfigurationRequest {
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
+/// see [S3::put_bucket_lifecycle]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLifecycleRequest {
@@ -10921,6 +11217,7 @@ pub struct PutBucketLifecycleRequest {
     pub lifecycle_configuration: Option<LifecycleConfiguration>,
 }
 
+/// see [S3::put_bucket_logging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLoggingRequest {
@@ -10934,6 +11231,7 @@ pub struct PutBucketLoggingRequest {
     pub expected_bucket_owner: Option<String>,
 }
 
+/// see [S3::put_bucket_metrics_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketMetricsConfigurationRequest {
@@ -10947,6 +11245,7 @@ pub struct PutBucketMetricsConfigurationRequest {
     pub metrics_configuration: MetricsConfiguration,
 }
 
+/// see [S3::put_bucket_notification_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketNotificationConfigurationRequest {
@@ -10957,6 +11256,7 @@ pub struct PutBucketNotificationConfigurationRequest {
     pub notification_configuration: NotificationConfiguration,
 }
 
+/// see [S3::put_bucket_notification]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketNotificationRequest {
@@ -10970,6 +11270,7 @@ pub struct PutBucketNotificationRequest {
     pub notification_configuration: NotificationConfigurationDeprecated,
 }
 
+/// see [S3::put_bucket_ownership_controls]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketOwnershipControlsRequest {
@@ -10983,6 +11284,7 @@ pub struct PutBucketOwnershipControlsRequest {
     pub ownership_controls: OwnershipControls,
 }
 
+/// see [S3::put_bucket_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketPolicyRequest {
@@ -10998,6 +11300,7 @@ pub struct PutBucketPolicyRequest {
     pub policy: String,
 }
 
+/// see [S3::put_bucket_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketReplicationRequest {
@@ -11012,6 +11315,7 @@ pub struct PutBucketReplicationRequest {
     pub token: Option<String>,
 }
 
+/// see [S3::put_bucket_request_payment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketRequestPaymentRequest {
@@ -11025,6 +11329,7 @@ pub struct PutBucketRequestPaymentRequest {
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
+/// see [S3::put_bucket_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketTaggingRequest {
@@ -11038,6 +11343,7 @@ pub struct PutBucketTaggingRequest {
     pub tagging: Tagging,
 }
 
+/// see [S3::put_bucket_versioning]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketVersioningRequest {
@@ -11053,6 +11359,7 @@ pub struct PutBucketVersioningRequest {
     pub versioning_configuration: VersioningConfiguration,
 }
 
+/// see [S3::put_bucket_website]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketWebsiteRequest {
@@ -11066,6 +11373,7 @@ pub struct PutBucketWebsiteRequest {
     pub website_configuration: WebsiteConfiguration,
 }
 
+/// see [S3::put_object_acl]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectAclOutput {
@@ -11089,6 +11397,7 @@ impl PutObjectAclOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::put_object_acl]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectAclRequest {
@@ -11119,6 +11428,7 @@ pub struct PutObjectAclRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::put_object_legal_hold]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLegalHoldOutput {
@@ -11142,6 +11452,7 @@ impl PutObjectLegalHoldOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::put_object_legal_hold]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectLegalHoldRequest {
@@ -11160,6 +11471,7 @@ pub struct PutObjectLegalHoldRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::put_object_lock_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLockConfigurationOutput {
@@ -11183,6 +11495,7 @@ impl PutObjectLockConfigurationOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::put_object_lock_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectLockConfigurationRequest {
@@ -11199,6 +11512,7 @@ pub struct PutObjectLockConfigurationRequest {
     pub token: Option<String>,
 }
 
+/// see [S3::put_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectOutput {
@@ -11240,6 +11554,7 @@ impl PutObjectOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::put_object]
 #[derive(Debug, Default)]
 pub struct PutObjectRequest {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> <p>This action is not supported by Amazon S3 on Outposts.</p>
@@ -11307,6 +11622,7 @@ pub struct PutObjectRequest {
     pub website_redirect_location: Option<String>,
 }
 
+/// see [S3::put_object_retention]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectRetentionOutput {
@@ -11330,6 +11646,7 @@ impl PutObjectRetentionOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::put_object_retention]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectRetentionRequest {
@@ -11350,6 +11667,7 @@ pub struct PutObjectRetentionRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::put_object_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectTaggingOutput {
@@ -11374,6 +11692,7 @@ impl PutObjectTaggingOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::put_object_tagging]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectTaggingRequest {
@@ -11391,6 +11710,7 @@ pub struct PutObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
+/// see [S3::put_public_access_block]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPublicAccessBlockRequest {
@@ -12650,6 +12970,7 @@ impl ResponseExpiresSerializer {
     }
 }
 
+/// see [S3::restore_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreObjectOutput {
@@ -12675,6 +12996,7 @@ impl RestoreObjectOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::restore_object]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreObjectRequest {
@@ -13311,6 +13633,7 @@ impl DeserializeEvent for SelectObjectContentEventStreamItem {
     }
 }
 
+/// see [S3::select_object_content]
 #[derive(Debug)]
 pub struct SelectObjectContentOutput {
     /// <p>The array of results.</p>
@@ -13318,6 +13641,7 @@ pub struct SelectObjectContentOutput {
 }
 
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records. It returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+/// see [S3::select_object_content]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectObjectContentRequest {
@@ -14980,6 +15304,7 @@ impl UploadIdMarkerSerializer {
     }
 }
 
+/// see [S3::upload_part_copy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadPartCopyOutput {
@@ -15017,6 +15342,7 @@ impl UploadPartCopyOutputDeserializer {
         })
     }
 }
+/// see [S3::upload_part_copy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadPartCopyRequest {
@@ -15059,6 +15385,7 @@ pub struct UploadPartCopyRequest {
     pub upload_id: String,
 }
 
+/// see [S3::upload_part]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadPartOutput {
@@ -15094,6 +15421,7 @@ impl UploadPartOutputDeserializer {
         Ok(obj)
     }
 }
+/// see [S3::upload_part]
 #[derive(Debug, Default)]
 pub struct UploadPartRequest {
     /// <p>Object data.</p>
@@ -18610,7 +18938,7 @@ impl fmt::Display for UploadPartCopyError {
 impl Error for UploadPartCopyError {}
 /// Trait representing the capabilities of the Amazon S3 API. Amazon S3 clients implement this trait.
 #[async_trait]
-pub trait S3 {
+pub trait S3: Clone + Sync + Send + 'static {
     /// <p><p>This operation aborts a multipart upload. After a multipart upload is aborted, no additional parts can be uploaded using that upload ID. The storage consumed by any previously uploaded parts will be freed. However, if any part uploads are currently in progress, those part uploads might or might not succeed. As a result, it might be necessary to abort a given multipart upload multiple times in order to completely free all storage consumed by all parts. </p> <p>To verify that all parts have been removed, so you don&#39;t get charged for the part storage, you should call the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html">ListParts</a> operation and ensure that the parts list is empty.</p> <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>The following operations are related to <code>AbortMultipartUpload</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html">UploadPart</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html">CompleteMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html">ListParts</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html">ListMultipartUploads</a> </p> </li> </ul></p>
     async fn abort_multipart_upload(
         &self,
@@ -18995,11 +19323,31 @@ pub trait S3 {
         input: ListMultipartUploadsRequest,
     ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>>;
 
+    /// Auto-paginating version of `list_multipart_uploads`
+    fn list_multipart_uploads_pages(
+        &self,
+        input: ListMultipartUploadsRequest,
+    ) -> RusotoStream<ListMultipartUploadsOutput, ListMultipartUploadsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_multipart_uploads(state.clone())
+        })
+    }
+
     /// <p><p>Returns metadata about all versions of the objects in a bucket. You can also use request parameters as selection criteria to return metadata about a subset of all the object versions. </p> <note> <p> A 200 OK response can contain valid or invalid XML. Make sure to design your application to parse the contents of the response and handle it appropriately.</p> </note> <p>To use this operation, you must have READ access to the bucket.</p> <p>This action is not supported by Amazon S3 on Outposts.</p> <p>The following operations are related to <code>ListObjectVersions</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html">ListObjectsV2</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html">PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html">DeleteObject</a> </p> </li> </ul></p>
     async fn list_object_versions(
         &self,
         input: ListObjectVersionsRequest,
     ) -> Result<ListObjectVersionsOutput, RusotoError<ListObjectVersionsError>>;
+
+    /// Auto-paginating version of `list_object_versions`
+    fn list_object_versions_pages(
+        &self,
+        input: ListObjectVersionsRequest,
+    ) -> RusotoStream<ListObjectVersionsOutput, ListObjectVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_object_versions(state.clone())
+        })
+    }
 
     /// <p><p>Returns some or all (up to 1,000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. A 200 OK response can contain valid or invalid XML. Be sure to design your application to parse the contents of the response and handle it appropriately.</p> <important> <p>This API has been revised. We recommend that you use the newer version, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html">ListObjectsV2</a>, when developing applications. For backward compatibility, Amazon S3 continues to support <code>ListObjects</code>.</p> </important> <p>The following operations are related to <code>ListObjects</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html">ListObjectsV2</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html">PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html">ListBuckets</a> </p> </li> </ul></p>
     async fn list_objects(
@@ -19007,17 +19355,44 @@ pub trait S3 {
         input: ListObjectsRequest,
     ) -> Result<ListObjectsOutput, RusotoError<ListObjectsError>>;
 
+    /// Auto-paginating version of `list_objects`
+    fn list_objects_pages(
+        &self,
+        input: ListObjectsRequest,
+    ) -> RusotoStream<ListObjectsOutput, ListObjectsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_objects(state.clone())
+        })
+    }
+
     /// <p><p>Returns some or all (up to 1,000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. A <code>200 OK</code> response can contain valid or invalid XML. Make sure to design your application to parse the contents of the response and handle it appropriately.</p> <p>To use this operation, you must have READ access to the bucket.</p> <p>To use this operation in an AWS Identity and Access Management (IAM) policy, you must have permissions to perform the <code>s3:ListBucket</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <important> <p>This section describes the latest revision of the API. We recommend that you use this revised API for application development. For backward compatibility, Amazon S3 continues to support the prior version of this API, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html">ListObjects</a>.</p> </important> <p>To get a list of your buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html">ListBuckets</a>.</p> <p>The following operations are related to <code>ListObjectsV2</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html">PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a> </p> </li> </ul></p>
     async fn list_objects_v2(
         &self,
         input: ListObjectsV2Request,
     ) -> Result<ListObjectsV2Output, RusotoError<ListObjectsV2Error>>;
 
+    /// Auto-paginating version of `list_objects_v2`
+    fn list_objects_v2_pages(
+        &self,
+        input: ListObjectsV2Request,
+    ) -> RusotoStream<ListObjectsV2Output, ListObjectsV2Error> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_objects_v2(state.clone())
+        })
+    }
+
     /// <p><p>Lists the parts that have been uploaded for a specific multipart upload. This operation must include the upload ID, which you obtain by sending the initiate multipart upload request (see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a>). This request returns a maximum of 1,000 uploaded parts. The default number of parts returned is 1,000 parts. You can restrict the number of parts returned by specifying the <code>max-parts</code> request parameter. If your multipart upload consists of more than 1,000 parts, the response returns an <code>IsTruncated</code> field with the value of true, and a <code>NextPartNumberMarker</code> element. In subsequent <code>ListParts</code> requests you can include the part-number-marker query string parameter and set its value to the <code>NextPartNumberMarker</code> field value from the previous response.</p> <p>For more information on multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart Upload</a>.</p> <p>For information on permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>The following operations are related to <code>ListParts</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html">UploadPart</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html">CompleteMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html">AbortMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html">ListMultipartUploads</a> </p> </li> </ul></p>
     async fn list_parts(
         &self,
         input: ListPartsRequest,
     ) -> Result<ListPartsOutput, RusotoError<ListPartsError>>;
+
+    /// Auto-paginating version of `list_parts`
+    fn list_parts_pages(&self, input: ListPartsRequest) -> RusotoStream<Part, ListPartsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_parts(state.clone())
+        })
+    }
 
     /// <p><p>Sets the accelerate configuration of an existing bucket. Amazon S3 Transfer Acceleration is a bucket-level feature that enables you to perform faster data transfers to Amazon S3.</p> <p> To use this operation, you must have permission to perform the s3:PutAccelerateConfiguration action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> The Transfer Acceleration state of a bucket can be set to one of the following two values:</p> <ul> <li> <p> Enabled – Enables accelerated data transfers to the bucket.</p> </li> <li> <p> Suspended – Disables accelerated data transfers to the bucket.</p> </li> </ul> <p>The <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html">GetBucketAccelerateConfiguration</a> operation returns the transfer acceleration state of a bucket.</p> <p>After setting the Transfer Acceleration state of a bucket to Enabled, it might take up to thirty minutes before the data transfer rates to the bucket increase.</p> <p> The name of the bucket used for Transfer Acceleration must be DNS-compliant and must not contain periods (&quot;.&quot;).</p> <p> For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p> <p>The following operations are related to <code>PutBucketAccelerateConfiguration</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html">GetBucketAccelerateConfiguration</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a> </p> </li> </ul></p>
     async fn put_bucket_accelerate_configuration(

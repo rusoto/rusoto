@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl CloudWatchLogsClient {
 }
 
 use serde_json;
+/// see [CloudWatchLogs::associate_kms_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateKmsKeyRequest {
@@ -61,6 +64,7 @@ pub struct AssociateKmsKeyRequest {
     pub log_group_name: String,
 }
 
+/// see [CloudWatchLogs::cancel_export_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelExportTaskRequest {
@@ -69,6 +73,7 @@ pub struct CancelExportTaskRequest {
     pub task_id: String,
 }
 
+/// see [CloudWatchLogs::create_export_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExportTaskRequest {
@@ -98,6 +103,7 @@ pub struct CreateExportTaskRequest {
     pub to: i64,
 }
 
+/// see [CloudWatchLogs::create_export_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateExportTaskResponse {
@@ -107,6 +113,7 @@ pub struct CreateExportTaskResponse {
     pub task_id: Option<String>,
 }
 
+/// see [CloudWatchLogs::create_log_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogGroupRequest {
@@ -123,6 +130,7 @@ pub struct CreateLogGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [CloudWatchLogs::create_log_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogStreamRequest {
@@ -134,6 +142,7 @@ pub struct CreateLogStreamRequest {
     pub log_stream_name: String,
 }
 
+/// see [CloudWatchLogs::delete_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDestinationRequest {
@@ -142,6 +151,7 @@ pub struct DeleteDestinationRequest {
     pub destination_name: String,
 }
 
+/// see [CloudWatchLogs::delete_log_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogGroupRequest {
@@ -150,6 +160,7 @@ pub struct DeleteLogGroupRequest {
     pub log_group_name: String,
 }
 
+/// see [CloudWatchLogs::delete_log_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogStreamRequest {
@@ -161,6 +172,7 @@ pub struct DeleteLogStreamRequest {
     pub log_stream_name: String,
 }
 
+/// see [CloudWatchLogs::delete_metric_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMetricFilterRequest {
@@ -172,6 +184,7 @@ pub struct DeleteMetricFilterRequest {
     pub log_group_name: String,
 }
 
+/// see [CloudWatchLogs::delete_query_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueryDefinitionRequest {
@@ -180,6 +193,7 @@ pub struct DeleteQueryDefinitionRequest {
     pub query_definition_id: String,
 }
 
+/// see [CloudWatchLogs::delete_query_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQueryDefinitionResponse {
@@ -189,6 +203,7 @@ pub struct DeleteQueryDefinitionResponse {
     pub success: Option<bool>,
 }
 
+/// see [CloudWatchLogs::delete_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
@@ -198,6 +213,7 @@ pub struct DeleteResourcePolicyRequest {
     pub policy_name: Option<String>,
 }
 
+/// see [CloudWatchLogs::delete_retention_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRetentionPolicyRequest {
@@ -206,6 +222,7 @@ pub struct DeleteRetentionPolicyRequest {
     pub log_group_name: String,
 }
 
+/// see [CloudWatchLogs::delete_subscription_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionFilterRequest {
@@ -217,6 +234,7 @@ pub struct DeleteSubscriptionFilterRequest {
     pub log_group_name: String,
 }
 
+/// see [CloudWatchLogs::describe_destinations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDestinationsRequest {
@@ -234,6 +252,15 @@ pub struct DescribeDestinationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeDestinationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_destinations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDestinationsResponse {
@@ -246,6 +273,31 @@ pub struct DescribeDestinationsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeDestinationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Destination>> {
+        Some(self.destinations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDestinationsResponse {
+    type Item = Destination;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Destination> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudWatchLogs::describe_export_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksRequest {
@@ -267,6 +319,15 @@ pub struct DescribeExportTasksRequest {
     pub task_id: Option<String>,
 }
 
+impl PagedRequest for DescribeExportTasksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_export_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExportTasksResponse {
@@ -279,6 +340,31 @@ pub struct DescribeExportTasksResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeExportTasksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ExportTask>> {
+        Some(self.export_tasks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeExportTasksResponse {
+    type Item = ExportTask;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ExportTask> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudWatchLogs::describe_log_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLogGroupsRequest {
@@ -296,6 +382,15 @@ pub struct DescribeLogGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeLogGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_log_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLogGroupsResponse {
@@ -308,6 +403,31 @@ pub struct DescribeLogGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeLogGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LogGroup>> {
+        Some(self.log_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeLogGroupsResponse {
+    type Item = LogGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LogGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudWatchLogs::describe_log_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLogStreamsRequest {
@@ -336,6 +456,15 @@ pub struct DescribeLogStreamsRequest {
     pub order_by: Option<String>,
 }
 
+impl PagedRequest for DescribeLogStreamsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_log_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLogStreamsResponse {
@@ -348,6 +477,31 @@ pub struct DescribeLogStreamsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeLogStreamsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LogStream>> {
+        Some(self.log_streams.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeLogStreamsResponse {
+    type Item = LogStream;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LogStream> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudWatchLogs::describe_metric_filters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMetricFiltersRequest {
@@ -377,6 +531,15 @@ pub struct DescribeMetricFiltersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeMetricFiltersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_metric_filters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMetricFiltersResponse {
@@ -389,6 +552,31 @@ pub struct DescribeMetricFiltersResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeMetricFiltersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<MetricFilter>> {
+        Some(self.metric_filters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeMetricFiltersResponse {
+    type Item = MetricFilter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MetricFilter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudWatchLogs::describe_queries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeQueriesRequest {
@@ -409,6 +597,15 @@ pub struct DescribeQueriesRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for DescribeQueriesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_queries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeQueriesResponse {
@@ -421,6 +618,31 @@ pub struct DescribeQueriesResponse {
     pub queries: Option<Vec<QueryInfo>>,
 }
 
+impl DescribeQueriesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<QueryInfo>> {
+        Some(self.queries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeQueriesResponse {
+    type Item = QueryInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<QueryInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudWatchLogs::describe_query_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeQueryDefinitionsRequest {
@@ -437,6 +659,7 @@ pub struct DescribeQueryDefinitionsRequest {
     pub query_definition_name_prefix: Option<String>,
 }
 
+/// see [CloudWatchLogs::describe_query_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeQueryDefinitionsResponse {
@@ -449,6 +672,7 @@ pub struct DescribeQueryDefinitionsResponse {
     pub query_definitions: Option<Vec<QueryDefinition>>,
 }
 
+/// see [CloudWatchLogs::describe_resource_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourcePoliciesRequest {
@@ -461,6 +685,15 @@ pub struct DescribeResourcePoliciesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeResourcePoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_resource_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourcePoliciesResponse {
@@ -473,6 +706,31 @@ pub struct DescribeResourcePoliciesResponse {
     pub resource_policies: Option<Vec<ResourcePolicy>>,
 }
 
+impl DescribeResourcePoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ResourcePolicy>> {
+        Some(self.resource_policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeResourcePoliciesResponse {
+    type Item = ResourcePolicy;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourcePolicy> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudWatchLogs::describe_subscription_filters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscriptionFiltersRequest {
@@ -493,6 +751,15 @@ pub struct DescribeSubscriptionFiltersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeSubscriptionFiltersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::describe_subscription_filters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubscriptionFiltersResponse {
@@ -503,6 +770,30 @@ pub struct DescribeSubscriptionFiltersResponse {
     #[serde(rename = "subscriptionFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_filters: Option<Vec<SubscriptionFilter>>,
+}
+
+impl DescribeSubscriptionFiltersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SubscriptionFilter>> {
+        Some(self.subscription_filters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSubscriptionFiltersResponse {
+    type Item = SubscriptionFilter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SubscriptionFilter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents a cross-account destination that receives subscription log events.</p>
@@ -535,6 +826,7 @@ pub struct Destination {
     pub target_arn: Option<String>,
 }
 
+/// see [CloudWatchLogs::disassociate_kms_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateKmsKeyRequest {
@@ -613,6 +905,7 @@ pub struct ExportTaskStatus {
     pub message: Option<String>,
 }
 
+/// see [CloudWatchLogs::filter_log_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterLogEventsRequest {
@@ -649,6 +942,15 @@ pub struct FilterLogEventsRequest {
     pub start_time: Option<i64>,
 }
 
+impl PagedRequest for FilterLogEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudWatchLogs::filter_log_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FilterLogEventsResponse {
@@ -664,6 +966,26 @@ pub struct FilterLogEventsResponse {
     #[serde(rename = "searchedLogStreams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub searched_log_streams: Option<Vec<SearchedLogStream>>,
+}
+
+impl FilterLogEventsResponse {}
+
+impl PagedOutput for FilterLogEventsResponse {
+    type Item = FilterLogEventsResponse;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FilterLogEventsResponse> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents a matched event.</p>
@@ -692,6 +1014,7 @@ pub struct FilteredLogEvent {
     pub timestamp: Option<i64>,
 }
 
+/// see [CloudWatchLogs::get_log_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogEventsRequest {
@@ -723,6 +1046,7 @@ pub struct GetLogEventsRequest {
     pub start_time: Option<i64>,
 }
 
+/// see [CloudWatchLogs::get_log_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLogEventsResponse {
@@ -740,6 +1064,7 @@ pub struct GetLogEventsResponse {
     pub next_forward_token: Option<String>,
 }
 
+/// see [CloudWatchLogs::get_log_group_fields]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogGroupFieldsRequest {
@@ -752,6 +1077,7 @@ pub struct GetLogGroupFieldsRequest {
     pub time: Option<i64>,
 }
 
+/// see [CloudWatchLogs::get_log_group_fields]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLogGroupFieldsResponse {
@@ -761,6 +1087,7 @@ pub struct GetLogGroupFieldsResponse {
     pub log_group_fields: Option<Vec<LogGroupField>>,
 }
 
+/// see [CloudWatchLogs::get_log_record]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogRecordRequest {
@@ -769,6 +1096,7 @@ pub struct GetLogRecordRequest {
     pub log_record_pointer: String,
 }
 
+/// see [CloudWatchLogs::get_log_record]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLogRecordResponse {
@@ -778,6 +1106,7 @@ pub struct GetLogRecordResponse {
     pub log_record: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [CloudWatchLogs::get_query_results]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryResultsRequest {
@@ -786,6 +1115,7 @@ pub struct GetQueryResultsRequest {
     pub query_id: String,
 }
 
+/// see [CloudWatchLogs::get_query_results]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueryResultsResponse {
@@ -815,6 +1145,7 @@ pub struct InputLogEvent {
     pub timestamp: i64,
 }
 
+/// see [CloudWatchLogs::list_tags_log_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsLogGroupRequest {
@@ -823,6 +1154,7 @@ pub struct ListTagsLogGroupRequest {
     pub log_group_name: String,
 }
 
+/// see [CloudWatchLogs::list_tags_log_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsLogGroupResponse {
@@ -992,6 +1324,7 @@ pub struct OutputLogEvent {
     pub timestamp: Option<i64>,
 }
 
+/// see [CloudWatchLogs::put_destination_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDestinationPolicyRequest {
@@ -1003,6 +1336,7 @@ pub struct PutDestinationPolicyRequest {
     pub destination_name: String,
 }
 
+/// see [CloudWatchLogs::put_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDestinationRequest {
@@ -1017,6 +1351,7 @@ pub struct PutDestinationRequest {
     pub target_arn: String,
 }
 
+/// see [CloudWatchLogs::put_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDestinationResponse {
@@ -1026,6 +1361,7 @@ pub struct PutDestinationResponse {
     pub destination: Option<Destination>,
 }
 
+/// see [CloudWatchLogs::put_log_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLogEventsRequest {
@@ -1044,6 +1380,7 @@ pub struct PutLogEventsRequest {
     pub sequence_token: Option<String>,
 }
 
+/// see [CloudWatchLogs::put_log_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLogEventsResponse {
@@ -1057,6 +1394,7 @@ pub struct PutLogEventsResponse {
     pub rejected_log_events_info: Option<RejectedLogEventsInfo>,
 }
 
+/// see [CloudWatchLogs::put_metric_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricFilterRequest {
@@ -1074,6 +1412,7 @@ pub struct PutMetricFilterRequest {
     pub metric_transformations: Vec<MetricTransformation>,
 }
 
+/// see [CloudWatchLogs::put_query_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutQueryDefinitionRequest {
@@ -1093,6 +1432,7 @@ pub struct PutQueryDefinitionRequest {
     pub query_string: String,
 }
 
+/// see [CloudWatchLogs::put_query_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutQueryDefinitionResponse {
@@ -1102,6 +1442,7 @@ pub struct PutQueryDefinitionResponse {
     pub query_definition_id: Option<String>,
 }
 
+/// see [CloudWatchLogs::put_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
@@ -1115,6 +1456,7 @@ pub struct PutResourcePolicyRequest {
     pub policy_name: Option<String>,
 }
 
+/// see [CloudWatchLogs::put_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyResponse {
@@ -1124,6 +1466,7 @@ pub struct PutResourcePolicyResponse {
     pub resource_policy: Option<ResourcePolicy>,
 }
 
+/// see [CloudWatchLogs::put_retention_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionPolicyRequest {
@@ -1134,6 +1477,7 @@ pub struct PutRetentionPolicyRequest {
     pub retention_in_days: i64,
 }
 
+/// see [CloudWatchLogs::put_subscription_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSubscriptionFilterRequest {
@@ -1311,6 +1655,7 @@ pub struct SearchedLogStream {
     pub searched_completely: Option<bool>,
 }
 
+/// see [CloudWatchLogs::start_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartQueryRequest {
@@ -1337,6 +1682,7 @@ pub struct StartQueryRequest {
     pub start_time: i64,
 }
 
+/// see [CloudWatchLogs::start_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartQueryResponse {
@@ -1346,6 +1692,7 @@ pub struct StartQueryResponse {
     pub query_id: Option<String>,
 }
 
+/// see [CloudWatchLogs::stop_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopQueryRequest {
@@ -1354,6 +1701,7 @@ pub struct StopQueryRequest {
     pub query_id: String,
 }
 
+/// see [CloudWatchLogs::stop_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopQueryResponse {
@@ -1395,6 +1743,7 @@ pub struct SubscriptionFilter {
     pub role_arn: Option<String>,
 }
 
+/// see [CloudWatchLogs::tag_log_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagLogGroupRequest {
@@ -1406,6 +1755,7 @@ pub struct TagLogGroupRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [CloudWatchLogs::test_metric_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestMetricFilterRequest {
@@ -1416,6 +1766,7 @@ pub struct TestMetricFilterRequest {
     pub log_event_messages: Vec<String>,
 }
 
+/// see [CloudWatchLogs::test_metric_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestMetricFilterResponse {
@@ -1425,6 +1776,7 @@ pub struct TestMetricFilterResponse {
     pub matches: Option<Vec<MetricFilterMatchRecord>>,
 }
 
+/// see [CloudWatchLogs::untag_log_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagLogGroupRequest {
@@ -3402,7 +3754,7 @@ impl fmt::Display for UntagLogGroupError {
 impl Error for UntagLogGroupError {}
 /// Trait representing the capabilities of the Amazon CloudWatch Logs API. Amazon CloudWatch Logs clients implement this trait.
 #[async_trait]
-pub trait CloudWatchLogs {
+pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <important> <p>CloudWatch Logs supports only symmetric CMKs. Do not use an associate an asymmetric CMK with your log group. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a>.</p> </important> <p>It can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you receive an <code>InvalidParameterException</code> error. </p>
     async fn associate_kms_key(
         &self,
@@ -3487,11 +3839,31 @@ pub trait CloudWatchLogs {
         input: DescribeDestinationsRequest,
     ) -> Result<DescribeDestinationsResponse, RusotoError<DescribeDestinationsError>>;
 
+    /// Auto-paginating version of `describe_destinations`
+    fn describe_destinations_pages(
+        &self,
+        input: DescribeDestinationsRequest,
+    ) -> RusotoStream<Destination, DescribeDestinationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_destinations(state.clone())
+        })
+    }
+
     /// <p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>
     async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
     ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>>;
+
+    /// Auto-paginating version of `describe_export_tasks`
+    fn describe_export_tasks_pages(
+        &self,
+        input: DescribeExportTasksRequest,
+    ) -> RusotoStream<ExportTask, DescribeExportTasksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_export_tasks(state.clone())
+        })
+    }
 
     /// <p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>
     async fn describe_log_groups(
@@ -3499,11 +3871,31 @@ pub trait CloudWatchLogs {
         input: DescribeLogGroupsRequest,
     ) -> Result<DescribeLogGroupsResponse, RusotoError<DescribeLogGroupsError>>;
 
+    /// Auto-paginating version of `describe_log_groups`
+    fn describe_log_groups_pages(
+        &self,
+        input: DescribeLogGroupsRequest,
+    ) -> RusotoStream<LogGroup, DescribeLogGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_log_groups(state.clone())
+        })
+    }
+
     /// <p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>
     async fn describe_log_streams(
         &self,
         input: DescribeLogStreamsRequest,
     ) -> Result<DescribeLogStreamsResponse, RusotoError<DescribeLogStreamsError>>;
+
+    /// Auto-paginating version of `describe_log_streams`
+    fn describe_log_streams_pages(
+        &self,
+        input: DescribeLogStreamsRequest,
+    ) -> RusotoStream<LogStream, DescribeLogStreamsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_log_streams(state.clone())
+        })
+    }
 
     /// <p>Lists the specified metric filters. You can list all of the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
     async fn describe_metric_filters(
@@ -3511,11 +3903,31 @@ pub trait CloudWatchLogs {
         input: DescribeMetricFiltersRequest,
     ) -> Result<DescribeMetricFiltersResponse, RusotoError<DescribeMetricFiltersError>>;
 
+    /// Auto-paginating version of `describe_metric_filters`
+    fn describe_metric_filters_pages(
+        &self,
+        input: DescribeMetricFiltersRequest,
+    ) -> RusotoStream<MetricFilter, DescribeMetricFiltersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_metric_filters(state.clone())
+        })
+    }
+
     /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries or limit it to queries of a specific log group or queries with a certain status.</p>
     async fn describe_queries(
         &self,
         input: DescribeQueriesRequest,
     ) -> Result<DescribeQueriesResponse, RusotoError<DescribeQueriesError>>;
+
+    /// Auto-paginating version of `describe_queries`
+    fn describe_queries_pages(
+        &self,
+        input: DescribeQueriesRequest,
+    ) -> RusotoStream<QueryInfo, DescribeQueriesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_queries(state.clone())
+        })
+    }
 
     /// <p>This operation returns a paginated list of your saved CloudWatch Logs Insights query definitions.</p> <p>You can use the <code>queryDefinitionNamePrefix</code> parameter to limit the results to only the query definitions that have names that start with a certain string.</p>
     async fn describe_query_definitions(
@@ -3529,11 +3941,31 @@ pub trait CloudWatchLogs {
         input: DescribeResourcePoliciesRequest,
     ) -> Result<DescribeResourcePoliciesResponse, RusotoError<DescribeResourcePoliciesError>>;
 
+    /// Auto-paginating version of `describe_resource_policies`
+    fn describe_resource_policies_pages(
+        &self,
+        input: DescribeResourcePoliciesRequest,
+    ) -> RusotoStream<ResourcePolicy, DescribeResourcePoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_resource_policies(state.clone())
+        })
+    }
+
     /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
     async fn describe_subscription_filters(
         &self,
         input: DescribeSubscriptionFiltersRequest,
     ) -> Result<DescribeSubscriptionFiltersResponse, RusotoError<DescribeSubscriptionFiltersError>>;
+
+    /// Auto-paginating version of `describe_subscription_filters`
+    fn describe_subscription_filters_pages(
+        &self,
+        input: DescribeSubscriptionFiltersRequest,
+    ) -> RusotoStream<SubscriptionFilter, DescribeSubscriptionFiltersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_subscription_filters(state.clone())
+        })
+    }
 
     /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
     async fn disassociate_kms_key(
@@ -3546,6 +3978,16 @@ pub trait CloudWatchLogs {
         &self,
         input: FilterLogEventsRequest,
     ) -> Result<FilterLogEventsResponse, RusotoError<FilterLogEventsError>>;
+
+    /// Auto-paginating version of `filter_log_events`
+    fn filter_log_events_pages(
+        &self,
+        input: FilterLogEventsRequest,
+    ) -> RusotoStream<FilterLogEventsResponse, FilterLogEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.filter_log_events(state.clone())
+        })
+    }
 
     /// <p>Lists log events from the specified log stream. You can list all of the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call. This operation can return empty results while there are more log events available through the token.</p>
     async fn get_log_events(

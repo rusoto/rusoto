@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -52,6 +54,7 @@ impl KinesisClient {
 use rusoto_core::event_stream::{DeserializeEvent, EventStream};
 use serde_json;
 /// <p>Represents the input for <code>AddTagsToStream</code>.</p>
+/// see [Kinesis::add_tags_to_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToStreamInput {
@@ -114,6 +117,7 @@ pub struct ConsumerDescription {
 }
 
 /// <p>Represents the input for <code>CreateStream</code>.</p>
+/// see [Kinesis::create_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamInput {
@@ -126,6 +130,7 @@ pub struct CreateStreamInput {
 }
 
 /// <p>Represents the input for <a>DecreaseStreamRetentionPeriod</a>.</p>
+/// see [Kinesis::decrease_stream_retention_period]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseStreamRetentionPeriodInput {
@@ -138,6 +143,7 @@ pub struct DecreaseStreamRetentionPeriodInput {
 }
 
 /// <p>Represents the input for <a>DeleteStream</a>.</p>
+/// see [Kinesis::delete_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamInput {
@@ -150,6 +156,7 @@ pub struct DeleteStreamInput {
     pub stream_name: String,
 }
 
+/// see [Kinesis::deregister_stream_consumer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterStreamConsumerInput {
@@ -167,10 +174,12 @@ pub struct DeregisterStreamConsumerInput {
     pub stream_arn: Option<String>,
 }
 
+/// see [Kinesis::describe_limits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLimitsInput {}
 
+/// see [Kinesis::describe_limits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLimitsOutput {
@@ -182,6 +191,7 @@ pub struct DescribeLimitsOutput {
     pub shard_limit: i64,
 }
 
+/// see [Kinesis::describe_stream_consumer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamConsumerInput {
@@ -199,6 +209,7 @@ pub struct DescribeStreamConsumerInput {
     pub stream_arn: Option<String>,
 }
 
+/// see [Kinesis::describe_stream_consumer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamConsumerOutput {
@@ -208,6 +219,7 @@ pub struct DescribeStreamConsumerOutput {
 }
 
 /// <p>Represents the input for <code>DescribeStream</code>.</p>
+/// see [Kinesis::describe_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamInput {
@@ -224,7 +236,16 @@ pub struct DescribeStreamInput {
     pub stream_name: String,
 }
 
+impl PagedRequest for DescribeStreamInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.exclusive_start_shard_id = key;
+        self
+    }
+}
+
 /// <p>Represents the output for <code>DescribeStream</code>.</p>
+/// see [Kinesis::describe_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamOutput {
@@ -233,6 +254,35 @@ pub struct DescribeStreamOutput {
     pub stream_description: StreamDescription,
 }
 
+impl DescribeStreamOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Shard>> {
+        Some(self.stream_description.shards.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.stream_description.has_more_shards.clone())
+    }
+}
+
+impl PagedOutput for DescribeStreamOutput {
+    type Item = Shard;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.stream_description.shards.last()?.shard_id.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Shard> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
+}
+
+/// see [Kinesis::describe_stream_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamSummaryInput {
@@ -241,6 +291,7 @@ pub struct DescribeStreamSummaryInput {
     pub stream_name: String,
 }
 
+/// see [Kinesis::describe_stream_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamSummaryOutput {
@@ -250,6 +301,7 @@ pub struct DescribeStreamSummaryOutput {
 }
 
 /// <p>Represents the input for <a>DisableEnhancedMonitoring</a>.</p>
+/// see [Kinesis::disable_enhanced_monitoring]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableEnhancedMonitoringInput {
@@ -262,6 +314,7 @@ pub struct DisableEnhancedMonitoringInput {
 }
 
 /// <p>Represents the input for <a>EnableEnhancedMonitoring</a>.</p>
+/// see [Kinesis::enable_enhanced_monitoring]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableEnhancedMonitoringInput {
@@ -284,6 +337,8 @@ pub struct EnhancedMetrics {
 }
 
 /// <p>Represents the output for <a>EnableEnhancedMonitoring</a> and <a>DisableEnhancedMonitoring</a>.</p>
+/// see [Kinesis::disable_enhanced_monitoring]
+/// see [Kinesis::enable_enhanced_monitoring]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnhancedMonitoringOutput {
@@ -315,6 +370,7 @@ pub struct ExpiredNextTokenException {
 }
 
 /// <p>Represents the input for <a>GetRecords</a>.</p>
+/// see [Kinesis::get_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecordsInput {
@@ -328,6 +384,7 @@ pub struct GetRecordsInput {
 }
 
 /// <p>Represents the output for <a>GetRecords</a>.</p>
+/// see [Kinesis::get_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecordsOutput {
@@ -348,6 +405,7 @@ pub struct GetRecordsOutput {
 }
 
 /// <p>Represents the input for <code>GetShardIterator</code>.</p>
+/// see [Kinesis::get_shard_iterator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShardIteratorInput {
@@ -371,6 +429,7 @@ pub struct GetShardIteratorInput {
 }
 
 /// <p>Represents the output for <code>GetShardIterator</code>.</p>
+/// see [Kinesis::get_shard_iterator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetShardIteratorOutput {
@@ -393,6 +452,7 @@ pub struct HashKeyRange {
 }
 
 /// <p>Represents the input for <a>IncreaseStreamRetentionPeriod</a>.</p>
+/// see [Kinesis::increase_stream_retention_period]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IncreaseStreamRetentionPeriodInput {
@@ -487,6 +547,7 @@ pub struct LimitExceededException {
     pub message: Option<String>,
 }
 
+/// see [Kinesis::list_shards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListShardsInput {
@@ -515,6 +576,15 @@ pub struct ListShardsInput {
     pub stream_name: Option<String>,
 }
 
+impl PagedRequest for ListShardsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kinesis::list_shards]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListShardsOutput {
@@ -528,6 +598,31 @@ pub struct ListShardsOutput {
     pub shards: Option<Vec<Shard>>,
 }
 
+impl ListShardsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Shard>> {
+        Some(self.shards.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListShardsOutput {
+    type Item = Shard;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Shard> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Kinesis::list_stream_consumers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamConsumersInput {
@@ -548,6 +643,15 @@ pub struct ListStreamConsumersInput {
     pub stream_creation_timestamp: Option<f64>,
 }
 
+impl PagedRequest for ListStreamConsumersInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Kinesis::list_stream_consumers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamConsumersOutput {
@@ -561,7 +665,32 @@ pub struct ListStreamConsumersOutput {
     pub next_token: Option<String>,
 }
 
+impl ListStreamConsumersOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Consumer>> {
+        Some(self.consumers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStreamConsumersOutput {
+    type Item = Consumer;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Consumer> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Represents the input for <code>ListStreams</code>.</p>
+/// see [Kinesis::list_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
@@ -575,7 +704,16 @@ pub struct ListStreamsInput {
     pub limit: Option<i64>,
 }
 
+impl PagedRequest for ListStreamsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.exclusive_start_stream_name = key;
+        self
+    }
+}
+
 /// <p>Represents the output for <code>ListStreams</code>.</p>
+/// see [Kinesis::list_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsOutput {
@@ -587,7 +725,36 @@ pub struct ListStreamsOutput {
     pub stream_names: Vec<String>,
 }
 
+impl ListStreamsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.stream_names.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.has_more_streams.clone())
+    }
+}
+
+impl PagedOutput for ListStreamsOutput {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.stream_names.last()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
+}
+
 /// <p>Represents the input for <code>ListTagsForStream</code>.</p>
+/// see [Kinesis::list_tags_for_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForStreamInput {
@@ -605,6 +772,7 @@ pub struct ListTagsForStreamInput {
 }
 
 /// <p>Represents the output for <code>ListTagsForStream</code>.</p>
+/// see [Kinesis::list_tags_for_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForStreamOutput {
@@ -617,6 +785,7 @@ pub struct ListTagsForStreamOutput {
 }
 
 /// <p>Represents the input for <code>MergeShards</code>.</p>
+/// see [Kinesis::merge_shards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeShardsInput {
@@ -639,6 +808,7 @@ pub struct ProvisionedThroughputExceededException {
 }
 
 /// <p>Represents the input for <code>PutRecord</code>.</p>
+/// see [Kinesis::put_record]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordInput {
@@ -667,6 +837,7 @@ pub struct PutRecordInput {
 }
 
 /// <p>Represents the output for <code>PutRecord</code>.</p>
+/// see [Kinesis::put_record]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecordOutput {
@@ -683,6 +854,7 @@ pub struct PutRecordOutput {
 }
 
 /// <p>A <code>PutRecords</code> request.</p>
+/// see [Kinesis::put_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordsInput {
@@ -695,6 +867,7 @@ pub struct PutRecordsInput {
 }
 
 /// <p> <code>PutRecords</code> results.</p>
+/// see [Kinesis::put_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecordsOutput {
@@ -782,6 +955,7 @@ pub struct Record {
     pub sequence_number: String,
 }
 
+/// see [Kinesis::register_stream_consumer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterStreamConsumerInput {
@@ -793,6 +967,7 @@ pub struct RegisterStreamConsumerInput {
     pub stream_arn: String,
 }
 
+/// see [Kinesis::register_stream_consumer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterStreamConsumerOutput {
@@ -802,6 +977,7 @@ pub struct RegisterStreamConsumerOutput {
 }
 
 /// <p>Represents the input for <code>RemoveTagsFromStream</code>.</p>
+/// see [Kinesis::remove_tags_from_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromStreamInput {
@@ -883,6 +1059,7 @@ pub struct ShardFilter {
 }
 
 /// <p>Represents the input for <code>SplitShard</code>.</p>
+/// see [Kinesis::split_shard]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SplitShardInput {
@@ -897,6 +1074,7 @@ pub struct SplitShardInput {
     pub stream_name: String,
 }
 
+/// see [Kinesis::start_stream_encryption]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartStreamEncryptionInput {
@@ -928,6 +1106,7 @@ pub struct StartingPosition {
     pub type_: String,
 }
 
+/// see [Kinesis::stop_stream_encryption]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStreamEncryptionInput {
@@ -1106,6 +1285,7 @@ impl DeserializeEvent for SubscribeToShardEventStreamItem {
     }
 }
 
+/// see [Kinesis::subscribe_to_shard]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeToShardInput {
@@ -1120,6 +1300,7 @@ pub struct SubscribeToShardInput {
     pub starting_position: StartingPosition,
 }
 
+/// see [Kinesis::subscribe_to_shard]
 #[derive(Debug)]
 pub struct SubscribeToShardOutput {
     /// <p>The event stream that your consumer can use to read records from the shard.</p>
@@ -1139,6 +1320,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Kinesis::update_shard_count]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateShardCountInput {
@@ -1153,6 +1335,7 @@ pub struct UpdateShardCountInput {
     pub target_shard_count: i64,
 }
 
+/// see [Kinesis::update_shard_count]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateShardCountOutput {
@@ -2662,7 +2845,7 @@ impl fmt::Display for UpdateShardCountError {
 impl Error for UpdateShardCountError {}
 /// Trait representing the capabilities of the Kinesis API. Kinesis clients implement this trait.
 #[async_trait]
-pub trait Kinesis {
+pub trait Kinesis: Clone + Sync + Send + 'static {
     /// <p>Adds or updates tags for the specified Kinesis data stream. Each time you invoke this operation, you can specify up to 10 tags. If you want to add more than 10 tags to your stream, you can invoke this operation multiple times. In total, each stream can have up to 50 tags.</p> <p>If tags have already been assigned to the stream, <code>AddTagsToStream</code> overwrites any existing tags that correspond to the specified tag keys.</p> <p> <a>AddTagsToStream</a> has a limit of five transactions per second per account.</p>
     async fn add_tags_to_stream(
         &self,
@@ -2703,6 +2886,16 @@ pub trait Kinesis {
         &self,
         input: DescribeStreamInput,
     ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>>;
+
+    /// Auto-paginating version of `describe_stream`
+    fn describe_stream_pages(
+        &self,
+        input: DescribeStreamInput,
+    ) -> RusotoStream<Shard, DescribeStreamError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_stream(state.clone())
+        })
+    }
 
     /// <p>To get the description of a registered consumer, provide the ARN of the consumer. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it. You may also provide all three parameters, as long as they don't conflict with each other. If you don't know the name or ARN of the consumer that you want to describe, you can use the <a>ListStreamConsumers</a> operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream.</p> <p>This operation has a limit of 20 transactions per second per stream.</p>
     async fn describe_stream_consumer(
@@ -2752,17 +2945,44 @@ pub trait Kinesis {
         input: ListShardsInput,
     ) -> Result<ListShardsOutput, RusotoError<ListShardsError>>;
 
+    /// Auto-paginating version of `list_shards`
+    fn list_shards_pages(&self, input: ListShardsInput) -> RusotoStream<Shard, ListShardsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_shards(state.clone())
+        })
+    }
+
     /// <p>Lists the consumers registered to receive data from a stream using enhanced fan-out, and provides information about each consumer.</p> <p>This operation has a limit of 5 transactions per second per stream.</p>
     async fn list_stream_consumers(
         &self,
         input: ListStreamConsumersInput,
     ) -> Result<ListStreamConsumersOutput, RusotoError<ListStreamConsumersError>>;
 
+    /// Auto-paginating version of `list_stream_consumers`
+    fn list_stream_consumers_pages(
+        &self,
+        input: ListStreamConsumersInput,
+    ) -> RusotoStream<Consumer, ListStreamConsumersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_stream_consumers(state.clone())
+        })
+    }
+
     /// <p>Lists your Kinesis data streams.</p> <p>The number of streams may be too large to return from a single call to <code>ListStreams</code>. You can limit the number of returned streams using the <code>Limit</code> parameter. If you do not specify a value for the <code>Limit</code> parameter, Kinesis Data Streams uses the default limit, which is currently 10.</p> <p>You can detect if there are more streams available to list by using the <code>HasMoreStreams</code> flag from the returned output. If there are more streams available, you can request more streams by using the name of the last stream returned by the <code>ListStreams</code> request in the <code>ExclusiveStartStreamName</code> parameter in a subsequent request to <code>ListStreams</code>. The group of stream names returned by the subsequent request is then added to the list. You can continue this process until all the stream names have been collected in the list. </p> <p> <a>ListStreams</a> has a limit of five transactions per second per account.</p>
     async fn list_streams(
         &self,
         input: ListStreamsInput,
     ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>>;
+
+    /// Auto-paginating version of `list_streams`
+    fn list_streams_pages(
+        &self,
+        input: ListStreamsInput,
+    ) -> RusotoStream<String, ListStreamsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_streams(state.clone())
+        })
+    }
 
     /// <p>Lists the tags for the specified Kinesis data stream. This operation has a limit of five transactions per second per account.</p>
     async fn list_tags_for_stream(

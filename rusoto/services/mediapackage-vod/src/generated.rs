@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -97,6 +99,7 @@ pub struct CmafPackage {
 }
 
 /// <p>A new MediaPackage VOD Asset configuration.</p>
+/// see [MediaPackageVod::create_asset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssetRequest {
@@ -121,6 +124,7 @@ pub struct CreateAssetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackageVod::create_asset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssetResponse {
@@ -162,6 +166,7 @@ pub struct CreateAssetResponse {
 }
 
 /// <p>A new MediaPackage VOD PackagingConfiguration resource configuration.</p>
+/// see [MediaPackageVod::create_packaging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackagingConfigurationRequest {
@@ -188,6 +193,7 @@ pub struct CreatePackagingConfigurationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackageVod::create_packaging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackagingConfigurationResponse {
@@ -221,6 +227,7 @@ pub struct CreatePackagingConfigurationResponse {
 }
 
 /// <p>A new MediaPackage VOD PackagingGroup resource configuration.</p>
+/// see [MediaPackageVod::create_packaging_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackagingGroupRequest {
@@ -235,6 +242,7 @@ pub struct CreatePackagingGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackageVod::create_packaging_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackagingGroupResponse {
@@ -316,6 +324,7 @@ pub struct DashPackage {
     pub segment_template_format: Option<String>,
 }
 
+/// see [MediaPackageVod::delete_asset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssetRequest {
@@ -324,10 +333,12 @@ pub struct DeleteAssetRequest {
     pub id: String,
 }
 
+/// see [MediaPackageVod::delete_asset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAssetResponse {}
 
+/// see [MediaPackageVod::delete_packaging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackagingConfigurationRequest {
@@ -336,10 +347,12 @@ pub struct DeletePackagingConfigurationRequest {
     pub id: String,
 }
 
+/// see [MediaPackageVod::delete_packaging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackagingConfigurationResponse {}
 
+/// see [MediaPackageVod::delete_packaging_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackagingGroupRequest {
@@ -348,10 +361,12 @@ pub struct DeletePackagingGroupRequest {
     pub id: String,
 }
 
+/// see [MediaPackageVod::delete_packaging_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackagingGroupResponse {}
 
+/// see [MediaPackageVod::describe_asset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssetRequest {
@@ -360,6 +375,7 @@ pub struct DescribeAssetRequest {
     pub id: String,
 }
 
+/// see [MediaPackageVod::describe_asset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssetResponse {
@@ -400,6 +416,7 @@ pub struct DescribeAssetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackageVod::describe_packaging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagingConfigurationRequest {
@@ -408,6 +425,7 @@ pub struct DescribePackagingConfigurationRequest {
     pub id: String,
 }
 
+/// see [MediaPackageVod::describe_packaging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagingConfigurationResponse {
@@ -440,6 +458,7 @@ pub struct DescribePackagingConfigurationResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MediaPackageVod::describe_packaging_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagingGroupRequest {
@@ -448,6 +467,7 @@ pub struct DescribePackagingGroupRequest {
     pub id: String,
 }
 
+/// see [MediaPackageVod::describe_packaging_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagingGroupResponse {
@@ -562,6 +582,7 @@ pub struct HlsPackage {
     pub use_audio_rendition_group: Option<bool>,
 }
 
+/// see [MediaPackageVod::list_assets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssetsRequest {
@@ -579,6 +600,15 @@ pub struct ListAssetsRequest {
     pub packaging_group_id: Option<String>,
 }
 
+impl PagedRequest for ListAssetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaPackageVod::list_assets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssetsResponse {
@@ -592,6 +622,31 @@ pub struct ListAssetsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAssetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AssetShallow>> {
+        Some(self.assets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAssetsResponse {
+    type Item = AssetShallow;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AssetShallow> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaPackageVod::list_packaging_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagingConfigurationsRequest {
@@ -609,6 +664,15 @@ pub struct ListPackagingConfigurationsRequest {
     pub packaging_group_id: Option<String>,
 }
 
+impl PagedRequest for ListPackagingConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaPackageVod::list_packaging_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagingConfigurationsResponse {
@@ -622,6 +686,31 @@ pub struct ListPackagingConfigurationsResponse {
     pub packaging_configurations: Option<Vec<PackagingConfiguration>>,
 }
 
+impl ListPackagingConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PackagingConfiguration>> {
+        Some(self.packaging_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPackagingConfigurationsResponse {
+    type Item = PackagingConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PackagingConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaPackageVod::list_packaging_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagingGroupsRequest {
@@ -635,6 +724,15 @@ pub struct ListPackagingGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListPackagingGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaPackageVod::list_packaging_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagingGroupsResponse {
@@ -648,6 +746,31 @@ pub struct ListPackagingGroupsResponse {
     pub packaging_groups: Option<Vec<PackagingGroup>>,
 }
 
+impl ListPackagingGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PackagingGroup>> {
+        Some(self.packaging_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPackagingGroupsResponse {
+    type Item = PackagingGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PackagingGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaPackageVod::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -656,6 +779,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [MediaPackageVod::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -788,6 +912,7 @@ pub struct StreamSelection {
     pub stream_order: Option<String>,
 }
 
+/// see [MediaPackageVod::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -799,6 +924,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [MediaPackageVod::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -811,6 +937,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>A MediaPackage VOD PackagingGroup resource configuration.</p>
+/// see [MediaPackageVod::update_packaging_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePackagingGroupRequest {
@@ -822,6 +949,7 @@ pub struct UpdatePackagingGroupRequest {
     pub id: String,
 }
 
+/// see [MediaPackageVod::update_packaging_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePackagingGroupResponse {
@@ -1813,7 +1941,7 @@ impl fmt::Display for UpdatePackagingGroupError {
 impl Error for UpdatePackagingGroupError {}
 /// Trait representing the capabilities of the MediaPackage Vod API. MediaPackage Vod clients implement this trait.
 #[async_trait]
-pub trait MediaPackageVod {
+pub trait MediaPackageVod: Clone + Sync + Send + 'static {
     /// <p>Creates a new MediaPackage VOD Asset resource.</p>
     async fn create_asset(
         &self,
@@ -1877,17 +2005,47 @@ pub trait MediaPackageVod {
         input: ListAssetsRequest,
     ) -> Result<ListAssetsResponse, RusotoError<ListAssetsError>>;
 
+    /// Auto-paginating version of `list_assets`
+    fn list_assets_pages(
+        &self,
+        input: ListAssetsRequest,
+    ) -> RusotoStream<AssetShallow, ListAssetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_assets(state.clone())
+        })
+    }
+
     /// <p>Returns a collection of MediaPackage VOD PackagingConfiguration resources.</p>
     async fn list_packaging_configurations(
         &self,
         input: ListPackagingConfigurationsRequest,
     ) -> Result<ListPackagingConfigurationsResponse, RusotoError<ListPackagingConfigurationsError>>;
 
+    /// Auto-paginating version of `list_packaging_configurations`
+    fn list_packaging_configurations_pages(
+        &self,
+        input: ListPackagingConfigurationsRequest,
+    ) -> RusotoStream<PackagingConfiguration, ListPackagingConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_packaging_configurations(state.clone())
+        })
+    }
+
     /// <p>Returns a collection of MediaPackage VOD PackagingGroup resources.</p>
     async fn list_packaging_groups(
         &self,
         input: ListPackagingGroupsRequest,
     ) -> Result<ListPackagingGroupsResponse, RusotoError<ListPackagingGroupsError>>;
+
+    /// Auto-paginating version of `list_packaging_groups`
+    fn list_packaging_groups_pages(
+        &self,
+        input: ListPackagingGroupsRequest,
+    ) -> RusotoStream<PackagingGroup, ListPackagingGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_packaging_groups(state.clone())
+        })
+    }
 
     /// <p>Returns a list of the tags assigned to the specified resource.</p>
     async fn list_tags_for_resource(

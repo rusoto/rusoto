@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ pub struct AbortCriteria {
 }
 
 /// <p>The input for the AcceptCertificateTransfer operation.</p>
+/// see [Iot::accept_certificate_transfer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptCertificateTransferRequest {
@@ -190,6 +193,7 @@ pub struct ActiveViolation {
     pub violation_start_time: Option<f64>,
 }
 
+/// see [Iot::add_thing_to_billing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddThingToBillingGroupRequest {
@@ -211,10 +215,12 @@ pub struct AddThingToBillingGroupRequest {
     pub thing_name: Option<String>,
 }
 
+/// see [Iot::add_thing_to_billing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddThingToBillingGroupResponse {}
 
+/// see [Iot::add_thing_to_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddThingToThingGroupRequest {
@@ -240,6 +246,7 @@ pub struct AddThingToThingGroupRequest {
     pub thing_name: Option<String>,
 }
 
+/// see [Iot::add_thing_to_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddThingToThingGroupResponse {}
@@ -325,6 +332,7 @@ pub struct AssetPropertyVariant {
     pub string_value: Option<String>,
 }
 
+/// see [Iot::associate_targets_with_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTargetsWithJobRequest {
@@ -344,6 +352,7 @@ pub struct AssociateTargetsWithJobRequest {
     pub targets: Vec<String>,
 }
 
+/// see [Iot::associate_targets_with_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTargetsWithJobResponse {
@@ -361,6 +370,7 @@ pub struct AssociateTargetsWithJobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Iot::attach_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPolicyRequest {
@@ -373,6 +383,7 @@ pub struct AttachPolicyRequest {
 }
 
 /// <p>The input for the AttachPrincipalPolicy operation.</p>
+/// see [Iot::attach_principal_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPrincipalPolicyRequest {
@@ -384,6 +395,7 @@ pub struct AttachPrincipalPolicyRequest {
     pub principal: String,
 }
 
+/// see [Iot::attach_security_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachSecurityProfileRequest {
@@ -395,11 +407,13 @@ pub struct AttachSecurityProfileRequest {
     pub security_profile_target_arn: String,
 }
 
+/// see [Iot::attach_security_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachSecurityProfileResponse {}
 
 /// <p>The input for the AttachThingPrincipal operation.</p>
+/// see [Iot::attach_thing_principal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachThingPrincipalRequest {
@@ -412,6 +426,7 @@ pub struct AttachThingPrincipalRequest {
 }
 
 /// <p>The output from the AttachThingPrincipal operation.</p>
+/// see [Iot::attach_thing_principal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachThingPrincipalResponse {}
@@ -1027,6 +1042,7 @@ pub struct CACertificateDescription {
     pub validity: Option<CertificateValidity>,
 }
 
+/// see [Iot::cancel_audit_mitigation_actions_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelAuditMitigationActionsTaskRequest {
@@ -1035,10 +1051,12 @@ pub struct CancelAuditMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::cancel_audit_mitigation_actions_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelAuditMitigationActionsTaskResponse {}
 
+/// see [Iot::cancel_audit_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelAuditTaskRequest {
@@ -1047,11 +1065,13 @@ pub struct CancelAuditTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::cancel_audit_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelAuditTaskResponse {}
 
 /// <p>The input for the CancelCertificateTransfer operation.</p>
+/// see [Iot::cancel_certificate_transfer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelCertificateTransferRequest {
@@ -1060,6 +1080,7 @@ pub struct CancelCertificateTransferRequest {
     pub certificate_id: String,
 }
 
+/// see [Iot::cancel_detect_mitigation_actions_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelDetectMitigationActionsTaskRequest {
@@ -1068,10 +1089,12 @@ pub struct CancelDetectMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::cancel_detect_mitigation_actions_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelDetectMitigationActionsTaskResponse {}
 
+/// see [Iot::cancel_job_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobExecutionRequest {
@@ -1095,6 +1118,7 @@ pub struct CancelJobExecutionRequest {
     pub thing_name: String,
 }
 
+/// see [Iot::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
@@ -1115,6 +1139,7 @@ pub struct CancelJobRequest {
     pub reason_code: Option<String>,
 }
 
+/// see [Iot::cancel_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {
@@ -1234,10 +1259,12 @@ pub struct CertificateValidity {
     pub not_before: Option<f64>,
 }
 
+/// see [Iot::clear_default_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClearDefaultAuthorizerRequest {}
 
+/// see [Iot::clear_default_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClearDefaultAuthorizerResponse {}
@@ -1347,6 +1374,7 @@ pub struct Configuration {
     pub enabled: Option<bool>,
 }
 
+/// see [Iot::confirm_topic_rule_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmTopicRuleDestinationRequest {
@@ -1355,10 +1383,12 @@ pub struct ConfirmTopicRuleDestinationRequest {
     pub confirmation_token: String,
 }
 
+/// see [Iot::confirm_topic_rule_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmTopicRuleDestinationResponse {}
 
+/// see [Iot::create_audit_suppression]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuditSuppressionRequest {
@@ -1383,10 +1413,12 @@ pub struct CreateAuditSuppressionRequest {
     pub suppress_indefinitely: Option<bool>,
 }
 
+/// see [Iot::create_audit_suppression]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAuditSuppressionResponse {}
 
+/// see [Iot::create_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
@@ -1418,6 +1450,7 @@ pub struct CreateAuthorizerRequest {
     pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Iot::create_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAuthorizerResponse {
@@ -1431,6 +1464,7 @@ pub struct CreateAuthorizerResponse {
     pub authorizer_name: Option<String>,
 }
 
+/// see [Iot::create_billing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBillingGroupRequest {
@@ -1447,6 +1481,7 @@ pub struct CreateBillingGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Iot::create_billing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBillingGroupResponse {
@@ -1465,6 +1500,7 @@ pub struct CreateBillingGroupResponse {
 }
 
 /// <p>The input for the CreateCertificateFromCsr operation.</p>
+/// see [Iot::create_certificate_from_csr]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCertificateFromCsrRequest {
@@ -1478,6 +1514,7 @@ pub struct CreateCertificateFromCsrRequest {
 }
 
 /// <p>The output from the CreateCertificateFromCsr operation.</p>
+/// see [Iot::create_certificate_from_csr]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCertificateFromCsrResponse {
@@ -1495,6 +1532,7 @@ pub struct CreateCertificateFromCsrResponse {
     pub certificate_pem: Option<String>,
 }
 
+/// see [Iot::create_custom_metric]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomMetricRequest {
@@ -1517,6 +1555,7 @@ pub struct CreateCustomMetricRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Iot::create_custom_metric]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomMetricResponse {
@@ -1530,6 +1569,7 @@ pub struct CreateCustomMetricResponse {
     pub metric_name: Option<String>,
 }
 
+/// see [Iot::create_dimension]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDimensionRequest {
@@ -1551,6 +1591,7 @@ pub struct CreateDimensionRequest {
     pub type_: String,
 }
 
+/// see [Iot::create_dimension]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDimensionResponse {
@@ -1564,6 +1605,7 @@ pub struct CreateDimensionResponse {
     pub name: Option<String>,
 }
 
+/// see [Iot::create_domain_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainConfigurationRequest {
@@ -1596,6 +1638,7 @@ pub struct CreateDomainConfigurationRequest {
     pub validation_certificate_arn: Option<String>,
 }
 
+/// see [Iot::create_domain_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainConfigurationResponse {
@@ -1609,6 +1652,7 @@ pub struct CreateDomainConfigurationResponse {
     pub domain_configuration_name: Option<String>,
 }
 
+/// see [Iot::create_dynamic_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDynamicThingGroupRequest {
@@ -1636,6 +1680,7 @@ pub struct CreateDynamicThingGroupRequest {
     pub thing_group_properties: Option<ThingGroupProperties>,
 }
 
+/// see [Iot::create_dynamic_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDynamicThingGroupResponse {
@@ -1665,6 +1710,7 @@ pub struct CreateDynamicThingGroupResponse {
     pub thing_group_name: Option<String>,
 }
 
+/// see [Iot::create_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
@@ -1716,6 +1762,7 @@ pub struct CreateJobRequest {
     pub timeout_config: Option<TimeoutConfig>,
 }
 
+/// see [Iot::create_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
@@ -1734,6 +1781,7 @@ pub struct CreateJobResponse {
 }
 
 /// <p>The input for the CreateKeysAndCertificate operation.</p>
+/// see [Iot::create_keys_and_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeysAndCertificateRequest {
@@ -1744,6 +1792,7 @@ pub struct CreateKeysAndCertificateRequest {
 }
 
 /// <p>The output of the CreateKeysAndCertificate operation.</p>
+/// see [Iot::create_keys_and_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateKeysAndCertificateResponse {
@@ -1765,6 +1814,7 @@ pub struct CreateKeysAndCertificateResponse {
     pub key_pair: Option<KeyPair>,
 }
 
+/// see [Iot::create_mitigation_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMitigationActionRequest {
@@ -1783,6 +1833,7 @@ pub struct CreateMitigationActionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Iot::create_mitigation_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMitigationActionResponse {
@@ -1796,6 +1847,7 @@ pub struct CreateMitigationActionResponse {
     pub action_id: Option<String>,
 }
 
+/// see [Iot::create_ota_update]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOTAUpdateRequest {
@@ -1849,6 +1901,7 @@ pub struct CreateOTAUpdateRequest {
     pub targets: Vec<String>,
 }
 
+/// see [Iot::create_ota_update]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOTAUpdateResponse {
@@ -1875,6 +1928,7 @@ pub struct CreateOTAUpdateResponse {
 }
 
 /// <p>The input for the CreatePolicy operation.</p>
+/// see [Iot::create_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyRequest {
@@ -1891,6 +1945,7 @@ pub struct CreatePolicyRequest {
 }
 
 /// <p>The output from the CreatePolicy operation.</p>
+/// see [Iot::create_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePolicyResponse {
@@ -1913,6 +1968,7 @@ pub struct CreatePolicyResponse {
 }
 
 /// <p>The input for the CreatePolicyVersion operation.</p>
+/// see [Iot::create_policy_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyVersionRequest {
@@ -1929,6 +1985,7 @@ pub struct CreatePolicyVersionRequest {
 }
 
 /// <p>The output of the CreatePolicyVersion operation.</p>
+/// see [Iot::create_policy_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePolicyVersionResponse {
@@ -1950,6 +2007,7 @@ pub struct CreatePolicyVersionResponse {
     pub policy_version_id: Option<String>,
 }
 
+/// see [Iot::create_provisioning_claim]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningClaimRequest {
@@ -1958,6 +2016,7 @@ pub struct CreateProvisioningClaimRequest {
     pub template_name: String,
 }
 
+/// see [Iot::create_provisioning_claim]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningClaimResponse {
@@ -1979,6 +2038,7 @@ pub struct CreateProvisioningClaimResponse {
     pub key_pair: Option<KeyPair>,
 }
 
+/// see [Iot::create_provisioning_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningTemplateRequest {
@@ -2009,6 +2069,7 @@ pub struct CreateProvisioningTemplateRequest {
     pub template_name: String,
 }
 
+/// see [Iot::create_provisioning_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningTemplateResponse {
@@ -2026,6 +2087,7 @@ pub struct CreateProvisioningTemplateResponse {
     pub template_name: Option<String>,
 }
 
+/// see [Iot::create_provisioning_template_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningTemplateVersionRequest {
@@ -2041,6 +2103,7 @@ pub struct CreateProvisioningTemplateVersionRequest {
     pub template_name: String,
 }
 
+/// see [Iot::create_provisioning_template_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningTemplateVersionResponse {
@@ -2062,6 +2125,7 @@ pub struct CreateProvisioningTemplateVersionResponse {
     pub version_id: Option<i64>,
 }
 
+/// see [Iot::create_role_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoleAliasRequest {
@@ -2081,6 +2145,7 @@ pub struct CreateRoleAliasRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Iot::create_role_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoleAliasResponse {
@@ -2094,6 +2159,7 @@ pub struct CreateRoleAliasResponse {
     pub role_alias_arn: Option<String>,
 }
 
+/// see [Iot::create_scheduled_audit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScheduledAuditRequest {
@@ -2120,6 +2186,7 @@ pub struct CreateScheduledAuditRequest {
     pub target_check_names: Vec<String>,
 }
 
+/// see [Iot::create_scheduled_audit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateScheduledAuditResponse {
@@ -2129,6 +2196,7 @@ pub struct CreateScheduledAuditResponse {
     pub scheduled_audit_arn: Option<String>,
 }
 
+/// see [Iot::create_security_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityProfileRequest {
@@ -2157,6 +2225,7 @@ pub struct CreateSecurityProfileRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Iot::create_security_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecurityProfileResponse {
@@ -2170,6 +2239,7 @@ pub struct CreateSecurityProfileResponse {
     pub security_profile_name: Option<String>,
 }
 
+/// see [Iot::create_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamRequest {
@@ -2192,6 +2262,7 @@ pub struct CreateStreamRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Iot::create_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStreamResponse {
@@ -2213,6 +2284,7 @@ pub struct CreateStreamResponse {
     pub stream_version: Option<i64>,
 }
 
+/// see [Iot::create_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingGroupRequest {
@@ -2233,6 +2305,7 @@ pub struct CreateThingGroupRequest {
     pub thing_group_properties: Option<ThingGroupProperties>,
 }
 
+/// see [Iot::create_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThingGroupResponse {
@@ -2251,6 +2324,7 @@ pub struct CreateThingGroupResponse {
 }
 
 /// <p>The input for the CreateThing operation.</p>
+/// see [Iot::create_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingRequest {
@@ -2272,6 +2346,7 @@ pub struct CreateThingRequest {
 }
 
 /// <p>The output of the CreateThing operation.</p>
+/// see [Iot::create_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThingResponse {
@@ -2290,6 +2365,7 @@ pub struct CreateThingResponse {
 }
 
 /// <p>The input for the CreateThingType operation.</p>
+/// see [Iot::create_thing_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingTypeRequest {
@@ -2307,6 +2383,7 @@ pub struct CreateThingTypeRequest {
 }
 
 /// <p>The output of the CreateThingType operation.</p>
+/// see [Iot::create_thing_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThingTypeResponse {
@@ -2324,6 +2401,7 @@ pub struct CreateThingTypeResponse {
     pub thing_type_name: Option<String>,
 }
 
+/// see [Iot::create_topic_rule_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicRuleDestinationRequest {
@@ -2332,6 +2410,7 @@ pub struct CreateTopicRuleDestinationRequest {
     pub destination_configuration: TopicRuleDestinationConfiguration,
 }
 
+/// see [Iot::create_topic_rule_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTopicRuleDestinationResponse {
@@ -2342,6 +2421,7 @@ pub struct CreateTopicRuleDestinationResponse {
 }
 
 /// <p>The input for the CreateTopicRule operation.</p>
+/// see [Iot::create_topic_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicRuleRequest {
@@ -2378,6 +2458,7 @@ pub struct CustomCodeSigning {
     pub signature_algorithm: Option<String>,
 }
 
+/// see [Iot::delete_account_audit_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountAuditConfigurationRequest {
@@ -2387,10 +2468,12 @@ pub struct DeleteAccountAuditConfigurationRequest {
     pub delete_scheduled_audits: Option<bool>,
 }
 
+/// see [Iot::delete_account_audit_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAccountAuditConfigurationResponse {}
 
+/// see [Iot::delete_audit_suppression]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuditSuppressionRequest {
@@ -2400,10 +2483,12 @@ pub struct DeleteAuditSuppressionRequest {
     pub resource_identifier: ResourceIdentifier,
 }
 
+/// see [Iot::delete_audit_suppression]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAuditSuppressionResponse {}
 
+/// see [Iot::delete_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
@@ -2412,10 +2497,12 @@ pub struct DeleteAuthorizerRequest {
     pub authorizer_name: String,
 }
 
+/// see [Iot::delete_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAuthorizerResponse {}
 
+/// see [Iot::delete_billing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBillingGroupRequest {
@@ -2428,11 +2515,13 @@ pub struct DeleteBillingGroupRequest {
     pub expected_version: Option<i64>,
 }
 
+/// see [Iot::delete_billing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBillingGroupResponse {}
 
 /// <p>Input for the DeleteCACertificate operation.</p>
+/// see [Iot::delete_ca_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCACertificateRequest {
@@ -2442,11 +2531,13 @@ pub struct DeleteCACertificateRequest {
 }
 
 /// <p>The output for the DeleteCACertificate operation.</p>
+/// see [Iot::delete_ca_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCACertificateResponse {}
 
 /// <p>The input for the DeleteCertificate operation.</p>
+/// see [Iot::delete_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateRequest {
@@ -2459,6 +2550,7 @@ pub struct DeleteCertificateRequest {
     pub force_delete: Option<bool>,
 }
 
+/// see [Iot::delete_custom_metric]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomMetricRequest {
@@ -2467,10 +2559,12 @@ pub struct DeleteCustomMetricRequest {
     pub metric_name: String,
 }
 
+/// see [Iot::delete_custom_metric]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCustomMetricResponse {}
 
+/// see [Iot::delete_dimension]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDimensionRequest {
@@ -2479,10 +2573,12 @@ pub struct DeleteDimensionRequest {
     pub name: String,
 }
 
+/// see [Iot::delete_dimension]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDimensionResponse {}
 
+/// see [Iot::delete_domain_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainConfigurationRequest {
@@ -2491,10 +2587,12 @@ pub struct DeleteDomainConfigurationRequest {
     pub domain_configuration_name: String,
 }
 
+/// see [Iot::delete_domain_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainConfigurationResponse {}
 
+/// see [Iot::delete_dynamic_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDynamicThingGroupRequest {
@@ -2507,10 +2605,12 @@ pub struct DeleteDynamicThingGroupRequest {
     pub thing_group_name: String,
 }
 
+/// see [Iot::delete_dynamic_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDynamicThingGroupResponse {}
 
+/// see [Iot::delete_job_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobExecutionRequest {
@@ -2533,6 +2633,7 @@ pub struct DeleteJobExecutionRequest {
     pub thing_name: String,
 }
 
+/// see [Iot::delete_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
@@ -2549,6 +2650,7 @@ pub struct DeleteJobRequest {
     pub namespace_id: Option<String>,
 }
 
+/// see [Iot::delete_mitigation_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMitigationActionRequest {
@@ -2557,10 +2659,12 @@ pub struct DeleteMitigationActionRequest {
     pub action_name: String,
 }
 
+/// see [Iot::delete_mitigation_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMitigationActionResponse {}
 
+/// see [Iot::delete_ota_update]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOTAUpdateRequest {
@@ -2577,11 +2681,13 @@ pub struct DeleteOTAUpdateRequest {
     pub ota_update_id: String,
 }
 
+/// see [Iot::delete_ota_update]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOTAUpdateResponse {}
 
 /// <p>The input for the DeletePolicy operation.</p>
+/// see [Iot::delete_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
@@ -2591,6 +2697,7 @@ pub struct DeletePolicyRequest {
 }
 
 /// <p>The input for the DeletePolicyVersion operation.</p>
+/// see [Iot::delete_policy_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyVersionRequest {
@@ -2602,6 +2709,7 @@ pub struct DeletePolicyVersionRequest {
     pub policy_version_id: String,
 }
 
+/// see [Iot::delete_provisioning_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningTemplateRequest {
@@ -2610,10 +2718,12 @@ pub struct DeleteProvisioningTemplateRequest {
     pub template_name: String,
 }
 
+/// see [Iot::delete_provisioning_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisioningTemplateResponse {}
 
+/// see [Iot::delete_provisioning_template_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningTemplateVersionRequest {
@@ -2625,20 +2735,24 @@ pub struct DeleteProvisioningTemplateVersionRequest {
     pub version_id: i64,
 }
 
+/// see [Iot::delete_provisioning_template_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisioningTemplateVersionResponse {}
 
 /// <p>The input for the DeleteRegistrationCode operation.</p>
+/// see [Iot::delete_registration_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegistrationCodeRequest {}
 
 /// <p>The output for the DeleteRegistrationCode operation.</p>
+/// see [Iot::delete_registration_code]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegistrationCodeResponse {}
 
+/// see [Iot::delete_role_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoleAliasRequest {
@@ -2647,10 +2761,12 @@ pub struct DeleteRoleAliasRequest {
     pub role_alias: String,
 }
 
+/// see [Iot::delete_role_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRoleAliasResponse {}
 
+/// see [Iot::delete_scheduled_audit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduledAuditRequest {
@@ -2659,10 +2775,12 @@ pub struct DeleteScheduledAuditRequest {
     pub scheduled_audit_name: String,
 }
 
+/// see [Iot::delete_scheduled_audit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteScheduledAuditResponse {}
 
+/// see [Iot::delete_security_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityProfileRequest {
@@ -2675,10 +2793,12 @@ pub struct DeleteSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
+/// see [Iot::delete_security_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecurityProfileResponse {}
 
+/// see [Iot::delete_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamRequest {
@@ -2687,10 +2807,12 @@ pub struct DeleteStreamRequest {
     pub stream_id: String,
 }
 
+/// see [Iot::delete_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStreamResponse {}
 
+/// see [Iot::delete_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingGroupRequest {
@@ -2703,11 +2825,13 @@ pub struct DeleteThingGroupRequest {
     pub thing_group_name: String,
 }
 
+/// see [Iot::delete_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThingGroupResponse {}
 
 /// <p>The input for the DeleteThing operation.</p>
+/// see [Iot::delete_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingRequest {
@@ -2721,11 +2845,13 @@ pub struct DeleteThingRequest {
 }
 
 /// <p>The output of the DeleteThing operation.</p>
+/// see [Iot::delete_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThingResponse {}
 
 /// <p>The input for the DeleteThingType operation.</p>
+/// see [Iot::delete_thing_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingTypeRequest {
@@ -2735,10 +2861,12 @@ pub struct DeleteThingTypeRequest {
 }
 
 /// <p>The output for the DeleteThingType operation.</p>
+/// see [Iot::delete_thing_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThingTypeResponse {}
 
+/// see [Iot::delete_topic_rule_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicRuleDestinationRequest {
@@ -2747,11 +2875,13 @@ pub struct DeleteTopicRuleDestinationRequest {
     pub arn: String,
 }
 
+/// see [Iot::delete_topic_rule_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTopicRuleDestinationResponse {}
 
 /// <p>The input for the DeleteTopicRule operation.</p>
+/// see [Iot::delete_topic_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicRuleRequest {
@@ -2760,6 +2890,7 @@ pub struct DeleteTopicRuleRequest {
     pub rule_name: String,
 }
 
+/// see [Iot::delete_v2_logging_level]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteV2LoggingLevelRequest {
@@ -2786,6 +2917,7 @@ pub struct Denied {
 }
 
 /// <p>The input for the DeprecateThingType operation.</p>
+/// see [Iot::deprecate_thing_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateThingTypeRequest {
@@ -2799,14 +2931,17 @@ pub struct DeprecateThingTypeRequest {
 }
 
 /// <p>The output for the DeprecateThingType operation.</p>
+/// see [Iot::deprecate_thing_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateThingTypeResponse {}
 
+/// see [Iot::describe_account_audit_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAuditConfigurationRequest {}
 
+/// see [Iot::describe_account_audit_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountAuditConfigurationResponse {
@@ -2826,6 +2961,7 @@ pub struct DescribeAccountAuditConfigurationResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [Iot::describe_audit_finding]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditFindingRequest {
@@ -2834,6 +2970,7 @@ pub struct DescribeAuditFindingRequest {
     pub finding_id: String,
 }
 
+/// see [Iot::describe_audit_finding]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditFindingResponse {
@@ -2842,6 +2979,7 @@ pub struct DescribeAuditFindingResponse {
     pub finding: Option<AuditFinding>,
 }
 
+/// see [Iot::describe_audit_mitigation_actions_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditMitigationActionsTaskRequest {
@@ -2850,6 +2988,7 @@ pub struct DescribeAuditMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::describe_audit_mitigation_actions_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditMitigationActionsTaskResponse {
@@ -2883,6 +3022,7 @@ pub struct DescribeAuditMitigationActionsTaskResponse {
     pub task_status: Option<String>,
 }
 
+/// see [Iot::describe_audit_suppression]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditSuppressionRequest {
@@ -2892,6 +3032,7 @@ pub struct DescribeAuditSuppressionRequest {
     pub resource_identifier: ResourceIdentifier,
 }
 
+/// see [Iot::describe_audit_suppression]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditSuppressionResponse {
@@ -2915,6 +3056,7 @@ pub struct DescribeAuditSuppressionResponse {
     pub suppress_indefinitely: Option<bool>,
 }
 
+/// see [Iot::describe_audit_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditTaskRequest {
@@ -2923,6 +3065,7 @@ pub struct DescribeAuditTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::describe_audit_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditTaskResponse {
@@ -2952,6 +3095,7 @@ pub struct DescribeAuditTaskResponse {
     pub task_type: Option<String>,
 }
 
+/// see [Iot::describe_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuthorizerRequest {
@@ -2960,6 +3104,7 @@ pub struct DescribeAuthorizerRequest {
     pub authorizer_name: String,
 }
 
+/// see [Iot::describe_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuthorizerResponse {
@@ -2969,6 +3114,7 @@ pub struct DescribeAuthorizerResponse {
     pub authorizer_description: Option<AuthorizerDescription>,
 }
 
+/// see [Iot::describe_billing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBillingGroupRequest {
@@ -2977,6 +3123,7 @@ pub struct DescribeBillingGroupRequest {
     pub billing_group_name: String,
 }
 
+/// see [Iot::describe_billing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBillingGroupResponse {
@@ -3007,6 +3154,7 @@ pub struct DescribeBillingGroupResponse {
 }
 
 /// <p>The input for the DescribeCACertificate operation.</p>
+/// see [Iot::describe_ca_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCACertificateRequest {
@@ -3016,6 +3164,7 @@ pub struct DescribeCACertificateRequest {
 }
 
 /// <p>The output from the DescribeCACertificate operation.</p>
+/// see [Iot::describe_ca_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCACertificateResponse {
@@ -3030,6 +3179,7 @@ pub struct DescribeCACertificateResponse {
 }
 
 /// <p>The input for the DescribeCertificate operation.</p>
+/// see [Iot::describe_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateRequest {
@@ -3039,6 +3189,7 @@ pub struct DescribeCertificateRequest {
 }
 
 /// <p>The output of the DescribeCertificate operation.</p>
+/// see [Iot::describe_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificateResponse {
@@ -3048,6 +3199,7 @@ pub struct DescribeCertificateResponse {
     pub certificate_description: Option<CertificateDescription>,
 }
 
+/// see [Iot::describe_custom_metric]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomMetricRequest {
@@ -3056,6 +3208,7 @@ pub struct DescribeCustomMetricRequest {
     pub metric_name: String,
 }
 
+/// see [Iot::describe_custom_metric]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCustomMetricResponse {
@@ -3085,10 +3238,12 @@ pub struct DescribeCustomMetricResponse {
     pub metric_type: Option<String>,
 }
 
+/// see [Iot::describe_default_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultAuthorizerRequest {}
 
+/// see [Iot::describe_default_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDefaultAuthorizerResponse {
@@ -3098,6 +3253,7 @@ pub struct DescribeDefaultAuthorizerResponse {
     pub authorizer_description: Option<AuthorizerDescription>,
 }
 
+/// see [Iot::describe_detect_mitigation_actions_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectMitigationActionsTaskRequest {
@@ -3106,6 +3262,7 @@ pub struct DescribeDetectMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::describe_detect_mitigation_actions_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectMitigationActionsTaskResponse {
@@ -3115,6 +3272,7 @@ pub struct DescribeDetectMitigationActionsTaskResponse {
     pub task_summary: Option<DetectMitigationActionsTaskSummary>,
 }
 
+/// see [Iot::describe_dimension]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDimensionRequest {
@@ -3123,6 +3281,7 @@ pub struct DescribeDimensionRequest {
     pub name: String,
 }
 
+/// see [Iot::describe_dimension]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDimensionResponse {
@@ -3152,6 +3311,7 @@ pub struct DescribeDimensionResponse {
     pub type_: Option<String>,
 }
 
+/// see [Iot::describe_domain_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainConfigurationRequest {
@@ -3160,6 +3320,7 @@ pub struct DescribeDomainConfigurationRequest {
     pub domain_configuration_name: String,
 }
 
+/// see [Iot::describe_domain_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainConfigurationResponse {
@@ -3202,6 +3363,7 @@ pub struct DescribeDomainConfigurationResponse {
 }
 
 /// <p>The input for the DescribeEndpoint operation.</p>
+/// see [Iot::describe_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
@@ -3212,6 +3374,7 @@ pub struct DescribeEndpointRequest {
 }
 
 /// <p>The output from the DescribeEndpoint operation.</p>
+/// see [Iot::describe_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointResponse {
@@ -3221,10 +3384,12 @@ pub struct DescribeEndpointResponse {
     pub endpoint_address: Option<String>,
 }
 
+/// see [Iot::describe_event_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventConfigurationsRequest {}
 
+/// see [Iot::describe_event_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventConfigurationsResponse {
@@ -3242,6 +3407,7 @@ pub struct DescribeEventConfigurationsResponse {
     pub last_modified_date: Option<f64>,
 }
 
+/// see [Iot::describe_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIndexRequest {
@@ -3250,6 +3416,7 @@ pub struct DescribeIndexRequest {
     pub index_name: String,
 }
 
+/// see [Iot::describe_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIndexResponse {
@@ -3267,6 +3434,7 @@ pub struct DescribeIndexResponse {
     pub schema: Option<String>,
 }
 
+/// see [Iot::describe_job_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobExecutionRequest {
@@ -3282,6 +3450,7 @@ pub struct DescribeJobExecutionRequest {
     pub thing_name: String,
 }
 
+/// see [Iot::describe_job_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobExecutionResponse {
@@ -3291,6 +3460,7 @@ pub struct DescribeJobExecutionResponse {
     pub execution: Option<JobExecution>,
 }
 
+/// see [Iot::describe_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobRequest {
@@ -3299,6 +3469,7 @@ pub struct DescribeJobRequest {
     pub job_id: String,
 }
 
+/// see [Iot::describe_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobResponse {
@@ -3312,6 +3483,7 @@ pub struct DescribeJobResponse {
     pub job: Option<Job>,
 }
 
+/// see [Iot::describe_mitigation_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMitigationActionRequest {
@@ -3320,6 +3492,7 @@ pub struct DescribeMitigationActionRequest {
     pub action_name: String,
 }
 
+/// see [Iot::describe_mitigation_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMitigationActionResponse {
@@ -3357,6 +3530,7 @@ pub struct DescribeMitigationActionResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [Iot::describe_provisioning_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningTemplateRequest {
@@ -3365,6 +3539,7 @@ pub struct DescribeProvisioningTemplateRequest {
     pub template_name: String,
 }
 
+/// see [Iot::describe_provisioning_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningTemplateResponse {
@@ -3410,6 +3585,7 @@ pub struct DescribeProvisioningTemplateResponse {
     pub template_name: Option<String>,
 }
 
+/// see [Iot::describe_provisioning_template_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningTemplateVersionRequest {
@@ -3421,6 +3597,7 @@ pub struct DescribeProvisioningTemplateVersionRequest {
     pub version_id: i64,
 }
 
+/// see [Iot::describe_provisioning_template_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningTemplateVersionResponse {
@@ -3442,6 +3619,7 @@ pub struct DescribeProvisioningTemplateVersionResponse {
     pub version_id: Option<i64>,
 }
 
+/// see [Iot::describe_role_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRoleAliasRequest {
@@ -3450,6 +3628,7 @@ pub struct DescribeRoleAliasRequest {
     pub role_alias: String,
 }
 
+/// see [Iot::describe_role_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRoleAliasResponse {
@@ -3459,6 +3638,7 @@ pub struct DescribeRoleAliasResponse {
     pub role_alias_description: Option<RoleAliasDescription>,
 }
 
+/// see [Iot::describe_scheduled_audit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledAuditRequest {
@@ -3467,6 +3647,7 @@ pub struct DescribeScheduledAuditRequest {
     pub scheduled_audit_name: String,
 }
 
+/// see [Iot::describe_scheduled_audit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScheduledAuditResponse {
@@ -3496,6 +3677,7 @@ pub struct DescribeScheduledAuditResponse {
     pub target_check_names: Option<Vec<String>>,
 }
 
+/// see [Iot::describe_security_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityProfileRequest {
@@ -3504,6 +3686,7 @@ pub struct DescribeSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
+/// see [Iot::describe_security_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecurityProfileResponse {
@@ -3545,6 +3728,7 @@ pub struct DescribeSecurityProfileResponse {
     pub version: Option<i64>,
 }
 
+/// see [Iot::describe_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamRequest {
@@ -3553,6 +3737,7 @@ pub struct DescribeStreamRequest {
     pub stream_id: String,
 }
 
+/// see [Iot::describe_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamResponse {
@@ -3562,6 +3747,7 @@ pub struct DescribeStreamResponse {
     pub stream_info: Option<StreamInfo>,
 }
 
+/// see [Iot::describe_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingGroupRequest {
@@ -3570,6 +3756,7 @@ pub struct DescribeThingGroupRequest {
     pub thing_group_name: String,
 }
 
+/// see [Iot::describe_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingGroupResponse {
@@ -3615,6 +3802,7 @@ pub struct DescribeThingGroupResponse {
     pub version: Option<i64>,
 }
 
+/// see [Iot::describe_thing_registration_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingRegistrationTaskRequest {
@@ -3623,6 +3811,7 @@ pub struct DescribeThingRegistrationTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::describe_thing_registration_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingRegistrationTaskResponse {
@@ -3677,6 +3866,7 @@ pub struct DescribeThingRegistrationTaskResponse {
 }
 
 /// <p>The input for the DescribeThing operation.</p>
+/// see [Iot::describe_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingRequest {
@@ -3686,6 +3876,7 @@ pub struct DescribeThingRequest {
 }
 
 /// <p>The output from the DescribeThing operation.</p>
+/// see [Iot::describe_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingResponse {
@@ -3724,6 +3915,7 @@ pub struct DescribeThingResponse {
 }
 
 /// <p>The input for the DescribeThingType operation.</p>
+/// see [Iot::describe_thing_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingTypeRequest {
@@ -3733,6 +3925,7 @@ pub struct DescribeThingTypeRequest {
 }
 
 /// <p>The output for the DescribeThingType operation.</p>
+/// see [Iot::describe_thing_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingTypeResponse {
@@ -3767,6 +3960,7 @@ pub struct Destination {
     pub s_3_destination: Option<S3Destination>,
 }
 
+/// see [Iot::detach_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPolicyRequest {
@@ -3779,6 +3973,7 @@ pub struct DetachPolicyRequest {
 }
 
 /// <p>The input for the DetachPrincipalPolicy operation.</p>
+/// see [Iot::detach_principal_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPrincipalPolicyRequest {
@@ -3790,6 +3985,7 @@ pub struct DetachPrincipalPolicyRequest {
     pub principal: String,
 }
 
+/// see [Iot::detach_security_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachSecurityProfileRequest {
@@ -3801,11 +3997,13 @@ pub struct DetachSecurityProfileRequest {
     pub security_profile_target_arn: String,
 }
 
+/// see [Iot::detach_security_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachSecurityProfileResponse {}
 
 /// <p>The input for the DetachThingPrincipal operation.</p>
+/// see [Iot::detach_thing_principal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachThingPrincipalRequest {
@@ -3818,6 +4016,7 @@ pub struct DetachThingPrincipalRequest {
 }
 
 /// <p>The output from the DetachThingPrincipal operation.</p>
+/// see [Iot::detach_thing_principal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachThingPrincipalResponse {}
@@ -3946,6 +4145,7 @@ pub struct DetectMitigationActionsTaskTarget {
 }
 
 /// <p>The input for the DisableTopicRuleRequest operation.</p>
+/// see [Iot::disable_topic_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableTopicRuleRequest {
@@ -4074,6 +4274,7 @@ pub struct EnableIoTLoggingParams {
 }
 
 /// <p>The input for the EnableTopicRuleRequest operation.</p>
+/// see [Iot::enable_topic_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableTopicRuleRequest {
@@ -4165,6 +4366,7 @@ pub struct FirehoseAction {
     pub separator: Option<String>,
 }
 
+/// see [Iot::get_behavior_model_training_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBehaviorModelTrainingSummariesRequest {
@@ -4182,6 +4384,15 @@ pub struct GetBehaviorModelTrainingSummariesRequest {
     pub security_profile_name: Option<String>,
 }
 
+impl PagedRequest for GetBehaviorModelTrainingSummariesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::get_behavior_model_training_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBehaviorModelTrainingSummariesResponse {
@@ -4195,6 +4406,31 @@ pub struct GetBehaviorModelTrainingSummariesResponse {
     pub summaries: Option<Vec<BehaviorModelTrainingSummary>>,
 }
 
+impl GetBehaviorModelTrainingSummariesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BehaviorModelTrainingSummary>> {
+        Some(self.summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBehaviorModelTrainingSummariesResponse {
+    type Item = BehaviorModelTrainingSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BehaviorModelTrainingSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::get_cardinality]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCardinalityRequest {
@@ -4215,6 +4451,7 @@ pub struct GetCardinalityRequest {
     pub query_version: Option<String>,
 }
 
+/// see [Iot::get_cardinality]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCardinalityResponse {
@@ -4224,6 +4461,7 @@ pub struct GetCardinalityResponse {
     pub cardinality: Option<i64>,
 }
 
+/// see [Iot::get_effective_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEffectivePoliciesRequest {
@@ -4241,6 +4479,7 @@ pub struct GetEffectivePoliciesRequest {
     pub thing_name: Option<String>,
 }
 
+/// see [Iot::get_effective_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEffectivePoliciesResponse {
@@ -4250,10 +4489,12 @@ pub struct GetEffectivePoliciesResponse {
     pub effective_policies: Option<Vec<EffectivePolicy>>,
 }
 
+/// see [Iot::get_indexing_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIndexingConfigurationRequest {}
 
+/// see [Iot::get_indexing_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIndexingConfigurationResponse {
@@ -4267,6 +4508,7 @@ pub struct GetIndexingConfigurationResponse {
     pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
 }
 
+/// see [Iot::get_job_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobDocumentRequest {
@@ -4275,6 +4517,7 @@ pub struct GetJobDocumentRequest {
     pub job_id: String,
 }
 
+/// see [Iot::get_job_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobDocumentResponse {
@@ -4285,11 +4528,13 @@ pub struct GetJobDocumentResponse {
 }
 
 /// <p>The input for the GetLoggingOptions operation.</p>
+/// see [Iot::get_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggingOptionsRequest {}
 
 /// <p>The output from the GetLoggingOptions operation.</p>
+/// see [Iot::get_logging_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggingOptionsResponse {
@@ -4303,6 +4548,7 @@ pub struct GetLoggingOptionsResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [Iot::get_ota_update]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOTAUpdateRequest {
@@ -4311,6 +4557,7 @@ pub struct GetOTAUpdateRequest {
     pub ota_update_id: String,
 }
 
+/// see [Iot::get_ota_update]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOTAUpdateResponse {
@@ -4320,6 +4567,7 @@ pub struct GetOTAUpdateResponse {
     pub ota_update_info: Option<OTAUpdateInfo>,
 }
 
+/// see [Iot::get_percentiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPercentilesRequest {
@@ -4344,6 +4592,7 @@ pub struct GetPercentilesRequest {
     pub query_version: Option<String>,
 }
 
+/// see [Iot::get_percentiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPercentilesResponse {
@@ -4354,6 +4603,7 @@ pub struct GetPercentilesResponse {
 }
 
 /// <p>The input for the GetPolicy operation.</p>
+/// see [Iot::get_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
@@ -4363,6 +4613,7 @@ pub struct GetPolicyRequest {
 }
 
 /// <p>The output from the GetPolicy operation.</p>
+/// see [Iot::get_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
@@ -4397,6 +4648,7 @@ pub struct GetPolicyResponse {
 }
 
 /// <p>The input for the GetPolicyVersion operation.</p>
+/// see [Iot::get_policy_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyVersionRequest {
@@ -4409,6 +4661,7 @@ pub struct GetPolicyVersionRequest {
 }
 
 /// <p>The output from the GetPolicyVersion operation.</p>
+/// see [Iot::get_policy_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyVersionResponse {
@@ -4447,11 +4700,13 @@ pub struct GetPolicyVersionResponse {
 }
 
 /// <p>The input to the GetRegistrationCode operation.</p>
+/// see [Iot::get_registration_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegistrationCodeRequest {}
 
 /// <p>The output from the GetRegistrationCode operation.</p>
+/// see [Iot::get_registration_code]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegistrationCodeResponse {
@@ -4461,6 +4716,7 @@ pub struct GetRegistrationCodeResponse {
     pub registration_code: Option<String>,
 }
 
+/// see [Iot::get_statistics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStatisticsRequest {
@@ -4481,6 +4737,7 @@ pub struct GetStatisticsRequest {
     pub query_version: Option<String>,
 }
 
+/// see [Iot::get_statistics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStatisticsResponse {
@@ -4490,6 +4747,7 @@ pub struct GetStatisticsResponse {
     pub statistics: Option<Statistics>,
 }
 
+/// see [Iot::get_topic_rule_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicRuleDestinationRequest {
@@ -4498,6 +4756,7 @@ pub struct GetTopicRuleDestinationRequest {
     pub arn: String,
 }
 
+/// see [Iot::get_topic_rule_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTopicRuleDestinationResponse {
@@ -4508,6 +4767,7 @@ pub struct GetTopicRuleDestinationResponse {
 }
 
 /// <p>The input for the GetTopicRule operation.</p>
+/// see [Iot::get_topic_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicRuleRequest {
@@ -4517,6 +4777,7 @@ pub struct GetTopicRuleRequest {
 }
 
 /// <p>The output from the GetTopicRule operation.</p>
+/// see [Iot::get_topic_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTopicRuleResponse {
@@ -4530,10 +4791,12 @@ pub struct GetTopicRuleResponse {
     pub rule_arn: Option<String>,
 }
 
+/// see [Iot::get_v2_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetV2LoggingOptionsRequest {}
 
+/// see [Iot::get_v2_logging_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetV2LoggingOptionsResponse {
@@ -5053,6 +5316,7 @@ pub struct LambdaAction {
     pub function_arn: String,
 }
 
+/// see [Iot::list_active_violations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActiveViolationsRequest {
@@ -5082,6 +5346,15 @@ pub struct ListActiveViolationsRequest {
     pub thing_name: Option<String>,
 }
 
+impl PagedRequest for ListActiveViolationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_active_violations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActiveViolationsResponse {
@@ -5095,6 +5368,31 @@ pub struct ListActiveViolationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListActiveViolationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ActiveViolation>> {
+        Some(self.active_violations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListActiveViolationsResponse {
+    type Item = ActiveViolation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ActiveViolation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_attached_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedPoliciesRequest {
@@ -5115,6 +5413,15 @@ pub struct ListAttachedPoliciesRequest {
     pub target: String,
 }
 
+impl PagedRequest for ListAttachedPoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Iot::list_attached_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttachedPoliciesResponse {
@@ -5128,6 +5435,31 @@ pub struct ListAttachedPoliciesResponse {
     pub policies: Option<Vec<Policy>>,
 }
 
+impl ListAttachedPoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Policy>> {
+        Some(self.policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAttachedPoliciesResponse {
+    type Item = Policy;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Policy> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_audit_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditFindingsRequest {
@@ -5165,6 +5497,15 @@ pub struct ListAuditFindingsRequest {
     pub task_id: Option<String>,
 }
 
+impl PagedRequest for ListAuditFindingsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_audit_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditFindingsResponse {
@@ -5178,6 +5519,31 @@ pub struct ListAuditFindingsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAuditFindingsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AuditFinding>> {
+        Some(self.findings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAuditFindingsResponse {
+    type Item = AuditFinding;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AuditFinding> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_audit_mitigation_actions_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditMitigationActionsExecutionsRequest {
@@ -5201,6 +5567,15 @@ pub struct ListAuditMitigationActionsExecutionsRequest {
     pub task_id: String,
 }
 
+impl PagedRequest for ListAuditMitigationActionsExecutionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_audit_mitigation_actions_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditMitigationActionsExecutionsResponse {
@@ -5214,6 +5589,31 @@ pub struct ListAuditMitigationActionsExecutionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAuditMitigationActionsExecutionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AuditMitigationActionExecutionMetadata>> {
+        Some(self.actions_executions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAuditMitigationActionsExecutionsResponse {
+    type Item = AuditMitigationActionExecutionMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AuditMitigationActionExecutionMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_audit_mitigation_actions_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditMitigationActionsTasksRequest {
@@ -5245,6 +5645,15 @@ pub struct ListAuditMitigationActionsTasksRequest {
     pub task_status: Option<String>,
 }
 
+impl PagedRequest for ListAuditMitigationActionsTasksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_audit_mitigation_actions_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditMitigationActionsTasksResponse {
@@ -5258,6 +5667,31 @@ pub struct ListAuditMitigationActionsTasksResponse {
     pub tasks: Option<Vec<AuditMitigationActionsTaskMetadata>>,
 }
 
+impl ListAuditMitigationActionsTasksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AuditMitigationActionsTaskMetadata>> {
+        Some(self.tasks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAuditMitigationActionsTasksResponse {
+    type Item = AuditMitigationActionsTaskMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AuditMitigationActionsTaskMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_audit_suppressions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditSuppressionsRequest {
@@ -5281,6 +5715,15 @@ pub struct ListAuditSuppressionsRequest {
     pub resource_identifier: Option<ResourceIdentifier>,
 }
 
+impl PagedRequest for ListAuditSuppressionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_audit_suppressions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditSuppressionsResponse {
@@ -5294,6 +5737,31 @@ pub struct ListAuditSuppressionsResponse {
     pub suppressions: Option<Vec<AuditSuppression>>,
 }
 
+impl ListAuditSuppressionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AuditSuppression>> {
+        Some(self.suppressions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAuditSuppressionsResponse {
+    type Item = AuditSuppression;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AuditSuppression> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_audit_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditTasksRequest {
@@ -5321,6 +5789,15 @@ pub struct ListAuditTasksRequest {
     pub task_type: Option<String>,
 }
 
+impl PagedRequest for ListAuditTasksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_audit_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditTasksResponse {
@@ -5334,6 +5811,31 @@ pub struct ListAuditTasksResponse {
     pub tasks: Option<Vec<AuditTaskMetadata>>,
 }
 
+impl ListAuditTasksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AuditTaskMetadata>> {
+        Some(self.tasks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAuditTasksResponse {
+    type Item = AuditTaskMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AuditTaskMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_authorizers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuthorizersRequest {
@@ -5355,6 +5857,15 @@ pub struct ListAuthorizersRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListAuthorizersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Iot::list_authorizers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuthorizersResponse {
@@ -5368,6 +5879,31 @@ pub struct ListAuthorizersResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListAuthorizersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AuthorizerSummary>> {
+        Some(self.authorizers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAuthorizersResponse {
+    type Item = AuthorizerSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AuthorizerSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_billing_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBillingGroupsRequest {
@@ -5385,6 +5921,15 @@ pub struct ListBillingGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListBillingGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_billing_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBillingGroupsResponse {
@@ -5398,7 +5943,32 @@ pub struct ListBillingGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListBillingGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GroupNameAndArn>> {
+        Some(self.billing_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBillingGroupsResponse {
+    type Item = GroupNameAndArn;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GroupNameAndArn> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>Input for the ListCACertificates operation.</p>
+/// see [Iot::list_ca_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCACertificatesRequest {
@@ -5416,7 +5986,16 @@ pub struct ListCACertificatesRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListCACertificatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The output from the ListCACertificates operation.</p>
+/// see [Iot::list_ca_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCACertificatesResponse {
@@ -5430,7 +6009,32 @@ pub struct ListCACertificatesResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListCACertificatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<CACertificate>> {
+        Some(self.certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCACertificatesResponse {
+    type Item = CACertificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CACertificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input to the ListCertificatesByCA operation.</p>
+/// see [Iot::list_certificates_by_ca]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesByCARequest {
@@ -5451,7 +6055,16 @@ pub struct ListCertificatesByCARequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListCertificatesByCARequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The output of the ListCertificatesByCA operation.</p>
+/// see [Iot::list_certificates_by_ca]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCertificatesByCAResponse {
@@ -5465,7 +6078,32 @@ pub struct ListCertificatesByCAResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListCertificatesByCAResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
+        Some(self.certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCertificatesByCAResponse {
+    type Item = Certificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Certificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListCertificates operation.</p>
+/// see [Iot::list_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesRequest {
@@ -5483,7 +6121,16 @@ pub struct ListCertificatesRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListCertificatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The output of the ListCertificates operation.</p>
+/// see [Iot::list_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCertificatesResponse {
@@ -5497,6 +6144,31 @@ pub struct ListCertificatesResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListCertificatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
+        Some(self.certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCertificatesResponse {
+    type Item = Certificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Certificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_custom_metrics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomMetricsRequest {
@@ -5510,6 +6182,15 @@ pub struct ListCustomMetricsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListCustomMetricsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_custom_metrics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCustomMetricsResponse {
@@ -5523,6 +6204,31 @@ pub struct ListCustomMetricsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListCustomMetricsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.metric_names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCustomMetricsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_detect_mitigation_actions_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectMitigationActionsExecutionsRequest {
@@ -5556,6 +6262,15 @@ pub struct ListDetectMitigationActionsExecutionsRequest {
     pub violation_id: Option<String>,
 }
 
+impl PagedRequest for ListDetectMitigationActionsExecutionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_detect_mitigation_actions_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectMitigationActionsExecutionsResponse {
@@ -5569,6 +6284,31 @@ pub struct ListDetectMitigationActionsExecutionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDetectMitigationActionsExecutionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DetectMitigationActionExecution>> {
+        Some(self.actions_executions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDetectMitigationActionsExecutionsResponse {
+    type Item = DetectMitigationActionExecution;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DetectMitigationActionExecution> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_detect_mitigation_actions_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectMitigationActionsTasksRequest {
@@ -5588,6 +6328,15 @@ pub struct ListDetectMitigationActionsTasksRequest {
     pub start_time: f64,
 }
 
+impl PagedRequest for ListDetectMitigationActionsTasksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_detect_mitigation_actions_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectMitigationActionsTasksResponse {
@@ -5601,6 +6350,31 @@ pub struct ListDetectMitigationActionsTasksResponse {
     pub tasks: Option<Vec<DetectMitigationActionsTaskSummary>>,
 }
 
+impl ListDetectMitigationActionsTasksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DetectMitigationActionsTaskSummary>> {
+        Some(self.tasks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDetectMitigationActionsTasksResponse {
+    type Item = DetectMitigationActionsTaskSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DetectMitigationActionsTaskSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_dimensions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDimensionsRequest {
@@ -5614,6 +6388,15 @@ pub struct ListDimensionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDimensionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_dimensions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDimensionsResponse {
@@ -5627,6 +6410,31 @@ pub struct ListDimensionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDimensionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.dimension_names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDimensionsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_domain_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainConfigurationsRequest {
@@ -5644,6 +6452,15 @@ pub struct ListDomainConfigurationsRequest {
     pub service_type: Option<String>,
 }
 
+impl PagedRequest for ListDomainConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Iot::list_domain_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainConfigurationsResponse {
@@ -5657,6 +6474,31 @@ pub struct ListDomainConfigurationsResponse {
     pub next_marker: Option<String>,
 }
 
+impl ListDomainConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DomainConfigurationSummary>> {
+        Some(self.domain_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDomainConfigurationsResponse {
+    type Item = DomainConfigurationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DomainConfigurationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_indices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndicesRequest {
@@ -5670,6 +6512,15 @@ pub struct ListIndicesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListIndicesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_indices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIndicesResponse {
@@ -5683,6 +6534,31 @@ pub struct ListIndicesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListIndicesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.index_names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListIndicesResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_job_executions_for_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobExecutionsForJobRequest {
@@ -5703,6 +6579,15 @@ pub struct ListJobExecutionsForJobRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListJobExecutionsForJobRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_job_executions_for_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobExecutionsForJobResponse {
@@ -5716,6 +6601,31 @@ pub struct ListJobExecutionsForJobResponse {
     pub next_token: Option<String>,
 }
 
+impl ListJobExecutionsForJobResponse {
+    fn pagination_page_opt(self) -> Option<Vec<JobExecutionSummaryForJob>> {
+        Some(self.execution_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobExecutionsForJobResponse {
+    type Item = JobExecutionSummaryForJob;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<JobExecutionSummaryForJob> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_job_executions_for_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobExecutionsForThingRequest {
@@ -5740,6 +6650,15 @@ pub struct ListJobExecutionsForThingRequest {
     pub thing_name: String,
 }
 
+impl PagedRequest for ListJobExecutionsForThingRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_job_executions_for_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobExecutionsForThingResponse {
@@ -5753,6 +6672,31 @@ pub struct ListJobExecutionsForThingResponse {
     pub next_token: Option<String>,
 }
 
+impl ListJobExecutionsForThingResponse {
+    fn pagination_page_opt(self) -> Option<Vec<JobExecutionSummaryForThing>> {
+        Some(self.execution_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobExecutionsForThingResponse {
+    type Item = JobExecutionSummaryForThing;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<JobExecutionSummaryForThing> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -5786,6 +6730,15 @@ pub struct ListJobsRequest {
     pub thing_group_name: Option<String>,
 }
 
+impl PagedRequest for ListJobsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
@@ -5799,6 +6752,31 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListJobsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<JobSummary>> {
+        Some(self.jobs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListJobsResponse {
+    type Item = JobSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<JobSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_mitigation_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMitigationActionsRequest {
@@ -5816,6 +6794,15 @@ pub struct ListMitigationActionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListMitigationActionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_mitigation_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMitigationActionsResponse {
@@ -5829,6 +6816,31 @@ pub struct ListMitigationActionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListMitigationActionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<MitigationActionIdentifier>> {
+        Some(self.action_identifiers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListMitigationActionsResponse {
+    type Item = MitigationActionIdentifier;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MitigationActionIdentifier> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_ota_updates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOTAUpdatesRequest {
@@ -5846,6 +6858,15 @@ pub struct ListOTAUpdatesRequest {
     pub ota_update_status: Option<String>,
 }
 
+impl PagedRequest for ListOTAUpdatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_ota_updates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOTAUpdatesResponse {
@@ -5859,7 +6880,32 @@ pub struct ListOTAUpdatesResponse {
     pub ota_updates: Option<Vec<OTAUpdateSummary>>,
 }
 
+impl ListOTAUpdatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<OTAUpdateSummary>> {
+        Some(self.ota_updates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOTAUpdatesResponse {
+    type Item = OTAUpdateSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OTAUpdateSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input to the ListOutgoingCertificates operation.</p>
+/// see [Iot::list_outgoing_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOutgoingCertificatesRequest {
@@ -5877,7 +6923,16 @@ pub struct ListOutgoingCertificatesRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListOutgoingCertificatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The output from the ListOutgoingCertificates operation.</p>
+/// see [Iot::list_outgoing_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOutgoingCertificatesResponse {
@@ -5891,7 +6946,32 @@ pub struct ListOutgoingCertificatesResponse {
     pub outgoing_certificates: Option<Vec<OutgoingCertificate>>,
 }
 
+impl ListOutgoingCertificatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<OutgoingCertificate>> {
+        Some(self.outgoing_certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOutgoingCertificatesResponse {
+    type Item = OutgoingCertificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OutgoingCertificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListPolicies operation.</p>
+/// see [Iot::list_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesRequest {
@@ -5909,7 +6989,16 @@ pub struct ListPoliciesRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListPoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The output from the ListPolicies operation.</p>
+/// see [Iot::list_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPoliciesResponse {
@@ -5923,7 +7012,32 @@ pub struct ListPoliciesResponse {
     pub policies: Option<Vec<Policy>>,
 }
 
+impl ListPoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Policy>> {
+        Some(self.policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPoliciesResponse {
+    type Item = Policy;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Policy> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListPolicyPrincipals operation.</p>
+/// see [Iot::list_policy_principals]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyPrincipalsRequest {
@@ -5944,7 +7058,16 @@ pub struct ListPolicyPrincipalsRequest {
     pub policy_name: String,
 }
 
+impl PagedRequest for ListPolicyPrincipalsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The output from the ListPolicyPrincipals operation.</p>
+/// see [Iot::list_policy_principals]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPolicyPrincipalsResponse {
@@ -5958,7 +7081,32 @@ pub struct ListPolicyPrincipalsResponse {
     pub principals: Option<Vec<String>>,
 }
 
+impl ListPolicyPrincipalsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.principals.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPolicyPrincipalsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListPolicyVersions operation.</p>
+/// see [Iot::list_policy_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyVersionsRequest {
@@ -5968,6 +7116,7 @@ pub struct ListPolicyVersionsRequest {
 }
 
 /// <p>The output from the ListPolicyVersions operation.</p>
+/// see [Iot::list_policy_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPolicyVersionsResponse {
@@ -5978,6 +7127,7 @@ pub struct ListPolicyVersionsResponse {
 }
 
 /// <p>The input for the ListPrincipalPolicies operation.</p>
+/// see [Iot::list_principal_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalPoliciesRequest {
@@ -5998,7 +7148,16 @@ pub struct ListPrincipalPoliciesRequest {
     pub principal: String,
 }
 
+impl PagedRequest for ListPrincipalPoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p>The output from the ListPrincipalPolicies operation.</p>
+/// see [Iot::list_principal_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalPoliciesResponse {
@@ -6012,7 +7171,32 @@ pub struct ListPrincipalPoliciesResponse {
     pub policies: Option<Vec<Policy>>,
 }
 
+impl ListPrincipalPoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Policy>> {
+        Some(self.policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPrincipalPoliciesResponse {
+    type Item = Policy;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Policy> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListPrincipalThings operation.</p>
+/// see [Iot::list_principal_things]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalThingsRequest {
@@ -6029,7 +7213,16 @@ pub struct ListPrincipalThingsRequest {
     pub principal: String,
 }
 
+impl PagedRequest for ListPrincipalThingsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The output from the ListPrincipalThings operation.</p>
+/// see [Iot::list_principal_things]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalThingsResponse {
@@ -6043,6 +7236,31 @@ pub struct ListPrincipalThingsResponse {
     pub things: Option<Vec<String>>,
 }
 
+impl ListPrincipalThingsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.things.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPrincipalThingsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_provisioning_template_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningTemplateVersionsRequest {
@@ -6059,6 +7277,15 @@ pub struct ListProvisioningTemplateVersionsRequest {
     pub template_name: String,
 }
 
+impl PagedRequest for ListProvisioningTemplateVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_provisioning_template_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningTemplateVersionsResponse {
@@ -6072,6 +7299,31 @@ pub struct ListProvisioningTemplateVersionsResponse {
     pub versions: Option<Vec<ProvisioningTemplateVersionSummary>>,
 }
 
+impl ListProvisioningTemplateVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ProvisioningTemplateVersionSummary>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListProvisioningTemplateVersionsResponse {
+    type Item = ProvisioningTemplateVersionSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProvisioningTemplateVersionSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_provisioning_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningTemplatesRequest {
@@ -6085,6 +7337,15 @@ pub struct ListProvisioningTemplatesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListProvisioningTemplatesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_provisioning_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningTemplatesResponse {
@@ -6098,6 +7359,31 @@ pub struct ListProvisioningTemplatesResponse {
     pub templates: Option<Vec<ProvisioningTemplateSummary>>,
 }
 
+impl ListProvisioningTemplatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ProvisioningTemplateSummary>> {
+        Some(self.templates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListProvisioningTemplatesResponse {
+    type Item = ProvisioningTemplateSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProvisioningTemplateSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_role_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoleAliasesRequest {
@@ -6115,6 +7401,15 @@ pub struct ListRoleAliasesRequest {
     pub page_size: Option<i64>,
 }
 
+impl PagedRequest for ListRoleAliasesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Iot::list_role_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoleAliasesResponse {
@@ -6128,6 +7423,31 @@ pub struct ListRoleAliasesResponse {
     pub role_aliases: Option<Vec<String>>,
 }
 
+impl ListRoleAliasesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.role_aliases.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRoleAliasesResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_scheduled_audits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListScheduledAuditsRequest {
@@ -6141,6 +7461,15 @@ pub struct ListScheduledAuditsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListScheduledAuditsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_scheduled_audits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListScheduledAuditsResponse {
@@ -6154,6 +7483,31 @@ pub struct ListScheduledAuditsResponse {
     pub scheduled_audits: Option<Vec<ScheduledAuditMetadata>>,
 }
 
+impl ListScheduledAuditsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ScheduledAuditMetadata>> {
+        Some(self.scheduled_audits.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListScheduledAuditsResponse {
+    type Item = ScheduledAuditMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ScheduledAuditMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_security_profiles_for_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesForTargetRequest {
@@ -6174,6 +7528,15 @@ pub struct ListSecurityProfilesForTargetRequest {
     pub security_profile_target_arn: String,
 }
 
+impl PagedRequest for ListSecurityProfilesForTargetRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_security_profiles_for_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityProfilesForTargetResponse {
@@ -6187,6 +7550,31 @@ pub struct ListSecurityProfilesForTargetResponse {
     pub security_profile_target_mappings: Option<Vec<SecurityProfileTargetMapping>>,
 }
 
+impl ListSecurityProfilesForTargetResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SecurityProfileTargetMapping>> {
+        Some(self.security_profile_target_mappings.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSecurityProfilesForTargetResponse {
+    type Item = SecurityProfileTargetMapping;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SecurityProfileTargetMapping> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_security_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
@@ -6208,6 +7596,15 @@ pub struct ListSecurityProfilesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSecurityProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_security_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityProfilesResponse {
@@ -6221,6 +7618,31 @@ pub struct ListSecurityProfilesResponse {
     pub security_profile_identifiers: Option<Vec<SecurityProfileIdentifier>>,
 }
 
+impl ListSecurityProfilesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SecurityProfileIdentifier>> {
+        Some(self.security_profile_identifiers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSecurityProfilesResponse {
+    type Item = SecurityProfileIdentifier;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SecurityProfileIdentifier> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsRequest {
@@ -6238,6 +7660,15 @@ pub struct ListStreamsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListStreamsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsResponse {
@@ -6251,6 +7682,31 @@ pub struct ListStreamsResponse {
     pub streams: Option<Vec<StreamSummary>>,
 }
 
+impl ListStreamsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<StreamSummary>> {
+        Some(self.streams.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListStreamsResponse {
+    type Item = StreamSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StreamSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -6263,6 +7719,15 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl PagedRequest for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -6276,6 +7741,31 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl ListTagsForResourceResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_targets_for_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsForPolicyRequest {
@@ -6292,6 +7782,15 @@ pub struct ListTargetsForPolicyRequest {
     pub policy_name: String,
 }
 
+impl PagedRequest for ListTargetsForPolicyRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Iot::list_targets_for_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTargetsForPolicyResponse {
@@ -6305,6 +7804,31 @@ pub struct ListTargetsForPolicyResponse {
     pub targets: Option<Vec<String>>,
 }
 
+impl ListTargetsForPolicyResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.targets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTargetsForPolicyResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_targets_for_security_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsForSecurityProfileRequest {
@@ -6321,6 +7845,15 @@ pub struct ListTargetsForSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
+impl PagedRequest for ListTargetsForSecurityProfileRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_targets_for_security_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTargetsForSecurityProfileResponse {
@@ -6334,6 +7867,31 @@ pub struct ListTargetsForSecurityProfileResponse {
     pub security_profile_targets: Option<Vec<SecurityProfileTarget>>,
 }
 
+impl ListTargetsForSecurityProfileResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SecurityProfileTarget>> {
+        Some(self.security_profile_targets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTargetsForSecurityProfileResponse {
+    type Item = SecurityProfileTarget;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SecurityProfileTarget> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_thing_groups_for_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingGroupsForThingRequest {
@@ -6350,6 +7908,15 @@ pub struct ListThingGroupsForThingRequest {
     pub thing_name: String,
 }
 
+impl PagedRequest for ListThingGroupsForThingRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_thing_groups_for_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsForThingResponse {
@@ -6363,6 +7930,31 @@ pub struct ListThingGroupsForThingResponse {
     pub thing_groups: Option<Vec<GroupNameAndArn>>,
 }
 
+impl ListThingGroupsForThingResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GroupNameAndArn>> {
+        Some(self.thing_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingGroupsForThingResponse {
+    type Item = GroupNameAndArn;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GroupNameAndArn> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_thing_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingGroupsRequest {
@@ -6388,6 +7980,15 @@ pub struct ListThingGroupsRequest {
     pub recursive: Option<bool>,
 }
 
+impl PagedRequest for ListThingGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_thing_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsResponse {
@@ -6401,7 +8002,32 @@ pub struct ListThingGroupsResponse {
     pub thing_groups: Option<Vec<GroupNameAndArn>>,
 }
 
+impl ListThingGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GroupNameAndArn>> {
+        Some(self.thing_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingGroupsResponse {
+    type Item = GroupNameAndArn;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GroupNameAndArn> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListThingPrincipal operation.</p>
+/// see [Iot::list_thing_principals]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingPrincipalsRequest {
@@ -6418,7 +8044,16 @@ pub struct ListThingPrincipalsRequest {
     pub thing_name: String,
 }
 
+impl PagedRequest for ListThingPrincipalsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The output from the ListThingPrincipals operation.</p>
+/// see [Iot::list_thing_principals]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingPrincipalsResponse {
@@ -6432,6 +8067,31 @@ pub struct ListThingPrincipalsResponse {
     pub principals: Option<Vec<String>>,
 }
 
+impl ListThingPrincipalsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.principals.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingPrincipalsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_thing_registration_task_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingRegistrationTaskReportsRequest {
@@ -6451,6 +8111,15 @@ pub struct ListThingRegistrationTaskReportsRequest {
     pub task_id: String,
 }
 
+impl PagedRequest for ListThingRegistrationTaskReportsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_thing_registration_task_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTaskReportsResponse {
@@ -6468,6 +8137,31 @@ pub struct ListThingRegistrationTaskReportsResponse {
     pub resource_links: Option<Vec<String>>,
 }
 
+impl ListThingRegistrationTaskReportsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.resource_links.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingRegistrationTaskReportsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_thing_registration_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingRegistrationTasksRequest {
@@ -6485,6 +8179,15 @@ pub struct ListThingRegistrationTasksRequest {
     pub status: Option<String>,
 }
 
+impl PagedRequest for ListThingRegistrationTasksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_thing_registration_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTasksResponse {
@@ -6498,7 +8201,32 @@ pub struct ListThingRegistrationTasksResponse {
     pub task_ids: Option<Vec<String>>,
 }
 
+impl ListThingRegistrationTasksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.task_ids.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingRegistrationTasksResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListThingTypes operation.</p>
+/// see [Iot::list_thing_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingTypesRequest {
@@ -6516,7 +8244,16 @@ pub struct ListThingTypesRequest {
     pub thing_type_name: Option<String>,
 }
 
+impl PagedRequest for ListThingTypesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The output for the ListThingTypes operation.</p>
+/// see [Iot::list_thing_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingTypesResponse {
@@ -6530,6 +8267,31 @@ pub struct ListThingTypesResponse {
     pub thing_types: Option<Vec<ThingTypeDefinition>>,
 }
 
+impl ListThingTypesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ThingTypeDefinition>> {
+        Some(self.thing_types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingTypesResponse {
+    type Item = ThingTypeDefinition;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ThingTypeDefinition> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_things_in_billing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsInBillingGroupRequest {
@@ -6546,6 +8308,15 @@ pub struct ListThingsInBillingGroupRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListThingsInBillingGroupRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_things_in_billing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInBillingGroupResponse {
@@ -6559,6 +8330,31 @@ pub struct ListThingsInBillingGroupResponse {
     pub things: Option<Vec<String>>,
 }
 
+impl ListThingsInBillingGroupResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.things.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingsInBillingGroupResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_things_in_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsInThingGroupRequest {
@@ -6579,6 +8375,15 @@ pub struct ListThingsInThingGroupRequest {
     pub thing_group_name: String,
 }
 
+impl PagedRequest for ListThingsInThingGroupRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_things_in_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInThingGroupResponse {
@@ -6592,7 +8397,32 @@ pub struct ListThingsInThingGroupResponse {
     pub things: Option<Vec<String>>,
 }
 
+impl ListThingsInThingGroupResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.things.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingsInThingGroupResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListThings operation.</p>
+/// see [Iot::list_things]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsRequest {
@@ -6618,7 +8448,16 @@ pub struct ListThingsRequest {
     pub thing_type_name: Option<String>,
 }
 
+impl PagedRequest for ListThingsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The output from the ListThings operation.</p>
+/// see [Iot::list_things]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsResponse {
@@ -6632,6 +8471,31 @@ pub struct ListThingsResponse {
     pub things: Option<Vec<ThingAttribute>>,
 }
 
+impl ListThingsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ThingAttribute>> {
+        Some(self.things.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListThingsResponse {
+    type Item = ThingAttribute;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ThingAttribute> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_topic_rule_destinations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicRuleDestinationsRequest {
@@ -6645,6 +8509,15 @@ pub struct ListTopicRuleDestinationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListTopicRuleDestinationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_topic_rule_destinations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicRuleDestinationsResponse {
@@ -6658,7 +8531,32 @@ pub struct ListTopicRuleDestinationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListTopicRuleDestinationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<TopicRuleDestinationSummary>> {
+        Some(self.destination_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTopicRuleDestinationsResponse {
+    type Item = TopicRuleDestinationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TopicRuleDestinationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>The input for the ListTopicRules operation.</p>
+/// see [Iot::list_topic_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicRulesRequest {
@@ -6680,7 +8578,16 @@ pub struct ListTopicRulesRequest {
     pub topic: Option<String>,
 }
 
+impl PagedRequest for ListTopicRulesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The output from the ListTopicRules operation.</p>
+/// see [Iot::list_topic_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicRulesResponse {
@@ -6694,6 +8601,31 @@ pub struct ListTopicRulesResponse {
     pub rules: Option<Vec<TopicRuleListItem>>,
 }
 
+impl ListTopicRulesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<TopicRuleListItem>> {
+        Some(self.rules.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTopicRulesResponse {
+    type Item = TopicRuleListItem;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TopicRuleListItem> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_v2_logging_levels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListV2LoggingLevelsRequest {
@@ -6711,6 +8643,15 @@ pub struct ListV2LoggingLevelsRequest {
     pub target_type: Option<String>,
 }
 
+impl PagedRequest for ListV2LoggingLevelsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_v2_logging_levels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListV2LoggingLevelsResponse {
@@ -6724,6 +8665,31 @@ pub struct ListV2LoggingLevelsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListV2LoggingLevelsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LogTargetConfiguration>> {
+        Some(self.log_target_configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListV2LoggingLevelsResponse {
+    type Item = LogTargetConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LogTargetConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot::list_violation_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListViolationEventsRequest {
@@ -6759,6 +8725,15 @@ pub struct ListViolationEventsRequest {
     pub thing_name: Option<String>,
 }
 
+impl PagedRequest for ListViolationEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot::list_violation_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListViolationEventsResponse {
@@ -6770,6 +8745,30 @@ pub struct ListViolationEventsResponse {
     #[serde(rename = "violationEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub violation_events: Option<Vec<ViolationEvent>>,
+}
+
+impl ListViolationEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ViolationEvent>> {
+        Some(self.violation_events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListViolationEventsResponse {
+    type Item = ViolationEvent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ViolationEvent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>A log target.</p>
@@ -7315,6 +9314,7 @@ pub struct RateIncreaseCriteria {
 }
 
 /// <p>The input to the RegisterCACertificate operation.</p>
+/// see [Iot::register_ca_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCACertificateRequest {
@@ -7343,6 +9343,7 @@ pub struct RegisterCACertificateRequest {
 }
 
 /// <p>The output from the RegisterCACertificateResponse operation.</p>
+/// see [Iot::register_ca_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterCACertificateResponse {
@@ -7357,6 +9358,7 @@ pub struct RegisterCACertificateResponse {
 }
 
 /// <p>The input to the RegisterCertificate operation.</p>
+/// see [Iot::register_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCertificateRequest {
@@ -7374,6 +9376,7 @@ pub struct RegisterCertificateRequest {
 }
 
 /// <p>The output from the RegisterCertificate operation.</p>
+/// see [Iot::register_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterCertificateResponse {
@@ -7387,6 +9390,7 @@ pub struct RegisterCertificateResponse {
     pub certificate_id: Option<String>,
 }
 
+/// see [Iot::register_certificate_without_ca]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCertificateWithoutCARequest {
@@ -7399,6 +9403,7 @@ pub struct RegisterCertificateWithoutCARequest {
     pub status: Option<String>,
 }
 
+/// see [Iot::register_certificate_without_ca]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterCertificateWithoutCAResponse {
@@ -7412,6 +9417,7 @@ pub struct RegisterCertificateWithoutCAResponse {
     pub certificate_id: Option<String>,
 }
 
+/// see [Iot::register_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterThingRequest {
@@ -7424,6 +9430,7 @@ pub struct RegisterThingRequest {
     pub template_body: String,
 }
 
+/// see [Iot::register_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterThingResponse {
@@ -7451,6 +9458,7 @@ pub struct RegistrationConfig {
 }
 
 /// <p>The input for the RejectCertificateTransfer operation.</p>
+/// see [Iot::reject_certificate_transfer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectCertificateTransferRequest {
@@ -7481,6 +9489,7 @@ pub struct RelatedResource {
     pub resource_type: Option<String>,
 }
 
+/// see [Iot::remove_thing_from_billing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveThingFromBillingGroupRequest {
@@ -7502,10 +9511,12 @@ pub struct RemoveThingFromBillingGroupRequest {
     pub thing_name: Option<String>,
 }
 
+/// see [Iot::remove_thing_from_billing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveThingFromBillingGroupResponse {}
 
+/// see [Iot::remove_thing_from_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveThingFromThingGroupRequest {
@@ -7527,6 +9538,7 @@ pub struct RemoveThingFromThingGroupRequest {
     pub thing_name: Option<String>,
 }
 
+/// see [Iot::remove_thing_from_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveThingFromThingGroupResponse {}
@@ -7540,6 +9552,7 @@ pub struct ReplaceDefaultPolicyVersionParams {
 }
 
 /// <p>The input for the ReplaceTopicRule operation.</p>
+/// see [Iot::replace_topic_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceTopicRuleRequest {
@@ -7722,6 +9735,7 @@ pub struct ScheduledAuditMetadata {
     pub scheduled_audit_name: Option<String>,
 }
 
+/// see [Iot::search_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchIndexRequest {
@@ -7746,6 +9760,7 @@ pub struct SearchIndexRequest {
     pub query_version: Option<String>,
 }
 
+/// see [Iot::search_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchIndexResponse {
@@ -7816,6 +9831,7 @@ pub struct ServerCertificateSummary {
     pub server_certificate_status_detail: Option<String>,
 }
 
+/// see [Iot::set_default_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultAuthorizerRequest {
@@ -7824,6 +9840,7 @@ pub struct SetDefaultAuthorizerRequest {
     pub authorizer_name: String,
 }
 
+/// see [Iot::set_default_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetDefaultAuthorizerResponse {
@@ -7838,6 +9855,7 @@ pub struct SetDefaultAuthorizerResponse {
 }
 
 /// <p>The input for the SetDefaultPolicyVersion operation.</p>
+/// see [Iot::set_default_policy_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultPolicyVersionRequest {
@@ -7850,6 +9868,7 @@ pub struct SetDefaultPolicyVersionRequest {
 }
 
 /// <p>The input for the SetLoggingOptions operation.</p>
+/// see [Iot::set_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoggingOptionsRequest {
@@ -7858,6 +9877,7 @@ pub struct SetLoggingOptionsRequest {
     pub logging_options_payload: LoggingOptionsPayload,
 }
 
+/// see [Iot::set_v2_logging_level]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetV2LoggingLevelRequest {
@@ -7869,6 +9889,7 @@ pub struct SetV2LoggingLevelRequest {
     pub log_target: LogTarget,
 }
 
+/// see [Iot::set_v2_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetV2LoggingOptionsRequest {
@@ -7947,6 +9968,7 @@ pub struct SqsAction {
     pub use_base_64: Option<bool>,
 }
 
+/// see [Iot::start_audit_mitigation_actions_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAuditMitigationActionsTaskRequest {
@@ -7964,6 +9986,7 @@ pub struct StartAuditMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::start_audit_mitigation_actions_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAuditMitigationActionsTaskResponse {
@@ -7973,6 +9996,7 @@ pub struct StartAuditMitigationActionsTaskResponse {
     pub task_id: Option<String>,
 }
 
+/// see [Iot::start_detect_mitigation_actions_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDetectMitigationActionsTaskRequest {
@@ -8002,6 +10026,7 @@ pub struct StartDetectMitigationActionsTaskRequest {
     pub violation_event_occurrence_range: Option<ViolationEventOccurrenceRange>,
 }
 
+/// see [Iot::start_detect_mitigation_actions_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDetectMitigationActionsTaskResponse {
@@ -8011,6 +10036,7 @@ pub struct StartDetectMitigationActionsTaskResponse {
     pub task_id: Option<String>,
 }
 
+/// see [Iot::start_on_demand_audit_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOnDemandAuditTaskRequest {
@@ -8019,6 +10045,7 @@ pub struct StartOnDemandAuditTaskRequest {
     pub target_check_names: Vec<String>,
 }
 
+/// see [Iot::start_on_demand_audit_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOnDemandAuditTaskResponse {
@@ -8045,6 +10072,7 @@ pub struct StartSigningJobParameter {
     pub signing_profile_parameter: Option<SigningProfileParameter>,
 }
 
+/// see [Iot::start_thing_registration_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartThingRegistrationTaskRequest {
@@ -8062,6 +10090,7 @@ pub struct StartThingRegistrationTaskRequest {
     pub template_body: String,
 }
 
+/// see [Iot::start_thing_registration_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartThingRegistrationTaskResponse {
@@ -8133,6 +10162,7 @@ pub struct StepFunctionsAction {
     pub state_machine_name: String,
 }
 
+/// see [Iot::stop_thing_registration_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopThingRegistrationTaskRequest {
@@ -8141,6 +10171,7 @@ pub struct StopThingRegistrationTaskRequest {
     pub task_id: String,
 }
 
+/// see [Iot::stop_thing_registration_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopThingRegistrationTaskResponse {}
@@ -8243,6 +10274,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Iot::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -8254,6 +10286,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Iot::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -8318,6 +10351,7 @@ pub struct TaskStatisticsForAuditCheck {
     pub total_findings_count: Option<i64>,
 }
 
+/// see [Iot::test_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestAuthorizationRequest {
@@ -8346,6 +10380,7 @@ pub struct TestAuthorizationRequest {
     pub principal: Option<String>,
 }
 
+/// see [Iot::test_authorization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestAuthorizationResponse {
@@ -8355,6 +10390,7 @@ pub struct TestAuthorizationResponse {
     pub auth_results: Option<Vec<AuthResult>>,
 }
 
+/// see [Iot::test_invoke_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeAuthorizerRequest {
@@ -8383,6 +10419,7 @@ pub struct TestInvokeAuthorizerRequest {
     pub token_signature: Option<String>,
 }
 
+/// see [Iot::test_invoke_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestInvokeAuthorizerResponse {
@@ -8865,6 +10902,7 @@ pub struct TopicRulePayload {
 }
 
 /// <p>The input for the TransferCertificate operation.</p>
+/// see [Iot::transfer_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransferCertificateRequest {
@@ -8881,6 +10919,7 @@ pub struct TransferCertificateRequest {
 }
 
 /// <p>The output from the TransferCertificate operation.</p>
+/// see [Iot::transfer_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransferCertificateResponse {
@@ -8916,6 +10955,7 @@ pub struct TransferData {
     pub transfer_message: Option<String>,
 }
 
+/// see [Iot::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -8927,10 +10967,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Iot::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Iot::update_account_audit_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountAuditConfigurationRequest {
@@ -8950,10 +10992,12 @@ pub struct UpdateAccountAuditConfigurationRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [Iot::update_account_audit_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountAuditConfigurationResponse {}
 
+/// see [Iot::update_audit_suppression]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuditSuppressionRequest {
@@ -8975,10 +11019,12 @@ pub struct UpdateAuditSuppressionRequest {
     pub suppress_indefinitely: Option<bool>,
 }
 
+/// see [Iot::update_audit_suppression]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuditSuppressionResponse {}
 
+/// see [Iot::update_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
@@ -9003,6 +11049,7 @@ pub struct UpdateAuthorizerRequest {
     pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Iot::update_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
@@ -9016,6 +11063,7 @@ pub struct UpdateAuthorizerResponse {
     pub authorizer_name: Option<String>,
 }
 
+/// see [Iot::update_billing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBillingGroupRequest {
@@ -9031,6 +11079,7 @@ pub struct UpdateBillingGroupRequest {
     pub expected_version: Option<i64>,
 }
 
+/// see [Iot::update_billing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBillingGroupResponse {
@@ -9049,6 +11098,7 @@ pub struct UpdateCACertificateParams {
 }
 
 /// <p>The input to the UpdateCACertificate operation.</p>
+/// see [Iot::update_ca_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCACertificateRequest {
@@ -9074,6 +11124,7 @@ pub struct UpdateCACertificateRequest {
 }
 
 /// <p>The input for the UpdateCertificate operation.</p>
+/// see [Iot::update_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCertificateRequest {
@@ -9085,6 +11136,7 @@ pub struct UpdateCertificateRequest {
     pub new_status: String,
 }
 
+/// see [Iot::update_custom_metric]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomMetricRequest {
@@ -9096,6 +11148,7 @@ pub struct UpdateCustomMetricRequest {
     pub metric_name: String,
 }
 
+/// see [Iot::update_custom_metric]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCustomMetricResponse {
@@ -9133,6 +11186,7 @@ pub struct UpdateDeviceCertificateParams {
     pub action: String,
 }
 
+/// see [Iot::update_dimension]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDimensionRequest {
@@ -9144,6 +11198,7 @@ pub struct UpdateDimensionRequest {
     pub string_values: Vec<String>,
 }
 
+/// see [Iot::update_dimension]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDimensionResponse {
@@ -9173,6 +11228,7 @@ pub struct UpdateDimensionResponse {
     pub type_: Option<String>,
 }
 
+/// see [Iot::update_domain_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainConfigurationRequest {
@@ -9193,6 +11249,7 @@ pub struct UpdateDomainConfigurationRequest {
     pub remove_authorizer_config: Option<bool>,
 }
 
+/// see [Iot::update_domain_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainConfigurationResponse {
@@ -9206,6 +11263,7 @@ pub struct UpdateDomainConfigurationResponse {
     pub domain_configuration_name: Option<String>,
 }
 
+/// see [Iot::update_dynamic_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDynamicThingGroupRequest {
@@ -9233,6 +11291,7 @@ pub struct UpdateDynamicThingGroupRequest {
     pub thing_group_properties: ThingGroupProperties,
 }
 
+/// see [Iot::update_dynamic_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDynamicThingGroupResponse {
@@ -9242,6 +11301,7 @@ pub struct UpdateDynamicThingGroupResponse {
     pub version: Option<i64>,
 }
 
+/// see [Iot::update_event_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEventConfigurationsRequest {
@@ -9251,10 +11311,12 @@ pub struct UpdateEventConfigurationsRequest {
     pub event_configurations: Option<::std::collections::HashMap<String, Configuration>>,
 }
 
+/// see [Iot::update_event_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEventConfigurationsResponse {}
 
+/// see [Iot::update_indexing_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIndexingConfigurationRequest {
@@ -9268,10 +11330,12 @@ pub struct UpdateIndexingConfigurationRequest {
     pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
 }
 
+/// see [Iot::update_indexing_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIndexingConfigurationResponse {}
 
+/// see [Iot::update_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
@@ -9304,6 +11368,7 @@ pub struct UpdateJobRequest {
     pub timeout_config: Option<TimeoutConfig>,
 }
 
+/// see [Iot::update_mitigation_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMitigationActionRequest {
@@ -9320,6 +11385,7 @@ pub struct UpdateMitigationActionRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [Iot::update_mitigation_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMitigationActionResponse {
@@ -9333,6 +11399,7 @@ pub struct UpdateMitigationActionResponse {
     pub action_id: Option<String>,
 }
 
+/// see [Iot::update_provisioning_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisioningTemplateRequest {
@@ -9365,10 +11432,12 @@ pub struct UpdateProvisioningTemplateRequest {
     pub template_name: String,
 }
 
+/// see [Iot::update_provisioning_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisioningTemplateResponse {}
 
+/// see [Iot::update_role_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoleAliasRequest {
@@ -9385,6 +11454,7 @@ pub struct UpdateRoleAliasRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [Iot::update_role_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRoleAliasResponse {
@@ -9398,6 +11468,7 @@ pub struct UpdateRoleAliasResponse {
     pub role_alias_arn: Option<String>,
 }
 
+/// see [Iot::update_scheduled_audit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScheduledAuditRequest {
@@ -9422,6 +11493,7 @@ pub struct UpdateScheduledAuditRequest {
     pub target_check_names: Option<Vec<String>>,
 }
 
+/// see [Iot::update_scheduled_audit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateScheduledAuditResponse {
@@ -9431,6 +11503,7 @@ pub struct UpdateScheduledAuditResponse {
     pub scheduled_audit_arn: Option<String>,
 }
 
+/// see [Iot::update_security_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityProfileRequest {
@@ -9471,6 +11544,7 @@ pub struct UpdateSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
+/// see [Iot::update_security_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecurityProfileResponse {
@@ -9512,6 +11586,7 @@ pub struct UpdateSecurityProfileResponse {
     pub version: Option<i64>,
 }
 
+/// see [Iot::update_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamRequest {
@@ -9532,6 +11607,7 @@ pub struct UpdateStreamRequest {
     pub stream_id: String,
 }
 
+/// see [Iot::update_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStreamResponse {
@@ -9553,6 +11629,7 @@ pub struct UpdateStreamResponse {
     pub stream_version: Option<i64>,
 }
 
+/// see [Iot::update_thing_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingGroupRequest {
@@ -9568,6 +11645,7 @@ pub struct UpdateThingGroupRequest {
     pub thing_group_properties: ThingGroupProperties,
 }
 
+/// see [Iot::update_thing_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThingGroupResponse {
@@ -9577,6 +11655,7 @@ pub struct UpdateThingGroupResponse {
     pub version: Option<i64>,
 }
 
+/// see [Iot::update_thing_groups_for_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingGroupsForThingRequest {
@@ -9598,11 +11677,13 @@ pub struct UpdateThingGroupsForThingRequest {
     pub thing_name: Option<String>,
 }
 
+/// see [Iot::update_thing_groups_for_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThingGroupsForThingResponse {}
 
 /// <p>The input for the UpdateThing operation.</p>
+/// see [Iot::update_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingRequest {
@@ -9628,10 +11709,12 @@ pub struct UpdateThingRequest {
 }
 
 /// <p>The output from the UpdateThing operation.</p>
+/// see [Iot::update_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThingResponse {}
 
+/// see [Iot::update_topic_rule_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTopicRuleDestinationRequest {
@@ -9643,10 +11726,12 @@ pub struct UpdateTopicRuleDestinationRequest {
     pub status: String,
 }
 
+/// see [Iot::update_topic_rule_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTopicRuleDestinationResponse {}
 
+/// see [Iot::validate_security_profile_behaviors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateSecurityProfileBehaviorsRequest {
@@ -9655,6 +11740,7 @@ pub struct ValidateSecurityProfileBehaviorsRequest {
     pub behaviors: Vec<Behavior>,
 }
 
+/// see [Iot::validate_security_profile_behaviors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidateSecurityProfileBehaviorsResponse {
@@ -23288,7 +25374,7 @@ impl fmt::Display for ValidateSecurityProfileBehaviorsError {
 impl Error for ValidateSecurityProfileBehaviorsError {}
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
 #[async_trait]
-pub trait Iot {
+pub trait Iot: Clone + Sync + Send + 'static {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     async fn accept_certificate_transfer(
         &self,
@@ -23968,6 +26054,16 @@ pub trait Iot {
         RusotoError<GetBehaviorModelTrainingSummariesError>,
     >;
 
+    /// Auto-paginating version of `get_behavior_model_training_summaries`
+    fn get_behavior_model_training_summaries_pages(
+        &self,
+        input: GetBehaviorModelTrainingSummariesRequest,
+    ) -> RusotoStream<BehaviorModelTrainingSummary, GetBehaviorModelTrainingSummariesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_behavior_model_training_summaries(state.clone())
+        })
+    }
+
     /// <p>Returns the approximate count of unique values that match the query.</p>
     async fn get_cardinality(
         &self,
@@ -24054,17 +26150,47 @@ pub trait Iot {
         input: ListActiveViolationsRequest,
     ) -> Result<ListActiveViolationsResponse, RusotoError<ListActiveViolationsError>>;
 
+    /// Auto-paginating version of `list_active_violations`
+    fn list_active_violations_pages(
+        &self,
+        input: ListActiveViolationsRequest,
+    ) -> RusotoStream<ActiveViolation, ListActiveViolationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_active_violations(state.clone())
+        })
+    }
+
     /// <p>Lists the policies attached to the specified thing group.</p>
     async fn list_attached_policies(
         &self,
         input: ListAttachedPoliciesRequest,
     ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>>;
 
+    /// Auto-paginating version of `list_attached_policies`
+    fn list_attached_policies_pages(
+        &self,
+        input: ListAttachedPoliciesRequest,
+    ) -> RusotoStream<Policy, ListAttachedPoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_attached_policies(state.clone())
+        })
+    }
+
     /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 90 days.)</p>
     async fn list_audit_findings(
         &self,
         input: ListAuditFindingsRequest,
     ) -> Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>>;
+
+    /// Auto-paginating version of `list_audit_findings`
+    fn list_audit_findings_pages(
+        &self,
+        input: ListAuditFindingsRequest,
+    ) -> RusotoStream<AuditFinding, ListAuditFindingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_audit_findings(state.clone())
+        })
+    }
 
     /// <p>Gets the status of audit mitigation action tasks that were executed.</p>
     async fn list_audit_mitigation_actions_executions(
@@ -24075,6 +26201,19 @@ pub trait Iot {
         RusotoError<ListAuditMitigationActionsExecutionsError>,
     >;
 
+    /// Auto-paginating version of `list_audit_mitigation_actions_executions`
+    fn list_audit_mitigation_actions_executions_pages(
+        &self,
+        input: ListAuditMitigationActionsExecutionsRequest,
+    ) -> RusotoStream<
+        AuditMitigationActionExecutionMetadata,
+        ListAuditMitigationActionsExecutionsError,
+    > {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_audit_mitigation_actions_executions(state.clone())
+        })
+    }
+
     /// <p>Gets a list of audit mitigation action tasks that match the specified filters.</p>
     async fn list_audit_mitigation_actions_tasks(
         &self,
@@ -24084,11 +26223,32 @@ pub trait Iot {
         RusotoError<ListAuditMitigationActionsTasksError>,
     >;
 
+    /// Auto-paginating version of `list_audit_mitigation_actions_tasks`
+    fn list_audit_mitigation_actions_tasks_pages(
+        &self,
+        input: ListAuditMitigationActionsTasksRequest,
+    ) -> RusotoStream<AuditMitigationActionsTaskMetadata, ListAuditMitigationActionsTasksError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_audit_mitigation_actions_tasks(state.clone())
+        })
+    }
+
     /// <p> Lists your Device Defender audit listings. </p>
     async fn list_audit_suppressions(
         &self,
         input: ListAuditSuppressionsRequest,
     ) -> Result<ListAuditSuppressionsResponse, RusotoError<ListAuditSuppressionsError>>;
+
+    /// Auto-paginating version of `list_audit_suppressions`
+    fn list_audit_suppressions_pages(
+        &self,
+        input: ListAuditSuppressionsRequest,
+    ) -> RusotoStream<AuditSuppression, ListAuditSuppressionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_audit_suppressions(state.clone())
+        })
+    }
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
     async fn list_audit_tasks(
@@ -24096,11 +26256,31 @@ pub trait Iot {
         input: ListAuditTasksRequest,
     ) -> Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>>;
 
+    /// Auto-paginating version of `list_audit_tasks`
+    fn list_audit_tasks_pages(
+        &self,
+        input: ListAuditTasksRequest,
+    ) -> RusotoStream<AuditTaskMetadata, ListAuditTasksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_audit_tasks(state.clone())
+        })
+    }
+
     /// <p>Lists the authorizers registered in your account.</p>
     async fn list_authorizers(
         &self,
         input: ListAuthorizersRequest,
     ) -> Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>>;
+
+    /// Auto-paginating version of `list_authorizers`
+    fn list_authorizers_pages(
+        &self,
+        input: ListAuthorizersRequest,
+    ) -> RusotoStream<AuthorizerSummary, ListAuthorizersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_authorizers(state.clone())
+        })
+    }
 
     /// <p>Lists the billing groups you have created.</p>
     async fn list_billing_groups(
@@ -24108,11 +26288,31 @@ pub trait Iot {
         input: ListBillingGroupsRequest,
     ) -> Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>>;
 
+    /// Auto-paginating version of `list_billing_groups`
+    fn list_billing_groups_pages(
+        &self,
+        input: ListBillingGroupsRequest,
+    ) -> RusotoStream<GroupNameAndArn, ListBillingGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_billing_groups(state.clone())
+        })
+    }
+
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     async fn list_ca_certificates(
         &self,
         input: ListCACertificatesRequest,
     ) -> Result<ListCACertificatesResponse, RusotoError<ListCACertificatesError>>;
+
+    /// Auto-paginating version of `list_ca_certificates`
+    fn list_ca_certificates_pages(
+        &self,
+        input: ListCACertificatesRequest,
+    ) -> RusotoStream<CACertificate, ListCACertificatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_ca_certificates(state.clone())
+        })
+    }
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     async fn list_certificates(
@@ -24120,17 +26320,47 @@ pub trait Iot {
         input: ListCertificatesRequest,
     ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>>;
 
+    /// Auto-paginating version of `list_certificates`
+    fn list_certificates_pages(
+        &self,
+        input: ListCertificatesRequest,
+    ) -> RusotoStream<Certificate, ListCertificatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_certificates(state.clone())
+        })
+    }
+
     /// <p>List the device certificates signed by the specified CA certificate.</p>
     async fn list_certificates_by_ca(
         &self,
         input: ListCertificatesByCARequest,
     ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>>;
 
+    /// Auto-paginating version of `list_certificates_by_ca`
+    fn list_certificates_by_ca_pages(
+        &self,
+        input: ListCertificatesByCARequest,
+    ) -> RusotoStream<Certificate, ListCertificatesByCAError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_certificates_by_ca(state.clone())
+        })
+    }
+
     /// <p> Lists your Device Defender detect custom metrics. </p>
     async fn list_custom_metrics(
         &self,
         input: ListCustomMetricsRequest,
     ) -> Result<ListCustomMetricsResponse, RusotoError<ListCustomMetricsError>>;
+
+    /// Auto-paginating version of `list_custom_metrics`
+    fn list_custom_metrics_pages(
+        &self,
+        input: ListCustomMetricsRequest,
+    ) -> RusotoStream<String, ListCustomMetricsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_custom_metrics(state.clone())
+        })
+    }
 
     /// <p> Lists mitigation actions executions for a Device Defender ML Detect Security Profile. </p>
     async fn list_detect_mitigation_actions_executions(
@@ -24141,6 +26371,17 @@ pub trait Iot {
         RusotoError<ListDetectMitigationActionsExecutionsError>,
     >;
 
+    /// Auto-paginating version of `list_detect_mitigation_actions_executions`
+    fn list_detect_mitigation_actions_executions_pages(
+        &self,
+        input: ListDetectMitigationActionsExecutionsRequest,
+    ) -> RusotoStream<DetectMitigationActionExecution, ListDetectMitigationActionsExecutionsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_detect_mitigation_actions_executions(state.clone())
+        })
+    }
+
     /// <p> List of Device Defender ML Detect mitigation actions tasks. </p>
     async fn list_detect_mitigation_actions_tasks(
         &self,
@@ -24150,11 +26391,32 @@ pub trait Iot {
         RusotoError<ListDetectMitigationActionsTasksError>,
     >;
 
+    /// Auto-paginating version of `list_detect_mitigation_actions_tasks`
+    fn list_detect_mitigation_actions_tasks_pages(
+        &self,
+        input: ListDetectMitigationActionsTasksRequest,
+    ) -> RusotoStream<DetectMitigationActionsTaskSummary, ListDetectMitigationActionsTasksError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_detect_mitigation_actions_tasks(state.clone())
+        })
+    }
+
     /// <p>List the set of dimensions that are defined for your AWS account.</p>
     async fn list_dimensions(
         &self,
         input: ListDimensionsRequest,
     ) -> Result<ListDimensionsResponse, RusotoError<ListDimensionsError>>;
+
+    /// Auto-paginating version of `list_dimensions`
+    fn list_dimensions_pages(
+        &self,
+        input: ListDimensionsRequest,
+    ) -> RusotoStream<String, ListDimensionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_dimensions(state.clone())
+        })
+    }
 
     /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn list_domain_configurations(
@@ -24162,11 +26424,31 @@ pub trait Iot {
         input: ListDomainConfigurationsRequest,
     ) -> Result<ListDomainConfigurationsResponse, RusotoError<ListDomainConfigurationsError>>;
 
+    /// Auto-paginating version of `list_domain_configurations`
+    fn list_domain_configurations_pages(
+        &self,
+        input: ListDomainConfigurationsRequest,
+    ) -> RusotoStream<DomainConfigurationSummary, ListDomainConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_domain_configurations(state.clone())
+        })
+    }
+
     /// <p>Lists the search indices.</p>
     async fn list_indices(
         &self,
         input: ListIndicesRequest,
     ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>>;
+
+    /// Auto-paginating version of `list_indices`
+    fn list_indices_pages(
+        &self,
+        input: ListIndicesRequest,
+    ) -> RusotoStream<String, ListIndicesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_indices(state.clone())
+        })
+    }
 
     /// <p>Lists the job executions for a job.</p>
     async fn list_job_executions_for_job(
@@ -24174,11 +26456,31 @@ pub trait Iot {
         input: ListJobExecutionsForJobRequest,
     ) -> Result<ListJobExecutionsForJobResponse, RusotoError<ListJobExecutionsForJobError>>;
 
+    /// Auto-paginating version of `list_job_executions_for_job`
+    fn list_job_executions_for_job_pages(
+        &self,
+        input: ListJobExecutionsForJobRequest,
+    ) -> RusotoStream<JobExecutionSummaryForJob, ListJobExecutionsForJobError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_job_executions_for_job(state.clone())
+        })
+    }
+
     /// <p>Lists the job executions for the specified thing.</p>
     async fn list_job_executions_for_thing(
         &self,
         input: ListJobExecutionsForThingRequest,
     ) -> Result<ListJobExecutionsForThingResponse, RusotoError<ListJobExecutionsForThingError>>;
+
+    /// Auto-paginating version of `list_job_executions_for_thing`
+    fn list_job_executions_for_thing_pages(
+        &self,
+        input: ListJobExecutionsForThingRequest,
+    ) -> RusotoStream<JobExecutionSummaryForThing, ListJobExecutionsForThingError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_job_executions_for_thing(state.clone())
+        })
+    }
 
     /// <p>Lists jobs.</p>
     async fn list_jobs(
@@ -24186,11 +26488,28 @@ pub trait Iot {
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<JobSummary, ListJobsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_jobs(state.clone())
+        })
+    }
+
     /// <p>Gets a list of all mitigation actions that match the specified filter criteria.</p>
     async fn list_mitigation_actions(
         &self,
         input: ListMitigationActionsRequest,
     ) -> Result<ListMitigationActionsResponse, RusotoError<ListMitigationActionsError>>;
+
+    /// Auto-paginating version of `list_mitigation_actions`
+    fn list_mitigation_actions_pages(
+        &self,
+        input: ListMitigationActionsRequest,
+    ) -> RusotoStream<MitigationActionIdentifier, ListMitigationActionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_mitigation_actions(state.clone())
+        })
+    }
 
     /// <p>Lists OTA updates.</p>
     async fn list_ota_updates(
@@ -24198,11 +26517,31 @@ pub trait Iot {
         input: ListOTAUpdatesRequest,
     ) -> Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>>;
 
+    /// Auto-paginating version of `list_ota_updates`
+    fn list_ota_updates_pages(
+        &self,
+        input: ListOTAUpdatesRequest,
+    ) -> RusotoStream<OTAUpdateSummary, ListOTAUpdatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_ota_updates(state.clone())
+        })
+    }
+
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     async fn list_outgoing_certificates(
         &self,
         input: ListOutgoingCertificatesRequest,
     ) -> Result<ListOutgoingCertificatesResponse, RusotoError<ListOutgoingCertificatesError>>;
+
+    /// Auto-paginating version of `list_outgoing_certificates`
+    fn list_outgoing_certificates_pages(
+        &self,
+        input: ListOutgoingCertificatesRequest,
+    ) -> RusotoStream<OutgoingCertificate, ListOutgoingCertificatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_outgoing_certificates(state.clone())
+        })
+    }
 
     /// <p>Lists your policies.</p>
     async fn list_policies(
@@ -24210,11 +26549,31 @@ pub trait Iot {
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
 
+    /// Auto-paginating version of `list_policies`
+    fn list_policies_pages(
+        &self,
+        input: ListPoliciesRequest,
+    ) -> RusotoStream<Policy, ListPoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_policies(state.clone())
+        })
+    }
+
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     async fn list_policy_principals(
         &self,
         input: ListPolicyPrincipalsRequest,
     ) -> Result<ListPolicyPrincipalsResponse, RusotoError<ListPolicyPrincipalsError>>;
+
+    /// Auto-paginating version of `list_policy_principals`
+    fn list_policy_principals_pages(
+        &self,
+        input: ListPolicyPrincipalsRequest,
+    ) -> RusotoStream<String, ListPolicyPrincipalsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_policy_principals(state.clone())
+        })
+    }
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     async fn list_policy_versions(
@@ -24228,11 +26587,31 @@ pub trait Iot {
         input: ListPrincipalPoliciesRequest,
     ) -> Result<ListPrincipalPoliciesResponse, RusotoError<ListPrincipalPoliciesError>>;
 
+    /// Auto-paginating version of `list_principal_policies`
+    fn list_principal_policies_pages(
+        &self,
+        input: ListPrincipalPoliciesRequest,
+    ) -> RusotoStream<Policy, ListPrincipalPoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_principal_policies(state.clone())
+        })
+    }
+
     /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
     async fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
     ) -> Result<ListPrincipalThingsResponse, RusotoError<ListPrincipalThingsError>>;
+
+    /// Auto-paginating version of `list_principal_things`
+    fn list_principal_things_pages(
+        &self,
+        input: ListPrincipalThingsRequest,
+    ) -> RusotoStream<String, ListPrincipalThingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_principal_things(state.clone())
+        })
+    }
 
     /// <p>A list of fleet provisioning template versions.</p>
     async fn list_provisioning_template_versions(
@@ -24243,11 +26622,32 @@ pub trait Iot {
         RusotoError<ListProvisioningTemplateVersionsError>,
     >;
 
+    /// Auto-paginating version of `list_provisioning_template_versions`
+    fn list_provisioning_template_versions_pages(
+        &self,
+        input: ListProvisioningTemplateVersionsRequest,
+    ) -> RusotoStream<ProvisioningTemplateVersionSummary, ListProvisioningTemplateVersionsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_provisioning_template_versions(state.clone())
+        })
+    }
+
     /// <p>Lists the fleet provisioning templates in your AWS account.</p>
     async fn list_provisioning_templates(
         &self,
         input: ListProvisioningTemplatesRequest,
     ) -> Result<ListProvisioningTemplatesResponse, RusotoError<ListProvisioningTemplatesError>>;
+
+    /// Auto-paginating version of `list_provisioning_templates`
+    fn list_provisioning_templates_pages(
+        &self,
+        input: ListProvisioningTemplatesRequest,
+    ) -> RusotoStream<ProvisioningTemplateSummary, ListProvisioningTemplatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_provisioning_templates(state.clone())
+        })
+    }
 
     /// <p>Lists the role aliases registered in your account.</p>
     async fn list_role_aliases(
@@ -24255,17 +26655,47 @@ pub trait Iot {
         input: ListRoleAliasesRequest,
     ) -> Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>>;
 
+    /// Auto-paginating version of `list_role_aliases`
+    fn list_role_aliases_pages(
+        &self,
+        input: ListRoleAliasesRequest,
+    ) -> RusotoStream<String, ListRoleAliasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_role_aliases(state.clone())
+        })
+    }
+
     /// <p>Lists all of your scheduled audits.</p>
     async fn list_scheduled_audits(
         &self,
         input: ListScheduledAuditsRequest,
     ) -> Result<ListScheduledAuditsResponse, RusotoError<ListScheduledAuditsError>>;
 
+    /// Auto-paginating version of `list_scheduled_audits`
+    fn list_scheduled_audits_pages(
+        &self,
+        input: ListScheduledAuditsRequest,
+    ) -> RusotoStream<ScheduledAuditMetadata, ListScheduledAuditsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_scheduled_audits(state.clone())
+        })
+    }
+
     /// <p><p>Lists the Device Defender security profiles you&#39;ve created. You can filter security profiles by dimension or custom metric.</p> <note> <p> <code>dimensionName</code> and <code>metricName</code> cannot be used in the same request.</p> </note></p>
     async fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
     ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>>;
+
+    /// Auto-paginating version of `list_security_profiles`
+    fn list_security_profiles_pages(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> RusotoStream<SecurityProfileIdentifier, ListSecurityProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_security_profiles(state.clone())
+        })
+    }
 
     /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
     async fn list_security_profiles_for_target(
@@ -24276,11 +26706,31 @@ pub trait Iot {
         RusotoError<ListSecurityProfilesForTargetError>,
     >;
 
+    /// Auto-paginating version of `list_security_profiles_for_target`
+    fn list_security_profiles_for_target_pages(
+        &self,
+        input: ListSecurityProfilesForTargetRequest,
+    ) -> RusotoStream<SecurityProfileTargetMapping, ListSecurityProfilesForTargetError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_security_profiles_for_target(state.clone())
+        })
+    }
+
     /// <p>Lists all of the streams in your AWS account.</p>
     async fn list_streams(
         &self,
         input: ListStreamsRequest,
     ) -> Result<ListStreamsResponse, RusotoError<ListStreamsError>>;
+
+    /// Auto-paginating version of `list_streams`
+    fn list_streams_pages(
+        &self,
+        input: ListStreamsRequest,
+    ) -> RusotoStream<StreamSummary, ListStreamsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_streams(state.clone())
+        })
+    }
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
     async fn list_tags_for_resource(
@@ -24288,11 +26738,31 @@ pub trait Iot {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoStream<Tag, ListTagsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_for_resource(state.clone())
+        })
+    }
+
     /// <p>List targets for the specified policy.</p>
     async fn list_targets_for_policy(
         &self,
         input: ListTargetsForPolicyRequest,
     ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>>;
+
+    /// Auto-paginating version of `list_targets_for_policy`
+    fn list_targets_for_policy_pages(
+        &self,
+        input: ListTargetsForPolicyRequest,
+    ) -> RusotoStream<String, ListTargetsForPolicyError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_targets_for_policy(state.clone())
+        })
+    }
 
     /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
     async fn list_targets_for_security_profile(
@@ -24303,11 +26773,31 @@ pub trait Iot {
         RusotoError<ListTargetsForSecurityProfileError>,
     >;
 
+    /// Auto-paginating version of `list_targets_for_security_profile`
+    fn list_targets_for_security_profile_pages(
+        &self,
+        input: ListTargetsForSecurityProfileRequest,
+    ) -> RusotoStream<SecurityProfileTarget, ListTargetsForSecurityProfileError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_targets_for_security_profile(state.clone())
+        })
+    }
+
     /// <p>List the thing groups in your account.</p>
     async fn list_thing_groups(
         &self,
         input: ListThingGroupsRequest,
     ) -> Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>>;
+
+    /// Auto-paginating version of `list_thing_groups`
+    fn list_thing_groups_pages(
+        &self,
+        input: ListThingGroupsRequest,
+    ) -> RusotoStream<GroupNameAndArn, ListThingGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_thing_groups(state.clone())
+        })
+    }
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
     async fn list_thing_groups_for_thing(
@@ -24315,11 +26805,31 @@ pub trait Iot {
         input: ListThingGroupsForThingRequest,
     ) -> Result<ListThingGroupsForThingResponse, RusotoError<ListThingGroupsForThingError>>;
 
+    /// Auto-paginating version of `list_thing_groups_for_thing`
+    fn list_thing_groups_for_thing_pages(
+        &self,
+        input: ListThingGroupsForThingRequest,
+    ) -> RusotoStream<GroupNameAndArn, ListThingGroupsForThingError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_thing_groups_for_thing(state.clone())
+        })
+    }
+
     /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
     async fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
     ) -> Result<ListThingPrincipalsResponse, RusotoError<ListThingPrincipalsError>>;
+
+    /// Auto-paginating version of `list_thing_principals`
+    fn list_thing_principals_pages(
+        &self,
+        input: ListThingPrincipalsRequest,
+    ) -> RusotoStream<String, ListThingPrincipalsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_thing_principals(state.clone())
+        })
+    }
 
     /// <p>Information about the thing registration tasks.</p>
     async fn list_thing_registration_task_reports(
@@ -24330,11 +26840,31 @@ pub trait Iot {
         RusotoError<ListThingRegistrationTaskReportsError>,
     >;
 
+    /// Auto-paginating version of `list_thing_registration_task_reports`
+    fn list_thing_registration_task_reports_pages(
+        &self,
+        input: ListThingRegistrationTaskReportsRequest,
+    ) -> RusotoStream<String, ListThingRegistrationTaskReportsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_thing_registration_task_reports(state.clone())
+        })
+    }
+
     /// <p>List bulk thing provisioning tasks.</p>
     async fn list_thing_registration_tasks(
         &self,
         input: ListThingRegistrationTasksRequest,
     ) -> Result<ListThingRegistrationTasksResponse, RusotoError<ListThingRegistrationTasksError>>;
+
+    /// Auto-paginating version of `list_thing_registration_tasks`
+    fn list_thing_registration_tasks_pages(
+        &self,
+        input: ListThingRegistrationTasksRequest,
+    ) -> RusotoStream<String, ListThingRegistrationTasksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_thing_registration_tasks(state.clone())
+        })
+    }
 
     /// <p>Lists the existing thing types.</p>
     async fn list_thing_types(
@@ -24342,11 +26872,31 @@ pub trait Iot {
         input: ListThingTypesRequest,
     ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>>;
 
+    /// Auto-paginating version of `list_thing_types`
+    fn list_thing_types_pages(
+        &self,
+        input: ListThingTypesRequest,
+    ) -> RusotoStream<ThingTypeDefinition, ListThingTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_thing_types(state.clone())
+        })
+    }
+
     /// <p><p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p> <note> <p>You will not be charged for calling this API if an <code>Access denied</code> error is returned. You will also not be charged if no attributes or pagination token was provided in request and no pagination token and no results were returned.</p> </note></p>
     async fn list_things(
         &self,
         input: ListThingsRequest,
     ) -> Result<ListThingsResponse, RusotoError<ListThingsError>>;
+
+    /// Auto-paginating version of `list_things`
+    fn list_things_pages(
+        &self,
+        input: ListThingsRequest,
+    ) -> RusotoStream<ThingAttribute, ListThingsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_things(state.clone())
+        })
+    }
 
     /// <p>Lists the things you have added to the given billing group.</p>
     async fn list_things_in_billing_group(
@@ -24354,11 +26904,31 @@ pub trait Iot {
         input: ListThingsInBillingGroupRequest,
     ) -> Result<ListThingsInBillingGroupResponse, RusotoError<ListThingsInBillingGroupError>>;
 
+    /// Auto-paginating version of `list_things_in_billing_group`
+    fn list_things_in_billing_group_pages(
+        &self,
+        input: ListThingsInBillingGroupRequest,
+    ) -> RusotoStream<String, ListThingsInBillingGroupError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_things_in_billing_group(state.clone())
+        })
+    }
+
     /// <p>Lists the things in the specified group.</p>
     async fn list_things_in_thing_group(
         &self,
         input: ListThingsInThingGroupRequest,
     ) -> Result<ListThingsInThingGroupResponse, RusotoError<ListThingsInThingGroupError>>;
+
+    /// Auto-paginating version of `list_things_in_thing_group`
+    fn list_things_in_thing_group_pages(
+        &self,
+        input: ListThingsInThingGroupRequest,
+    ) -> RusotoStream<String, ListThingsInThingGroupError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_things_in_thing_group(state.clone())
+        })
+    }
 
     /// <p>Lists all the topic rule destinations in your AWS account.</p>
     async fn list_topic_rule_destinations(
@@ -24366,11 +26936,31 @@ pub trait Iot {
         input: ListTopicRuleDestinationsRequest,
     ) -> Result<ListTopicRuleDestinationsResponse, RusotoError<ListTopicRuleDestinationsError>>;
 
+    /// Auto-paginating version of `list_topic_rule_destinations`
+    fn list_topic_rule_destinations_pages(
+        &self,
+        input: ListTopicRuleDestinationsRequest,
+    ) -> RusotoStream<TopicRuleDestinationSummary, ListTopicRuleDestinationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_topic_rule_destinations(state.clone())
+        })
+    }
+
     /// <p>Lists the rules for the specific topic.</p>
     async fn list_topic_rules(
         &self,
         input: ListTopicRulesRequest,
     ) -> Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>>;
+
+    /// Auto-paginating version of `list_topic_rules`
+    fn list_topic_rules_pages(
+        &self,
+        input: ListTopicRulesRequest,
+    ) -> RusotoStream<TopicRuleListItem, ListTopicRulesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_topic_rules(state.clone())
+        })
+    }
 
     /// <p>Lists logging levels.</p>
     async fn list_v2_logging_levels(
@@ -24378,11 +26968,31 @@ pub trait Iot {
         input: ListV2LoggingLevelsRequest,
     ) -> Result<ListV2LoggingLevelsResponse, RusotoError<ListV2LoggingLevelsError>>;
 
+    /// Auto-paginating version of `list_v2_logging_levels`
+    fn list_v2_logging_levels_pages(
+        &self,
+        input: ListV2LoggingLevelsRequest,
+    ) -> RusotoStream<LogTargetConfiguration, ListV2LoggingLevelsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_v2_logging_levels(state.clone())
+        })
+    }
+
     /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior, or thing (device).</p>
     async fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
     ) -> Result<ListViolationEventsResponse, RusotoError<ListViolationEventsError>>;
+
+    /// Auto-paginating version of `list_violation_events`
+    fn list_violation_events_pages(
+        &self,
+        input: ListViolationEventsRequest,
+    ) -> RusotoStream<ViolationEvent, ListViolationEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_violation_events(state.clone())
+        })
+    }
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     async fn register_ca_certificate(

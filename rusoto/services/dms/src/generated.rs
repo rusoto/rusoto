@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -69,6 +71,7 @@ pub struct AccountQuota {
 }
 
 /// <p>Associates a set of tags with an AWS DMS resource.</p>
+/// see [DatabaseMigrationService::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
@@ -81,11 +84,13 @@ pub struct AddTagsToResourceMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::add_tags_to_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResponse {}
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
@@ -101,6 +106,7 @@ pub struct ApplyPendingMaintenanceActionMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResponse {
@@ -121,6 +127,7 @@ pub struct AvailabilityZone {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::cancel_replication_task_assessment_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelReplicationTaskAssessmentRunMessage {
@@ -130,6 +137,7 @@ pub struct CancelReplicationTaskAssessmentRunMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::cancel_replication_task_assessment_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelReplicationTaskAssessmentRunResponse {
@@ -221,6 +229,7 @@ pub struct Connection {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointMessage {
@@ -350,6 +359,7 @@ pub struct CreateEndpointMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointResponse {
@@ -360,6 +370,7 @@ pub struct CreateEndpointResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
@@ -392,6 +403,7 @@ pub struct CreateEventSubscriptionMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_event_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEventSubscriptionResponse {
@@ -402,6 +414,7 @@ pub struct CreateEventSubscriptionResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_replication_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationInstanceMessage {
@@ -466,6 +479,7 @@ pub struct CreateReplicationInstanceMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_replication_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationInstanceResponse {
@@ -476,6 +490,7 @@ pub struct CreateReplicationInstanceResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_replication_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationSubnetGroupMessage {
@@ -495,6 +510,7 @@ pub struct CreateReplicationSubnetGroupMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_replication_subnet_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationSubnetGroupResponse {
@@ -505,6 +521,7 @@ pub struct CreateReplicationSubnetGroupResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_replication_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationTaskMessage {
@@ -557,6 +574,7 @@ pub struct CreateReplicationTaskMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::create_replication_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationTaskResponse {
@@ -566,6 +584,7 @@ pub struct CreateReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
+/// see [DatabaseMigrationService::delete_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateMessage {
@@ -574,6 +593,7 @@ pub struct DeleteCertificateMessage {
     pub certificate_arn: String,
 }
 
+/// see [DatabaseMigrationService::delete_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCertificateResponse {
@@ -584,6 +604,7 @@ pub struct DeleteCertificateResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionMessage {
@@ -596,6 +617,7 @@ pub struct DeleteConnectionMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionResponse {
@@ -606,6 +628,7 @@ pub struct DeleteConnectionResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointMessage {
@@ -615,6 +638,7 @@ pub struct DeleteEndpointMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEndpointResponse {
@@ -625,6 +649,7 @@ pub struct DeleteEndpointResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
@@ -634,6 +659,7 @@ pub struct DeleteEventSubscriptionMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_event_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEventSubscriptionResponse {
@@ -644,6 +670,7 @@ pub struct DeleteEventSubscriptionResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationInstanceMessage {
@@ -653,6 +680,7 @@ pub struct DeleteReplicationInstanceMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationInstanceResponse {
@@ -663,6 +691,7 @@ pub struct DeleteReplicationInstanceResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationSubnetGroupMessage {
@@ -672,11 +701,13 @@ pub struct DeleteReplicationSubnetGroupMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_subnet_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationSubnetGroupResponse {}
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_task_assessment_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationTaskAssessmentRunMessage {
@@ -686,6 +717,7 @@ pub struct DeleteReplicationTaskAssessmentRunMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_task_assessment_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationTaskAssessmentRunResponse {
@@ -696,6 +728,7 @@ pub struct DeleteReplicationTaskAssessmentRunResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationTaskMessage {
@@ -705,6 +738,7 @@ pub struct DeleteReplicationTaskMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::delete_replication_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationTaskResponse {
@@ -715,11 +749,13 @@ pub struct DeleteReplicationTaskResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_account_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesMessage {}
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_account_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountAttributesResponse {
@@ -734,6 +770,7 @@ pub struct DescribeAccountAttributesResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_applicable_individual_assessments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicableIndividualAssessmentsMessage {
@@ -768,6 +805,7 @@ pub struct DescribeApplicableIndividualAssessmentsMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_applicable_individual_assessments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeApplicableIndividualAssessmentsResponse {
@@ -781,6 +819,7 @@ pub struct DescribeApplicableIndividualAssessmentsResponse {
     pub marker: Option<String>,
 }
 
+/// see [DatabaseMigrationService::describe_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificatesMessage {
@@ -798,6 +837,15 @@ pub struct DescribeCertificatesMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeCertificatesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [DatabaseMigrationService::describe_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificatesResponse {
@@ -811,7 +859,32 @@ pub struct DescribeCertificatesResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeCertificatesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
+        Some(self.certificates.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeCertificatesResponse {
+    type Item = Certificate;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Certificate> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionsMessage {
@@ -829,7 +902,16 @@ pub struct DescribeConnectionsMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeConnectionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConnectionsResponse {
@@ -843,7 +925,32 @@ pub struct DescribeConnectionsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeConnectionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Connection>> {
+        Some(self.connections.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeConnectionsResponse {
+    type Item = Connection;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Connection> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_endpoint_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointTypesMessage {
@@ -861,7 +968,16 @@ pub struct DescribeEndpointTypesMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeEndpointTypesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_endpoint_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointTypesResponse {
@@ -875,7 +991,32 @@ pub struct DescribeEndpointTypesResponse {
     pub supported_endpoint_types: Option<Vec<SupportedEndpointType>>,
 }
 
+impl DescribeEndpointTypesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SupportedEndpointType>> {
+        Some(self.supported_endpoint_types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEndpointTypesResponse {
+    type Item = SupportedEndpointType;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SupportedEndpointType> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointsMessage {
@@ -893,7 +1034,16 @@ pub struct DescribeEndpointsMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeEndpointsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointsResponse {
@@ -907,7 +1057,32 @@ pub struct DescribeEndpointsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeEndpointsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Endpoint>> {
+        Some(self.endpoints.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEndpointsResponse {
+    type Item = Endpoint;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Endpoint> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
@@ -922,6 +1097,7 @@ pub struct DescribeEventCategoriesMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_event_categories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventCategoriesResponse {
@@ -932,6 +1108,7 @@ pub struct DescribeEventCategoriesResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
@@ -953,7 +1130,16 @@ pub struct DescribeEventSubscriptionsMessage {
     pub subscription_name: Option<String>,
 }
 
+impl PagedRequest for DescribeEventSubscriptionsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventSubscriptionsResponse {
@@ -967,7 +1153,32 @@ pub struct DescribeEventSubscriptionsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeEventSubscriptionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<EventSubscription>> {
+        Some(self.event_subscriptions_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventSubscriptionsResponse {
+    type Item = EventSubscription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EventSubscription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
@@ -1009,7 +1220,16 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<f64>,
 }
 
+impl PagedRequest for DescribeEventsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsResponse {
@@ -1023,7 +1243,32 @@ pub struct DescribeEventsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventsResponse {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_orderable_replication_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableReplicationInstancesMessage {
@@ -1037,7 +1282,16 @@ pub struct DescribeOrderableReplicationInstancesMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeOrderableReplicationInstancesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_orderable_replication_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrderableReplicationInstancesResponse {
@@ -1051,7 +1305,32 @@ pub struct DescribeOrderableReplicationInstancesResponse {
     pub orderable_replication_instances: Option<Vec<OrderableReplicationInstance>>,
 }
 
+impl DescribeOrderableReplicationInstancesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<OrderableReplicationInstance>> {
+        Some(self.orderable_replication_instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeOrderableReplicationInstancesResponse {
+    type Item = OrderableReplicationInstance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OrderableReplicationInstance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
@@ -1074,6 +1353,7 @@ pub struct DescribePendingMaintenanceActionsMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePendingMaintenanceActionsResponse {
@@ -1088,6 +1368,7 @@ pub struct DescribePendingMaintenanceActionsResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_refresh_schemas_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRefreshSchemasStatusMessage {
@@ -1097,6 +1378,7 @@ pub struct DescribeRefreshSchemasStatusMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_refresh_schemas_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRefreshSchemasStatusResponse {
@@ -1106,6 +1388,7 @@ pub struct DescribeRefreshSchemasStatusResponse {
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
+/// see [DatabaseMigrationService::describe_replication_instance_task_logs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationInstanceTaskLogsMessage {
@@ -1122,6 +1405,7 @@ pub struct DescribeReplicationInstanceTaskLogsMessage {
     pub replication_instance_arn: String,
 }
 
+/// see [DatabaseMigrationService::describe_replication_instance_task_logs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationInstanceTaskLogsResponse {
@@ -1140,6 +1424,7 @@ pub struct DescribeReplicationInstanceTaskLogsResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationInstancesMessage {
@@ -1157,7 +1442,16 @@ pub struct DescribeReplicationInstancesMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeReplicationInstancesMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationInstancesResponse {
@@ -1171,7 +1465,32 @@ pub struct DescribeReplicationInstancesResponse {
     pub replication_instances: Option<Vec<ReplicationInstance>>,
 }
 
+impl DescribeReplicationInstancesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ReplicationInstance>> {
+        Some(self.replication_instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeReplicationInstancesResponse {
+    type Item = ReplicationInstance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReplicationInstance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationSubnetGroupsMessage {
@@ -1189,7 +1508,16 @@ pub struct DescribeReplicationSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeReplicationSubnetGroupsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_subnet_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationSubnetGroupsResponse {
@@ -1203,7 +1531,32 @@ pub struct DescribeReplicationSubnetGroupsResponse {
     pub replication_subnet_groups: Option<Vec<ReplicationSubnetGroup>>,
 }
 
+impl DescribeReplicationSubnetGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ReplicationSubnetGroup>> {
+        Some(self.replication_subnet_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeReplicationSubnetGroupsResponse {
+    type Item = ReplicationSubnetGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReplicationSubnetGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_task_assessment_results]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTaskAssessmentResultsMessage {
@@ -1221,7 +1574,16 @@ pub struct DescribeReplicationTaskAssessmentResultsMessage {
     pub replication_task_arn: Option<String>,
 }
 
+impl PagedRequest for DescribeReplicationTaskAssessmentResultsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_task_assessment_results]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationTaskAssessmentResultsResponse {
@@ -1239,7 +1601,32 @@ pub struct DescribeReplicationTaskAssessmentResultsResponse {
     pub replication_task_assessment_results: Option<Vec<ReplicationTaskAssessmentResult>>,
 }
 
+impl DescribeReplicationTaskAssessmentResultsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ReplicationTaskAssessmentResult>> {
+        Some(self.replication_task_assessment_results.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeReplicationTaskAssessmentResultsResponse {
+    type Item = ReplicationTaskAssessmentResult;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReplicationTaskAssessmentResult> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_task_assessment_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTaskAssessmentRunsMessage {
@@ -1258,6 +1645,7 @@ pub struct DescribeReplicationTaskAssessmentRunsMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_task_assessment_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationTaskAssessmentRunsResponse {
@@ -1272,6 +1660,7 @@ pub struct DescribeReplicationTaskAssessmentRunsResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_task_individual_assessments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTaskIndividualAssessmentsMessage {
@@ -1290,6 +1679,7 @@ pub struct DescribeReplicationTaskIndividualAssessmentsMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_task_individual_assessments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationTaskIndividualAssessmentsResponse {
@@ -1304,6 +1694,7 @@ pub struct DescribeReplicationTaskIndividualAssessmentsResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTasksMessage {
@@ -1325,7 +1716,16 @@ pub struct DescribeReplicationTasksMessage {
     pub without_settings: Option<bool>,
 }
 
+impl PagedRequest for DescribeReplicationTasksMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_replication_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationTasksResponse {
@@ -1339,7 +1739,32 @@ pub struct DescribeReplicationTasksResponse {
     pub replication_tasks: Option<Vec<ReplicationTask>>,
 }
 
+impl DescribeReplicationTasksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ReplicationTask>> {
+        Some(self.replication_tasks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeReplicationTasksResponse {
+    type Item = ReplicationTask;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReplicationTask> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_schemas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemasMessage {
@@ -1356,7 +1781,16 @@ pub struct DescribeSchemasMessage {
     pub max_records: Option<i64>,
 }
 
+impl PagedRequest for DescribeSchemasMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_schemas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSchemasResponse {
@@ -1370,7 +1804,32 @@ pub struct DescribeSchemasResponse {
     pub schemas: Option<Vec<String>>,
 }
 
+impl DescribeSchemasResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.schemas.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSchemasResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_table_statistics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTableStatisticsMessage {
@@ -1391,7 +1850,16 @@ pub struct DescribeTableStatisticsMessage {
     pub replication_task_arn: String,
 }
 
+impl PagedRequest for DescribeTableStatisticsMessage {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [DatabaseMigrationService::describe_table_statistics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTableStatisticsResponse {
@@ -1407,6 +1875,30 @@ pub struct DescribeTableStatisticsResponse {
     #[serde(rename = "TableStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_statistics: Option<Vec<TableStatistics>>,
+}
+
+impl DescribeTableStatisticsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<TableStatistics>> {
+        Some(self.table_statistics.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeTableStatisticsResponse {
+    type Item = TableStatistics;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<TableStatistics> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p>
@@ -1774,6 +2266,7 @@ pub struct IBMDb2Settings {
     pub username: Option<String>,
 }
 
+/// see [DatabaseMigrationService::import_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCertificateMessage {
@@ -1799,6 +2292,7 @@ pub struct ImportCertificateMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DatabaseMigrationService::import_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportCertificateResponse {
@@ -1895,6 +2389,7 @@ pub struct KinesisSettings {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
@@ -1904,6 +2399,7 @@ pub struct ListTagsForResourceMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1967,6 +2463,7 @@ pub struct MicrosoftSQLServerSettings {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEndpointMessage {
@@ -2091,6 +2588,7 @@ pub struct ModifyEndpointMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyEndpointResponse {
@@ -2101,6 +2599,7 @@ pub struct ModifyEndpointResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
@@ -2126,6 +2625,7 @@ pub struct ModifyEventSubscriptionMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_event_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyEventSubscriptionResponse {
@@ -2136,6 +2636,7 @@ pub struct ModifyEventSubscriptionResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_replication_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationInstanceMessage {
@@ -2185,6 +2686,7 @@ pub struct ModifyReplicationInstanceMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_replication_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReplicationInstanceResponse {
@@ -2195,6 +2697,7 @@ pub struct ModifyReplicationInstanceResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_replication_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationSubnetGroupMessage {
@@ -2211,6 +2714,7 @@ pub struct ModifyReplicationSubnetGroupMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_replication_subnet_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReplicationSubnetGroupResponse {
@@ -2221,6 +2725,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_replication_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationTaskMessage {
@@ -2262,6 +2767,7 @@ pub struct ModifyReplicationTaskMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::modify_replication_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReplicationTaskResponse {
@@ -2333,6 +2839,7 @@ pub struct MongoDbSettings {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::move_replication_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MoveReplicationTaskMessage {
@@ -2345,6 +2852,7 @@ pub struct MoveReplicationTaskMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::move_replication_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MoveReplicationTaskResponse {
@@ -2708,6 +3216,7 @@ pub struct PostgreSQLSettings {
     pub username: Option<String>,
 }
 
+/// see [DatabaseMigrationService::reboot_replication_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootReplicationInstanceMessage {
@@ -2720,6 +3229,7 @@ pub struct RebootReplicationInstanceMessage {
     pub replication_instance_arn: String,
 }
 
+/// see [DatabaseMigrationService::reboot_replication_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootReplicationInstanceResponse {
@@ -2855,6 +3365,7 @@ pub struct RedshiftSettings {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::refresh_schemas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshSchemasMessage {
@@ -2867,6 +3378,7 @@ pub struct RefreshSchemasMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::refresh_schemas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RefreshSchemasResponse {
@@ -2902,6 +3414,7 @@ pub struct RefreshSchemasStatus {
     pub status: Option<String>,
 }
 
+/// see [DatabaseMigrationService::reload_tables]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReloadTablesMessage {
@@ -2917,6 +3430,7 @@ pub struct ReloadTablesMessage {
     pub tables_to_reload: Vec<TableToReload>,
 }
 
+/// see [DatabaseMigrationService::reload_tables]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReloadTablesResponse {
@@ -2927,6 +3441,7 @@ pub struct ReloadTablesResponse {
 }
 
 /// <p>Removes one or more tags from an AWS DMS resource.</p>
+/// see [DatabaseMigrationService::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
@@ -2939,6 +3454,7 @@ pub struct RemoveTagsFromResourceMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {}
@@ -3491,6 +4007,7 @@ pub struct S3Settings {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::start_replication_task_assessment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskAssessmentMessage {
@@ -3500,6 +4017,7 @@ pub struct StartReplicationTaskAssessmentMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::start_replication_task_assessment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartReplicationTaskAssessmentResponse {
@@ -3510,6 +4028,7 @@ pub struct StartReplicationTaskAssessmentResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::start_replication_task_assessment_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskAssessmentRunMessage {
@@ -3548,6 +4067,7 @@ pub struct StartReplicationTaskAssessmentRunMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::start_replication_task_assessment_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartReplicationTaskAssessmentRunResponse {
@@ -3558,6 +4078,7 @@ pub struct StartReplicationTaskAssessmentRunResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::start_replication_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskMessage {
@@ -3582,6 +4103,7 @@ pub struct StartReplicationTaskMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::start_replication_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartReplicationTaskResponse {
@@ -3592,6 +4114,7 @@ pub struct StartReplicationTaskResponse {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::stop_replication_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopReplicationTaskMessage {
@@ -3601,6 +4124,7 @@ pub struct StopReplicationTaskMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::stop_replication_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopReplicationTaskResponse {
@@ -3795,6 +4319,7 @@ pub struct Tag {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::test_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestConnectionMessage {
@@ -3807,6 +4332,7 @@ pub struct TestConnectionMessage {
 }
 
 /// <p><p/></p>
+/// see [DatabaseMigrationService::test_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestConnectionResponse {
@@ -6564,7 +7090,7 @@ impl fmt::Display for TestConnectionError {
 impl Error for TestConnectionError {}
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
 #[async_trait]
-pub trait DatabaseMigrationService {
+pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/APIReference/API_Tag.html"> <code>Tag</code> </a> data type description.</p>
     async fn add_tags_to_resource(
         &self,
@@ -6690,11 +7216,31 @@ pub trait DatabaseMigrationService {
         input: DescribeCertificatesMessage,
     ) -> Result<DescribeCertificatesResponse, RusotoError<DescribeCertificatesError>>;
 
+    /// Auto-paginating version of `describe_certificates`
+    fn describe_certificates_pages(
+        &self,
+        input: DescribeCertificatesMessage,
+    ) -> RusotoStream<Certificate, DescribeCertificatesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_certificates(state.clone())
+        })
+    }
+
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
     async fn describe_connections(
         &self,
         input: DescribeConnectionsMessage,
     ) -> Result<DescribeConnectionsResponse, RusotoError<DescribeConnectionsError>>;
+
+    /// Auto-paginating version of `describe_connections`
+    fn describe_connections_pages(
+        &self,
+        input: DescribeConnectionsMessage,
+    ) -> RusotoStream<Connection, DescribeConnectionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_connections(state.clone())
+        })
+    }
 
     /// <p>Returns information about the type of endpoints available.</p>
     async fn describe_endpoint_types(
@@ -6702,11 +7248,31 @@ pub trait DatabaseMigrationService {
         input: DescribeEndpointTypesMessage,
     ) -> Result<DescribeEndpointTypesResponse, RusotoError<DescribeEndpointTypesError>>;
 
+    /// Auto-paginating version of `describe_endpoint_types`
+    fn describe_endpoint_types_pages(
+        &self,
+        input: DescribeEndpointTypesMessage,
+    ) -> RusotoStream<SupportedEndpointType, DescribeEndpointTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_endpoint_types(state.clone())
+        })
+    }
+
     /// <p>Returns information about the endpoints for your account in the current region.</p>
     async fn describe_endpoints(
         &self,
         input: DescribeEndpointsMessage,
     ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
+
+    /// Auto-paginating version of `describe_endpoints`
+    fn describe_endpoints_pages(
+        &self,
+        input: DescribeEndpointsMessage,
+    ) -> RusotoStream<Endpoint, DescribeEndpointsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_endpoints(state.clone())
+        })
+    }
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     async fn describe_event_categories(
@@ -6720,11 +7286,31 @@ pub trait DatabaseMigrationService {
         input: DescribeEventSubscriptionsMessage,
     ) -> Result<DescribeEventSubscriptionsResponse, RusotoError<DescribeEventSubscriptionsError>>;
 
+    /// Auto-paginating version of `describe_event_subscriptions`
+    fn describe_event_subscriptions_pages(
+        &self,
+        input: DescribeEventSubscriptionsMessage,
+    ) -> RusotoStream<EventSubscription, DescribeEventSubscriptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_event_subscriptions(state.clone())
+        })
+    }
+
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsMessage,
+    ) -> RusotoStream<Event, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
     async fn describe_orderable_replication_instances(
@@ -6734,6 +7320,17 @@ pub trait DatabaseMigrationService {
         DescribeOrderableReplicationInstancesResponse,
         RusotoError<DescribeOrderableReplicationInstancesError>,
     >;
+
+    /// Auto-paginating version of `describe_orderable_replication_instances`
+    fn describe_orderable_replication_instances_pages(
+        &self,
+        input: DescribeOrderableReplicationInstancesMessage,
+    ) -> RusotoStream<OrderableReplicationInstance, DescribeOrderableReplicationInstancesError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_orderable_replication_instances(state.clone())
+        })
+    }
 
     /// <p>For internal use only</p>
     async fn describe_pending_maintenance_actions(
@@ -6765,6 +7362,16 @@ pub trait DatabaseMigrationService {
         input: DescribeReplicationInstancesMessage,
     ) -> Result<DescribeReplicationInstancesResponse, RusotoError<DescribeReplicationInstancesError>>;
 
+    /// Auto-paginating version of `describe_replication_instances`
+    fn describe_replication_instances_pages(
+        &self,
+        input: DescribeReplicationInstancesMessage,
+    ) -> RusotoStream<ReplicationInstance, DescribeReplicationInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_replication_instances(state.clone())
+        })
+    }
+
     /// <p>Returns information about the replication subnet groups.</p>
     async fn describe_replication_subnet_groups(
         &self,
@@ -6774,6 +7381,16 @@ pub trait DatabaseMigrationService {
         RusotoError<DescribeReplicationSubnetGroupsError>,
     >;
 
+    /// Auto-paginating version of `describe_replication_subnet_groups`
+    fn describe_replication_subnet_groups_pages(
+        &self,
+        input: DescribeReplicationSubnetGroupsMessage,
+    ) -> RusotoStream<ReplicationSubnetGroup, DescribeReplicationSubnetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_replication_subnet_groups(state.clone())
+        })
+    }
+
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
     async fn describe_replication_task_assessment_results(
         &self,
@@ -6782,6 +7399,17 @@ pub trait DatabaseMigrationService {
         DescribeReplicationTaskAssessmentResultsResponse,
         RusotoError<DescribeReplicationTaskAssessmentResultsError>,
     >;
+
+    /// Auto-paginating version of `describe_replication_task_assessment_results`
+    fn describe_replication_task_assessment_results_pages(
+        &self,
+        input: DescribeReplicationTaskAssessmentResultsMessage,
+    ) -> RusotoStream<ReplicationTaskAssessmentResult, DescribeReplicationTaskAssessmentResultsError>
+    {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_replication_task_assessment_results(state.clone())
+        })
+    }
 
     /// <p><p>Returns a paginated list of premigration assessment runs based on filter settings.</p> <p>These filter settings can specify a combination of premigration assessment runs, migration tasks, replication instances, and assessment run status values.</p> <note> <p>This operation doesn&#39;t return information about individual assessments. For this information, see the <code>DescribeReplicationTaskIndividualAssessments</code> operation. </p> </note></p>
     async fn describe_replication_task_assessment_runs(
@@ -6807,17 +7435,47 @@ pub trait DatabaseMigrationService {
         input: DescribeReplicationTasksMessage,
     ) -> Result<DescribeReplicationTasksResponse, RusotoError<DescribeReplicationTasksError>>;
 
+    /// Auto-paginating version of `describe_replication_tasks`
+    fn describe_replication_tasks_pages(
+        &self,
+        input: DescribeReplicationTasksMessage,
+    ) -> RusotoStream<ReplicationTask, DescribeReplicationTasksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_replication_tasks(state.clone())
+        })
+    }
+
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
     async fn describe_schemas(
         &self,
         input: DescribeSchemasMessage,
     ) -> Result<DescribeSchemasResponse, RusotoError<DescribeSchemasError>>;
 
+    /// Auto-paginating version of `describe_schemas`
+    fn describe_schemas_pages(
+        &self,
+        input: DescribeSchemasMessage,
+    ) -> RusotoStream<String, DescribeSchemasError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_schemas(state.clone())
+        })
+    }
+
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
     async fn describe_table_statistics(
         &self,
         input: DescribeTableStatisticsMessage,
     ) -> Result<DescribeTableStatisticsResponse, RusotoError<DescribeTableStatisticsError>>;
+
+    /// Auto-paginating version of `describe_table_statistics`
+    fn describe_table_statistics_pages(
+        &self,
+        input: DescribeTableStatisticsMessage,
+    ) -> RusotoStream<TableStatistics, DescribeTableStatisticsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_table_statistics(state.clone())
+        })
+    }
 
     /// <p>Uploads the specified certificate.</p>
     async fn import_certificate(

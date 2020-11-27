@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl KinesisAnalyticsV2Client {
 }
 
 use serde_json;
+/// see [KinesisAnalyticsV2::add_application_cloud_watch_logging_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationCloudWatchLoggingOptionRequest {
@@ -65,6 +68,7 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
     pub current_application_version_id: i64,
 }
 
+/// see [KinesisAnalyticsV2::add_application_cloud_watch_logging_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationCloudWatchLoggingOptionResponse {
@@ -82,6 +86,7 @@ pub struct AddApplicationCloudWatchLoggingOptionResponse {
     pub cloud_watch_logging_option_descriptions: Option<Vec<CloudWatchLoggingOptionDescription>>,
 }
 
+/// see [KinesisAnalyticsV2::add_application_input_processing_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputProcessingConfigurationRequest {
@@ -99,6 +104,7 @@ pub struct AddApplicationInputProcessingConfigurationRequest {
     pub input_processing_configuration: InputProcessingConfiguration,
 }
 
+/// see [KinesisAnalyticsV2::add_application_input_processing_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationInputProcessingConfigurationResponse {
@@ -120,6 +126,7 @@ pub struct AddApplicationInputProcessingConfigurationResponse {
     pub input_processing_configuration_description: Option<InputProcessingConfigurationDescription>,
 }
 
+/// see [KinesisAnalyticsV2::add_application_input]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputRequest {
@@ -134,6 +141,7 @@ pub struct AddApplicationInputRequest {
     pub input: Input,
 }
 
+/// see [KinesisAnalyticsV2::add_application_input]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationInputResponse {
@@ -151,6 +159,7 @@ pub struct AddApplicationInputResponse {
     pub input_descriptions: Option<Vec<InputDescription>>,
 }
 
+/// see [KinesisAnalyticsV2::add_application_output]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationOutputRequest {
@@ -165,6 +174,7 @@ pub struct AddApplicationOutputRequest {
     pub output: Output,
 }
 
+/// see [KinesisAnalyticsV2::add_application_output]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationOutputResponse {
@@ -182,6 +192,7 @@ pub struct AddApplicationOutputResponse {
     pub output_descriptions: Option<Vec<OutputDescription>>,
 }
 
+/// see [KinesisAnalyticsV2::add_application_reference_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationReferenceDataSourceRequest {
@@ -196,6 +207,7 @@ pub struct AddApplicationReferenceDataSourceRequest {
     pub reference_data_source: ReferenceDataSource,
 }
 
+/// see [KinesisAnalyticsV2::add_application_reference_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationReferenceDataSourceResponse {
@@ -213,6 +225,7 @@ pub struct AddApplicationReferenceDataSourceResponse {
     pub reference_data_source_descriptions: Option<Vec<ReferenceDataSourceDescription>>,
 }
 
+/// see [KinesisAnalyticsV2::add_application_vpc_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationVpcConfigurationRequest {
@@ -227,6 +240,7 @@ pub struct AddApplicationVpcConfigurationRequest {
     pub vpc_configuration: VpcConfiguration,
 }
 
+/// see [KinesisAnalyticsV2::add_application_vpc_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationVpcConfigurationResponse {
@@ -667,6 +681,7 @@ pub struct CodeContentUpdate {
     pub zip_file_content_update: Option<bytes::Bytes>,
 }
 
+/// see [KinesisAnalyticsV2::create_application_presigned_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationPresignedUrlRequest {
@@ -682,6 +697,7 @@ pub struct CreateApplicationPresignedUrlRequest {
     pub url_type: String,
 }
 
+/// see [KinesisAnalyticsV2::create_application_presigned_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationPresignedUrlResponse {
@@ -691,6 +707,7 @@ pub struct CreateApplicationPresignedUrlResponse {
     pub authorized_url: Option<String>,
 }
 
+/// see [KinesisAnalyticsV2::create_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
@@ -721,6 +738,7 @@ pub struct CreateApplicationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [KinesisAnalyticsV2::create_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
@@ -729,6 +747,7 @@ pub struct CreateApplicationResponse {
     pub application_detail: ApplicationDetail,
 }
 
+/// see [KinesisAnalyticsV2::create_application_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationSnapshotRequest {
@@ -740,10 +759,12 @@ pub struct CreateApplicationSnapshotRequest {
     pub snapshot_name: String,
 }
 
+/// see [KinesisAnalyticsV2::create_application_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationSnapshotResponse {}
 
+/// see [KinesisAnalyticsV2::delete_application_cloud_watch_logging_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
@@ -758,6 +779,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
     pub current_application_version_id: i64,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_cloud_watch_logging_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionResponse {
@@ -775,6 +797,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionResponse {
     pub cloud_watch_logging_option_descriptions: Option<Vec<CloudWatchLoggingOptionDescription>>,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_input_processing_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInputProcessingConfigurationRequest {
@@ -789,6 +812,7 @@ pub struct DeleteApplicationInputProcessingConfigurationRequest {
     pub input_id: String,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_input_processing_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationInputProcessingConfigurationResponse {
@@ -802,6 +826,7 @@ pub struct DeleteApplicationInputProcessingConfigurationResponse {
     pub application_version_id: Option<i64>,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_output]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationOutputRequest {
@@ -816,6 +841,7 @@ pub struct DeleteApplicationOutputRequest {
     pub output_id: String,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_output]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationOutputResponse {
@@ -829,6 +855,7 @@ pub struct DeleteApplicationOutputResponse {
     pub application_version_id: Option<i64>,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_reference_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationReferenceDataSourceRequest {
@@ -843,6 +870,7 @@ pub struct DeleteApplicationReferenceDataSourceRequest {
     pub reference_id: String,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_reference_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationReferenceDataSourceResponse {
@@ -856,6 +884,7 @@ pub struct DeleteApplicationReferenceDataSourceResponse {
     pub application_version_id: Option<i64>,
 }
 
+/// see [KinesisAnalyticsV2::delete_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
@@ -867,10 +896,12 @@ pub struct DeleteApplicationRequest {
     pub create_timestamp: f64,
 }
 
+/// see [KinesisAnalyticsV2::delete_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationResponse {}
 
+/// see [KinesisAnalyticsV2::delete_application_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationSnapshotRequest {
@@ -885,10 +916,12 @@ pub struct DeleteApplicationSnapshotRequest {
     pub snapshot_name: String,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationSnapshotResponse {}
 
+/// see [KinesisAnalyticsV2::delete_application_vpc_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationVpcConfigurationRequest {
@@ -903,6 +936,7 @@ pub struct DeleteApplicationVpcConfigurationRequest {
     pub vpc_configuration_id: String,
 }
 
+/// see [KinesisAnalyticsV2::delete_application_vpc_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationVpcConfigurationResponse {
@@ -916,6 +950,7 @@ pub struct DeleteApplicationVpcConfigurationResponse {
     pub application_version_id: Option<i64>,
 }
 
+/// see [KinesisAnalyticsV2::describe_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationRequest {
@@ -928,6 +963,7 @@ pub struct DescribeApplicationRequest {
     pub include_additional_details: Option<bool>,
 }
 
+/// see [KinesisAnalyticsV2::describe_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeApplicationResponse {
@@ -936,6 +972,7 @@ pub struct DescribeApplicationResponse {
     pub application_detail: ApplicationDetail,
 }
 
+/// see [KinesisAnalyticsV2::describe_application_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationSnapshotRequest {
@@ -947,6 +984,7 @@ pub struct DescribeApplicationSnapshotRequest {
     pub snapshot_name: String,
 }
 
+/// see [KinesisAnalyticsV2::describe_application_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeApplicationSnapshotResponse {
@@ -963,6 +1001,7 @@ pub struct DestinationSchema {
     pub record_format_type: String,
 }
 
+/// see [KinesisAnalyticsV2::discover_input_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverInputSchemaRequest {
@@ -987,6 +1026,7 @@ pub struct DiscoverInputSchemaRequest {
     pub service_execution_role: String,
 }
 
+/// see [KinesisAnalyticsV2::discover_input_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DiscoverInputSchemaResponse {
@@ -1473,6 +1513,7 @@ pub struct LambdaOutputUpdate {
     pub resource_arn_update: String,
 }
 
+/// see [KinesisAnalyticsV2::list_application_snapshots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationSnapshotsRequest {
@@ -1489,6 +1530,15 @@ pub struct ListApplicationSnapshotsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListApplicationSnapshotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [KinesisAnalyticsV2::list_application_snapshots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationSnapshotsResponse {
@@ -1502,6 +1552,31 @@ pub struct ListApplicationSnapshotsResponse {
     pub snapshot_summaries: Option<Vec<SnapshotDetails>>,
 }
 
+impl ListApplicationSnapshotsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SnapshotDetails>> {
+        Some(self.snapshot_summaries.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListApplicationSnapshotsResponse {
+    type Item = SnapshotDetails;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SnapshotDetails> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [KinesisAnalyticsV2::list_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
@@ -1515,6 +1590,15 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListApplicationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [KinesisAnalyticsV2::list_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsResponse {
@@ -1527,6 +1611,31 @@ pub struct ListApplicationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListApplicationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ApplicationSummary>> {
+        Some(self.application_summaries.clone())
+    }
+}
+
+impl PagedOutput for ListApplicationsResponse {
+    type Item = ApplicationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ApplicationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [KinesisAnalyticsV2::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1535,6 +1644,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [KinesisAnalyticsV2::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2107,6 +2217,7 @@ pub struct SqlRunConfiguration {
     pub input_starting_position_configuration: InputStartingPositionConfiguration,
 }
 
+/// see [KinesisAnalyticsV2::start_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartApplicationRequest {
@@ -2118,10 +2229,12 @@ pub struct StartApplicationRequest {
     pub run_configuration: RunConfiguration,
 }
 
+/// see [KinesisAnalyticsV2::start_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartApplicationResponse {}
 
+/// see [KinesisAnalyticsV2::stop_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopApplicationRequest {
@@ -2134,6 +2247,7 @@ pub struct StopApplicationRequest {
     pub force: Option<bool>,
 }
 
+/// see [KinesisAnalyticsV2::stop_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopApplicationResponse {}
@@ -2150,6 +2264,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [KinesisAnalyticsV2::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2161,10 +2276,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [KinesisAnalyticsV2::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [KinesisAnalyticsV2::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2176,10 +2293,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [KinesisAnalyticsV2::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [KinesisAnalyticsV2::update_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
@@ -2207,6 +2326,7 @@ pub struct UpdateApplicationRequest {
     pub service_execution_role_update: Option<String>,
 }
 
+/// see [KinesisAnalyticsV2::update_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {
@@ -4016,7 +4136,7 @@ impl fmt::Display for UpdateApplicationError {
 impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the Kinesis Analytics V2 API. Kinesis Analytics V2 clients implement this trait.
 #[async_trait]
-pub trait KinesisAnalyticsV2 {
+pub trait KinesisAnalyticsV2: Clone + Sync + Send + 'static {
     /// <p>Adds an Amazon CloudWatch log stream to monitor application configuration errors.</p>
     async fn add_application_cloud_watch_logging_option(
         &self,
@@ -4164,11 +4284,31 @@ pub trait KinesisAnalyticsV2 {
         input: ListApplicationSnapshotsRequest,
     ) -> Result<ListApplicationSnapshotsResponse, RusotoError<ListApplicationSnapshotsError>>;
 
+    /// Auto-paginating version of `list_application_snapshots`
+    fn list_application_snapshots_pages(
+        &self,
+        input: ListApplicationSnapshotsRequest,
+    ) -> RusotoStream<SnapshotDetails, ListApplicationSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_application_snapshots(state.clone())
+        })
+    }
+
     /// <p>Returns a list of Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
     ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>;
+
+    /// Auto-paginating version of `list_applications`
+    fn list_applications_pages(
+        &self,
+        input: ListApplicationsRequest,
+    ) -> RusotoStream<ApplicationSummary, ListApplicationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_applications(state.clone())
+        })
+    }
 
     /// <p>Retrieves the list of key-value tags assigned to the application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
     async fn list_tags_for_resource(

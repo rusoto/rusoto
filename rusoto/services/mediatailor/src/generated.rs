@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -105,6 +107,7 @@ pub struct DashConfigurationForPut {
     pub origin_manifest_type: Option<String>,
 }
 
+/// see [MediaTailor::delete_playback_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlaybackConfigurationRequest {
@@ -113,10 +116,12 @@ pub struct DeletePlaybackConfigurationRequest {
     pub name: String,
 }
 
+/// see [MediaTailor::delete_playback_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePlaybackConfigurationResponse {}
 
+/// see [MediaTailor::get_playback_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlaybackConfigurationRequest {
@@ -125,6 +130,7 @@ pub struct GetPlaybackConfigurationRequest {
     pub name: String,
 }
 
+/// see [MediaTailor::get_playback_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPlaybackConfigurationResponse {
@@ -208,6 +214,7 @@ pub struct HlsConfiguration {
     pub manifest_endpoint_prefix: Option<String>,
 }
 
+/// see [MediaTailor::list_playback_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlaybackConfigurationsRequest {
@@ -221,6 +228,15 @@ pub struct ListPlaybackConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListPlaybackConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [MediaTailor::list_playback_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPlaybackConfigurationsResponse {
@@ -234,6 +250,31 @@ pub struct ListPlaybackConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListPlaybackConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PlaybackConfiguration>> {
+        Some(self.items.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPlaybackConfigurationsResponse {
+    type Item = PlaybackConfiguration;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PlaybackConfiguration> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MediaTailor::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -242,6 +283,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [MediaTailor::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -347,6 +389,7 @@ pub struct PlaybackConfiguration {
     pub video_content_source_url: Option<String>,
 }
 
+/// see [MediaTailor::put_playback_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPlaybackConfigurationRequest {
@@ -404,6 +447,7 @@ pub struct PutPlaybackConfigurationRequest {
     pub video_content_source_url: Option<String>,
 }
 
+/// see [MediaTailor::put_playback_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPlaybackConfigurationResponse {
@@ -477,6 +521,7 @@ pub struct PutPlaybackConfigurationResponse {
     pub video_content_source_url: Option<String>,
 }
 
+/// see [MediaTailor::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -493,6 +538,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [MediaTailor::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -688,7 +734,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaTailor API. MediaTailor clients implement this trait.
 #[async_trait]
-pub trait MediaTailor {
+pub trait MediaTailor: Clone + Sync + Send + 'static {
     /// <p>Deletes the playback configuration for the specified name. </p>
     async fn delete_playback_configuration(
         &self,
@@ -706,6 +752,16 @@ pub trait MediaTailor {
         &self,
         input: ListPlaybackConfigurationsRequest,
     ) -> Result<ListPlaybackConfigurationsResponse, RusotoError<ListPlaybackConfigurationsError>>;
+
+    /// Auto-paginating version of `list_playback_configurations`
+    fn list_playback_configurations_pages(
+        &self,
+        input: ListPlaybackConfigurationsRequest,
+    ) -> RusotoStream<PlaybackConfiguration, ListPlaybackConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_playback_configurations(state.clone())
+        })
+    }
 
     /// <p>Returns a list of the tags assigned to the specified playback configuration resource. </p>
     async fn list_tags_for_resource(

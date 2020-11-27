@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -124,6 +126,7 @@ pub struct Cluster {
     pub total_nodes: Option<i64>,
 }
 
+/// see [DynamodbAccelerator::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -177,6 +180,7 @@ pub struct CreateClusterRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DynamodbAccelerator::create_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResponse {
@@ -186,6 +190,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [DynamodbAccelerator::create_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateParameterGroupRequest {
@@ -198,6 +203,7 @@ pub struct CreateParameterGroupRequest {
     pub parameter_group_name: String,
 }
 
+/// see [DynamodbAccelerator::create_parameter_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateParameterGroupResponse {
@@ -207,6 +213,7 @@ pub struct CreateParameterGroupResponse {
     pub parameter_group: Option<ParameterGroup>,
 }
 
+/// see [DynamodbAccelerator::create_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubnetGroupRequest {
@@ -222,6 +229,7 @@ pub struct CreateSubnetGroupRequest {
     pub subnet_ids: Vec<String>,
 }
 
+/// see [DynamodbAccelerator::create_subnet_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubnetGroupResponse {
@@ -231,6 +239,7 @@ pub struct CreateSubnetGroupResponse {
     pub subnet_group: Option<SubnetGroup>,
 }
 
+/// see [DynamodbAccelerator::decrease_replication_factor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseReplicationFactorRequest {
@@ -250,6 +259,7 @@ pub struct DecreaseReplicationFactorRequest {
     pub node_ids_to_remove: Option<Vec<String>>,
 }
 
+/// see [DynamodbAccelerator::decrease_replication_factor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DecreaseReplicationFactorResponse {
@@ -259,6 +269,7 @@ pub struct DecreaseReplicationFactorResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [DynamodbAccelerator::delete_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
@@ -267,6 +278,7 @@ pub struct DeleteClusterRequest {
     pub cluster_name: String,
 }
 
+/// see [DynamodbAccelerator::delete_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClusterResponse {
@@ -276,6 +288,7 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [DynamodbAccelerator::delete_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteParameterGroupRequest {
@@ -284,6 +297,7 @@ pub struct DeleteParameterGroupRequest {
     pub parameter_group_name: String,
 }
 
+/// see [DynamodbAccelerator::delete_parameter_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteParameterGroupResponse {
@@ -293,6 +307,7 @@ pub struct DeleteParameterGroupResponse {
     pub deletion_message: Option<String>,
 }
 
+/// see [DynamodbAccelerator::delete_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubnetGroupRequest {
@@ -301,6 +316,7 @@ pub struct DeleteSubnetGroupRequest {
     pub subnet_group_name: String,
 }
 
+/// see [DynamodbAccelerator::delete_subnet_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubnetGroupResponse {
@@ -310,6 +326,7 @@ pub struct DeleteSubnetGroupResponse {
     pub deletion_message: Option<String>,
 }
 
+/// see [DynamodbAccelerator::describe_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClustersRequest {
@@ -327,6 +344,15 @@ pub struct DescribeClustersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeClustersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamodbAccelerator::describe_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClustersResponse {
@@ -340,6 +366,31 @@ pub struct DescribeClustersResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeClustersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Cluster>> {
+        Some(self.clusters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeClustersResponse {
+    type Item = Cluster;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Cluster> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DynamodbAccelerator::describe_default_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultParametersRequest {
@@ -353,6 +404,15 @@ pub struct DescribeDefaultParametersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeDefaultParametersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamodbAccelerator::describe_default_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDefaultParametersResponse {
@@ -366,6 +426,31 @@ pub struct DescribeDefaultParametersResponse {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+impl DescribeDefaultParametersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDefaultParametersResponse {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DynamodbAccelerator::describe_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsRequest {
@@ -399,6 +484,15 @@ pub struct DescribeEventsRequest {
     pub start_time: Option<f64>,
 }
 
+impl PagedRequest for DescribeEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamodbAccelerator::describe_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsResponse {
@@ -412,6 +506,31 @@ pub struct DescribeEventsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeEventsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Event>> {
+        Some(self.events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEventsResponse {
+    type Item = Event;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DynamodbAccelerator::describe_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeParameterGroupsRequest {
@@ -429,6 +548,15 @@ pub struct DescribeParameterGroupsRequest {
     pub parameter_group_names: Option<Vec<String>>,
 }
 
+impl PagedRequest for DescribeParameterGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamodbAccelerator::describe_parameter_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeParameterGroupsResponse {
@@ -442,6 +570,31 @@ pub struct DescribeParameterGroupsResponse {
     pub parameter_groups: Option<Vec<ParameterGroup>>,
 }
 
+impl DescribeParameterGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ParameterGroup>> {
+        Some(self.parameter_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeParameterGroupsResponse {
+    type Item = ParameterGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ParameterGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DynamodbAccelerator::describe_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeParametersRequest {
@@ -462,6 +615,15 @@ pub struct DescribeParametersRequest {
     pub source: Option<String>,
 }
 
+impl PagedRequest for DescribeParametersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamodbAccelerator::describe_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeParametersResponse {
@@ -475,6 +637,31 @@ pub struct DescribeParametersResponse {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+impl DescribeParametersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeParametersResponse {
+    type Item = Parameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [DynamodbAccelerator::describe_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubnetGroupsRequest {
@@ -492,6 +679,15 @@ pub struct DescribeSubnetGroupsRequest {
     pub subnet_group_names: Option<Vec<String>>,
 }
 
+impl PagedRequest for DescribeSubnetGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamodbAccelerator::describe_subnet_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubnetGroupsResponse {
@@ -503,6 +699,30 @@ pub struct DescribeSubnetGroupsResponse {
     #[serde(rename = "SubnetGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_groups: Option<Vec<SubnetGroup>>,
+}
+
+impl DescribeSubnetGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SubnetGroup>> {
+        Some(self.subnet_groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSubnetGroupsResponse {
+    type Item = SubnetGroup;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SubnetGroup> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents the information required for client programs to connect to the configuration endpoint for a DAX cluster, or to an individual node within the cluster.</p>
@@ -541,6 +761,7 @@ pub struct Event {
     pub source_type: Option<String>,
 }
 
+/// see [DynamodbAccelerator::increase_replication_factor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IncreaseReplicationFactorRequest {
@@ -556,6 +777,7 @@ pub struct IncreaseReplicationFactorRequest {
     pub new_replication_factor: i64,
 }
 
+/// see [DynamodbAccelerator::increase_replication_factor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IncreaseReplicationFactorResponse {
@@ -565,6 +787,7 @@ pub struct IncreaseReplicationFactorResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [DynamodbAccelerator::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -577,6 +800,15 @@ pub struct ListTagsRequest {
     pub resource_name: String,
 }
 
+impl PagedRequest for ListTagsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [DynamodbAccelerator::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
@@ -588,6 +820,30 @@ pub struct ListTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl ListTagsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Represents an individual node within a DAX cluster.</p>
@@ -740,6 +996,7 @@ pub struct ParameterNameValue {
     pub parameter_value: Option<String>,
 }
 
+/// see [DynamodbAccelerator::reboot_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootNodeRequest {
@@ -751,6 +1008,7 @@ pub struct RebootNodeRequest {
     pub node_id: String,
 }
 
+/// see [DynamodbAccelerator::reboot_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootNodeResponse {
@@ -842,6 +1100,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [DynamodbAccelerator::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -853,6 +1112,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [DynamodbAccelerator::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {
@@ -862,6 +1122,7 @@ pub struct TagResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DynamodbAccelerator::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -873,6 +1134,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [DynamodbAccelerator::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {
@@ -882,6 +1144,7 @@ pub struct UntagResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [DynamodbAccelerator::update_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterRequest {
@@ -914,6 +1177,7 @@ pub struct UpdateClusterRequest {
     pub security_group_ids: Option<Vec<String>>,
 }
 
+/// see [DynamodbAccelerator::update_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterResponse {
@@ -923,6 +1187,7 @@ pub struct UpdateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [DynamodbAccelerator::update_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateParameterGroupRequest {
@@ -934,6 +1199,7 @@ pub struct UpdateParameterGroupRequest {
     pub parameter_name_values: Vec<ParameterNameValue>,
 }
 
+/// see [DynamodbAccelerator::update_parameter_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateParameterGroupResponse {
@@ -943,6 +1209,7 @@ pub struct UpdateParameterGroupResponse {
     pub parameter_group: Option<ParameterGroup>,
 }
 
+/// see [DynamodbAccelerator::update_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubnetGroupRequest {
@@ -959,6 +1226,7 @@ pub struct UpdateSubnetGroupRequest {
     pub subnet_ids: Option<Vec<String>>,
 }
 
+/// see [DynamodbAccelerator::update_subnet_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubnetGroupResponse {
@@ -2460,7 +2728,7 @@ impl fmt::Display for UpdateSubnetGroupError {
 impl Error for UpdateSubnetGroupError {}
 /// Trait representing the capabilities of the Amazon DAX API. Amazon DAX clients implement this trait.
 #[async_trait]
-pub trait DynamodbAccelerator {
+pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
     async fn create_cluster(
         &self,
@@ -2509,11 +2777,31 @@ pub trait DynamodbAccelerator {
         input: DescribeClustersRequest,
     ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>>;
 
+    /// Auto-paginating version of `describe_clusters`
+    fn describe_clusters_pages(
+        &self,
+        input: DescribeClustersRequest,
+    ) -> RusotoStream<Cluster, DescribeClustersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_clusters(state.clone())
+        })
+    }
+
     /// <p>Returns the default system parameter information for the DAX caching software.</p>
     async fn describe_default_parameters(
         &self,
         input: DescribeDefaultParametersRequest,
     ) -> Result<DescribeDefaultParametersResponse, RusotoError<DescribeDefaultParametersError>>;
+
+    /// Auto-paginating version of `describe_default_parameters`
+    fn describe_default_parameters_pages(
+        &self,
+        input: DescribeDefaultParametersRequest,
+    ) -> RusotoStream<Parameter, DescribeDefaultParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_default_parameters(state.clone())
+        })
+    }
 
     /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last 24 hours are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     async fn describe_events(
@@ -2521,11 +2809,31 @@ pub trait DynamodbAccelerator {
         input: DescribeEventsRequest,
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages(
+        &self,
+        input: DescribeEventsRequest,
+    ) -> RusotoStream<Event, DescribeEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_events(state.clone())
+        })
+    }
+
     /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
     async fn describe_parameter_groups(
         &self,
         input: DescribeParameterGroupsRequest,
     ) -> Result<DescribeParameterGroupsResponse, RusotoError<DescribeParameterGroupsError>>;
+
+    /// Auto-paginating version of `describe_parameter_groups`
+    fn describe_parameter_groups_pages(
+        &self,
+        input: DescribeParameterGroupsRequest,
+    ) -> RusotoStream<ParameterGroup, DescribeParameterGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_parameter_groups(state.clone())
+        })
+    }
 
     /// <p>Returns the detailed parameter list for a particular parameter group.</p>
     async fn describe_parameters(
@@ -2533,11 +2841,31 @@ pub trait DynamodbAccelerator {
         input: DescribeParametersRequest,
     ) -> Result<DescribeParametersResponse, RusotoError<DescribeParametersError>>;
 
+    /// Auto-paginating version of `describe_parameters`
+    fn describe_parameters_pages(
+        &self,
+        input: DescribeParametersRequest,
+    ) -> RusotoStream<Parameter, DescribeParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_parameters(state.clone())
+        })
+    }
+
     /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
     async fn describe_subnet_groups(
         &self,
         input: DescribeSubnetGroupsRequest,
     ) -> Result<DescribeSubnetGroupsResponse, RusotoError<DescribeSubnetGroupsError>>;
+
+    /// Auto-paginating version of `describe_subnet_groups`
+    fn describe_subnet_groups_pages(
+        &self,
+        input: DescribeSubnetGroupsRequest,
+    ) -> RusotoStream<SubnetGroup, DescribeSubnetGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_subnet_groups(state.clone())
+        })
+    }
 
     /// <p>Adds one or more nodes to a DAX cluster.</p>
     async fn increase_replication_factor(
@@ -2550,6 +2878,13 @@ pub trait DynamodbAccelerator {
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
+
+    /// Auto-paginating version of `list_tags`
+    fn list_tags_pages(&self, input: ListTagsRequest) -> RusotoStream<Tag, ListTagsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags(state.clone())
+        })
+    }
 
     /// <p><p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p> <note> <p> <code>RebootNode</code> restarts the DAX engine process and does not remove the contents of the cache. </p> </note></p>
     async fn reboot_node(

@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -61,6 +63,7 @@ pub struct AcceleratorTypeOffering {
     pub location_type: Option<String>,
 }
 
+/// see [ElasticInference::describe_accelerator_offerings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorOfferingsRequest {
@@ -73,6 +76,7 @@ pub struct DescribeAcceleratorOfferingsRequest {
     pub location_type: String,
 }
 
+/// see [ElasticInference::describe_accelerator_offerings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorOfferingsResponse {
@@ -82,10 +86,12 @@ pub struct DescribeAcceleratorOfferingsResponse {
     pub accelerator_type_offerings: Option<Vec<AcceleratorTypeOffering>>,
 }
 
+/// see [ElasticInference::describe_accelerator_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorTypesRequest {}
 
+/// see [ElasticInference::describe_accelerator_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorTypesResponse {
@@ -95,6 +101,7 @@ pub struct DescribeAcceleratorTypesResponse {
     pub accelerator_types: Option<Vec<AcceleratorType>>,
 }
 
+/// see [ElasticInference::describe_accelerators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorsRequest {
@@ -116,6 +123,15 @@ pub struct DescribeAcceleratorsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeAcceleratorsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [ElasticInference::describe_accelerators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorsResponse {
@@ -127,6 +143,30 @@ pub struct DescribeAcceleratorsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl DescribeAcceleratorsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ElasticInferenceAccelerator>> {
+        Some(self.accelerator_set.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAcceleratorsResponse {
+    type Item = ElasticInferenceAccelerator;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ElasticInferenceAccelerator> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p> The details of an Elastic Inference Accelerator. </p>
@@ -193,6 +233,7 @@ pub struct KeyValuePair {
     pub value: Option<i64>,
 }
 
+/// see [ElasticInference::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -201,6 +242,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [ElasticInference::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResult {
@@ -220,6 +262,7 @@ pub struct MemoryInfo {
     pub size_in_mi_b: Option<i64>,
 }
 
+/// see [ElasticInference::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -231,10 +274,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [ElasticInference::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResult {}
 
+/// see [ElasticInference::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -246,6 +291,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [ElasticInference::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResult {}
@@ -508,7 +554,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon Elastic Inference API. Amazon Elastic Inference clients implement this trait.
 #[async_trait]
-pub trait ElasticInference {
+pub trait ElasticInference: Clone + Sync + Send + 'static {
     /// <p> Describes the locations in which a given accelerator type or set of types is present in a given region. </p>
     async fn describe_accelerator_offerings(
         &self,
@@ -525,6 +571,16 @@ pub trait ElasticInference {
         &self,
         input: DescribeAcceleratorsRequest,
     ) -> Result<DescribeAcceleratorsResponse, RusotoError<DescribeAcceleratorsError>>;
+
+    /// Auto-paginating version of `describe_accelerators`
+    fn describe_accelerators_pages(
+        &self,
+        input: DescribeAcceleratorsRequest,
+    ) -> RusotoStream<ElasticInferenceAccelerator, DescribeAcceleratorsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_accelerators(state.clone())
+        })
+    }
 
     /// <p> Returns all tags of an Elastic Inference Accelerator. </p>
     async fn list_tags_for_resource(

@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -138,6 +140,7 @@ pub struct AttributeFilter {
     pub or_all_filters: Option<Vec<AttributeFilter>>,
 }
 
+/// see [Kendra::batch_delete_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteDocumentRequest {
@@ -152,6 +155,7 @@ pub struct BatchDeleteDocumentRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::batch_delete_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteDocumentResponse {
@@ -179,6 +183,7 @@ pub struct BatchDeleteDocumentResponseFailedDocument {
     pub id: Option<String>,
 }
 
+/// see [Kendra::batch_put_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutDocumentRequest {
@@ -194,6 +199,7 @@ pub struct BatchPutDocumentRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [Kendra::batch_put_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutDocumentResponse {
@@ -452,6 +458,7 @@ pub struct ConnectionConfiguration {
     pub table_name: String,
 }
 
+/// see [Kendra::create_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceRequest {
@@ -490,6 +497,7 @@ pub struct CreateDataSourceRequest {
     pub type_: String,
 }
 
+/// see [Kendra::create_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceResponse {
@@ -498,6 +506,7 @@ pub struct CreateDataSourceResponse {
     pub id: String,
 }
 
+/// see [Kendra::create_faq]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFaqRequest {
@@ -531,6 +540,7 @@ pub struct CreateFaqRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Kendra::create_faq]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFaqResponse {
@@ -540,6 +550,7 @@ pub struct CreateFaqResponse {
     pub id: Option<String>,
 }
 
+/// see [Kendra::create_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIndexRequest {
@@ -579,6 +590,7 @@ pub struct CreateIndexRequest {
     pub user_token_configurations: Option<Vec<UserTokenConfiguration>>,
 }
 
+/// see [Kendra::create_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIndexResponse {
@@ -588,6 +600,7 @@ pub struct CreateIndexResponse {
     pub id: Option<String>,
 }
 
+/// see [Kendra::create_thesaurus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThesaurusRequest {
@@ -617,6 +630,7 @@ pub struct CreateThesaurusRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Kendra::create_thesaurus]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThesaurusResponse {
@@ -820,6 +834,7 @@ pub struct DatabaseConfiguration {
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
 }
 
+/// see [Kendra::delete_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceRequest {
@@ -831,6 +846,7 @@ pub struct DeleteDataSourceRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::delete_faq]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFaqRequest {
@@ -842,6 +858,7 @@ pub struct DeleteFaqRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::delete_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIndexRequest {
@@ -850,6 +867,7 @@ pub struct DeleteIndexRequest {
     pub id: String,
 }
 
+/// see [Kendra::delete_thesaurus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThesaurusRequest {
@@ -861,6 +879,7 @@ pub struct DeleteThesaurusRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::describe_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourceRequest {
@@ -872,6 +891,7 @@ pub struct DescribeDataSourceRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::describe_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSourceResponse {
@@ -925,6 +945,7 @@ pub struct DescribeDataSourceResponse {
     pub updated_at: Option<f64>,
 }
 
+/// see [Kendra::describe_faq]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFaqRequest {
@@ -936,6 +957,7 @@ pub struct DescribeFaqRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::describe_faq]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFaqResponse {
@@ -984,6 +1006,7 @@ pub struct DescribeFaqResponse {
     pub updated_at: Option<f64>,
 }
 
+/// see [Kendra::describe_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIndexRequest {
@@ -992,6 +1015,7 @@ pub struct DescribeIndexRequest {
     pub id: String,
 }
 
+/// see [Kendra::describe_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIndexResponse {
@@ -1057,6 +1081,7 @@ pub struct DescribeIndexResponse {
     pub user_token_configurations: Option<Vec<UserTokenConfiguration>>,
 }
 
+/// see [Kendra::describe_thesaurus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThesaurusRequest {
@@ -1068,6 +1093,7 @@ pub struct DescribeThesaurusRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::describe_thesaurus]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThesaurusResponse {
@@ -1436,6 +1462,7 @@ pub struct JwtTokenTypeConfiguration {
     pub user_name_attribute_field: Option<String>,
 }
 
+/// see [Kendra::list_data_source_sync_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourceSyncJobsRequest {
@@ -1463,6 +1490,7 @@ pub struct ListDataSourceSyncJobsRequest {
     pub status_filter: Option<String>,
 }
 
+/// see [Kendra::list_data_source_sync_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourceSyncJobsResponse {
@@ -1476,6 +1504,7 @@ pub struct ListDataSourceSyncJobsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Kendra::list_data_sources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourcesRequest {
@@ -1492,6 +1521,7 @@ pub struct ListDataSourcesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Kendra::list_data_sources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourcesResponse {
@@ -1505,6 +1535,7 @@ pub struct ListDataSourcesResponse {
     pub summary_items: Option<Vec<DataSourceSummary>>,
 }
 
+/// see [Kendra::list_faqs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFaqsRequest {
@@ -1521,6 +1552,7 @@ pub struct ListFaqsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Kendra::list_faqs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFaqsResponse {
@@ -1534,6 +1566,7 @@ pub struct ListFaqsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Kendra::list_indices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndicesRequest {
@@ -1547,6 +1580,7 @@ pub struct ListIndicesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Kendra::list_indices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIndicesResponse {
@@ -1560,6 +1594,7 @@ pub struct ListIndicesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Kendra::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1568,6 +1603,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Kendra::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1577,6 +1613,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Kendra::list_thesauri]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThesauriRequest {
@@ -1593,6 +1630,7 @@ pub struct ListThesauriRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Kendra::list_thesauri]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThesauriResponse {
@@ -1664,6 +1702,7 @@ pub struct Principal {
     pub type_: String,
 }
 
+/// see [Kendra::query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryRequest {
@@ -1711,6 +1750,7 @@ pub struct QueryRequest {
     pub visitor_id: Option<String>,
 }
 
+/// see [Kendra::query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryResult {
@@ -2182,6 +2222,7 @@ pub struct SqlConfiguration {
     pub query_identifiers_enclosing_option: Option<String>,
 }
 
+/// see [Kendra::start_data_source_sync_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDataSourceSyncJobRequest {
@@ -2193,6 +2234,7 @@ pub struct StartDataSourceSyncJobRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::start_data_source_sync_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDataSourceSyncJobResponse {
@@ -2202,6 +2244,7 @@ pub struct StartDataSourceSyncJobResponse {
     pub execution_id: Option<String>,
 }
 
+/// see [Kendra::stop_data_source_sync_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDataSourceSyncJobRequest {
@@ -2213,6 +2256,7 @@ pub struct StopDataSourceSyncJobRequest {
     pub index_id: String,
 }
 
+/// see [Kendra::submit_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitFeedbackRequest {
@@ -2243,6 +2287,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Kendra::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2254,6 +2299,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Kendra::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2324,6 +2370,7 @@ pub struct TimeRange {
     pub start_time: Option<f64>,
 }
 
+/// see [Kendra::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2335,10 +2382,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Kendra::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Kendra::update_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceRequest {
@@ -2369,6 +2418,7 @@ pub struct UpdateDataSourceRequest {
     pub schedule: Option<String>,
 }
 
+/// see [Kendra::update_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIndexRequest {
@@ -2405,6 +2455,7 @@ pub struct UpdateIndexRequest {
     pub user_token_configurations: Option<Vec<UserTokenConfiguration>>,
 }
 
+/// see [Kendra::update_thesaurus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThesaurusRequest {
@@ -4022,7 +4073,7 @@ impl fmt::Display for UpdateThesaurusError {
 impl Error for UpdateThesaurusError {}
 /// Trait representing the capabilities of the kendra API. kendra clients implement this trait.
 #[async_trait]
-pub trait Kendra {
+pub trait Kendra: Clone + Sync + Send + 'static {
     /// <p>Removes one or more documents from an index. The documents must have been added with the <a>BatchPutDocument</a> operation.</p> <p>The documents are deleted asynchronously. You can see the progress of the deletion by using AWS CloudWatch. Any error messages releated to the processing of the batch are sent to you CloudWatch log.</p>
     async fn batch_delete_document(
         &self,

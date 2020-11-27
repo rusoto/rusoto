@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -210,6 +212,7 @@ pub struct ConversationLogsResponse {
     pub log_settings: Option<Vec<LogSettingsResponse>>,
 }
 
+/// see [LexModels::create_bot_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBotVersionRequest {
@@ -222,6 +225,7 @@ pub struct CreateBotVersionRequest {
     pub name: String,
 }
 
+/// see [LexModels::create_bot_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBotVersionResponse {
@@ -295,6 +299,7 @@ pub struct CreateBotVersionResponse {
     pub voice_id: Option<String>,
 }
 
+/// see [LexModels::create_intent_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntentVersionRequest {
@@ -307,6 +312,7 @@ pub struct CreateIntentVersionRequest {
     pub name: String,
 }
 
+/// see [LexModels::create_intent_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntentVersionResponse {
@@ -384,6 +390,7 @@ pub struct CreateIntentVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [LexModels::create_slot_type_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSlotTypeVersionRequest {
@@ -396,6 +403,7 @@ pub struct CreateSlotTypeVersionRequest {
     pub name: String,
 }
 
+/// see [LexModels::create_slot_type_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSlotTypeVersionResponse {
@@ -441,6 +449,7 @@ pub struct CreateSlotTypeVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [LexModels::delete_bot_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotAliasRequest {
@@ -452,6 +461,7 @@ pub struct DeleteBotAliasRequest {
     pub name: String,
 }
 
+/// see [LexModels::delete_bot_channel_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotChannelAssociationRequest {
@@ -466,6 +476,7 @@ pub struct DeleteBotChannelAssociationRequest {
     pub name: String,
 }
 
+/// see [LexModels::delete_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotRequest {
@@ -474,6 +485,7 @@ pub struct DeleteBotRequest {
     pub name: String,
 }
 
+/// see [LexModels::delete_bot_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotVersionRequest {
@@ -485,6 +497,7 @@ pub struct DeleteBotVersionRequest {
     pub version: String,
 }
 
+/// see [LexModels::delete_intent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntentRequest {
@@ -493,6 +506,7 @@ pub struct DeleteIntentRequest {
     pub name: String,
 }
 
+/// see [LexModels::delete_intent_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntentVersionRequest {
@@ -504,6 +518,7 @@ pub struct DeleteIntentVersionRequest {
     pub version: String,
 }
 
+/// see [LexModels::delete_slot_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSlotTypeRequest {
@@ -512,6 +527,7 @@ pub struct DeleteSlotTypeRequest {
     pub name: String,
 }
 
+/// see [LexModels::delete_slot_type_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSlotTypeVersionRequest {
@@ -523,6 +539,7 @@ pub struct DeleteSlotTypeVersionRequest {
     pub version: String,
 }
 
+/// see [LexModels::delete_utterances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUtterancesRequest {
@@ -569,6 +586,7 @@ pub struct FulfillmentActivity {
     pub type_: String,
 }
 
+/// see [LexModels::get_bot_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotAliasRequest {
@@ -580,6 +598,7 @@ pub struct GetBotAliasRequest {
     pub name: String,
 }
 
+/// see [LexModels::get_bot_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotAliasResponse {
@@ -617,6 +636,7 @@ pub struct GetBotAliasResponse {
     pub name: Option<String>,
 }
 
+/// see [LexModels::get_bot_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotAliasesRequest {
@@ -637,6 +657,15 @@ pub struct GetBotAliasesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetBotAliasesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_bot_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotAliasesResponse {
@@ -650,6 +679,31 @@ pub struct GetBotAliasesResponse {
     pub next_token: Option<String>,
 }
 
+impl GetBotAliasesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BotAliasMetadata>> {
+        Some(self.bot_aliases.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBotAliasesResponse {
+    type Item = BotAliasMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BotAliasMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_bot_channel_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotChannelAssociationRequest {
@@ -664,6 +718,7 @@ pub struct GetBotChannelAssociationRequest {
     pub name: String,
 }
 
+/// see [LexModels::get_bot_channel_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotChannelAssociationResponse {
@@ -705,6 +760,7 @@ pub struct GetBotChannelAssociationResponse {
     pub type_: Option<String>,
 }
 
+/// see [LexModels::get_bot_channel_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotChannelAssociationsRequest {
@@ -728,6 +784,15 @@ pub struct GetBotChannelAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetBotChannelAssociationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_bot_channel_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotChannelAssociationsResponse {
@@ -741,6 +806,31 @@ pub struct GetBotChannelAssociationsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetBotChannelAssociationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BotChannelAssociation>> {
+        Some(self.bot_channel_associations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBotChannelAssociationsResponse {
+    type Item = BotChannelAssociation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BotChannelAssociation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotRequest {
@@ -752,6 +842,7 @@ pub struct GetBotRequest {
     pub version_or_alias: String,
 }
 
+/// see [LexModels::get_bot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotResponse {
@@ -829,6 +920,7 @@ pub struct GetBotResponse {
     pub voice_id: Option<String>,
 }
 
+/// see [LexModels::get_bot_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotVersionsRequest {
@@ -845,6 +937,15 @@ pub struct GetBotVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetBotVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_bot_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotVersionsResponse {
@@ -858,6 +959,31 @@ pub struct GetBotVersionsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetBotVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BotMetadata>> {
+        Some(self.bots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBotVersionsResponse {
+    type Item = BotMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BotMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_bots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotsRequest {
@@ -875,6 +1001,15 @@ pub struct GetBotsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetBotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_bots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotsResponse {
@@ -888,6 +1023,31 @@ pub struct GetBotsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetBotsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BotMetadata>> {
+        Some(self.bots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBotsResponse {
+    type Item = BotMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BotMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_builtin_intent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBuiltinIntentRequest {
@@ -896,6 +1056,7 @@ pub struct GetBuiltinIntentRequest {
     pub signature: String,
 }
 
+/// see [LexModels::get_builtin_intent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBuiltinIntentResponse {
@@ -913,6 +1074,7 @@ pub struct GetBuiltinIntentResponse {
     pub supported_locales: Option<Vec<String>>,
 }
 
+/// see [LexModels::get_builtin_intents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBuiltinIntentsRequest {
@@ -934,6 +1096,15 @@ pub struct GetBuiltinIntentsRequest {
     pub signature_contains: Option<String>,
 }
 
+impl PagedRequest for GetBuiltinIntentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_builtin_intents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBuiltinIntentsResponse {
@@ -947,6 +1118,31 @@ pub struct GetBuiltinIntentsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetBuiltinIntentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BuiltinIntentMetadata>> {
+        Some(self.intents.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBuiltinIntentsResponse {
+    type Item = BuiltinIntentMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BuiltinIntentMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_builtin_slot_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBuiltinSlotTypesRequest {
@@ -968,6 +1164,15 @@ pub struct GetBuiltinSlotTypesRequest {
     pub signature_contains: Option<String>,
 }
 
+impl PagedRequest for GetBuiltinSlotTypesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_builtin_slot_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBuiltinSlotTypesResponse {
@@ -981,6 +1186,31 @@ pub struct GetBuiltinSlotTypesResponse {
     pub slot_types: Option<Vec<BuiltinSlotTypeMetadata>>,
 }
 
+impl GetBuiltinSlotTypesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BuiltinSlotTypeMetadata>> {
+        Some(self.slot_types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBuiltinSlotTypesResponse {
+    type Item = BuiltinSlotTypeMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BuiltinSlotTypeMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_export]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportRequest {
@@ -998,6 +1228,7 @@ pub struct GetExportRequest {
     pub version: String,
 }
 
+/// see [LexModels::get_export]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExportResponse {
@@ -1031,6 +1262,7 @@ pub struct GetExportResponse {
     pub version: Option<String>,
 }
 
+/// see [LexModels::get_import]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImportRequest {
@@ -1039,6 +1271,7 @@ pub struct GetImportRequest {
     pub import_id: String,
 }
 
+/// see [LexModels::get_import]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImportResponse {
@@ -1072,6 +1305,7 @@ pub struct GetImportResponse {
     pub resource_type: Option<String>,
 }
 
+/// see [LexModels::get_intent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntentRequest {
@@ -1083,6 +1317,7 @@ pub struct GetIntentRequest {
     pub version: String,
 }
 
+/// see [LexModels::get_intent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntentResponse {
@@ -1160,6 +1395,7 @@ pub struct GetIntentResponse {
     pub version: Option<String>,
 }
 
+/// see [LexModels::get_intent_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntentVersionsRequest {
@@ -1176,6 +1412,15 @@ pub struct GetIntentVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetIntentVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_intent_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntentVersionsResponse {
@@ -1189,6 +1434,31 @@ pub struct GetIntentVersionsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetIntentVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<IntentMetadata>> {
+        Some(self.intents.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetIntentVersionsResponse {
+    type Item = IntentMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<IntentMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_intents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntentsRequest {
@@ -1206,6 +1476,15 @@ pub struct GetIntentsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetIntentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_intents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntentsResponse {
@@ -1219,6 +1498,31 @@ pub struct GetIntentsResponse {
     pub next_token: Option<String>,
 }
 
+impl GetIntentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<IntentMetadata>> {
+        Some(self.intents.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetIntentsResponse {
+    type Item = IntentMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<IntentMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_slot_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSlotTypeRequest {
@@ -1230,6 +1534,7 @@ pub struct GetSlotTypeRequest {
     pub version: String,
 }
 
+/// see [LexModels::get_slot_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSlotTypeResponse {
@@ -1275,6 +1580,7 @@ pub struct GetSlotTypeResponse {
     pub version: Option<String>,
 }
 
+/// see [LexModels::get_slot_type_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSlotTypeVersionsRequest {
@@ -1291,6 +1597,15 @@ pub struct GetSlotTypeVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetSlotTypeVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_slot_type_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSlotTypeVersionsResponse {
@@ -1304,6 +1619,31 @@ pub struct GetSlotTypeVersionsResponse {
     pub slot_types: Option<Vec<SlotTypeMetadata>>,
 }
 
+impl GetSlotTypeVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SlotTypeMetadata>> {
+        Some(self.slot_types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetSlotTypeVersionsResponse {
+    type Item = SlotTypeMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SlotTypeMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_slot_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSlotTypesRequest {
@@ -1321,6 +1661,15 @@ pub struct GetSlotTypesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for GetSlotTypesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [LexModels::get_slot_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSlotTypesResponse {
@@ -1334,6 +1683,31 @@ pub struct GetSlotTypesResponse {
     pub slot_types: Option<Vec<SlotTypeMetadata>>,
 }
 
+impl GetSlotTypesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SlotTypeMetadata>> {
+        Some(self.slot_types.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetSlotTypesResponse {
+    type Item = SlotTypeMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SlotTypeMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [LexModels::get_utterances_view]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUtterancesViewRequest {
@@ -1348,6 +1722,7 @@ pub struct GetUtterancesViewRequest {
     pub status_type: String,
 }
 
+/// see [LexModels::get_utterances_view]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUtterancesViewResponse {
@@ -1421,6 +1796,7 @@ pub struct KendraConfiguration {
     pub role: String,
 }
 
+/// see [LexModels::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1429,6 +1805,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [LexModels::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1527,6 +1904,7 @@ pub struct Prompt {
     pub response_card: Option<String>,
 }
 
+/// see [LexModels::put_bot_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBotAliasRequest {
@@ -1557,6 +1935,7 @@ pub struct PutBotAliasRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [LexModels::put_bot_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBotAliasResponse {
@@ -1598,6 +1977,7 @@ pub struct PutBotAliasResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [LexModels::put_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBotRequest {
@@ -1664,6 +2044,7 @@ pub struct PutBotRequest {
     pub voice_id: Option<String>,
 }
 
+/// see [LexModels::put_bot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBotResponse {
@@ -1749,6 +2130,7 @@ pub struct PutBotResponse {
     pub voice_id: Option<String>,
 }
 
+/// see [LexModels::put_intent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntentRequest {
@@ -1817,6 +2199,7 @@ pub struct PutIntentRequest {
     pub slots: Option<Vec<Slot>>,
 }
 
+/// see [LexModels::put_intent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutIntentResponse {
@@ -1898,6 +2281,7 @@ pub struct PutIntentResponse {
     pub version: Option<String>,
 }
 
+/// see [LexModels::put_slot_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSlotTypeRequest {
@@ -1934,6 +2318,7 @@ pub struct PutSlotTypeRequest {
     pub value_selection_strategy: Option<String>,
 }
 
+/// see [LexModels::put_slot_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSlotTypeResponse {
@@ -2098,6 +2483,7 @@ pub struct SlotTypeRegexConfiguration {
     pub pattern: String,
 }
 
+/// see [LexModels::start_import]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportRequest {
@@ -2121,6 +2507,7 @@ pub struct StartImportRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [LexModels::start_import]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImportResponse {
@@ -2177,6 +2564,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [LexModels::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2188,10 +2576,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [LexModels::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [LexModels::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2203,6 +2593,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [LexModels::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -4273,7 +4664,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon Lex Model Building Service API. Amazon Lex Model Building Service clients implement this trait.
 #[async_trait]
-pub trait LexModels {
+pub trait LexModels: Clone + Sync + Send + 'static {
     /// <p>Creates a new version of the bot based on the <code>$LATEST</code> version. If the <code>$LATEST</code> version of this resource hasn't changed since you created the last version, Amazon Lex doesn't create a new version. It returns the last created version.</p> <note> <p>You can update only the <code>$LATEST</code> version of the bot. You can't update the numbered versions that you create with the <code>CreateBotVersion</code> operation.</p> </note> <p> When you create the first version of a bot, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p> This operation requires permission for the <code>lex:CreateBotVersion</code> action. </p>
     async fn create_bot_version(
         &self,
@@ -4361,6 +4752,16 @@ pub trait LexModels {
         input: GetBotAliasesRequest,
     ) -> Result<GetBotAliasesResponse, RusotoError<GetBotAliasesError>>;
 
+    /// Auto-paginating version of `get_bot_aliases`
+    fn get_bot_aliases_pages(
+        &self,
+        input: GetBotAliasesRequest,
+    ) -> RusotoStream<BotAliasMetadata, GetBotAliasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_bot_aliases(state.clone())
+        })
+    }
+
     /// <p>Returns information about the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permissions for the <code>lex:GetBotChannelAssociation</code> action.</p>
     async fn get_bot_channel_association(
         &self,
@@ -4373,17 +4774,44 @@ pub trait LexModels {
         input: GetBotChannelAssociationsRequest,
     ) -> Result<GetBotChannelAssociationsResponse, RusotoError<GetBotChannelAssociationsError>>;
 
+    /// Auto-paginating version of `get_bot_channel_associations`
+    fn get_bot_channel_associations_pages(
+        &self,
+        input: GetBotChannelAssociationsRequest,
+    ) -> RusotoStream<BotChannelAssociation, GetBotChannelAssociationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_bot_channel_associations(state.clone())
+        })
+    }
+
     /// <p>Gets information about all of the versions of a bot.</p> <p>The <code>GetBotVersions</code> operation returns a <code>BotMetadata</code> object for each version of a bot. For example, if a bot has three numbered versions, the <code>GetBotVersions</code> operation returns four <code>BotMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetBotVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetBotVersions</code> action.</p>
     async fn get_bot_versions(
         &self,
         input: GetBotVersionsRequest,
     ) -> Result<GetBotVersionsResponse, RusotoError<GetBotVersionsError>>;
 
+    /// Auto-paginating version of `get_bot_versions`
+    fn get_bot_versions_pages(
+        &self,
+        input: GetBotVersionsRequest,
+    ) -> RusotoStream<BotMetadata, GetBotVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_bot_versions(state.clone())
+        })
+    }
+
     /// <p>Returns bot information as follows: </p> <ul> <li> <p>If you provide the <code>nameContains</code> field, the response includes information for the <code>$LATEST</code> version of all bots whose name contains the specified string.</p> </li> <li> <p>If you don't specify the <code>nameContains</code> field, the operation returns information about the <code>$LATEST</code> version of all of your bots.</p> </li> </ul> <p>This operation requires permission for the <code>lex:GetBots</code> action.</p>
     async fn get_bots(
         &self,
         input: GetBotsRequest,
     ) -> Result<GetBotsResponse, RusotoError<GetBotsError>>;
+
+    /// Auto-paginating version of `get_bots`
+    fn get_bots_pages(&self, input: GetBotsRequest) -> RusotoStream<BotMetadata, GetBotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_bots(state.clone())
+        })
+    }
 
     /// <p>Returns information about a built-in intent.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntent</code> action.</p>
     async fn get_builtin_intent(
@@ -4397,11 +4825,31 @@ pub trait LexModels {
         input: GetBuiltinIntentsRequest,
     ) -> Result<GetBuiltinIntentsResponse, RusotoError<GetBuiltinIntentsError>>;
 
+    /// Auto-paginating version of `get_builtin_intents`
+    fn get_builtin_intents_pages(
+        &self,
+        input: GetBuiltinIntentsRequest,
+    ) -> RusotoStream<BuiltinIntentMetadata, GetBuiltinIntentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_builtin_intents(state.clone())
+        })
+    }
+
     /// <p>Gets a list of built-in slot types that meet the specified criteria.</p> <p>For a list of built-in slot types, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p> <p>This operation requires permission for the <code>lex:GetBuiltInSlotTypes</code> action.</p>
     async fn get_builtin_slot_types(
         &self,
         input: GetBuiltinSlotTypesRequest,
     ) -> Result<GetBuiltinSlotTypesResponse, RusotoError<GetBuiltinSlotTypesError>>;
+
+    /// Auto-paginating version of `get_builtin_slot_types`
+    fn get_builtin_slot_types_pages(
+        &self,
+        input: GetBuiltinSlotTypesRequest,
+    ) -> RusotoStream<BuiltinSlotTypeMetadata, GetBuiltinSlotTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_builtin_slot_types(state.clone())
+        })
+    }
 
     /// <p>Exports the contents of a Amazon Lex resource in a specified format. </p>
     async fn get_export(
@@ -4427,11 +4875,31 @@ pub trait LexModels {
         input: GetIntentVersionsRequest,
     ) -> Result<GetIntentVersionsResponse, RusotoError<GetIntentVersionsError>>;
 
+    /// Auto-paginating version of `get_intent_versions`
+    fn get_intent_versions_pages(
+        &self,
+        input: GetIntentVersionsRequest,
+    ) -> RusotoStream<IntentMetadata, GetIntentVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_intent_versions(state.clone())
+        })
+    }
+
     /// <p>Returns intent information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all intents that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all intents. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetIntents</code> action. </p>
     async fn get_intents(
         &self,
         input: GetIntentsRequest,
     ) -> Result<GetIntentsResponse, RusotoError<GetIntentsError>>;
+
+    /// Auto-paginating version of `get_intents`
+    fn get_intents_pages(
+        &self,
+        input: GetIntentsRequest,
+    ) -> RusotoStream<IntentMetadata, GetIntentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_intents(state.clone())
+        })
+    }
 
     /// <p>Returns information about a specific version of a slot type. In addition to specifying the slot type name, you must specify the slot type version.</p> <p>This operation requires permissions for the <code>lex:GetSlotType</code> action.</p>
     async fn get_slot_type(
@@ -4445,11 +4913,31 @@ pub trait LexModels {
         input: GetSlotTypeVersionsRequest,
     ) -> Result<GetSlotTypeVersionsResponse, RusotoError<GetSlotTypeVersionsError>>;
 
+    /// Auto-paginating version of `get_slot_type_versions`
+    fn get_slot_type_versions_pages(
+        &self,
+        input: GetSlotTypeVersionsRequest,
+    ) -> RusotoStream<SlotTypeMetadata, GetSlotTypeVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_slot_type_versions(state.clone())
+        })
+    }
+
     /// <p>Returns slot type information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all slot types that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all slot types. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetSlotTypes</code> action. </p>
     async fn get_slot_types(
         &self,
         input: GetSlotTypesRequest,
     ) -> Result<GetSlotTypesResponse, RusotoError<GetSlotTypesError>>;
+
+    /// Auto-paginating version of `get_slot_types`
+    fn get_slot_types_pages(
+        &self,
+        input: GetSlotTypesRequest,
+    ) -> RusotoStream<SlotTypeMetadata, GetSlotTypesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_slot_types(state.clone())
+        })
+    }
 
     /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions of your bot in each request. Amazon Lex returns the most frequent utterances received by the bot in the last 15 days. The response contains information about a maximum of 100 utterances for each version.</p> <p>If you set <code>childDirected</code> field to true when you created your bot, or if you opted out of participating in improving Amazon Lex, utterances are not available.</p> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
     async fn get_utterances_view(

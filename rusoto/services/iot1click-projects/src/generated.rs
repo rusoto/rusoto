@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Iot1ClickProjects::associate_device_with_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithPlacementRequest {
@@ -42,10 +45,12 @@ pub struct AssociateDeviceWithPlacementRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::associate_device_with_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDeviceWithPlacementResponse {}
 
+/// see [Iot1ClickProjects::create_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlacementRequest {
@@ -61,10 +66,12 @@ pub struct CreatePlacementRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::create_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePlacementResponse {}
 
+/// see [Iot1ClickProjects::create_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
@@ -85,10 +92,12 @@ pub struct CreateProjectRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Iot1ClickProjects::create_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResponse {}
 
+/// see [Iot1ClickProjects::delete_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlacementRequest {
@@ -100,10 +109,12 @@ pub struct DeletePlacementRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::delete_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePlacementResponse {}
 
+/// see [Iot1ClickProjects::delete_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
@@ -112,10 +123,12 @@ pub struct DeleteProjectRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::delete_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResponse {}
 
+/// see [Iot1ClickProjects::describe_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlacementRequest {
@@ -127,6 +140,7 @@ pub struct DescribePlacementRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::describe_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePlacementResponse {
@@ -135,6 +149,7 @@ pub struct DescribePlacementResponse {
     pub placement: PlacementDescription,
 }
 
+/// see [Iot1ClickProjects::describe_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectRequest {
@@ -143,6 +158,7 @@ pub struct DescribeProjectRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::describe_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectResponse {
@@ -164,6 +180,7 @@ pub struct DeviceTemplate {
     pub device_type: Option<String>,
 }
 
+/// see [Iot1ClickProjects::disassociate_device_from_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDeviceFromPlacementRequest {
@@ -178,10 +195,12 @@ pub struct DisassociateDeviceFromPlacementRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::disassociate_device_from_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDeviceFromPlacementResponse {}
 
+/// see [Iot1ClickProjects::get_devices_in_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicesInPlacementRequest {
@@ -193,6 +212,7 @@ pub struct GetDevicesInPlacementRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::get_devices_in_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicesInPlacementResponse {
@@ -201,6 +221,7 @@ pub struct GetDevicesInPlacementResponse {
     pub devices: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Iot1ClickProjects::list_placements]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlacementsRequest {
@@ -217,6 +238,15 @@ pub struct ListPlacementsRequest {
     pub project_name: String,
 }
 
+impl PagedRequest for ListPlacementsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot1ClickProjects::list_placements]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPlacementsResponse {
@@ -229,6 +259,31 @@ pub struct ListPlacementsResponse {
     pub placements: Vec<PlacementSummary>,
 }
 
+impl ListPlacementsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PlacementSummary>> {
+        Some(self.placements.clone())
+    }
+}
+
+impl PagedOutput for ListPlacementsResponse {
+    type Item = PlacementSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PlacementSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot1ClickProjects::list_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
@@ -242,6 +297,15 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListProjectsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Iot1ClickProjects::list_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResponse {
@@ -254,6 +318,31 @@ pub struct ListProjectsResponse {
     pub projects: Vec<ProjectSummary>,
 }
 
+impl ListProjectsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ProjectSummary>> {
+        Some(self.projects.clone())
+    }
+}
+
+impl PagedOutput for ListProjectsResponse {
+    type Item = ProjectSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ProjectSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Iot1ClickProjects::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -262,6 +351,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Iot1ClickProjects::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -377,6 +467,7 @@ pub struct ProjectSummary {
     pub updated_date: f64,
 }
 
+/// see [Iot1ClickProjects::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -388,10 +479,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Iot1ClickProjects::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Iot1ClickProjects::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -403,10 +496,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Iot1ClickProjects::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Iot1ClickProjects::update_placement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePlacementRequest {
@@ -422,10 +517,12 @@ pub struct UpdatePlacementRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::update_placement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePlacementResponse {}
 
+/// see [Iot1ClickProjects::update_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
@@ -442,6 +539,7 @@ pub struct UpdateProjectRequest {
     pub project_name: String,
 }
 
+/// see [Iot1ClickProjects::update_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResponse {}
@@ -1196,7 +1294,7 @@ impl fmt::Display for UpdateProjectError {
 impl Error for UpdateProjectError {}
 /// Trait representing the capabilities of the AWS IoT 1-Click Projects API. AWS IoT 1-Click Projects clients implement this trait.
 #[async_trait]
-pub trait Iot1ClickProjects {
+pub trait Iot1ClickProjects: Clone + Sync + Send + 'static {
     /// <p>Associates a physical device with a placement.</p>
     async fn associate_device_with_placement(
         &self,
@@ -1260,11 +1358,31 @@ pub trait Iot1ClickProjects {
         input: ListPlacementsRequest,
     ) -> Result<ListPlacementsResponse, RusotoError<ListPlacementsError>>;
 
+    /// Auto-paginating version of `list_placements`
+    fn list_placements_pages(
+        &self,
+        input: ListPlacementsRequest,
+    ) -> RusotoStream<PlacementSummary, ListPlacementsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_placements(state.clone())
+        })
+    }
+
     /// <p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>
     async fn list_projects(
         &self,
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResponse, RusotoError<ListProjectsError>>;
+
+    /// Auto-paginating version of `list_projects`
+    fn list_projects_pages(
+        &self,
+        input: ListProjectsRequest,
+    ) -> RusotoStream<ProjectSummary, ListProjectsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_projects(state.clone())
+        })
+    }
 
     /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>
     async fn list_tags_for_resource(

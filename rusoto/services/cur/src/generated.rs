@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl CostAndUsageReportClient {
 
 use serde_json;
 /// <p>Deletes the specified report.</p>
+/// see [CostAndUsageReport::delete_report_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReportDefinitionRequest {
@@ -61,6 +64,7 @@ pub struct DeleteReportDefinitionRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
+/// see [CostAndUsageReport::delete_report_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReportDefinitionResponse {
@@ -70,6 +74,7 @@ pub struct DeleteReportDefinitionResponse {
 }
 
 /// <p>Requests a list of AWS Cost and Usage reports owned by the account.</p>
+/// see [CostAndUsageReport::describe_report_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReportDefinitionsRequest {
@@ -81,7 +86,16 @@ pub struct DescribeReportDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeReportDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
+/// see [CostAndUsageReport::describe_report_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReportDefinitionsResponse {
@@ -94,6 +108,31 @@ pub struct DescribeReportDefinitionsResponse {
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
+impl DescribeReportDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ReportDefinition>> {
+        Some(self.report_definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeReportDefinitionsResponse {
+    type Item = ReportDefinition;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ReportDefinition> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CostAndUsageReport::modify_report_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReportDefinitionRequest {
@@ -103,11 +142,13 @@ pub struct ModifyReportDefinitionRequest {
     pub report_name: String,
 }
 
+/// see [CostAndUsageReport::modify_report_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReportDefinitionResponse {}
 
 /// <p>Creates a Cost and Usage Report.</p>
+/// see [CostAndUsageReport::put_report_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutReportDefinitionRequest {
@@ -117,6 +158,7 @@ pub struct PutReportDefinitionRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+/// see [CostAndUsageReport::put_report_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutReportDefinitionResponse {}
@@ -299,7 +341,7 @@ impl fmt::Display for PutReportDefinitionError {
 impl Error for PutReportDefinitionError {}
 /// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
 #[async_trait]
-pub trait CostAndUsageReport {
+pub trait CostAndUsageReport: Clone + Sync + Send + 'static {
     /// <p>Deletes the specified report.</p>
     async fn delete_report_definition(
         &self,
@@ -311,6 +353,16 @@ pub trait CostAndUsageReport {
         &self,
         input: DescribeReportDefinitionsRequest,
     ) -> Result<DescribeReportDefinitionsResponse, RusotoError<DescribeReportDefinitionsError>>;
+
+    /// Auto-paginating version of `describe_report_definitions`
+    fn describe_report_definitions_pages(
+        &self,
+        input: DescribeReportDefinitionsRequest,
+    ) -> RusotoStream<ReportDefinition, DescribeReportDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_report_definitions(state.clone())
+        })
+    }
 
     /// <p>Allows you to programatically update your report preferences.</p>
     async fn modify_report_definition(

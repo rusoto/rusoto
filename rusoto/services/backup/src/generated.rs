@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -471,6 +473,7 @@ pub struct CopyJob {
     pub status_message: Option<String>,
 }
 
+/// see [Backup::create_backup_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupPlanInput {
@@ -487,6 +490,7 @@ pub struct CreateBackupPlanInput {
     pub creator_request_id: Option<String>,
 }
 
+/// see [Backup::create_backup_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupPlanOutput {
@@ -512,6 +516,7 @@ pub struct CreateBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
+/// see [Backup::create_backup_selection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupSelectionInput {
@@ -527,6 +532,7 @@ pub struct CreateBackupSelectionInput {
     pub creator_request_id: Option<String>,
 }
 
+/// see [Backup::create_backup_selection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupSelectionOutput {
@@ -544,6 +550,7 @@ pub struct CreateBackupSelectionOutput {
     pub selection_id: Option<String>,
 }
 
+/// see [Backup::create_backup_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupVaultInput {
@@ -564,6 +571,7 @@ pub struct CreateBackupVaultInput {
     pub encryption_key_arn: Option<String>,
 }
 
+/// see [Backup::create_backup_vault]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupVaultOutput {
@@ -581,6 +589,7 @@ pub struct CreateBackupVaultOutput {
     pub creation_date: Option<f64>,
 }
 
+/// see [Backup::delete_backup_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupPlanInput {
@@ -589,6 +598,7 @@ pub struct DeleteBackupPlanInput {
     pub backup_plan_id: String,
 }
 
+/// see [Backup::delete_backup_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackupPlanOutput {
@@ -610,6 +620,7 @@ pub struct DeleteBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
+/// see [Backup::delete_backup_selection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupSelectionInput {
@@ -621,6 +632,7 @@ pub struct DeleteBackupSelectionInput {
     pub selection_id: String,
 }
 
+/// see [Backup::delete_backup_vault_access_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupVaultAccessPolicyInput {
@@ -629,6 +641,7 @@ pub struct DeleteBackupVaultAccessPolicyInput {
     pub backup_vault_name: String,
 }
 
+/// see [Backup::delete_backup_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupVaultInput {
@@ -637,6 +650,7 @@ pub struct DeleteBackupVaultInput {
     pub backup_vault_name: String,
 }
 
+/// see [Backup::delete_backup_vault_notifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupVaultNotificationsInput {
@@ -645,6 +659,7 @@ pub struct DeleteBackupVaultNotificationsInput {
     pub backup_vault_name: String,
 }
 
+/// see [Backup::delete_recovery_point]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRecoveryPointInput {
@@ -656,6 +671,7 @@ pub struct DeleteRecoveryPointInput {
     pub recovery_point_arn: String,
 }
 
+/// see [Backup::describe_backup_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupJobInput {
@@ -664,6 +680,7 @@ pub struct DescribeBackupJobInput {
     pub backup_job_id: String,
 }
 
+/// see [Backup::describe_backup_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupJobOutput {
@@ -749,6 +766,7 @@ pub struct DescribeBackupJobOutput {
     pub status_message: Option<String>,
 }
 
+/// see [Backup::describe_backup_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupVaultInput {
@@ -757,6 +775,7 @@ pub struct DescribeBackupVaultInput {
     pub backup_vault_name: String,
 }
 
+/// see [Backup::describe_backup_vault]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupVaultOutput {
@@ -786,6 +805,7 @@ pub struct DescribeBackupVaultOutput {
     pub number_of_recovery_points: Option<i64>,
 }
 
+/// see [Backup::describe_copy_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCopyJobInput {
@@ -794,6 +814,7 @@ pub struct DescribeCopyJobInput {
     pub copy_job_id: String,
 }
 
+/// see [Backup::describe_copy_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCopyJobOutput {
@@ -803,10 +824,12 @@ pub struct DescribeCopyJobOutput {
     pub copy_job: Option<CopyJob>,
 }
 
+/// see [Backup::describe_global_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalSettingsInput {}
 
+/// see [Backup::describe_global_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGlobalSettingsOutput {
@@ -820,6 +843,7 @@ pub struct DescribeGlobalSettingsOutput {
     pub last_update_time: Option<f64>,
 }
 
+/// see [Backup::describe_protected_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProtectedResourceInput {
@@ -828,6 +852,7 @@ pub struct DescribeProtectedResourceInput {
     pub resource_arn: String,
 }
 
+/// see [Backup::describe_protected_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProtectedResourceOutput {
@@ -845,6 +870,7 @@ pub struct DescribeProtectedResourceOutput {
     pub resource_type: Option<String>,
 }
 
+/// see [Backup::describe_recovery_point]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecoveryPointInput {
@@ -856,6 +882,7 @@ pub struct DescribeRecoveryPointInput {
     pub recovery_point_arn: String,
 }
 
+/// see [Backup::describe_recovery_point]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecoveryPointOutput {
@@ -933,10 +960,12 @@ pub struct DescribeRecoveryPointOutput {
     pub storage_class: Option<String>,
 }
 
+/// see [Backup::describe_region_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRegionSettingsInput {}
 
+/// see [Backup::describe_region_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRegionSettingsOutput {
@@ -946,6 +975,7 @@ pub struct DescribeRegionSettingsOutput {
     pub resource_type_opt_in_preference: Option<::std::collections::HashMap<String, bool>>,
 }
 
+/// see [Backup::describe_restore_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRestoreJobInput {
@@ -954,6 +984,7 @@ pub struct DescribeRestoreJobInput {
     pub restore_job_id: String,
 }
 
+/// see [Backup::describe_restore_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRestoreJobOutput {
@@ -1011,6 +1042,7 @@ pub struct DescribeRestoreJobOutput {
     pub status_message: Option<String>,
 }
 
+/// see [Backup::export_backup_plan_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportBackupPlanTemplateInput {
@@ -1019,6 +1051,7 @@ pub struct ExportBackupPlanTemplateInput {
     pub backup_plan_id: String,
 }
 
+/// see [Backup::export_backup_plan_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportBackupPlanTemplateOutput {
@@ -1028,6 +1061,7 @@ pub struct ExportBackupPlanTemplateOutput {
     pub backup_plan_template_json: Option<String>,
 }
 
+/// see [Backup::get_backup_plan_from_json]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupPlanFromJSONInput {
@@ -1036,6 +1070,7 @@ pub struct GetBackupPlanFromJSONInput {
     pub backup_plan_template_json: String,
 }
 
+/// see [Backup::get_backup_plan_from_json]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupPlanFromJSONOutput {
@@ -1045,6 +1080,7 @@ pub struct GetBackupPlanFromJSONOutput {
     pub backup_plan: Option<BackupPlan>,
 }
 
+/// see [Backup::get_backup_plan_from_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupPlanFromTemplateInput {
@@ -1053,6 +1089,7 @@ pub struct GetBackupPlanFromTemplateInput {
     pub backup_plan_template_id: String,
 }
 
+/// see [Backup::get_backup_plan_from_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupPlanFromTemplateOutput {
@@ -1062,6 +1099,7 @@ pub struct GetBackupPlanFromTemplateOutput {
     pub backup_plan_document: Option<BackupPlan>,
 }
 
+/// see [Backup::get_backup_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupPlanInput {
@@ -1074,6 +1112,7 @@ pub struct GetBackupPlanInput {
     pub version_id: Option<String>,
 }
 
+/// see [Backup::get_backup_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupPlanOutput {
@@ -1115,6 +1154,7 @@ pub struct GetBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
+/// see [Backup::get_backup_selection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupSelectionInput {
@@ -1126,6 +1166,7 @@ pub struct GetBackupSelectionInput {
     pub selection_id: String,
 }
 
+/// see [Backup::get_backup_selection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupSelectionOutput {
@@ -1151,6 +1192,7 @@ pub struct GetBackupSelectionOutput {
     pub selection_id: Option<String>,
 }
 
+/// see [Backup::get_backup_vault_access_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupVaultAccessPolicyInput {
@@ -1159,6 +1201,7 @@ pub struct GetBackupVaultAccessPolicyInput {
     pub backup_vault_name: String,
 }
 
+/// see [Backup::get_backup_vault_access_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupVaultAccessPolicyOutput {
@@ -1176,6 +1219,7 @@ pub struct GetBackupVaultAccessPolicyOutput {
     pub policy: Option<String>,
 }
 
+/// see [Backup::get_backup_vault_notifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupVaultNotificationsInput {
@@ -1184,6 +1228,7 @@ pub struct GetBackupVaultNotificationsInput {
     pub backup_vault_name: String,
 }
 
+/// see [Backup::get_backup_vault_notifications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupVaultNotificationsOutput {
@@ -1205,6 +1250,7 @@ pub struct GetBackupVaultNotificationsOutput {
     pub sns_topic_arn: Option<String>,
 }
 
+/// see [Backup::get_recovery_point_restore_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecoveryPointRestoreMetadataInput {
@@ -1216,6 +1262,7 @@ pub struct GetRecoveryPointRestoreMetadataInput {
     pub recovery_point_arn: String,
 }
 
+/// see [Backup::get_recovery_point_restore_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecoveryPointRestoreMetadataOutput {
@@ -1233,6 +1280,7 @@ pub struct GetRecoveryPointRestoreMetadataOutput {
     pub restore_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Backup::get_supported_resource_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSupportedResourceTypesOutput {
@@ -1255,6 +1303,7 @@ pub struct Lifecycle {
     pub move_to_cold_storage_after_days: Option<i64>,
 }
 
+/// see [Backup::list_backup_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupJobsInput {
@@ -1296,6 +1345,7 @@ pub struct ListBackupJobsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupJobsOutput {
@@ -1309,6 +1359,7 @@ pub struct ListBackupJobsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_plan_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupPlanTemplatesInput {
@@ -1322,6 +1373,7 @@ pub struct ListBackupPlanTemplatesInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_plan_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupPlanTemplatesOutput {
@@ -1335,6 +1387,7 @@ pub struct ListBackupPlanTemplatesOutput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_plan_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupPlanVersionsInput {
@@ -1351,6 +1404,7 @@ pub struct ListBackupPlanVersionsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_plan_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupPlanVersionsOutput {
@@ -1364,6 +1418,7 @@ pub struct ListBackupPlanVersionsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_plans]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupPlansInput {
@@ -1381,6 +1436,7 @@ pub struct ListBackupPlansInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_plans]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupPlansOutput {
@@ -1394,6 +1450,7 @@ pub struct ListBackupPlansOutput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_selections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupSelectionsInput {
@@ -1410,6 +1467,7 @@ pub struct ListBackupSelectionsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_selections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupSelectionsOutput {
@@ -1423,6 +1481,7 @@ pub struct ListBackupSelectionsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_vaults]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupVaultsInput {
@@ -1436,6 +1495,7 @@ pub struct ListBackupVaultsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_backup_vaults]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupVaultsOutput {
@@ -1449,6 +1509,7 @@ pub struct ListBackupVaultsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_copy_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCopyJobsInput {
@@ -1490,6 +1551,7 @@ pub struct ListCopyJobsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_copy_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCopyJobsOutput {
@@ -1503,6 +1565,7 @@ pub struct ListCopyJobsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_protected_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtectedResourcesInput {
@@ -1516,6 +1579,7 @@ pub struct ListProtectedResourcesInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_protected_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProtectedResourcesOutput {
@@ -1529,6 +1593,7 @@ pub struct ListProtectedResourcesOutput {
     pub results: Option<Vec<ProtectedResource>>,
 }
 
+/// see [Backup::list_recovery_points_by_backup_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecoveryPointsByBackupVaultInput {
@@ -1565,6 +1630,7 @@ pub struct ListRecoveryPointsByBackupVaultInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_recovery_points_by_backup_vault]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecoveryPointsByBackupVaultOutput {
@@ -1578,6 +1644,7 @@ pub struct ListRecoveryPointsByBackupVaultOutput {
     pub recovery_points: Option<Vec<RecoveryPointByBackupVault>>,
 }
 
+/// see [Backup::list_recovery_points_by_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecoveryPointsByResourceInput {
@@ -1594,6 +1661,7 @@ pub struct ListRecoveryPointsByResourceInput {
     pub resource_arn: String,
 }
 
+/// see [Backup::list_recovery_points_by_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecoveryPointsByResourceOutput {
@@ -1607,6 +1675,7 @@ pub struct ListRecoveryPointsByResourceOutput {
     pub recovery_points: Option<Vec<RecoveryPointByResource>>,
 }
 
+/// see [Backup::list_restore_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRestoreJobsInput {
@@ -1636,6 +1705,7 @@ pub struct ListRestoreJobsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Backup::list_restore_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRestoreJobsOutput {
@@ -1649,6 +1719,7 @@ pub struct ListRestoreJobsOutput {
     pub restore_jobs: Option<Vec<RestoreJobsListMember>>,
 }
 
+/// see [Backup::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsInput {
@@ -1665,6 +1736,7 @@ pub struct ListTagsInput {
     pub resource_arn: String,
 }
 
+/// see [Backup::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsOutput {
@@ -1696,6 +1768,7 @@ pub struct ProtectedResource {
     pub resource_type: Option<String>,
 }
 
+/// see [Backup::put_backup_vault_access_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBackupVaultAccessPolicyInput {
@@ -1708,6 +1781,7 @@ pub struct PutBackupVaultAccessPolicyInput {
     pub policy: Option<String>,
 }
 
+/// see [Backup::put_backup_vault_notifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBackupVaultNotificationsInput {
@@ -1906,6 +1980,7 @@ pub struct RestoreJobsListMember {
     pub status_message: Option<String>,
 }
 
+/// see [Backup::start_backup_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBackupJobInput {
@@ -1944,6 +2019,7 @@ pub struct StartBackupJobInput {
     pub start_window_minutes: Option<i64>,
 }
 
+/// see [Backup::start_backup_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBackupJobOutput {
@@ -1961,6 +2037,7 @@ pub struct StartBackupJobOutput {
     pub recovery_point_arn: Option<String>,
 }
 
+/// see [Backup::start_copy_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCopyJobInput {
@@ -1985,6 +2062,7 @@ pub struct StartCopyJobInput {
     pub source_backup_vault_name: String,
 }
 
+/// see [Backup::start_copy_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartCopyJobOutput {
@@ -1998,6 +2076,7 @@ pub struct StartCopyJobOutput {
     pub creation_date: Option<f64>,
 }
 
+/// see [Backup::start_restore_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRestoreJobInput {
@@ -2020,6 +2099,7 @@ pub struct StartRestoreJobInput {
     pub resource_type: Option<String>,
 }
 
+/// see [Backup::start_restore_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRestoreJobOutput {
@@ -2029,6 +2109,7 @@ pub struct StartRestoreJobOutput {
     pub restore_job_id: Option<String>,
 }
 
+/// see [Backup::stop_backup_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBackupJobInput {
@@ -2037,6 +2118,7 @@ pub struct StopBackupJobInput {
     pub backup_job_id: String,
 }
 
+/// see [Backup::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -2048,6 +2130,7 @@ pub struct TagResourceInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Backup::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -2059,6 +2142,7 @@ pub struct UntagResourceInput {
     pub tag_key_list: Vec<String>,
 }
 
+/// see [Backup::update_backup_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBackupPlanInput {
@@ -2070,6 +2154,7 @@ pub struct UpdateBackupPlanInput {
     pub backup_plan_id: String,
 }
 
+/// see [Backup::update_backup_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBackupPlanOutput {
@@ -2095,6 +2180,7 @@ pub struct UpdateBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
+/// see [Backup::update_global_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalSettingsInput {
@@ -2104,6 +2190,7 @@ pub struct UpdateGlobalSettingsInput {
     pub global_settings: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Backup::update_recovery_point_lifecycle]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRecoveryPointLifecycleInput {
@@ -2119,6 +2206,7 @@ pub struct UpdateRecoveryPointLifecycleInput {
     pub recovery_point_arn: String,
 }
 
+/// see [Backup::update_recovery_point_lifecycle]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRecoveryPointLifecycleOutput {
@@ -2140,6 +2228,7 @@ pub struct UpdateRecoveryPointLifecycleOutput {
     pub recovery_point_arn: Option<String>,
 }
 
+/// see [Backup::update_region_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegionSettingsInput {
@@ -4913,7 +5002,7 @@ impl fmt::Display for UpdateRegionSettingsError {
 impl Error for UpdateRegionSettingsError {}
 /// Trait representing the capabilities of the AWS Backup API. AWS Backup clients implement this trait.
 #[async_trait]
-pub trait Backup {
+pub trait Backup: Clone + Sync + Send + 'static {
     /// <p>Creates a backup plan using a backup plan name and backup rules. A backup plan is a document that contains information that AWS Backup uses to schedule tasks that create recovery points for resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
     async fn create_backup_plan(
         &self,

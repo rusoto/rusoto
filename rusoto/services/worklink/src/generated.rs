@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Worklink::associate_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDomainRequest {
@@ -43,10 +46,12 @@ pub struct AssociateDomainRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::associate_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDomainResponse {}
 
+/// see [Worklink::associate_website_authorization_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateWebsiteAuthorizationProviderRequest {
@@ -62,6 +67,7 @@ pub struct AssociateWebsiteAuthorizationProviderRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::associate_website_authorization_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateWebsiteAuthorizationProviderResponse {
@@ -71,6 +77,7 @@ pub struct AssociateWebsiteAuthorizationProviderResponse {
     pub authorization_provider_id: Option<String>,
 }
 
+/// see [Worklink::associate_website_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateWebsiteCertificateAuthorityRequest {
@@ -86,6 +93,7 @@ pub struct AssociateWebsiteCertificateAuthorityRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::associate_website_certificate_authority]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateWebsiteCertificateAuthorityResponse {
@@ -95,6 +103,7 @@ pub struct AssociateWebsiteCertificateAuthorityResponse {
     pub website_ca_id: Option<String>,
 }
 
+/// see [Worklink::create_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetRequest {
@@ -115,6 +124,7 @@ pub struct CreateFleetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Worklink::create_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetResponse {
@@ -124,6 +134,7 @@ pub struct CreateFleetResponse {
     pub fleet_arn: Option<String>,
 }
 
+/// see [Worklink::delete_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetRequest {
@@ -132,10 +143,12 @@ pub struct DeleteFleetRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::delete_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFleetResponse {}
 
+/// see [Worklink::describe_audit_stream_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditStreamConfigurationRequest {
@@ -144,6 +157,7 @@ pub struct DescribeAuditStreamConfigurationRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::describe_audit_stream_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditStreamConfigurationResponse {
@@ -153,6 +167,7 @@ pub struct DescribeAuditStreamConfigurationResponse {
     pub audit_stream_arn: Option<String>,
 }
 
+/// see [Worklink::describe_company_network_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCompanyNetworkConfigurationRequest {
@@ -161,6 +176,7 @@ pub struct DescribeCompanyNetworkConfigurationRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::describe_company_network_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCompanyNetworkConfigurationResponse {
@@ -178,6 +194,7 @@ pub struct DescribeCompanyNetworkConfigurationResponse {
     pub vpc_id: Option<String>,
 }
 
+/// see [Worklink::describe_device_policy_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDevicePolicyConfigurationRequest {
@@ -186,6 +203,7 @@ pub struct DescribeDevicePolicyConfigurationRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::describe_device_policy_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDevicePolicyConfigurationResponse {
@@ -195,6 +213,7 @@ pub struct DescribeDevicePolicyConfigurationResponse {
     pub device_ca_certificate: Option<String>,
 }
 
+/// see [Worklink::describe_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceRequest {
@@ -206,6 +225,7 @@ pub struct DescribeDeviceRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::describe_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceResponse {
@@ -247,6 +267,7 @@ pub struct DescribeDeviceResponse {
     pub username: Option<String>,
 }
 
+/// see [Worklink::describe_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainRequest {
@@ -258,6 +279,7 @@ pub struct DescribeDomainRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::describe_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainResponse {
@@ -283,6 +305,7 @@ pub struct DescribeDomainResponse {
     pub domain_status: Option<String>,
 }
 
+/// see [Worklink::describe_fleet_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetMetadataRequest {
@@ -291,6 +314,7 @@ pub struct DescribeFleetMetadataRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::describe_fleet_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetMetadataResponse {
@@ -328,6 +352,7 @@ pub struct DescribeFleetMetadataResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Worklink::describe_identity_provider_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityProviderConfigurationRequest {
@@ -336,6 +361,7 @@ pub struct DescribeIdentityProviderConfigurationRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::describe_identity_provider_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityProviderConfigurationResponse {
@@ -353,6 +379,7 @@ pub struct DescribeIdentityProviderConfigurationResponse {
     pub service_provider_saml_metadata: Option<String>,
 }
 
+/// see [Worklink::describe_website_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWebsiteCertificateAuthorityRequest {
@@ -364,6 +391,7 @@ pub struct DescribeWebsiteCertificateAuthorityRequest {
     pub website_ca_id: String,
 }
 
+/// see [Worklink::describe_website_certificate_authority]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWebsiteCertificateAuthorityResponse {
@@ -395,6 +423,7 @@ pub struct DeviceSummary {
     pub device_status: Option<String>,
 }
 
+/// see [Worklink::disassociate_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDomainRequest {
@@ -406,10 +435,12 @@ pub struct DisassociateDomainRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::disassociate_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDomainResponse {}
 
+/// see [Worklink::disassociate_website_authorization_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateWebsiteAuthorizationProviderRequest {
@@ -421,10 +452,12 @@ pub struct DisassociateWebsiteAuthorizationProviderRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::disassociate_website_authorization_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebsiteAuthorizationProviderResponse {}
 
+/// see [Worklink::disassociate_website_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateWebsiteCertificateAuthorityRequest {
@@ -436,6 +469,7 @@ pub struct DisassociateWebsiteCertificateAuthorityRequest {
     pub website_ca_id: String,
 }
 
+/// see [Worklink::disassociate_website_certificate_authority]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebsiteCertificateAuthorityResponse {}
@@ -497,6 +531,7 @@ pub struct FleetSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Worklink::list_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
@@ -513,6 +548,7 @@ pub struct ListDevicesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
@@ -526,6 +562,7 @@ pub struct ListDevicesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_domains]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
@@ -542,6 +579,7 @@ pub struct ListDomainsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_domains]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsResponse {
@@ -555,6 +593,7 @@ pub struct ListDomainsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_fleets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFleetsRequest {
@@ -568,6 +607,7 @@ pub struct ListFleetsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_fleets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFleetsResponse {
@@ -581,6 +621,7 @@ pub struct ListFleetsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -589,6 +630,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Worklink::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -598,6 +640,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Worklink::list_website_authorization_providers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebsiteAuthorizationProvidersRequest {
@@ -614,6 +657,7 @@ pub struct ListWebsiteAuthorizationProvidersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_website_authorization_providers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebsiteAuthorizationProvidersResponse {
@@ -627,6 +671,7 @@ pub struct ListWebsiteAuthorizationProvidersResponse {
     pub website_authorization_providers: Option<Vec<WebsiteAuthorizationProviderSummary>>,
 }
 
+/// see [Worklink::list_website_certificate_authorities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebsiteCertificateAuthoritiesRequest {
@@ -643,6 +688,7 @@ pub struct ListWebsiteCertificateAuthoritiesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Worklink::list_website_certificate_authorities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebsiteCertificateAuthoritiesResponse {
@@ -656,6 +702,7 @@ pub struct ListWebsiteCertificateAuthoritiesResponse {
     pub website_certificate_authorities: Option<Vec<WebsiteCaSummary>>,
 }
 
+/// see [Worklink::restore_domain_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDomainAccessRequest {
@@ -667,10 +714,12 @@ pub struct RestoreDomainAccessRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::restore_domain_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreDomainAccessResponse {}
 
+/// see [Worklink::revoke_domain_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeDomainAccessRequest {
@@ -682,10 +731,12 @@ pub struct RevokeDomainAccessRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::revoke_domain_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeDomainAccessResponse {}
 
+/// see [Worklink::sign_out_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignOutUserRequest {
@@ -697,10 +748,12 @@ pub struct SignOutUserRequest {
     pub username: String,
 }
 
+/// see [Worklink::sign_out_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignOutUserResponse {}
 
+/// see [Worklink::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -712,10 +765,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Worklink::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Worklink::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -727,10 +782,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Worklink::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Worklink::update_audit_stream_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuditStreamConfigurationRequest {
@@ -743,10 +800,12 @@ pub struct UpdateAuditStreamConfigurationRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::update_audit_stream_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuditStreamConfigurationResponse {}
 
+/// see [Worklink::update_company_network_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCompanyNetworkConfigurationRequest {
@@ -764,10 +823,12 @@ pub struct UpdateCompanyNetworkConfigurationRequest {
     pub vpc_id: String,
 }
 
+/// see [Worklink::update_company_network_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCompanyNetworkConfigurationResponse {}
 
+/// see [Worklink::update_device_policy_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicePolicyConfigurationRequest {
@@ -780,10 +841,12 @@ pub struct UpdateDevicePolicyConfigurationRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::update_device_policy_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevicePolicyConfigurationResponse {}
 
+/// see [Worklink::update_domain_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainMetadataRequest {
@@ -799,10 +862,12 @@ pub struct UpdateDomainMetadataRequest {
     pub fleet_arn: String,
 }
 
+/// see [Worklink::update_domain_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainMetadataResponse {}
 
+/// see [Worklink::update_fleet_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetMetadataRequest {
@@ -819,10 +884,12 @@ pub struct UpdateFleetMetadataRequest {
     pub optimize_for_end_user_location: Option<bool>,
 }
 
+/// see [Worklink::update_fleet_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetMetadataResponse {}
 
+/// see [Worklink::update_identity_provider_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIdentityProviderConfigurationRequest {
@@ -838,6 +905,7 @@ pub struct UpdateIdentityProviderConfigurationRequest {
     pub identity_provider_type: String,
 }
 
+/// see [Worklink::update_identity_provider_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIdentityProviderConfigurationResponse {}
@@ -2975,7 +3043,7 @@ impl fmt::Display for UpdateIdentityProviderConfigurationError {
 impl Error for UpdateIdentityProviderConfigurationError {}
 /// Trait representing the capabilities of the WorkLink API. WorkLink clients implement this trait.
 #[async_trait]
-pub trait Worklink {
+pub trait Worklink: Clone + Sync + Send + 'static {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
     async fn associate_domain(
         &self,

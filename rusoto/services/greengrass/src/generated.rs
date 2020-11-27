@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [GreenGrass::associate_role_to_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRoleToGroupRequest {
@@ -36,6 +39,7 @@ pub struct AssociateRoleToGroupRequest {
     pub role_arn: String,
 }
 
+/// see [GreenGrass::associate_role_to_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateRoleToGroupResponse {
@@ -45,6 +49,7 @@ pub struct AssociateRoleToGroupResponse {
     pub associated_at: Option<String>,
 }
 
+/// see [GreenGrass::associate_service_role_to_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceRoleToAccountRequest {
@@ -53,6 +58,7 @@ pub struct AssociateServiceRoleToAccountRequest {
     pub role_arn: String,
 }
 
+/// see [GreenGrass::associate_service_role_to_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateServiceRoleToAccountResponse {
@@ -208,6 +214,7 @@ pub struct CoreDefinitionVersion {
     pub cores: Option<Vec<Core>>,
 }
 
+/// see [GreenGrass::create_connector_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectorDefinitionRequest {
@@ -229,6 +236,7 @@ pub struct CreateConnectorDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_connector_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectorDefinitionResponse {
@@ -262,6 +270,7 @@ pub struct CreateConnectorDefinitionResponse {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::create_connector_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectorDefinitionVersionRequest {
@@ -278,6 +287,7 @@ pub struct CreateConnectorDefinitionVersionRequest {
     pub connectors: Option<Vec<Connector>>,
 }
 
+/// see [GreenGrass::create_connector_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectorDefinitionVersionResponse {
@@ -300,6 +310,7 @@ pub struct CreateConnectorDefinitionVersionResponse {
 }
 
 /// <p>Information needed to create a core definition.</p>
+/// see [GreenGrass::create_core_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCoreDefinitionRequest {
@@ -321,6 +332,7 @@ pub struct CreateCoreDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_core_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCoreDefinitionResponse {
@@ -354,6 +366,7 @@ pub struct CreateCoreDefinitionResponse {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::create_core_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCoreDefinitionVersionRequest {
@@ -370,6 +383,7 @@ pub struct CreateCoreDefinitionVersionRequest {
     pub cores: Option<Vec<Core>>,
 }
 
+/// see [GreenGrass::create_core_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCoreDefinitionVersionResponse {
@@ -391,6 +405,7 @@ pub struct CreateCoreDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::create_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
@@ -414,6 +429,7 @@ pub struct CreateDeploymentRequest {
     pub group_version_id: Option<String>,
 }
 
+/// see [GreenGrass::create_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResponse {
@@ -427,6 +443,7 @@ pub struct CreateDeploymentResponse {
     pub deployment_id: Option<String>,
 }
 
+/// see [GreenGrass::create_device_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceDefinitionRequest {
@@ -448,6 +465,7 @@ pub struct CreateDeviceDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_device_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceDefinitionResponse {
@@ -481,6 +499,7 @@ pub struct CreateDeviceDefinitionResponse {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::create_device_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceDefinitionVersionRequest {
@@ -497,6 +516,7 @@ pub struct CreateDeviceDefinitionVersionRequest {
     pub devices: Option<Vec<Device>>,
 }
 
+/// see [GreenGrass::create_device_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceDefinitionVersionResponse {
@@ -518,6 +538,7 @@ pub struct CreateDeviceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::create_function_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionDefinitionRequest {
@@ -539,6 +560,7 @@ pub struct CreateFunctionDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_function_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionDefinitionResponse {
@@ -573,6 +595,7 @@ pub struct CreateFunctionDefinitionResponse {
 }
 
 /// <p>Information needed to create a function definition version.</p>
+/// see [GreenGrass::create_function_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionDefinitionVersionRequest {
@@ -593,6 +616,7 @@ pub struct CreateFunctionDefinitionVersionRequest {
     pub functions: Option<Vec<Function>>,
 }
 
+/// see [GreenGrass::create_function_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionDefinitionVersionResponse {
@@ -614,6 +638,7 @@ pub struct CreateFunctionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::create_group_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupCertificateAuthorityRequest {
@@ -626,6 +651,7 @@ pub struct CreateGroupCertificateAuthorityRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::create_group_certificate_authority]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupCertificateAuthorityResponse {
@@ -635,6 +661,7 @@ pub struct CreateGroupCertificateAuthorityResponse {
     pub group_certificate_authority_arn: Option<String>,
 }
 
+/// see [GreenGrass::create_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
@@ -656,6 +683,7 @@ pub struct CreateGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
@@ -689,6 +717,7 @@ pub struct CreateGroupResponse {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::create_group_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupVersionRequest {
@@ -729,6 +758,7 @@ pub struct CreateGroupVersionRequest {
     pub subscription_definition_version_arn: Option<String>,
 }
 
+/// see [GreenGrass::create_group_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupVersionResponse {
@@ -750,6 +780,7 @@ pub struct CreateGroupVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::create_logger_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoggerDefinitionRequest {
@@ -771,6 +802,7 @@ pub struct CreateLoggerDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_logger_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoggerDefinitionResponse {
@@ -804,6 +836,7 @@ pub struct CreateLoggerDefinitionResponse {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::create_logger_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoggerDefinitionVersionRequest {
@@ -820,6 +853,7 @@ pub struct CreateLoggerDefinitionVersionRequest {
     pub loggers: Option<Vec<Logger>>,
 }
 
+/// see [GreenGrass::create_logger_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoggerDefinitionVersionResponse {
@@ -841,6 +875,7 @@ pub struct CreateLoggerDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::create_resource_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDefinitionRequest {
@@ -862,6 +897,7 @@ pub struct CreateResourceDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_resource_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDefinitionResponse {
@@ -895,6 +931,7 @@ pub struct CreateResourceDefinitionResponse {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::create_resource_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDefinitionVersionRequest {
@@ -911,6 +948,7 @@ pub struct CreateResourceDefinitionVersionRequest {
     pub resources: Option<Vec<Resource>>,
 }
 
+/// see [GreenGrass::create_resource_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDefinitionVersionResponse {
@@ -932,6 +970,7 @@ pub struct CreateResourceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::create_software_update_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSoftwareUpdateJobRequest {
@@ -954,6 +993,7 @@ pub struct CreateSoftwareUpdateJobRequest {
     pub update_targets_operating_system: String,
 }
 
+/// see [GreenGrass::create_software_update_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSoftwareUpdateJobResponse {
@@ -971,6 +1011,7 @@ pub struct CreateSoftwareUpdateJobResponse {
     pub platform_software_version: Option<String>,
 }
 
+/// see [GreenGrass::create_subscription_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionDefinitionRequest {
@@ -992,6 +1033,7 @@ pub struct CreateSubscriptionDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::create_subscription_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionDefinitionResponse {
@@ -1025,6 +1067,7 @@ pub struct CreateSubscriptionDefinitionResponse {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::create_subscription_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionDefinitionVersionRequest {
@@ -1041,6 +1084,7 @@ pub struct CreateSubscriptionDefinitionVersionRequest {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
+/// see [GreenGrass::create_subscription_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionDefinitionVersionResponse {
@@ -1100,6 +1144,7 @@ pub struct DefinitionInformation {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::delete_connector_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectorDefinitionRequest {
@@ -1108,10 +1153,12 @@ pub struct DeleteConnectorDefinitionRequest {
     pub connector_definition_id: String,
 }
 
+/// see [GreenGrass::delete_connector_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectorDefinitionResponse {}
 
+/// see [GreenGrass::delete_core_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCoreDefinitionRequest {
@@ -1120,10 +1167,12 @@ pub struct DeleteCoreDefinitionRequest {
     pub core_definition_id: String,
 }
 
+/// see [GreenGrass::delete_core_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCoreDefinitionResponse {}
 
+/// see [GreenGrass::delete_device_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceDefinitionRequest {
@@ -1132,10 +1181,12 @@ pub struct DeleteDeviceDefinitionRequest {
     pub device_definition_id: String,
 }
 
+/// see [GreenGrass::delete_device_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceDefinitionResponse {}
 
+/// see [GreenGrass::delete_function_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionDefinitionRequest {
@@ -1144,10 +1195,12 @@ pub struct DeleteFunctionDefinitionRequest {
     pub function_definition_id: String,
 }
 
+/// see [GreenGrass::delete_function_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFunctionDefinitionResponse {}
 
+/// see [GreenGrass::delete_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
@@ -1156,10 +1209,12 @@ pub struct DeleteGroupRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::delete_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResponse {}
 
+/// see [GreenGrass::delete_logger_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoggerDefinitionRequest {
@@ -1168,10 +1223,12 @@ pub struct DeleteLoggerDefinitionRequest {
     pub logger_definition_id: String,
 }
 
+/// see [GreenGrass::delete_logger_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoggerDefinitionResponse {}
 
+/// see [GreenGrass::delete_resource_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceDefinitionRequest {
@@ -1180,10 +1237,12 @@ pub struct DeleteResourceDefinitionRequest {
     pub resource_definition_id: String,
 }
 
+/// see [GreenGrass::delete_resource_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceDefinitionResponse {}
 
+/// see [GreenGrass::delete_subscription_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionDefinitionRequest {
@@ -1192,6 +1251,7 @@ pub struct DeleteSubscriptionDefinitionRequest {
     pub subscription_definition_id: String,
 }
 
+/// see [GreenGrass::delete_subscription_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubscriptionDefinitionResponse {}
@@ -1249,6 +1309,7 @@ pub struct DeviceDefinitionVersion {
     pub devices: Option<Vec<Device>>,
 }
 
+/// see [GreenGrass::disassociate_role_from_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRoleFromGroupRequest {
@@ -1257,6 +1318,7 @@ pub struct DisassociateRoleFromGroupRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::disassociate_role_from_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateRoleFromGroupResponse {
@@ -1266,10 +1328,12 @@ pub struct DisassociateRoleFromGroupResponse {
     pub disassociated_at: Option<String>,
 }
 
+/// see [GreenGrass::disassociate_service_role_from_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateServiceRoleFromAccountRequest {}
 
+/// see [GreenGrass::disassociate_service_role_from_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceRoleFromAccountResponse {
@@ -1419,6 +1483,7 @@ pub struct FunctionRunAsConfig {
     pub uid: Option<i64>,
 }
 
+/// see [GreenGrass::get_associated_role]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssociatedRoleRequest {
@@ -1427,6 +1492,7 @@ pub struct GetAssociatedRoleRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::get_associated_role]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssociatedRoleResponse {
@@ -1440,6 +1506,7 @@ pub struct GetAssociatedRoleResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [GreenGrass::get_bulk_deployment_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBulkDeploymentStatusRequest {
@@ -1448,6 +1515,7 @@ pub struct GetBulkDeploymentStatusRequest {
     pub bulk_deployment_id: String,
 }
 
+/// see [GreenGrass::get_bulk_deployment_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBulkDeploymentStatusResponse {
@@ -1477,6 +1545,7 @@ pub struct GetBulkDeploymentStatusResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_connectivity_info]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectivityInfoRequest {
@@ -1485,6 +1554,7 @@ pub struct GetConnectivityInfoRequest {
     pub thing_name: String,
 }
 
+/// see [GreenGrass::get_connectivity_info]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectivityInfoResponse {
@@ -1498,6 +1568,7 @@ pub struct GetConnectivityInfoResponse {
     pub message: Option<String>,
 }
 
+/// see [GreenGrass::get_connector_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorDefinitionRequest {
@@ -1506,6 +1577,7 @@ pub struct GetConnectorDefinitionRequest {
     pub connector_definition_id: String,
 }
 
+/// see [GreenGrass::get_connector_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorDefinitionResponse {
@@ -1543,6 +1615,7 @@ pub struct GetConnectorDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_connector_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorDefinitionVersionRequest {
@@ -1558,6 +1631,7 @@ pub struct GetConnectorDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [GreenGrass::get_connector_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorDefinitionVersionResponse {
@@ -1587,6 +1661,7 @@ pub struct GetConnectorDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_core_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCoreDefinitionRequest {
@@ -1595,6 +1670,7 @@ pub struct GetCoreDefinitionRequest {
     pub core_definition_id: String,
 }
 
+/// see [GreenGrass::get_core_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCoreDefinitionResponse {
@@ -1632,6 +1708,7 @@ pub struct GetCoreDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_core_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCoreDefinitionVersionRequest {
@@ -1643,6 +1720,7 @@ pub struct GetCoreDefinitionVersionRequest {
     pub core_definition_version_id: String,
 }
 
+/// see [GreenGrass::get_core_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCoreDefinitionVersionResponse {
@@ -1672,6 +1750,7 @@ pub struct GetCoreDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_deployment_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentStatusRequest {
@@ -1683,6 +1762,7 @@ pub struct GetDeploymentStatusRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::get_deployment_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentStatusResponse {
@@ -1708,6 +1788,7 @@ pub struct GetDeploymentStatusResponse {
     pub updated_at: Option<String>,
 }
 
+/// see [GreenGrass::get_device_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceDefinitionRequest {
@@ -1716,6 +1797,7 @@ pub struct GetDeviceDefinitionRequest {
     pub device_definition_id: String,
 }
 
+/// see [GreenGrass::get_device_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceDefinitionResponse {
@@ -1753,6 +1835,7 @@ pub struct GetDeviceDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_device_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceDefinitionVersionRequest {
@@ -1768,6 +1851,7 @@ pub struct GetDeviceDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [GreenGrass::get_device_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceDefinitionVersionResponse {
@@ -1797,6 +1881,7 @@ pub struct GetDeviceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_function_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionDefinitionRequest {
@@ -1805,6 +1890,7 @@ pub struct GetFunctionDefinitionRequest {
     pub function_definition_id: String,
 }
 
+/// see [GreenGrass::get_function_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionDefinitionResponse {
@@ -1842,6 +1928,7 @@ pub struct GetFunctionDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_function_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionDefinitionVersionRequest {
@@ -1857,6 +1944,7 @@ pub struct GetFunctionDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [GreenGrass::get_function_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionDefinitionVersionResponse {
@@ -1886,6 +1974,7 @@ pub struct GetFunctionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_group_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupCertificateAuthorityRequest {
@@ -1897,6 +1986,7 @@ pub struct GetGroupCertificateAuthorityRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::get_group_certificate_authority]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupCertificateAuthorityResponse {
@@ -1914,6 +2004,7 @@ pub struct GetGroupCertificateAuthorityResponse {
     pub pem_encoded_certificate: Option<String>,
 }
 
+/// see [GreenGrass::get_group_certificate_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupCertificateConfigurationRequest {
@@ -1922,6 +2013,7 @@ pub struct GetGroupCertificateConfigurationRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::get_group_certificate_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupCertificateConfigurationResponse {
@@ -1939,6 +2031,7 @@ pub struct GetGroupCertificateConfigurationResponse {
     pub group_id: Option<String>,
 }
 
+/// see [GreenGrass::get_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
@@ -1947,6 +2040,7 @@ pub struct GetGroupRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::get_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResponse {
@@ -1984,6 +2078,7 @@ pub struct GetGroupResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_group_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupVersionRequest {
@@ -1995,6 +2090,7 @@ pub struct GetGroupVersionRequest {
     pub group_version_id: String,
 }
 
+/// see [GreenGrass::get_group_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupVersionResponse {
@@ -2020,6 +2116,7 @@ pub struct GetGroupVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_logger_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggerDefinitionRequest {
@@ -2028,6 +2125,7 @@ pub struct GetLoggerDefinitionRequest {
     pub logger_definition_id: String,
 }
 
+/// see [GreenGrass::get_logger_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggerDefinitionResponse {
@@ -2065,6 +2163,7 @@ pub struct GetLoggerDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_logger_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggerDefinitionVersionRequest {
@@ -2080,6 +2179,7 @@ pub struct GetLoggerDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [GreenGrass::get_logger_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggerDefinitionVersionResponse {
@@ -2105,6 +2205,7 @@ pub struct GetLoggerDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_resource_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceDefinitionRequest {
@@ -2113,6 +2214,7 @@ pub struct GetResourceDefinitionRequest {
     pub resource_definition_id: String,
 }
 
+/// see [GreenGrass::get_resource_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceDefinitionResponse {
@@ -2150,6 +2252,7 @@ pub struct GetResourceDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_resource_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceDefinitionVersionRequest {
@@ -2161,6 +2264,7 @@ pub struct GetResourceDefinitionVersionRequest {
     pub resource_definition_version_id: String,
 }
 
+/// see [GreenGrass::get_resource_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceDefinitionVersionResponse {
@@ -2186,10 +2290,12 @@ pub struct GetResourceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_service_role_for_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceRoleForAccountRequest {}
 
+/// see [GreenGrass::get_service_role_for_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceRoleForAccountResponse {
@@ -2203,6 +2309,7 @@ pub struct GetServiceRoleForAccountResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [GreenGrass::get_subscription_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionDefinitionRequest {
@@ -2211,6 +2318,7 @@ pub struct GetSubscriptionDefinitionRequest {
     pub subscription_definition_id: String,
 }
 
+/// see [GreenGrass::get_subscription_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSubscriptionDefinitionResponse {
@@ -2248,6 +2356,7 @@ pub struct GetSubscriptionDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::get_subscription_definition_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionDefinitionVersionRequest {
@@ -2263,6 +2372,7 @@ pub struct GetSubscriptionDefinitionVersionRequest {
     pub subscription_definition_version_id: String,
 }
 
+/// see [GreenGrass::get_subscription_definition_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSubscriptionDefinitionVersionResponse {
@@ -2292,6 +2402,7 @@ pub struct GetSubscriptionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::get_thing_runtime_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThingRuntimeConfigurationRequest {
@@ -2300,6 +2411,7 @@ pub struct GetThingRuntimeConfigurationRequest {
     pub thing_name: String,
 }
 
+/// see [GreenGrass::get_thing_runtime_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetThingRuntimeConfigurationResponse {
@@ -2403,6 +2515,7 @@ pub struct GroupVersion {
     pub subscription_definition_version_arn: Option<String>,
 }
 
+/// see [GreenGrass::list_bulk_deployment_detailed_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBulkDeploymentDetailedReportsRequest {
@@ -2419,6 +2532,15 @@ pub struct ListBulkDeploymentDetailedReportsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListBulkDeploymentDetailedReportsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_bulk_deployment_detailed_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBulkDeploymentDetailedReportsResponse {
@@ -2432,6 +2554,31 @@ pub struct ListBulkDeploymentDetailedReportsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListBulkDeploymentDetailedReportsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BulkDeploymentResult>> {
+        Some(self.deployments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBulkDeploymentDetailedReportsResponse {
+    type Item = BulkDeploymentResult;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BulkDeploymentResult> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_bulk_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBulkDeploymentsRequest {
@@ -2445,6 +2592,15 @@ pub struct ListBulkDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListBulkDeploymentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_bulk_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBulkDeploymentsResponse {
@@ -2458,6 +2614,31 @@ pub struct ListBulkDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListBulkDeploymentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BulkDeployment>> {
+        Some(self.bulk_deployments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListBulkDeploymentsResponse {
+    type Item = BulkDeployment;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BulkDeployment> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_connector_definition_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectorDefinitionVersionsRequest {
@@ -2474,6 +2655,15 @@ pub struct ListConnectorDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListConnectorDefinitionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_connector_definition_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConnectorDefinitionVersionsResponse {
@@ -2487,6 +2677,31 @@ pub struct ListConnectorDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListConnectorDefinitionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListConnectorDefinitionVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_connector_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectorDefinitionsRequest {
@@ -2500,6 +2715,15 @@ pub struct ListConnectorDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListConnectorDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_connector_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConnectorDefinitionsResponse {
@@ -2513,6 +2737,31 @@ pub struct ListConnectorDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListConnectorDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
+        Some(self.definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListConnectorDefinitionsResponse {
+    type Item = DefinitionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DefinitionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_core_definition_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCoreDefinitionVersionsRequest {
@@ -2529,6 +2778,15 @@ pub struct ListCoreDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListCoreDefinitionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_core_definition_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCoreDefinitionVersionsResponse {
@@ -2542,6 +2800,31 @@ pub struct ListCoreDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListCoreDefinitionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCoreDefinitionVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_core_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCoreDefinitionsRequest {
@@ -2555,6 +2838,15 @@ pub struct ListCoreDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListCoreDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_core_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCoreDefinitionsResponse {
@@ -2568,6 +2860,31 @@ pub struct ListCoreDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListCoreDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
+        Some(self.definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCoreDefinitionsResponse {
+    type Item = DefinitionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DefinitionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsRequest {
@@ -2584,6 +2901,15 @@ pub struct ListDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeploymentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentsResponse {
@@ -2597,6 +2923,31 @@ pub struct ListDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDeploymentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Deployment>> {
+        Some(self.deployments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeploymentsResponse {
+    type Item = Deployment;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Deployment> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_device_definition_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceDefinitionVersionsRequest {
@@ -2613,6 +2964,15 @@ pub struct ListDeviceDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeviceDefinitionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_device_definition_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceDefinitionVersionsResponse {
@@ -2626,6 +2986,31 @@ pub struct ListDeviceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListDeviceDefinitionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeviceDefinitionVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_device_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceDefinitionsRequest {
@@ -2639,6 +3024,15 @@ pub struct ListDeviceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDeviceDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_device_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceDefinitionsResponse {
@@ -2652,6 +3046,31 @@ pub struct ListDeviceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDeviceDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
+        Some(self.definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDeviceDefinitionsResponse {
+    type Item = DefinitionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DefinitionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_function_definition_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionDefinitionVersionsRequest {
@@ -2668,6 +3087,15 @@ pub struct ListFunctionDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListFunctionDefinitionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_function_definition_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionDefinitionVersionsResponse {
@@ -2681,6 +3109,31 @@ pub struct ListFunctionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListFunctionDefinitionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFunctionDefinitionVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_function_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionDefinitionsRequest {
@@ -2694,6 +3147,15 @@ pub struct ListFunctionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListFunctionDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_function_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionDefinitionsResponse {
@@ -2707,6 +3169,31 @@ pub struct ListFunctionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListFunctionDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
+        Some(self.definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListFunctionDefinitionsResponse {
+    type Item = DefinitionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DefinitionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_group_certificate_authorities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupCertificateAuthoritiesRequest {
@@ -2715,6 +3202,7 @@ pub struct ListGroupCertificateAuthoritiesRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::list_group_certificate_authorities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupCertificateAuthoritiesResponse {
@@ -2724,6 +3212,7 @@ pub struct ListGroupCertificateAuthoritiesResponse {
     pub group_certificate_authorities: Option<Vec<GroupCertificateAuthorityProperties>>,
 }
 
+/// see [GreenGrass::list_group_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupVersionsRequest {
@@ -2740,6 +3229,15 @@ pub struct ListGroupVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListGroupVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_group_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupVersionsResponse {
@@ -2753,6 +3251,31 @@ pub struct ListGroupVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListGroupVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGroupVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
@@ -2766,6 +3289,15 @@ pub struct ListGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
@@ -2779,6 +3311,31 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GroupInformation>> {
+        Some(self.groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGroupsResponse {
+    type Item = GroupInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GroupInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_logger_definition_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggerDefinitionVersionsRequest {
@@ -2795,6 +3352,15 @@ pub struct ListLoggerDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLoggerDefinitionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_logger_definition_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggerDefinitionVersionsResponse {
@@ -2808,6 +3374,31 @@ pub struct ListLoggerDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListLoggerDefinitionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLoggerDefinitionVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_logger_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggerDefinitionsRequest {
@@ -2821,6 +3412,15 @@ pub struct ListLoggerDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLoggerDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_logger_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggerDefinitionsResponse {
@@ -2834,6 +3434,31 @@ pub struct ListLoggerDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListLoggerDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
+        Some(self.definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLoggerDefinitionsResponse {
+    type Item = DefinitionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DefinitionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_resource_definition_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDefinitionVersionsRequest {
@@ -2850,6 +3475,15 @@ pub struct ListResourceDefinitionVersionsRequest {
     pub resource_definition_id: String,
 }
 
+impl PagedRequest for ListResourceDefinitionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_resource_definition_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDefinitionVersionsResponse {
@@ -2863,6 +3497,31 @@ pub struct ListResourceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListResourceDefinitionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListResourceDefinitionVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_resource_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDefinitionsRequest {
@@ -2876,6 +3535,15 @@ pub struct ListResourceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListResourceDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_resource_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDefinitionsResponse {
@@ -2889,6 +3557,31 @@ pub struct ListResourceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListResourceDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
+        Some(self.definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListResourceDefinitionsResponse {
+    type Item = DefinitionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DefinitionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_subscription_definition_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionDefinitionVersionsRequest {
@@ -2905,6 +3598,15 @@ pub struct ListSubscriptionDefinitionVersionsRequest {
     pub subscription_definition_id: String,
 }
 
+impl PagedRequest for ListSubscriptionDefinitionVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_subscription_definition_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscriptionDefinitionVersionsResponse {
@@ -2918,6 +3620,31 @@ pub struct ListSubscriptionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
+impl ListSubscriptionDefinitionVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
+        Some(self.versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSubscriptionDefinitionVersionsResponse {
+    type Item = VersionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<VersionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_subscription_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionDefinitionsRequest {
@@ -2931,6 +3658,15 @@ pub struct ListSubscriptionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSubscriptionDefinitionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [GreenGrass::list_subscription_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscriptionDefinitionsResponse {
@@ -2944,6 +3680,31 @@ pub struct ListSubscriptionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListSubscriptionDefinitionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
+        Some(self.definitions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSubscriptionDefinitionsResponse {
+    type Item = DefinitionInformation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DefinitionInformation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [GreenGrass::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2952,6 +3713,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [GreenGrass::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -3021,6 +3783,7 @@ pub struct LoggerDefinitionVersion {
 }
 
 /// <p>Information needed to reset deployments.</p>
+/// see [GreenGrass::reset_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDeploymentsRequest {
@@ -3037,6 +3800,7 @@ pub struct ResetDeploymentsRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::reset_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetDeploymentsResponse {
@@ -3177,6 +3941,7 @@ pub struct SecretsManagerSecretResourceData {
     pub additional_staging_labels_to_download: Option<Vec<String>>,
 }
 
+/// see [GreenGrass::start_bulk_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBulkDeploymentRequest {
@@ -3196,6 +3961,7 @@ pub struct StartBulkDeploymentRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GreenGrass::start_bulk_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBulkDeploymentResponse {
@@ -3209,6 +3975,7 @@ pub struct StartBulkDeploymentResponse {
     pub bulk_deployment_id: Option<String>,
 }
 
+/// see [GreenGrass::stop_bulk_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBulkDeploymentRequest {
@@ -3217,6 +3984,7 @@ pub struct StopBulkDeploymentRequest {
     pub bulk_deployment_id: String,
 }
 
+/// see [GreenGrass::stop_bulk_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBulkDeploymentResponse {}
@@ -3248,6 +4016,7 @@ pub struct SubscriptionDefinitionVersion {
 }
 
 /// <p>A map of the key-value pairs for the resource tag.</p>
+/// see [GreenGrass::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -3281,6 +4050,7 @@ pub struct TelemetryConfigurationUpdate {
     pub telemetry: String,
 }
 
+/// see [GreenGrass::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3293,6 +4063,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Connectivity information.</p>
+/// see [GreenGrass::update_connectivity_info]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectivityInfoRequest {
@@ -3305,6 +4076,7 @@ pub struct UpdateConnectivityInfoRequest {
     pub thing_name: String,
 }
 
+/// see [GreenGrass::update_connectivity_info]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectivityInfoResponse {
@@ -3318,6 +4090,7 @@ pub struct UpdateConnectivityInfoResponse {
     pub version: Option<String>,
 }
 
+/// see [GreenGrass::update_connector_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectorDefinitionRequest {
@@ -3330,10 +4103,12 @@ pub struct UpdateConnectorDefinitionRequest {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::update_connector_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectorDefinitionResponse {}
 
+/// see [GreenGrass::update_core_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCoreDefinitionRequest {
@@ -3346,10 +4121,12 @@ pub struct UpdateCoreDefinitionRequest {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::update_core_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCoreDefinitionResponse {}
 
+/// see [GreenGrass::update_device_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceDefinitionRequest {
@@ -3362,10 +4139,12 @@ pub struct UpdateDeviceDefinitionRequest {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::update_device_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceDefinitionResponse {}
 
+/// see [GreenGrass::update_function_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionDefinitionRequest {
@@ -3378,10 +4157,12 @@ pub struct UpdateFunctionDefinitionRequest {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::update_function_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFunctionDefinitionResponse {}
 
+/// see [GreenGrass::update_group_certificate_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupCertificateConfigurationRequest {
@@ -3394,6 +4175,7 @@ pub struct UpdateGroupCertificateConfigurationRequest {
     pub group_id: String,
 }
 
+/// see [GreenGrass::update_group_certificate_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupCertificateConfigurationResponse {
@@ -3411,6 +4193,7 @@ pub struct UpdateGroupCertificateConfigurationResponse {
     pub group_id: Option<String>,
 }
 
+/// see [GreenGrass::update_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
@@ -3423,10 +4206,12 @@ pub struct UpdateGroupRequest {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::update_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResponse {}
 
+/// see [GreenGrass::update_logger_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoggerDefinitionRequest {
@@ -3439,10 +4224,12 @@ pub struct UpdateLoggerDefinitionRequest {
     pub name: Option<String>,
 }
 
+/// see [GreenGrass::update_logger_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLoggerDefinitionResponse {}
 
+/// see [GreenGrass::update_resource_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceDefinitionRequest {
@@ -3455,10 +4242,12 @@ pub struct UpdateResourceDefinitionRequest {
     pub resource_definition_id: String,
 }
 
+/// see [GreenGrass::update_resource_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceDefinitionResponse {}
 
+/// see [GreenGrass::update_subscription_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriptionDefinitionRequest {
@@ -3471,10 +4260,12 @@ pub struct UpdateSubscriptionDefinitionRequest {
     pub subscription_definition_id: String,
 }
 
+/// see [GreenGrass::update_subscription_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriptionDefinitionResponse {}
 
+/// see [GreenGrass::update_thing_runtime_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingRuntimeConfigurationRequest {
@@ -3487,6 +4278,7 @@ pub struct UpdateThingRuntimeConfigurationRequest {
     pub thing_name: String,
 }
 
+/// see [GreenGrass::update_thing_runtime_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThingRuntimeConfigurationResponse {}
@@ -6495,7 +7287,7 @@ impl fmt::Display for UpdateThingRuntimeConfigurationError {
 impl Error for UpdateThingRuntimeConfigurationError {}
 /// Trait representing the capabilities of the AWS Greengrass API. AWS Greengrass clients implement this trait.
 #[async_trait]
-pub trait GreenGrass {
+pub trait GreenGrass: Clone + Sync + Send + 'static {
     /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     async fn associate_role_to_group(
         &self,
@@ -6869,11 +7661,31 @@ pub trait GreenGrass {
         RusotoError<ListBulkDeploymentDetailedReportsError>,
     >;
 
+    /// Auto-paginating version of `list_bulk_deployment_detailed_reports`
+    fn list_bulk_deployment_detailed_reports_pages(
+        &self,
+        input: ListBulkDeploymentDetailedReportsRequest,
+    ) -> RusotoStream<BulkDeploymentResult, ListBulkDeploymentDetailedReportsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_bulk_deployment_detailed_reports(state.clone())
+        })
+    }
+
     /// <p>Returns a list of bulk deployments.</p>
     async fn list_bulk_deployments(
         &self,
         input: ListBulkDeploymentsRequest,
     ) -> Result<ListBulkDeploymentsResponse, RusotoError<ListBulkDeploymentsError>>;
+
+    /// Auto-paginating version of `list_bulk_deployments`
+    fn list_bulk_deployments_pages(
+        &self,
+        input: ListBulkDeploymentsRequest,
+    ) -> RusotoStream<BulkDeployment, ListBulkDeploymentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_bulk_deployments(state.clone())
+        })
+    }
 
     /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
     async fn list_connector_definition_versions(
@@ -6884,11 +7696,31 @@ pub trait GreenGrass {
         RusotoError<ListConnectorDefinitionVersionsError>,
     >;
 
+    /// Auto-paginating version of `list_connector_definition_versions`
+    fn list_connector_definition_versions_pages(
+        &self,
+        input: ListConnectorDefinitionVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListConnectorDefinitionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_connector_definition_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of connector definitions.</p>
     async fn list_connector_definitions(
         &self,
         input: ListConnectorDefinitionsRequest,
     ) -> Result<ListConnectorDefinitionsResponse, RusotoError<ListConnectorDefinitionsError>>;
+
+    /// Auto-paginating version of `list_connector_definitions`
+    fn list_connector_definitions_pages(
+        &self,
+        input: ListConnectorDefinitionsRequest,
+    ) -> RusotoStream<DefinitionInformation, ListConnectorDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_connector_definitions(state.clone())
+        })
+    }
 
     /// <p>Lists the versions of a core definition.</p>
     async fn list_core_definition_versions(
@@ -6896,11 +7728,31 @@ pub trait GreenGrass {
         input: ListCoreDefinitionVersionsRequest,
     ) -> Result<ListCoreDefinitionVersionsResponse, RusotoError<ListCoreDefinitionVersionsError>>;
 
+    /// Auto-paginating version of `list_core_definition_versions`
+    fn list_core_definition_versions_pages(
+        &self,
+        input: ListCoreDefinitionVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListCoreDefinitionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_core_definition_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of core definitions.</p>
     async fn list_core_definitions(
         &self,
         input: ListCoreDefinitionsRequest,
     ) -> Result<ListCoreDefinitionsResponse, RusotoError<ListCoreDefinitionsError>>;
+
+    /// Auto-paginating version of `list_core_definitions`
+    fn list_core_definitions_pages(
+        &self,
+        input: ListCoreDefinitionsRequest,
+    ) -> RusotoStream<DefinitionInformation, ListCoreDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_core_definitions(state.clone())
+        })
+    }
 
     /// <p>Returns a history of deployments for the group.</p>
     async fn list_deployments(
@@ -6908,17 +7760,47 @@ pub trait GreenGrass {
         input: ListDeploymentsRequest,
     ) -> Result<ListDeploymentsResponse, RusotoError<ListDeploymentsError>>;
 
+    /// Auto-paginating version of `list_deployments`
+    fn list_deployments_pages(
+        &self,
+        input: ListDeploymentsRequest,
+    ) -> RusotoStream<Deployment, ListDeploymentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_deployments(state.clone())
+        })
+    }
+
     /// <p>Lists the versions of a device definition.</p>
     async fn list_device_definition_versions(
         &self,
         input: ListDeviceDefinitionVersionsRequest,
     ) -> Result<ListDeviceDefinitionVersionsResponse, RusotoError<ListDeviceDefinitionVersionsError>>;
 
+    /// Auto-paginating version of `list_device_definition_versions`
+    fn list_device_definition_versions_pages(
+        &self,
+        input: ListDeviceDefinitionVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListDeviceDefinitionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_device_definition_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of device definitions.</p>
     async fn list_device_definitions(
         &self,
         input: ListDeviceDefinitionsRequest,
     ) -> Result<ListDeviceDefinitionsResponse, RusotoError<ListDeviceDefinitionsError>>;
+
+    /// Auto-paginating version of `list_device_definitions`
+    fn list_device_definitions_pages(
+        &self,
+        input: ListDeviceDefinitionsRequest,
+    ) -> RusotoStream<DefinitionInformation, ListDeviceDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_device_definitions(state.clone())
+        })
+    }
 
     /// <p>Lists the versions of a Lambda function definition.</p>
     async fn list_function_definition_versions(
@@ -6929,11 +7811,31 @@ pub trait GreenGrass {
         RusotoError<ListFunctionDefinitionVersionsError>,
     >;
 
+    /// Auto-paginating version of `list_function_definition_versions`
+    fn list_function_definition_versions_pages(
+        &self,
+        input: ListFunctionDefinitionVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListFunctionDefinitionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_function_definition_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of Lambda function definitions.</p>
     async fn list_function_definitions(
         &self,
         input: ListFunctionDefinitionsRequest,
     ) -> Result<ListFunctionDefinitionsResponse, RusotoError<ListFunctionDefinitionsError>>;
+
+    /// Auto-paginating version of `list_function_definitions`
+    fn list_function_definitions_pages(
+        &self,
+        input: ListFunctionDefinitionsRequest,
+    ) -> RusotoStream<DefinitionInformation, ListFunctionDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_function_definitions(state.clone())
+        })
+    }
 
     /// <p>Retrieves the current CAs for a group.</p>
     async fn list_group_certificate_authorities(
@@ -6950,11 +7852,31 @@ pub trait GreenGrass {
         input: ListGroupVersionsRequest,
     ) -> Result<ListGroupVersionsResponse, RusotoError<ListGroupVersionsError>>;
 
+    /// Auto-paginating version of `list_group_versions`
+    fn list_group_versions_pages(
+        &self,
+        input: ListGroupVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListGroupVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_group_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of groups.</p>
     async fn list_groups(
         &self,
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
+
+    /// Auto-paginating version of `list_groups`
+    fn list_groups_pages(
+        &self,
+        input: ListGroupsRequest,
+    ) -> RusotoStream<GroupInformation, ListGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_groups(state.clone())
+        })
+    }
 
     /// <p>Lists the versions of a logger definition.</p>
     async fn list_logger_definition_versions(
@@ -6962,11 +7884,31 @@ pub trait GreenGrass {
         input: ListLoggerDefinitionVersionsRequest,
     ) -> Result<ListLoggerDefinitionVersionsResponse, RusotoError<ListLoggerDefinitionVersionsError>>;
 
+    /// Auto-paginating version of `list_logger_definition_versions`
+    fn list_logger_definition_versions_pages(
+        &self,
+        input: ListLoggerDefinitionVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListLoggerDefinitionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_logger_definition_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of logger definitions.</p>
     async fn list_logger_definitions(
         &self,
         input: ListLoggerDefinitionsRequest,
     ) -> Result<ListLoggerDefinitionsResponse, RusotoError<ListLoggerDefinitionsError>>;
+
+    /// Auto-paginating version of `list_logger_definitions`
+    fn list_logger_definitions_pages(
+        &self,
+        input: ListLoggerDefinitionsRequest,
+    ) -> RusotoStream<DefinitionInformation, ListLoggerDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_logger_definitions(state.clone())
+        })
+    }
 
     /// <p>Lists the versions of a resource definition.</p>
     async fn list_resource_definition_versions(
@@ -6977,11 +7919,31 @@ pub trait GreenGrass {
         RusotoError<ListResourceDefinitionVersionsError>,
     >;
 
+    /// Auto-paginating version of `list_resource_definition_versions`
+    fn list_resource_definition_versions_pages(
+        &self,
+        input: ListResourceDefinitionVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListResourceDefinitionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resource_definition_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of resource definitions.</p>
     async fn list_resource_definitions(
         &self,
         input: ListResourceDefinitionsRequest,
     ) -> Result<ListResourceDefinitionsResponse, RusotoError<ListResourceDefinitionsError>>;
+
+    /// Auto-paginating version of `list_resource_definitions`
+    fn list_resource_definitions_pages(
+        &self,
+        input: ListResourceDefinitionsRequest,
+    ) -> RusotoStream<DefinitionInformation, ListResourceDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resource_definitions(state.clone())
+        })
+    }
 
     /// <p>Lists the versions of a subscription definition.</p>
     async fn list_subscription_definition_versions(
@@ -6992,11 +7954,31 @@ pub trait GreenGrass {
         RusotoError<ListSubscriptionDefinitionVersionsError>,
     >;
 
+    /// Auto-paginating version of `list_subscription_definition_versions`
+    fn list_subscription_definition_versions_pages(
+        &self,
+        input: ListSubscriptionDefinitionVersionsRequest,
+    ) -> RusotoStream<VersionInformation, ListSubscriptionDefinitionVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_subscription_definition_versions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list of subscription definitions.</p>
     async fn list_subscription_definitions(
         &self,
         input: ListSubscriptionDefinitionsRequest,
     ) -> Result<ListSubscriptionDefinitionsResponse, RusotoError<ListSubscriptionDefinitionsError>>;
+
+    /// Auto-paginating version of `list_subscription_definitions`
+    fn list_subscription_definitions_pages(
+        &self,
+        input: ListSubscriptionDefinitionsRequest,
+    ) -> RusotoStream<DefinitionInformation, ListSubscriptionDefinitionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_subscription_definitions(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of resource tags for a resource arn.</p>
     async fn list_tags_for_resource(

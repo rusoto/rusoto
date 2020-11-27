@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Connect::associate_approved_origin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateApprovedOriginRequest {
@@ -36,6 +39,7 @@ pub struct AssociateApprovedOriginRequest {
     pub origin: String,
 }
 
+/// see [Connect::associate_instance_storage_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateInstanceStorageConfigRequest {
@@ -50,6 +54,7 @@ pub struct AssociateInstanceStorageConfigRequest {
     pub storage_config: InstanceStorageConfig,
 }
 
+/// see [Connect::associate_instance_storage_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateInstanceStorageConfigResponse {
@@ -59,6 +64,7 @@ pub struct AssociateInstanceStorageConfigResponse {
     pub association_id: Option<String>,
 }
 
+/// see [Connect::associate_lambda_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateLambdaFunctionRequest {
@@ -70,6 +76,7 @@ pub struct AssociateLambdaFunctionRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::associate_lex_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateLexBotRequest {
@@ -81,6 +88,7 @@ pub struct AssociateLexBotRequest {
     pub lex_bot: LexBot,
 }
 
+/// see [Connect::associate_routing_profile_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRoutingProfileQueuesRequest {
@@ -95,6 +103,7 @@ pub struct AssociateRoutingProfileQueuesRequest {
     pub routing_profile_id: String,
 }
 
+/// see [Connect::associate_security_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSecurityKeyRequest {
@@ -106,6 +115,7 @@ pub struct AssociateSecurityKeyRequest {
     pub key: String,
 }
 
+/// see [Connect::associate_security_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSecurityKeyResponse {
@@ -197,6 +207,7 @@ pub struct ContactFlowSummary {
     pub name: Option<String>,
 }
 
+/// see [Connect::create_contact_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContactFlowRequest {
@@ -222,6 +233,7 @@ pub struct CreateContactFlowRequest {
     pub type_: String,
 }
 
+/// see [Connect::create_contact_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContactFlowResponse {
@@ -235,6 +247,7 @@ pub struct CreateContactFlowResponse {
     pub contact_flow_id: Option<String>,
 }
 
+/// see [Connect::create_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceRequest {
@@ -261,6 +274,7 @@ pub struct CreateInstanceRequest {
     pub outbound_calls_enabled: bool,
 }
 
+/// see [Connect::create_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceResponse {
@@ -274,6 +288,7 @@ pub struct CreateInstanceResponse {
     pub id: Option<String>,
 }
 
+/// see [Connect::create_integration_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationAssociationRequest {
@@ -297,6 +312,7 @@ pub struct CreateIntegrationAssociationRequest {
     pub source_type: String,
 }
 
+/// see [Connect::create_integration_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntegrationAssociationResponse {
@@ -310,6 +326,7 @@ pub struct CreateIntegrationAssociationResponse {
     pub integration_association_id: Option<String>,
 }
 
+/// see [Connect::create_quick_connect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQuickConnectRequest {
@@ -332,6 +349,7 @@ pub struct CreateQuickConnectRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Connect::create_quick_connect]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateQuickConnectResponse {
@@ -345,6 +363,7 @@ pub struct CreateQuickConnectResponse {
     pub quick_connect_id: Option<String>,
 }
 
+/// see [Connect::create_routing_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoutingProfileRequest {
@@ -373,6 +392,7 @@ pub struct CreateRoutingProfileRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Connect::create_routing_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoutingProfileResponse {
@@ -386,6 +406,7 @@ pub struct CreateRoutingProfileResponse {
     pub routing_profile_id: Option<String>,
 }
 
+/// see [Connect::create_use_case]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUseCaseRequest {
@@ -400,6 +421,7 @@ pub struct CreateUseCaseRequest {
     pub use_case_type: String,
 }
 
+/// see [Connect::create_use_case]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUseCaseResponse {
@@ -413,6 +435,7 @@ pub struct CreateUseCaseResponse {
     pub use_case_id: Option<String>,
 }
 
+/// see [Connect::create_user_hierarchy_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserHierarchyGroupRequest {
@@ -428,6 +451,7 @@ pub struct CreateUserHierarchyGroupRequest {
     pub parent_group_id: Option<String>,
 }
 
+/// see [Connect::create_user_hierarchy_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserHierarchyGroupResponse {
@@ -441,6 +465,7 @@ pub struct CreateUserHierarchyGroupResponse {
     pub hierarchy_group_id: Option<String>,
 }
 
+/// see [Connect::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -481,6 +506,7 @@ pub struct CreateUserRequest {
     pub username: String,
 }
 
+/// see [Connect::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
@@ -557,6 +583,7 @@ pub struct CurrentMetricResult {
     pub dimensions: Option<Dimensions>,
 }
 
+/// see [Connect::delete_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
@@ -565,6 +592,7 @@ pub struct DeleteInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::delete_integration_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationAssociationRequest {
@@ -576,6 +604,7 @@ pub struct DeleteIntegrationAssociationRequest {
     pub integration_association_id: String,
 }
 
+/// see [Connect::delete_quick_connect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQuickConnectRequest {
@@ -587,6 +616,7 @@ pub struct DeleteQuickConnectRequest {
     pub quick_connect_id: String,
 }
 
+/// see [Connect::delete_use_case]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUseCaseRequest {
@@ -601,6 +631,7 @@ pub struct DeleteUseCaseRequest {
     pub use_case_id: String,
 }
 
+/// see [Connect::delete_user_hierarchy_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserHierarchyGroupRequest {
@@ -612,6 +643,7 @@ pub struct DeleteUserHierarchyGroupRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -623,6 +655,7 @@ pub struct DeleteUserRequest {
     pub user_id: String,
 }
 
+/// see [Connect::describe_contact_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContactFlowRequest {
@@ -634,6 +667,7 @@ pub struct DescribeContactFlowRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::describe_contact_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContactFlowResponse {
@@ -643,6 +677,7 @@ pub struct DescribeContactFlowResponse {
     pub contact_flow: Option<ContactFlow>,
 }
 
+/// see [Connect::describe_instance_attribute]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceAttributeRequest {
@@ -654,6 +689,7 @@ pub struct DescribeInstanceAttributeRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::describe_instance_attribute]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstanceAttributeResponse {
@@ -663,6 +699,7 @@ pub struct DescribeInstanceAttributeResponse {
     pub attribute: Option<Attribute>,
 }
 
+/// see [Connect::describe_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceRequest {
@@ -671,6 +708,7 @@ pub struct DescribeInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::describe_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstanceResponse {
@@ -680,6 +718,7 @@ pub struct DescribeInstanceResponse {
     pub instance: Option<Instance>,
 }
 
+/// see [Connect::describe_instance_storage_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceStorageConfigRequest {
@@ -694,6 +733,7 @@ pub struct DescribeInstanceStorageConfigRequest {
     pub resource_type: String,
 }
 
+/// see [Connect::describe_instance_storage_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstanceStorageConfigResponse {
@@ -703,6 +743,7 @@ pub struct DescribeInstanceStorageConfigResponse {
     pub storage_config: Option<InstanceStorageConfig>,
 }
 
+/// see [Connect::describe_quick_connect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeQuickConnectRequest {
@@ -714,6 +755,7 @@ pub struct DescribeQuickConnectRequest {
     pub quick_connect_id: String,
 }
 
+/// see [Connect::describe_quick_connect]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeQuickConnectResponse {
@@ -723,6 +765,7 @@ pub struct DescribeQuickConnectResponse {
     pub quick_connect: Option<QuickConnect>,
 }
 
+/// see [Connect::describe_routing_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRoutingProfileRequest {
@@ -734,6 +777,7 @@ pub struct DescribeRoutingProfileRequest {
     pub routing_profile_id: String,
 }
 
+/// see [Connect::describe_routing_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRoutingProfileResponse {
@@ -743,6 +787,7 @@ pub struct DescribeRoutingProfileResponse {
     pub routing_profile: Option<RoutingProfile>,
 }
 
+/// see [Connect::describe_user_hierarchy_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyGroupRequest {
@@ -754,6 +799,7 @@ pub struct DescribeUserHierarchyGroupRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::describe_user_hierarchy_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserHierarchyGroupResponse {
@@ -763,6 +809,7 @@ pub struct DescribeUserHierarchyGroupResponse {
     pub hierarchy_group: Option<HierarchyGroup>,
 }
 
+/// see [Connect::describe_user_hierarchy_structure]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyStructureRequest {
@@ -771,6 +818,7 @@ pub struct DescribeUserHierarchyStructureRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::describe_user_hierarchy_structure]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserHierarchyStructureResponse {
@@ -780,6 +828,7 @@ pub struct DescribeUserHierarchyStructureResponse {
     pub hierarchy_structure: Option<HierarchyStructure>,
 }
 
+/// see [Connect::describe_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
@@ -791,6 +840,7 @@ pub struct DescribeUserRequest {
     pub user_id: String,
 }
 
+/// see [Connect::describe_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
@@ -814,6 +864,7 @@ pub struct Dimensions {
     pub queue: Option<QueueReference>,
 }
 
+/// see [Connect::disassociate_approved_origin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateApprovedOriginRequest {
@@ -825,6 +876,7 @@ pub struct DisassociateApprovedOriginRequest {
     pub origin: String,
 }
 
+/// see [Connect::disassociate_instance_storage_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateInstanceStorageConfigRequest {
@@ -839,6 +891,7 @@ pub struct DisassociateInstanceStorageConfigRequest {
     pub resource_type: String,
 }
 
+/// see [Connect::disassociate_lambda_function]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateLambdaFunctionRequest {
@@ -850,6 +903,7 @@ pub struct DisassociateLambdaFunctionRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::disassociate_lex_bot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateLexBotRequest {
@@ -864,6 +918,7 @@ pub struct DisassociateLexBotRequest {
     pub lex_region: String,
 }
 
+/// see [Connect::disassociate_routing_profile_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRoutingProfileQueuesRequest {
@@ -878,6 +933,7 @@ pub struct DisassociateRoutingProfileQueuesRequest {
     pub routing_profile_id: String,
 }
 
+/// see [Connect::disassociate_security_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSecurityKeyRequest {
@@ -914,6 +970,7 @@ pub struct Filters {
     pub queues: Option<Vec<String>>,
 }
 
+/// see [Connect::get_contact_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactAttributesRequest {
@@ -925,6 +982,7 @@ pub struct GetContactAttributesRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::get_contact_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactAttributesResponse {
@@ -934,6 +992,7 @@ pub struct GetContactAttributesResponse {
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Connect::get_current_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCurrentMetricDataRequest {
@@ -960,6 +1019,7 @@ pub struct GetCurrentMetricDataRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Connect::get_current_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCurrentMetricDataResponse {
@@ -977,6 +1037,7 @@ pub struct GetCurrentMetricDataResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Connect::get_federation_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFederationTokenRequest {
@@ -985,6 +1046,7 @@ pub struct GetFederationTokenRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::get_federation_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFederationTokenResponse {
@@ -994,6 +1056,7 @@ pub struct GetFederationTokenResponse {
     pub credentials: Option<Credentials>,
 }
 
+/// see [Connect::get_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricDataRequest {
@@ -1026,6 +1089,15 @@ pub struct GetMetricDataRequest {
     pub start_time: f64,
 }
 
+impl PagedRequest for GetMetricDataRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::get_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMetricDataResponse {
@@ -1037,6 +1109,30 @@ pub struct GetMetricDataResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl GetMetricDataResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HistoricalMetricResult>> {
+        Some(self.metric_results.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetMetricDataResponse {
+    type Item = HistoricalMetricResult;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HistoricalMetricResult> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Contains information about a hierarchy group.</p>
@@ -1462,6 +1558,7 @@ pub struct LexBot {
     pub name: Option<String>,
 }
 
+/// see [Connect::list_approved_origins]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApprovedOriginsRequest {
@@ -1478,6 +1575,15 @@ pub struct ListApprovedOriginsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListApprovedOriginsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_approved_origins]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApprovedOriginsResponse {
@@ -1491,6 +1597,31 @@ pub struct ListApprovedOriginsResponse {
     pub origins: Option<Vec<String>>,
 }
 
+impl ListApprovedOriginsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.origins.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListApprovedOriginsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_contact_flows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactFlowsRequest {
@@ -1511,6 +1642,15 @@ pub struct ListContactFlowsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListContactFlowsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_contact_flows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContactFlowsResponse {
@@ -1524,6 +1664,31 @@ pub struct ListContactFlowsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListContactFlowsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ContactFlowSummary>> {
+        Some(self.contact_flow_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListContactFlowsResponse {
+    type Item = ContactFlowSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ContactFlowSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_hours_of_operations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHoursOfOperationsRequest {
@@ -1540,6 +1705,15 @@ pub struct ListHoursOfOperationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListHoursOfOperationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_hours_of_operations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHoursOfOperationsResponse {
@@ -1553,6 +1727,31 @@ pub struct ListHoursOfOperationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListHoursOfOperationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HoursOfOperationSummary>> {
+        Some(self.hours_of_operation_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListHoursOfOperationsResponse {
+    type Item = HoursOfOperationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HoursOfOperationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_instance_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceAttributesRequest {
@@ -1569,6 +1768,15 @@ pub struct ListInstanceAttributesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListInstanceAttributesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_instance_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceAttributesResponse {
@@ -1582,6 +1790,31 @@ pub struct ListInstanceAttributesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListInstanceAttributesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Attribute>> {
+        Some(self.attributes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInstanceAttributesResponse {
+    type Item = Attribute;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Attribute> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_instance_storage_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceStorageConfigsRequest {
@@ -1601,6 +1834,15 @@ pub struct ListInstanceStorageConfigsRequest {
     pub resource_type: String,
 }
 
+impl PagedRequest for ListInstanceStorageConfigsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_instance_storage_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceStorageConfigsResponse {
@@ -1614,6 +1856,31 @@ pub struct ListInstanceStorageConfigsResponse {
     pub storage_configs: Option<Vec<InstanceStorageConfig>>,
 }
 
+impl ListInstanceStorageConfigsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<InstanceStorageConfig>> {
+        Some(self.storage_configs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInstanceStorageConfigsResponse {
+    type Item = InstanceStorageConfig;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<InstanceStorageConfig> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstancesRequest {
@@ -1627,6 +1894,15 @@ pub struct ListInstancesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListInstancesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstancesResponse {
@@ -1640,6 +1916,31 @@ pub struct ListInstancesResponse {
     pub next_token: Option<String>,
 }
 
+impl ListInstancesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<InstanceSummary>> {
+        Some(self.instance_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListInstancesResponse {
+    type Item = InstanceSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<InstanceSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_integration_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIntegrationAssociationsRequest {
@@ -1656,6 +1957,15 @@ pub struct ListIntegrationAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListIntegrationAssociationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_integration_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIntegrationAssociationsResponse {
@@ -1669,6 +1979,31 @@ pub struct ListIntegrationAssociationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListIntegrationAssociationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<IntegrationAssociationSummary>> {
+        Some(self.integration_association_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListIntegrationAssociationsResponse {
+    type Item = IntegrationAssociationSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<IntegrationAssociationSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_lambda_functions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLambdaFunctionsRequest {
@@ -1685,6 +2020,15 @@ pub struct ListLambdaFunctionsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLambdaFunctionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_lambda_functions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLambdaFunctionsResponse {
@@ -1698,6 +2042,31 @@ pub struct ListLambdaFunctionsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListLambdaFunctionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.lambda_functions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLambdaFunctionsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_lex_bots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLexBotsRequest {
@@ -1714,6 +2083,15 @@ pub struct ListLexBotsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLexBotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_lex_bots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLexBotsResponse {
@@ -1727,6 +2105,31 @@ pub struct ListLexBotsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListLexBotsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<LexBot>> {
+        Some(self.lex_bots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListLexBotsResponse {
+    type Item = LexBot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LexBot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_phone_numbers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
@@ -1751,6 +2154,15 @@ pub struct ListPhoneNumbersRequest {
     pub phone_number_types: Option<Vec<String>>,
 }
 
+impl PagedRequest for ListPhoneNumbersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_phone_numbers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPhoneNumbersResponse {
@@ -1764,6 +2176,31 @@ pub struct ListPhoneNumbersResponse {
     pub phone_number_summary_list: Option<Vec<PhoneNumberSummary>>,
 }
 
+impl ListPhoneNumbersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PhoneNumberSummary>> {
+        Some(self.phone_number_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPhoneNumbersResponse {
+    type Item = PhoneNumberSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PhoneNumberSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_prompts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPromptsRequest {
@@ -1780,6 +2217,15 @@ pub struct ListPromptsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListPromptsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_prompts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPromptsResponse {
@@ -1793,6 +2239,31 @@ pub struct ListPromptsResponse {
     pub prompt_summary_list: Option<Vec<PromptSummary>>,
 }
 
+impl ListPromptsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PromptSummary>> {
+        Some(self.prompt_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPromptsResponse {
+    type Item = PromptSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PromptSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
@@ -1813,6 +2284,15 @@ pub struct ListQueuesRequest {
     pub queue_types: Option<Vec<String>>,
 }
 
+impl PagedRequest for ListQueuesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_queues]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQueuesResponse {
@@ -1826,6 +2306,31 @@ pub struct ListQueuesResponse {
     pub queue_summary_list: Option<Vec<QueueSummary>>,
 }
 
+impl ListQueuesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<QueueSummary>> {
+        Some(self.queue_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListQueuesResponse {
+    type Item = QueueSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<QueueSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_quick_connects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQuickConnectsRequest {
@@ -1846,6 +2351,15 @@ pub struct ListQuickConnectsRequest {
     pub quick_connect_types: Option<Vec<String>>,
 }
 
+impl PagedRequest for ListQuickConnectsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_quick_connects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQuickConnectsResponse {
@@ -1859,6 +2373,31 @@ pub struct ListQuickConnectsResponse {
     pub quick_connect_summary_list: Option<Vec<QuickConnectSummary>>,
 }
 
+impl ListQuickConnectsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<QuickConnectSummary>> {
+        Some(self.quick_connect_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListQuickConnectsResponse {
+    type Item = QuickConnectSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<QuickConnectSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_routing_profile_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutingProfileQueuesRequest {
@@ -1878,6 +2417,15 @@ pub struct ListRoutingProfileQueuesRequest {
     pub routing_profile_id: String,
 }
 
+impl PagedRequest for ListRoutingProfileQueuesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_routing_profile_queues]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoutingProfileQueuesResponse {
@@ -1891,6 +2439,35 @@ pub struct ListRoutingProfileQueuesResponse {
     pub routing_profile_queue_config_summary_list: Option<Vec<RoutingProfileQueueConfigSummary>>,
 }
 
+impl ListRoutingProfileQueuesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RoutingProfileQueueConfigSummary>> {
+        Some(
+            self.routing_profile_queue_config_summary_list
+                .as_ref()?
+                .clone(),
+        )
+    }
+}
+
+impl PagedOutput for ListRoutingProfileQueuesResponse {
+    type Item = RoutingProfileQueueConfigSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RoutingProfileQueueConfigSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_routing_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutingProfilesRequest {
@@ -1907,6 +2484,15 @@ pub struct ListRoutingProfilesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListRoutingProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_routing_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoutingProfilesResponse {
@@ -1920,6 +2506,31 @@ pub struct ListRoutingProfilesResponse {
     pub routing_profile_summary_list: Option<Vec<RoutingProfileSummary>>,
 }
 
+impl ListRoutingProfilesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RoutingProfileSummary>> {
+        Some(self.routing_profile_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRoutingProfilesResponse {
+    type Item = RoutingProfileSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RoutingProfileSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_security_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityKeysRequest {
@@ -1936,6 +2547,15 @@ pub struct ListSecurityKeysRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSecurityKeysRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_security_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityKeysResponse {
@@ -1949,6 +2569,31 @@ pub struct ListSecurityKeysResponse {
     pub security_keys: Option<Vec<SecurityKey>>,
 }
 
+impl ListSecurityKeysResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SecurityKey>> {
+        Some(self.security_keys.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSecurityKeysResponse {
+    type Item = SecurityKey;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SecurityKey> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_security_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
@@ -1965,6 +2610,15 @@ pub struct ListSecurityProfilesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListSecurityProfilesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_security_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityProfilesResponse {
@@ -1978,6 +2632,31 @@ pub struct ListSecurityProfilesResponse {
     pub security_profile_summary_list: Option<Vec<SecurityProfileSummary>>,
 }
 
+impl ListSecurityProfilesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SecurityProfileSummary>> {
+        Some(self.security_profile_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSecurityProfilesResponse {
+    type Item = SecurityProfileSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SecurityProfileSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1986,6 +2665,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Connect::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1996,6 +2676,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Provides summary information about the use cases for the specified Amazon Connect AppIntegration association.</p>
+/// see [Connect::list_use_cases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUseCasesRequest {
@@ -2015,6 +2696,15 @@ pub struct ListUseCasesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListUseCasesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_use_cases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUseCasesResponse {
@@ -2028,6 +2718,31 @@ pub struct ListUseCasesResponse {
     pub use_case_summary_list: Option<Vec<UseCase>>,
 }
 
+impl ListUseCasesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UseCase>> {
+        Some(self.use_case_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUseCasesResponse {
+    type Item = UseCase;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UseCase> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_user_hierarchy_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserHierarchyGroupsRequest {
@@ -2044,6 +2759,15 @@ pub struct ListUserHierarchyGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListUserHierarchyGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_user_hierarchy_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserHierarchyGroupsResponse {
@@ -2057,6 +2781,31 @@ pub struct ListUserHierarchyGroupsResponse {
     pub user_hierarchy_group_summary_list: Option<Vec<HierarchyGroupSummary>>,
 }
 
+impl ListUserHierarchyGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<HierarchyGroupSummary>> {
+        Some(self.user_hierarchy_group_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUserHierarchyGroupsResponse {
+    type Item = HierarchyGroupSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<HierarchyGroupSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Connect::list_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -2073,6 +2822,15 @@ pub struct ListUsersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListUsersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Connect::list_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
@@ -2084,6 +2842,30 @@ pub struct ListUsersResponse {
     #[serde(rename = "UserSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_summary_list: Option<Vec<UserSummary>>,
+}
+
+impl ListUsersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<UserSummary>> {
+        Some(self.user_summary_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListUsersResponse {
+    type Item = UserSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Contains information about which channels are supported, and how many contacts an agent can have on a channel simultaneously.</p>
@@ -2296,6 +3078,7 @@ pub struct Reference {
     pub value: String,
 }
 
+/// see [Connect::resume_contact_recording]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResumeContactRecordingRequest {
@@ -2310,6 +3093,7 @@ pub struct ResumeContactRecordingRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::resume_contact_recording]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResumeContactRecordingResponse {}
@@ -2472,6 +3256,7 @@ pub struct SecurityProfileSummary {
     pub name: Option<String>,
 }
 
+/// see [Connect::start_chat_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChatContactRequest {
@@ -2498,6 +3283,7 @@ pub struct StartChatContactRequest {
     pub participant_details: ParticipantDetails,
 }
 
+/// see [Connect::start_chat_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChatContactResponse {
@@ -2515,6 +3301,7 @@ pub struct StartChatContactResponse {
     pub participant_token: Option<String>,
 }
 
+/// see [Connect::start_contact_recording]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartContactRecordingRequest {
@@ -2532,10 +3319,12 @@ pub struct StartContactRecordingRequest {
     pub voice_recording_configuration: VoiceRecordingConfiguration,
 }
 
+/// see [Connect::start_contact_recording]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartContactRecordingResponse {}
 
+/// see [Connect::start_outbound_voice_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOutboundVoiceContactRequest {
@@ -2566,6 +3355,7 @@ pub struct StartOutboundVoiceContactRequest {
     pub source_phone_number: Option<String>,
 }
 
+/// see [Connect::start_outbound_voice_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOutboundVoiceContactResponse {
@@ -2575,6 +3365,7 @@ pub struct StartOutboundVoiceContactResponse {
     pub contact_id: Option<String>,
 }
 
+/// see [Connect::start_task_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTaskContactRequest {
@@ -2609,6 +3400,7 @@ pub struct StartTaskContactRequest {
     pub references: Option<::std::collections::HashMap<String, Reference>>,
 }
 
+/// see [Connect::start_task_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTaskContactResponse {
@@ -2618,6 +3410,7 @@ pub struct StartTaskContactResponse {
     pub contact_id: Option<String>,
 }
 
+/// see [Connect::stop_contact_recording]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContactRecordingRequest {
@@ -2632,10 +3425,12 @@ pub struct StopContactRecordingRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::stop_contact_recording]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContactRecordingResponse {}
 
+/// see [Connect::stop_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContactRequest {
@@ -2647,10 +3442,12 @@ pub struct StopContactRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::stop_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContactResponse {}
 
+/// see [Connect::suspend_contact_recording]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SuspendContactRecordingRequest {
@@ -2665,10 +3462,12 @@ pub struct SuspendContactRecordingRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::suspend_contact_recording]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SuspendContactRecordingResponse {}
 
+/// see [Connect::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2693,6 +3492,7 @@ pub struct Threshold {
     pub threshold_value: Option<f64>,
 }
 
+/// see [Connect::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2704,6 +3504,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Connect::update_contact_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactAttributesRequest {
@@ -2718,10 +3519,12 @@ pub struct UpdateContactAttributesRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::update_contact_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContactAttributesResponse {}
 
+/// see [Connect::update_contact_flow_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactFlowContentRequest {
@@ -2736,6 +3539,7 @@ pub struct UpdateContactFlowContentRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::update_contact_flow_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactFlowNameRequest {
@@ -2755,6 +3559,7 @@ pub struct UpdateContactFlowNameRequest {
     pub name: Option<String>,
 }
 
+/// see [Connect::update_instance_attribute]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceAttributeRequest {
@@ -2769,6 +3574,7 @@ pub struct UpdateInstanceAttributeRequest {
     pub value: String,
 }
 
+/// see [Connect::update_instance_storage_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceStorageConfigRequest {
@@ -2785,6 +3591,7 @@ pub struct UpdateInstanceStorageConfigRequest {
     pub storage_config: InstanceStorageConfig,
 }
 
+/// see [Connect::update_quick_connect_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQuickConnectConfigRequest {
@@ -2799,6 +3606,7 @@ pub struct UpdateQuickConnectConfigRequest {
     pub quick_connect_id: String,
 }
 
+/// see [Connect::update_quick_connect_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQuickConnectNameRequest {
@@ -2818,6 +3626,7 @@ pub struct UpdateQuickConnectNameRequest {
     pub quick_connect_id: String,
 }
 
+/// see [Connect::update_routing_profile_concurrency]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoutingProfileConcurrencyRequest {
@@ -2832,6 +3641,7 @@ pub struct UpdateRoutingProfileConcurrencyRequest {
     pub routing_profile_id: String,
 }
 
+/// see [Connect::update_routing_profile_default_outbound_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoutingProfileDefaultOutboundQueueRequest {
@@ -2846,6 +3656,7 @@ pub struct UpdateRoutingProfileDefaultOutboundQueueRequest {
     pub routing_profile_id: String,
 }
 
+/// see [Connect::update_routing_profile_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoutingProfileNameRequest {
@@ -2865,6 +3676,7 @@ pub struct UpdateRoutingProfileNameRequest {
     pub routing_profile_id: String,
 }
 
+/// see [Connect::update_routing_profile_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoutingProfileQueuesRequest {
@@ -2879,6 +3691,7 @@ pub struct UpdateRoutingProfileQueuesRequest {
     pub routing_profile_id: String,
 }
 
+/// see [Connect::update_user_hierarchy_group_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserHierarchyGroupNameRequest {
@@ -2893,6 +3706,7 @@ pub struct UpdateUserHierarchyGroupNameRequest {
     pub name: String,
 }
 
+/// see [Connect::update_user_hierarchy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserHierarchyRequest {
@@ -2908,6 +3722,7 @@ pub struct UpdateUserHierarchyRequest {
     pub user_id: String,
 }
 
+/// see [Connect::update_user_hierarchy_structure]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserHierarchyStructureRequest {
@@ -2919,6 +3734,7 @@ pub struct UpdateUserHierarchyStructureRequest {
     pub instance_id: String,
 }
 
+/// see [Connect::update_user_identity_info]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserIdentityInfoRequest {
@@ -2933,6 +3749,7 @@ pub struct UpdateUserIdentityInfoRequest {
     pub user_id: String,
 }
 
+/// see [Connect::update_user_phone_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPhoneConfigRequest {
@@ -2947,6 +3764,7 @@ pub struct UpdateUserPhoneConfigRequest {
     pub user_id: String,
 }
 
+/// see [Connect::update_user_routing_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRoutingProfileRequest {
@@ -2961,6 +3779,7 @@ pub struct UpdateUserRoutingProfileRequest {
     pub user_id: String,
 }
 
+/// see [Connect::update_user_security_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSecurityProfilesRequest {
@@ -8559,7 +9378,7 @@ impl fmt::Display for UpdateUserSecurityProfilesError {
 impl Error for UpdateUserSecurityProfilesError {}
 /// Trait representing the capabilities of the Amazon Connect API. Amazon Connect clients implement this trait.
 #[async_trait]
-pub trait Connect {
+pub trait Connect: Clone + Sync + Send + 'static {
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Associates an approved origin to an Amazon Connect instance.</p>
     async fn associate_approved_origin(
         &self,
@@ -8803,11 +9622,31 @@ pub trait Connect {
         input: GetMetricDataRequest,
     ) -> Result<GetMetricDataResponse, RusotoError<GetMetricDataError>>;
 
+    /// Auto-paginating version of `get_metric_data`
+    fn get_metric_data_pages(
+        &self,
+        input: GetMetricDataRequest,
+    ) -> RusotoStream<HistoricalMetricResult, GetMetricDataError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_metric_data(state.clone())
+        })
+    }
+
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all approved origins associated with the instance.</p>
     async fn list_approved_origins(
         &self,
         input: ListApprovedOriginsRequest,
     ) -> Result<ListApprovedOriginsResponse, RusotoError<ListApprovedOriginsError>>;
+
+    /// Auto-paginating version of `list_approved_origins`
+    fn list_approved_origins_pages(
+        &self,
+        input: ListApprovedOriginsRequest,
+    ) -> RusotoStream<String, ListApprovedOriginsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_approved_origins(state.clone())
+        })
+    }
 
     /// <p>Provides information about the contact flows for the specified Amazon Connect instance.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p> <p>For more information about contact flows, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-contact-flows.html">Contact Flows</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_contact_flows(
@@ -8815,11 +9654,31 @@ pub trait Connect {
         input: ListContactFlowsRequest,
     ) -> Result<ListContactFlowsResponse, RusotoError<ListContactFlowsError>>;
 
+    /// Auto-paginating version of `list_contact_flows`
+    fn list_contact_flows_pages(
+        &self,
+        input: ListContactFlowsRequest,
+    ) -> RusotoStream<ContactFlowSummary, ListContactFlowsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_contact_flows(state.clone())
+        })
+    }
+
     /// <p>Provides information about the hours of operation for the specified Amazon Connect instance.</p> <p>For more information about hours of operation, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/set-hours-operation.html">Set the Hours of Operation for a Queue</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_hours_of_operations(
         &self,
         input: ListHoursOfOperationsRequest,
     ) -> Result<ListHoursOfOperationsResponse, RusotoError<ListHoursOfOperationsError>>;
+
+    /// Auto-paginating version of `list_hours_of_operations`
+    fn list_hours_of_operations_pages(
+        &self,
+        input: ListHoursOfOperationsRequest,
+    ) -> RusotoStream<HoursOfOperationSummary, ListHoursOfOperationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_hours_of_operations(state.clone())
+        })
+    }
 
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all attribute types for the given instance.</p>
     async fn list_instance_attributes(
@@ -8827,11 +9686,31 @@ pub trait Connect {
         input: ListInstanceAttributesRequest,
     ) -> Result<ListInstanceAttributesResponse, RusotoError<ListInstanceAttributesError>>;
 
+    /// Auto-paginating version of `list_instance_attributes`
+    fn list_instance_attributes_pages(
+        &self,
+        input: ListInstanceAttributesRequest,
+    ) -> RusotoStream<Attribute, ListInstanceAttributesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_instance_attributes(state.clone())
+        })
+    }
+
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of storage configs for the identified instance and resource type.</p>
     async fn list_instance_storage_configs(
         &self,
         input: ListInstanceStorageConfigsRequest,
     ) -> Result<ListInstanceStorageConfigsResponse, RusotoError<ListInstanceStorageConfigsError>>;
+
+    /// Auto-paginating version of `list_instance_storage_configs`
+    fn list_instance_storage_configs_pages(
+        &self,
+        input: ListInstanceStorageConfigsRequest,
+    ) -> RusotoStream<InstanceStorageConfig, ListInstanceStorageConfigsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_instance_storage_configs(state.clone())
+        })
+    }
 
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Return a list of instances which are in active state, creation-in-progress state, and failed state. Instances that aren't successfully created (they are in a failed state) are returned only for 24 hours after the CreateInstance API was invoked.</p>
     async fn list_instances(
@@ -8839,11 +9718,31 @@ pub trait Connect {
         input: ListInstancesRequest,
     ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>>;
 
+    /// Auto-paginating version of `list_instances`
+    fn list_instances_pages(
+        &self,
+        input: ListInstancesRequest,
+    ) -> RusotoStream<InstanceSummary, ListInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_instances(state.clone())
+        })
+    }
+
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Provides summary information about the AppIntegration associations for the specified Amazon Connect instance.</p>
     async fn list_integration_associations(
         &self,
         input: ListIntegrationAssociationsRequest,
     ) -> Result<ListIntegrationAssociationsResponse, RusotoError<ListIntegrationAssociationsError>>;
+
+    /// Auto-paginating version of `list_integration_associations`
+    fn list_integration_associations_pages(
+        &self,
+        input: ListIntegrationAssociationsRequest,
+    ) -> RusotoStream<IntegrationAssociationSummary, ListIntegrationAssociationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_integration_associations(state.clone())
+        })
+    }
 
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all the Lambda functions that show up in the drop-down options in the relevant contact flow blocks.</p>
     async fn list_lambda_functions(
@@ -8851,11 +9750,31 @@ pub trait Connect {
         input: ListLambdaFunctionsRequest,
     ) -> Result<ListLambdaFunctionsResponse, RusotoError<ListLambdaFunctionsError>>;
 
+    /// Auto-paginating version of `list_lambda_functions`
+    fn list_lambda_functions_pages(
+        &self,
+        input: ListLambdaFunctionsRequest,
+    ) -> RusotoStream<String, ListLambdaFunctionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_lambda_functions(state.clone())
+        })
+    }
+
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all the Amazon Lex bots currently associated with the instance.</p>
     async fn list_lex_bots(
         &self,
         input: ListLexBotsRequest,
     ) -> Result<ListLexBotsResponse, RusotoError<ListLexBotsError>>;
+
+    /// Auto-paginating version of `list_lex_bots`
+    fn list_lex_bots_pages(
+        &self,
+        input: ListLexBotsRequest,
+    ) -> RusotoStream<LexBot, ListLexBotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_lex_bots(state.clone())
+        })
+    }
 
     /// <p>Provides information about the phone numbers for the specified Amazon Connect instance. </p> <p>For more information about phone numbers, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/contact-center-phone-number.html">Set Up Phone Numbers for Your Contact Center</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_phone_numbers(
@@ -8863,11 +9782,31 @@ pub trait Connect {
         input: ListPhoneNumbersRequest,
     ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>>;
 
+    /// Auto-paginating version of `list_phone_numbers`
+    fn list_phone_numbers_pages(
+        &self,
+        input: ListPhoneNumbersRequest,
+    ) -> RusotoStream<PhoneNumberSummary, ListPhoneNumbersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_phone_numbers(state.clone())
+        })
+    }
+
     /// <p>Provides information about the prompts for the specified Amazon Connect instance.</p>
     async fn list_prompts(
         &self,
         input: ListPromptsRequest,
     ) -> Result<ListPromptsResponse, RusotoError<ListPromptsError>>;
+
+    /// Auto-paginating version of `list_prompts`
+    fn list_prompts_pages(
+        &self,
+        input: ListPromptsRequest,
+    ) -> RusotoStream<PromptSummary, ListPromptsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_prompts(state.clone())
+        })
+    }
 
     /// <p>Provides information about the queues for the specified Amazon Connect instance.</p> <p>For more information about queues, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-queues-standard-and-agent.html">Queues: Standard and Agent</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_queues(
@@ -8875,11 +9814,31 @@ pub trait Connect {
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>>;
 
+    /// Auto-paginating version of `list_queues`
+    fn list_queues_pages(
+        &self,
+        input: ListQueuesRequest,
+    ) -> RusotoStream<QueueSummary, ListQueuesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_queues(state.clone())
+        })
+    }
+
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Provides information about the quick connects for the specified Amazon Connect instance. </p>
     async fn list_quick_connects(
         &self,
         input: ListQuickConnectsRequest,
     ) -> Result<ListQuickConnectsResponse, RusotoError<ListQuickConnectsError>>;
+
+    /// Auto-paginating version of `list_quick_connects`
+    fn list_quick_connects_pages(
+        &self,
+        input: ListQuickConnectsRequest,
+    ) -> RusotoStream<QuickConnectSummary, ListQuickConnectsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_quick_connects(state.clone())
+        })
+    }
 
     /// <p>List the queues associated with a routing profile.</p>
     async fn list_routing_profile_queues(
@@ -8887,11 +9846,31 @@ pub trait Connect {
         input: ListRoutingProfileQueuesRequest,
     ) -> Result<ListRoutingProfileQueuesResponse, RusotoError<ListRoutingProfileQueuesError>>;
 
+    /// Auto-paginating version of `list_routing_profile_queues`
+    fn list_routing_profile_queues_pages(
+        &self,
+        input: ListRoutingProfileQueuesRequest,
+    ) -> RusotoStream<RoutingProfileQueueConfigSummary, ListRoutingProfileQueuesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_routing_profile_queues(state.clone())
+        })
+    }
+
     /// <p>Provides summary information about the routing profiles for the specified Amazon Connect instance.</p> <p>For more information about routing profiles, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-routing.html">Routing Profiles</a> and <a href="https://docs.aws.amazon.com/connect/latest/adminguide/routing-profiles.html">Create a Routing Profile</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_routing_profiles(
         &self,
         input: ListRoutingProfilesRequest,
     ) -> Result<ListRoutingProfilesResponse, RusotoError<ListRoutingProfilesError>>;
+
+    /// Auto-paginating version of `list_routing_profiles`
+    fn list_routing_profiles_pages(
+        &self,
+        input: ListRoutingProfilesRequest,
+    ) -> RusotoStream<RoutingProfileSummary, ListRoutingProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_routing_profiles(state.clone())
+        })
+    }
 
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all security keys associated with the instance.</p>
     async fn list_security_keys(
@@ -8899,11 +9878,31 @@ pub trait Connect {
         input: ListSecurityKeysRequest,
     ) -> Result<ListSecurityKeysResponse, RusotoError<ListSecurityKeysError>>;
 
+    /// Auto-paginating version of `list_security_keys`
+    fn list_security_keys_pages(
+        &self,
+        input: ListSecurityKeysRequest,
+    ) -> RusotoStream<SecurityKey, ListSecurityKeysError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_security_keys(state.clone())
+        })
+    }
+
     /// <p>Provides summary information about the security profiles for the specified Amazon Connect instance.</p> <p>For more information about security profiles, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/connect-security-profiles.html">Security Profiles</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
     ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>>;
+
+    /// Auto-paginating version of `list_security_profiles`
+    fn list_security_profiles_pages(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> RusotoStream<SecurityProfileSummary, ListSecurityProfilesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_security_profiles(state.clone())
+        })
+    }
 
     /// <p>Lists the tags for the specified resource.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_tags_for_resource(
@@ -8917,17 +9916,47 @@ pub trait Connect {
         input: ListUseCasesRequest,
     ) -> Result<ListUseCasesResponse, RusotoError<ListUseCasesError>>;
 
+    /// Auto-paginating version of `list_use_cases`
+    fn list_use_cases_pages(
+        &self,
+        input: ListUseCasesRequest,
+    ) -> RusotoStream<UseCase, ListUseCasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_use_cases(state.clone())
+        })
+    }
+
     /// <p>Provides summary information about the hierarchy groups for the specified Amazon Connect instance.</p> <p>For more information about agent hierarchies, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/agent-hierarchy.html">Set Up Agent Hierarchies</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_user_hierarchy_groups(
         &self,
         input: ListUserHierarchyGroupsRequest,
     ) -> Result<ListUserHierarchyGroupsResponse, RusotoError<ListUserHierarchyGroupsError>>;
 
+    /// Auto-paginating version of `list_user_hierarchy_groups`
+    fn list_user_hierarchy_groups_pages(
+        &self,
+        input: ListUserHierarchyGroupsRequest,
+    ) -> RusotoStream<HierarchyGroupSummary, ListUserHierarchyGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_user_hierarchy_groups(state.clone())
+        })
+    }
+
     /// <p>Provides summary information about the users for the specified Amazon Connect instance.</p>
     async fn list_users(
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
+
+    /// Auto-paginating version of `list_users`
+    fn list_users_pages(
+        &self,
+        input: ListUsersRequest,
+    ) -> RusotoStream<UserSummary, ListUsersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_users(state.clone())
+        })
+    }
 
     /// <p>When a contact is being recorded, and the recording has been suspended using SuspendContactRecording, this API resumes recording the call.</p> <p>Only voice recordings are supported at this time.</p>
     async fn resume_contact_recording(

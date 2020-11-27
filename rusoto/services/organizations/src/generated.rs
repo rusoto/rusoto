@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl OrganizationsClient {
 }
 
 use serde_json;
+/// see [Organizations::accept_handshake]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptHandshakeRequest {
@@ -59,6 +62,7 @@ pub struct AcceptHandshakeRequest {
     pub handshake_id: String,
 }
 
+/// see [Organizations::accept_handshake]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptHandshakeResponse {
@@ -102,6 +106,7 @@ pub struct Account {
     pub status: Option<String>,
 }
 
+/// see [Organizations::attach_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPolicyRequest {
@@ -113,6 +118,7 @@ pub struct AttachPolicyRequest {
     pub target_id: String,
 }
 
+/// see [Organizations::cancel_handshake]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelHandshakeRequest {
@@ -121,6 +127,7 @@ pub struct CancelHandshakeRequest {
     pub handshake_id: String,
 }
 
+/// see [Organizations::cancel_handshake]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelHandshakeResponse {
@@ -144,6 +151,7 @@ pub struct Child {
     pub type_: Option<String>,
 }
 
+/// see [Organizations::create_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountRequest {
@@ -167,6 +175,7 @@ pub struct CreateAccountRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Organizations::create_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAccountResponse {
@@ -214,6 +223,7 @@ pub struct CreateAccountStatus {
     pub state: Option<String>,
 }
 
+/// see [Organizations::create_gov_cloud_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGovCloudAccountRequest {
@@ -237,6 +247,7 @@ pub struct CreateGovCloudAccountRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Organizations::create_gov_cloud_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGovCloudAccountResponse {
@@ -245,6 +256,7 @@ pub struct CreateGovCloudAccountResponse {
     pub create_account_status: Option<CreateAccountStatus>,
 }
 
+/// see [Organizations::create_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOrganizationRequest {
@@ -254,6 +266,7 @@ pub struct CreateOrganizationRequest {
     pub feature_set: Option<String>,
 }
 
+/// see [Organizations::create_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOrganizationResponse {
@@ -263,6 +276,7 @@ pub struct CreateOrganizationResponse {
     pub organization: Option<Organization>,
 }
 
+/// see [Organizations::create_organizational_unit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOrganizationalUnitRequest {
@@ -278,6 +292,7 @@ pub struct CreateOrganizationalUnitRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Organizations::create_organizational_unit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOrganizationalUnitResponse {
@@ -287,6 +302,7 @@ pub struct CreateOrganizationalUnitResponse {
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
+/// see [Organizations::create_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyRequest {
@@ -308,6 +324,7 @@ pub struct CreatePolicyRequest {
     pub type_: String,
 }
 
+/// see [Organizations::create_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePolicyResponse {
@@ -317,6 +334,7 @@ pub struct CreatePolicyResponse {
     pub policy: Option<Policy>,
 }
 
+/// see [Organizations::decline_handshake]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineHandshakeRequest {
@@ -325,6 +343,7 @@ pub struct DeclineHandshakeRequest {
     pub handshake_id: String,
 }
 
+/// see [Organizations::decline_handshake]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineHandshakeResponse {
@@ -386,6 +405,7 @@ pub struct DelegatedService {
     pub service_principal: Option<String>,
 }
 
+/// see [Organizations::delete_organizational_unit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationalUnitRequest {
@@ -394,6 +414,7 @@ pub struct DeleteOrganizationalUnitRequest {
     pub organizational_unit_id: String,
 }
 
+/// see [Organizations::delete_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
@@ -402,6 +423,7 @@ pub struct DeletePolicyRequest {
     pub policy_id: String,
 }
 
+/// see [Organizations::deregister_delegated_administrator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterDelegatedAdministratorRequest {
@@ -413,6 +435,7 @@ pub struct DeregisterDelegatedAdministratorRequest {
     pub service_principal: String,
 }
 
+/// see [Organizations::describe_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountRequest {
@@ -421,6 +444,7 @@ pub struct DescribeAccountRequest {
     pub account_id: String,
 }
 
+/// see [Organizations::describe_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountResponse {
@@ -430,6 +454,7 @@ pub struct DescribeAccountResponse {
     pub account: Option<Account>,
 }
 
+/// see [Organizations::describe_create_account_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCreateAccountStatusRequest {
@@ -438,6 +463,7 @@ pub struct DescribeCreateAccountStatusRequest {
     pub create_account_request_id: String,
 }
 
+/// see [Organizations::describe_create_account_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCreateAccountStatusResponse {
@@ -447,6 +473,7 @@ pub struct DescribeCreateAccountStatusResponse {
     pub create_account_status: Option<CreateAccountStatus>,
 }
 
+/// see [Organizations::describe_effective_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEffectivePolicyRequest {
@@ -459,6 +486,7 @@ pub struct DescribeEffectivePolicyRequest {
     pub target_id: Option<String>,
 }
 
+/// see [Organizations::describe_effective_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEffectivePolicyResponse {
@@ -468,6 +496,7 @@ pub struct DescribeEffectivePolicyResponse {
     pub effective_policy: Option<EffectivePolicy>,
 }
 
+/// see [Organizations::describe_handshake]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHandshakeRequest {
@@ -476,6 +505,7 @@ pub struct DescribeHandshakeRequest {
     pub handshake_id: String,
 }
 
+/// see [Organizations::describe_handshake]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHandshakeResponse {
@@ -485,6 +515,7 @@ pub struct DescribeHandshakeResponse {
     pub handshake: Option<Handshake>,
 }
 
+/// see [Organizations::describe_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationResponse {
@@ -494,6 +525,7 @@ pub struct DescribeOrganizationResponse {
     pub organization: Option<Organization>,
 }
 
+/// see [Organizations::describe_organizational_unit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationalUnitRequest {
@@ -502,6 +534,7 @@ pub struct DescribeOrganizationalUnitRequest {
     pub organizational_unit_id: String,
 }
 
+/// see [Organizations::describe_organizational_unit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationalUnitResponse {
@@ -511,6 +544,7 @@ pub struct DescribeOrganizationalUnitResponse {
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
+/// see [Organizations::describe_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePolicyRequest {
@@ -519,6 +553,7 @@ pub struct DescribePolicyRequest {
     pub policy_id: String,
 }
 
+/// see [Organizations::describe_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePolicyResponse {
@@ -528,6 +563,7 @@ pub struct DescribePolicyResponse {
     pub policy: Option<Policy>,
 }
 
+/// see [Organizations::detach_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPolicyRequest {
@@ -539,6 +575,7 @@ pub struct DetachPolicyRequest {
     pub target_id: String,
 }
 
+/// see [Organizations::disable_aws_service_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableAWSServiceAccessRequest {
@@ -547,6 +584,7 @@ pub struct DisableAWSServiceAccessRequest {
     pub service_principal: String,
 }
 
+/// see [Organizations::disable_policy_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisablePolicyTypeRequest {
@@ -558,6 +596,7 @@ pub struct DisablePolicyTypeRequest {
     pub root_id: String,
 }
 
+/// see [Organizations::disable_policy_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisablePolicyTypeResponse {
@@ -589,6 +628,7 @@ pub struct EffectivePolicy {
     pub target_id: Option<String>,
 }
 
+/// see [Organizations::enable_aws_service_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAWSServiceAccessRequest {
@@ -597,10 +637,12 @@ pub struct EnableAWSServiceAccessRequest {
     pub service_principal: String,
 }
 
+/// see [Organizations::enable_all_features]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAllFeaturesRequest {}
 
+/// see [Organizations::enable_all_features]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableAllFeaturesResponse {
@@ -610,6 +652,7 @@ pub struct EnableAllFeaturesResponse {
     pub handshake: Option<Handshake>,
 }
 
+/// see [Organizations::enable_policy_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnablePolicyTypeRequest {
@@ -621,6 +664,7 @@ pub struct EnablePolicyTypeRequest {
     pub root_id: String,
 }
 
+/// see [Organizations::enable_policy_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnablePolicyTypeResponse {
@@ -725,6 +769,7 @@ pub struct HandshakeResource {
     pub value: Option<String>,
 }
 
+/// see [Organizations::invite_account_to_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteAccountToOrganizationRequest {
@@ -741,6 +786,7 @@ pub struct InviteAccountToOrganizationRequest {
     pub target: HandshakeParty,
 }
 
+/// see [Organizations::invite_account_to_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteAccountToOrganizationResponse {
@@ -750,6 +796,7 @@ pub struct InviteAccountToOrganizationResponse {
     pub handshake: Option<Handshake>,
 }
 
+/// see [Organizations::list_aws_service_access_for_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAWSServiceAccessForOrganizationRequest {
@@ -763,6 +810,15 @@ pub struct ListAWSServiceAccessForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAWSServiceAccessForOrganizationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_aws_service_access_for_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAWSServiceAccessForOrganizationResponse {
@@ -776,6 +832,31 @@ pub struct ListAWSServiceAccessForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAWSServiceAccessForOrganizationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<EnabledServicePrincipal>> {
+        Some(self.enabled_service_principals.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAWSServiceAccessForOrganizationResponse {
+    type Item = EnabledServicePrincipal;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<EnabledServicePrincipal> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_accounts_for_parent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountsForParentRequest {
@@ -792,6 +873,15 @@ pub struct ListAccountsForParentRequest {
     pub parent_id: String,
 }
 
+impl PagedRequest for ListAccountsForParentRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_accounts_for_parent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsForParentResponse {
@@ -805,6 +895,31 @@ pub struct ListAccountsForParentResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAccountsForParentResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Account>> {
+        Some(self.accounts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAccountsForParentResponse {
+    type Item = Account;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Account> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_accounts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountsRequest {
@@ -818,6 +933,15 @@ pub struct ListAccountsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAccountsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_accounts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsResponse {
@@ -831,6 +955,31 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAccountsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Account>> {
+        Some(self.accounts.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAccountsResponse {
+    type Item = Account;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Account> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_children]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChildrenRequest {
@@ -850,6 +999,15 @@ pub struct ListChildrenRequest {
     pub parent_id: String,
 }
 
+impl PagedRequest for ListChildrenRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_children]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChildrenResponse {
@@ -863,6 +1021,31 @@ pub struct ListChildrenResponse {
     pub next_token: Option<String>,
 }
 
+impl ListChildrenResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Child>> {
+        Some(self.children.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListChildrenResponse {
+    type Item = Child;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Child> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_create_account_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCreateAccountStatusRequest {
@@ -880,6 +1063,15 @@ pub struct ListCreateAccountStatusRequest {
     pub states: Option<Vec<String>>,
 }
 
+impl PagedRequest for ListCreateAccountStatusRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_create_account_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCreateAccountStatusResponse {
@@ -893,6 +1085,31 @@ pub struct ListCreateAccountStatusResponse {
     pub next_token: Option<String>,
 }
 
+impl ListCreateAccountStatusResponse {
+    fn pagination_page_opt(self) -> Option<Vec<CreateAccountStatus>> {
+        Some(self.create_account_statuses.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListCreateAccountStatusResponse {
+    type Item = CreateAccountStatus;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CreateAccountStatus> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_delegated_administrators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDelegatedAdministratorsRequest {
@@ -910,6 +1127,15 @@ pub struct ListDelegatedAdministratorsRequest {
     pub service_principal: Option<String>,
 }
 
+impl PagedRequest for ListDelegatedAdministratorsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_delegated_administrators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDelegatedAdministratorsResponse {
@@ -923,6 +1149,31 @@ pub struct ListDelegatedAdministratorsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDelegatedAdministratorsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DelegatedAdministrator>> {
+        Some(self.delegated_administrators.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDelegatedAdministratorsResponse {
+    type Item = DelegatedAdministrator;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DelegatedAdministrator> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_delegated_services_for_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDelegatedServicesForAccountRequest {
@@ -939,6 +1190,15 @@ pub struct ListDelegatedServicesForAccountRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListDelegatedServicesForAccountRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_delegated_services_for_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDelegatedServicesForAccountResponse {
@@ -952,6 +1212,31 @@ pub struct ListDelegatedServicesForAccountResponse {
     pub next_token: Option<String>,
 }
 
+impl ListDelegatedServicesForAccountResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DelegatedService>> {
+        Some(self.delegated_services.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListDelegatedServicesForAccountResponse {
+    type Item = DelegatedService;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DelegatedService> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_handshakes_for_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHandshakesForAccountRequest {
@@ -969,6 +1254,15 @@ pub struct ListHandshakesForAccountRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListHandshakesForAccountRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_handshakes_for_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHandshakesForAccountResponse {
@@ -982,6 +1276,31 @@ pub struct ListHandshakesForAccountResponse {
     pub next_token: Option<String>,
 }
 
+impl ListHandshakesForAccountResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Handshake>> {
+        Some(self.handshakes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListHandshakesForAccountResponse {
+    type Item = Handshake;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Handshake> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_handshakes_for_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHandshakesForOrganizationRequest {
@@ -999,6 +1318,15 @@ pub struct ListHandshakesForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListHandshakesForOrganizationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_handshakes_for_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHandshakesForOrganizationResponse {
@@ -1012,6 +1340,31 @@ pub struct ListHandshakesForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
+impl ListHandshakesForOrganizationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Handshake>> {
+        Some(self.handshakes.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListHandshakesForOrganizationResponse {
+    type Item = Handshake;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Handshake> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_organizational_units_for_parent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationalUnitsForParentRequest {
@@ -1028,6 +1381,15 @@ pub struct ListOrganizationalUnitsForParentRequest {
     pub parent_id: String,
 }
 
+impl PagedRequest for ListOrganizationalUnitsForParentRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_organizational_units_for_parent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationalUnitsForParentResponse {
@@ -1041,6 +1403,31 @@ pub struct ListOrganizationalUnitsForParentResponse {
     pub organizational_units: Option<Vec<OrganizationalUnit>>,
 }
 
+impl ListOrganizationalUnitsForParentResponse {
+    fn pagination_page_opt(self) -> Option<Vec<OrganizationalUnit>> {
+        Some(self.organizational_units.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListOrganizationalUnitsForParentResponse {
+    type Item = OrganizationalUnit;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<OrganizationalUnit> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_parents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListParentsRequest {
@@ -1057,6 +1444,15 @@ pub struct ListParentsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListParentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_parents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListParentsResponse {
@@ -1070,6 +1466,31 @@ pub struct ListParentsResponse {
     pub parents: Option<Vec<Parent>>,
 }
 
+impl ListParentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Parent>> {
+        Some(self.parents.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListParentsResponse {
+    type Item = Parent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Parent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_policies_for_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesForTargetRequest {
@@ -1089,6 +1510,15 @@ pub struct ListPoliciesForTargetRequest {
     pub target_id: String,
 }
 
+impl PagedRequest for ListPoliciesForTargetRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_policies_for_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPoliciesForTargetResponse {
@@ -1102,6 +1532,31 @@ pub struct ListPoliciesForTargetResponse {
     pub policies: Option<Vec<PolicySummary>>,
 }
 
+impl ListPoliciesForTargetResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PolicySummary>> {
+        Some(self.policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPoliciesForTargetResponse {
+    type Item = PolicySummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PolicySummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesRequest {
@@ -1118,6 +1573,15 @@ pub struct ListPoliciesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListPoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPoliciesResponse {
@@ -1131,6 +1595,31 @@ pub struct ListPoliciesResponse {
     pub policies: Option<Vec<PolicySummary>>,
 }
 
+impl ListPoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PolicySummary>> {
+        Some(self.policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPoliciesResponse {
+    type Item = PolicySummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PolicySummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_roots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRootsRequest {
@@ -1144,6 +1633,15 @@ pub struct ListRootsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListRootsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_roots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRootsResponse {
@@ -1157,6 +1655,31 @@ pub struct ListRootsResponse {
     pub roots: Option<Vec<Root>>,
 }
 
+impl ListRootsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Root>> {
+        Some(self.roots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListRootsResponse {
+    type Item = Root;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Root> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1169,6 +1692,15 @@ pub struct ListTagsForResourceRequest {
     pub resource_id: String,
 }
 
+impl PagedRequest for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1182,6 +1714,31 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl ListTagsForResourceResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::list_targets_for_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsForPolicyRequest {
@@ -1198,6 +1755,15 @@ pub struct ListTargetsForPolicyRequest {
     pub policy_id: String,
 }
 
+impl PagedRequest for ListTargetsForPolicyRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Organizations::list_targets_for_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTargetsForPolicyResponse {
@@ -1211,6 +1777,31 @@ pub struct ListTargetsForPolicyResponse {
     pub targets: Option<Vec<PolicyTargetSummary>>,
 }
 
+impl ListTargetsForPolicyResponse {
+    fn pagination_page_opt(self) -> Option<Vec<PolicyTargetSummary>> {
+        Some(self.targets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListTargetsForPolicyResponse {
+    type Item = PolicyTargetSummary;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<PolicyTargetSummary> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Organizations::move_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MoveAccountRequest {
@@ -1371,6 +1962,7 @@ pub struct PolicyTypeSummary {
     pub type_: Option<String>,
 }
 
+/// see [Organizations::register_delegated_administrator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDelegatedAdministratorRequest {
@@ -1382,6 +1974,7 @@ pub struct RegisterDelegatedAdministratorRequest {
     pub service_principal: String,
 }
 
+/// see [Organizations::remove_account_from_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAccountFromOrganizationRequest {
@@ -1423,6 +2016,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Organizations::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1434,6 +2028,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Organizations::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1445,6 +2040,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Organizations::update_organizational_unit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOrganizationalUnitRequest {
@@ -1457,6 +2053,7 @@ pub struct UpdateOrganizationalUnitRequest {
     pub organizational_unit_id: String,
 }
 
+/// see [Organizations::update_organizational_unit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOrganizationalUnitResponse {
@@ -1466,6 +2063,7 @@ pub struct UpdateOrganizationalUnitResponse {
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
+/// see [Organizations::update_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePolicyRequest {
@@ -1486,6 +2084,7 @@ pub struct UpdatePolicyRequest {
     pub policy_id: String,
 }
 
+/// see [Organizations::update_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePolicyResponse {
@@ -5821,7 +6420,7 @@ impl fmt::Display for UpdatePolicyError {
 impl Error for UpdatePolicyError {}
 /// Trait representing the capabilities of the Organizations API. Organizations clients implement this trait.
 #[async_trait]
-pub trait Organizations {
+pub trait Organizations: Clone + Sync + Send + 'static {
     /// <p>Sends a response to the originator of a handshake agreeing to the action proposed by the handshake request.</p> <p>This operation can be called only by the following principals when they also have the relevant IAM permissions:</p> <ul> <li> <p> <b>Invitation to join</b> or <b>Approve all features request</b> handshakes: only a principal from the member account.</p> <p>The user who calls the API for an invitation to join must have the <code>organizations:AcceptHandshake</code> permission. If you enabled all features in the organization, the user must also have the <code>iam:CreateServiceLinkedRole</code> permission so that AWS Organizations can create the required service-linked role named <code>AWSServiceRoleForOrganizations</code>. For more information, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_integration_services.html#orgs_integration_service-linked-roles">AWS Organizations and Service-Linked Roles</a> in the <i>AWS Organizations User Guide</i>.</p> </li> <li> <p> <b>Enable all features final confirmation</b> handshake: only a principal from the management account.</p> <p>For more information about invitations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_invites.html">Inviting an AWS Account to Join Your Organization</a> in the <i>AWS Organizations User Guide.</i> For more information about requests to enable all features in the organization, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide.</i> </p> </li> </ul> <p>After you accept a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that, it's deleted.</p>
     async fn accept_handshake(
         &self,
@@ -5991,11 +6590,31 @@ pub trait Organizations {
         RusotoError<ListAWSServiceAccessForOrganizationError>,
     >;
 
+    /// Auto-paginating version of `list_aws_service_access_for_organization`
+    fn list_aws_service_access_for_organization_pages(
+        &self,
+        input: ListAWSServiceAccessForOrganizationRequest,
+    ) -> RusotoStream<EnabledServicePrincipal, ListAWSServiceAccessForOrganizationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_aws_service_access_for_organization(state.clone())
+        })
+    }
+
     /// <p>Lists all the accounts in the organization. To request only the accounts in a specified root or organizational unit (OU), use the <a>ListAccountsForParent</a> operation instead.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_accounts(
         &self,
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
+
+    /// Auto-paginating version of `list_accounts`
+    fn list_accounts_pages(
+        &self,
+        input: ListAccountsRequest,
+    ) -> RusotoStream<Account, ListAccountsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_accounts(state.clone())
+        })
+    }
 
     /// <p>Lists the accounts in an organization that are contained by the specified target root or organizational unit (OU). If you specify the root, you get a list of all the accounts that aren't in any OU. If you specify an OU, you get a list of all the accounts in only that OU and not in any child OUs. To get a list of all accounts in the organization, use the <a>ListAccounts</a> operation.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_accounts_for_parent(
@@ -6003,11 +6622,31 @@ pub trait Organizations {
         input: ListAccountsForParentRequest,
     ) -> Result<ListAccountsForParentResponse, RusotoError<ListAccountsForParentError>>;
 
+    /// Auto-paginating version of `list_accounts_for_parent`
+    fn list_accounts_for_parent_pages(
+        &self,
+        input: ListAccountsForParentRequest,
+    ) -> RusotoStream<Account, ListAccountsForParentError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_accounts_for_parent(state.clone())
+        })
+    }
+
     /// <p>Lists all of the organizational units (OUs) or accounts that are contained in the specified parent OU or root. This operation, along with <a>ListParents</a> enables you to traverse the tree structure that makes up this root.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_children(
         &self,
         input: ListChildrenRequest,
     ) -> Result<ListChildrenResponse, RusotoError<ListChildrenError>>;
+
+    /// Auto-paginating version of `list_children`
+    fn list_children_pages(
+        &self,
+        input: ListChildrenRequest,
+    ) -> RusotoStream<Child, ListChildrenError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_children(state.clone())
+        })
+    }
 
     /// <p>Lists the account creation requests that match the specified status that is currently being tracked for the organization.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_create_account_status(
@@ -6015,11 +6654,31 @@ pub trait Organizations {
         input: ListCreateAccountStatusRequest,
     ) -> Result<ListCreateAccountStatusResponse, RusotoError<ListCreateAccountStatusError>>;
 
+    /// Auto-paginating version of `list_create_account_status`
+    fn list_create_account_status_pages(
+        &self,
+        input: ListCreateAccountStatusRequest,
+    ) -> RusotoStream<CreateAccountStatus, ListCreateAccountStatusError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_create_account_status(state.clone())
+        })
+    }
+
     /// <p>Lists the AWS accounts that are designated as delegated administrators in this organization.</p> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_delegated_administrators(
         &self,
         input: ListDelegatedAdministratorsRequest,
     ) -> Result<ListDelegatedAdministratorsResponse, RusotoError<ListDelegatedAdministratorsError>>;
+
+    /// Auto-paginating version of `list_delegated_administrators`
+    fn list_delegated_administrators_pages(
+        &self,
+        input: ListDelegatedAdministratorsRequest,
+    ) -> RusotoStream<DelegatedAdministrator, ListDelegatedAdministratorsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_delegated_administrators(state.clone())
+        })
+    }
 
     /// <p>List the AWS services for which the specified account is a delegated administrator.</p> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_delegated_services_for_account(
@@ -6030,11 +6689,31 @@ pub trait Organizations {
         RusotoError<ListDelegatedServicesForAccountError>,
     >;
 
+    /// Auto-paginating version of `list_delegated_services_for_account`
+    fn list_delegated_services_for_account_pages(
+        &self,
+        input: ListDelegatedServicesForAccountRequest,
+    ) -> RusotoStream<DelegatedService, ListDelegatedServicesForAccountError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_delegated_services_for_account(state.clone())
+        })
+    }
+
     /// <p>Lists the current handshakes that are associated with the account of the requesting user.</p> <p>Handshakes that are <code>ACCEPTED</code>, <code>DECLINED</code>, or <code>CANCELED</code> appear in the results of this API for only 30 days after changing to that state. After that, they're deleted and no longer accessible.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called from any account in the organization.</p>
     async fn list_handshakes_for_account(
         &self,
         input: ListHandshakesForAccountRequest,
     ) -> Result<ListHandshakesForAccountResponse, RusotoError<ListHandshakesForAccountError>>;
+
+    /// Auto-paginating version of `list_handshakes_for_account`
+    fn list_handshakes_for_account_pages(
+        &self,
+        input: ListHandshakesForAccountRequest,
+    ) -> RusotoStream<Handshake, ListHandshakesForAccountError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_handshakes_for_account(state.clone())
+        })
+    }
 
     /// <p>Lists the handshakes that are associated with the organization that the requesting user is part of. The <code>ListHandshakesForOrganization</code> operation returns a list of handshake structures. Each structure contains details and status about a handshake.</p> <p>Handshakes that are <code>ACCEPTED</code>, <code>DECLINED</code>, or <code>CANCELED</code> appear in the results of this API for only 30 days after changing to that state. After that, they're deleted and no longer accessible.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_handshakes_for_organization(
@@ -6045,6 +6724,16 @@ pub trait Organizations {
         RusotoError<ListHandshakesForOrganizationError>,
     >;
 
+    /// Auto-paginating version of `list_handshakes_for_organization`
+    fn list_handshakes_for_organization_pages(
+        &self,
+        input: ListHandshakesForOrganizationRequest,
+    ) -> RusotoStream<Handshake, ListHandshakesForOrganizationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_handshakes_for_organization(state.clone())
+        })
+    }
+
     /// <p>Lists the organizational units (OUs) in a parent organizational unit or root.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_organizational_units_for_parent(
         &self,
@@ -6054,11 +6743,31 @@ pub trait Organizations {
         RusotoError<ListOrganizationalUnitsForParentError>,
     >;
 
+    /// Auto-paginating version of `list_organizational_units_for_parent`
+    fn list_organizational_units_for_parent_pages(
+        &self,
+        input: ListOrganizationalUnitsForParentRequest,
+    ) -> RusotoStream<OrganizationalUnit, ListOrganizationalUnitsForParentError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_organizational_units_for_parent(state.clone())
+        })
+    }
+
     /// <p><p>Lists the root or organizational units (OUs) that serve as the immediate parent of the specified child OU or account. This operation, along with <a>ListChildren</a> enables you to traverse the tree structure that makes up this root.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization&#39;s management account or by a member account that is a delegated administrator for an AWS service.</p> <note> <p>In the current release, a child can have only a single parent.</p> </note></p>
     async fn list_parents(
         &self,
         input: ListParentsRequest,
     ) -> Result<ListParentsResponse, RusotoError<ListParentsError>>;
+
+    /// Auto-paginating version of `list_parents`
+    fn list_parents_pages(
+        &self,
+        input: ListParentsRequest,
+    ) -> RusotoStream<Parent, ListParentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_parents(state.clone())
+        })
+    }
 
     /// <p>Retrieves the list of all policies in an organization of a specified type.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_policies(
@@ -6066,11 +6775,31 @@ pub trait Organizations {
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
 
+    /// Auto-paginating version of `list_policies`
+    fn list_policies_pages(
+        &self,
+        input: ListPoliciesRequest,
+    ) -> RusotoStream<PolicySummary, ListPoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_policies(state.clone())
+        })
+    }
+
     /// <p>Lists the policies that are directly attached to the specified target root, organizational unit (OU), or account. You must specify the policy type that you want included in the returned list.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_policies_for_target(
         &self,
         input: ListPoliciesForTargetRequest,
     ) -> Result<ListPoliciesForTargetResponse, RusotoError<ListPoliciesForTargetError>>;
+
+    /// Auto-paginating version of `list_policies_for_target`
+    fn list_policies_for_target_pages(
+        &self,
+        input: ListPoliciesForTargetRequest,
+    ) -> RusotoStream<PolicySummary, ListPoliciesForTargetError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_policies_for_target(state.clone())
+        })
+    }
 
     /// <p><p>Lists the roots that are defined in the current organization.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization&#39;s management account or by a member account that is a delegated administrator for an AWS service.</p> <note> <p>Policy types can be enabled and disabled in roots. This is distinct from whether they&#39;re available in the organization. When you enable all features, you make policy types available for use in that organization. Individual policy types can then be enabled and disabled in a root. To see the availability of a policy type in an organization, use <a>DescribeOrganization</a>.</p> </note></p>
     async fn list_roots(
@@ -6078,17 +6807,44 @@ pub trait Organizations {
         input: ListRootsRequest,
     ) -> Result<ListRootsResponse, RusotoError<ListRootsError>>;
 
+    /// Auto-paginating version of `list_roots`
+    fn list_roots_pages(&self, input: ListRootsRequest) -> RusotoStream<Root, ListRootsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_roots(state.clone())
+        })
+    }
+
     /// <p>Lists tags that are attached to the specified resource.</p> <p>You can attach tags to the following resources in AWS Organizations.</p> <ul> <li> <p>AWS account</p> </li> <li> <p>Organization root</p> </li> <li> <p>Organizational unit (OU)</p> </li> <li> <p>Policy (any type)</p> </li> </ul> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoStream<Tag, ListTagsForResourceError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_tags_for_resource(state.clone())
+        })
+    }
+
     /// <p>Lists all the roots, organizational units (OUs), and accounts that the specified policy is attached to.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
     async fn list_targets_for_policy(
         &self,
         input: ListTargetsForPolicyRequest,
     ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>>;
+
+    /// Auto-paginating version of `list_targets_for_policy`
+    fn list_targets_for_policy_pages(
+        &self,
+        input: ListTargetsForPolicyRequest,
+    ) -> RusotoStream<PolicyTargetSummary, ListTargetsForPolicyError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_targets_for_policy(state.clone())
+        })
+    }
 
     /// <p>Moves an account from its current source parent root or organizational unit (OU) to the specified destination parent root or OU.</p> <p>This operation can be called only from the organization's management account.</p>
     async fn move_account(

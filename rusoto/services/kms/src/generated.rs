@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -76,6 +78,7 @@ pub struct AliasListEntry {
     pub target_key_id: Option<String>,
 }
 
+/// see [Kms::cancel_key_deletion]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelKeyDeletionRequest {
@@ -84,6 +87,7 @@ pub struct CancelKeyDeletionRequest {
     pub key_id: String,
 }
 
+/// see [Kms::cancel_key_deletion]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelKeyDeletionResponse {
@@ -93,6 +97,7 @@ pub struct CancelKeyDeletionResponse {
     pub key_id: Option<String>,
 }
 
+/// see [Kms::connect_custom_key_store]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectCustomKeyStoreRequest {
@@ -101,10 +106,12 @@ pub struct ConnectCustomKeyStoreRequest {
     pub custom_key_store_id: String,
 }
 
+/// see [Kms::connect_custom_key_store]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConnectCustomKeyStoreResponse {}
 
+/// see [Kms::create_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
@@ -116,6 +123,7 @@ pub struct CreateAliasRequest {
     pub target_key_id: String,
 }
 
+/// see [Kms::create_custom_key_store]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomKeyStoreRequest {
@@ -133,6 +141,7 @@ pub struct CreateCustomKeyStoreRequest {
     pub trust_anchor_certificate: String,
 }
 
+/// see [Kms::create_custom_key_store]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomKeyStoreResponse {
@@ -142,6 +151,7 @@ pub struct CreateCustomKeyStoreResponse {
     pub custom_key_store_id: Option<String>,
 }
 
+/// see [Kms::create_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGrantRequest {
@@ -172,6 +182,7 @@ pub struct CreateGrantRequest {
     pub retiring_principal: Option<String>,
 }
 
+/// see [Kms::create_grant]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGrantResponse {
@@ -185,6 +196,7 @@ pub struct CreateGrantResponse {
     pub grant_token: Option<String>,
 }
 
+/// see [Kms::create_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeyRequest {
@@ -222,6 +234,7 @@ pub struct CreateKeyRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Kms::create_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateKeyResponse {
@@ -265,6 +278,7 @@ pub struct CustomKeyStoresListEntry {
     pub trust_anchor_certificate: Option<String>,
 }
 
+/// see [Kms::decrypt]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecryptRequest {
@@ -294,6 +308,7 @@ pub struct DecryptRequest {
     pub key_id: Option<String>,
 }
 
+/// see [Kms::decrypt]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DecryptResponse {
@@ -316,6 +331,7 @@ pub struct DecryptResponse {
     pub plaintext: Option<bytes::Bytes>,
 }
 
+/// see [Kms::delete_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
@@ -324,6 +340,7 @@ pub struct DeleteAliasRequest {
     pub alias_name: String,
 }
 
+/// see [Kms::delete_custom_key_store]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomKeyStoreRequest {
@@ -332,10 +349,12 @@ pub struct DeleteCustomKeyStoreRequest {
     pub custom_key_store_id: String,
 }
 
+/// see [Kms::delete_custom_key_store]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCustomKeyStoreResponse {}
 
+/// see [Kms::delete_imported_key_material]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImportedKeyMaterialRequest {
@@ -344,6 +363,7 @@ pub struct DeleteImportedKeyMaterialRequest {
     pub key_id: String,
 }
 
+/// see [Kms::describe_custom_key_stores]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomKeyStoresRequest {
@@ -365,6 +385,7 @@ pub struct DescribeCustomKeyStoresRequest {
     pub marker: Option<String>,
 }
 
+/// see [Kms::describe_custom_key_stores]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCustomKeyStoresResponse {
@@ -382,6 +403,7 @@ pub struct DescribeCustomKeyStoresResponse {
     pub truncated: Option<bool>,
 }
 
+/// see [Kms::describe_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyRequest {
@@ -394,6 +416,7 @@ pub struct DescribeKeyRequest {
     pub key_id: String,
 }
 
+/// see [Kms::describe_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeKeyResponse {
@@ -403,6 +426,7 @@ pub struct DescribeKeyResponse {
     pub key_metadata: Option<KeyMetadata>,
 }
 
+/// see [Kms::disable_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableKeyRequest {
@@ -411,6 +435,7 @@ pub struct DisableKeyRequest {
     pub key_id: String,
 }
 
+/// see [Kms::disable_key_rotation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableKeyRotationRequest {
@@ -419,6 +444,7 @@ pub struct DisableKeyRotationRequest {
     pub key_id: String,
 }
 
+/// see [Kms::disconnect_custom_key_store]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisconnectCustomKeyStoreRequest {
@@ -427,10 +453,12 @@ pub struct DisconnectCustomKeyStoreRequest {
     pub custom_key_store_id: String,
 }
 
+/// see [Kms::disconnect_custom_key_store]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisconnectCustomKeyStoreResponse {}
 
+/// see [Kms::enable_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableKeyRequest {
@@ -439,6 +467,7 @@ pub struct EnableKeyRequest {
     pub key_id: String,
 }
 
+/// see [Kms::enable_key_rotation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableKeyRotationRequest {
@@ -447,6 +476,7 @@ pub struct EnableKeyRotationRequest {
     pub key_id: String,
 }
 
+/// see [Kms::encrypt]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptRequest {
@@ -475,6 +505,7 @@ pub struct EncryptRequest {
     pub plaintext: bytes::Bytes,
 }
 
+/// see [Kms::encrypt]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EncryptResponse {
@@ -497,6 +528,7 @@ pub struct EncryptResponse {
     pub key_id: Option<String>,
 }
 
+/// see [Kms::generate_data_key_pair]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyPairRequest {
@@ -516,6 +548,7 @@ pub struct GenerateDataKeyPairRequest {
     pub key_pair_spec: String,
 }
 
+/// see [Kms::generate_data_key_pair]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateDataKeyPairResponse {
@@ -556,6 +589,7 @@ pub struct GenerateDataKeyPairResponse {
     pub public_key: Option<bytes::Bytes>,
 }
 
+/// see [Kms::generate_data_key_pair_without_plaintext]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyPairWithoutPlaintextRequest {
@@ -575,6 +609,7 @@ pub struct GenerateDataKeyPairWithoutPlaintextRequest {
     pub key_pair_spec: String,
 }
 
+/// see [Kms::generate_data_key_pair_without_plaintext]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateDataKeyPairWithoutPlaintextResponse {
@@ -606,6 +641,7 @@ pub struct GenerateDataKeyPairWithoutPlaintextResponse {
     pub public_key: Option<bytes::Bytes>,
 }
 
+/// see [Kms::generate_data_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyRequest {
@@ -630,6 +666,7 @@ pub struct GenerateDataKeyRequest {
     pub number_of_bytes: Option<i64>,
 }
 
+/// see [Kms::generate_data_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateDataKeyResponse {
@@ -657,6 +694,7 @@ pub struct GenerateDataKeyResponse {
     pub plaintext: Option<bytes::Bytes>,
 }
 
+/// see [Kms::generate_data_key_without_plaintext]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateDataKeyWithoutPlaintextRequest {
@@ -681,6 +719,7 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
     pub number_of_bytes: Option<i64>,
 }
 
+/// see [Kms::generate_data_key_without_plaintext]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateDataKeyWithoutPlaintextResponse {
@@ -699,6 +738,7 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
     pub key_id: Option<String>,
 }
 
+/// see [Kms::generate_random]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateRandomRequest {
@@ -712,6 +752,7 @@ pub struct GenerateRandomRequest {
     pub number_of_bytes: Option<i64>,
 }
 
+/// see [Kms::generate_random]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateRandomResponse {
@@ -726,6 +767,7 @@ pub struct GenerateRandomResponse {
     pub plaintext: Option<bytes::Bytes>,
 }
 
+/// see [Kms::get_key_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPolicyRequest {
@@ -737,6 +779,7 @@ pub struct GetKeyPolicyRequest {
     pub policy_name: String,
 }
 
+/// see [Kms::get_key_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetKeyPolicyResponse {
@@ -746,6 +789,7 @@ pub struct GetKeyPolicyResponse {
     pub policy: Option<String>,
 }
 
+/// see [Kms::get_key_rotation_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyRotationStatusRequest {
@@ -754,6 +798,7 @@ pub struct GetKeyRotationStatusRequest {
     pub key_id: String,
 }
 
+/// see [Kms::get_key_rotation_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetKeyRotationStatusResponse {
@@ -763,6 +808,7 @@ pub struct GetKeyRotationStatusResponse {
     pub key_rotation_enabled: Option<bool>,
 }
 
+/// see [Kms::get_parameters_for_import]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParametersForImportRequest {
@@ -777,6 +823,7 @@ pub struct GetParametersForImportRequest {
     pub wrapping_key_spec: String,
 }
 
+/// see [Kms::get_parameters_for_import]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParametersForImportResponse {
@@ -808,6 +855,7 @@ pub struct GetParametersForImportResponse {
     pub public_key: Option<bytes::Bytes>,
 }
 
+/// see [Kms::get_public_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyRequest {
@@ -820,6 +868,7 @@ pub struct GetPublicKeyRequest {
     pub key_id: String,
 }
 
+/// see [Kms::get_public_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPublicKeyResponse {
@@ -909,6 +958,7 @@ pub struct GrantListEntry {
     pub retiring_principal: Option<String>,
 }
 
+/// see [Kms::import_key_material]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportKeyMaterialRequest {
@@ -941,6 +991,7 @@ pub struct ImportKeyMaterialRequest {
     pub valid_to: Option<f64>,
 }
 
+/// see [Kms::import_key_material]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportKeyMaterialResponse {}
@@ -1036,6 +1087,7 @@ pub struct KeyMetadata {
     pub valid_to: Option<f64>,
 }
 
+/// see [Kms::list_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesRequest {
@@ -1053,6 +1105,15 @@ pub struct ListAliasesRequest {
     pub marker: Option<String>,
 }
 
+impl PagedRequest for ListAliasesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Kms::list_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesResponse {
@@ -1070,6 +1131,35 @@ pub struct ListAliasesResponse {
     pub truncated: Option<bool>,
 }
 
+impl ListAliasesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AliasListEntry>> {
+        Some(self.aliases.as_ref()?.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAliasesResponse {
+    type Item = AliasListEntry;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AliasListEntry> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
+}
+
+/// see [Kms::list_grants]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGrantsRequest {
@@ -1086,6 +1176,16 @@ pub struct ListGrantsRequest {
     pub marker: Option<String>,
 }
 
+impl PagedRequest for ListGrantsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Kms::list_grants]
+/// see [Kms::list_retirable_grants]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGrantsResponse {
@@ -1103,6 +1203,35 @@ pub struct ListGrantsResponse {
     pub truncated: Option<bool>,
 }
 
+impl ListGrantsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GrantListEntry>> {
+        Some(self.grants.as_ref()?.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListGrantsResponse {
+    type Item = GrantListEntry;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GrantListEntry> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
+}
+
+/// see [Kms::list_key_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyPoliciesRequest {
@@ -1119,6 +1248,15 @@ pub struct ListKeyPoliciesRequest {
     pub marker: Option<String>,
 }
 
+impl PagedRequest for ListKeyPoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Kms::list_key_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKeyPoliciesResponse {
@@ -1136,6 +1274,35 @@ pub struct ListKeyPoliciesResponse {
     pub truncated: Option<bool>,
 }
 
+impl ListKeyPoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.policy_names.as_ref()?.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListKeyPoliciesResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
+}
+
+/// see [Kms::list_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeysRequest {
@@ -1149,6 +1316,15 @@ pub struct ListKeysRequest {
     pub marker: Option<String>,
 }
 
+impl PagedRequest for ListKeysRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Kms::list_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKeysResponse {
@@ -1166,6 +1342,35 @@ pub struct ListKeysResponse {
     pub truncated: Option<bool>,
 }
 
+impl ListKeysResponse {
+    fn pagination_page_opt(self) -> Option<Vec<KeyListEntry>> {
+        Some(self.keys.as_ref()?.clone())
+    }
+
+    fn has_another_page_opt(&self) -> Option<bool> {
+        Some(self.truncated.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListKeysResponse {
+    type Item = KeyListEntry;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<KeyListEntry> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.has_another_page_opt().unwrap_or(false)
+        }
+    }
+}
+
+/// see [Kms::list_resource_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceTagsRequest {
@@ -1182,6 +1387,7 @@ pub struct ListResourceTagsRequest {
     pub marker: Option<String>,
 }
 
+/// see [Kms::list_resource_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceTagsResponse {
@@ -1199,6 +1405,7 @@ pub struct ListResourceTagsResponse {
     pub truncated: Option<bool>,
 }
 
+/// see [Kms::list_retirable_grants]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRetirableGrantsRequest {
@@ -1215,6 +1422,7 @@ pub struct ListRetirableGrantsRequest {
     pub retiring_principal: String,
 }
 
+/// see [Kms::put_key_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutKeyPolicyRequest {
@@ -1233,6 +1441,7 @@ pub struct PutKeyPolicyRequest {
     pub policy_name: String,
 }
 
+/// see [Kms::re_encrypt]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReEncryptRequest {
@@ -1273,6 +1482,7 @@ pub struct ReEncryptRequest {
     pub source_key_id: Option<String>,
 }
 
+/// see [Kms::re_encrypt]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReEncryptResponse {
@@ -1303,6 +1513,7 @@ pub struct ReEncryptResponse {
     pub source_key_id: Option<String>,
 }
 
+/// see [Kms::retire_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetireGrantRequest {
@@ -1320,6 +1531,7 @@ pub struct RetireGrantRequest {
     pub key_id: Option<String>,
 }
 
+/// see [Kms::revoke_grant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeGrantRequest {
@@ -1331,6 +1543,7 @@ pub struct RevokeGrantRequest {
     pub key_id: String,
 }
 
+/// see [Kms::schedule_key_deletion]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleKeyDeletionRequest {
@@ -1343,6 +1556,7 @@ pub struct ScheduleKeyDeletionRequest {
     pub pending_window_in_days: Option<i64>,
 }
 
+/// see [Kms::schedule_key_deletion]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduleKeyDeletionResponse {
@@ -1356,6 +1570,7 @@ pub struct ScheduleKeyDeletionResponse {
     pub key_id: Option<String>,
 }
 
+/// see [Kms::sign]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignRequest {
@@ -1383,6 +1598,7 @@ pub struct SignRequest {
     pub signing_algorithm: String,
 }
 
+/// see [Kms::sign]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignResponse {
@@ -1416,6 +1632,7 @@ pub struct Tag {
     pub tag_value: String,
 }
 
+/// see [Kms::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1427,6 +1644,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Kms::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1438,6 +1656,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Kms::update_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAliasRequest {
@@ -1449,6 +1668,7 @@ pub struct UpdateAliasRequest {
     pub target_key_id: String,
 }
 
+/// see [Kms::update_custom_key_store]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomKeyStoreRequest {
@@ -1469,10 +1689,12 @@ pub struct UpdateCustomKeyStoreRequest {
     pub new_custom_key_store_name: Option<String>,
 }
 
+/// see [Kms::update_custom_key_store]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCustomKeyStoreResponse {}
 
+/// see [Kms::update_key_description]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateKeyDescriptionRequest {
@@ -1484,6 +1706,7 @@ pub struct UpdateKeyDescriptionRequest {
     pub key_id: String,
 }
 
+/// see [Kms::verify]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyRequest {
@@ -1519,6 +1742,7 @@ pub struct VerifyRequest {
     pub signing_algorithm: String,
 }
 
+/// see [Kms::verify]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VerifyResponse {
@@ -4586,7 +4810,7 @@ impl fmt::Display for VerifyError {
 impl Error for VerifyError {}
 /// Trait representing the capabilities of the KMS API. KMS clients implement this trait.
 #[async_trait]
-pub trait Kms {
+pub trait Kms: Clone + Sync + Send + 'static {
     /// <p>Cancels the deletion of a customer master key (CMK). When this operation succeeds, the key state of the CMK is <code>Disabled</code>. To enable the CMK, use <a>EnableKey</a>. </p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The CMK that you use for this operation must be in a compatible key state. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p> <b>Cross-account use</b>: No. You cannot perform this operation on a CMK in a different AWS account.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:CancelKeyDeletion</a> (key policy)</p> <p> <b>Related operations</b>: <a>ScheduleKeyDeletion</a> </p>
     async fn cancel_key_deletion(
         &self,
@@ -4764,11 +4988,31 @@ pub trait Kms {
         input: ListAliasesRequest,
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
+    /// Auto-paginating version of `list_aliases`
+    fn list_aliases_pages(
+        &self,
+        input: ListAliasesRequest,
+    ) -> RusotoStream<AliasListEntry, ListAliasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_aliases(state.clone())
+        })
+    }
+
     /// <p><p>Gets a list of all grants for the specified customer master key (CMK).</p> <note> <p>The <code>GranteePrincipal</code> field in the <code>ListGrants</code> response usually contains the user or role designated as the grantee principal in the grant. However, when the grantee principal in the grant is an AWS service, the <code>GranteePrincipal</code> field contains the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html#principal-services">service principal</a>, which might represent several different grantee principals.</p> </note> <p> <b>Cross-account use</b>: Yes. To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the <code>KeyId</code> parameter.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListGrants</a> (key policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>CreateGrant</a> </p> </li> <li> <p> <a>ListRetirableGrants</a> </p> </li> <li> <p> <a>RetireGrant</a> </p> </li> <li> <p> <a>RevokeGrant</a> </p> </li> </ul></p>
     async fn list_grants(
         &self,
         input: ListGrantsRequest,
     ) -> Result<ListGrantsResponse, RusotoError<ListGrantsError>>;
+
+    /// Auto-paginating version of `list_grants`
+    fn list_grants_pages(
+        &self,
+        input: ListGrantsRequest,
+    ) -> RusotoStream<GrantListEntry, ListGrantsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_grants(state.clone())
+        })
+    }
 
     /// <p><p>Gets the names of the key policies that are attached to a customer master key (CMK). This operation is designed to get policy names that you can use in a <a>GetKeyPolicy</a> operation. However, the only valid policy name is <code>default</code>. </p> <p> <b>Cross-account use</b>: No. You cannot perform this operation on a CMK in a different AWS account.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListKeyPolicies</a> (key policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>GetKeyPolicy</a> </p> </li> <li> <p> <a>PutKeyPolicy</a> </p> </li> </ul></p>
     async fn list_key_policies(
@@ -4776,11 +5020,28 @@ pub trait Kms {
         input: ListKeyPoliciesRequest,
     ) -> Result<ListKeyPoliciesResponse, RusotoError<ListKeyPoliciesError>>;
 
+    /// Auto-paginating version of `list_key_policies`
+    fn list_key_policies_pages(
+        &self,
+        input: ListKeyPoliciesRequest,
+    ) -> RusotoStream<String, ListKeyPoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_key_policies(state.clone())
+        })
+    }
+
     /// <p><p>Gets a list of all customer master keys (CMKs) in the caller&#39;s AWS account and Region.</p> <p> <b>Cross-account use</b>: No. You cannot perform this operation on a CMK in a different AWS account.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListKeys</a> (IAM policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>CreateKey</a> </p> </li> <li> <p> <a>DescribeKey</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>ListResourceTags</a> </p> </li> </ul></p>
     async fn list_keys(
         &self,
         input: ListKeysRequest,
     ) -> Result<ListKeysResponse, RusotoError<ListKeysError>>;
+
+    /// Auto-paginating version of `list_keys`
+    fn list_keys_pages(&self, input: ListKeysRequest) -> RusotoStream<KeyListEntry, ListKeysError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_keys(state.clone())
+        })
+    }
 
     /// <p><p>Returns all tags on the specified customer master key (CMK).</p> <p>For general information about tags, including the format and syntax, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>Amazon Web Services General Reference</i>. For information about using tags in AWS KMS, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/tagging-keys.html">Tagging keys</a>.</p> <p> <b>Cross-account use</b>: No. You cannot perform this operation on a CMK in a different AWS account.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListResourceTags</a> (key policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>TagResource</a> </p> </li> <li> <p> <a>UntagResource</a> </p> </li> </ul></p>
     async fn list_resource_tags(

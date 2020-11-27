@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -268,6 +270,7 @@ pub struct CostTypes {
     pub use_blended: Option<bool>,
 }
 
+/// see [Budgets::create_budget_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBudgetActionRequest {
@@ -294,6 +297,7 @@ pub struct CreateBudgetActionRequest {
     pub subscribers: Vec<Subscriber>,
 }
 
+/// see [Budgets::create_budget_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBudgetActionResponse {
@@ -307,6 +311,7 @@ pub struct CreateBudgetActionResponse {
 }
 
 /// <p> Request of CreateBudget </p>
+/// see [Budgets::create_budget]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBudgetRequest {
@@ -323,11 +328,13 @@ pub struct CreateBudgetRequest {
 }
 
 /// <p> Response of CreateBudget </p>
+/// see [Budgets::create_budget]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBudgetResponse {}
 
 /// <p> Request of CreateNotification </p>
+/// see [Budgets::create_notification]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationRequest {
@@ -346,11 +353,13 @@ pub struct CreateNotificationRequest {
 }
 
 /// <p> Response of CreateNotification </p>
+/// see [Budgets::create_notification]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotificationResponse {}
 
 /// <p> Request of CreateSubscriber </p>
+/// see [Budgets::create_subscriber]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriberRequest {
@@ -369,6 +378,7 @@ pub struct CreateSubscriberRequest {
 }
 
 /// <p> Response of CreateSubscriber </p>
+/// see [Budgets::create_subscriber]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriberResponse {}
@@ -390,6 +400,7 @@ pub struct Definition {
     pub ssm_action_definition: Option<SsmActionDefinition>,
 }
 
+/// see [Budgets::delete_budget_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBudgetActionRequest {
@@ -402,6 +413,7 @@ pub struct DeleteBudgetActionRequest {
     pub budget_name: String,
 }
 
+/// see [Budgets::delete_budget_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBudgetActionResponse {
@@ -414,6 +426,7 @@ pub struct DeleteBudgetActionResponse {
 }
 
 /// <p> Request of DeleteBudget </p>
+/// see [Budgets::delete_budget]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBudgetRequest {
@@ -426,11 +439,13 @@ pub struct DeleteBudgetRequest {
 }
 
 /// <p> Response of DeleteBudget </p>
+/// see [Budgets::delete_budget]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBudgetResponse {}
 
 /// <p> Request of DeleteNotification </p>
+/// see [Budgets::delete_notification]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationRequest {
@@ -446,11 +461,13 @@ pub struct DeleteNotificationRequest {
 }
 
 /// <p> Response of DeleteNotification </p>
+/// see [Budgets::delete_notification]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNotificationResponse {}
 
 /// <p> Request of DeleteSubscriber </p>
+/// see [Budgets::delete_subscriber]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriberRequest {
@@ -469,10 +486,12 @@ pub struct DeleteSubscriberRequest {
 }
 
 /// <p> Response of DeleteSubscriber </p>
+/// see [Budgets::delete_subscriber]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubscriberResponse {}
 
+/// see [Budgets::describe_budget_action_histories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetActionHistoriesRequest {
@@ -494,6 +513,15 @@ pub struct DescribeBudgetActionHistoriesRequest {
     pub time_period: Option<TimePeriod>,
 }
 
+impl PagedRequest for DescribeBudgetActionHistoriesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Budgets::describe_budget_action_histories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetActionHistoriesResponse {
@@ -505,6 +533,31 @@ pub struct DescribeBudgetActionHistoriesResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBudgetActionHistoriesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ActionHistory>> {
+        Some(self.action_histories.clone())
+    }
+}
+
+impl PagedOutput for DescribeBudgetActionHistoriesResponse {
+    type Item = ActionHistory;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ActionHistory> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Budgets::describe_budget_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetActionRequest {
@@ -517,6 +570,7 @@ pub struct DescribeBudgetActionRequest {
     pub budget_name: String,
 }
 
+/// see [Budgets::describe_budget_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetActionResponse {
@@ -529,6 +583,7 @@ pub struct DescribeBudgetActionResponse {
     pub budget_name: String,
 }
 
+/// see [Budgets::describe_budget_actions_for_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetActionsForAccountRequest {
@@ -542,6 +597,15 @@ pub struct DescribeBudgetActionsForAccountRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeBudgetActionsForAccountRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Budgets::describe_budget_actions_for_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetActionsForAccountResponse {
@@ -553,6 +617,31 @@ pub struct DescribeBudgetActionsForAccountResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBudgetActionsForAccountResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Action>> {
+        Some(self.actions.clone())
+    }
+}
+
+impl PagedOutput for DescribeBudgetActionsForAccountResponse {
+    type Item = Action;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Action> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Budgets::describe_budget_actions_for_budget]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetActionsForBudgetRequest {
@@ -568,6 +657,15 @@ pub struct DescribeBudgetActionsForBudgetRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeBudgetActionsForBudgetRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Budgets::describe_budget_actions_for_budget]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetActionsForBudgetResponse {
@@ -579,6 +677,31 @@ pub struct DescribeBudgetActionsForBudgetResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBudgetActionsForBudgetResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Action>> {
+        Some(self.actions.clone())
+    }
+}
+
+impl PagedOutput for DescribeBudgetActionsForBudgetResponse {
+    type Item = Action;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Action> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Budgets::describe_budget_performance_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetPerformanceHistoryRequest {
@@ -598,6 +721,15 @@ pub struct DescribeBudgetPerformanceHistoryRequest {
     pub time_period: Option<TimePeriod>,
 }
 
+impl PagedRequest for DescribeBudgetPerformanceHistoryRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Budgets::describe_budget_performance_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetPerformanceHistoryResponse {
@@ -610,7 +742,32 @@ pub struct DescribeBudgetPerformanceHistoryResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBudgetPerformanceHistoryResponse {
+    fn pagination_page_opt(self) -> Option<Vec<BudgetPerformanceHistory>> {
+        Some(self.budget_performance_history.as_ref()?.clone()).map(|x| vec![x])
+    }
+}
+
+impl PagedOutput for DescribeBudgetPerformanceHistoryResponse {
+    type Item = BudgetPerformanceHistory;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BudgetPerformanceHistory> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p> Request of DescribeBudget </p>
+/// see [Budgets::describe_budget]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetRequest {
@@ -623,6 +780,7 @@ pub struct DescribeBudgetRequest {
 }
 
 /// <p> Response of DescribeBudget </p>
+/// see [Budgets::describe_budget]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetResponse {
@@ -633,6 +791,7 @@ pub struct DescribeBudgetResponse {
 }
 
 /// <p> Request of DescribeBudgets </p>
+/// see [Budgets::describe_budgets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetsRequest {
@@ -649,7 +808,16 @@ pub struct DescribeBudgetsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeBudgetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p> Response of DescribeBudgets </p>
+/// see [Budgets::describe_budgets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetsResponse {
@@ -663,7 +831,32 @@ pub struct DescribeBudgetsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeBudgetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Budget>> {
+        Some(self.budgets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeBudgetsResponse {
+    type Item = Budget;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Budget> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p> Request of DescribeNotificationsForBudget </p>
+/// see [Budgets::describe_notifications_for_budget]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationsForBudgetRequest {
@@ -683,7 +876,16 @@ pub struct DescribeNotificationsForBudgetRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeNotificationsForBudgetRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p> Response of GetNotificationsForBudget </p>
+/// see [Budgets::describe_notifications_for_budget]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotificationsForBudgetResponse {
@@ -697,7 +899,32 @@ pub struct DescribeNotificationsForBudgetResponse {
     pub notifications: Option<Vec<Notification>>,
 }
 
+impl DescribeNotificationsForBudgetResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Notification>> {
+        Some(self.notifications.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeNotificationsForBudgetResponse {
+    type Item = Notification;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Notification> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p> Request of DescribeSubscribersForNotification </p>
+/// see [Budgets::describe_subscribers_for_notification]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribersForNotificationRequest {
@@ -720,7 +947,16 @@ pub struct DescribeSubscribersForNotificationRequest {
     pub notification: Notification,
 }
 
+impl PagedRequest for DescribeSubscribersForNotificationRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p> Response of DescribeSubscribersForNotification </p>
+/// see [Budgets::describe_subscribers_for_notification]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubscribersForNotificationResponse {
@@ -734,6 +970,31 @@ pub struct DescribeSubscribersForNotificationResponse {
     pub subscribers: Option<Vec<Subscriber>>,
 }
 
+impl DescribeSubscribersForNotificationResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Subscriber>> {
+        Some(self.subscribers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSubscribersForNotificationResponse {
+    type Item = Subscriber;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Subscriber> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Budgets::execute_budget_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteBudgetActionRequest {
@@ -749,6 +1010,7 @@ pub struct ExecuteBudgetActionRequest {
     pub execution_type: String,
 }
 
+/// see [Budgets::execute_budget_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteBudgetActionResponse {
@@ -878,6 +1140,7 @@ pub struct TimePeriod {
     pub start: Option<f64>,
 }
 
+/// see [Budgets::update_budget_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBudgetActionRequest {
@@ -910,6 +1173,7 @@ pub struct UpdateBudgetActionRequest {
     pub subscribers: Option<Vec<Subscriber>>,
 }
 
+/// see [Budgets::update_budget_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBudgetActionResponse {
@@ -926,6 +1190,7 @@ pub struct UpdateBudgetActionResponse {
 }
 
 /// <p> Request of UpdateBudget </p>
+/// see [Budgets::update_budget]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBudgetRequest {
@@ -938,11 +1203,13 @@ pub struct UpdateBudgetRequest {
 }
 
 /// <p> Response of UpdateBudget </p>
+/// see [Budgets::update_budget]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBudgetResponse {}
 
 /// <p> Request of UpdateNotification </p>
+/// see [Budgets::update_notification]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationRequest {
@@ -961,11 +1228,13 @@ pub struct UpdateNotificationRequest {
 }
 
 /// <p> Response of UpdateNotification </p>
+/// see [Budgets::update_notification]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotificationResponse {}
 
 /// <p> Request of UpdateSubscriber </p>
+/// see [Budgets::update_subscriber]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriberRequest {
@@ -987,6 +1256,7 @@ pub struct UpdateSubscriberRequest {
 }
 
 /// <p> Response of UpdateSubscriber </p>
+/// see [Budgets::update_subscriber]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriberResponse {}
@@ -2307,7 +2577,7 @@ impl fmt::Display for UpdateSubscriberError {
 impl Error for UpdateSubscriberError {}
 /// Trait representing the capabilities of the AWSBudgets API. AWSBudgets clients implement this trait.
 #[async_trait]
-pub trait Budgets {
+pub trait Budgets: Clone + Sync + Send + 'static {
     /// <p><p>Creates a budget and, if included, notifications and subscribers. </p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_CreateBudget.html#API_CreateBudget_Examples">Examples</a> section. </p> </important></p>
     async fn create_budget(
         &self,
@@ -2377,6 +2647,16 @@ pub trait Budgets {
         RusotoError<DescribeBudgetActionHistoriesError>,
     >;
 
+    /// Auto-paginating version of `describe_budget_action_histories`
+    fn describe_budget_action_histories_pages(
+        &self,
+        input: DescribeBudgetActionHistoriesRequest,
+    ) -> RusotoStream<ActionHistory, DescribeBudgetActionHistoriesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_budget_action_histories(state.clone())
+        })
+    }
+
     /// <p> Describes all of the budget actions for an account. </p>
     async fn describe_budget_actions_for_account(
         &self,
@@ -2385,6 +2665,16 @@ pub trait Budgets {
         DescribeBudgetActionsForAccountResponse,
         RusotoError<DescribeBudgetActionsForAccountError>,
     >;
+
+    /// Auto-paginating version of `describe_budget_actions_for_account`
+    fn describe_budget_actions_for_account_pages(
+        &self,
+        input: DescribeBudgetActionsForAccountRequest,
+    ) -> RusotoStream<Action, DescribeBudgetActionsForAccountError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_budget_actions_for_account(state.clone())
+        })
+    }
 
     /// <p> Describes all of the budget actions for a budget. </p>
     async fn describe_budget_actions_for_budget(
@@ -2395,6 +2685,16 @@ pub trait Budgets {
         RusotoError<DescribeBudgetActionsForBudgetError>,
     >;
 
+    /// Auto-paginating version of `describe_budget_actions_for_budget`
+    fn describe_budget_actions_for_budget_pages(
+        &self,
+        input: DescribeBudgetActionsForBudgetRequest,
+    ) -> RusotoStream<Action, DescribeBudgetActionsForBudgetError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_budget_actions_for_budget(state.clone())
+        })
+    }
+
     /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
     async fn describe_budget_performance_history(
         &self,
@@ -2404,11 +2704,31 @@ pub trait Budgets {
         RusotoError<DescribeBudgetPerformanceHistoryError>,
     >;
 
+    /// Auto-paginating version of `describe_budget_performance_history`
+    fn describe_budget_performance_history_pages(
+        &self,
+        input: DescribeBudgetPerformanceHistoryRequest,
+    ) -> RusotoStream<BudgetPerformanceHistory, DescribeBudgetPerformanceHistoryError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_budget_performance_history(state.clone())
+        })
+    }
+
     /// <p><p>Lists the budgets that are associated with an account.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudgets.html#API_DescribeBudgets_Examples">Examples</a> section. </p> </important></p>
     async fn describe_budgets(
         &self,
         input: DescribeBudgetsRequest,
     ) -> Result<DescribeBudgetsResponse, RusotoError<DescribeBudgetsError>>;
+
+    /// Auto-paginating version of `describe_budgets`
+    fn describe_budgets_pages(
+        &self,
+        input: DescribeBudgetsRequest,
+    ) -> RusotoStream<Budget, DescribeBudgetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_budgets(state.clone())
+        })
+    }
 
     /// <p>Lists the notifications that are associated with a budget.</p>
     async fn describe_notifications_for_budget(
@@ -2419,6 +2739,16 @@ pub trait Budgets {
         RusotoError<DescribeNotificationsForBudgetError>,
     >;
 
+    /// Auto-paginating version of `describe_notifications_for_budget`
+    fn describe_notifications_for_budget_pages(
+        &self,
+        input: DescribeNotificationsForBudgetRequest,
+    ) -> RusotoStream<Notification, DescribeNotificationsForBudgetError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_notifications_for_budget(state.clone())
+        })
+    }
+
     /// <p>Lists the subscribers that are associated with a notification.</p>
     async fn describe_subscribers_for_notification(
         &self,
@@ -2427,6 +2757,16 @@ pub trait Budgets {
         DescribeSubscribersForNotificationResponse,
         RusotoError<DescribeSubscribersForNotificationError>,
     >;
+
+    /// Auto-paginating version of `describe_subscribers_for_notification`
+    fn describe_subscribers_for_notification_pages(
+        &self,
+        input: DescribeSubscribersForNotificationRequest,
+    ) -> RusotoStream<Subscriber, DescribeSubscribersForNotificationError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_subscribers_for_notification(state.clone())
+        })
+    }
 
     /// <p> Executes a budget action. </p>
     async fn execute_budget_action(

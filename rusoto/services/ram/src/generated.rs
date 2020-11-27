@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Ram::accept_resource_share_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptResourceShareInvitationRequest {
@@ -37,6 +40,7 @@ pub struct AcceptResourceShareInvitationRequest {
     pub resource_share_invitation_arn: String,
 }
 
+/// see [Ram::accept_resource_share_invitation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptResourceShareInvitationResponse {
@@ -50,6 +54,7 @@ pub struct AcceptResourceShareInvitationResponse {
     pub resource_share_invitation: Option<ResourceShareInvitation>,
 }
 
+/// see [Ram::associate_resource_share_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResourceSharePermissionRequest {
@@ -69,6 +74,7 @@ pub struct AssociateResourceSharePermissionRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::associate_resource_share_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateResourceSharePermissionResponse {
@@ -82,6 +88,7 @@ pub struct AssociateResourceSharePermissionResponse {
     pub return_value: Option<bool>,
 }
 
+/// see [Ram::associate_resource_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResourceShareRequest {
@@ -102,6 +109,7 @@ pub struct AssociateResourceShareRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::associate_resource_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateResourceShareResponse {
@@ -115,6 +123,7 @@ pub struct AssociateResourceShareResponse {
     pub resource_share_associations: Option<Vec<ResourceShareAssociation>>,
 }
 
+/// see [Ram::create_resource_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceShareRequest {
@@ -147,6 +156,7 @@ pub struct CreateResourceShareRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ram::create_resource_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceShareResponse {
@@ -160,6 +170,7 @@ pub struct CreateResourceShareResponse {
     pub resource_share: Option<ResourceShare>,
 }
 
+/// see [Ram::delete_resource_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceShareRequest {
@@ -172,6 +183,7 @@ pub struct DeleteResourceShareRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::delete_resource_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceShareResponse {
@@ -185,6 +197,7 @@ pub struct DeleteResourceShareResponse {
     pub return_value: Option<bool>,
 }
 
+/// see [Ram::disassociate_resource_share_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResourceSharePermissionRequest {
@@ -200,6 +213,7 @@ pub struct DisassociateResourceSharePermissionRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::disassociate_resource_share_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateResourceSharePermissionResponse {
@@ -213,6 +227,7 @@ pub struct DisassociateResourceSharePermissionResponse {
     pub return_value: Option<bool>,
 }
 
+/// see [Ram::disassociate_resource_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResourceShareRequest {
@@ -233,6 +248,7 @@ pub struct DisassociateResourceShareRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::disassociate_resource_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateResourceShareResponse {
@@ -246,10 +262,12 @@ pub struct DisassociateResourceShareResponse {
     pub resource_share_associations: Option<Vec<ResourceShareAssociation>>,
 }
 
+/// see [Ram::enable_sharing_with_aws_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSharingWithAwsOrganizationRequest {}
 
+/// see [Ram::enable_sharing_with_aws_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableSharingWithAwsOrganizationResponse {
@@ -259,6 +277,7 @@ pub struct EnableSharingWithAwsOrganizationResponse {
     pub return_value: Option<bool>,
 }
 
+/// see [Ram::get_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPermissionRequest {
@@ -271,6 +290,7 @@ pub struct GetPermissionRequest {
     pub permission_version: Option<i64>,
 }
 
+/// see [Ram::get_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPermissionResponse {
@@ -280,6 +300,7 @@ pub struct GetPermissionResponse {
     pub permission: Option<ResourceSharePermissionDetail>,
 }
 
+/// see [Ram::get_resource_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePoliciesRequest {
@@ -300,6 +321,15 @@ pub struct GetResourcePoliciesRequest {
     pub resource_arns: Vec<String>,
 }
 
+impl PagedRequest for GetResourcePoliciesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Ram::get_resource_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePoliciesResponse {
@@ -313,6 +343,31 @@ pub struct GetResourcePoliciesResponse {
     pub policies: Option<Vec<String>>,
 }
 
+impl GetResourcePoliciesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.policies.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetResourcePoliciesResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Ram::get_resource_share_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceShareAssociationsRequest {
@@ -345,6 +400,15 @@ pub struct GetResourceShareAssociationsRequest {
     pub resource_share_arns: Option<Vec<String>>,
 }
 
+impl PagedRequest for GetResourceShareAssociationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Ram::get_resource_share_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceShareAssociationsResponse {
@@ -358,6 +422,31 @@ pub struct GetResourceShareAssociationsResponse {
     pub resource_share_associations: Option<Vec<ResourceShareAssociation>>,
 }
 
+impl GetResourceShareAssociationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceShareAssociation>> {
+        Some(self.resource_share_associations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetResourceShareAssociationsResponse {
+    type Item = ResourceShareAssociation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceShareAssociation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Ram::get_resource_share_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceShareInvitationsRequest {
@@ -379,6 +468,15 @@ pub struct GetResourceShareInvitationsRequest {
     pub resource_share_invitation_arns: Option<Vec<String>>,
 }
 
+impl PagedRequest for GetResourceShareInvitationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Ram::get_resource_share_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceShareInvitationsResponse {
@@ -392,6 +490,31 @@ pub struct GetResourceShareInvitationsResponse {
     pub resource_share_invitations: Option<Vec<ResourceShareInvitation>>,
 }
 
+impl GetResourceShareInvitationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceShareInvitation>> {
+        Some(self.resource_share_invitations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetResourceShareInvitationsResponse {
+    type Item = ResourceShareInvitation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceShareInvitation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Ram::get_resource_shares]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceSharesRequest {
@@ -424,6 +547,15 @@ pub struct GetResourceSharesRequest {
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
+impl PagedRequest for GetResourceSharesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Ram::get_resource_shares]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceSharesResponse {
@@ -437,6 +569,31 @@ pub struct GetResourceSharesResponse {
     pub resource_shares: Option<Vec<ResourceShare>>,
 }
 
+impl GetResourceSharesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ResourceShare>> {
+        Some(self.resource_shares.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetResourceSharesResponse {
+    type Item = ResourceShare;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ResourceShare> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Ram::list_pending_invitation_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPendingInvitationResourcesRequest {
@@ -453,6 +610,7 @@ pub struct ListPendingInvitationResourcesRequest {
     pub resource_share_invitation_arn: String,
 }
 
+/// see [Ram::list_pending_invitation_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPendingInvitationResourcesResponse {
@@ -466,6 +624,7 @@ pub struct ListPendingInvitationResourcesResponse {
     pub resources: Option<Vec<Resource>>,
 }
 
+/// see [Ram::list_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPermissionsRequest {
@@ -483,6 +642,7 @@ pub struct ListPermissionsRequest {
     pub resource_type: Option<String>,
 }
 
+/// see [Ram::list_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPermissionsResponse {
@@ -496,6 +656,7 @@ pub struct ListPermissionsResponse {
     pub permissions: Option<Vec<ResourceSharePermissionSummary>>,
 }
 
+/// see [Ram::list_principals]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalsRequest {
@@ -528,6 +689,15 @@ pub struct ListPrincipalsRequest {
     pub resource_type: Option<String>,
 }
 
+impl PagedRequest for ListPrincipalsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Ram::list_principals]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalsResponse {
@@ -541,6 +711,31 @@ pub struct ListPrincipalsResponse {
     pub principals: Option<Vec<Principal>>,
 }
 
+impl ListPrincipalsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Principal>> {
+        Some(self.principals.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListPrincipalsResponse {
+    type Item = Principal;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Principal> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Ram::list_resource_share_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceSharePermissionsRequest {
@@ -557,6 +752,7 @@ pub struct ListResourceSharePermissionsRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::list_resource_share_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceSharePermissionsResponse {
@@ -570,6 +766,7 @@ pub struct ListResourceSharePermissionsResponse {
     pub permissions: Option<Vec<ResourceSharePermissionSummary>>,
 }
 
+/// see [Ram::list_resource_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceTypesRequest {
@@ -583,6 +780,7 @@ pub struct ListResourceTypesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Ram::list_resource_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceTypesResponse {
@@ -596,6 +794,7 @@ pub struct ListResourceTypesResponse {
     pub resource_types: Option<Vec<ServiceNameAndResourceType>>,
 }
 
+/// see [Ram::list_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
@@ -628,6 +827,15 @@ pub struct ListResourcesRequest {
     pub resource_type: Option<String>,
 }
 
+impl PagedRequest for ListResourcesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Ram::list_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResponse {
@@ -639,6 +847,30 @@ pub struct ListResourcesResponse {
     #[serde(rename = "resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<Resource>>,
+}
+
+impl ListResourcesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Resource>> {
+        Some(self.resources.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListResourcesResponse {
+    type Item = Resource;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Resource> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Describes a principal for use with AWS Resource Access Manager.</p>
@@ -667,6 +899,7 @@ pub struct Principal {
     pub resource_share_arn: Option<String>,
 }
 
+/// see [Ram::promote_resource_share_created_from_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PromoteResourceShareCreatedFromPolicyRequest {
@@ -675,6 +908,7 @@ pub struct PromoteResourceShareCreatedFromPolicyRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::promote_resource_share_created_from_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PromoteResourceShareCreatedFromPolicyResponse {
@@ -684,6 +918,7 @@ pub struct PromoteResourceShareCreatedFromPolicyResponse {
     pub return_value: Option<bool>,
 }
 
+/// see [Ram::reject_resource_share_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectResourceShareInvitationRequest {
@@ -696,6 +931,7 @@ pub struct RejectResourceShareInvitationRequest {
     pub resource_share_invitation_arn: String,
 }
 
+/// see [Ram::reject_resource_share_invitation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectResourceShareInvitationResponse {
@@ -986,6 +1222,7 @@ pub struct TagFilter {
     pub tag_values: Option<Vec<String>>,
 }
 
+/// see [Ram::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -997,10 +1234,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Ram::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Ram::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1012,10 +1251,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Ram::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Ram::update_resource_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceShareRequest {
@@ -1036,6 +1277,7 @@ pub struct UpdateResourceShareRequest {
     pub resource_share_arn: String,
 }
 
+/// see [Ram::update_resource_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceShareResponse {
@@ -3095,7 +3337,7 @@ impl fmt::Display for UpdateResourceShareError {
 impl Error for UpdateResourceShareError {}
 /// Trait representing the capabilities of the RAM API. RAM clients implement this trait.
 #[async_trait]
-pub trait Ram {
+pub trait Ram: Clone + Sync + Send + 'static {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>
     async fn accept_resource_share_invitation(
         &self,
@@ -3167,11 +3409,31 @@ pub trait Ram {
         input: GetResourcePoliciesRequest,
     ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>>;
 
+    /// Auto-paginating version of `get_resource_policies`
+    fn get_resource_policies_pages(
+        &self,
+        input: GetResourcePoliciesRequest,
+    ) -> RusotoStream<String, GetResourcePoliciesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_resource_policies(state.clone())
+        })
+    }
+
     /// <p>Gets the resources or principals for the resource shares that you own.</p>
     async fn get_resource_share_associations(
         &self,
         input: GetResourceShareAssociationsRequest,
     ) -> Result<GetResourceShareAssociationsResponse, RusotoError<GetResourceShareAssociationsError>>;
+
+    /// Auto-paginating version of `get_resource_share_associations`
+    fn get_resource_share_associations_pages(
+        &self,
+        input: GetResourceShareAssociationsRequest,
+    ) -> RusotoStream<ResourceShareAssociation, GetResourceShareAssociationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_resource_share_associations(state.clone())
+        })
+    }
 
     /// <p>Gets the invitations for resource sharing that you've received.</p>
     async fn get_resource_share_invitations(
@@ -3179,11 +3441,31 @@ pub trait Ram {
         input: GetResourceShareInvitationsRequest,
     ) -> Result<GetResourceShareInvitationsResponse, RusotoError<GetResourceShareInvitationsError>>;
 
+    /// Auto-paginating version of `get_resource_share_invitations`
+    fn get_resource_share_invitations_pages(
+        &self,
+        input: GetResourceShareInvitationsRequest,
+    ) -> RusotoStream<ResourceShareInvitation, GetResourceShareInvitationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_resource_share_invitations(state.clone())
+        })
+    }
+
     /// <p>Gets the resource shares that you own or the resource shares that are shared with you.</p>
     async fn get_resource_shares(
         &self,
         input: GetResourceSharesRequest,
     ) -> Result<GetResourceSharesResponse, RusotoError<GetResourceSharesError>>;
+
+    /// Auto-paginating version of `get_resource_shares`
+    fn get_resource_shares_pages(
+        &self,
+        input: GetResourceSharesRequest,
+    ) -> RusotoStream<ResourceShare, GetResourceSharesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_resource_shares(state.clone())
+        })
+    }
 
     /// <p>Lists the resources in a resource share that is shared with you but that the invitation is still pending for.</p>
     async fn list_pending_invitation_resources(
@@ -3206,6 +3488,16 @@ pub trait Ram {
         input: ListPrincipalsRequest,
     ) -> Result<ListPrincipalsResponse, RusotoError<ListPrincipalsError>>;
 
+    /// Auto-paginating version of `list_principals`
+    fn list_principals_pages(
+        &self,
+        input: ListPrincipalsRequest,
+    ) -> RusotoStream<Principal, ListPrincipalsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_principals(state.clone())
+        })
+    }
+
     /// <p>Lists the AWS RAM permissions that are associated with a resource share.</p>
     async fn list_resource_share_permissions(
         &self,
@@ -3223,6 +3515,16 @@ pub trait Ram {
         &self,
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
+
+    /// Auto-paginating version of `list_resources`
+    fn list_resources_pages(
+        &self,
+        input: ListResourcesRequest,
+    ) -> RusotoStream<Resource, ListResourcesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_resources(state.clone())
+        })
+    }
 
     /// <p><p>Resource shares that were created by attaching a policy to a resource are visible only to the resource share owner, and the resource share cannot be modified in AWS RAM.</p> <p>Use this API action to promote the resource share. When you promote the resource share, it becomes:</p> <ul> <li> <p>Visible to all principals that it is shared with.</p> </li> <li> <p>Modifiable in AWS RAM.</p> </li> </ul></p>
     async fn promote_resource_share_created_from_policy(

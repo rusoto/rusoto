@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -26,6 +28,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Provides a description of an EFS file system access point.</p>
+/// see [Efs::create_access_point]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessPointDescription {
@@ -79,6 +82,8 @@ pub struct BackupPolicy {
     pub status: String,
 }
 
+/// see [Efs::describe_backup_policy]
+/// see [Efs::put_backup_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupPolicyDescription {
@@ -88,6 +93,7 @@ pub struct BackupPolicyDescription {
     pub backup_policy: Option<BackupPolicy>,
 }
 
+/// see [Efs::create_access_point]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccessPointRequest {
@@ -111,6 +117,7 @@ pub struct CreateAccessPointRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Efs::create_file_system]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemRequest {
@@ -144,6 +151,7 @@ pub struct CreateFileSystemRequest {
 }
 
 /// <p><p/></p>
+/// see [Efs::create_mount_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMountTargetRequest {
@@ -164,6 +172,7 @@ pub struct CreateMountTargetRequest {
 }
 
 /// <p><p/></p>
+/// see [Efs::create_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
@@ -189,6 +198,7 @@ pub struct CreationInfo {
     pub permissions: String,
 }
 
+/// see [Efs::delete_access_point]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessPointRequest {
@@ -197,6 +207,7 @@ pub struct DeleteAccessPointRequest {
     pub access_point_id: String,
 }
 
+/// see [Efs::delete_file_system_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileSystemPolicyRequest {
@@ -206,6 +217,7 @@ pub struct DeleteFileSystemPolicyRequest {
 }
 
 /// <p><p/></p>
+/// see [Efs::delete_file_system]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileSystemRequest {
@@ -215,6 +227,7 @@ pub struct DeleteFileSystemRequest {
 }
 
 /// <p><p/></p>
+/// see [Efs::delete_mount_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMountTargetRequest {
@@ -224,6 +237,7 @@ pub struct DeleteMountTargetRequest {
 }
 
 /// <p><p/></p>
+/// see [Efs::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
@@ -235,6 +249,7 @@ pub struct DeleteTagsRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Efs::describe_access_points]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccessPointsRequest {
@@ -256,6 +271,7 @@ pub struct DescribeAccessPointsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Efs::describe_access_points]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccessPointsResponse {
@@ -269,6 +285,7 @@ pub struct DescribeAccessPointsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Efs::describe_backup_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupPolicyRequest {
@@ -277,6 +294,7 @@ pub struct DescribeBackupPolicyRequest {
     pub file_system_id: String,
 }
 
+/// see [Efs::describe_file_system_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemPolicyRequest {
@@ -286,6 +304,7 @@ pub struct DescribeFileSystemPolicyRequest {
 }
 
 /// <p><p/></p>
+/// see [Efs::describe_file_systems]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemsRequest {
@@ -307,6 +326,15 @@ pub struct DescribeFileSystemsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for DescribeFileSystemsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Efs::describe_file_systems]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFileSystemsResponse {
@@ -324,6 +352,31 @@ pub struct DescribeFileSystemsResponse {
     pub next_marker: Option<String>,
 }
 
+impl DescribeFileSystemsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<FileSystemDescription>> {
+        Some(self.file_systems.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeFileSystemsResponse {
+    type Item = FileSystemDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FileSystemDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Efs::describe_lifecycle_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLifecycleConfigurationRequest {
@@ -333,6 +386,7 @@ pub struct DescribeLifecycleConfigurationRequest {
 }
 
 /// <p><p/></p>
+/// see [Efs::describe_mount_target_security_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMountTargetSecurityGroupsRequest {
@@ -341,6 +395,7 @@ pub struct DescribeMountTargetSecurityGroupsRequest {
     pub mount_target_id: String,
 }
 
+/// see [Efs::describe_mount_target_security_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMountTargetSecurityGroupsResponse {
@@ -350,6 +405,7 @@ pub struct DescribeMountTargetSecurityGroupsResponse {
 }
 
 /// <p><p/></p>
+/// see [Efs::describe_mount_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMountTargetsRequest {
@@ -375,7 +431,16 @@ pub struct DescribeMountTargetsRequest {
     pub mount_target_id: Option<String>,
 }
 
+impl PagedRequest for DescribeMountTargetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [Efs::describe_mount_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMountTargetsResponse {
@@ -393,7 +458,32 @@ pub struct DescribeMountTargetsResponse {
     pub next_marker: Option<String>,
 }
 
+impl DescribeMountTargetsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<MountTargetDescription>> {
+        Some(self.mount_targets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeMountTargetsResponse {
+    type Item = MountTargetDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MountTargetDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p><p/></p>
+/// see [Efs::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
@@ -410,7 +500,16 @@ pub struct DescribeTagsRequest {
     pub max_items: Option<i64>,
 }
 
+impl PagedRequest for DescribeTagsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
 /// <p><p/></p>
+/// see [Efs::describe_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResponse {
@@ -427,7 +526,33 @@ pub struct DescribeTagsResponse {
     pub tags: Vec<Tag>,
 }
 
+impl DescribeTagsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
+        Some(self.tags.clone())
+    }
+}
+
+impl PagedOutput for DescribeTagsResponse {
+    type Item = Tag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
 /// <p>A description of the file system.</p>
+/// see [Efs::create_file_system]
+/// see [Efs::update_file_system]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileSystemDescription {
@@ -484,6 +609,8 @@ pub struct FileSystemDescription {
     pub throughput_mode: Option<String>,
 }
 
+/// see [Efs::describe_file_system_policy]
+/// see [Efs::put_file_system_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileSystemPolicyDescription {
@@ -518,6 +645,8 @@ pub struct FileSystemSize {
     pub value_in_standard: Option<i64>,
 }
 
+/// see [Efs::describe_lifecycle_configuration]
+/// see [Efs::put_lifecycle_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecycleConfigurationDescription {
@@ -536,6 +665,7 @@ pub struct LifecyclePolicy {
     pub transition_to_ia: Option<String>,
 }
 
+/// see [Efs::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -552,6 +682,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_id: String,
 }
 
+/// see [Efs::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -566,6 +697,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p><p/></p>
+/// see [Efs::modify_mount_target_security_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyMountTargetSecurityGroupsRequest {
@@ -579,6 +711,7 @@ pub struct ModifyMountTargetSecurityGroupsRequest {
 }
 
 /// <p>Provides a description of a mount target.</p>
+/// see [Efs::create_mount_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MountTargetDescription {
@@ -635,6 +768,7 @@ pub struct PosixUser {
     pub uid: i64,
 }
 
+/// see [Efs::put_backup_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBackupPolicyRequest {
@@ -646,6 +780,7 @@ pub struct PutBackupPolicyRequest {
     pub file_system_id: String,
 }
 
+/// see [Efs::put_file_system_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileSystemPolicyRequest {
@@ -661,6 +796,7 @@ pub struct PutFileSystemPolicyRequest {
     pub policy: String,
 }
 
+/// see [Efs::put_lifecycle_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleConfigurationRequest {
@@ -696,6 +832,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Efs::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -707,6 +844,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Efs::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -718,6 +856,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Efs::update_file_system]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemRequest {
@@ -2178,7 +2317,7 @@ impl fmt::Display for UpdateFileSystemError {
 impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the EFS API. EFS clients implement this trait.
 #[async_trait]
-pub trait Efs {
+pub trait Efs: Clone + Sync + Send + 'static {
     /// <p>Creates an EFS access point. An access point is an application-specific view into an EFS file system that applies an operating system user and group, and a file system path, to any file system request made through the access point. The operating system user and group override any identity information provided by the NFS client. The file system path is exposed as the access point's root directory. Applications using the access point can only access data in its own directory and below. To learn more, see <a href="https://docs.aws.amazon.com/efs/latest/ug/efs-access-points.html">Mounting a File System Using EFS Access Points</a>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:CreateAccessPoint</code> action.</p>
     async fn create_access_point(
         &self,
@@ -2257,6 +2396,16 @@ pub trait Efs {
         input: DescribeFileSystemsRequest,
     ) -> Result<DescribeFileSystemsResponse, RusotoError<DescribeFileSystemsError>>;
 
+    /// Auto-paginating version of `describe_file_systems`
+    fn describe_file_systems_pages(
+        &self,
+        input: DescribeFileSystemsRequest,
+    ) -> RusotoStream<FileSystemDescription, DescribeFileSystemsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_file_systems(state.clone())
+        })
+    }
+
     /// <p>Returns the current <code>LifecycleConfiguration</code> object for the specified Amazon EFS file system. EFS lifecycle management uses the <code>LifecycleConfiguration</code> object to identify which files to move to the EFS Infrequent Access (IA) storage class. For a file system without a <code>LifecycleConfiguration</code> object, the call returns an empty array in the response.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeLifecycleConfiguration</code> operation.</p>
     async fn describe_lifecycle_configuration(
         &self,
@@ -2278,11 +2427,31 @@ pub trait Efs {
         input: DescribeMountTargetsRequest,
     ) -> Result<DescribeMountTargetsResponse, RusotoError<DescribeMountTargetsError>>;
 
+    /// Auto-paginating version of `describe_mount_targets`
+    fn describe_mount_targets_pages(
+        &self,
+        input: DescribeMountTargetsRequest,
+    ) -> RusotoStream<MountTargetDescription, DescribeMountTargetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_mount_targets(state.clone())
+        })
+    }
+
     /// <p>Returns the tags associated with a file system. The order of tags returned in the response of one <code>DescribeTags</code> call and the order of tags returned across the responses of a multiple-call iteration (when using pagination) is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeTags</code> action. </p>
     async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
     ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
+
+    /// Auto-paginating version of `describe_tags`
+    fn describe_tags_pages(
+        &self,
+        input: DescribeTagsRequest,
+    ) -> RusotoStream<Tag, DescribeTagsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_tags(state.clone())
+        })
+    }
 
     /// <p>Lists all tags for a top-level EFS resource. You must provide the ID of the resource that you want to retrieve the tags for.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeAccessPoints</code> action.</p>
     async fn list_tags_for_resource(

@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -25,6 +27,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Workdocs::abort_document_version_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortDocumentVersionUploadRequest {
@@ -40,6 +43,7 @@ pub struct AbortDocumentVersionUploadRequest {
     pub version_id: String,
 }
 
+/// see [Workdocs::activate_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateUserRequest {
@@ -52,6 +56,7 @@ pub struct ActivateUserRequest {
     pub user_id: String,
 }
 
+/// see [Workdocs::activate_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivateUserResponse {
@@ -103,6 +108,7 @@ pub struct Activity {
     pub type_: Option<String>,
 }
 
+/// see [Workdocs::add_resource_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddResourcePermissionsRequest {
@@ -122,6 +128,7 @@ pub struct AddResourcePermissionsRequest {
     pub resource_id: String,
 }
 
+/// see [Workdocs::add_resource_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddResourcePermissionsResponse {
@@ -198,6 +205,7 @@ pub struct CommentMetadata {
     pub recipient_id: Option<String>,
 }
 
+/// see [Workdocs::create_comment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCommentRequest {
@@ -232,6 +240,7 @@ pub struct CreateCommentRequest {
     pub visibility: Option<String>,
 }
 
+/// see [Workdocs::create_comment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCommentResponse {
@@ -241,6 +250,7 @@ pub struct CreateCommentResponse {
     pub comment: Option<Comment>,
 }
 
+/// see [Workdocs::create_custom_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomMetadataRequest {
@@ -260,10 +270,12 @@ pub struct CreateCustomMetadataRequest {
     pub version_id: Option<String>,
 }
 
+/// see [Workdocs::create_custom_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomMetadataResponse {}
 
+/// see [Workdocs::create_folder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFolderRequest {
@@ -280,6 +292,7 @@ pub struct CreateFolderRequest {
     pub parent_folder_id: String,
 }
 
+/// see [Workdocs::create_folder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFolderResponse {
@@ -289,6 +302,7 @@ pub struct CreateFolderResponse {
     pub metadata: Option<FolderMetadata>,
 }
 
+/// see [Workdocs::create_labels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLabelsRequest {
@@ -304,10 +318,12 @@ pub struct CreateLabelsRequest {
     pub resource_id: String,
 }
 
+/// see [Workdocs::create_labels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLabelsResponse {}
 
+/// see [Workdocs::create_notification_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationSubscriptionRequest {
@@ -325,6 +341,7 @@ pub struct CreateNotificationSubscriptionRequest {
     pub subscription_type: String,
 }
 
+/// see [Workdocs::create_notification_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotificationSubscriptionResponse {
@@ -334,6 +351,7 @@ pub struct CreateNotificationSubscriptionResponse {
     pub subscription: Option<Subscription>,
 }
 
+/// see [Workdocs::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -371,6 +389,7 @@ pub struct CreateUserRequest {
     pub username: String,
 }
 
+/// see [Workdocs::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
@@ -380,6 +399,7 @@ pub struct CreateUserResponse {
     pub user: Option<User>,
 }
 
+/// see [Workdocs::deactivate_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateUserRequest {
@@ -392,6 +412,7 @@ pub struct DeactivateUserRequest {
     pub user_id: String,
 }
 
+/// see [Workdocs::delete_comment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCommentRequest {
@@ -410,6 +431,7 @@ pub struct DeleteCommentRequest {
     pub version_id: String,
 }
 
+/// see [Workdocs::delete_custom_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomMetadataRequest {
@@ -434,10 +456,12 @@ pub struct DeleteCustomMetadataRequest {
     pub version_id: Option<String>,
 }
 
+/// see [Workdocs::delete_custom_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCustomMetadataResponse {}
 
+/// see [Workdocs::delete_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentRequest {
@@ -450,6 +474,7 @@ pub struct DeleteDocumentRequest {
     pub document_id: String,
 }
 
+/// see [Workdocs::delete_folder_contents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFolderContentsRequest {
@@ -462,6 +487,7 @@ pub struct DeleteFolderContentsRequest {
     pub folder_id: String,
 }
 
+/// see [Workdocs::delete_folder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFolderRequest {
@@ -474,6 +500,7 @@ pub struct DeleteFolderRequest {
     pub folder_id: String,
 }
 
+/// see [Workdocs::delete_labels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLabelsRequest {
@@ -494,10 +521,12 @@ pub struct DeleteLabelsRequest {
     pub resource_id: String,
 }
 
+/// see [Workdocs::delete_labels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLabelsResponse {}
 
+/// see [Workdocs::delete_notification_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationSubscriptionRequest {
@@ -509,6 +538,7 @@ pub struct DeleteNotificationSubscriptionRequest {
     pub subscription_id: String,
 }
 
+/// see [Workdocs::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -521,6 +551,7 @@ pub struct DeleteUserRequest {
     pub user_id: String,
 }
 
+/// see [Workdocs::describe_activities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivitiesRequest {
@@ -566,6 +597,15 @@ pub struct DescribeActivitiesRequest {
     pub user_id: Option<String>,
 }
 
+impl PagedRequest for DescribeActivitiesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_activities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActivitiesResponse {
@@ -579,6 +619,31 @@ pub struct DescribeActivitiesResponse {
     pub user_activities: Option<Vec<Activity>>,
 }
 
+impl DescribeActivitiesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Activity>> {
+        Some(self.user_activities.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeActivitiesResponse {
+    type Item = Activity;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Activity> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_comments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommentsRequest {
@@ -602,6 +667,15 @@ pub struct DescribeCommentsRequest {
     pub version_id: String,
 }
 
+impl PagedRequest for DescribeCommentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_comments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCommentsResponse {
@@ -615,6 +689,31 @@ pub struct DescribeCommentsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeCommentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Comment>> {
+        Some(self.comments.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeCommentsResponse {
+    type Item = Comment;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Comment> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_document_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentVersionsRequest {
@@ -643,6 +742,15 @@ pub struct DescribeDocumentVersionsRequest {
     pub marker: Option<String>,
 }
 
+impl PagedRequest for DescribeDocumentVersionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_document_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentVersionsResponse {
@@ -656,6 +764,31 @@ pub struct DescribeDocumentVersionsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeDocumentVersionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<DocumentVersionMetadata>> {
+        Some(self.document_versions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDocumentVersionsResponse {
+    type Item = DocumentVersionMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DocumentVersionMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_folder_contents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFolderContentsRequest {
@@ -692,6 +825,15 @@ pub struct DescribeFolderContentsRequest {
     pub type_: Option<String>,
 }
 
+impl PagedRequest for DescribeFolderContentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_folder_contents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFolderContentsResponse {
@@ -709,6 +851,27 @@ pub struct DescribeFolderContentsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeFolderContentsResponse {}
+
+impl PagedOutput for DescribeFolderContentsResponse {
+    type Item = DescribeFolderContentsResponse;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DescribeFolderContentsResponse> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupsRequest {
@@ -733,6 +896,15 @@ pub struct DescribeGroupsRequest {
     pub search_query: String,
 }
 
+impl PagedRequest for DescribeGroupsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGroupsResponse {
@@ -746,6 +918,31 @@ pub struct DescribeGroupsResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeGroupsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<GroupMetadata>> {
+        Some(self.groups.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeGroupsResponse {
+    type Item = GroupMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<GroupMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_notification_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationSubscriptionsRequest {
@@ -762,6 +959,15 @@ pub struct DescribeNotificationSubscriptionsRequest {
     pub organization_id: String,
 }
 
+impl PagedRequest for DescribeNotificationSubscriptionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_notification_subscriptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotificationSubscriptionsResponse {
@@ -775,6 +981,31 @@ pub struct DescribeNotificationSubscriptionsResponse {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
+impl DescribeNotificationSubscriptionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Subscription>> {
+        Some(self.subscriptions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeNotificationSubscriptionsResponse {
+    type Item = Subscription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Subscription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_resource_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourcePermissionsRequest {
@@ -799,6 +1030,15 @@ pub struct DescribeResourcePermissionsRequest {
     pub resource_id: String,
 }
 
+impl PagedRequest for DescribeResourcePermissionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_resource_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourcePermissionsResponse {
@@ -812,6 +1052,31 @@ pub struct DescribeResourcePermissionsResponse {
     pub principals: Option<Vec<Principal>>,
 }
 
+impl DescribeResourcePermissionsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<Principal>> {
+        Some(self.principals.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeResourcePermissionsResponse {
+    type Item = Principal;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Principal> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_root_folders]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRootFoldersRequest {
@@ -828,6 +1093,15 @@ pub struct DescribeRootFoldersRequest {
     pub marker: Option<String>,
 }
 
+impl PagedRequest for DescribeRootFoldersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_root_folders]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRootFoldersResponse {
@@ -841,6 +1115,31 @@ pub struct DescribeRootFoldersResponse {
     pub marker: Option<String>,
 }
 
+impl DescribeRootFoldersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<FolderMetadata>> {
+        Some(self.folders.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeRootFoldersResponse {
+    type Item = FolderMetadata;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<FolderMetadata> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Workdocs::describe_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsersRequest {
@@ -886,6 +1185,15 @@ pub struct DescribeUsersRequest {
     pub user_ids: Option<String>,
 }
 
+impl PagedRequest for DescribeUsersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
+}
+
+/// see [Workdocs::describe_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUsersResponse {
@@ -897,6 +1205,30 @@ pub struct DescribeUsersResponse {
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<User>>,
+}
+
+impl DescribeUsersResponse {
+    fn pagination_page_opt(self) -> Option<Vec<User>> {
+        Some(self.users.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeUsersResponse {
+    type Item = User;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<User> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Describes the document.</p>
@@ -1045,6 +1377,7 @@ pub struct FolderMetadata {
     pub size: Option<i64>,
 }
 
+/// see [Workdocs::get_current_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCurrentUserRequest {
@@ -1053,6 +1386,7 @@ pub struct GetCurrentUserRequest {
     pub authentication_token: String,
 }
 
+/// see [Workdocs::get_current_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCurrentUserResponse {
@@ -1062,6 +1396,7 @@ pub struct GetCurrentUserResponse {
     pub user: Option<User>,
 }
 
+/// see [Workdocs::get_document_path]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentPathRequest {
@@ -1086,6 +1421,7 @@ pub struct GetDocumentPathRequest {
     pub marker: Option<String>,
 }
 
+/// see [Workdocs::get_document_path]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentPathResponse {
@@ -1095,6 +1431,7 @@ pub struct GetDocumentPathResponse {
     pub path: Option<ResourcePath>,
 }
 
+/// see [Workdocs::get_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentRequest {
@@ -1111,6 +1448,7 @@ pub struct GetDocumentRequest {
     pub include_custom_metadata: Option<bool>,
 }
 
+/// see [Workdocs::get_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentResponse {
@@ -1124,6 +1462,7 @@ pub struct GetDocumentResponse {
     pub metadata: Option<DocumentMetadata>,
 }
 
+/// see [Workdocs::get_document_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentVersionRequest {
@@ -1147,6 +1486,7 @@ pub struct GetDocumentVersionRequest {
     pub version_id: String,
 }
 
+/// see [Workdocs::get_document_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentVersionResponse {
@@ -1160,6 +1500,7 @@ pub struct GetDocumentVersionResponse {
     pub metadata: Option<DocumentVersionMetadata>,
 }
 
+/// see [Workdocs::get_folder_path]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderPathRequest {
@@ -1184,6 +1525,7 @@ pub struct GetFolderPathRequest {
     pub marker: Option<String>,
 }
 
+/// see [Workdocs::get_folder_path]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFolderPathResponse {
@@ -1193,6 +1535,7 @@ pub struct GetFolderPathResponse {
     pub path: Option<ResourcePath>,
 }
 
+/// see [Workdocs::get_folder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderRequest {
@@ -1209,6 +1552,7 @@ pub struct GetFolderRequest {
     pub include_custom_metadata: Option<bool>,
 }
 
+/// see [Workdocs::get_folder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFolderResponse {
@@ -1222,6 +1566,7 @@ pub struct GetFolderResponse {
     pub metadata: Option<FolderMetadata>,
 }
 
+/// see [Workdocs::get_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesRequest {
@@ -1247,6 +1592,7 @@ pub struct GetResourcesRequest {
     pub user_id: Option<String>,
 }
 
+/// see [Workdocs::get_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcesResponse {
@@ -1278,6 +1624,7 @@ pub struct GroupMetadata {
     pub name: Option<String>,
 }
 
+/// see [Workdocs::initiate_document_version_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateDocumentVersionUploadRequest {
@@ -1314,6 +1661,7 @@ pub struct InitiateDocumentVersionUploadRequest {
     pub parent_folder_id: String,
 }
 
+/// see [Workdocs::initiate_document_version_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateDocumentVersionUploadResponse {
@@ -1387,6 +1735,7 @@ pub struct Principal {
     pub type_: Option<String>,
 }
 
+/// see [Workdocs::remove_all_resource_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAllResourcePermissionsRequest {
@@ -1399,6 +1748,7 @@ pub struct RemoveAllResourcePermissionsRequest {
     pub resource_id: String,
 }
 
+/// see [Workdocs::remove_resource_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveResourcePermissionRequest {
@@ -1552,6 +1902,7 @@ pub struct Subscription {
     pub subscription_id: Option<String>,
 }
 
+/// see [Workdocs::update_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentRequest {
@@ -1576,6 +1927,7 @@ pub struct UpdateDocumentRequest {
     pub resource_state: Option<String>,
 }
 
+/// see [Workdocs::update_document_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentVersionRequest {
@@ -1595,6 +1947,7 @@ pub struct UpdateDocumentVersionRequest {
     pub version_status: Option<String>,
 }
 
+/// see [Workdocs::update_folder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFolderRequest {
@@ -1619,6 +1972,7 @@ pub struct UpdateFolderRequest {
     pub resource_state: Option<String>,
 }
 
+/// see [Workdocs::update_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
@@ -1659,6 +2013,7 @@ pub struct UpdateUserRequest {
     pub user_id: String,
 }
 
+/// see [Workdocs::update_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
@@ -4646,7 +5001,7 @@ impl fmt::Display for UpdateUserError {
 impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the Amazon WorkDocs API. Amazon WorkDocs clients implement this trait.
 #[async_trait]
-pub trait Workdocs {
+pub trait Workdocs: Clone + Sync + Send + 'static {
     /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
     async fn abort_document_version_upload(
         &self,
@@ -4764,11 +5119,31 @@ pub trait Workdocs {
         input: DescribeActivitiesRequest,
     ) -> Result<DescribeActivitiesResponse, RusotoError<DescribeActivitiesError>>;
 
+    /// Auto-paginating version of `describe_activities`
+    fn describe_activities_pages(
+        &self,
+        input: DescribeActivitiesRequest,
+    ) -> RusotoStream<Activity, DescribeActivitiesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_activities(state.clone())
+        })
+    }
+
     /// <p>List all the comments for the specified document version.</p>
     async fn describe_comments(
         &self,
         input: DescribeCommentsRequest,
     ) -> Result<DescribeCommentsResponse, RusotoError<DescribeCommentsError>>;
+
+    /// Auto-paginating version of `describe_comments`
+    fn describe_comments_pages(
+        &self,
+        input: DescribeCommentsRequest,
+    ) -> RusotoStream<Comment, DescribeCommentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_comments(state.clone())
+        })
+    }
 
     /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
     async fn describe_document_versions(
@@ -4776,17 +5151,47 @@ pub trait Workdocs {
         input: DescribeDocumentVersionsRequest,
     ) -> Result<DescribeDocumentVersionsResponse, RusotoError<DescribeDocumentVersionsError>>;
 
+    /// Auto-paginating version of `describe_document_versions`
+    fn describe_document_versions_pages(
+        &self,
+        input: DescribeDocumentVersionsRequest,
+    ) -> RusotoStream<DocumentVersionMetadata, DescribeDocumentVersionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_document_versions(state.clone())
+        })
+    }
+
     /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
     async fn describe_folder_contents(
         &self,
         input: DescribeFolderContentsRequest,
     ) -> Result<DescribeFolderContentsResponse, RusotoError<DescribeFolderContentsError>>;
 
+    /// Auto-paginating version of `describe_folder_contents`
+    fn describe_folder_contents_pages(
+        &self,
+        input: DescribeFolderContentsRequest,
+    ) -> RusotoStream<DescribeFolderContentsResponse, DescribeFolderContentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_folder_contents(state.clone())
+        })
+    }
+
     /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
     async fn describe_groups(
         &self,
         input: DescribeGroupsRequest,
     ) -> Result<DescribeGroupsResponse, RusotoError<DescribeGroupsError>>;
+
+    /// Auto-paginating version of `describe_groups`
+    fn describe_groups_pages(
+        &self,
+        input: DescribeGroupsRequest,
+    ) -> RusotoStream<GroupMetadata, DescribeGroupsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_groups(state.clone())
+        })
+    }
 
     /// <p>Lists the specified notification subscriptions.</p>
     async fn describe_notification_subscriptions(
@@ -4797,11 +5202,31 @@ pub trait Workdocs {
         RusotoError<DescribeNotificationSubscriptionsError>,
     >;
 
+    /// Auto-paginating version of `describe_notification_subscriptions`
+    fn describe_notification_subscriptions_pages(
+        &self,
+        input: DescribeNotificationSubscriptionsRequest,
+    ) -> RusotoStream<Subscription, DescribeNotificationSubscriptionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_notification_subscriptions(state.clone())
+        })
+    }
+
     /// <p>Describes the permissions of a specified resource.</p>
     async fn describe_resource_permissions(
         &self,
         input: DescribeResourcePermissionsRequest,
     ) -> Result<DescribeResourcePermissionsResponse, RusotoError<DescribeResourcePermissionsError>>;
+
+    /// Auto-paginating version of `describe_resource_permissions`
+    fn describe_resource_permissions_pages(
+        &self,
+        input: DescribeResourcePermissionsRequest,
+    ) -> RusotoStream<Principal, DescribeResourcePermissionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_resource_permissions(state.clone())
+        })
+    }
 
     /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     async fn describe_root_folders(
@@ -4809,11 +5234,31 @@ pub trait Workdocs {
         input: DescribeRootFoldersRequest,
     ) -> Result<DescribeRootFoldersResponse, RusotoError<DescribeRootFoldersError>>;
 
+    /// Auto-paginating version of `describe_root_folders`
+    fn describe_root_folders_pages(
+        &self,
+        input: DescribeRootFoldersRequest,
+    ) -> RusotoStream<FolderMetadata, DescribeRootFoldersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_root_folders(state.clone())
+        })
+    }
+
     /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
     async fn describe_users(
         &self,
         input: DescribeUsersRequest,
     ) -> Result<DescribeUsersResponse, RusotoError<DescribeUsersError>>;
+
+    /// Auto-paginating version of `describe_users`
+    fn describe_users_pages(
+        &self,
+        input: DescribeUsersRequest,
+    ) -> RusotoStream<User, DescribeUsersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_users(state.clone())
+        })
+    }
 
     /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     async fn get_current_user(

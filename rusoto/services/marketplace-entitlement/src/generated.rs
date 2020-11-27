@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -101,6 +103,7 @@ pub struct EntitlementValue {
 }
 
 /// <p>The GetEntitlementsRequest contains parameters for the GetEntitlements operation.</p>
+/// see [MarketplaceEntitlement::get_entitlements]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEntitlementsRequest {
@@ -121,7 +124,16 @@ pub struct GetEntitlementsRequest {
     pub product_code: String,
 }
 
+impl PagedRequest for GetEntitlementsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>The GetEntitlementsRequest contains results from the GetEntitlements operation.</p>
+/// see [MarketplaceEntitlement::get_entitlements]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEntitlementsResult {
@@ -133,6 +145,30 @@ pub struct GetEntitlementsResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl GetEntitlementsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Entitlement>> {
+        Some(self.entitlements.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetEntitlementsResult {
+    type Item = Entitlement;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Entitlement> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// Errors returned by GetEntitlements
@@ -181,12 +217,22 @@ impl fmt::Display for GetEntitlementsError {
 impl Error for GetEntitlementsError {}
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
 #[async_trait]
-pub trait MarketplaceEntitlement {
+pub trait MarketplaceEntitlement: Clone + Sync + Send + 'static {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
     async fn get_entitlements(
         &self,
         input: GetEntitlementsRequest,
     ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>>;
+
+    /// Auto-paginating version of `get_entitlements`
+    fn get_entitlements_pages(
+        &self,
+        input: GetEntitlementsRequest,
+    ) -> RusotoStream<Entitlement, GetEntitlementsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_entitlements(state.clone())
+        })
+    }
 }
 /// A client for the AWS Marketplace Entitlement Service API.
 #[derive(Clone)]

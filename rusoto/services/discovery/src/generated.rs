@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -128,6 +130,7 @@ pub struct AgentNetworkInfo {
     pub mac_address: Option<String>,
 }
 
+/// see [Discovery::associate_configuration_items_to_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateConfigurationItemsToApplicationRequest {
@@ -139,6 +142,7 @@ pub struct AssociateConfigurationItemsToApplicationRequest {
     pub configuration_ids: Vec<String>,
 }
 
+/// see [Discovery::associate_configuration_items_to_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateConfigurationItemsToApplicationResponse {}
@@ -161,6 +165,7 @@ pub struct DiscoveryBatchDeleteImportDataError {
     pub import_task_id: Option<String>,
 }
 
+/// see [Discovery::batch_delete_import_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteImportDataRequest {
@@ -169,6 +174,7 @@ pub struct BatchDeleteImportDataRequest {
     pub import_task_ids: Vec<String>,
 }
 
+/// see [Discovery::batch_delete_import_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteImportDataResponse {
@@ -242,6 +248,7 @@ pub struct ContinuousExportDescription {
     pub stop_time: Option<f64>,
 }
 
+/// see [Discovery::create_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
@@ -254,6 +261,7 @@ pub struct CreateApplicationRequest {
     pub name: String,
 }
 
+/// see [Discovery::create_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
@@ -263,6 +271,7 @@ pub struct CreateApplicationResponse {
     pub configuration_id: Option<String>,
 }
 
+/// see [Discovery::create_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
@@ -274,6 +283,7 @@ pub struct CreateTagsRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Discovery::create_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTagsResponse {}
@@ -332,6 +342,7 @@ pub struct CustomerConnectorInfo {
     pub unknown_connectors: i64,
 }
 
+/// see [Discovery::delete_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationsRequest {
@@ -340,10 +351,12 @@ pub struct DeleteApplicationsRequest {
     pub configuration_ids: Vec<String>,
 }
 
+/// see [Discovery::delete_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationsResponse {}
 
+/// see [Discovery::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
@@ -356,10 +369,12 @@ pub struct DeleteTagsRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Discovery::delete_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsResponse {}
 
+/// see [Discovery::describe_agents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentsRequest {
@@ -381,6 +396,15 @@ pub struct DescribeAgentsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeAgentsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Discovery::describe_agents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAgentsResponse {
@@ -394,6 +418,31 @@ pub struct DescribeAgentsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeAgentsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AgentInfo>> {
+        Some(self.agents_info.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAgentsResponse {
+    type Item = AgentInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AgentInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Discovery::describe_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationsRequest {
@@ -402,6 +451,7 @@ pub struct DescribeConfigurationsRequest {
     pub configuration_ids: Vec<String>,
 }
 
+/// see [Discovery::describe_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationsResponse {
@@ -411,6 +461,7 @@ pub struct DescribeConfigurationsResponse {
     pub configurations: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
+/// see [Discovery::describe_continuous_exports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContinuousExportsRequest {
@@ -428,6 +479,15 @@ pub struct DescribeContinuousExportsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeContinuousExportsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Discovery::describe_continuous_exports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContinuousExportsResponse {
@@ -441,6 +501,31 @@ pub struct DescribeContinuousExportsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeContinuousExportsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ContinuousExportDescription>> {
+        Some(self.descriptions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeContinuousExportsResponse {
+    type Item = ContinuousExportDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ContinuousExportDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Discovery::describe_export_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportConfigurationsRequest {
@@ -458,6 +543,15 @@ pub struct DescribeExportConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeExportConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Discovery::describe_export_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExportConfigurationsResponse {
@@ -471,6 +565,31 @@ pub struct DescribeExportConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeExportConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ExportInfo>> {
+        Some(self.exports_info.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeExportConfigurationsResponse {
+    type Item = ExportInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ExportInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Discovery::describe_export_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksRequest {
@@ -492,6 +611,15 @@ pub struct DescribeExportTasksRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeExportTasksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Discovery::describe_export_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExportTasksResponse {
@@ -505,6 +633,31 @@ pub struct DescribeExportTasksResponse {
     pub next_token: Option<String>,
 }
 
+impl DescribeExportTasksResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ExportInfo>> {
+        Some(self.exports_info.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeExportTasksResponse {
+    type Item = ExportInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ExportInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Discovery::describe_import_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImportTasksRequest {
@@ -522,6 +675,7 @@ pub struct DescribeImportTasksRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Discovery::describe_import_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImportTasksResponse {
@@ -535,6 +689,7 @@ pub struct DescribeImportTasksResponse {
     pub tasks: Option<Vec<ImportTask>>,
 }
 
+/// see [Discovery::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
@@ -552,6 +707,15 @@ pub struct DescribeTagsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeTagsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Discovery::describe_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResponse {
@@ -565,6 +729,31 @@ pub struct DescribeTagsResponse {
     pub tags: Option<Vec<ConfigurationTag>>,
 }
 
+impl DescribeTagsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<ConfigurationTag>> {
+        Some(self.tags.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeTagsResponse {
+    type Item = ConfigurationTag;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ConfigurationTag> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Discovery::disassociate_configuration_items_from_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConfigurationItemsFromApplicationRequest {
@@ -576,10 +765,12 @@ pub struct DisassociateConfigurationItemsFromApplicationRequest {
     pub configuration_ids: Vec<String>,
 }
 
+/// see [Discovery::disassociate_configuration_items_from_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateConfigurationItemsFromApplicationResponse {}
 
+/// see [Discovery::export_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportConfigurationsResponse {
@@ -653,10 +844,12 @@ pub struct Filter {
     pub values: Vec<String>,
 }
 
+/// see [Discovery::get_discovery_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoverySummaryRequest {}
 
+/// see [Discovery::get_discovery_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoverySummaryResponse {
@@ -758,6 +951,7 @@ pub struct ImportTaskFilter {
     pub values: Option<Vec<String>>,
 }
 
+/// see [Discovery::list_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationsRequest {
@@ -782,6 +976,15 @@ pub struct ListConfigurationsRequest {
     pub order_by: Option<Vec<OrderByElement>>,
 }
 
+impl PagedRequest for ListConfigurationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Discovery::list_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationsResponse {
@@ -795,6 +998,31 @@ pub struct ListConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListConfigurationsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<::std::collections::HashMap<String, String>>> {
+        Some(self.configurations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListConfigurationsResponse {
+    type Item = ::std::collections::HashMap<String, String>;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<::std::collections::HashMap<String, String>> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Discovery::list_server_neighbors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServerNeighborsRequest {
@@ -819,6 +1047,7 @@ pub struct ListServerNeighborsRequest {
     pub port_information_needed: Option<bool>,
 }
 
+/// see [Discovery::list_server_neighbors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServerNeighborsResponse {
@@ -871,10 +1100,12 @@ pub struct OrderByElement {
     pub sort_order: Option<String>,
 }
 
+/// see [Discovery::start_continuous_export]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartContinuousExportRequest {}
 
+/// see [Discovery::start_continuous_export]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartContinuousExportResponse {
@@ -900,6 +1131,7 @@ pub struct StartContinuousExportResponse {
     pub start_time: Option<f64>,
 }
 
+/// see [Discovery::start_data_collection_by_agent_ids]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDataCollectionByAgentIdsRequest {
@@ -908,6 +1140,7 @@ pub struct StartDataCollectionByAgentIdsRequest {
     pub agent_ids: Vec<String>,
 }
 
+/// see [Discovery::start_data_collection_by_agent_ids]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDataCollectionByAgentIdsResponse {
@@ -917,6 +1150,7 @@ pub struct StartDataCollectionByAgentIdsResponse {
     pub agents_configuration_status: Option<Vec<AgentConfigurationStatus>>,
 }
 
+/// see [Discovery::start_export_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExportTaskRequest {
@@ -938,6 +1172,7 @@ pub struct StartExportTaskRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [Discovery::start_export_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartExportTaskResponse {
@@ -947,6 +1182,7 @@ pub struct StartExportTaskResponse {
     pub export_id: Option<String>,
 }
 
+/// see [Discovery::start_import_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportTaskRequest {
@@ -962,6 +1198,7 @@ pub struct StartImportTaskRequest {
     pub name: String,
 }
 
+/// see [Discovery::start_import_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImportTaskResponse {
@@ -971,6 +1208,7 @@ pub struct StartImportTaskResponse {
     pub task: Option<ImportTask>,
 }
 
+/// see [Discovery::stop_continuous_export]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContinuousExportRequest {
@@ -979,6 +1217,7 @@ pub struct StopContinuousExportRequest {
     pub export_id: String,
 }
 
+/// see [Discovery::stop_continuous_export]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContinuousExportResponse {
@@ -992,6 +1231,7 @@ pub struct StopContinuousExportResponse {
     pub stop_time: Option<f64>,
 }
 
+/// see [Discovery::stop_data_collection_by_agent_ids]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDataCollectionByAgentIdsRequest {
@@ -1000,6 +1240,7 @@ pub struct StopDataCollectionByAgentIdsRequest {
     pub agent_ids: Vec<String>,
 }
 
+/// see [Discovery::stop_data_collection_by_agent_ids]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDataCollectionByAgentIdsResponse {
@@ -1033,6 +1274,7 @@ pub struct TagFilter {
     pub values: Vec<String>,
 }
 
+/// see [Discovery::update_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
@@ -1049,6 +1291,7 @@ pub struct UpdateApplicationRequest {
     pub name: Option<String>,
 }
 
+/// see [Discovery::update_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {}
@@ -2777,7 +3020,7 @@ impl fmt::Display for UpdateApplicationError {
 impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
 #[async_trait]
-pub trait Discovery {
+pub trait Discovery: Clone + Sync + Send + 'static {
     /// <p>Associates one or more configuration items with an application.</p>
     async fn associate_configuration_items_to_application(
         &self,
@@ -2823,6 +3066,16 @@ pub trait Discovery {
         input: DescribeAgentsRequest,
     ) -> Result<DescribeAgentsResponse, RusotoError<DescribeAgentsError>>;
 
+    /// Auto-paginating version of `describe_agents`
+    fn describe_agents_pages(
+        &self,
+        input: DescribeAgentsRequest,
+    ) -> RusotoStream<AgentInfo, DescribeAgentsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_agents(state.clone())
+        })
+    }
+
     /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
     async fn describe_configurations(
         &self,
@@ -2835,17 +3088,47 @@ pub trait Discovery {
         input: DescribeContinuousExportsRequest,
     ) -> Result<DescribeContinuousExportsResponse, RusotoError<DescribeContinuousExportsError>>;
 
+    /// Auto-paginating version of `describe_continuous_exports`
+    fn describe_continuous_exports_pages(
+        &self,
+        input: DescribeContinuousExportsRequest,
+    ) -> RusotoStream<ContinuousExportDescription, DescribeContinuousExportsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_continuous_exports(state.clone())
+        })
+    }
+
     /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
     async fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
     ) -> Result<DescribeExportConfigurationsResponse, RusotoError<DescribeExportConfigurationsError>>;
 
+    /// Auto-paginating version of `describe_export_configurations`
+    fn describe_export_configurations_pages(
+        &self,
+        input: DescribeExportConfigurationsRequest,
+    ) -> RusotoStream<ExportInfo, DescribeExportConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_export_configurations(state.clone())
+        })
+    }
+
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
     async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
     ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>>;
+
+    /// Auto-paginating version of `describe_export_tasks`
+    fn describe_export_tasks_pages(
+        &self,
+        input: DescribeExportTasksRequest,
+    ) -> RusotoStream<ExportInfo, DescribeExportTasksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_export_tasks(state.clone())
+        })
+    }
 
     /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
     async fn describe_import_tasks(
@@ -2858,6 +3141,16 @@ pub trait Discovery {
         &self,
         input: DescribeTagsRequest,
     ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
+
+    /// Auto-paginating version of `describe_tags`
+    fn describe_tags_pages(
+        &self,
+        input: DescribeTagsRequest,
+    ) -> RusotoStream<ConfigurationTag, DescribeTagsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_tags(state.clone())
+        })
+    }
 
     /// <p>Disassociates one or more configuration items from an application.</p>
     async fn disassociate_configuration_items_from_application(
@@ -2883,6 +3176,16 @@ pub trait Discovery {
         &self,
         input: ListConfigurationsRequest,
     ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
+
+    /// Auto-paginating version of `list_configurations`
+    fn list_configurations_pages(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> RusotoStream<::std::collections::HashMap<String, String>, ListConfigurationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_configurations(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
     async fn list_server_neighbors(

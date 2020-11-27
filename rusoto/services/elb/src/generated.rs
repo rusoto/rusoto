@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -176,6 +178,7 @@ impl AccessPointPortDeserializer {
     }
 }
 /// <p>Contains the parameters for EnableAvailabilityZonesForLoadBalancer.</p>
+/// see [Elb::enable_availability_zones_for_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAvailabilityZonesInput {
@@ -207,6 +210,7 @@ impl AddAvailabilityZonesInputSerializer {
 }
 
 /// <p>Contains the output of EnableAvailabilityZonesForLoadBalancer.</p>
+/// see [Elb::enable_availability_zones_for_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddAvailabilityZonesOutput {
@@ -240,6 +244,7 @@ impl AddAvailabilityZonesOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for AddTags.</p>
+/// see [Elb::add_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
@@ -268,6 +273,7 @@ impl AddTagsInputSerializer {
 }
 
 /// <p>Contains the output of AddTags.</p>
+/// see [Elb::add_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddTagsOutput {}
@@ -452,6 +458,7 @@ impl AppCookieStickinessPolicyDeserializer {
     }
 }
 /// <p>Contains the parameters for ApplySecurityGroupsToLoadBalancer.</p>
+/// see [Elb::apply_security_groups_to_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplySecurityGroupsToLoadBalancerInput {
@@ -483,6 +490,7 @@ impl ApplySecurityGroupsToLoadBalancerInputSerializer {
 }
 
 /// <p>Contains the output of ApplySecurityGroupsToLoadBalancer.</p>
+/// see [Elb::apply_security_groups_to_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplySecurityGroupsToLoadBalancerOutput {
@@ -516,6 +524,7 @@ impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for AttachLoaBalancerToSubnets.</p>
+/// see [Elb::attach_load_balancer_to_subnets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachLoadBalancerToSubnetsInput {
@@ -543,6 +552,7 @@ impl AttachLoadBalancerToSubnetsInputSerializer {
 }
 
 /// <p>Contains the output of AttachLoadBalancerToSubnets.</p>
+/// see [Elb::attach_load_balancer_to_subnets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachLoadBalancerToSubnetsOutput {
@@ -707,6 +717,7 @@ impl CardinalityDeserializer {
     }
 }
 /// <p>Contains the parameters for ConfigureHealthCheck.</p>
+/// see [Elb::configure_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigureHealthCheckInput {
@@ -738,6 +749,7 @@ impl ConfigureHealthCheckInputSerializer {
 }
 
 /// <p>Contains the output of ConfigureHealthCheck.</p>
+/// see [Elb::configure_health_check]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigureHealthCheckOutput {
@@ -897,6 +909,7 @@ impl CookieNameDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateLoadBalancer.</p>
+/// see [Elb::create_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccessPointInput {
@@ -961,6 +974,7 @@ impl CreateAccessPointInputSerializer {
 }
 
 /// <p>Contains the output for CreateLoadBalancer.</p>
+/// see [Elb::create_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateAccessPointOutput {
@@ -992,6 +1006,7 @@ impl CreateAccessPointOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateAppCookieStickinessPolicy.</p>
+/// see [Elb::create_app_cookie_stickiness_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppCookieStickinessPolicyInput {
@@ -1022,6 +1037,7 @@ impl CreateAppCookieStickinessPolicyInputSerializer {
 }
 
 /// <p>Contains the output for CreateAppCookieStickinessPolicy.</p>
+/// see [Elb::create_app_cookie_stickiness_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateAppCookieStickinessPolicyOutput {}
@@ -1044,6 +1060,7 @@ impl CreateAppCookieStickinessPolicyOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateLBCookieStickinessPolicy.</p>
+/// see [Elb::create_lb_cookie_stickiness_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLBCookieStickinessPolicyInput {
@@ -1079,6 +1096,7 @@ impl CreateLBCookieStickinessPolicyInputSerializer {
 }
 
 /// <p>Contains the output for CreateLBCookieStickinessPolicy.</p>
+/// see [Elb::create_lb_cookie_stickiness_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLBCookieStickinessPolicyOutput {}
@@ -1101,6 +1119,7 @@ impl CreateLBCookieStickinessPolicyOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateLoadBalancerListeners.</p>
+/// see [Elb::create_load_balancer_listeners]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerListenerInput {
@@ -1132,6 +1151,7 @@ impl CreateLoadBalancerListenerInputSerializer {
 }
 
 /// <p>Contains the parameters for CreateLoadBalancerListener.</p>
+/// see [Elb::create_load_balancer_listeners]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoadBalancerListenerOutput {}
@@ -1154,6 +1174,7 @@ impl CreateLoadBalancerListenerOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateLoadBalancerPolicy.</p>
+/// see [Elb::create_load_balancer_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerPolicyInput {
@@ -1196,6 +1217,7 @@ impl CreateLoadBalancerPolicyInputSerializer {
 }
 
 /// <p>Contains the output of CreateLoadBalancerPolicy.</p>
+/// see [Elb::create_load_balancer_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoadBalancerPolicyOutput {}
@@ -1293,6 +1315,7 @@ impl DefaultValueDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteLoadBalancer.</p>
+/// see [Elb::delete_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessPointInput {
@@ -1317,6 +1340,7 @@ impl DeleteAccessPointInputSerializer {
 }
 
 /// <p>Contains the output of DeleteLoadBalancer.</p>
+/// see [Elb::delete_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteAccessPointOutput {}
@@ -1339,6 +1363,7 @@ impl DeleteAccessPointOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteLoadBalancerListeners.</p>
+/// see [Elb::delete_load_balancer_listeners]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerListenerInput {
@@ -1370,6 +1395,7 @@ impl DeleteLoadBalancerListenerInputSerializer {
 }
 
 /// <p>Contains the output of DeleteLoadBalancerListeners.</p>
+/// see [Elb::delete_load_balancer_listeners]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLoadBalancerListenerOutput {}
@@ -1392,6 +1418,7 @@ impl DeleteLoadBalancerListenerOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteLoadBalancerPolicy.</p>
+/// see [Elb::delete_load_balancer_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerPolicyInput {
@@ -1419,6 +1446,7 @@ impl DeleteLoadBalancerPolicyInputSerializer {
 }
 
 /// <p>Contains the output of DeleteLoadBalancerPolicy.</p>
+/// see [Elb::delete_load_balancer_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLoadBalancerPolicyOutput {}
@@ -1441,6 +1469,7 @@ impl DeleteLoadBalancerPolicyOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DeregisterInstancesFromLoadBalancer.</p>
+/// see [Elb::deregister_instances_from_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterEndPointsInput {
@@ -1472,6 +1501,7 @@ impl DeregisterEndPointsInputSerializer {
 }
 
 /// <p>Contains the output of DeregisterInstancesFromLoadBalancer.</p>
+/// see [Elb::deregister_instances_from_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterEndPointsOutput {
@@ -1505,6 +1535,7 @@ impl DeregisterEndPointsOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeLoadBalancers.</p>
+/// see [Elb::describe_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccessPointsInput {
@@ -1514,6 +1545,14 @@ pub struct DescribeAccessPointsInput {
     pub marker: Option<String>,
     /// <p>The maximum number of results to return with this call (a number from 1 to 400). The default is 400.</p>
     pub page_size: Option<i64>,
+}
+
+impl PagedRequest for DescribeAccessPointsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeAccessPointsInput` contents to a `SignedRequest`.
@@ -1542,6 +1581,7 @@ impl DescribeAccessPointsInputSerializer {
 }
 
 /// <p>Contains the parameters for DescribeLoadBalancers.</p>
+/// see [Elb::describe_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccessPointsOutput {
@@ -1549,6 +1589,30 @@ pub struct DescribeAccessPointsOutput {
     pub load_balancer_descriptions: Option<Vec<LoadBalancerDescription>>,
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
+}
+
+impl DescribeAccessPointsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<LoadBalancerDescription>> {
+        Some(self.load_balancer_descriptions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAccessPointsOutput {
+    type Item = LoadBalancerDescription;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LoadBalancerDescription> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1583,6 +1647,7 @@ impl DescribeAccessPointsOutputDeserializer {
         )
     }
 }
+/// see [Elb::describe_account_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountLimitsInput {
@@ -1590,6 +1655,14 @@ pub struct DescribeAccountLimitsInput {
     pub marker: Option<String>,
     /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
+}
+
+impl PagedRequest for DescribeAccountLimitsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.marker = key;
+        self
+    }
 }
 
 /// Serialize `DescribeAccountLimitsInput` contents to a `SignedRequest`.
@@ -1610,6 +1683,7 @@ impl DescribeAccountLimitsInputSerializer {
     }
 }
 
+/// see [Elb::describe_account_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsOutput {
@@ -1617,6 +1691,30 @@ pub struct DescribeAccountLimitsOutput {
     pub limits: Option<Vec<Limit>>,
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
+}
+
+impl DescribeAccountLimitsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Limit>> {
+        Some(self.limits.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeAccountLimitsOutput {
+    type Item = Limit;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_marker.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Limit> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -1649,6 +1747,7 @@ impl DescribeAccountLimitsOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeInstanceHealth.</p>
+/// see [Elb::describe_instance_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndPointStateInput {
@@ -1682,6 +1781,7 @@ impl DescribeEndPointStateInputSerializer {
 }
 
 /// <p>Contains the output for DescribeInstanceHealth.</p>
+/// see [Elb::describe_instance_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEndPointStateOutput {
@@ -1715,6 +1815,7 @@ impl DescribeEndPointStateOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeLoadBalancerAttributes.</p>
+/// see [Elb::describe_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerAttributesInput {
@@ -1739,6 +1840,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
 }
 
 /// <p>Contains the output of DescribeLoadBalancerAttributes.</p>
+/// see [Elb::describe_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerAttributesOutput {
@@ -1774,6 +1876,7 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeLoadBalancerPolicies.</p>
+/// see [Elb::describe_load_balancer_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerPoliciesInput {
@@ -1806,6 +1909,7 @@ impl DescribeLoadBalancerPoliciesInputSerializer {
 }
 
 /// <p>Contains the output of DescribeLoadBalancerPolicies.</p>
+/// see [Elb::describe_load_balancer_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerPoliciesOutput {
@@ -1842,6 +1946,7 @@ impl DescribeLoadBalancerPoliciesOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeLoadBalancerPolicyTypes.</p>
+/// see [Elb::describe_load_balancer_policy_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerPolicyTypesInput {
@@ -1869,6 +1974,7 @@ impl DescribeLoadBalancerPolicyTypesInputSerializer {
 }
 
 /// <p>Contains the output of DescribeLoadBalancerPolicyTypes.</p>
+/// see [Elb::describe_load_balancer_policy_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerPolicyTypesOutput {
@@ -1905,6 +2011,7 @@ impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeTags.</p>
+/// see [Elb::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsInput {
@@ -1930,6 +2037,7 @@ impl DescribeTagsInputSerializer {
 }
 
 /// <p>Contains the output for DescribeTags.</p>
+/// see [Elb::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTagsOutput {
@@ -1967,6 +2075,7 @@ impl DescriptionDeserializer {
     }
 }
 /// <p>Contains the parameters for DetachLoadBalancerFromSubnets.</p>
+/// see [Elb::detach_load_balancer_from_subnets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachLoadBalancerFromSubnetsInput {
@@ -1994,6 +2103,7 @@ impl DetachLoadBalancerFromSubnetsInputSerializer {
 }
 
 /// <p>Contains the output of DetachLoadBalancerFromSubnets.</p>
+/// see [Elb::detach_load_balancer_from_subnets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetachLoadBalancerFromSubnetsOutput {
@@ -2869,6 +2979,7 @@ impl MaxDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifyLoadBalancerAttributes.</p>
+/// see [Elb::modify_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyLoadBalancerAttributesInput {
@@ -2900,6 +3011,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
 }
 
 /// <p>Contains the output of ModifyLoadBalancerAttributes.</p>
+/// see [Elb::modify_load_balancer_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyLoadBalancerAttributesOutput {
@@ -3399,6 +3511,7 @@ impl ReasonCodeDeserializer {
     }
 }
 /// <p>Contains the parameters for RegisterInstancesWithLoadBalancer.</p>
+/// see [Elb::register_instances_with_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterEndPointsInput {
@@ -3430,6 +3543,7 @@ impl RegisterEndPointsInputSerializer {
 }
 
 /// <p>Contains the output of RegisterInstancesWithLoadBalancer.</p>
+/// see [Elb::register_instances_with_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterEndPointsOutput {
@@ -3463,6 +3577,7 @@ impl RegisterEndPointsOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for DisableAvailabilityZonesForLoadBalancer.</p>
+/// see [Elb::disable_availability_zones_for_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAvailabilityZonesInput {
@@ -3494,6 +3609,7 @@ impl RemoveAvailabilityZonesInputSerializer {
 }
 
 /// <p>Contains the output for DisableAvailabilityZonesForLoadBalancer.</p>
+/// see [Elb::disable_availability_zones_for_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveAvailabilityZonesOutput {
@@ -3527,6 +3643,7 @@ impl RemoveAvailabilityZonesOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for RemoveTags.</p>
+/// see [Elb::remove_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
@@ -3555,6 +3672,7 @@ impl RemoveTagsInputSerializer {
 }
 
 /// <p>Contains the output of RemoveTags.</p>
+/// see [Elb::remove_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveTagsOutput {}
@@ -3647,6 +3765,7 @@ impl SecurityGroupsSerializer {
 }
 
 /// <p>Contains the parameters for SetLoadBalancerListenerSSLCertificate.</p>
+/// see [Elb::set_load_balancer_listener_ssl_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBalancerListenerSSLCertificateInput {
@@ -3687,6 +3806,7 @@ impl SetLoadBalancerListenerSSLCertificateInputSerializer {
 }
 
 /// <p>Contains the output of SetLoadBalancerListenerSSLCertificate.</p>
+/// see [Elb::set_load_balancer_listener_ssl_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetLoadBalancerListenerSSLCertificateOutput {}
@@ -3709,6 +3829,7 @@ impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for SetLoadBalancerPoliciesForBackendServer.</p>
+/// see [Elb::set_load_balancer_policies_for_backend_server]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBalancerPoliciesForBackendServerInput {
@@ -3747,6 +3868,7 @@ impl SetLoadBalancerPoliciesForBackendServerInputSerializer {
 }
 
 /// <p>Contains the output of SetLoadBalancerPoliciesForBackendServer.</p>
+/// see [Elb::set_load_balancer_policies_for_backend_server]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetLoadBalancerPoliciesForBackendServerOutput {}
@@ -3769,6 +3891,7 @@ impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
     }
 }
 /// <p>Contains the parameters for SetLoadBalancePoliciesOfListener.</p>
+/// see [Elb::set_load_balancer_policies_of_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBalancerPoliciesOfListenerInput {
@@ -3806,6 +3929,7 @@ impl SetLoadBalancerPoliciesOfListenerInputSerializer {
 }
 
 /// <p>Contains the output of SetLoadBalancePoliciesOfListener.</p>
+/// see [Elb::set_load_balancer_policies_of_listener]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetLoadBalancerPoliciesOfListenerOutput {}
@@ -6022,7 +6146,7 @@ impl fmt::Display for SetLoadBalancerPoliciesOfListenerError {
 impl Error for SetLoadBalancerPoliciesOfListenerError {}
 /// Trait representing the capabilities of the Elastic Load Balancing API. Elastic Load Balancing clients implement this trait.
 #[async_trait]
-pub trait Elb {
+pub trait Elb: Clone + Sync + Send + 'static {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
     async fn add_tags(
         &self,
@@ -6116,6 +6240,16 @@ pub trait Elb {
         input: DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
+    /// Auto-paginating version of `describe_account_limits`
+    fn describe_account_limits_pages(
+        &self,
+        input: DescribeAccountLimitsInput,
+    ) -> RusotoStream<Limit, DescribeAccountLimitsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_account_limits(state.clone())
+        })
+    }
+
     /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
     async fn describe_instance_health(
         &self,
@@ -6151,6 +6285,16 @@ pub trait Elb {
         &self,
         input: DescribeAccessPointsInput,
     ) -> Result<DescribeAccessPointsOutput, RusotoError<DescribeLoadBalancersError>>;
+
+    /// Auto-paginating version of `describe_load_balancers`
+    fn describe_load_balancers_pages(
+        &self,
+        input: DescribeAccessPointsInput,
+    ) -> RusotoStream<LoadBalancerDescription, DescribeLoadBalancersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_load_balancers(state.clone())
+        })
+    }
 
     /// <p>Describes the tags associated with the specified load balancers.</p>
     async fn describe_tags(

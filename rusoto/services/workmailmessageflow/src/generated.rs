@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -23,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+/// see [WorkmailMessageFlow::get_raw_message_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRawMessageContentRequest {
@@ -31,6 +34,7 @@ pub struct GetRawMessageContentRequest {
     pub message_id: String,
 }
 
+/// see [WorkmailMessageFlow::get_raw_message_content]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetRawMessageContentResponse {
     /// <p>The raw content of the email message, in MIME format.</p>
@@ -71,7 +75,7 @@ impl fmt::Display for GetRawMessageContentError {
 impl Error for GetRawMessageContentError {}
 /// Trait representing the capabilities of the Amazon WorkMail Message Flow API. Amazon WorkMail Message Flow clients implement this trait.
 #[async_trait]
-pub trait WorkmailMessageFlow {
+pub trait WorkmailMessageFlow: Clone + Sync + Send + 'static {
     /// <p>Retrieves the raw content of an in-transit email message, in MIME format. </p>
     async fn get_raw_message_content(
         &self,

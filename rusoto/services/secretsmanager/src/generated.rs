@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl SecretsManagerClient {
 }
 
 use serde_json;
+/// see [SecretsManager::cancel_rotate_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelRotateSecretRequest {
@@ -59,6 +62,7 @@ pub struct CancelRotateSecretRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::cancel_rotate_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelRotateSecretResponse {
@@ -76,6 +80,7 @@ pub struct CancelRotateSecretResponse {
     pub version_id: Option<String>,
 }
 
+/// see [SecretsManager::create_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecretRequest {
@@ -113,6 +118,7 @@ pub struct CreateSecretRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SecretsManager::create_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecretResponse {
@@ -130,6 +136,7 @@ pub struct CreateSecretResponse {
     pub version_id: Option<String>,
 }
 
+/// see [SecretsManager::delete_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
@@ -138,6 +145,7 @@ pub struct DeleteResourcePolicyRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::delete_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcePolicyResponse {
@@ -151,6 +159,7 @@ pub struct DeleteResourcePolicyResponse {
     pub name: Option<String>,
 }
 
+/// see [SecretsManager::delete_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecretRequest {
@@ -167,6 +176,7 @@ pub struct DeleteSecretRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::delete_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecretResponse {
@@ -184,6 +194,7 @@ pub struct DeleteSecretResponse {
     pub name: Option<String>,
 }
 
+/// see [SecretsManager::describe_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecretRequest {
@@ -192,6 +203,7 @@ pub struct DescribeSecretRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::describe_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecretResponse {
@@ -271,6 +283,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
+/// see [SecretsManager::get_random_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRandomPasswordRequest {
@@ -308,6 +321,7 @@ pub struct GetRandomPasswordRequest {
     pub require_each_included_type: Option<bool>,
 }
 
+/// see [SecretsManager::get_random_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRandomPasswordResponse {
@@ -317,6 +331,7 @@ pub struct GetRandomPasswordResponse {
     pub random_password: Option<String>,
 }
 
+/// see [SecretsManager::get_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePolicyRequest {
@@ -325,6 +340,7 @@ pub struct GetResourcePolicyRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::get_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePolicyResponse {
@@ -342,6 +358,7 @@ pub struct GetResourcePolicyResponse {
     pub resource_policy: Option<String>,
 }
 
+/// see [SecretsManager::get_secret_value]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSecretValueRequest {
@@ -358,6 +375,7 @@ pub struct GetSecretValueRequest {
     pub version_stage: Option<String>,
 }
 
+/// see [SecretsManager::get_secret_value]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSecretValueResponse {
@@ -396,6 +414,7 @@ pub struct GetSecretValueResponse {
     pub version_stages: Option<Vec<String>>,
 }
 
+/// see [SecretsManager::list_secret_version_ids]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecretVersionIdsRequest {
@@ -416,6 +435,7 @@ pub struct ListSecretVersionIdsRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::list_secret_version_ids]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecretVersionIdsResponse {
@@ -437,6 +457,7 @@ pub struct ListSecretVersionIdsResponse {
     pub versions: Option<Vec<SecretVersionsListEntry>>,
 }
 
+/// see [SecretsManager::list_secrets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecretsRequest {
@@ -458,6 +479,15 @@ pub struct ListSecretsRequest {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for ListSecretsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [SecretsManager::list_secrets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecretsResponse {
@@ -471,6 +501,31 @@ pub struct ListSecretsResponse {
     pub secret_list: Option<Vec<SecretListEntry>>,
 }
 
+impl ListSecretsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<SecretListEntry>> {
+        Some(self.secret_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListSecretsResponse {
+    type Item = SecretListEntry;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<SecretListEntry> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [SecretsManager::put_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
@@ -486,6 +541,7 @@ pub struct PutResourcePolicyRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::put_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyResponse {
@@ -499,6 +555,7 @@ pub struct PutResourcePolicyResponse {
     pub name: Option<String>,
 }
 
+/// see [SecretsManager::put_secret_value]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSecretValueRequest {
@@ -528,6 +585,7 @@ pub struct PutSecretValueRequest {
     pub version_stages: Option<Vec<String>>,
 }
 
+/// see [SecretsManager::put_secret_value]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSecretValueResponse {
@@ -549,6 +607,7 @@ pub struct PutSecretValueResponse {
     pub version_stages: Option<Vec<String>>,
 }
 
+/// see [SecretsManager::restore_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreSecretRequest {
@@ -557,6 +616,7 @@ pub struct RestoreSecretRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::restore_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreSecretResponse {
@@ -570,6 +630,7 @@ pub struct RestoreSecretResponse {
     pub name: Option<String>,
 }
 
+/// see [SecretsManager::rotate_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateSecretRequest {
@@ -590,6 +651,7 @@ pub struct RotateSecretRequest {
     pub secret_id: String,
 }
 
+/// see [SecretsManager::rotate_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateSecretResponse {
@@ -717,6 +779,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [SecretsManager::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -728,6 +791,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [SecretsManager::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -739,6 +803,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [SecretsManager::update_secret]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecretRequest {
@@ -772,6 +837,7 @@ pub struct UpdateSecretRequest {
     pub secret_string: Option<String>,
 }
 
+/// see [SecretsManager::update_secret]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecretResponse {
@@ -789,6 +855,7 @@ pub struct UpdateSecretResponse {
     pub version_id: Option<String>,
 }
 
+/// see [SecretsManager::update_secret_version_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecretVersionStageRequest {
@@ -808,6 +875,7 @@ pub struct UpdateSecretVersionStageRequest {
     pub version_stage: String,
 }
 
+/// see [SecretsManager::update_secret_version_stage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecretVersionStageResponse {
@@ -821,6 +889,7 @@ pub struct UpdateSecretVersionStageResponse {
     pub name: Option<String>,
 }
 
+/// see [SecretsManager::validate_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateResourcePolicyRequest {
@@ -833,6 +902,7 @@ pub struct ValidateResourcePolicyRequest {
     pub secret_id: Option<String>,
 }
 
+/// see [SecretsManager::validate_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidateResourcePolicyResponse {
@@ -1888,7 +1958,7 @@ impl fmt::Display for ValidateResourcePolicyError {
 impl Error for ValidateResourcePolicyError {}
 /// Trait representing the capabilities of the AWS Secrets Manager API. AWS Secrets Manager clients implement this trait.
 #[async_trait]
-pub trait SecretsManager {
+pub trait SecretsManager: Clone + Sync + Send + 'static {
     /// <p><p>Disables automatic scheduled rotation and cancels the rotation of a secret if currently in progress.</p> <p>To re-enable scheduled rotation, call <a>RotateSecret</a> with <code>AutomaticallyRotateAfterDays</code> set to a value greater than 0. This immediately rotates your secret and then enables the automatic schedule.</p> <note> <p>If you cancel a rotation while in progress, it can leave the <code>VersionStage</code> labels in an unexpected state. Depending on the step of the rotation in progress, you might need to remove the staging label <code>AWSPENDING</code> from the partially created version, specified by the <code>VersionId</code> response value. You should also evaluate the partially rotated new version to see if it should be deleted, which you can do by removing all staging labels from the new version <code>VersionStage</code> field.</p> </note> <p>To successfully start a rotation, the staging label <code>AWSPENDING</code> must be in one of the following states:</p> <ul> <li> <p>Not attached to any version at all</p> </li> <li> <p>Attached to the same version as the staging label <code>AWSCURRENT</code> </p> </li> </ul> <p>If the staging label <code>AWSPENDING</code> attached to a different version than the version with <code>AWSCURRENT</code> then the attempt to rotate fails.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p>secretsmanager:CancelRotateSecret</p> </li> </ul> <p> <b>Related operations</b> </p> <ul> <li> <p>To configure rotation for a secret or to manually trigger a rotation, use <a>RotateSecret</a>.</p> </li> <li> <p>To get the rotation configuration details for a secret, use <a>DescribeSecret</a>.</p> </li> <li> <p>To list all of the currently available secrets, use <a>ListSecrets</a>.</p> </li> <li> <p>To list all of the versions currently associated with a secret, use <a>ListSecretVersionIds</a>.</p> </li> </ul></p>
     async fn cancel_rotate_secret(
         &self,
@@ -1948,6 +2018,16 @@ pub trait SecretsManager {
         &self,
         input: ListSecretsRequest,
     ) -> Result<ListSecretsResponse, RusotoError<ListSecretsError>>;
+
+    /// Auto-paginating version of `list_secrets`
+    fn list_secrets_pages(
+        &self,
+        input: ListSecretsRequest,
+    ) -> RusotoStream<SecretListEntry, ListSecretsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_secrets(state.clone())
+        })
+    }
 
     /// <p><p>Attaches the contents of the specified resource-based permission policy to a secret. A resource-based policy is optional. Alternatively, you can use IAM identity-based policies that specify the secret&#39;s Amazon Resource Name (ARN) in the policy statement&#39;s <code>Resources</code> element. You can also use a combination of both identity-based and resource-based policies. The affected users and roles receive the permissions that are permitted by all of the relevant policies. For more information, see <a href="http://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_resource-based-policies.html">Using Resource-Based Policies for AWS Secrets Manager</a>. For the complete description of the AWS policy syntax and grammar, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html">IAM JSON Policy Reference</a> in the <i>IAM User Guide</i>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p>secretsmanager:PutResourcePolicy</p> </li> </ul> <p> <b>Related operations</b> </p> <ul> <li> <p>To retrieve the resource policy attached to a secret, use <a>GetResourcePolicy</a>.</p> </li> <li> <p>To delete the resource-based policy that&#39;s attached to a secret, use <a>DeleteResourcePolicy</a>.</p> </li> <li> <p>To list all of the currently available secrets, use <a>ListSecrets</a>.</p> </li> </ul></p>
     async fn put_resource_policy(

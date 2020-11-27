@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -128,6 +130,7 @@ pub struct ApplicationSettingsResponse {
     pub settings_group: Option<String>,
 }
 
+/// see [AppStream::associate_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateFleetRequest {
@@ -139,10 +142,12 @@ pub struct AssociateFleetRequest {
     pub stack_name: String,
 }
 
+/// see [AppStream::associate_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateFleetResult {}
 
+/// see [AppStream::batch_associate_user_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateUserStackRequest {
@@ -151,6 +156,7 @@ pub struct BatchAssociateUserStackRequest {
     pub user_stack_associations: Vec<UserStackAssociation>,
 }
 
+/// see [AppStream::batch_associate_user_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAssociateUserStackResult {
@@ -160,6 +166,7 @@ pub struct BatchAssociateUserStackResult {
     pub errors: Option<Vec<UserStackAssociationError>>,
 }
 
+/// see [AppStream::batch_disassociate_user_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateUserStackRequest {
@@ -168,6 +175,7 @@ pub struct BatchDisassociateUserStackRequest {
     pub user_stack_associations: Vec<UserStackAssociation>,
 }
 
+/// see [AppStream::batch_disassociate_user_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDisassociateUserStackResult {
@@ -207,6 +215,7 @@ pub struct ComputeCapacityStatus {
     pub running: Option<i64>,
 }
 
+/// see [AppStream::copy_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyImageRequest {
@@ -225,6 +234,7 @@ pub struct CopyImageRequest {
     pub source_image_name: String,
 }
 
+/// see [AppStream::copy_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyImageResponse {
@@ -234,6 +244,7 @@ pub struct CopyImageResponse {
     pub destination_image_name: Option<String>,
 }
 
+/// see [AppStream::create_directory_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectoryConfigRequest {
@@ -249,6 +260,7 @@ pub struct CreateDirectoryConfigRequest {
     pub service_account_credentials: Option<ServiceAccountCredentials>,
 }
 
+/// see [AppStream::create_directory_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectoryConfigResult {
@@ -258,6 +270,7 @@ pub struct CreateDirectoryConfigResult {
     pub directory_config: Option<DirectoryConfig>,
 }
 
+/// see [AppStream::create_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetRequest {
@@ -328,6 +341,7 @@ pub struct CreateFleetRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [AppStream::create_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetResult {
@@ -337,6 +351,7 @@ pub struct CreateFleetResult {
     pub fleet: Option<Fleet>,
 }
 
+/// see [AppStream::create_image_builder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageBuilderRequest {
@@ -392,6 +407,7 @@ pub struct CreateImageBuilderRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [AppStream::create_image_builder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageBuilderResult {
@@ -401,6 +417,7 @@ pub struct CreateImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
+/// see [AppStream::create_image_builder_streaming_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageBuilderStreamingURLRequest {
@@ -413,6 +430,7 @@ pub struct CreateImageBuilderStreamingURLRequest {
     pub validity: Option<i64>,
 }
 
+/// see [AppStream::create_image_builder_streaming_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageBuilderStreamingURLResult {
@@ -426,6 +444,7 @@ pub struct CreateImageBuilderStreamingURLResult {
     pub streaming_url: Option<String>,
 }
 
+/// see [AppStream::create_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackRequest {
@@ -474,6 +493,7 @@ pub struct CreateStackRequest {
     pub user_settings: Option<Vec<UserSetting>>,
 }
 
+/// see [AppStream::create_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStackResult {
@@ -483,6 +503,7 @@ pub struct CreateStackResult {
     pub stack: Option<Stack>,
 }
 
+/// see [AppStream::create_streaming_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingURLRequest {
@@ -509,6 +530,7 @@ pub struct CreateStreamingURLRequest {
     pub validity: Option<i64>,
 }
 
+/// see [AppStream::create_streaming_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStreamingURLResult {
@@ -522,10 +544,12 @@ pub struct CreateStreamingURLResult {
     pub streaming_url: Option<String>,
 }
 
+/// see [AppStream::create_usage_report_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsageReportSubscriptionRequest {}
 
+/// see [AppStream::create_usage_report_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUsageReportSubscriptionResult {
@@ -539,6 +563,7 @@ pub struct CreateUsageReportSubscriptionResult {
     pub schedule: Option<String>,
 }
 
+/// see [AppStream::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -562,10 +587,12 @@ pub struct CreateUserRequest {
     pub user_name: String,
 }
 
+/// see [AppStream::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResult {}
 
+/// see [AppStream::delete_directory_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectoryConfigRequest {
@@ -574,10 +601,12 @@ pub struct DeleteDirectoryConfigRequest {
     pub directory_name: String,
 }
 
+/// see [AppStream::delete_directory_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectoryConfigResult {}
 
+/// see [AppStream::delete_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetRequest {
@@ -586,10 +615,12 @@ pub struct DeleteFleetRequest {
     pub name: String,
 }
 
+/// see [AppStream::delete_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFleetResult {}
 
+/// see [AppStream::delete_image_builder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageBuilderRequest {
@@ -598,6 +629,7 @@ pub struct DeleteImageBuilderRequest {
     pub name: String,
 }
 
+/// see [AppStream::delete_image_builder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageBuilderResult {
@@ -607,6 +639,7 @@ pub struct DeleteImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
+/// see [AppStream::delete_image_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImagePermissionsRequest {
@@ -618,10 +651,12 @@ pub struct DeleteImagePermissionsRequest {
     pub shared_account_id: String,
 }
 
+/// see [AppStream::delete_image_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImagePermissionsResult {}
 
+/// see [AppStream::delete_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRequest {
@@ -630,6 +665,7 @@ pub struct DeleteImageRequest {
     pub name: String,
 }
 
+/// see [AppStream::delete_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageResult {
@@ -639,6 +675,7 @@ pub struct DeleteImageResult {
     pub image: Option<Image>,
 }
 
+/// see [AppStream::delete_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackRequest {
@@ -647,18 +684,22 @@ pub struct DeleteStackRequest {
     pub name: String,
 }
 
+/// see [AppStream::delete_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStackResult {}
 
+/// see [AppStream::delete_usage_report_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsageReportSubscriptionRequest {}
 
+/// see [AppStream::delete_usage_report_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUsageReportSubscriptionResult {}
 
+/// see [AppStream::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -670,10 +711,12 @@ pub struct DeleteUserRequest {
     pub user_name: String,
 }
 
+/// see [AppStream::delete_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResult {}
 
+/// see [AppStream::describe_directory_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectoryConfigsRequest {
@@ -691,6 +734,15 @@ pub struct DescribeDirectoryConfigsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeDirectoryConfigsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_directory_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectoryConfigsResult {
@@ -704,6 +756,31 @@ pub struct DescribeDirectoryConfigsResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeDirectoryConfigsResult {
+    fn pagination_page_opt(self) -> Option<Vec<DirectoryConfig>> {
+        Some(self.directory_configs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDirectoryConfigsResult {
+    type Item = DirectoryConfig;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DirectoryConfig> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::describe_fleets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetsRequest {
@@ -717,6 +794,15 @@ pub struct DescribeFleetsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeFleetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_fleets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetsResult {
@@ -730,6 +816,31 @@ pub struct DescribeFleetsResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeFleetsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Fleet>> {
+        Some(self.fleets.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeFleetsResult {
+    type Item = Fleet;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Fleet> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::describe_image_builders]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImageBuildersRequest {
@@ -747,6 +858,15 @@ pub struct DescribeImageBuildersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeImageBuildersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_image_builders]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImageBuildersResult {
@@ -760,6 +880,31 @@ pub struct DescribeImageBuildersResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeImageBuildersResult {
+    fn pagination_page_opt(self) -> Option<Vec<ImageBuilder>> {
+        Some(self.image_builders.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeImageBuildersResult {
+    type Item = ImageBuilder;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ImageBuilder> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::describe_image_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagePermissionsRequest {
@@ -780,6 +925,7 @@ pub struct DescribeImagePermissionsRequest {
     pub shared_aws_account_ids: Option<Vec<String>>,
 }
 
+/// see [AppStream::describe_image_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImagePermissionsResult {
@@ -797,6 +943,7 @@ pub struct DescribeImagePermissionsResult {
     pub shared_image_permissions_list: Option<Vec<SharedImagePermissions>>,
 }
 
+/// see [AppStream::describe_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagesRequest {
@@ -822,6 +969,15 @@ pub struct DescribeImagesRequest {
     pub type_: Option<String>,
 }
 
+impl PagedRequest for DescribeImagesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImagesResult {
@@ -835,6 +991,31 @@ pub struct DescribeImagesResult {
     pub next_token: Option<String>,
 }
 
+impl DescribeImagesResult {
+    fn pagination_page_opt(self) -> Option<Vec<Image>> {
+        Some(self.images.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeImagesResult {
+    type Item = Image;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Image> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::describe_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSessionsRequest {
@@ -862,6 +1043,15 @@ pub struct DescribeSessionsRequest {
     pub user_id: Option<String>,
 }
 
+impl PagedRequest for DescribeSessionsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSessionsResult {
@@ -875,6 +1065,31 @@ pub struct DescribeSessionsResult {
     pub sessions: Option<Vec<Session>>,
 }
 
+impl DescribeSessionsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Session>> {
+        Some(self.sessions.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeSessionsResult {
+    type Item = Session;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Session> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::describe_stacks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStacksRequest {
@@ -888,6 +1103,15 @@ pub struct DescribeStacksRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeStacksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_stacks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStacksResult {
@@ -901,6 +1125,31 @@ pub struct DescribeStacksResult {
     pub stacks: Option<Vec<Stack>>,
 }
 
+impl DescribeStacksResult {
+    fn pagination_page_opt(self) -> Option<Vec<Stack>> {
+        Some(self.stacks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeStacksResult {
+    type Item = Stack;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Stack> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::describe_usage_report_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsageReportSubscriptionsRequest {
@@ -914,6 +1163,7 @@ pub struct DescribeUsageReportSubscriptionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [AppStream::describe_usage_report_subscriptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUsageReportSubscriptionsResult {
@@ -927,6 +1177,7 @@ pub struct DescribeUsageReportSubscriptionsResult {
     pub usage_report_subscriptions: Option<Vec<UsageReportSubscription>>,
 }
 
+/// see [AppStream::describe_user_stack_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserStackAssociationsRequest {
@@ -952,6 +1203,15 @@ pub struct DescribeUserStackAssociationsRequest {
     pub user_name: Option<String>,
 }
 
+impl PagedRequest for DescribeUserStackAssociationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_user_stack_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserStackAssociationsResult {
@@ -965,6 +1225,31 @@ pub struct DescribeUserStackAssociationsResult {
     pub user_stack_associations: Option<Vec<UserStackAssociation>>,
 }
 
+impl DescribeUserStackAssociationsResult {
+    fn pagination_page_opt(self) -> Option<Vec<UserStackAssociation>> {
+        Some(self.user_stack_associations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeUserStackAssociationsResult {
+    type Item = UserStackAssociation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<UserStackAssociation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::describe_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsersRequest {
@@ -981,6 +1266,15 @@ pub struct DescribeUsersRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for DescribeUsersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::describe_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUsersResult {
@@ -992,6 +1286,30 @@ pub struct DescribeUsersResult {
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<User>>,
+}
+
+impl DescribeUsersResult {
+    fn pagination_page_opt(self) -> Option<Vec<User>> {
+        Some(self.users.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeUsersResult {
+    type Item = User;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<User> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Describes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
@@ -1015,6 +1333,7 @@ pub struct DirectoryConfig {
     pub service_account_credentials: Option<ServiceAccountCredentials>,
 }
 
+/// see [AppStream::disable_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableUserRequest {
@@ -1026,10 +1345,12 @@ pub struct DisableUserRequest {
     pub user_name: String,
 }
 
+/// see [AppStream::disable_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableUserResult {}
 
+/// see [AppStream::disassociate_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFleetRequest {
@@ -1041,6 +1362,7 @@ pub struct DisassociateFleetRequest {
     pub stack_name: String,
 }
 
+/// see [AppStream::disassociate_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateFleetResult {}
@@ -1058,6 +1380,7 @@ pub struct DomainJoinInfo {
     pub organizational_unit_distinguished_name: Option<String>,
 }
 
+/// see [AppStream::enable_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableUserRequest {
@@ -1069,10 +1392,12 @@ pub struct EnableUserRequest {
     pub user_name: String,
 }
 
+/// see [AppStream::enable_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableUserResult {}
 
+/// see [AppStream::expire_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExpireSessionRequest {
@@ -1081,6 +1406,7 @@ pub struct ExpireSessionRequest {
     pub session_id: String,
 }
 
+/// see [AppStream::expire_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExpireSessionResult {}
@@ -1380,6 +1706,7 @@ pub struct LastReportGenerationExecutionError {
     pub error_message: Option<String>,
 }
 
+/// see [AppStream::list_associated_fleets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociatedFleetsRequest {
@@ -1392,6 +1719,15 @@ pub struct ListAssociatedFleetsRequest {
     pub stack_name: String,
 }
 
+impl PagedRequest for ListAssociatedFleetsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::list_associated_fleets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociatedFleetsResult {
@@ -1405,6 +1741,31 @@ pub struct ListAssociatedFleetsResult {
     pub next_token: Option<String>,
 }
 
+impl ListAssociatedFleetsResult {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAssociatedFleetsResult {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::list_associated_stacks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociatedStacksRequest {
@@ -1417,6 +1778,15 @@ pub struct ListAssociatedStacksRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAssociatedStacksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [AppStream::list_associated_stacks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociatedStacksResult {
@@ -1430,6 +1800,31 @@ pub struct ListAssociatedStacksResult {
     pub next_token: Option<String>,
 }
 
+impl ListAssociatedStacksResult {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAssociatedStacksResult {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [AppStream::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1438,6 +1833,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [AppStream::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1614,6 +2010,7 @@ pub struct StackError {
     pub error_message: Option<String>,
 }
 
+/// see [AppStream::start_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFleetRequest {
@@ -1622,10 +2019,12 @@ pub struct StartFleetRequest {
     pub name: String,
 }
 
+/// see [AppStream::start_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartFleetResult {}
 
+/// see [AppStream::start_image_builder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImageBuilderRequest {
@@ -1638,6 +2037,7 @@ pub struct StartImageBuilderRequest {
     pub name: String,
 }
 
+/// see [AppStream::start_image_builder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImageBuilderResult {
@@ -1647,6 +2047,7 @@ pub struct StartImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
+/// see [AppStream::stop_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopFleetRequest {
@@ -1655,10 +2056,12 @@ pub struct StopFleetRequest {
     pub name: String,
 }
 
+/// see [AppStream::stop_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopFleetResult {}
 
+/// see [AppStream::stop_image_builder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopImageBuilderRequest {
@@ -1667,6 +2070,7 @@ pub struct StopImageBuilderRequest {
     pub name: String,
 }
 
+/// see [AppStream::stop_image_builder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopImageBuilderResult {
@@ -1692,6 +2096,7 @@ pub struct StorageConnector {
     pub resource_identifier: Option<String>,
 }
 
+/// see [AppStream::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1703,10 +2108,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [AppStream::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [AppStream::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1718,10 +2125,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [AppStream::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [AppStream::update_directory_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDirectoryConfigRequest {
@@ -1738,6 +2147,7 @@ pub struct UpdateDirectoryConfigRequest {
     pub service_account_credentials: Option<ServiceAccountCredentials>,
 }
 
+/// see [AppStream::update_directory_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDirectoryConfigResult {
@@ -1747,6 +2157,7 @@ pub struct UpdateDirectoryConfigResult {
     pub directory_config: Option<DirectoryConfig>,
 }
 
+/// see [AppStream::update_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetRequest {
@@ -1816,6 +2227,7 @@ pub struct UpdateFleetRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [AppStream::update_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetResult {
@@ -1825,6 +2237,7 @@ pub struct UpdateFleetResult {
     pub fleet: Option<Fleet>,
 }
 
+/// see [AppStream::update_image_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateImagePermissionsRequest {
@@ -1839,10 +2252,12 @@ pub struct UpdateImagePermissionsRequest {
     pub shared_account_id: String,
 }
 
+/// see [AppStream::update_image_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateImagePermissionsResult {}
 
+/// see [AppStream::update_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackRequest {
@@ -1891,6 +2306,7 @@ pub struct UpdateStackRequest {
     pub user_settings: Option<Vec<UserSetting>>,
 }
 
+/// see [AppStream::update_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStackResult {
@@ -4251,7 +4667,7 @@ impl fmt::Display for UpdateStackError {
 impl Error for UpdateStackError {}
 /// Trait representing the capabilities of the Amazon AppStream API. Amazon AppStream clients implement this trait.
 #[async_trait]
-pub trait AppStream {
+pub trait AppStream: Clone + Sync + Send + 'static {
     /// <p>Associates the specified fleet with the specified stack.</p>
     async fn associate_fleet(
         &self,
@@ -4379,17 +4795,47 @@ pub trait AppStream {
         input: DescribeDirectoryConfigsRequest,
     ) -> Result<DescribeDirectoryConfigsResult, RusotoError<DescribeDirectoryConfigsError>>;
 
+    /// Auto-paginating version of `describe_directory_configs`
+    fn describe_directory_configs_pages(
+        &self,
+        input: DescribeDirectoryConfigsRequest,
+    ) -> RusotoStream<DirectoryConfig, DescribeDirectoryConfigsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_directory_configs(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
     async fn describe_fleets(
         &self,
         input: DescribeFleetsRequest,
     ) -> Result<DescribeFleetsResult, RusotoError<DescribeFleetsError>>;
 
+    /// Auto-paginating version of `describe_fleets`
+    fn describe_fleets_pages(
+        &self,
+        input: DescribeFleetsRequest,
+    ) -> RusotoStream<Fleet, DescribeFleetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_fleets(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
     async fn describe_image_builders(
         &self,
         input: DescribeImageBuildersRequest,
     ) -> Result<DescribeImageBuildersResult, RusotoError<DescribeImageBuildersError>>;
+
+    /// Auto-paginating version of `describe_image_builders`
+    fn describe_image_builders_pages(
+        &self,
+        input: DescribeImageBuildersRequest,
+    ) -> RusotoStream<ImageBuilder, DescribeImageBuildersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_image_builders(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list that describes the permissions for shared AWS account IDs on a private image that you own. </p>
     async fn describe_image_permissions(
@@ -4403,17 +4849,47 @@ pub trait AppStream {
         input: DescribeImagesRequest,
     ) -> Result<DescribeImagesResult, RusotoError<DescribeImagesError>>;
 
+    /// Auto-paginating version of `describe_images`
+    fn describe_images_pages(
+        &self,
+        input: DescribeImagesRequest,
+    ) -> RusotoStream<Image, DescribeImagesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_images(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     async fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
     ) -> Result<DescribeSessionsResult, RusotoError<DescribeSessionsError>>;
 
+    /// Auto-paginating version of `describe_sessions`
+    fn describe_sessions_pages(
+        &self,
+        input: DescribeSessionsRequest,
+    ) -> RusotoStream<Session, DescribeSessionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_sessions(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
     async fn describe_stacks(
         &self,
         input: DescribeStacksRequest,
     ) -> Result<DescribeStacksResult, RusotoError<DescribeStacksError>>;
+
+    /// Auto-paginating version of `describe_stacks`
+    fn describe_stacks_pages(
+        &self,
+        input: DescribeStacksRequest,
+    ) -> RusotoStream<Stack, DescribeStacksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_stacks(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
     async fn describe_usage_report_subscriptions(
@@ -4430,11 +4906,31 @@ pub trait AppStream {
         input: DescribeUserStackAssociationsRequest,
     ) -> Result<DescribeUserStackAssociationsResult, RusotoError<DescribeUserStackAssociationsError>>;
 
+    /// Auto-paginating version of `describe_user_stack_associations`
+    fn describe_user_stack_associations_pages(
+        &self,
+        input: DescribeUserStackAssociationsRequest,
+    ) -> RusotoStream<UserStackAssociation, DescribeUserStackAssociationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_user_stack_associations(state.clone())
+        })
+    }
+
     /// <p>Retrieves a list that describes one or more specified users in the user pool.</p>
     async fn describe_users(
         &self,
         input: DescribeUsersRequest,
     ) -> Result<DescribeUsersResult, RusotoError<DescribeUsersError>>;
+
+    /// Auto-paginating version of `describe_users`
+    fn describe_users_pages(
+        &self,
+        input: DescribeUsersRequest,
+    ) -> RusotoStream<User, DescribeUsersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_users(state.clone())
+        })
+    }
 
     /// <p>Disables the specified user in the user pool. Users can't sign in to AppStream 2.0 until they are re-enabled. This action does not delete the user. </p>
     async fn disable_user(
@@ -4466,11 +4962,31 @@ pub trait AppStream {
         input: ListAssociatedFleetsRequest,
     ) -> Result<ListAssociatedFleetsResult, RusotoError<ListAssociatedFleetsError>>;
 
+    /// Auto-paginating version of `list_associated_fleets`
+    fn list_associated_fleets_pages(
+        &self,
+        input: ListAssociatedFleetsRequest,
+    ) -> RusotoStream<String, ListAssociatedFleetsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_associated_fleets(state.clone())
+        })
+    }
+
     /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
     async fn list_associated_stacks(
         &self,
         input: ListAssociatedStacksRequest,
     ) -> Result<ListAssociatedStacksResult, RusotoError<ListAssociatedStacksError>>;
+
+    /// Auto-paginating version of `list_associated_stacks`
+    fn list_associated_stacks_pages(
+        &self,
+        input: ListAssociatedStacksRequest,
+    ) -> RusotoStream<String, ListAssociatedStacksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_associated_stacks(state.clone())
+        })
+    }
 
     /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     async fn list_tags_for_resource(

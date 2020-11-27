@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -50,6 +52,7 @@ impl CloudHsmClient {
 }
 
 use serde_json;
+/// see [CloudHsm::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceRequest {
@@ -61,6 +64,7 @@ pub struct AddTagsToResourceRequest {
     pub tag_list: Vec<Tag>,
 }
 
+/// see [CloudHsm::add_tags_to_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResponse {
@@ -70,6 +74,7 @@ pub struct AddTagsToResourceResponse {
 }
 
 /// <p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>
+/// see [CloudHsm::create_hapg]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHapgRequest {
@@ -79,6 +84,7 @@ pub struct CreateHapgRequest {
 }
 
 /// <p>Contains the output of the <a>CreateHAPartitionGroup</a> action.</p>
+/// see [CloudHsm::create_hapg]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHapgResponse {
@@ -89,6 +95,7 @@ pub struct CreateHapgResponse {
 }
 
 /// <p>Contains the inputs for the <code>CreateHsm</code> operation.</p>
+/// see [CloudHsm::create_hsm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHsmRequest {
@@ -122,6 +129,7 @@ pub struct CreateHsmRequest {
 }
 
 /// <p>Contains the output of the <code>CreateHsm</code> operation.</p>
+/// see [CloudHsm::create_hsm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHsmResponse {
@@ -132,6 +140,7 @@ pub struct CreateHsmResponse {
 }
 
 /// <p>Contains the inputs for the <a>CreateLunaClient</a> action.</p>
+/// see [CloudHsm::create_luna_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLunaClientRequest {
@@ -145,6 +154,7 @@ pub struct CreateLunaClientRequest {
 }
 
 /// <p>Contains the output of the <a>CreateLunaClient</a> action.</p>
+/// see [CloudHsm::create_luna_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLunaClientResponse {
@@ -155,6 +165,7 @@ pub struct CreateLunaClientResponse {
 }
 
 /// <p>Contains the inputs for the <a>DeleteHapg</a> action.</p>
+/// see [CloudHsm::delete_hapg]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHapgRequest {
@@ -164,6 +175,7 @@ pub struct DeleteHapgRequest {
 }
 
 /// <p>Contains the output of the <a>DeleteHapg</a> action.</p>
+/// see [CloudHsm::delete_hapg]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHapgResponse {
@@ -173,6 +185,7 @@ pub struct DeleteHapgResponse {
 }
 
 /// <p>Contains the inputs for the <a>DeleteHsm</a> operation.</p>
+/// see [CloudHsm::delete_hsm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHsmRequest {
@@ -182,6 +195,7 @@ pub struct DeleteHsmRequest {
 }
 
 /// <p>Contains the output of the <a>DeleteHsm</a> operation.</p>
+/// see [CloudHsm::delete_hsm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHsmResponse {
@@ -190,6 +204,7 @@ pub struct DeleteHsmResponse {
     pub status: String,
 }
 
+/// see [CloudHsm::delete_luna_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLunaClientRequest {
@@ -198,6 +213,7 @@ pub struct DeleteLunaClientRequest {
     pub client_arn: String,
 }
 
+/// see [CloudHsm::delete_luna_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLunaClientResponse {
@@ -207,6 +223,7 @@ pub struct DeleteLunaClientResponse {
 }
 
 /// <p>Contains the inputs for the <a>DescribeHapg</a> action.</p>
+/// see [CloudHsm::describe_hapg]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHapgRequest {
@@ -216,6 +233,7 @@ pub struct DescribeHapgRequest {
 }
 
 /// <p>Contains the output of the <a>DescribeHapg</a> action.</p>
+/// see [CloudHsm::describe_hapg]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHapgResponse {
@@ -258,6 +276,7 @@ pub struct DescribeHapgResponse {
 }
 
 /// <p>Contains the inputs for the <a>DescribeHsm</a> operation.</p>
+/// see [CloudHsm::describe_hsm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHsmRequest {
@@ -272,6 +291,7 @@ pub struct DescribeHsmRequest {
 }
 
 /// <p>Contains the output of the <a>DescribeHsm</a> operation.</p>
+/// see [CloudHsm::describe_hsm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHsmResponse {
@@ -360,6 +380,7 @@ pub struct DescribeHsmResponse {
     pub vpc_id: Option<String>,
 }
 
+/// see [CloudHsm::describe_luna_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLunaClientRequest {
@@ -373,6 +394,7 @@ pub struct DescribeLunaClientRequest {
     pub client_arn: Option<String>,
 }
 
+/// see [CloudHsm::describe_luna_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLunaClientResponse {
@@ -398,6 +420,7 @@ pub struct DescribeLunaClientResponse {
     pub last_modified_timestamp: Option<String>,
 }
 
+/// see [CloudHsm::get_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigRequest {
@@ -412,6 +435,7 @@ pub struct GetConfigRequest {
     pub hapg_list: Vec<String>,
 }
 
+/// see [CloudHsm::get_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigResponse {
@@ -430,10 +454,12 @@ pub struct GetConfigResponse {
 }
 
 /// <p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>
+/// see [CloudHsm::list_available_zones]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAvailableZonesRequest {}
 
+/// see [CloudHsm::list_available_zones]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAvailableZonesResponse {
@@ -443,6 +469,7 @@ pub struct ListAvailableZonesResponse {
     pub az_list: Option<Vec<String>>,
 }
 
+/// see [CloudHsm::list_hapgs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHapgsRequest {
@@ -452,6 +479,15 @@ pub struct ListHapgsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListHapgsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudHsm::list_hapgs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHapgsResponse {
@@ -464,6 +500,31 @@ pub struct ListHapgsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListHapgsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.hapg_list.clone())
+    }
+}
+
+impl PagedOutput for ListHapgsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudHsm::list_hsms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHsmsRequest {
@@ -473,7 +534,16 @@ pub struct ListHsmsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListHsmsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Contains the output of the <code>ListHsms</code> operation.</p>
+/// see [CloudHsm::list_hsms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHsmsResponse {
@@ -487,6 +557,31 @@ pub struct ListHsmsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListHsmsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.hsm_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListHsmsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudHsm::list_luna_clients]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLunaClientsRequest {
@@ -496,6 +591,15 @@ pub struct ListLunaClientsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListLunaClientsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [CloudHsm::list_luna_clients]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLunaClientsResponse {
@@ -508,6 +612,31 @@ pub struct ListLunaClientsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListLunaClientsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.client_list.clone())
+    }
+}
+
+impl PagedOutput for ListLunaClientsResponse {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [CloudHsm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -516,6 +645,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [CloudHsm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -524,6 +654,7 @@ pub struct ListTagsForResourceResponse {
     pub tag_list: Vec<Tag>,
 }
 
+/// see [CloudHsm::modify_hapg]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyHapgRequest {
@@ -540,6 +671,7 @@ pub struct ModifyHapgRequest {
     pub partition_serial_list: Option<Vec<String>>,
 }
 
+/// see [CloudHsm::modify_hapg]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyHapgResponse {
@@ -550,6 +682,7 @@ pub struct ModifyHapgResponse {
 }
 
 /// <p>Contains the inputs for the <a>ModifyHsm</a> operation.</p>
+/// see [CloudHsm::modify_hsm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyHsmRequest {
@@ -579,6 +712,7 @@ pub struct ModifyHsmRequest {
 }
 
 /// <p>Contains the output of the <a>ModifyHsm</a> operation.</p>
+/// see [CloudHsm::modify_hsm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyHsmResponse {
@@ -588,6 +722,7 @@ pub struct ModifyHsmResponse {
     pub hsm_arn: Option<String>,
 }
 
+/// see [CloudHsm::modify_luna_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyLunaClientRequest {
@@ -599,6 +734,7 @@ pub struct ModifyLunaClientRequest {
     pub client_arn: String,
 }
 
+/// see [CloudHsm::modify_luna_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyLunaClientResponse {
@@ -608,6 +744,7 @@ pub struct ModifyLunaClientResponse {
     pub client_arn: Option<String>,
 }
 
+/// see [CloudHsm::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceRequest {
@@ -619,6 +756,7 @@ pub struct RemoveTagsFromResourceRequest {
     pub tag_key_list: Vec<String>,
 }
 
+/// see [CloudHsm::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {
@@ -1476,7 +1614,7 @@ impl fmt::Display for RemoveTagsFromResourceError {
 impl Error for RemoveTagsFromResourceError {}
 /// Trait representing the capabilities of the CloudHSM API. CloudHSM clients implement this trait.
 #[async_trait]
-pub trait CloudHsm {
+pub trait CloudHsm: Clone + Sync + Send + 'static {
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>
     async fn add_tags_to_resource(
         &self,
@@ -1554,17 +1692,41 @@ pub trait CloudHsm {
         input: ListHapgsRequest,
     ) -> Result<ListHapgsResponse, RusotoError<ListHapgsError>>;
 
+    /// Auto-paginating version of `list_hapgs`
+    fn list_hapgs_pages(&self, input: ListHapgsRequest) -> RusotoStream<String, ListHapgsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_hapgs(state.clone())
+        })
+    }
+
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> member. If more results are available, the <code>NextToken</code> member of the response contains a token that you pass in the next call to <code>ListHsms</code> to retrieve the next set of items.</p>
     async fn list_hsms(
         &self,
         input: ListHsmsRequest,
     ) -> Result<ListHsmsResponse, RusotoError<ListHsmsError>>;
 
+    /// Auto-paginating version of `list_hsms`
+    fn list_hsms_pages(&self, input: ListHsmsRequest) -> RusotoStream<String, ListHsmsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_hsms(state.clone())
+        })
+    }
+
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> member. If more results are available, the <code>NextToken</code> member of the response contains a token that you pass in the next call to <code>ListLunaClients</code> to retrieve the next set of items.</p>
     async fn list_luna_clients(
         &self,
         input: ListLunaClientsRequest,
     ) -> Result<ListLunaClientsResponse, RusotoError<ListLunaClientsError>>;
+
+    /// Auto-paginating version of `list_luna_clients`
+    fn list_luna_clients_pages(
+        &self,
+        input: ListLunaClientsRequest,
+    ) -> RusotoStream<String, ListLunaClientsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_luna_clients(state.clone())
+        })
+    }
 
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>
     async fn list_tags_for_resource(

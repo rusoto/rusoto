@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -51,6 +53,7 @@ impl MachineLearningClient {
 }
 
 use serde_json;
+/// see [MachineLearning::add_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
@@ -66,6 +69,7 @@ pub struct AddTagsInput {
 }
 
 /// <p>Amazon ML returns the following elements. </p>
+/// see [MachineLearning::add_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {
@@ -144,6 +148,7 @@ pub struct BatchPrediction {
     pub total_record_count: Option<i64>,
 }
 
+/// see [MachineLearning::create_batch_prediction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchPredictionInput {
@@ -166,6 +171,7 @@ pub struct CreateBatchPredictionInput {
 }
 
 /// <p> Represents the output of a <code>CreateBatchPrediction</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateBatchPrediction</code> operation is asynchronous. You can poll for status updates by using the <code>&gt;GetBatchPrediction</code> operation and checking the <code>Status</code> parameter of the result. </p>
+/// see [MachineLearning::create_batch_prediction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBatchPredictionOutput {
@@ -175,6 +181,7 @@ pub struct CreateBatchPredictionOutput {
     pub batch_prediction_id: Option<String>,
 }
 
+/// see [MachineLearning::create_data_source_from_rds]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromRDSInput {
@@ -198,6 +205,7 @@ pub struct CreateDataSourceFromRDSInput {
 }
 
 /// <p> Represents the output of a <code>CreateDataSourceFromRDS</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromRDS</code>&gt; operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. You can inspect the <code>Message</code> when <code>Status</code> shows up as <code>FAILED</code>. You can also check the progress of the copy operation by going to the <code>DataPipeline</code> console and looking up the pipeline using the <code>pipelineId </code> from the describe call.</p>
+/// see [MachineLearning::create_data_source_from_rds]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceFromRDSOutput {
@@ -207,6 +215,7 @@ pub struct CreateDataSourceFromRDSOutput {
     pub data_source_id: Option<String>,
 }
 
+/// see [MachineLearning::create_data_source_from_redshift]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromRedshiftInput {
@@ -230,6 +239,7 @@ pub struct CreateDataSourceFromRedshiftInput {
 }
 
 /// <p> Represents the output of a <code>CreateDataSourceFromRedshift</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromRedshift</code> operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. </p>
+/// see [MachineLearning::create_data_source_from_redshift]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceFromRedshiftOutput {
@@ -239,6 +249,7 @@ pub struct CreateDataSourceFromRedshiftOutput {
     pub data_source_id: Option<String>,
 }
 
+/// see [MachineLearning::create_data_source_from_s3]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromS3Input {
@@ -259,6 +270,7 @@ pub struct CreateDataSourceFromS3Input {
 }
 
 /// <p> Represents the output of a <code>CreateDataSourceFromS3</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromS3</code> operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. </p>
+/// see [MachineLearning::create_data_source_from_s3]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceFromS3Output {
@@ -268,6 +280,7 @@ pub struct CreateDataSourceFromS3Output {
     pub data_source_id: Option<String>,
 }
 
+/// see [MachineLearning::create_evaluation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEvaluationInput {
@@ -287,6 +300,7 @@ pub struct CreateEvaluationInput {
 }
 
 /// <p> Represents the output of a <code>CreateEvaluation</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p><code>CreateEvaluation</code> operation is asynchronous. You can poll for status updates by using the <code>GetEvcaluation</code> operation and checking the <code>Status</code> parameter. </p>
+/// see [MachineLearning::create_evaluation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEvaluationOutput {
@@ -296,6 +310,7 @@ pub struct CreateEvaluationOutput {
     pub evaluation_id: Option<String>,
 }
 
+/// see [MachineLearning::create_ml_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMLModelInput {
@@ -327,6 +342,7 @@ pub struct CreateMLModelInput {
 }
 
 /// <p> Represents the output of a <code>CreateMLModel</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateMLModel</code> operation is asynchronous. You can poll for status updates by using the <code>GetMLModel</code> operation and checking the <code>Status</code> parameter. </p>
+/// see [MachineLearning::create_ml_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMLModelOutput {
@@ -336,6 +352,7 @@ pub struct CreateMLModelOutput {
     pub ml_model_id: Option<String>,
 }
 
+/// see [MachineLearning::create_realtime_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRealtimeEndpointInput {
@@ -345,6 +362,7 @@ pub struct CreateRealtimeEndpointInput {
 }
 
 /// <p><p>Represents the output of an <code>CreateRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>.</p> <note> <p>The endpoint information includes the URI of the <code>MLModel</code>; that is, the location to send online prediction requests for the specified <code>MLModel</code>.</p> </note></p>
+/// see [MachineLearning::create_realtime_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRealtimeEndpointOutput {
@@ -430,6 +448,7 @@ pub struct DataSource {
     pub status: Option<String>,
 }
 
+/// see [MachineLearning::delete_batch_prediction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBatchPredictionInput {
@@ -439,6 +458,7 @@ pub struct DeleteBatchPredictionInput {
 }
 
 /// <p> Represents the output of a <code>DeleteBatchPrediction</code> operation.</p> <p>You can use the <code>GetBatchPrediction</code> operation and check the value of the <code>Status</code> parameter to see whether a <code>BatchPrediction</code> is marked as <code>DELETED</code>.</p>
+/// see [MachineLearning::delete_batch_prediction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBatchPredictionOutput {
@@ -448,6 +468,7 @@ pub struct DeleteBatchPredictionOutput {
     pub batch_prediction_id: Option<String>,
 }
 
+/// see [MachineLearning::delete_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceInput {
@@ -457,6 +478,7 @@ pub struct DeleteDataSourceInput {
 }
 
 /// <p> Represents the output of a <code>DeleteDataSource</code> operation.</p>
+/// see [MachineLearning::delete_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataSourceOutput {
@@ -466,6 +488,7 @@ pub struct DeleteDataSourceOutput {
     pub data_source_id: Option<String>,
 }
 
+/// see [MachineLearning::delete_evaluation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEvaluationInput {
@@ -475,6 +498,7 @@ pub struct DeleteEvaluationInput {
 }
 
 /// <p> Represents the output of a <code>DeleteEvaluation</code> operation. The output indicates that Amazon Machine Learning (Amazon ML) received the request.</p> <p>You can use the <code>GetEvaluation</code> operation and check the value of the <code>Status</code> parameter to see whether an <code>Evaluation</code> is marked as <code>DELETED</code>.</p>
+/// see [MachineLearning::delete_evaluation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEvaluationOutput {
@@ -484,6 +508,7 @@ pub struct DeleteEvaluationOutput {
     pub evaluation_id: Option<String>,
 }
 
+/// see [MachineLearning::delete_ml_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMLModelInput {
@@ -493,6 +518,7 @@ pub struct DeleteMLModelInput {
 }
 
 /// <p>Represents the output of a <code>DeleteMLModel</code> operation.</p> <p>You can use the <code>GetMLModel</code> operation and check the value of the <code>Status</code> parameter to see whether an <code>MLModel</code> is marked as <code>DELETED</code>.</p>
+/// see [MachineLearning::delete_ml_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMLModelOutput {
@@ -502,6 +528,7 @@ pub struct DeleteMLModelOutput {
     pub ml_model_id: Option<String>,
 }
 
+/// see [MachineLearning::delete_realtime_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRealtimeEndpointInput {
@@ -511,6 +538,7 @@ pub struct DeleteRealtimeEndpointInput {
 }
 
 /// <p>Represents the output of an <code>DeleteRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>. </p>
+/// see [MachineLearning::delete_realtime_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRealtimeEndpointOutput {
@@ -524,6 +552,7 @@ pub struct DeleteRealtimeEndpointOutput {
     pub realtime_endpoint_info: Option<RealtimeEndpointInfo>,
 }
 
+/// see [MachineLearning::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsInput {
@@ -539,6 +568,7 @@ pub struct DeleteTagsInput {
 }
 
 /// <p>Amazon ML returns the following elements. </p>
+/// see [MachineLearning::delete_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsOutput {
@@ -552,6 +582,7 @@ pub struct DeleteTagsOutput {
     pub resource_type: Option<String>,
 }
 
+/// see [MachineLearning::describe_batch_predictions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBatchPredictionsInput {
@@ -601,7 +632,16 @@ pub struct DescribeBatchPredictionsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for DescribeBatchPredictionsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>DescribeBatchPredictions</code> operation. The content is essentially a list of <code>BatchPrediction</code>s.</p>
+/// see [MachineLearning::describe_batch_predictions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBatchPredictionsOutput {
@@ -615,6 +655,31 @@ pub struct DescribeBatchPredictionsOutput {
     pub results: Option<Vec<BatchPrediction>>,
 }
 
+impl DescribeBatchPredictionsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<BatchPrediction>> {
+        Some(self.results.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeBatchPredictionsOutput {
+    type Item = BatchPrediction;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<BatchPrediction> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MachineLearning::describe_data_sources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourcesInput {
@@ -664,7 +729,16 @@ pub struct DescribeDataSourcesInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for DescribeDataSourcesInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the query results from a <a>DescribeDataSources</a> operation. The content is essentially a list of <code>DataSource</code>.</p>
+/// see [MachineLearning::describe_data_sources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSourcesOutput {
@@ -678,6 +752,31 @@ pub struct DescribeDataSourcesOutput {
     pub results: Option<Vec<DataSource>>,
 }
 
+impl DescribeDataSourcesOutput {
+    fn pagination_page_opt(self) -> Option<Vec<DataSource>> {
+        Some(self.results.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeDataSourcesOutput {
+    type Item = DataSource;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DataSource> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MachineLearning::describe_evaluations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEvaluationsInput {
@@ -727,7 +826,16 @@ pub struct DescribeEvaluationsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for DescribeEvaluationsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the query results from a <code>DescribeEvaluations</code> operation. The content is essentially a list of <code>Evaluation</code>.</p>
+/// see [MachineLearning::describe_evaluations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEvaluationsOutput {
@@ -741,6 +849,31 @@ pub struct DescribeEvaluationsOutput {
     pub results: Option<Vec<Evaluation>>,
 }
 
+impl DescribeEvaluationsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<Evaluation>> {
+        Some(self.results.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeEvaluationsOutput {
+    type Item = Evaluation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Evaluation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MachineLearning::describe_ml_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMLModelsInput {
@@ -790,7 +923,16 @@ pub struct DescribeMLModelsInput {
     pub sort_order: Option<String>,
 }
 
+impl PagedRequest for DescribeMLModelsInput {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
 /// <p>Represents the output of a <code>DescribeMLModels</code> operation. The content is essentially a list of <code>MLModel</code>.</p>
+/// see [MachineLearning::describe_ml_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMLModelsOutput {
@@ -804,6 +946,31 @@ pub struct DescribeMLModelsOutput {
     pub results: Option<Vec<MLModel>>,
 }
 
+impl DescribeMLModelsOutput {
+    fn pagination_page_opt(self) -> Option<Vec<MLModel>> {
+        Some(self.results.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for DescribeMLModelsOutput {
+    type Item = MLModel;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<MLModel> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [MachineLearning::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsInput {
@@ -816,6 +983,7 @@ pub struct DescribeTagsInput {
 }
 
 /// <p>Amazon ML returns the following elements. </p>
+/// see [MachineLearning::describe_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsOutput {
@@ -892,6 +1060,7 @@ pub struct Evaluation {
     pub status: Option<String>,
 }
 
+/// see [MachineLearning::get_batch_prediction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBatchPredictionInput {
@@ -901,6 +1070,7 @@ pub struct GetBatchPredictionInput {
 }
 
 /// <p>Represents the output of a <code>GetBatchPrediction</code> operation and describes a <code>BatchPrediction</code>.</p>
+/// see [MachineLearning::get_batch_prediction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBatchPredictionOutput {
@@ -974,6 +1144,7 @@ pub struct GetBatchPredictionOutput {
     pub total_record_count: Option<i64>,
 }
 
+/// see [MachineLearning::get_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataSourceInput {
@@ -987,6 +1158,7 @@ pub struct GetDataSourceInput {
 }
 
 /// <p>Represents the output of a <code>GetDataSource</code> operation and describes a <code>DataSource</code>.</p>
+/// see [MachineLearning::get_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataSourceOutput {
@@ -1069,6 +1241,7 @@ pub struct GetDataSourceOutput {
     pub status: Option<String>,
 }
 
+/// see [MachineLearning::get_evaluation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEvaluationInput {
@@ -1078,6 +1251,7 @@ pub struct GetEvaluationInput {
 }
 
 /// <p>Represents the output of a <code>GetEvaluation</code> operation and describes an <code>Evaluation</code>.</p>
+/// see [MachineLearning::get_evaluation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEvaluationOutput {
@@ -1143,6 +1317,7 @@ pub struct GetEvaluationOutput {
     pub status: Option<String>,
 }
 
+/// see [MachineLearning::get_ml_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLModelInput {
@@ -1156,6 +1331,7 @@ pub struct GetMLModelInput {
 }
 
 /// <p>Represents the output of a <code>GetMLModel</code> operation, and provides detailed information about a <code>MLModel</code>.</p>
+/// see [MachineLearning::get_ml_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLModelOutput {
@@ -1330,6 +1506,7 @@ pub struct PerformanceMetrics {
     pub properties: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MachineLearning::predict]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PredictInput {
@@ -1342,6 +1519,7 @@ pub struct PredictInput {
     pub record: ::std::collections::HashMap<String, String>,
 }
 
+/// see [MachineLearning::predict]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PredictOutput {
@@ -1582,6 +1760,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [MachineLearning::update_batch_prediction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBatchPredictionInput {
@@ -1594,6 +1773,7 @@ pub struct UpdateBatchPredictionInput {
 }
 
 /// <p>Represents the output of an <code>UpdateBatchPrediction</code> operation.</p> <p>You can see the updated content by using the <code>GetBatchPrediction</code> operation.</p>
+/// see [MachineLearning::update_batch_prediction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBatchPredictionOutput {
@@ -1603,6 +1783,7 @@ pub struct UpdateBatchPredictionOutput {
     pub batch_prediction_id: Option<String>,
 }
 
+/// see [MachineLearning::update_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceInput {
@@ -1615,6 +1796,7 @@ pub struct UpdateDataSourceInput {
 }
 
 /// <p>Represents the output of an <code>UpdateDataSource</code> operation.</p> <p>You can see the updated content by using the <code>GetBatchPrediction</code> operation.</p>
+/// see [MachineLearning::update_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSourceOutput {
@@ -1624,6 +1806,7 @@ pub struct UpdateDataSourceOutput {
     pub data_source_id: Option<String>,
 }
 
+/// see [MachineLearning::update_evaluation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEvaluationInput {
@@ -1636,6 +1819,7 @@ pub struct UpdateEvaluationInput {
 }
 
 /// <p>Represents the output of an <code>UpdateEvaluation</code> operation.</p> <p>You can see the updated content by using the <code>GetEvaluation</code> operation.</p>
+/// see [MachineLearning::update_evaluation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEvaluationOutput {
@@ -1645,6 +1829,7 @@ pub struct UpdateEvaluationOutput {
     pub evaluation_id: Option<String>,
 }
 
+/// see [MachineLearning::update_ml_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMLModelInput {
@@ -1662,6 +1847,7 @@ pub struct UpdateMLModelInput {
 }
 
 /// <p>Represents the output of an <code>UpdateMLModel</code> operation.</p> <p>You can see the updated content by using the <code>GetMLModel</code> operation.</p>
+/// see [MachineLearning::update_ml_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMLModelOutput {
@@ -2909,7 +3095,7 @@ impl fmt::Display for UpdateMLModelError {
 impl Error for UpdateMLModelError {}
 /// Trait representing the capabilities of the Amazon Machine Learning API. Amazon Machine Learning clients implement this trait.
 #[async_trait]
-pub trait MachineLearning {
+pub trait MachineLearning: Clone + Sync + Send + 'static {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
     async fn add_tags(
         &self,
@@ -3000,11 +3186,31 @@ pub trait MachineLearning {
         input: DescribeBatchPredictionsInput,
     ) -> Result<DescribeBatchPredictionsOutput, RusotoError<DescribeBatchPredictionsError>>;
 
+    /// Auto-paginating version of `describe_batch_predictions`
+    fn describe_batch_predictions_pages(
+        &self,
+        input: DescribeBatchPredictionsInput,
+    ) -> RusotoStream<BatchPrediction, DescribeBatchPredictionsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_batch_predictions(state.clone())
+        })
+    }
+
     /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
     async fn describe_data_sources(
         &self,
         input: DescribeDataSourcesInput,
     ) -> Result<DescribeDataSourcesOutput, RusotoError<DescribeDataSourcesError>>;
+
+    /// Auto-paginating version of `describe_data_sources`
+    fn describe_data_sources_pages(
+        &self,
+        input: DescribeDataSourcesInput,
+    ) -> RusotoStream<DataSource, DescribeDataSourcesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_data_sources(state.clone())
+        })
+    }
 
     /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
     async fn describe_evaluations(
@@ -3012,11 +3218,31 @@ pub trait MachineLearning {
         input: DescribeEvaluationsInput,
     ) -> Result<DescribeEvaluationsOutput, RusotoError<DescribeEvaluationsError>>;
 
+    /// Auto-paginating version of `describe_evaluations`
+    fn describe_evaluations_pages(
+        &self,
+        input: DescribeEvaluationsInput,
+    ) -> RusotoStream<Evaluation, DescribeEvaluationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_evaluations(state.clone())
+        })
+    }
+
     /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
     async fn describe_ml_models(
         &self,
         input: DescribeMLModelsInput,
     ) -> Result<DescribeMLModelsOutput, RusotoError<DescribeMLModelsError>>;
+
+    /// Auto-paginating version of `describe_ml_models`
+    fn describe_ml_models_pages(
+        &self,
+        input: DescribeMLModelsInput,
+    ) -> RusotoStream<MLModel, DescribeMLModelsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.describe_ml_models(state.clone())
+        })
+    }
 
     /// <p>Describes one or more of the tags for your Amazon ML object.</p>
     async fn describe_tags(

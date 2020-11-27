@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -26,6 +28,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The input for the BulkPublish operation.</p>
+/// see [CognitoSync::bulk_publish]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BulkPublishRequest {
@@ -35,6 +38,7 @@ pub struct BulkPublishRequest {
 }
 
 /// <p>The output for the BulkPublish operation.</p>
+/// see [CognitoSync::bulk_publish]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkPublishResponse {
@@ -96,6 +100,7 @@ pub struct Dataset {
 }
 
 /// <p>A request to delete the specific dataset.</p>
+/// see [CognitoSync::delete_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
@@ -111,6 +116,7 @@ pub struct DeleteDatasetRequest {
 }
 
 /// <p>Response to a successful DeleteDataset request.</p>
+/// see [CognitoSync::delete_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDatasetResponse {
@@ -121,6 +127,7 @@ pub struct DeleteDatasetResponse {
 }
 
 /// <p>A request for meta data about a dataset (creation date, number of records, size) by owner and dataset name.</p>
+/// see [CognitoSync::describe_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
@@ -136,6 +143,7 @@ pub struct DescribeDatasetRequest {
 }
 
 /// <p>Response to a successful DescribeDataset request.</p>
+/// see [CognitoSync::describe_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
@@ -146,6 +154,7 @@ pub struct DescribeDatasetResponse {
 }
 
 /// <p>A request for usage information about the identity pool.</p>
+/// see [CognitoSync::describe_identity_pool_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityPoolUsageRequest {
@@ -155,6 +164,7 @@ pub struct DescribeIdentityPoolUsageRequest {
 }
 
 /// <p>Response to a successful DescribeIdentityPoolUsage request.</p>
+/// see [CognitoSync::describe_identity_pool_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityPoolUsageResponse {
@@ -165,6 +175,7 @@ pub struct DescribeIdentityPoolUsageResponse {
 }
 
 /// <p>A request for information about the usage of an identity pool.</p>
+/// see [CognitoSync::describe_identity_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityUsageRequest {
@@ -177,6 +188,7 @@ pub struct DescribeIdentityUsageRequest {
 }
 
 /// <p>The response to a successful DescribeIdentityUsage request.</p>
+/// see [CognitoSync::describe_identity_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityUsageResponse {
@@ -187,6 +199,7 @@ pub struct DescribeIdentityUsageResponse {
 }
 
 /// <p>The input for the GetBulkPublishDetails operation.</p>
+/// see [CognitoSync::get_bulk_publish_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBulkPublishDetailsRequest {
@@ -196,6 +209,7 @@ pub struct GetBulkPublishDetailsRequest {
 }
 
 /// <p>The output for the GetBulkPublishDetails operation.</p>
+/// see [CognitoSync::get_bulk_publish_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBulkPublishDetailsResponse {
@@ -222,6 +236,7 @@ pub struct GetBulkPublishDetailsResponse {
 }
 
 /// <p>A request for a list of the configured Cognito Events</p>
+/// see [CognitoSync::get_cognito_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCognitoEventsRequest {
@@ -231,6 +246,7 @@ pub struct GetCognitoEventsRequest {
 }
 
 /// <p>The response from the GetCognitoEvents request</p>
+/// see [CognitoSync::get_cognito_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCognitoEventsResponse {
@@ -241,6 +257,7 @@ pub struct GetCognitoEventsResponse {
 }
 
 /// <p>The input for the GetIdentityPoolConfiguration operation.</p>
+/// see [CognitoSync::get_identity_pool_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityPoolConfigurationRequest {
@@ -250,6 +267,7 @@ pub struct GetIdentityPoolConfigurationRequest {
 }
 
 /// <p>The output for the GetIdentityPoolConfiguration operation.</p>
+/// see [CognitoSync::get_identity_pool_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdentityPoolConfigurationResponse {
@@ -316,6 +334,7 @@ pub struct IdentityUsage {
 }
 
 /// <p>Request for a list of datasets for an identity.</p>
+/// see [CognitoSync::list_datasets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
@@ -336,6 +355,7 @@ pub struct ListDatasetsRequest {
 }
 
 /// <p>Returned for a successful ListDatasets request.</p>
+/// see [CognitoSync::list_datasets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
@@ -354,6 +374,7 @@ pub struct ListDatasetsResponse {
 }
 
 /// <p>A request for usage information on an identity pool.</p>
+/// see [CognitoSync::list_identity_pool_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentityPoolUsageRequest {
@@ -368,6 +389,7 @@ pub struct ListIdentityPoolUsageRequest {
 }
 
 /// <p>Returned for a successful ListIdentityPoolUsage request.</p>
+/// see [CognitoSync::list_identity_pool_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentityPoolUsageResponse {
@@ -390,6 +412,7 @@ pub struct ListIdentityPoolUsageResponse {
 }
 
 /// <p>A request for a list of records.</p>
+/// see [CognitoSync::list_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecordsRequest {
@@ -421,6 +444,7 @@ pub struct ListRecordsRequest {
 }
 
 /// <p>Returned for a successful ListRecordsRequest.</p>
+/// see [CognitoSync::list_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecordsResponse {
@@ -529,6 +553,7 @@ pub struct RecordPatch {
 }
 
 /// <p>A request to RegisterDevice.</p>
+/// see [CognitoSync::register_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDeviceRequest {
@@ -547,6 +572,7 @@ pub struct RegisterDeviceRequest {
 }
 
 /// <p>Response to a RegisterDevice request.</p>
+/// see [CognitoSync::register_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterDeviceResponse {
@@ -557,6 +583,7 @@ pub struct RegisterDeviceResponse {
 }
 
 /// <p>A request to configure Cognito Events</p>
+/// see [CognitoSync::set_cognito_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetCognitoEventsRequest {
@@ -569,6 +596,7 @@ pub struct SetCognitoEventsRequest {
 }
 
 /// <p>The input for the SetIdentityPoolConfiguration operation.</p>
+/// see [CognitoSync::set_identity_pool_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityPoolConfigurationRequest {
@@ -586,6 +614,7 @@ pub struct SetIdentityPoolConfigurationRequest {
 }
 
 /// <p>The output for the SetIdentityPoolConfiguration operation</p>
+/// see [CognitoSync::set_identity_pool_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetIdentityPoolConfigurationResponse {
@@ -604,6 +633,7 @@ pub struct SetIdentityPoolConfigurationResponse {
 }
 
 /// <p>A request to SubscribeToDatasetRequest.</p>
+/// see [CognitoSync::subscribe_to_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeToDatasetRequest {
@@ -622,11 +652,13 @@ pub struct SubscribeToDatasetRequest {
 }
 
 /// <p>Response to a SubscribeToDataset request.</p>
+/// see [CognitoSync::subscribe_to_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubscribeToDatasetResponse {}
 
 /// <p>A request to UnsubscribeFromDataset.</p>
+/// see [CognitoSync::unsubscribe_from_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeFromDatasetRequest {
@@ -645,11 +677,13 @@ pub struct UnsubscribeFromDatasetRequest {
 }
 
 /// <p>Response to an UnsubscribeFromDataset request.</p>
+/// see [CognitoSync::unsubscribe_from_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnsubscribeFromDatasetResponse {}
 
 /// <p>A request to post updates to records or add and delete records for a dataset and user.</p>
+/// see [CognitoSync::update_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRecordsRequest {
@@ -680,6 +714,7 @@ pub struct UpdateRecordsRequest {
 }
 
 /// <p>Returned for a successful UpdateRecordsRequest.</p>
+/// see [CognitoSync::update_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRecordsResponse {
@@ -1721,7 +1756,7 @@ impl fmt::Display for UpdateRecordsError {
 impl Error for UpdateRecordsError {}
 /// Trait representing the capabilities of the Amazon Cognito Sync API. Amazon Cognito Sync clients implement this trait.
 #[async_trait]
-pub trait CognitoSync {
+pub trait CognitoSync: Clone + Sync + Send + 'static {
     /// <p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     async fn bulk_publish(
         &self,

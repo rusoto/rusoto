@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -286,6 +288,7 @@ pub struct CalculatedColumn {
     pub expression: String,
 }
 
+/// see [Quicksight::cancel_ingestion]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelIngestionRequest {
@@ -300,6 +303,7 @@ pub struct CancelIngestionRequest {
     pub ingestion_id: String,
 }
 
+/// see [Quicksight::cancel_ingestion]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelIngestionResponse {
@@ -422,6 +426,7 @@ pub struct ColumnTag {
     pub column_geographic_role: Option<String>,
 }
 
+/// see [Quicksight::create_account_customization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountCustomizationRequest {
@@ -441,6 +446,7 @@ pub struct CreateAccountCustomizationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Quicksight::create_account_customization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAccountCustomizationResponse {
@@ -470,6 +476,7 @@ pub struct CreateAccountCustomizationResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::create_analysis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAnalysisRequest {
@@ -503,6 +510,7 @@ pub struct CreateAnalysisRequest {
     pub theme_arn: Option<String>,
 }
 
+/// see [Quicksight::create_analysis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAnalysisResponse {
@@ -536,6 +544,7 @@ pub struct CreateColumnsOperation {
     pub columns: Vec<CalculatedColumn>,
 }
 
+/// see [Quicksight::create_dashboard]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDashboardRequest {
@@ -577,6 +586,7 @@ pub struct CreateDashboardRequest {
     pub version_description: Option<String>,
 }
 
+/// see [Quicksight::create_dashboard]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDashboardResponse {
@@ -606,6 +616,7 @@ pub struct CreateDashboardResponse {
     pub version_arn: Option<String>,
 }
 
+/// see [Quicksight::create_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSetRequest {
@@ -650,6 +661,7 @@ pub struct CreateDataSetRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Quicksight::create_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSetResponse {
@@ -679,6 +691,7 @@ pub struct CreateDataSetResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::create_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceRequest {
@@ -720,6 +733,7 @@ pub struct CreateDataSourceRequest {
     pub vpc_connection_properties: Option<VpcConnectionProperties>,
 }
 
+/// see [Quicksight::create_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceResponse {
@@ -745,6 +759,7 @@ pub struct CreateDataSourceResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::create_group_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupMembershipRequest {
@@ -762,6 +777,7 @@ pub struct CreateGroupMembershipRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::create_group_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupMembershipResponse {
@@ -780,6 +796,7 @@ pub struct CreateGroupMembershipResponse {
 }
 
 /// <p>The request object for this operation. </p>
+/// see [Quicksight::create_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
@@ -799,6 +816,7 @@ pub struct CreateGroupRequest {
 }
 
 /// <p>The response object for this operation.</p>
+/// see [Quicksight::create_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
@@ -816,6 +834,7 @@ pub struct CreateGroupResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::create_iam_policy_assignment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIAMPolicyAssignmentRequest {
@@ -841,6 +860,7 @@ pub struct CreateIAMPolicyAssignmentRequest {
     pub policy_arn: Option<String>,
 }
 
+/// see [Quicksight::create_iam_policy_assignment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIAMPolicyAssignmentResponse {
@@ -874,6 +894,7 @@ pub struct CreateIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::create_ingestion]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIngestionRequest {
@@ -888,6 +909,7 @@ pub struct CreateIngestionRequest {
     pub ingestion_id: String,
 }
 
+/// see [Quicksight::create_ingestion]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIngestionResponse {
@@ -913,6 +935,7 @@ pub struct CreateIngestionResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::create_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNamespaceRequest {
@@ -931,6 +954,7 @@ pub struct CreateNamespaceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Quicksight::create_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNamespaceResponse {
@@ -964,6 +988,7 @@ pub struct CreateNamespaceResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::create_template_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTemplateAliasRequest {
@@ -981,6 +1006,7 @@ pub struct CreateTemplateAliasRequest {
     pub template_version_number: i64,
 }
 
+/// see [Quicksight::create_template_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTemplateAliasResponse {
@@ -998,6 +1024,7 @@ pub struct CreateTemplateAliasResponse {
     pub template_alias: Option<TemplateAlias>,
 }
 
+/// see [Quicksight::create_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTemplateRequest {
@@ -1028,6 +1055,7 @@ pub struct CreateTemplateRequest {
     pub version_description: Option<String>,
 }
 
+/// see [Quicksight::create_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTemplateResponse {
@@ -1057,6 +1085,7 @@ pub struct CreateTemplateResponse {
     pub version_arn: Option<String>,
 }
 
+/// see [Quicksight::create_theme_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThemeAliasRequest {
@@ -1074,6 +1103,7 @@ pub struct CreateThemeAliasRequest {
     pub theme_version_number: i64,
 }
 
+/// see [Quicksight::create_theme_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThemeAliasResponse {
@@ -1091,6 +1121,7 @@ pub struct CreateThemeAliasResponse {
     pub theme_alias: Option<ThemeAlias>,
 }
 
+/// see [Quicksight::create_theme]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThemeRequest {
@@ -1123,6 +1154,7 @@ pub struct CreateThemeRequest {
     pub version_description: Option<String>,
 }
 
+/// see [Quicksight::create_theme]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThemeResponse {
@@ -1745,6 +1777,7 @@ pub struct DecimalParameter {
     pub values: Vec<f64>,
 }
 
+/// see [Quicksight::delete_account_customization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountCustomizationRequest {
@@ -1757,6 +1790,7 @@ pub struct DeleteAccountCustomizationRequest {
     pub namespace: Option<String>,
 }
 
+/// see [Quicksight::delete_account_customization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAccountCustomizationResponse {
@@ -1770,6 +1804,7 @@ pub struct DeleteAccountCustomizationResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_analysis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnalysisRequest {
@@ -1789,6 +1824,7 @@ pub struct DeleteAnalysisRequest {
     pub recovery_window_in_days: Option<i64>,
 }
 
+/// see [Quicksight::delete_analysis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAnalysisResponse {
@@ -1814,6 +1850,7 @@ pub struct DeleteAnalysisResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_dashboard]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDashboardRequest {
@@ -1829,6 +1866,7 @@ pub struct DeleteDashboardRequest {
     pub version_number: Option<i64>,
 }
 
+/// see [Quicksight::delete_dashboard]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDashboardResponse {
@@ -1850,6 +1888,7 @@ pub struct DeleteDashboardResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSetRequest {
@@ -1861,6 +1900,7 @@ pub struct DeleteDataSetRequest {
     pub data_set_id: String,
 }
 
+/// see [Quicksight::delete_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataSetResponse {
@@ -1882,6 +1922,7 @@ pub struct DeleteDataSetResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceRequest {
@@ -1893,6 +1934,7 @@ pub struct DeleteDataSourceRequest {
     pub data_source_id: String,
 }
 
+/// see [Quicksight::delete_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataSourceResponse {
@@ -1914,6 +1956,7 @@ pub struct DeleteDataSourceResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_group_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupMembershipRequest {
@@ -1931,6 +1974,7 @@ pub struct DeleteGroupMembershipRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::delete_group_membership]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupMembershipResponse {
@@ -1944,6 +1988,7 @@ pub struct DeleteGroupMembershipResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
@@ -1958,6 +2003,7 @@ pub struct DeleteGroupRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::delete_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResponse {
@@ -1971,6 +2017,7 @@ pub struct DeleteGroupResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_iam_policy_assignment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIAMPolicyAssignmentRequest {
@@ -1985,6 +2032,7 @@ pub struct DeleteIAMPolicyAssignmentRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::delete_iam_policy_assignment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIAMPolicyAssignmentResponse {
@@ -2002,6 +2050,7 @@ pub struct DeleteIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamespaceRequest {
@@ -2013,6 +2062,7 @@ pub struct DeleteNamespaceRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::delete_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNamespaceResponse {
@@ -2026,6 +2076,7 @@ pub struct DeleteNamespaceResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_template_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTemplateAliasRequest {
@@ -2040,6 +2091,7 @@ pub struct DeleteTemplateAliasRequest {
     pub template_id: String,
 }
 
+/// see [Quicksight::delete_template_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTemplateAliasResponse {
@@ -2065,6 +2117,7 @@ pub struct DeleteTemplateAliasResponse {
     pub template_id: Option<String>,
 }
 
+/// see [Quicksight::delete_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTemplateRequest {
@@ -2080,6 +2133,7 @@ pub struct DeleteTemplateRequest {
     pub version_number: Option<i64>,
 }
 
+/// see [Quicksight::delete_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTemplateResponse {
@@ -2101,6 +2155,7 @@ pub struct DeleteTemplateResponse {
     pub template_id: Option<String>,
 }
 
+/// see [Quicksight::delete_theme_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThemeAliasRequest {
@@ -2115,6 +2170,7 @@ pub struct DeleteThemeAliasRequest {
     pub theme_id: String,
 }
 
+/// see [Quicksight::delete_theme_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThemeAliasResponse {
@@ -2140,6 +2196,7 @@ pub struct DeleteThemeAliasResponse {
     pub theme_id: Option<String>,
 }
 
+/// see [Quicksight::delete_theme]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThemeRequest {
@@ -2155,6 +2212,7 @@ pub struct DeleteThemeRequest {
     pub version_number: Option<i64>,
 }
 
+/// see [Quicksight::delete_theme]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThemeResponse {
@@ -2177,6 +2235,7 @@ pub struct DeleteThemeResponse {
 }
 
 /// <p><p/></p>
+/// see [Quicksight::delete_user_by_principal_id]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserByPrincipalIdRequest {
@@ -2191,6 +2250,7 @@ pub struct DeleteUserByPrincipalIdRequest {
     pub principal_id: String,
 }
 
+/// see [Quicksight::delete_user_by_principal_id]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserByPrincipalIdResponse {
@@ -2204,6 +2264,7 @@ pub struct DeleteUserByPrincipalIdResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -2218,6 +2279,7 @@ pub struct DeleteUserRequest {
     pub user_name: String,
 }
 
+/// see [Quicksight::delete_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {
@@ -2231,6 +2293,7 @@ pub struct DeleteUserResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_account_customization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountCustomizationRequest {
@@ -2247,6 +2310,7 @@ pub struct DescribeAccountCustomizationRequest {
     pub resolved: Option<bool>,
 }
 
+/// see [Quicksight::describe_account_customization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountCustomizationResponse {
@@ -2276,6 +2340,7 @@ pub struct DescribeAccountCustomizationResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_account_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountSettingsRequest {
@@ -2284,6 +2349,7 @@ pub struct DescribeAccountSettingsRequest {
     pub aws_account_id: String,
 }
 
+/// see [Quicksight::describe_account_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountSettingsResponse {
@@ -2301,6 +2367,7 @@ pub struct DescribeAccountSettingsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_analysis_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAnalysisPermissionsRequest {
@@ -2312,6 +2379,7 @@ pub struct DescribeAnalysisPermissionsRequest {
     pub aws_account_id: String,
 }
 
+/// see [Quicksight::describe_analysis_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAnalysisPermissionsResponse {
@@ -2337,6 +2405,7 @@ pub struct DescribeAnalysisPermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_analysis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAnalysisRequest {
@@ -2348,6 +2417,7 @@ pub struct DescribeAnalysisRequest {
     pub aws_account_id: String,
 }
 
+/// see [Quicksight::describe_analysis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAnalysisResponse {
@@ -2365,6 +2435,7 @@ pub struct DescribeAnalysisResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_dashboard_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDashboardPermissionsRequest {
@@ -2376,6 +2447,7 @@ pub struct DescribeDashboardPermissionsRequest {
     pub dashboard_id: String,
 }
 
+/// see [Quicksight::describe_dashboard_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDashboardPermissionsResponse {
@@ -2401,6 +2473,7 @@ pub struct DescribeDashboardPermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_dashboard]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDashboardRequest {
@@ -2420,6 +2493,7 @@ pub struct DescribeDashboardRequest {
     pub version_number: Option<i64>,
 }
 
+/// see [Quicksight::describe_dashboard]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDashboardResponse {
@@ -2437,6 +2511,7 @@ pub struct DescribeDashboardResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_data_set_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSetPermissionsRequest {
@@ -2448,6 +2523,7 @@ pub struct DescribeDataSetPermissionsRequest {
     pub data_set_id: String,
 }
 
+/// see [Quicksight::describe_data_set_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSetPermissionsResponse {
@@ -2473,6 +2549,7 @@ pub struct DescribeDataSetPermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSetRequest {
@@ -2484,6 +2561,7 @@ pub struct DescribeDataSetRequest {
     pub data_set_id: String,
 }
 
+/// see [Quicksight::describe_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSetResponse {
@@ -2501,6 +2579,7 @@ pub struct DescribeDataSetResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_data_source_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourcePermissionsRequest {
@@ -2512,6 +2591,7 @@ pub struct DescribeDataSourcePermissionsRequest {
     pub data_source_id: String,
 }
 
+/// see [Quicksight::describe_data_source_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSourcePermissionsResponse {
@@ -2537,6 +2617,7 @@ pub struct DescribeDataSourcePermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourceRequest {
@@ -2548,6 +2629,7 @@ pub struct DescribeDataSourceRequest {
     pub data_source_id: String,
 }
 
+/// see [Quicksight::describe_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSourceResponse {
@@ -2565,6 +2647,7 @@ pub struct DescribeDataSourceResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupRequest {
@@ -2579,6 +2662,7 @@ pub struct DescribeGroupRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::describe_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGroupResponse {
@@ -2596,6 +2680,7 @@ pub struct DescribeGroupResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_iam_policy_assignment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIAMPolicyAssignmentRequest {
@@ -2610,6 +2695,7 @@ pub struct DescribeIAMPolicyAssignmentRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::describe_iam_policy_assignment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIAMPolicyAssignmentResponse {
@@ -2627,6 +2713,7 @@ pub struct DescribeIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_ingestion]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIngestionRequest {
@@ -2641,6 +2728,7 @@ pub struct DescribeIngestionRequest {
     pub ingestion_id: String,
 }
 
+/// see [Quicksight::describe_ingestion]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIngestionResponse {
@@ -2658,6 +2746,7 @@ pub struct DescribeIngestionResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNamespaceRequest {
@@ -2669,6 +2758,7 @@ pub struct DescribeNamespaceRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::describe_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNamespaceResponse {
@@ -2686,6 +2776,7 @@ pub struct DescribeNamespaceResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::describe_template_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTemplateAliasRequest {
@@ -2700,6 +2791,7 @@ pub struct DescribeTemplateAliasRequest {
     pub template_id: String,
 }
 
+/// see [Quicksight::describe_template_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplateAliasResponse {
@@ -2717,6 +2809,7 @@ pub struct DescribeTemplateAliasResponse {
     pub template_alias: Option<TemplateAlias>,
 }
 
+/// see [Quicksight::describe_template_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTemplatePermissionsRequest {
@@ -2728,6 +2821,7 @@ pub struct DescribeTemplatePermissionsRequest {
     pub template_id: String,
 }
 
+/// see [Quicksight::describe_template_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplatePermissionsResponse {
@@ -2753,6 +2847,7 @@ pub struct DescribeTemplatePermissionsResponse {
     pub template_id: Option<String>,
 }
 
+/// see [Quicksight::describe_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTemplateRequest {
@@ -2772,6 +2867,7 @@ pub struct DescribeTemplateRequest {
     pub version_number: Option<i64>,
 }
 
+/// see [Quicksight::describe_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplateResponse {
@@ -2789,6 +2885,7 @@ pub struct DescribeTemplateResponse {
     pub template: Option<Template>,
 }
 
+/// see [Quicksight::describe_theme_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThemeAliasRequest {
@@ -2803,6 +2900,7 @@ pub struct DescribeThemeAliasRequest {
     pub theme_id: String,
 }
 
+/// see [Quicksight::describe_theme_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThemeAliasResponse {
@@ -2820,6 +2918,7 @@ pub struct DescribeThemeAliasResponse {
     pub theme_alias: Option<ThemeAlias>,
 }
 
+/// see [Quicksight::describe_theme_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThemePermissionsRequest {
@@ -2831,6 +2930,7 @@ pub struct DescribeThemePermissionsRequest {
     pub theme_id: String,
 }
 
+/// see [Quicksight::describe_theme_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThemePermissionsResponse {
@@ -2856,6 +2956,7 @@ pub struct DescribeThemePermissionsResponse {
     pub theme_id: Option<String>,
 }
 
+/// see [Quicksight::describe_theme]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThemeRequest {
@@ -2875,6 +2976,7 @@ pub struct DescribeThemeRequest {
     pub version_number: Option<i64>,
 }
 
+/// see [Quicksight::describe_theme]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThemeResponse {
@@ -2892,6 +2994,7 @@ pub struct DescribeThemeResponse {
     pub theme: Option<Theme>,
 }
 
+/// see [Quicksight::describe_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
@@ -2906,6 +3009,7 @@ pub struct DescribeUserRequest {
     pub user_name: String,
 }
 
+/// see [Quicksight::describe_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
@@ -2969,6 +3073,7 @@ pub struct GeoSpatialColumnGroup {
     pub name: String,
 }
 
+/// see [Quicksight::get_dashboard_embed_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDashboardEmbedUrlRequest {
@@ -3012,6 +3117,7 @@ pub struct GetDashboardEmbedUrlRequest {
 }
 
 /// <p>Output returned from the <code>GetDashboardEmbedUrl</code> operation.</p>
+/// see [Quicksight::get_dashboard_embed_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDashboardEmbedUrlResponse {
@@ -3029,6 +3135,7 @@ pub struct GetDashboardEmbedUrlResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::get_session_embed_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSessionEmbedUrlRequest {
@@ -3049,6 +3156,7 @@ pub struct GetSessionEmbedUrlRequest {
     pub user_arn: Option<String>,
 }
 
+/// see [Quicksight::get_session_embed_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSessionEmbedUrlResponse {
@@ -3265,6 +3373,7 @@ pub struct JoinKeyProperties {
     pub unique_key: Option<bool>,
 }
 
+/// see [Quicksight::list_analyses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAnalysesRequest {
@@ -3281,6 +3390,7 @@ pub struct ListAnalysesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_analyses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAnalysesResponse {
@@ -3302,6 +3412,7 @@ pub struct ListAnalysesResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_dashboard_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDashboardVersionsRequest {
@@ -3321,6 +3432,7 @@ pub struct ListDashboardVersionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_dashboard_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDashboardVersionsResponse {
@@ -3342,6 +3454,7 @@ pub struct ListDashboardVersionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_dashboards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDashboardsRequest {
@@ -3358,6 +3471,7 @@ pub struct ListDashboardsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_dashboards]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDashboardsResponse {
@@ -3379,6 +3493,7 @@ pub struct ListDashboardsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_data_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSetsRequest {
@@ -3395,6 +3510,7 @@ pub struct ListDataSetsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_data_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSetsResponse {
@@ -3416,6 +3532,7 @@ pub struct ListDataSetsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_data_sources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourcesRequest {
@@ -3432,6 +3549,7 @@ pub struct ListDataSourcesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_data_sources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourcesResponse {
@@ -3453,6 +3571,7 @@ pub struct ListDataSourcesResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_group_memberships]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupMembershipsRequest {
@@ -3475,6 +3594,7 @@ pub struct ListGroupMembershipsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_group_memberships]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupMembershipsResponse {
@@ -3496,6 +3616,7 @@ pub struct ListGroupMembershipsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
@@ -3515,6 +3636,7 @@ pub struct ListGroupsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
@@ -3536,6 +3658,7 @@ pub struct ListGroupsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_iam_policy_assignments_for_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIAMPolicyAssignmentsForUserRequest {
@@ -3558,6 +3681,7 @@ pub struct ListIAMPolicyAssignmentsForUserRequest {
     pub user_name: String,
 }
 
+/// see [Quicksight::list_iam_policy_assignments_for_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIAMPolicyAssignmentsForUserResponse {
@@ -3579,6 +3703,7 @@ pub struct ListIAMPolicyAssignmentsForUserResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_iam_policy_assignments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIAMPolicyAssignmentsRequest {
@@ -3602,6 +3727,7 @@ pub struct ListIAMPolicyAssignmentsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_iam_policy_assignments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIAMPolicyAssignmentsResponse {
@@ -3623,6 +3749,7 @@ pub struct ListIAMPolicyAssignmentsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_ingestions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIngestionsRequest {
@@ -3642,6 +3769,7 @@ pub struct ListIngestionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_ingestions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIngestionsResponse {
@@ -3663,6 +3791,7 @@ pub struct ListIngestionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_namespaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamespacesRequest {
@@ -3679,6 +3808,7 @@ pub struct ListNamespacesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_namespaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNamespacesResponse {
@@ -3700,6 +3830,7 @@ pub struct ListNamespacesResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -3708,6 +3839,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Quicksight::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -3725,6 +3857,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Quicksight::list_template_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTemplateAliasesRequest {
@@ -3744,6 +3877,7 @@ pub struct ListTemplateAliasesRequest {
     pub template_id: String,
 }
 
+/// see [Quicksight::list_template_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTemplateAliasesResponse {
@@ -3765,6 +3899,7 @@ pub struct ListTemplateAliasesResponse {
     pub template_alias_list: Option<Vec<TemplateAlias>>,
 }
 
+/// see [Quicksight::list_template_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTemplateVersionsRequest {
@@ -3784,6 +3919,7 @@ pub struct ListTemplateVersionsRequest {
     pub template_id: String,
 }
 
+/// see [Quicksight::list_template_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTemplateVersionsResponse {
@@ -3805,6 +3941,7 @@ pub struct ListTemplateVersionsResponse {
     pub template_version_summary_list: Option<Vec<TemplateVersionSummary>>,
 }
 
+/// see [Quicksight::list_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTemplatesRequest {
@@ -3821,6 +3958,7 @@ pub struct ListTemplatesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTemplatesResponse {
@@ -3842,6 +3980,7 @@ pub struct ListTemplatesResponse {
     pub template_summary_list: Option<Vec<TemplateSummary>>,
 }
 
+/// see [Quicksight::list_theme_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThemeAliasesRequest {
@@ -3861,6 +4000,7 @@ pub struct ListThemeAliasesRequest {
     pub theme_id: String,
 }
 
+/// see [Quicksight::list_theme_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThemeAliasesResponse {
@@ -3882,6 +4022,7 @@ pub struct ListThemeAliasesResponse {
     pub theme_alias_list: Option<Vec<ThemeAlias>>,
 }
 
+/// see [Quicksight::list_theme_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThemeVersionsRequest {
@@ -3901,6 +4042,7 @@ pub struct ListThemeVersionsRequest {
     pub theme_id: String,
 }
 
+/// see [Quicksight::list_theme_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThemeVersionsResponse {
@@ -3922,6 +4064,7 @@ pub struct ListThemeVersionsResponse {
     pub theme_version_summary_list: Option<Vec<ThemeVersionSummary>>,
 }
 
+/// see [Quicksight::list_themes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThemesRequest {
@@ -3942,6 +4085,7 @@ pub struct ListThemesRequest {
     pub type_: Option<String>,
 }
 
+/// see [Quicksight::list_themes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThemesResponse {
@@ -3963,6 +4107,7 @@ pub struct ListThemesResponse {
     pub theme_summary_list: Option<Vec<ThemeSummary>>,
 }
 
+/// see [Quicksight::list_user_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserGroupsRequest {
@@ -3985,6 +4130,7 @@ pub struct ListUserGroupsRequest {
     pub user_name: String,
 }
 
+/// see [Quicksight::list_user_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserGroupsResponse {
@@ -4006,6 +4152,7 @@ pub struct ListUserGroupsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::list_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -4025,6 +4172,7 @@ pub struct ListUsersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::list_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
@@ -4316,6 +4464,7 @@ pub struct RedshiftParameters {
     pub port: Option<i64>,
 }
 
+/// see [Quicksight::register_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterUserRequest {
@@ -4352,6 +4501,7 @@ pub struct RegisterUserRequest {
     pub user_role: String,
 }
 
+/// see [Quicksight::register_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterUserResponse {
@@ -4417,6 +4567,7 @@ pub struct ResourcePermission {
     pub principal: String,
 }
 
+/// see [Quicksight::restore_analysis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreAnalysisRequest {
@@ -4428,6 +4579,7 @@ pub struct RestoreAnalysisRequest {
     pub aws_account_id: String,
 }
 
+/// see [Quicksight::restore_analysis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreAnalysisResponse {
@@ -4501,6 +4653,7 @@ pub struct S3Source {
     pub upload_settings: Option<UploadSettings>,
 }
 
+/// see [Quicksight::search_analyses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAnalysesRequest {
@@ -4520,6 +4673,7 @@ pub struct SearchAnalysesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::search_analyses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchAnalysesResponse {
@@ -4541,6 +4695,7 @@ pub struct SearchAnalysesResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::search_dashboards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchDashboardsRequest {
@@ -4560,6 +4715,7 @@ pub struct SearchDashboardsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Quicksight::search_dashboards]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchDashboardsResponse {
@@ -4708,6 +4864,7 @@ pub struct TagColumnOperation {
     pub tags: Vec<ColumnTag>,
 }
 
+/// see [Quicksight::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -4719,6 +4876,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Quicksight::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {
@@ -5248,6 +5406,7 @@ pub struct UIColorPalette {
     pub warning_foreground: Option<String>,
 }
 
+/// see [Quicksight::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -5259,6 +5418,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Quicksight::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {
@@ -5272,6 +5432,7 @@ pub struct UntagResourceResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_account_customization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountCustomizationRequest {
@@ -5287,6 +5448,7 @@ pub struct UpdateAccountCustomizationRequest {
     pub namespace: Option<String>,
 }
 
+/// see [Quicksight::update_account_customization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountCustomizationResponse {
@@ -5316,6 +5478,7 @@ pub struct UpdateAccountCustomizationResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_account_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountSettingsRequest {
@@ -5331,6 +5494,7 @@ pub struct UpdateAccountSettingsRequest {
     pub notification_email: Option<String>,
 }
 
+/// see [Quicksight::update_account_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountSettingsResponse {
@@ -5344,6 +5508,7 @@ pub struct UpdateAccountSettingsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_analysis_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAnalysisPermissionsRequest {
@@ -5363,6 +5528,7 @@ pub struct UpdateAnalysisPermissionsRequest {
     pub revoke_permissions: Option<Vec<ResourcePermission>>,
 }
 
+/// see [Quicksight::update_analysis_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAnalysisPermissionsResponse {
@@ -5388,6 +5554,7 @@ pub struct UpdateAnalysisPermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_analysis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAnalysisRequest {
@@ -5413,6 +5580,7 @@ pub struct UpdateAnalysisRequest {
     pub theme_arn: Option<String>,
 }
 
+/// see [Quicksight::update_analysis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAnalysisResponse {
@@ -5438,6 +5606,7 @@ pub struct UpdateAnalysisResponse {
     pub update_status: Option<String>,
 }
 
+/// see [Quicksight::update_dashboard_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDashboardPermissionsRequest {
@@ -5457,6 +5626,7 @@ pub struct UpdateDashboardPermissionsRequest {
     pub revoke_permissions: Option<Vec<ResourcePermission>>,
 }
 
+/// see [Quicksight::update_dashboard_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDashboardPermissionsResponse {
@@ -5482,6 +5652,7 @@ pub struct UpdateDashboardPermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_dashboard_published_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDashboardPublishedVersionRequest {
@@ -5496,6 +5667,7 @@ pub struct UpdateDashboardPublishedVersionRequest {
     pub version_number: i64,
 }
 
+/// see [Quicksight::update_dashboard_published_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDashboardPublishedVersionResponse {
@@ -5517,6 +5689,7 @@ pub struct UpdateDashboardPublishedVersionResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_dashboard]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDashboardRequest {
@@ -5550,6 +5723,7 @@ pub struct UpdateDashboardRequest {
     pub version_description: Option<String>,
 }
 
+/// see [Quicksight::update_dashboard]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDashboardResponse {
@@ -5579,6 +5753,7 @@ pub struct UpdateDashboardResponse {
     pub version_arn: Option<String>,
 }
 
+/// see [Quicksight::update_data_set_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSetPermissionsRequest {
@@ -5598,6 +5773,7 @@ pub struct UpdateDataSetPermissionsRequest {
     pub revoke_permissions: Option<Vec<ResourcePermission>>,
 }
 
+/// see [Quicksight::update_data_set_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSetPermissionsResponse {
@@ -5619,6 +5795,7 @@ pub struct UpdateDataSetPermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSetRequest {
@@ -5655,6 +5832,7 @@ pub struct UpdateDataSetRequest {
     pub row_level_permission_data_set: Option<RowLevelPermissionDataSet>,
 }
 
+/// see [Quicksight::update_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSetResponse {
@@ -5684,6 +5862,7 @@ pub struct UpdateDataSetResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_data_source_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourcePermissionsRequest {
@@ -5703,6 +5882,7 @@ pub struct UpdateDataSourcePermissionsRequest {
     pub revoke_permissions: Option<Vec<ResourcePermission>>,
 }
 
+/// see [Quicksight::update_data_source_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSourcePermissionsResponse {
@@ -5724,6 +5904,7 @@ pub struct UpdateDataSourcePermissionsResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_data_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceRequest {
@@ -5754,6 +5935,7 @@ pub struct UpdateDataSourceRequest {
     pub vpc_connection_properties: Option<VpcConnectionProperties>,
 }
 
+/// see [Quicksight::update_data_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSourceResponse {
@@ -5779,6 +5961,7 @@ pub struct UpdateDataSourceResponse {
     pub update_status: Option<String>,
 }
 
+/// see [Quicksight::update_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
@@ -5797,6 +5980,7 @@ pub struct UpdateGroupRequest {
     pub namespace: String,
 }
 
+/// see [Quicksight::update_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResponse {
@@ -5814,6 +5998,7 @@ pub struct UpdateGroupResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_iam_policy_assignment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIAMPolicyAssignmentRequest {
@@ -5840,6 +6025,7 @@ pub struct UpdateIAMPolicyAssignmentRequest {
     pub policy_arn: Option<String>,
 }
 
+/// see [Quicksight::update_iam_policy_assignment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIAMPolicyAssignmentResponse {
@@ -5873,6 +6059,7 @@ pub struct UpdateIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
+/// see [Quicksight::update_template_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTemplateAliasRequest {
@@ -5890,6 +6077,7 @@ pub struct UpdateTemplateAliasRequest {
     pub template_version_number: i64,
 }
 
+/// see [Quicksight::update_template_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTemplateAliasResponse {
@@ -5907,6 +6095,7 @@ pub struct UpdateTemplateAliasResponse {
     pub template_alias: Option<TemplateAlias>,
 }
 
+/// see [Quicksight::update_template_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTemplatePermissionsRequest {
@@ -5926,6 +6115,7 @@ pub struct UpdateTemplatePermissionsRequest {
     pub template_id: String,
 }
 
+/// see [Quicksight::update_template_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTemplatePermissionsResponse {
@@ -5951,6 +6141,7 @@ pub struct UpdateTemplatePermissionsResponse {
     pub template_id: Option<String>,
 }
 
+/// see [Quicksight::update_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTemplateRequest {
@@ -5973,6 +6164,7 @@ pub struct UpdateTemplateRequest {
     pub version_description: Option<String>,
 }
 
+/// see [Quicksight::update_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTemplateResponse {
@@ -6002,6 +6194,7 @@ pub struct UpdateTemplateResponse {
     pub version_arn: Option<String>,
 }
 
+/// see [Quicksight::update_theme_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThemeAliasRequest {
@@ -6019,6 +6212,7 @@ pub struct UpdateThemeAliasRequest {
     pub theme_version_number: i64,
 }
 
+/// see [Quicksight::update_theme_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThemeAliasResponse {
@@ -6036,6 +6230,7 @@ pub struct UpdateThemeAliasResponse {
     pub theme_alias: Option<ThemeAlias>,
 }
 
+/// see [Quicksight::update_theme_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThemePermissionsRequest {
@@ -6055,6 +6250,7 @@ pub struct UpdateThemePermissionsRequest {
     pub theme_id: String,
 }
 
+/// see [Quicksight::update_theme_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThemePermissionsResponse {
@@ -6080,6 +6276,7 @@ pub struct UpdateThemePermissionsResponse {
     pub theme_id: Option<String>,
 }
 
+/// see [Quicksight::update_theme]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThemeRequest {
@@ -6106,6 +6303,7 @@ pub struct UpdateThemeRequest {
     pub version_description: Option<String>,
 }
 
+/// see [Quicksight::update_theme]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThemeResponse {
@@ -6135,6 +6333,7 @@ pub struct UpdateThemeResponse {
     pub version_arn: Option<String>,
 }
 
+/// see [Quicksight::update_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
@@ -6163,6 +6362,7 @@ pub struct UpdateUserRequest {
     pub user_name: String,
 }
 
+/// see [Quicksight::update_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
@@ -13179,7 +13379,7 @@ impl fmt::Display for UpdateUserError {
 impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the Amazon QuickSight API. Amazon QuickSight clients implement this trait.
 #[async_trait]
-pub trait Quicksight {
+pub trait Quicksight: Clone + Sync + Send + 'static {
     /// <p>Cancels an ongoing ingestion of data into SPICE.</p>
     async fn cancel_ingestion(
         &self,

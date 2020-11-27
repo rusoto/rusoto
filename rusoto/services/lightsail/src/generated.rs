@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -171,6 +173,7 @@ pub struct Alarm {
     pub unit: Option<String>,
 }
 
+/// see [Lightsail::allocate_static_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateStaticIpRequest {
@@ -179,6 +182,7 @@ pub struct AllocateStaticIpRequest {
     pub static_ip_name: String,
 }
 
+/// see [Lightsail::allocate_static_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AllocateStaticIpResult {
@@ -188,6 +192,7 @@ pub struct AllocateStaticIpResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::attach_certificate_to_distribution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachCertificateToDistributionRequest {
@@ -199,6 +204,7 @@ pub struct AttachCertificateToDistributionRequest {
     pub distribution_name: String,
 }
 
+/// see [Lightsail::attach_certificate_to_distribution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachCertificateToDistributionResult {
@@ -208,6 +214,7 @@ pub struct AttachCertificateToDistributionResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::attach_disk]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachDiskRequest {
@@ -222,6 +229,7 @@ pub struct AttachDiskRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::attach_disk]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachDiskResult {
@@ -231,6 +239,7 @@ pub struct AttachDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::attach_instances_to_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachInstancesToLoadBalancerRequest {
@@ -242,6 +251,7 @@ pub struct AttachInstancesToLoadBalancerRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::attach_instances_to_load_balancer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachInstancesToLoadBalancerResult {
@@ -251,6 +261,7 @@ pub struct AttachInstancesToLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::attach_load_balancer_tls_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachLoadBalancerTlsCertificateRequest {
@@ -262,6 +273,7 @@ pub struct AttachLoadBalancerTlsCertificateRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::attach_load_balancer_tls_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachLoadBalancerTlsCertificateResult {
@@ -271,6 +283,7 @@ pub struct AttachLoadBalancerTlsCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::attach_static_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachStaticIpRequest {
@@ -282,6 +295,7 @@ pub struct AttachStaticIpRequest {
     pub static_ip_name: String,
 }
 
+/// see [Lightsail::attach_static_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachStaticIpResult {
@@ -630,6 +644,7 @@ pub struct CertificateSummary {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::close_instance_public_ports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseInstancePublicPortsRequest {
@@ -641,6 +656,7 @@ pub struct CloseInstancePublicPortsRequest {
     pub port_info: PortInfo,
 }
 
+/// see [Lightsail::close_instance_public_ports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloseInstancePublicPortsResult {
@@ -1013,6 +1029,7 @@ pub struct ContainerServiceRegistryLogin {
     pub username: Option<String>,
 }
 
+/// see [Lightsail::get_container_services]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContainerServicesListResult {
@@ -1035,6 +1052,7 @@ pub struct CookieObject {
     pub option: Option<String>,
 }
 
+/// see [Lightsail::copy_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotRequest {
@@ -1062,6 +1080,7 @@ pub struct CopySnapshotRequest {
     pub use_latest_restorable_auto_snapshot: Option<bool>,
 }
 
+/// see [Lightsail::copy_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopySnapshotResult {
@@ -1071,6 +1090,7 @@ pub struct CopySnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCertificateRequest {
@@ -1090,6 +1110,7 @@ pub struct CreateCertificateRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCertificateResult {
@@ -1103,6 +1124,7 @@ pub struct CreateCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_cloud_formation_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationStackRequest {
@@ -1111,6 +1133,7 @@ pub struct CreateCloudFormationStackRequest {
     pub instances: Vec<InstanceEntry>,
 }
 
+/// see [Lightsail::create_cloud_formation_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationStackResult {
@@ -1120,6 +1143,7 @@ pub struct CreateCloudFormationStackResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_contact_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContactMethodRequest {
@@ -1131,6 +1155,7 @@ pub struct CreateContactMethodRequest {
     pub protocol: String,
 }
 
+/// see [Lightsail::create_contact_method]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContactMethodResult {
@@ -1140,6 +1165,7 @@ pub struct CreateContactMethodResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_container_service_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContainerServiceDeploymentRequest {
@@ -1156,6 +1182,7 @@ pub struct CreateContainerServiceDeploymentRequest {
     pub service_name: String,
 }
 
+/// see [Lightsail::create_container_service_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContainerServiceDeploymentResult {
@@ -1165,10 +1192,12 @@ pub struct CreateContainerServiceDeploymentResult {
     pub container_service: Option<ContainerService>,
 }
 
+/// see [Lightsail::create_container_service_registry_login]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContainerServiceRegistryLoginRequest {}
 
+/// see [Lightsail::create_container_service_registry_login]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContainerServiceRegistryLoginResult {
@@ -1178,6 +1207,7 @@ pub struct CreateContainerServiceRegistryLoginResult {
     pub registry_login: Option<ContainerServiceRegistryLogin>,
 }
 
+/// see [Lightsail::create_container_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContainerServiceRequest {
@@ -1204,6 +1234,7 @@ pub struct CreateContainerServiceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_container_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContainerServiceResult {
@@ -1213,6 +1244,7 @@ pub struct CreateContainerServiceResult {
     pub container_service: Option<ContainerService>,
 }
 
+/// see [Lightsail::create_disk_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskFromSnapshotRequest {
@@ -1251,6 +1283,7 @@ pub struct CreateDiskFromSnapshotRequest {
     pub use_latest_restorable_auto_snapshot: Option<bool>,
 }
 
+/// see [Lightsail::create_disk_from_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDiskFromSnapshotResult {
@@ -1260,6 +1293,7 @@ pub struct CreateDiskFromSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_disk]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskRequest {
@@ -1282,6 +1316,7 @@ pub struct CreateDiskRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_disk]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDiskResult {
@@ -1291,6 +1326,7 @@ pub struct CreateDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_disk_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskSnapshotRequest {
@@ -1311,6 +1347,7 @@ pub struct CreateDiskSnapshotRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_disk_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDiskSnapshotResult {
@@ -1320,6 +1357,7 @@ pub struct CreateDiskSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_distribution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionRequest {
@@ -1349,6 +1387,7 @@ pub struct CreateDistributionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_distribution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDistributionResult {
@@ -1362,6 +1401,7 @@ pub struct CreateDistributionResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::create_domain_entry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainEntryRequest {
@@ -1373,6 +1413,7 @@ pub struct CreateDomainEntryRequest {
     pub domain_name: String,
 }
 
+/// see [Lightsail::create_domain_entry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainEntryResult {
@@ -1382,6 +1423,7 @@ pub struct CreateDomainEntryResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::create_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
@@ -1394,6 +1436,7 @@ pub struct CreateDomainRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainResult {
@@ -1403,6 +1446,7 @@ pub struct CreateDomainResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::create_instance_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceSnapshotRequest {
@@ -1418,6 +1462,7 @@ pub struct CreateInstanceSnapshotRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_instance_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceSnapshotResult {
@@ -1427,6 +1472,7 @@ pub struct CreateInstanceSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_instances_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesFromSnapshotRequest {
@@ -1477,6 +1523,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     pub user_data: Option<String>,
 }
 
+/// see [Lightsail::create_instances_from_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstancesFromSnapshotResult {
@@ -1486,6 +1533,7 @@ pub struct CreateInstancesFromSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesRequest {
@@ -1519,6 +1567,7 @@ pub struct CreateInstancesRequest {
     pub user_data: Option<String>,
 }
 
+/// see [Lightsail::create_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstancesResult {
@@ -1528,6 +1577,7 @@ pub struct CreateInstancesResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_key_pair]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeyPairRequest {
@@ -1540,6 +1590,7 @@ pub struct CreateKeyPairRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_key_pair]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateKeyPairResult {
@@ -1561,6 +1612,7 @@ pub struct CreateKeyPairResult {
     pub public_key_base_64: Option<String>,
 }
 
+/// see [Lightsail::create_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerRequest {
@@ -1592,6 +1644,7 @@ pub struct CreateLoadBalancerRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_load_balancer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoadBalancerResult {
@@ -1601,6 +1654,7 @@ pub struct CreateLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_load_balancer_tls_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerTlsCertificateRequest {
@@ -1623,6 +1677,7 @@ pub struct CreateLoadBalancerTlsCertificateRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_load_balancer_tls_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoadBalancerTlsCertificateResult {
@@ -1632,6 +1687,7 @@ pub struct CreateLoadBalancerTlsCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_relational_database_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseFromSnapshotRequest {
@@ -1672,6 +1728,7 @@ pub struct CreateRelationalDatabaseFromSnapshotRequest {
     pub use_latest_restorable_time: Option<bool>,
 }
 
+/// see [Lightsail::create_relational_database_from_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRelationalDatabaseFromSnapshotResult {
@@ -1681,6 +1738,7 @@ pub struct CreateRelationalDatabaseFromSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_relational_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseRequest {
@@ -1725,6 +1783,7 @@ pub struct CreateRelationalDatabaseRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_relational_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRelationalDatabaseResult {
@@ -1734,6 +1793,7 @@ pub struct CreateRelationalDatabaseResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::create_relational_database_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseSnapshotRequest {
@@ -1749,6 +1809,7 @@ pub struct CreateRelationalDatabaseSnapshotRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::create_relational_database_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRelationalDatabaseSnapshotResult {
@@ -1758,6 +1819,7 @@ pub struct CreateRelationalDatabaseSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_alarm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAlarmRequest {
@@ -1766,6 +1828,7 @@ pub struct DeleteAlarmRequest {
     pub alarm_name: String,
 }
 
+/// see [Lightsail::delete_alarm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAlarmResult {
@@ -1775,6 +1838,7 @@ pub struct DeleteAlarmResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_auto_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAutoSnapshotRequest {
@@ -1786,6 +1850,7 @@ pub struct DeleteAutoSnapshotRequest {
     pub resource_name: String,
 }
 
+/// see [Lightsail::delete_auto_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAutoSnapshotResult {
@@ -1795,6 +1860,7 @@ pub struct DeleteAutoSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateRequest {
@@ -1803,6 +1869,7 @@ pub struct DeleteCertificateRequest {
     pub certificate_name: String,
 }
 
+/// see [Lightsail::delete_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCertificateResult {
@@ -1812,6 +1879,7 @@ pub struct DeleteCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_contact_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContactMethodRequest {
@@ -1820,6 +1888,7 @@ pub struct DeleteContactMethodRequest {
     pub protocol: String,
 }
 
+/// see [Lightsail::delete_contact_method]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContactMethodResult {
@@ -1829,6 +1898,7 @@ pub struct DeleteContactMethodResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_container_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContainerImageRequest {
@@ -1840,10 +1910,12 @@ pub struct DeleteContainerImageRequest {
     pub service_name: String,
 }
 
+/// see [Lightsail::delete_container_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContainerImageResult {}
 
+/// see [Lightsail::delete_container_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContainerServiceRequest {
@@ -1852,10 +1924,12 @@ pub struct DeleteContainerServiceRequest {
     pub service_name: String,
 }
 
+/// see [Lightsail::delete_container_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContainerServiceResult {}
 
+/// see [Lightsail::delete_disk]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiskRequest {
@@ -1868,6 +1942,7 @@ pub struct DeleteDiskRequest {
     pub force_delete_add_ons: Option<bool>,
 }
 
+/// see [Lightsail::delete_disk]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDiskResult {
@@ -1877,6 +1952,7 @@ pub struct DeleteDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_disk_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiskSnapshotRequest {
@@ -1885,6 +1961,7 @@ pub struct DeleteDiskSnapshotRequest {
     pub disk_snapshot_name: String,
 }
 
+/// see [Lightsail::delete_disk_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDiskSnapshotResult {
@@ -1894,6 +1971,7 @@ pub struct DeleteDiskSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_distribution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionRequest {
@@ -1903,6 +1981,7 @@ pub struct DeleteDistributionRequest {
     pub distribution_name: Option<String>,
 }
 
+/// see [Lightsail::delete_distribution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDistributionResult {
@@ -1912,6 +1991,7 @@ pub struct DeleteDistributionResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::delete_domain_entry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainEntryRequest {
@@ -1923,6 +2003,7 @@ pub struct DeleteDomainEntryRequest {
     pub domain_name: String,
 }
 
+/// see [Lightsail::delete_domain_entry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainEntryResult {
@@ -1932,6 +2013,7 @@ pub struct DeleteDomainEntryResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::delete_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
@@ -1940,6 +2022,7 @@ pub struct DeleteDomainRequest {
     pub domain_name: String,
 }
 
+/// see [Lightsail::delete_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainResult {
@@ -1949,6 +2032,7 @@ pub struct DeleteDomainResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::delete_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
@@ -1961,6 +2045,7 @@ pub struct DeleteInstanceRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::delete_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInstanceResult {
@@ -1970,6 +2055,7 @@ pub struct DeleteInstanceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_instance_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceSnapshotRequest {
@@ -1978,6 +2064,7 @@ pub struct DeleteInstanceSnapshotRequest {
     pub instance_snapshot_name: String,
 }
 
+/// see [Lightsail::delete_instance_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInstanceSnapshotResult {
@@ -1987,6 +2074,7 @@ pub struct DeleteInstanceSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_key_pair]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKeyPairRequest {
@@ -1995,6 +2083,7 @@ pub struct DeleteKeyPairRequest {
     pub key_pair_name: String,
 }
 
+/// see [Lightsail::delete_key_pair]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteKeyPairResult {
@@ -2004,6 +2093,7 @@ pub struct DeleteKeyPairResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::delete_known_host_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKnownHostKeysRequest {
@@ -2012,6 +2102,7 @@ pub struct DeleteKnownHostKeysRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::delete_known_host_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteKnownHostKeysResult {
@@ -2021,6 +2112,7 @@ pub struct DeleteKnownHostKeysResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerRequest {
@@ -2029,6 +2121,7 @@ pub struct DeleteLoadBalancerRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::delete_load_balancer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoadBalancerResult {
@@ -2038,6 +2131,7 @@ pub struct DeleteLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_load_balancer_tls_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerTlsCertificateRequest {
@@ -2053,6 +2147,7 @@ pub struct DeleteLoadBalancerTlsCertificateRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::delete_load_balancer_tls_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoadBalancerTlsCertificateResult {
@@ -2062,6 +2157,7 @@ pub struct DeleteLoadBalancerTlsCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_relational_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRelationalDatabaseRequest {
@@ -2078,6 +2174,7 @@ pub struct DeleteRelationalDatabaseRequest {
     pub skip_final_snapshot: Option<bool>,
 }
 
+/// see [Lightsail::delete_relational_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRelationalDatabaseResult {
@@ -2087,6 +2184,7 @@ pub struct DeleteRelationalDatabaseResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::delete_relational_database_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRelationalDatabaseSnapshotRequest {
@@ -2095,6 +2193,7 @@ pub struct DeleteRelationalDatabaseSnapshotRequest {
     pub relational_database_snapshot_name: String,
 }
 
+/// see [Lightsail::delete_relational_database_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRelationalDatabaseSnapshotResult {
@@ -2118,6 +2217,7 @@ pub struct DestinationInfo {
     pub service: Option<String>,
 }
 
+/// see [Lightsail::detach_certificate_from_distribution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachCertificateFromDistributionRequest {
@@ -2126,6 +2226,7 @@ pub struct DetachCertificateFromDistributionRequest {
     pub distribution_name: String,
 }
 
+/// see [Lightsail::detach_certificate_from_distribution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachCertificateFromDistributionResult {
@@ -2135,6 +2236,7 @@ pub struct DetachCertificateFromDistributionResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::detach_disk]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachDiskRequest {
@@ -2143,6 +2245,7 @@ pub struct DetachDiskRequest {
     pub disk_name: String,
 }
 
+/// see [Lightsail::detach_disk]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachDiskResult {
@@ -2152,6 +2255,7 @@ pub struct DetachDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::detach_instances_from_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachInstancesFromLoadBalancerRequest {
@@ -2163,6 +2267,7 @@ pub struct DetachInstancesFromLoadBalancerRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::detach_instances_from_load_balancer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachInstancesFromLoadBalancerResult {
@@ -2172,6 +2277,7 @@ pub struct DetachInstancesFromLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::detach_static_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachStaticIpRequest {
@@ -2180,6 +2286,7 @@ pub struct DetachStaticIpRequest {
     pub static_ip_name: String,
 }
 
+/// see [Lightsail::detach_static_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachStaticIpResult {
@@ -2189,6 +2296,7 @@ pub struct DetachStaticIpResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::disable_add_on]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableAddOnRequest {
@@ -2200,6 +2308,7 @@ pub struct DisableAddOnRequest {
     pub resource_name: String,
 }
 
+/// see [Lightsail::disable_add_on]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableAddOnResult {
@@ -2490,10 +2599,12 @@ pub struct DomainValidationRecord {
     pub resource_record: Option<ResourceRecord>,
 }
 
+/// see [Lightsail::download_default_key_pair]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DownloadDefaultKeyPairRequest {}
 
+/// see [Lightsail::download_default_key_pair]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DownloadDefaultKeyPairResult {
@@ -2507,6 +2618,7 @@ pub struct DownloadDefaultKeyPairResult {
     pub public_key_base_64: Option<String>,
 }
 
+/// see [Lightsail::enable_add_on]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAddOnRequest {
@@ -2518,6 +2630,7 @@ pub struct EnableAddOnRequest {
     pub resource_name: String,
 }
 
+/// see [Lightsail::enable_add_on]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableAddOnResult {
@@ -2619,6 +2732,7 @@ pub struct ExportSnapshotRecordSourceInfo {
     pub resource_type: Option<String>,
 }
 
+/// see [Lightsail::export_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportSnapshotRequest {
@@ -2627,6 +2741,7 @@ pub struct ExportSnapshotRequest {
     pub source_snapshot_name: String,
 }
 
+/// see [Lightsail::export_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportSnapshotResult {
@@ -2636,6 +2751,7 @@ pub struct ExportSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::get_active_names]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetActiveNamesRequest {
@@ -2645,6 +2761,15 @@ pub struct GetActiveNamesRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetActiveNamesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_active_names]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetActiveNamesResult {
@@ -2658,6 +2783,31 @@ pub struct GetActiveNamesResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetActiveNamesResult {
+    fn pagination_page_opt(self) -> Option<Vec<String>> {
+        Some(self.active_names.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetActiveNamesResult {
+    type Item = String;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_alarms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAlarmsRequest {
@@ -2675,6 +2825,7 @@ pub struct GetAlarmsRequest {
     pub page_token: Option<String>,
 }
 
+/// see [Lightsail::get_alarms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAlarmsResult {
@@ -2688,6 +2839,7 @@ pub struct GetAlarmsResult {
     pub next_page_token: Option<String>,
 }
 
+/// see [Lightsail::get_auto_snapshots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutoSnapshotsRequest {
@@ -2696,6 +2848,7 @@ pub struct GetAutoSnapshotsRequest {
     pub resource_name: String,
 }
 
+/// see [Lightsail::get_auto_snapshots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAutoSnapshotsResult {
@@ -2713,6 +2866,7 @@ pub struct GetAutoSnapshotsResult {
     pub resource_type: Option<String>,
 }
 
+/// see [Lightsail::get_blueprints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlueprintsRequest {
@@ -2726,6 +2880,15 @@ pub struct GetBlueprintsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetBlueprintsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_blueprints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlueprintsResult {
@@ -2739,6 +2902,31 @@ pub struct GetBlueprintsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetBlueprintsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Blueprint>> {
+        Some(self.blueprints.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBlueprintsResult {
+    type Item = Blueprint;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Blueprint> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_bundles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBundlesRequest {
@@ -2752,6 +2940,15 @@ pub struct GetBundlesRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetBundlesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_bundles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBundlesResult {
@@ -2765,6 +2962,31 @@ pub struct GetBundlesResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetBundlesResult {
+    fn pagination_page_opt(self) -> Option<Vec<Bundle>> {
+        Some(self.bundles.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetBundlesResult {
+    type Item = Bundle;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Bundle> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCertificatesRequest {
@@ -2782,6 +3004,7 @@ pub struct GetCertificatesRequest {
     pub include_certificate_details: Option<bool>,
 }
 
+/// see [Lightsail::get_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCertificatesResult {
@@ -2791,6 +3014,7 @@ pub struct GetCertificatesResult {
     pub certificates: Option<Vec<CertificateSummary>>,
 }
 
+/// see [Lightsail::get_cloud_formation_stack_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationStackRecordsRequest {
@@ -2800,6 +3024,15 @@ pub struct GetCloudFormationStackRecordsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetCloudFormationStackRecordsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_cloud_formation_stack_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCloudFormationStackRecordsResult {
@@ -2813,6 +3046,31 @@ pub struct GetCloudFormationStackRecordsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetCloudFormationStackRecordsResult {
+    fn pagination_page_opt(self) -> Option<Vec<CloudFormationStackRecord>> {
+        Some(self.cloud_formation_stack_records.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetCloudFormationStackRecordsResult {
+    type Item = CloudFormationStackRecord;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<CloudFormationStackRecord> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_contact_methods]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactMethodsRequest {
@@ -2822,6 +3080,7 @@ pub struct GetContactMethodsRequest {
     pub protocols: Option<Vec<String>>,
 }
 
+/// see [Lightsail::get_contact_methods]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactMethodsResult {
@@ -2831,10 +3090,12 @@ pub struct GetContactMethodsResult {
     pub contact_methods: Option<Vec<ContactMethod>>,
 }
 
+/// see [Lightsail::get_container_api_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerAPIMetadataRequest {}
 
+/// see [Lightsail::get_container_api_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerAPIMetadataResult {
@@ -2844,6 +3105,7 @@ pub struct GetContainerAPIMetadataResult {
     pub metadata: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
+/// see [Lightsail::get_container_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerImagesRequest {
@@ -2852,6 +3114,7 @@ pub struct GetContainerImagesRequest {
     pub service_name: String,
 }
 
+/// see [Lightsail::get_container_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerImagesResult {
@@ -2861,6 +3124,7 @@ pub struct GetContainerImagesResult {
     pub container_images: Option<Vec<ContainerImage>>,
 }
 
+/// see [Lightsail::get_container_log]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerLogRequest {
@@ -2888,6 +3152,7 @@ pub struct GetContainerLogRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [Lightsail::get_container_log]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerLogResult {
@@ -2901,6 +3166,7 @@ pub struct GetContainerLogResult {
     pub next_page_token: Option<String>,
 }
 
+/// see [Lightsail::get_container_service_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerServiceDeploymentsRequest {
@@ -2909,6 +3175,7 @@ pub struct GetContainerServiceDeploymentsRequest {
     pub service_name: String,
 }
 
+/// see [Lightsail::get_container_service_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerServiceDeploymentsResult {
@@ -2918,6 +3185,7 @@ pub struct GetContainerServiceDeploymentsResult {
     pub deployments: Option<Vec<ContainerServiceDeployment>>,
 }
 
+/// see [Lightsail::get_container_service_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerServiceMetricDataRequest {
@@ -2941,6 +3209,7 @@ pub struct GetContainerServiceMetricDataRequest {
     pub statistics: Vec<String>,
 }
 
+/// see [Lightsail::get_container_service_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerServiceMetricDataResult {
@@ -2954,10 +3223,12 @@ pub struct GetContainerServiceMetricDataResult {
     pub metric_name: Option<String>,
 }
 
+/// see [Lightsail::get_container_service_powers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerServicePowersRequest {}
 
+/// see [Lightsail::get_container_service_powers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerServicePowersResult {
@@ -2967,6 +3238,7 @@ pub struct GetContainerServicePowersResult {
     pub powers: Option<Vec<ContainerServicePower>>,
 }
 
+/// see [Lightsail::get_container_services]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerServicesRequest {
@@ -2976,6 +3248,7 @@ pub struct GetContainerServicesRequest {
     pub service_name: Option<String>,
 }
 
+/// see [Lightsail::get_disk]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskRequest {
@@ -2984,6 +3257,7 @@ pub struct GetDiskRequest {
     pub disk_name: String,
 }
 
+/// see [Lightsail::get_disk]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiskResult {
@@ -2993,6 +3267,7 @@ pub struct GetDiskResult {
     pub disk: Option<Disk>,
 }
 
+/// see [Lightsail::get_disk_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskSnapshotRequest {
@@ -3001,6 +3276,7 @@ pub struct GetDiskSnapshotRequest {
     pub disk_snapshot_name: String,
 }
 
+/// see [Lightsail::get_disk_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiskSnapshotResult {
@@ -3010,6 +3286,7 @@ pub struct GetDiskSnapshotResult {
     pub disk_snapshot: Option<DiskSnapshot>,
 }
 
+/// see [Lightsail::get_disk_snapshots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskSnapshotsRequest {
@@ -3019,6 +3296,15 @@ pub struct GetDiskSnapshotsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetDiskSnapshotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_disk_snapshots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiskSnapshotsResult {
@@ -3032,6 +3318,31 @@ pub struct GetDiskSnapshotsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetDiskSnapshotsResult {
+    fn pagination_page_opt(self) -> Option<Vec<DiskSnapshot>> {
+        Some(self.disk_snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetDiskSnapshotsResult {
+    type Item = DiskSnapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<DiskSnapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_disks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDisksRequest {
@@ -3041,6 +3352,15 @@ pub struct GetDisksRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetDisksRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_disks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDisksResult {
@@ -3054,10 +3374,36 @@ pub struct GetDisksResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetDisksResult {
+    fn pagination_page_opt(self) -> Option<Vec<Disk>> {
+        Some(self.disks.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetDisksResult {
+    type Item = Disk;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Disk> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_distribution_bundles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionBundlesRequest {}
 
+/// see [Lightsail::get_distribution_bundles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionBundlesResult {
@@ -3067,6 +3413,7 @@ pub struct GetDistributionBundlesResult {
     pub bundles: Option<Vec<DistributionBundle>>,
 }
 
+/// see [Lightsail::get_distribution_latest_cache_reset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionLatestCacheResetRequest {
@@ -3076,6 +3423,7 @@ pub struct GetDistributionLatestCacheResetRequest {
     pub distribution_name: Option<String>,
 }
 
+/// see [Lightsail::get_distribution_latest_cache_reset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionLatestCacheResetResult {
@@ -3089,6 +3437,7 @@ pub struct GetDistributionLatestCacheResetResult {
     pub status: Option<String>,
 }
 
+/// see [Lightsail::get_distribution_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionMetricDataRequest {
@@ -3115,6 +3464,7 @@ pub struct GetDistributionMetricDataRequest {
     pub unit: String,
 }
 
+/// see [Lightsail::get_distribution_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionMetricDataResult {
@@ -3128,6 +3478,7 @@ pub struct GetDistributionMetricDataResult {
     pub metric_name: Option<String>,
 }
 
+/// see [Lightsail::get_distributions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionsRequest {
@@ -3141,6 +3492,7 @@ pub struct GetDistributionsRequest {
     pub page_token: Option<String>,
 }
 
+/// see [Lightsail::get_distributions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionsResult {
@@ -3154,6 +3506,7 @@ pub struct GetDistributionsResult {
     pub next_page_token: Option<String>,
 }
 
+/// see [Lightsail::get_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainRequest {
@@ -3162,6 +3515,7 @@ pub struct GetDomainRequest {
     pub domain_name: String,
 }
 
+/// see [Lightsail::get_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainResult {
@@ -3171,6 +3525,7 @@ pub struct GetDomainResult {
     pub domain: Option<Domain>,
 }
 
+/// see [Lightsail::get_domains]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainsRequest {
@@ -3180,6 +3535,15 @@ pub struct GetDomainsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetDomainsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_domains]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainsResult {
@@ -3193,6 +3557,31 @@ pub struct GetDomainsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetDomainsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Domain>> {
+        Some(self.domains.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetDomainsResult {
+    type Item = Domain;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Domain> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_export_snapshot_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportSnapshotRecordsRequest {
@@ -3202,6 +3591,15 @@ pub struct GetExportSnapshotRecordsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetExportSnapshotRecordsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_export_snapshot_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExportSnapshotRecordsResult {
@@ -3215,6 +3613,31 @@ pub struct GetExportSnapshotRecordsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetExportSnapshotRecordsResult {
+    fn pagination_page_opt(self) -> Option<Vec<ExportSnapshotRecord>> {
+        Some(self.export_snapshot_records.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetExportSnapshotRecordsResult {
+    type Item = ExportSnapshotRecord;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<ExportSnapshotRecord> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_instance_access_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceAccessDetailsRequest {
@@ -3227,6 +3650,7 @@ pub struct GetInstanceAccessDetailsRequest {
     pub protocol: Option<String>,
 }
 
+/// see [Lightsail::get_instance_access_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceAccessDetailsResult {
@@ -3236,6 +3660,7 @@ pub struct GetInstanceAccessDetailsResult {
     pub access_details: Option<InstanceAccessDetails>,
 }
 
+/// see [Lightsail::get_instance_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceMetricDataRequest {
@@ -3262,6 +3687,7 @@ pub struct GetInstanceMetricDataRequest {
     pub unit: String,
 }
 
+/// see [Lightsail::get_instance_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceMetricDataResult {
@@ -3275,6 +3701,7 @@ pub struct GetInstanceMetricDataResult {
     pub metric_name: Option<String>,
 }
 
+/// see [Lightsail::get_instance_port_states]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancePortStatesRequest {
@@ -3283,6 +3710,7 @@ pub struct GetInstancePortStatesRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::get_instance_port_states]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstancePortStatesResult {
@@ -3292,6 +3720,7 @@ pub struct GetInstancePortStatesResult {
     pub port_states: Option<Vec<InstancePortState>>,
 }
 
+/// see [Lightsail::get_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceRequest {
@@ -3300,6 +3729,7 @@ pub struct GetInstanceRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::get_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceResult {
@@ -3309,6 +3739,7 @@ pub struct GetInstanceResult {
     pub instance: Option<Instance>,
 }
 
+/// see [Lightsail::get_instance_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceSnapshotRequest {
@@ -3317,6 +3748,7 @@ pub struct GetInstanceSnapshotRequest {
     pub instance_snapshot_name: String,
 }
 
+/// see [Lightsail::get_instance_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceSnapshotResult {
@@ -3326,6 +3758,7 @@ pub struct GetInstanceSnapshotResult {
     pub instance_snapshot: Option<InstanceSnapshot>,
 }
 
+/// see [Lightsail::get_instance_snapshots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceSnapshotsRequest {
@@ -3335,6 +3768,15 @@ pub struct GetInstanceSnapshotsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetInstanceSnapshotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_instance_snapshots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceSnapshotsResult {
@@ -3348,6 +3790,31 @@ pub struct GetInstanceSnapshotsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetInstanceSnapshotsResult {
+    fn pagination_page_opt(self) -> Option<Vec<InstanceSnapshot>> {
+        Some(self.instance_snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetInstanceSnapshotsResult {
+    type Item = InstanceSnapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<InstanceSnapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_instance_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceStateRequest {
@@ -3356,6 +3823,7 @@ pub struct GetInstanceStateRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::get_instance_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceStateResult {
@@ -3365,6 +3833,7 @@ pub struct GetInstanceStateResult {
     pub state: Option<InstanceState>,
 }
 
+/// see [Lightsail::get_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancesRequest {
@@ -3374,6 +3843,15 @@ pub struct GetInstancesRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetInstancesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstancesResult {
@@ -3387,6 +3865,31 @@ pub struct GetInstancesResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetInstancesResult {
+    fn pagination_page_opt(self) -> Option<Vec<Instance>> {
+        Some(self.instances.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetInstancesResult {
+    type Item = Instance;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Instance> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_key_pair]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPairRequest {
@@ -3395,6 +3898,7 @@ pub struct GetKeyPairRequest {
     pub key_pair_name: String,
 }
 
+/// see [Lightsail::get_key_pair]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetKeyPairResult {
@@ -3404,6 +3908,7 @@ pub struct GetKeyPairResult {
     pub key_pair: Option<KeyPair>,
 }
 
+/// see [Lightsail::get_key_pairs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPairsRequest {
@@ -3413,6 +3918,15 @@ pub struct GetKeyPairsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetKeyPairsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_key_pairs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetKeyPairsResult {
@@ -3426,6 +3940,31 @@ pub struct GetKeyPairsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetKeyPairsResult {
+    fn pagination_page_opt(self) -> Option<Vec<KeyPair>> {
+        Some(self.key_pairs.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetKeyPairsResult {
+    type Item = KeyPair;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<KeyPair> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_load_balancer_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerMetricDataRequest {
@@ -3452,6 +3991,7 @@ pub struct GetLoadBalancerMetricDataRequest {
     pub unit: String,
 }
 
+/// see [Lightsail::get_load_balancer_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoadBalancerMetricDataResult {
@@ -3465,6 +4005,7 @@ pub struct GetLoadBalancerMetricDataResult {
     pub metric_name: Option<String>,
 }
 
+/// see [Lightsail::get_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerRequest {
@@ -3473,6 +4014,7 @@ pub struct GetLoadBalancerRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::get_load_balancer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoadBalancerResult {
@@ -3482,6 +4024,7 @@ pub struct GetLoadBalancerResult {
     pub load_balancer: Option<LoadBalancer>,
 }
 
+/// see [Lightsail::get_load_balancer_tls_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerTlsCertificatesRequest {
@@ -3490,6 +4033,7 @@ pub struct GetLoadBalancerTlsCertificatesRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::get_load_balancer_tls_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoadBalancerTlsCertificatesResult {
@@ -3499,6 +4043,7 @@ pub struct GetLoadBalancerTlsCertificatesResult {
     pub tls_certificates: Option<Vec<LoadBalancerTlsCertificate>>,
 }
 
+/// see [Lightsail::get_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancersRequest {
@@ -3508,6 +4053,15 @@ pub struct GetLoadBalancersRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetLoadBalancersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_load_balancers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoadBalancersResult {
@@ -3521,6 +4075,31 @@ pub struct GetLoadBalancersResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetLoadBalancersResult {
+    fn pagination_page_opt(self) -> Option<Vec<LoadBalancer>> {
+        Some(self.load_balancers.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetLoadBalancersResult {
+    type Item = LoadBalancer;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<LoadBalancer> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_operation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationRequest {
@@ -3529,6 +4108,7 @@ pub struct GetOperationRequest {
     pub operation_id: String,
 }
 
+/// see [Lightsail::get_operation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationResult {
@@ -3538,6 +4118,7 @@ pub struct GetOperationResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::get_operations_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsForResourceRequest {
@@ -3550,6 +4131,7 @@ pub struct GetOperationsForResourceRequest {
     pub resource_name: String,
 }
 
+/// see [Lightsail::get_operations_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationsForResourceResult {
@@ -3563,6 +4145,7 @@ pub struct GetOperationsForResourceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::get_operations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsRequest {
@@ -3572,6 +4155,15 @@ pub struct GetOperationsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetOperationsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_operations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationsResult {
@@ -3585,6 +4177,31 @@ pub struct GetOperationsResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+impl GetOperationsResult {
+    fn pagination_page_opt(self) -> Option<Vec<Operation>> {
+        Some(self.operations.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetOperationsResult {
+    type Item = Operation;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<Operation> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_regions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegionsRequest {
@@ -3598,6 +4215,7 @@ pub struct GetRegionsRequest {
     pub include_relational_database_availability_zones: Option<bool>,
 }
 
+/// see [Lightsail::get_regions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegionsResult {
@@ -3607,6 +4225,7 @@ pub struct GetRegionsResult {
     pub regions: Option<Vec<Region>>,
 }
 
+/// see [Lightsail::get_relational_database_blueprints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBlueprintsRequest {
@@ -3616,6 +4235,15 @@ pub struct GetRelationalDatabaseBlueprintsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetRelationalDatabaseBlueprintsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_relational_database_blueprints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseBlueprintsResult {
@@ -3629,6 +4257,31 @@ pub struct GetRelationalDatabaseBlueprintsResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetRelationalDatabaseBlueprintsResult {
+    fn pagination_page_opt(self) -> Option<Vec<RelationalDatabaseBlueprint>> {
+        Some(self.blueprints.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetRelationalDatabaseBlueprintsResult {
+    type Item = RelationalDatabaseBlueprint;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RelationalDatabaseBlueprint> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_relational_database_bundles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBundlesRequest {
@@ -3638,6 +4291,15 @@ pub struct GetRelationalDatabaseBundlesRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetRelationalDatabaseBundlesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_relational_database_bundles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseBundlesResult {
@@ -3651,6 +4313,31 @@ pub struct GetRelationalDatabaseBundlesResult {
     pub next_page_token: Option<String>,
 }
 
+impl GetRelationalDatabaseBundlesResult {
+    fn pagination_page_opt(self) -> Option<Vec<RelationalDatabaseBundle>> {
+        Some(self.bundles.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetRelationalDatabaseBundlesResult {
+    type Item = RelationalDatabaseBundle;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RelationalDatabaseBundle> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_relational_database_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseEventsRequest {
@@ -3667,6 +4354,15 @@ pub struct GetRelationalDatabaseEventsRequest {
     pub relational_database_name: String,
 }
 
+impl PagedRequest for GetRelationalDatabaseEventsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_relational_database_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseEventsResult {
@@ -3680,6 +4376,31 @@ pub struct GetRelationalDatabaseEventsResult {
     pub relational_database_events: Option<Vec<RelationalDatabaseEvent>>,
 }
 
+impl GetRelationalDatabaseEventsResult {
+    fn pagination_page_opt(self) -> Option<Vec<RelationalDatabaseEvent>> {
+        Some(self.relational_database_events.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetRelationalDatabaseEventsResult {
+    type Item = RelationalDatabaseEvent;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RelationalDatabaseEvent> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_relational_database_log_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseLogEventsRequest {
@@ -3707,6 +4428,7 @@ pub struct GetRelationalDatabaseLogEventsRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [Lightsail::get_relational_database_log_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseLogEventsResult {
@@ -3724,6 +4446,7 @@ pub struct GetRelationalDatabaseLogEventsResult {
     pub resource_log_events: Option<Vec<LogEvent>>,
 }
 
+/// see [Lightsail::get_relational_database_log_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseLogStreamsRequest {
@@ -3732,6 +4455,7 @@ pub struct GetRelationalDatabaseLogStreamsRequest {
     pub relational_database_name: String,
 }
 
+/// see [Lightsail::get_relational_database_log_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseLogStreamsResult {
@@ -3741,6 +4465,7 @@ pub struct GetRelationalDatabaseLogStreamsResult {
     pub log_streams: Option<Vec<String>>,
 }
 
+/// see [Lightsail::get_relational_database_master_user_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseMasterUserPasswordRequest {
@@ -3753,6 +4478,7 @@ pub struct GetRelationalDatabaseMasterUserPasswordRequest {
     pub relational_database_name: String,
 }
 
+/// see [Lightsail::get_relational_database_master_user_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseMasterUserPasswordResult {
@@ -3766,6 +4492,7 @@ pub struct GetRelationalDatabaseMasterUserPasswordResult {
     pub master_user_password: Option<String>,
 }
 
+/// see [Lightsail::get_relational_database_metric_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseMetricDataRequest {
@@ -3792,6 +4519,7 @@ pub struct GetRelationalDatabaseMetricDataRequest {
     pub unit: String,
 }
 
+/// see [Lightsail::get_relational_database_metric_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseMetricDataResult {
@@ -3805,6 +4533,7 @@ pub struct GetRelationalDatabaseMetricDataResult {
     pub metric_name: Option<String>,
 }
 
+/// see [Lightsail::get_relational_database_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseParametersRequest {
@@ -3817,6 +4546,15 @@ pub struct GetRelationalDatabaseParametersRequest {
     pub relational_database_name: String,
 }
 
+impl PagedRequest for GetRelationalDatabaseParametersRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_relational_database_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseParametersResult {
@@ -3830,6 +4568,31 @@ pub struct GetRelationalDatabaseParametersResult {
     pub parameters: Option<Vec<RelationalDatabaseParameter>>,
 }
 
+impl GetRelationalDatabaseParametersResult {
+    fn pagination_page_opt(self) -> Option<Vec<RelationalDatabaseParameter>> {
+        Some(self.parameters.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetRelationalDatabaseParametersResult {
+    type Item = RelationalDatabaseParameter;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RelationalDatabaseParameter> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_relational_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseRequest {
@@ -3838,6 +4601,7 @@ pub struct GetRelationalDatabaseRequest {
     pub relational_database_name: String,
 }
 
+/// see [Lightsail::get_relational_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseResult {
@@ -3847,6 +4611,7 @@ pub struct GetRelationalDatabaseResult {
     pub relational_database: Option<RelationalDatabase>,
 }
 
+/// see [Lightsail::get_relational_database_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseSnapshotRequest {
@@ -3855,6 +4620,7 @@ pub struct GetRelationalDatabaseSnapshotRequest {
     pub relational_database_snapshot_name: String,
 }
 
+/// see [Lightsail::get_relational_database_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseSnapshotResult {
@@ -3864,6 +4630,7 @@ pub struct GetRelationalDatabaseSnapshotResult {
     pub relational_database_snapshot: Option<RelationalDatabaseSnapshot>,
 }
 
+/// see [Lightsail::get_relational_database_snapshots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseSnapshotsRequest {
@@ -3873,6 +4640,15 @@ pub struct GetRelationalDatabaseSnapshotsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetRelationalDatabaseSnapshotsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_relational_database_snapshots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseSnapshotsResult {
@@ -3886,6 +4662,31 @@ pub struct GetRelationalDatabaseSnapshotsResult {
     pub relational_database_snapshots: Option<Vec<RelationalDatabaseSnapshot>>,
 }
 
+impl GetRelationalDatabaseSnapshotsResult {
+    fn pagination_page_opt(self) -> Option<Vec<RelationalDatabaseSnapshot>> {
+        Some(self.relational_database_snapshots.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetRelationalDatabaseSnapshotsResult {
+    type Item = RelationalDatabaseSnapshot;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RelationalDatabaseSnapshot> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_relational_databases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabasesRequest {
@@ -3895,6 +4696,15 @@ pub struct GetRelationalDatabasesRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetRelationalDatabasesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_relational_databases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabasesResult {
@@ -3908,6 +4718,31 @@ pub struct GetRelationalDatabasesResult {
     pub relational_databases: Option<Vec<RelationalDatabase>>,
 }
 
+impl GetRelationalDatabasesResult {
+    fn pagination_page_opt(self) -> Option<Vec<RelationalDatabase>> {
+        Some(self.relational_databases.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetRelationalDatabasesResult {
+    type Item = RelationalDatabase;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RelationalDatabase> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Lightsail::get_static_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStaticIpRequest {
@@ -3916,6 +4751,7 @@ pub struct GetStaticIpRequest {
     pub static_ip_name: String,
 }
 
+/// see [Lightsail::get_static_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStaticIpResult {
@@ -3925,6 +4761,7 @@ pub struct GetStaticIpResult {
     pub static_ip: Option<StaticIp>,
 }
 
+/// see [Lightsail::get_static_ips]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStaticIpsRequest {
@@ -3934,6 +4771,15 @@ pub struct GetStaticIpsRequest {
     pub page_token: Option<String>,
 }
 
+impl PagedRequest for GetStaticIpsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.page_token = key;
+        self
+    }
+}
+
+/// see [Lightsail::get_static_ips]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStaticIpsResult {
@@ -3945,6 +4791,30 @@ pub struct GetStaticIpsResult {
     #[serde(rename = "staticIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_ips: Option<Vec<StaticIp>>,
+}
+
+impl GetStaticIpsResult {
+    fn pagination_page_opt(self) -> Option<Vec<StaticIp>> {
+        Some(self.static_ips.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for GetStaticIpsResult {
+    type Item = StaticIp;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_page_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<StaticIp> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
 }
 
 /// <p>Describes the request headers that a Lightsail distribution bases caching on.</p> <p>For the headers that you specify, your distribution caches separate versions of the specified content based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure your distribution to cache your content based on values in the <code>product</code> header. Your distribution forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. </p>
@@ -3994,6 +4864,7 @@ pub struct HostKeyAttributes {
     pub witnessed_at: Option<f64>,
 }
 
+/// see [Lightsail::import_key_pair]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportKeyPairRequest {
@@ -4005,6 +4876,7 @@ pub struct ImportKeyPairRequest {
     pub public_key_base_64: String,
 }
 
+/// see [Lightsail::import_key_pair]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportKeyPairResult {
@@ -4410,10 +5282,12 @@ pub struct InstanceState {
     pub name: Option<String>,
 }
 
+/// see [Lightsail::is_vpc_peered]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IsVpcPeeredRequest {}
 
+/// see [Lightsail::is_vpc_peered]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IsVpcPeeredResult {
@@ -4863,6 +5737,7 @@ pub struct MonthlyTransfer {
     pub gb_per_month_allocated: Option<i64>,
 }
 
+/// see [Lightsail::open_instance_public_ports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpenInstancePublicPortsRequest {
@@ -4874,6 +5749,7 @@ pub struct OpenInstancePublicPortsRequest {
     pub port_info: PortInfo,
 }
 
+/// see [Lightsail::open_instance_public_ports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpenInstancePublicPortsResult {
@@ -4973,10 +5849,12 @@ pub struct PasswordData {
     pub key_pair_name: Option<String>,
 }
 
+/// see [Lightsail::peer_vpc]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PeerVpcRequest {}
 
+/// see [Lightsail::peer_vpc]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PeerVpcResult {
@@ -5048,6 +5926,7 @@ pub struct PortInfo {
     pub to_port: Option<i64>,
 }
 
+/// see [Lightsail::put_alarm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAlarmRequest {
@@ -5091,6 +5970,7 @@ pub struct PutAlarmRequest {
     pub treat_missing_data: Option<String>,
 }
 
+/// see [Lightsail::put_alarm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAlarmResult {
@@ -5100,6 +5980,7 @@ pub struct PutAlarmResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::put_instance_public_ports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInstancePublicPortsRequest {
@@ -5111,6 +5992,7 @@ pub struct PutInstancePublicPortsRequest {
     pub port_infos: Vec<PortInfo>,
 }
 
+/// see [Lightsail::put_instance_public_ports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutInstancePublicPortsResult {
@@ -5133,6 +6015,7 @@ pub struct QueryStringObject {
     pub query_strings_allow_list: Option<Vec<String>>,
 }
 
+/// see [Lightsail::reboot_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootInstanceRequest {
@@ -5141,6 +6024,7 @@ pub struct RebootInstanceRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::reboot_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootInstanceResult {
@@ -5150,6 +6034,7 @@ pub struct RebootInstanceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::reboot_relational_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootRelationalDatabaseRequest {
@@ -5158,6 +6043,7 @@ pub struct RebootRelationalDatabaseRequest {
     pub relational_database_name: String,
 }
 
+/// see [Lightsail::reboot_relational_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootRelationalDatabaseResult {
@@ -5197,6 +6083,7 @@ pub struct Region {
     pub relational_database_availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
+/// see [Lightsail::register_container_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterContainerImageRequest {
@@ -5211,6 +6098,7 @@ pub struct RegisterContainerImageRequest {
     pub service_name: String,
 }
 
+/// see [Lightsail::register_container_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterContainerImageResult {
@@ -5558,6 +6446,7 @@ pub struct RelationalDatabaseSnapshot {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Lightsail::release_static_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReleaseStaticIpRequest {
@@ -5566,6 +6455,7 @@ pub struct ReleaseStaticIpRequest {
     pub static_ip_name: String,
 }
 
+/// see [Lightsail::release_static_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReleaseStaticIpResult {
@@ -5597,6 +6487,7 @@ pub struct RenewalSummary {
     pub updated_at: Option<f64>,
 }
 
+/// see [Lightsail::reset_distribution_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDistributionCacheRequest {
@@ -5606,6 +6497,7 @@ pub struct ResetDistributionCacheRequest {
     pub distribution_name: Option<String>,
 }
 
+/// see [Lightsail::reset_distribution_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetDistributionCacheResult {
@@ -5655,6 +6547,7 @@ pub struct ResourceRecord {
     pub value: Option<String>,
 }
 
+/// see [Lightsail::send_contact_method_verification]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendContactMethodVerificationRequest {
@@ -5663,6 +6556,7 @@ pub struct SendContactMethodVerificationRequest {
     pub protocol: String,
 }
 
+/// see [Lightsail::send_contact_method_verification]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendContactMethodVerificationResult {
@@ -5672,6 +6566,7 @@ pub struct SendContactMethodVerificationResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::start_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRequest {
@@ -5680,6 +6575,7 @@ pub struct StartInstanceRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::start_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartInstanceResult {
@@ -5689,6 +6585,7 @@ pub struct StartInstanceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::start_relational_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRelationalDatabaseRequest {
@@ -5697,6 +6594,7 @@ pub struct StartRelationalDatabaseRequest {
     pub relational_database_name: String,
 }
 
+/// see [Lightsail::start_relational_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRelationalDatabaseResult {
@@ -5748,6 +6646,7 @@ pub struct StaticIp {
     pub support_code: Option<String>,
 }
 
+/// see [Lightsail::stop_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopInstanceRequest {
@@ -5760,6 +6659,7 @@ pub struct StopInstanceRequest {
     pub instance_name: String,
 }
 
+/// see [Lightsail::stop_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopInstanceResult {
@@ -5769,6 +6669,7 @@ pub struct StopInstanceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::stop_relational_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRelationalDatabaseRequest {
@@ -5781,6 +6682,7 @@ pub struct StopRelationalDatabaseRequest {
     pub relational_database_snapshot_name: Option<String>,
 }
 
+/// see [Lightsail::stop_relational_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRelationalDatabaseResult {
@@ -5803,6 +6705,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Lightsail::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -5818,6 +6721,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Lightsail::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResult {
@@ -5827,6 +6731,7 @@ pub struct TagResourceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::test_alarm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestAlarmRequest {
@@ -5838,6 +6743,7 @@ pub struct TestAlarmRequest {
     pub state: String,
 }
 
+/// see [Lightsail::test_alarm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestAlarmResult {
@@ -5847,10 +6753,12 @@ pub struct TestAlarmResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::unpeer_vpc]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnpeerVpcRequest {}
 
+/// see [Lightsail::unpeer_vpc]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnpeerVpcResult {
@@ -5860,6 +6768,7 @@ pub struct UnpeerVpcResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -5875,6 +6784,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Lightsail::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResult {
@@ -5884,6 +6794,7 @@ pub struct UntagResourceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::update_container_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContainerServiceRequest {
@@ -5908,6 +6819,7 @@ pub struct UpdateContainerServiceRequest {
     pub service_name: String,
 }
 
+/// see [Lightsail::update_container_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContainerServiceResult {
@@ -5917,6 +6829,7 @@ pub struct UpdateContainerServiceResult {
     pub container_service: Option<ContainerService>,
 }
 
+/// see [Lightsail::update_distribution_bundle]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionBundleRequest {
@@ -5930,6 +6843,7 @@ pub struct UpdateDistributionBundleRequest {
     pub distribution_name: Option<String>,
 }
 
+/// see [Lightsail::update_distribution_bundle]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDistributionBundleResult {
@@ -5938,6 +6852,7 @@ pub struct UpdateDistributionBundleResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::update_distribution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionRequest {
@@ -5966,6 +6881,7 @@ pub struct UpdateDistributionRequest {
     pub origin: Option<InputOrigin>,
 }
 
+/// see [Lightsail::update_distribution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDistributionResult {
@@ -5975,6 +6891,7 @@ pub struct UpdateDistributionResult {
     pub operation: Option<Operation>,
 }
 
+/// see [Lightsail::update_domain_entry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainEntryRequest {
@@ -5986,6 +6903,7 @@ pub struct UpdateDomainEntryRequest {
     pub domain_name: String,
 }
 
+/// see [Lightsail::update_domain_entry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainEntryResult {
@@ -5995,6 +6913,7 @@ pub struct UpdateDomainEntryResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::update_load_balancer_attribute]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoadBalancerAttributeRequest {
@@ -6009,6 +6928,7 @@ pub struct UpdateLoadBalancerAttributeRequest {
     pub load_balancer_name: String,
 }
 
+/// see [Lightsail::update_load_balancer_attribute]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLoadBalancerAttributeResult {
@@ -6018,6 +6938,7 @@ pub struct UpdateLoadBalancerAttributeResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::update_relational_database_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRelationalDatabaseParametersRequest {
@@ -6029,6 +6950,7 @@ pub struct UpdateRelationalDatabaseParametersRequest {
     pub relational_database_name: String,
 }
 
+/// see [Lightsail::update_relational_database_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRelationalDatabaseParametersResult {
@@ -6038,6 +6960,7 @@ pub struct UpdateRelationalDatabaseParametersResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// see [Lightsail::update_relational_database]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRelationalDatabaseRequest {
@@ -6082,6 +7005,7 @@ pub struct UpdateRelationalDatabaseRequest {
     pub rotate_master_user_password: Option<bool>,
 }
 
+/// see [Lightsail::update_relational_database]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRelationalDatabaseResult {
@@ -16041,7 +16965,7 @@ impl fmt::Display for UpdateRelationalDatabaseParametersError {
 impl Error for UpdateRelationalDatabaseParametersError {}
 /// Trait representing the capabilities of the Amazon Lightsail API. Amazon Lightsail clients implement this trait.
 #[async_trait]
-pub trait Lightsail {
+pub trait Lightsail: Clone + Sync + Send + 'static {
     /// <p>Allocates a static IP address.</p>
     async fn allocate_static_ip(
         &self,
@@ -16415,6 +17339,16 @@ pub trait Lightsail {
         input: GetActiveNamesRequest,
     ) -> Result<GetActiveNamesResult, RusotoError<GetActiveNamesError>>;
 
+    /// Auto-paginating version of `get_active_names`
+    fn get_active_names_pages(
+        &self,
+        input: GetActiveNamesRequest,
+    ) -> RusotoStream<String, GetActiveNamesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_active_names(state.clone())
+        })
+    }
+
     /// <p>Returns information about the configured alarms. Specify an alarm name in your request to return information about a specific alarm, or specify a monitored resource name to return information about all alarms for a specific resource.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
     async fn get_alarms(
         &self,
@@ -16433,11 +17367,28 @@ pub trait Lightsail {
         input: GetBlueprintsRequest,
     ) -> Result<GetBlueprintsResult, RusotoError<GetBlueprintsError>>;
 
+    /// Auto-paginating version of `get_blueprints`
+    fn get_blueprints_pages(
+        &self,
+        input: GetBlueprintsRequest,
+    ) -> RusotoStream<Blueprint, GetBlueprintsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_blueprints(state.clone())
+        })
+    }
+
     /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
     async fn get_bundles(
         &self,
         input: GetBundlesRequest,
     ) -> Result<GetBundlesResult, RusotoError<GetBundlesError>>;
+
+    /// Auto-paginating version of `get_bundles`
+    fn get_bundles_pages(&self, input: GetBundlesRequest) -> RusotoStream<Bundle, GetBundlesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_bundles(state.clone())
+        })
+    }
 
     /// <p><p>Returns information about one or more Amazon Lightsail SSL/TLS certificates.</p> <note> <p>To get a summary of a certificate, ommit <code>includeCertificateDetails</code> from your request. The response will include only the certificate Amazon Resource Name (ARN), certificate name, domain name, and tags.</p> </note></p>
     async fn get_certificates(
@@ -16450,6 +17401,16 @@ pub trait Lightsail {
         &self,
         input: GetCloudFormationStackRecordsRequest,
     ) -> Result<GetCloudFormationStackRecordsResult, RusotoError<GetCloudFormationStackRecordsError>>;
+
+    /// Auto-paginating version of `get_cloud_formation_stack_records`
+    fn get_cloud_formation_stack_records_pages(
+        &self,
+        input: GetCloudFormationStackRecordsRequest,
+    ) -> RusotoStream<CloudFormationStackRecord, GetCloudFormationStackRecordsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_cloud_formation_stack_records(state.clone())
+        })
+    }
 
     /// <p>Returns information about the configured contact methods. Specify a protocol in your request to return information about a specific contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
     async fn get_contact_methods(
@@ -16518,11 +17479,28 @@ pub trait Lightsail {
         input: GetDiskSnapshotsRequest,
     ) -> Result<GetDiskSnapshotsResult, RusotoError<GetDiskSnapshotsError>>;
 
+    /// Auto-paginating version of `get_disk_snapshots`
+    fn get_disk_snapshots_pages(
+        &self,
+        input: GetDiskSnapshotsRequest,
+    ) -> RusotoStream<DiskSnapshot, GetDiskSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_disk_snapshots(state.clone())
+        })
+    }
+
     /// <p>Returns information about all block storage disks in your AWS account and region.</p>
     async fn get_disks(
         &self,
         input: GetDisksRequest,
     ) -> Result<GetDisksResult, RusotoError<GetDisksError>>;
+
+    /// Auto-paginating version of `get_disks`
+    fn get_disks_pages(&self, input: GetDisksRequest) -> RusotoStream<Disk, GetDisksError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_disks(state.clone())
+        })
+    }
 
     /// <p>Returns the list bundles that can be applied to you Amazon Lightsail content delivery network (CDN) distributions.</p> <p>A distribution bundle specifies the monthly network transfer quota and monthly cost of your dsitribution.</p>
     async fn get_distribution_bundles(
@@ -16562,11 +17540,28 @@ pub trait Lightsail {
         input: GetDomainsRequest,
     ) -> Result<GetDomainsResult, RusotoError<GetDomainsError>>;
 
+    /// Auto-paginating version of `get_domains`
+    fn get_domains_pages(&self, input: GetDomainsRequest) -> RusotoStream<Domain, GetDomainsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_domains(state.clone())
+        })
+    }
+
     /// <p>Returns the export snapshot record created as a result of the <code>export snapshot</code> operation.</p> <p>An export snapshot record can be used to create a new Amazon EC2 instance and its related resources with the <code>create cloud formation stack</code> operation.</p>
     async fn get_export_snapshot_records(
         &self,
         input: GetExportSnapshotRecordsRequest,
     ) -> Result<GetExportSnapshotRecordsResult, RusotoError<GetExportSnapshotRecordsError>>;
+
+    /// Auto-paginating version of `get_export_snapshot_records`
+    fn get_export_snapshot_records_pages(
+        &self,
+        input: GetExportSnapshotRecordsRequest,
+    ) -> RusotoStream<ExportSnapshotRecord, GetExportSnapshotRecordsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_export_snapshot_records(state.clone())
+        })
+    }
 
     /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
     async fn get_instance(
@@ -16604,6 +17599,16 @@ pub trait Lightsail {
         input: GetInstanceSnapshotsRequest,
     ) -> Result<GetInstanceSnapshotsResult, RusotoError<GetInstanceSnapshotsError>>;
 
+    /// Auto-paginating version of `get_instance_snapshots`
+    fn get_instance_snapshots_pages(
+        &self,
+        input: GetInstanceSnapshotsRequest,
+    ) -> RusotoStream<InstanceSnapshot, GetInstanceSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_instance_snapshots(state.clone())
+        })
+    }
+
     /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
     async fn get_instance_state(
         &self,
@@ -16616,6 +17621,16 @@ pub trait Lightsail {
         input: GetInstancesRequest,
     ) -> Result<GetInstancesResult, RusotoError<GetInstancesError>>;
 
+    /// Auto-paginating version of `get_instances`
+    fn get_instances_pages(
+        &self,
+        input: GetInstancesRequest,
+    ) -> RusotoStream<Instance, GetInstancesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_instances(state.clone())
+        })
+    }
+
     /// <p>Returns information about a specific key pair.</p>
     async fn get_key_pair(
         &self,
@@ -16627,6 +17642,16 @@ pub trait Lightsail {
         &self,
         input: GetKeyPairsRequest,
     ) -> Result<GetKeyPairsResult, RusotoError<GetKeyPairsError>>;
+
+    /// Auto-paginating version of `get_key_pairs`
+    fn get_key_pairs_pages(
+        &self,
+        input: GetKeyPairsRequest,
+    ) -> RusotoStream<KeyPair, GetKeyPairsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_key_pairs(state.clone())
+        })
+    }
 
     /// <p>Returns information about the specified Lightsail load balancer.</p>
     async fn get_load_balancer(
@@ -16655,6 +17680,16 @@ pub trait Lightsail {
         input: GetLoadBalancersRequest,
     ) -> Result<GetLoadBalancersResult, RusotoError<GetLoadBalancersError>>;
 
+    /// Auto-paginating version of `get_load_balancers`
+    fn get_load_balancers_pages(
+        &self,
+        input: GetLoadBalancersRequest,
+    ) -> RusotoStream<LoadBalancer, GetLoadBalancersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_load_balancers(state.clone())
+        })
+    }
+
     /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
     async fn get_operation(
         &self,
@@ -16666,6 +17701,16 @@ pub trait Lightsail {
         &self,
         input: GetOperationsRequest,
     ) -> Result<GetOperationsResult, RusotoError<GetOperationsError>>;
+
+    /// Auto-paginating version of `get_operations`
+    fn get_operations_pages(
+        &self,
+        input: GetOperationsRequest,
+    ) -> RusotoStream<Operation, GetOperationsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_operations(state.clone())
+        })
+    }
 
     /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
     async fn get_operations_for_resource(
@@ -16694,17 +17739,47 @@ pub trait Lightsail {
         RusotoError<GetRelationalDatabaseBlueprintsError>,
     >;
 
+    /// Auto-paginating version of `get_relational_database_blueprints`
+    fn get_relational_database_blueprints_pages(
+        &self,
+        input: GetRelationalDatabaseBlueprintsRequest,
+    ) -> RusotoStream<RelationalDatabaseBlueprint, GetRelationalDatabaseBlueprintsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_relational_database_blueprints(state.clone())
+        })
+    }
+
     /// <p>Returns the list of bundles that are available in Amazon Lightsail. A bundle describes the performance specifications for a database.</p> <p>You can use a bundle ID to create a new database with explicit performance specifications.</p>
     async fn get_relational_database_bundles(
         &self,
         input: GetRelationalDatabaseBundlesRequest,
     ) -> Result<GetRelationalDatabaseBundlesResult, RusotoError<GetRelationalDatabaseBundlesError>>;
 
+    /// Auto-paginating version of `get_relational_database_bundles`
+    fn get_relational_database_bundles_pages(
+        &self,
+        input: GetRelationalDatabaseBundlesRequest,
+    ) -> RusotoStream<RelationalDatabaseBundle, GetRelationalDatabaseBundlesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_relational_database_bundles(state.clone())
+        })
+    }
+
     /// <p>Returns a list of events for a specific database in Amazon Lightsail.</p>
     async fn get_relational_database_events(
         &self,
         input: GetRelationalDatabaseEventsRequest,
     ) -> Result<GetRelationalDatabaseEventsResult, RusotoError<GetRelationalDatabaseEventsError>>;
+
+    /// Auto-paginating version of `get_relational_database_events`
+    fn get_relational_database_events_pages(
+        &self,
+        input: GetRelationalDatabaseEventsRequest,
+    ) -> RusotoStream<RelationalDatabaseEvent, GetRelationalDatabaseEventsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_relational_database_events(state.clone())
+        })
+    }
 
     /// <p>Returns a list of log events for a database in Amazon Lightsail.</p>
     async fn get_relational_database_log_events(
@@ -16751,6 +17826,16 @@ pub trait Lightsail {
         RusotoError<GetRelationalDatabaseParametersError>,
     >;
 
+    /// Auto-paginating version of `get_relational_database_parameters`
+    fn get_relational_database_parameters_pages(
+        &self,
+        input: GetRelationalDatabaseParametersRequest,
+    ) -> RusotoStream<RelationalDatabaseParameter, GetRelationalDatabaseParametersError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_relational_database_parameters(state.clone())
+        })
+    }
+
     /// <p>Returns information about a specific database snapshot in Amazon Lightsail.</p>
     async fn get_relational_database_snapshot(
         &self,
@@ -16766,11 +17851,31 @@ pub trait Lightsail {
         RusotoError<GetRelationalDatabaseSnapshotsError>,
     >;
 
+    /// Auto-paginating version of `get_relational_database_snapshots`
+    fn get_relational_database_snapshots_pages(
+        &self,
+        input: GetRelationalDatabaseSnapshotsRequest,
+    ) -> RusotoStream<RelationalDatabaseSnapshot, GetRelationalDatabaseSnapshotsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_relational_database_snapshots(state.clone())
+        })
+    }
+
     /// <p>Returns information about all of your databases in Amazon Lightsail.</p>
     async fn get_relational_databases(
         &self,
         input: GetRelationalDatabasesRequest,
     ) -> Result<GetRelationalDatabasesResult, RusotoError<GetRelationalDatabasesError>>;
+
+    /// Auto-paginating version of `get_relational_databases`
+    fn get_relational_databases_pages(
+        &self,
+        input: GetRelationalDatabasesRequest,
+    ) -> RusotoStream<RelationalDatabase, GetRelationalDatabasesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_relational_databases(state.clone())
+        })
+    }
 
     /// <p>Returns information about a specific static IP.</p>
     async fn get_static_ip(
@@ -16783,6 +17888,16 @@ pub trait Lightsail {
         &self,
         input: GetStaticIpsRequest,
     ) -> Result<GetStaticIpsResult, RusotoError<GetStaticIpsError>>;
+
+    /// Auto-paginating version of `get_static_ips`
+    fn get_static_ips_pages(
+        &self,
+        input: GetStaticIpsRequest,
+    ) -> RusotoStream<StaticIp, GetStaticIpsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.get_static_ips(state.clone())
+        })
+    }
 
     /// <p>Imports a public SSH key from a specific key pair.</p>
     async fn import_key_pair(

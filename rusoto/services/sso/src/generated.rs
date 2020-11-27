@@ -15,6 +15,8 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
@@ -42,6 +44,7 @@ pub struct AccountInfo {
     pub email_address: Option<String>,
 }
 
+/// see [Sso::get_role_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoleCredentialsRequest {
@@ -56,6 +59,7 @@ pub struct GetRoleCredentialsRequest {
     pub role_name: String,
 }
 
+/// see [Sso::get_role_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoleCredentialsResponse {
@@ -65,6 +69,7 @@ pub struct GetRoleCredentialsResponse {
     pub role_credentials: Option<RoleCredentials>,
 }
 
+/// see [Sso::list_account_roles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountRolesRequest {
@@ -84,6 +89,15 @@ pub struct ListAccountRolesRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAccountRolesRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Sso::list_account_roles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountRolesResponse {
@@ -97,6 +111,31 @@ pub struct ListAccountRolesResponse {
     pub role_list: Option<Vec<RoleInfo>>,
 }
 
+impl ListAccountRolesResponse {
+    fn pagination_page_opt(self) -> Option<Vec<RoleInfo>> {
+        Some(self.role_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAccountRolesResponse {
+    type Item = RoleInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<RoleInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Sso::list_accounts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountsRequest {
@@ -113,6 +152,15 @@ pub struct ListAccountsRequest {
     pub next_token: Option<String>,
 }
 
+impl PagedRequest for ListAccountsRequest {
+    type Token = Option<String>;
+    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+        self.next_token = key;
+        self
+    }
+}
+
+/// see [Sso::list_accounts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsResponse {
@@ -126,6 +174,31 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
+impl ListAccountsResponse {
+    fn pagination_page_opt(self) -> Option<Vec<AccountInfo>> {
+        Some(self.account_list.as_ref()?.clone())
+    }
+}
+
+impl PagedOutput for ListAccountsResponse {
+    type Item = AccountInfo;
+    type Token = Option<String>;
+    fn pagination_token(&self) -> Option<String> {
+        Some(self.next_token.as_ref()?.clone())
+    }
+
+    fn into_pagination_page(self) -> Vec<AccountInfo> {
+        self.pagination_page_opt().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        {
+            self.pagination_token().is_some()
+        }
+    }
+}
+
+/// see [Sso::logout]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LogoutRequest {
@@ -358,7 +431,7 @@ impl fmt::Display for LogoutError {
 impl Error for LogoutError {}
 /// Trait representing the capabilities of the SSO API. SSO clients implement this trait.
 #[async_trait]
-pub trait Sso {
+pub trait Sso: Clone + Sync + Send + 'static {
     /// <p>Returns the STS short-term credentials for a given role name that is assigned to the user.</p>
     async fn get_role_credentials(
         &self,
@@ -371,11 +444,31 @@ pub trait Sso {
         input: ListAccountRolesRequest,
     ) -> Result<ListAccountRolesResponse, RusotoError<ListAccountRolesError>>;
 
+    /// Auto-paginating version of `list_account_roles`
+    fn list_account_roles_pages(
+        &self,
+        input: ListAccountRolesRequest,
+    ) -> RusotoStream<RoleInfo, ListAccountRolesError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_account_roles(state.clone())
+        })
+    }
+
     /// <p>Lists all AWS accounts assigned to the user. These AWS accounts are assigned by the administrator of the account. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/useraccess.html#assignusers">Assign User Access</a> in the <i>AWS SSO User Guide</i>. This operation returns a paginated response.</p>
     async fn list_accounts(
         &self,
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
+
+    /// Auto-paginating version of `list_accounts`
+    fn list_accounts_pages(
+        &self,
+        input: ListAccountsRequest,
+    ) -> RusotoStream<AccountInfo, ListAccountsError> {
+        all_pages(self.clone(), input, move |client, state| {
+            client.list_accounts(state.clone())
+        })
+    }
 
     /// <p>Removes the client- and server-side session that is associated with the user.</p>
     async fn logout(&self, input: LogoutRequest) -> Result<(), RusotoError<LogoutError>>;
