@@ -7,7 +7,8 @@ use crate::Service;
 
 use super::xml_payload_parser;
 use super::{
-    error_type_name, generate_field_name, get_rust_type, FileWriter, GenerateProtocol, IoResult,
+    error_type_name, generate_field_name, get_rust_type, write_paged_version, FileWriter,
+    GenerateProtocol, IoResult,
 };
 
 pub struct QueryGenerator;
@@ -27,7 +28,9 @@ impl GenerateProtocol for QueryGenerator {
                 ",
                 documentation = generate_documentation(operation),
                 method_signature = generate_method_signature(operation_name, operation, service),
-            )?
+            )?;
+
+            write_paged_version(operation_name, service, operation, writer)?;
         }
         Ok(())
     }

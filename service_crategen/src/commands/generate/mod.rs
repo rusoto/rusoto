@@ -10,7 +10,7 @@ use toml;
 mod codegen;
 
 use crate::cargo;
-use crate::{Service, ServiceConfig, ServiceDefinition};
+use crate::{Paginators, Service, ServiceConfig, ServiceDefinition};
 
 fn generate_examples(crate_dir_path: &Path) -> Option<String> {
     let examples_dir_path = crate_dir_path.join("examples");
@@ -71,7 +71,11 @@ pub fn generate_services(
         // Panicking on error is okay because we can't do anything if the definition isn't present
         #[allow(clippy::match_wild_err_arm)]
             let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
-            Ok(sd) => Service::new(service_config, sd),
+            Ok(sd) => {
+                let paginators = Paginators::load(name, &service_config.protocol_version)
+                    .unwrap_or_else(|err| panic!("Failed to load paginators for service {}. Make sure the botocore submodule has been initialized!: {}", name, err));
+                Service::new(service_config, sd, paginators)
+            },
             Err(_) => panic!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name),
         };
 

@@ -117,7 +117,8 @@ fn payload_body_parser(
 ) -> String {
     match payload_type {
         ShapeType::Blob if !streaming => {
-            format!("
+            format!(
+                "
                 let mut response = response;
                 let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                 let mut result = {output_shape}::default();
@@ -125,20 +126,23 @@ fn payload_body_parser(
                 {parse_non_payload}
                 Ok(result)
                 ",
-                    output_shape = output_shape,
-                    payload_member = payload_member.to_snake_case(),
-                    parse_non_payload = parse_non_payload)
+                output_shape = output_shape,
+                payload_member = payload_member.to_snake_case(),
+                parse_non_payload = parse_non_payload
+            )
         }
         ShapeType::Blob if streaming => {
-            format!("
+            format!(
+                "
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(response.body);
                 {parse_non_payload}
                 Ok(result)
                 ",
-                    output_shape = output_shape,
-                    payload_member = payload_member.to_snake_case(),
-                    parse_non_payload = parse_non_payload)
+                output_shape = output_shape,
+                payload_member = payload_member.to_snake_case(),
+                parse_non_payload = parse_non_payload
+            )
         }
         _ => {
             format!("

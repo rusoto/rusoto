@@ -1,7 +1,7 @@
 use inflector::Inflector;
 use std::io::Write;
 
-use super::{error_type_name, generate_field_name, GenerateProtocol};
+use super::{error_type_name, generate_field_name, write_paged_version, GenerateProtocol};
 use super::{
     get_rust_type, mutate_type_name, rest_request_generator, rest_response_parser,
     xml_payload_parser,
@@ -27,7 +27,9 @@ impl GenerateProtocol for RestXmlGenerator {
                 ",
                 documentation = generate_documentation(operation, service),
                 method_signature = generate_method_signature(operation_name, operation, service),
-            )?
+            )?;
+
+            write_paged_version(operation_name, service, operation, writer)?;
         }
         Ok(())
     }

@@ -5,6 +5,7 @@ mod cargo;
 mod commands;
 mod config;
 mod doco;
+mod jmespath;
 mod service;
 mod util;
 
@@ -12,7 +13,7 @@ use std::path::Path;
 
 use clap::{crate_authors, crate_description, crate_version, App, Arg, SubCommand};
 
-use crate::botocore::ServiceDefinition;
+use crate::botocore::{Paginators, ServiceDefinition};
 use crate::config::ServiceConfig;
 use crate::service::Service;
 

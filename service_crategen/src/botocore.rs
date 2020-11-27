@@ -6,6 +6,8 @@ use std::io::BufReader;
 use std::marker::PhantomData;
 use std::path::Path;
 
+use lazy_static::lazy_static;
+use regex::Regex;
 use serde::de::{Error as SerdeError, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 use serde_json;
@@ -260,6 +262,10 @@ impl<'a> Shape {
         &self.member.as_ref().expect("Member shape undefined").shape
     }
 
+    pub fn members_type(&'a self, field: &str) -> Option<&'a str> {
+        Some(&self.members.as_ref()?.get(field)?.shape)
+    }
+
     pub fn required(&self, field: &'a str) -> bool {
         self.required.is_some()
             && self
@@ -322,12 +328,17 @@ pub struct Operation {
 }
 
 impl<'a> Operation {
+    pub fn opt_input_shape(&'a self) -> Option<&'a str> {
+        Some(&self.input.as_ref()?.shape)
+    }
+
     pub fn input_shape(&'a self) -> &'a str {
-        &self
-            .input
-            .as_ref()
+        self.opt_input_shape()
             .unwrap_or_else(|| panic!("Operation input undefined for {}", self.name))
-            .shape
+    }
+
+    pub fn output_shape(&'a self) -> Option<&'a str> {
+        Some(&self.output.as_ref()?.shape)
     }
 
     pub fn input_shape_or(&'a self, default: &'a str) -> &'a str {
@@ -338,10 +349,16 @@ impl<'a> Operation {
     }
 
     pub fn output_shape_or(&'a self, default: &'a str) -> &'a str {
-        match self.output.as_ref() {
-            Some(output) => &output.shape,
-            None => default,
+        self.output_shape().unwrap_or(default)
+    }
+
+    pub fn name(&self) -> &str {
+        lazy_static! {
+            static ref RE: Regex = Regex::new(r"^(.*?)(\d{4}_\d{2}_\d{2})?$").unwrap();
         }
+
+        let caps = RE.captures(&self.name).unwrap();
+        caps.get(1).unwrap().as_str()
     }
 
     // botocore duplicates errors in a few places
@@ -482,5 +499,55 @@ where
         D: Deserializer<'de>,
     {
         deserializer.deserialize_map(ShapesMapVisitor::new())
+    }
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct Paginators {
+    pub pagination: BTreeMap<String, Pagination>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct Pagination {
+    pub more_results: Option<String>,
+    pub input_token: PaginationKey,
+    pub output_token: PaginationKey,
+    pub result_key: PaginationKey,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[serde(untagged)]
+pub enum PaginationKey {
+    One(String),
+    Many(Vec<String>),
+}
+
+impl PaginationKey {
+    pub fn only(&self) -> Option<String> {
+        match self {
+            PaginationKey::One(one) => Some(one.clone()),
+            PaginationKey::Many(many) if many.len() == 1 => Some(many[0].clone()),
+            _ => None,
+        }
+    }
+
+    pub fn as_slice(&self) -> &[String] {
+        match self {
+            PaginationKey::One(one) => std::slice::from_ref(one),
+            PaginationKey::Many(many) => many,
+        }
+    }
+}
+
+impl Paginators {
+    pub fn load(name: &str, protocol_version: &str) -> Result<Option<Self>, Box<dyn error::Error>> {
+        let input_path = Path::new(BOTOCORE_DIR)
+            .join(format!("{}/{}/paginators-1.json", name, protocol_version));
+        if !input_path.exists() {
+            return Ok(None);
+        }
+        let input_file = BufReader::new(File::open(&input_path)?);
+
+        Ok(serde_json::from_reader(input_file)?)
     }
 }
