@@ -3840,8 +3840,11 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVaultAccessPolicyOutput, _>()?;
+
+            let mut result = GetVaultAccessPolicyOutput::default();
+            result.policy = proto::json::ResponsePayload::new(&response)
+                .deserialize::<VaultAccessPolicy, _>()
+                .ok();
 
             Ok(result)
         } else {
@@ -3906,8 +3909,11 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVaultNotificationsOutput, _>()?;
+
+            let mut result = GetVaultNotificationsOutput::default();
+            result.vault_notification_config = proto::json::ResponsePayload::new(&response)
+                .deserialize::<VaultNotificationConfig, _>()
+                .ok();
 
             Ok(result)
         } else {
