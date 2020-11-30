@@ -6069,10 +6069,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = CreateGatewayRouteOutput::default();
-            result.gateway_route = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GatewayRouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGatewayRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6109,10 +6107,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = CreateMeshOutput::default();
-            result.mesh =
-                proto::json::ResponsePayload::new(&response).deserialize::<MeshData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateMeshOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6157,10 +6153,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = CreateRouteOutput::default();
-            result.route =
-                proto::json::ResponsePayload::new(&response).deserialize::<RouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6206,10 +6200,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = CreateVirtualGatewayOutput::default();
-            result.virtual_gateway = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualGatewayData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVirtualGatewayOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6270,10 +6262,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = CreateVirtualNodeOutput::default();
-            result.virtual_node =
-                proto::json::ResponsePayload::new(&response).deserialize::<VirtualNodeData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVirtualNodeOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6320,10 +6310,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = CreateVirtualRouterOutput::default();
-            result.virtual_router = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualRouterData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVirtualRouterOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6370,10 +6358,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = CreateVirtualServiceOutput::default();
-            result.virtual_service = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualServiceData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVirtualServiceOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6406,10 +6392,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DeleteGatewayRouteOutput::default();
-            result.gateway_route = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GatewayRouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteGatewayRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6440,10 +6424,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DeleteMeshOutput::default();
-            result.mesh =
-                proto::json::ResponsePayload::new(&response).deserialize::<MeshData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteMeshOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6481,10 +6463,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DeleteRouteOutput::default();
-            result.route =
-                proto::json::ResponsePayload::new(&response).deserialize::<RouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6522,10 +6502,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DeleteVirtualGatewayOutput::default();
-            result.virtual_gateway = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualGatewayData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteVirtualGatewayOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6566,10 +6544,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DeleteVirtualNodeOutput::default();
-            result.virtual_node =
-                proto::json::ResponsePayload::new(&response).deserialize::<VirtualNodeData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteVirtualNodeOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6610,10 +6586,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DeleteVirtualRouterOutput::default();
-            result.virtual_router = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualRouterData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteVirtualRouterOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6650,10 +6624,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DeleteVirtualServiceOutput::default();
-            result.virtual_service = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualServiceData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteVirtualServiceOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6686,10 +6658,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DescribeGatewayRouteOutput::default();
-            result.gateway_route = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GatewayRouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeGatewayRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6722,10 +6692,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DescribeMeshOutput::default();
-            result.mesh =
-                proto::json::ResponsePayload::new(&response).deserialize::<MeshData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeMeshOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6763,10 +6731,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DescribeRouteOutput::default();
-            result.route =
-                proto::json::ResponsePayload::new(&response).deserialize::<RouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6803,10 +6769,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DescribeVirtualGatewayOutput::default();
-            result.virtual_gateway = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualGatewayData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeVirtualGatewayOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6843,10 +6807,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DescribeVirtualNodeOutput::default();
-            result.virtual_node =
-                proto::json::ResponsePayload::new(&response).deserialize::<VirtualNodeData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeVirtualNodeOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6883,10 +6845,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DescribeVirtualRouterOutput::default();
-            result.virtual_router = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualRouterData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeVirtualRouterOutput, _>()?;
 
             Ok(result)
         } else {
@@ -6923,10 +6883,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = DescribeVirtualServiceOutput::default();
-            result.virtual_service = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualServiceData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeVirtualServiceOutput, _>()?;
 
             Ok(result)
         } else {
@@ -7372,10 +7330,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = UpdateGatewayRouteOutput::default();
-            result.gateway_route = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GatewayRouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGatewayRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -7405,10 +7361,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = UpdateMeshOutput::default();
-            result.mesh =
-                proto::json::ResponsePayload::new(&response).deserialize::<MeshData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateMeshOutput, _>()?;
 
             Ok(result)
         } else {
@@ -7449,10 +7403,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = UpdateRouteOutput::default();
-            result.route =
-                proto::json::ResponsePayload::new(&response).deserialize::<RouteData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateRouteOutput, _>()?;
 
             Ok(result)
         } else {
@@ -7492,10 +7444,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = UpdateVirtualGatewayOutput::default();
-            result.virtual_gateway = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualGatewayData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVirtualGatewayOutput, _>()?;
 
             Ok(result)
         } else {
@@ -7535,10 +7485,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = UpdateVirtualNodeOutput::default();
-            result.virtual_node =
-                proto::json::ResponsePayload::new(&response).deserialize::<VirtualNodeData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVirtualNodeOutput, _>()?;
 
             Ok(result)
         } else {
@@ -7578,10 +7526,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = UpdateVirtualRouterOutput::default();
-            result.virtual_router = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualRouterData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVirtualRouterOutput, _>()?;
 
             Ok(result)
         } else {
@@ -7621,10 +7567,8 @@ impl AppMesh for AppMeshClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-
-            let mut result = UpdateVirtualServiceOutput::default();
-            result.virtual_service = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VirtualServiceData, _>()?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVirtualServiceOutput, _>()?;
 
             Ok(result)
         } else {
