@@ -357,6 +357,7 @@ where
         "DELETE" => Method::DELETE,
         "GET" => Method::GET,
         "HEAD" => Method::HEAD,
+        "PATCH" => Method::PATCH,
         v => {
             return Err(HttpDispatchError {
                 message: format!("Unsupported HTTP verb {}", v),
