@@ -38,15 +38,14 @@ use xml::EventReader;
 use xml::EventWriter;
 
 impl S3Client {
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -15310,6 +15309,20 @@ impl AbortMultipartUploadError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AbortMultipartUploadError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15343,6 +15356,20 @@ impl CompleteMultipartUploadError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CompleteMultipartUploadError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15384,6 +15411,18 @@ impl CopyObjectError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CopyObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15436,6 +15475,18 @@ impl CreateBucketError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateBucketError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15472,6 +15523,20 @@ impl CreateMultipartUploadError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateMultipartUploadError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15503,6 +15568,18 @@ impl DeleteBucketError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15540,6 +15617,20 @@ impl DeleteBucketAnalyticsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketAnalyticsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15573,6 +15664,18 @@ impl DeleteBucketCorsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketCorsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15604,6 +15707,20 @@ impl DeleteBucketEncryptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketEncryptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15641,6 +15758,20 @@ impl DeleteBucketIntelligentTieringConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketIntelligentTieringConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15676,6 +15807,20 @@ impl DeleteBucketInventoryConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketInventoryConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15707,6 +15852,20 @@ impl DeleteBucketLifecycleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketLifecycleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15744,6 +15903,20 @@ impl DeleteBucketMetricsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketMetricsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15779,6 +15952,20 @@ impl DeleteBucketOwnershipControlsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketOwnershipControlsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15810,6 +15997,18 @@ impl DeleteBucketPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15845,6 +16044,20 @@ impl DeleteBucketReplicationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketReplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15876,6 +16089,18 @@ impl DeleteBucketTaggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15911,6 +16136,18 @@ impl DeleteBucketWebsiteError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketWebsiteError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15942,6 +16179,18 @@ impl DeleteObjectError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15977,6 +16226,18 @@ impl DeleteObjectTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteObjectTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16010,6 +16271,18 @@ impl DeleteObjectsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteObjectsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16041,6 +16314,20 @@ impl DeletePublicAccessBlockError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeletePublicAccessBlockError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16078,6 +16365,20 @@ impl GetBucketAccelerateConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketAccelerateConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16109,6 +16410,18 @@ impl GetBucketAclError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16146,6 +16459,20 @@ impl GetBucketAnalyticsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketAnalyticsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16179,6 +16506,18 @@ impl GetBucketCorsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketCorsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16210,6 +16549,18 @@ impl GetBucketEncryptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketEncryptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16247,6 +16598,20 @@ impl GetBucketIntelligentTieringConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketIntelligentTieringConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16282,6 +16647,20 @@ impl GetBucketInventoryConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketInventoryConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16313,6 +16692,18 @@ impl GetBucketLifecycleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketLifecycleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16350,6 +16741,20 @@ impl GetBucketLifecycleConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketLifecycleConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16383,6 +16788,18 @@ impl GetBucketLocationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketLocationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16414,6 +16831,18 @@ impl GetBucketLoggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketLoggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16451,6 +16880,20 @@ impl GetBucketMetricsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketMetricsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16482,6 +16925,20 @@ impl GetBucketNotificationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketNotificationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16519,6 +16976,20 @@ impl GetBucketNotificationConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketNotificationConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16554,6 +17025,20 @@ impl GetBucketOwnershipControlsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketOwnershipControlsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16585,6 +17070,18 @@ impl GetBucketPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16620,6 +17117,20 @@ impl GetBucketPolicyStatusError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketPolicyStatusError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16651,6 +17162,20 @@ impl GetBucketReplicationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketReplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16686,6 +17211,20 @@ impl GetBucketRequestPaymentError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketRequestPaymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16717,6 +17256,18 @@ impl GetBucketTaggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16752,6 +17303,18 @@ impl GetBucketVersioningError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketVersioningError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16783,6 +17346,18 @@ impl GetBucketWebsiteError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketWebsiteError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16833,6 +17408,18 @@ impl GetObjectError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16877,6 +17464,18 @@ impl GetObjectAclError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16910,6 +17509,18 @@ impl GetObjectLegalHoldError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectLegalHoldError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16947,6 +17558,20 @@ impl GetObjectLockConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetObjectLockConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16978,6 +17603,18 @@ impl GetObjectRetentionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectRetentionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17013,6 +17650,18 @@ impl GetObjectTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17046,6 +17695,18 @@ impl GetObjectTorrentError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectTorrentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17077,6 +17738,20 @@ impl GetPublicAccessBlockError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetPublicAccessBlockError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17118,6 +17793,18 @@ impl HeadBucketError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<HeadBucketError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17163,6 +17850,18 @@ impl HeadObjectError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<HeadObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17200,6 +17899,20 @@ impl ListBucketAnalyticsConfigurationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketAnalyticsConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17233,6 +17946,20 @@ impl ListBucketIntelligentTieringConfigurationsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketIntelligentTieringConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17270,6 +17997,20 @@ impl ListBucketInventoryConfigurationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketInventoryConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17305,6 +18046,20 @@ impl ListBucketMetricsConfigurationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketMetricsConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17336,6 +18091,18 @@ impl ListBucketsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListBucketsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17371,6 +18138,20 @@ impl ListMultipartUploadsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListMultipartUploadsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17402,6 +18183,18 @@ impl ListObjectVersionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListObjectVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17443,6 +18236,18 @@ impl ListObjectsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListObjectsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17488,6 +18293,18 @@ impl ListObjectsV2Error {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListObjectsV2Error> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17521,6 +18338,18 @@ impl ListPartsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListPartsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17558,6 +18387,20 @@ impl PutBucketAccelerateConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketAccelerateConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17589,6 +18432,18 @@ impl PutBucketAclError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17626,6 +18481,20 @@ impl PutBucketAnalyticsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketAnalyticsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17659,6 +18528,18 @@ impl PutBucketCorsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketCorsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17690,6 +18571,18 @@ impl PutBucketEncryptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketEncryptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17727,6 +18620,20 @@ impl PutBucketIntelligentTieringConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketIntelligentTieringConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17762,6 +18669,20 @@ impl PutBucketInventoryConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketInventoryConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17793,6 +18714,18 @@ impl PutBucketLifecycleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketLifecycleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17830,6 +18763,20 @@ impl PutBucketLifecycleConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketLifecycleConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17861,6 +18808,18 @@ impl PutBucketLoggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketLoggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17898,6 +18857,20 @@ impl PutBucketMetricsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketMetricsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17929,6 +18902,20 @@ impl PutBucketNotificationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketNotificationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17966,6 +18953,20 @@ impl PutBucketNotificationConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketNotificationConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18001,6 +19002,20 @@ impl PutBucketOwnershipControlsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketOwnershipControlsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18032,6 +19047,18 @@ impl PutBucketPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18067,6 +19094,20 @@ impl PutBucketReplicationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketReplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18098,6 +19139,20 @@ impl PutBucketRequestPaymentError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketRequestPaymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18133,6 +19188,18 @@ impl PutBucketTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18164,6 +19231,18 @@ impl PutBucketVersioningError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketVersioningError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18199,6 +19278,18 @@ impl PutBucketWebsiteError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketWebsiteError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18230,6 +19321,18 @@ impl PutObjectError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18273,6 +19376,18 @@ impl PutObjectAclError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18306,6 +19421,18 @@ impl PutObjectLegalHoldError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectLegalHoldError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18343,6 +19470,20 @@ impl PutObjectLockConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutObjectLockConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18374,6 +19515,18 @@ impl PutObjectRetentionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectRetentionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18409,6 +19562,18 @@ impl PutObjectTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18440,6 +19605,20 @@ impl PutPublicAccessBlockError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutPublicAccessBlockError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18485,6 +19664,18 @@ impl RestoreObjectError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<RestoreObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18520,6 +19711,18 @@ impl SelectObjectContentError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<SelectObjectContentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18553,6 +19756,18 @@ impl UploadPartError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UploadPartError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18584,6 +19799,18 @@ impl UploadPartCopyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UploadPartCopyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19257,8 +20484,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, AbortMultipartUploadError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AbortMultipartUploadError::refine)?;
 
         let result = AbortMultipartUploadOutput::default();
         let mut result = result;
@@ -19297,8 +20525,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, CompleteMultipartUploadError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CompleteMultipartUploadError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -19439,8 +20668,9 @@ impl S3 for S3Client {
         );
 
         let mut response = self
-            .sign_and_dispatch(request, CopyObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CopyObjectError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -19509,8 +20739,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, CreateBucketError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateBucketError::refine)?;
 
         let result = CreateBucketOutput::default();
         let mut result = result;
@@ -19602,8 +20833,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, CreateMultipartUploadError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateMultipartUploadError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -19650,8 +20882,9 @@ impl S3 for S3Client {
         );
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19677,11 +20910,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketAnalyticsConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketAnalyticsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19706,8 +20937,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketCorsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketCorsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19732,8 +20964,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketEncryptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketEncryptionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19755,11 +20988,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketIntelligentTieringConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketIntelligentTieringConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19785,11 +21016,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketInventoryConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketInventoryConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19814,8 +21043,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketLifecycleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketLifecycleError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19841,11 +21071,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketMetricsConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketMetricsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19870,8 +21098,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketOwnershipControlsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketOwnershipControlsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19896,8 +21125,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19922,8 +21152,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketReplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketReplicationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19948,8 +21179,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketTaggingError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19974,8 +21206,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketWebsiteError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketWebsiteError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -20008,8 +21241,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteObjectError::refine)?;
 
         let result = DeleteObjectOutput::default();
         let mut result = result;
@@ -20044,8 +21278,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteObjectTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteObjectTaggingError::refine)?;
 
         let result = DeleteObjectTaggingOutput::default();
         let mut result = result;
@@ -20082,8 +21317,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteObjectsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteObjectsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20114,8 +21350,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeletePublicAccessBlockError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeletePublicAccessBlockError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -20143,11 +21380,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetBucketAccelerateConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketAccelerateConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20178,8 +21413,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketAclError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20214,8 +21450,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketAnalyticsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketAnalyticsConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20246,8 +21483,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketCorsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketCorsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20278,8 +21516,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketEncryptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketEncryptionError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20310,11 +21549,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetBucketIntelligentTieringConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketIntelligentTieringConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20352,8 +21589,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketInventoryConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketInventoryConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20384,8 +21622,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLifecycleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLifecycleError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20419,8 +21658,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLifecycleConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLifecycleConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20451,8 +21691,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLocationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLocationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20483,8 +21724,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLoggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLoggingError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20517,8 +21759,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketMetricsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketMetricsConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20549,8 +21792,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketNotificationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketNotificationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20582,11 +21826,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetBucketNotificationConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketNotificationConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20618,8 +21860,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketOwnershipControlsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketOwnershipControlsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20650,8 +21893,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketPolicyError::refine)?;
 
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
@@ -20680,8 +21924,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketPolicyStatusError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketPolicyStatusError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20712,8 +21957,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketReplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketReplicationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20744,8 +21990,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketRequestPaymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketRequestPaymentError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20776,8 +22023,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketTaggingError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20808,8 +22056,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketVersioningError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketVersioningError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20840,8 +22089,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketWebsiteError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketWebsiteError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -20913,8 +22163,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectError::refine)?;
 
         let mut result = GetObjectOutput::default();
         result.body = Some(response.body);
@@ -21012,8 +22263,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectAclError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21048,8 +22300,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectLegalHoldError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectLegalHoldError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21081,8 +22334,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectLockConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectLockConfigurationError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21117,8 +22371,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectRetentionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectRetentionError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21152,8 +22407,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectTaggingError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21185,8 +22441,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectTorrentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectTorrentError::refine)?;
 
         let mut result = GetObjectTorrentOutput::default();
         result.body = Some(response.body);
@@ -21213,8 +22470,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetPublicAccessBlockError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPublicAccessBlockError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21242,8 +22500,9 @@ impl S3 for S3Client {
         );
 
         let mut response = self
-            .sign_and_dispatch(request, HeadBucketError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(HeadBucketError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21291,8 +22550,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, HeadObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(HeadObjectError::refine)?;
 
         let result = HeadObjectOutput::default();
         let mut result = result;
@@ -21388,11 +22648,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListBucketAnalyticsConfigurationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketAnalyticsConfigurationsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21425,11 +22683,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListBucketIntelligentTieringConfigurationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketIntelligentTieringConfigurationsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21469,11 +22725,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListBucketInventoryConfigurationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketInventoryConfigurationsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21510,8 +22764,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListBucketMetricsConfigurationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketMetricsConfigurationsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21531,8 +22786,9 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, ListBucketsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21581,8 +22837,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListMultipartUploadsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListMultipartUploadsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21631,8 +22888,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListObjectVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectVersionsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21678,8 +22936,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListObjectsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21732,8 +22991,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListObjectsV2Error::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectsV2Error::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21771,8 +23031,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListPartsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPartsError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
@@ -21812,11 +23073,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                PutBucketAccelerateConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketAccelerateConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21863,8 +23122,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketAclError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21897,8 +23157,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketAnalyticsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketAnalyticsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21932,8 +23193,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketCorsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketCorsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21967,8 +23229,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketEncryptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketEncryptionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21997,11 +23260,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                PutBucketIntelligentTieringConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketIntelligentTieringConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22034,8 +23295,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketInventoryConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketInventoryConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22073,8 +23335,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketLifecycleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketLifecycleError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22111,8 +23374,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketLifecycleConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketLifecycleConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22146,8 +23410,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketLoggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketLoggingError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22180,8 +23445,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketMetricsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketMetricsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22215,8 +23481,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketNotificationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketNotificationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22248,11 +23515,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                PutBucketNotificationConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketNotificationConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22286,8 +23551,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketOwnershipControlsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketOwnershipControlsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22319,8 +23585,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22355,8 +23622,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketReplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketReplicationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22390,8 +23658,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketRequestPaymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketRequestPaymentError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22421,8 +23690,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketTaggingError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22457,8 +23727,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketVersioningError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketVersioningError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22492,8 +23763,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketWebsiteError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketWebsiteError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22586,8 +23858,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectError::refine)?;
 
         let result = PutObjectOutput::default();
         let mut result = result;
@@ -22660,8 +23933,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectAclError::refine)?;
 
         let result = PutObjectAclOutput::default();
         let mut result = result;
@@ -22705,8 +23979,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectLegalHoldError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectLegalHoldError::refine)?;
 
         let result = PutObjectLegalHoldOutput::default();
         let mut result = result;
@@ -22749,8 +24024,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectLockConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectLockConfigurationError::refine)?;
 
         let result = PutObjectLockConfigurationOutput::default();
         let mut result = result;
@@ -22798,8 +24074,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectRetentionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectRetentionError::refine)?;
 
         let result = PutObjectRetentionOutput::default();
         let mut result = result;
@@ -22834,8 +24111,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectTaggingError::refine)?;
 
         let result = PutObjectTaggingOutput::default();
         let mut result = result;
@@ -22871,8 +24149,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutPublicAccessBlockError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutPublicAccessBlockError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22912,8 +24191,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, RestoreObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RestoreObjectError::refine)?;
 
         let result = RestoreObjectOutput::default();
         let mut result = result;
@@ -22962,8 +24242,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, SelectObjectContentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SelectObjectContentError::refine)?;
 
         unimplemented!()
     }
@@ -23006,8 +24287,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, UploadPartError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UploadPartError::refine)?;
 
         let result = UploadPartOutput::default();
         let mut result = result;
@@ -23097,8 +24379,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, UploadPartCopyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UploadPartCopyError::refine)?;
 
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {

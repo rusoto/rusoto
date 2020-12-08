@@ -51,7 +51,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        let mut response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
+                        let mut response = self.sign_and_dispatch(request).await.map_err({error_type}::refine)?;
 
                         {parse_response_body}
                     }}
@@ -104,15 +104,14 @@ impl GenerateProtocol for RestXmlGenerator {
             writer,
             "
             impl {type_name} {{
-                async fn sign_and_dispatch<E>(
+                async fn sign_and_dispatch(
                     &self,
                     request: SignedRequest,
-                    from_response: fn (BufferedHttpResponse) -> RusotoError<E>,
-                ) -> Result<HttpResponse, RusotoError<E>> {{
+                ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {{
                     let mut response = self.client.sign_and_dispatch(request).await?;
                     if !response.status.is_success() {{
-                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-                        return Err(from_response(response));
+                        let response = response.buffer().await?;
+                        return Err(RusotoError::Unknown(response));
                     }}
 
                     Ok(response)
