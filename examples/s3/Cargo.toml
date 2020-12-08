@@ -9,8 +9,8 @@ edition = "2018"
 [workspace]
 
 [dependencies]
-rusoto_core = "0.45"
-rusoto_s3 = { version = "0.45", features = ["serialize_structs"] }
+rusoto_core = { path = "../../rusoto/core" }
+rusoto_s3 = { path = "../../rusoto/services/s3/", features = ["serialize_structs"] }
 structopt = "0.3"
 
 # note: current implementation requires this version of the tokio runtime.
