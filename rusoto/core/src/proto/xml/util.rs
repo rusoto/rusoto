@@ -121,10 +121,7 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
         }
     }
     match stack.next() {
-        Some(Ok(XmlEvent::Characters(data))) |
-        Some(Ok(XmlEvent::CData(data))) => {
-            Ok(data)
-        },
+        Some(Ok(XmlEvent::Characters(data))) | Some(Ok(XmlEvent::CData(data))) => Ok(data),
         _ => Err(XmlParseError::new("Expected characters")),
     }
 }
@@ -265,19 +262,21 @@ pub async fn parse_response<T, E>(
 where
     T: Default,
 {
-    let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+    let xml_response = response.buffer().await?;
     if xml_response.body.is_empty() {
         Ok(T::default())
     } else {
-        let reader = EventReader::new_with_config(
-            xml_response.body.as_ref(),
-            ParserConfig::new().trim_whitespace(false),
-        );
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let actual_tag_name = peek_at_name(&mut stack)?;
+        let (actual_tag_name, mut stack) = init_parser(&xml_response.body)?;
         Ok(deserialize(&actual_tag_name, &mut stack)?)
     }
+}
+
+fn init_parser(body: &[u8]) -> Result<(String, XmlResponse), XmlParseError> {
+    let reader = EventReader::new_with_config(body, ParserConfig::new().trim_whitespace(false));
+    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+    let _start_document = stack.next();
+    let actual_tag_name = peek_at_name(&mut stack)?;
+    Ok((actual_tag_name, stack))
 }
 
 #[cfg(test)]
