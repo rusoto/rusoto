@@ -398,7 +398,7 @@ fn generate_struct_serializer(shape: &Shape, service: &Service<'_>) -> String {
             _ => {
                 serializer += &generate_primitive_struct_field_serializer(
                     shape,
-                    &member_shape.shape_type,
+                    member_shape.shape_type,
                     location_name,
                     member_name,
                 );
@@ -430,7 +430,7 @@ fn generate_primitive_struct_field_serializer(
     } else {
         format!(
             "if let Some(ref value) = obj.{field_name} {{
-                write_characters_element(writer, \"{location_name}\", &value.to_string())?;
+                write_characters_element(writer, \"{location_name}\", &value{to_string})?;
             }}",
             field_name = generate_field_name(member_name),
             location_name = location_name,

@@ -539,13 +539,13 @@ impl CacheBehaviorSerializer {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.cache_policy_id {
-            write_characters_element(writer, "CachePolicyId", &value.to_string())?;
+            write_characters_element(writer, "CachePolicyId", &value)?;
         }
         if let Some(ref value) = obj.compress {
             write_characters_element(writer, "Compress", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
-            write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
+            write_characters_element(writer, "FieldLevelEncryptionId", &value)?;
         }
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
@@ -555,27 +555,23 @@ impl CacheBehaviorSerializer {
             )?;
         }
         if let Some(ref value) = obj.origin_request_policy_id {
-            write_characters_element(writer, "OriginRequestPolicyId", &value.to_string())?;
+            write_characters_element(writer, "OriginRequestPolicyId", &value)?;
         }
-        write_characters_element(writer, "PathPattern", &obj.path_pattern.to_string())?;
+        write_characters_element(writer, "PathPattern", &obj.path_pattern)?;
         if let Some(ref value) = obj.realtime_log_config_arn {
-            write_characters_element(writer, "RealtimeLogConfigArn", &value.to_string())?;
+            write_characters_element(writer, "RealtimeLogConfigArn", &value)?;
         }
         if let Some(ref value) = obj.smooth_streaming {
             write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
-        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
+        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id)?;
         if let Some(ref value) = obj.trusted_key_groups {
             &TrustedKeyGroupsSerializer::serialize(&mut writer, "TrustedKeyGroups", value)?;
         }
         if let Some(ref value) = obj.trusted_signers {
             &TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", value)?;
         }
-        write_characters_element(
-            writer,
-            "ViewerProtocolPolicy",
-            &obj.viewer_protocol_policy.to_string(),
-        )?;
+        write_characters_element(writer, "ViewerProtocolPolicy", &obj.viewer_protocol_policy)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -790,7 +786,7 @@ impl CachePolicyConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         if let Some(ref value) = obj.default_ttl {
             write_characters_element(writer, "DefaultTTL", &value.to_string())?;
@@ -799,7 +795,7 @@ impl CachePolicyConfigSerializer {
             write_characters_element(writer, "MaxTTL", &value.to_string())?;
         }
         write_characters_element(writer, "MinTTL", &obj.min_ttl.to_string())?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         if let Some(ref value) = obj.parameters_in_cache_key_and_forwarded_to_origin {
             &ParametersInCacheKeyAndForwardedToOriginSerializer::serialize(
                 &mut writer,
@@ -887,7 +883,7 @@ impl CachePolicyCookiesConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior.to_string())?;
+        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior)?;
         if let Some(ref value) = obj.cookies {
             &CookieNamesSerializer::serialize(&mut writer, "Cookies", value)?;
         }
@@ -971,7 +967,7 @@ impl CachePolicyHeadersConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior.to_string())?;
+        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior)?;
         if let Some(ref value) = obj.headers {
             &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
         }
@@ -1104,11 +1100,7 @@ impl CachePolicyQueryStringsConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(
-            writer,
-            "QueryStringBehavior",
-            &obj.query_string_behavior.to_string(),
-        )?;
+        write_characters_element(writer, "QueryStringBehavior", &obj.query_string_behavior)?;
         if let Some(ref value) = obj.query_strings {
             &QueryStringNamesSerializer::serialize(&mut writer, "QueryStrings", value)?;
         }
@@ -1344,8 +1336,8 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
-        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
+        write_characters_element(writer, "Comment", &obj.comment)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -1551,10 +1543,10 @@ impl ContentTypeProfileSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "ContentType", &obj.content_type.to_string())?;
-        write_characters_element(writer, "Format", &obj.format.to_string())?;
+        write_characters_element(writer, "ContentType", &obj.content_type)?;
+        write_characters_element(writer, "Format", &obj.format)?;
         if let Some(ref value) = obj.profile_id {
-            write_characters_element(writer, "ProfileId", &value.to_string())?;
+            write_characters_element(writer, "ProfileId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2422,10 +2414,10 @@ impl CustomErrorResponseSerializer {
         }
         write_characters_element(writer, "ErrorCode", &obj.error_code.to_string())?;
         if let Some(ref value) = obj.response_code {
-            write_characters_element(writer, "ResponseCode", &value.to_string())?;
+            write_characters_element(writer, "ResponseCode", &value)?;
         }
         if let Some(ref value) = obj.response_page_path {
-            write_characters_element(writer, "ResponsePagePath", &value.to_string())?;
+            write_characters_element(writer, "ResponsePagePath", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2668,11 +2660,7 @@ impl CustomOriginConfigSerializer {
         if let Some(ref value) = obj.origin_keepalive_timeout {
             write_characters_element(writer, "OriginKeepaliveTimeout", &value.to_string())?;
         }
-        write_characters_element(
-            writer,
-            "OriginProtocolPolicy",
-            &obj.origin_protocol_policy.to_string(),
-        )?;
+        write_characters_element(writer, "OriginProtocolPolicy", &obj.origin_protocol_policy)?;
         if let Some(ref value) = obj.origin_read_timeout {
             write_characters_element(writer, "OriginReadTimeout", &value.to_string())?;
         }
@@ -2810,13 +2798,13 @@ impl DefaultCacheBehaviorSerializer {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.cache_policy_id {
-            write_characters_element(writer, "CachePolicyId", &value.to_string())?;
+            write_characters_element(writer, "CachePolicyId", &value)?;
         }
         if let Some(ref value) = obj.compress {
             write_characters_element(writer, "Compress", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
-            write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
+            write_characters_element(writer, "FieldLevelEncryptionId", &value)?;
         }
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
@@ -2826,26 +2814,22 @@ impl DefaultCacheBehaviorSerializer {
             )?;
         }
         if let Some(ref value) = obj.origin_request_policy_id {
-            write_characters_element(writer, "OriginRequestPolicyId", &value.to_string())?;
+            write_characters_element(writer, "OriginRequestPolicyId", &value)?;
         }
         if let Some(ref value) = obj.realtime_log_config_arn {
-            write_characters_element(writer, "RealtimeLogConfigArn", &value.to_string())?;
+            write_characters_element(writer, "RealtimeLogConfigArn", &value)?;
         }
         if let Some(ref value) = obj.smooth_streaming {
             write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
-        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
+        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id)?;
         if let Some(ref value) = obj.trusted_key_groups {
             &TrustedKeyGroupsSerializer::serialize(&mut writer, "TrustedKeyGroups", value)?;
         }
         if let Some(ref value) = obj.trusted_signers {
             &TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", value)?;
         }
-        write_characters_element(
-            writer,
-            "ViewerProtocolPolicy",
-            &obj.viewer_protocol_policy.to_string(),
-        )?;
+        write_characters_element(writer, "ViewerProtocolPolicy", &obj.viewer_protocol_policy)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3229,8 +3213,8 @@ impl DistributionConfigSerializer {
         if let Some(ref value) = obj.cache_behaviors {
             &CacheBehaviorsSerializer::serialize(&mut writer, "CacheBehaviors", value)?;
         }
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
-        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
+        write_characters_element(writer, "Comment", &obj.comment)?;
         if let Some(ref value) = obj.custom_error_responses {
             &CustomErrorResponsesSerializer::serialize(&mut writer, "CustomErrorResponses", value)?;
         }
@@ -3240,11 +3224,11 @@ impl DistributionConfigSerializer {
             &obj.default_cache_behavior,
         )?;
         if let Some(ref value) = obj.default_root_object {
-            write_characters_element(writer, "DefaultRootObject", &value.to_string())?;
+            write_characters_element(writer, "DefaultRootObject", &value)?;
         }
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.http_version {
-            write_characters_element(writer, "HttpVersion", &value.to_string())?;
+            write_characters_element(writer, "HttpVersion", &value)?;
         }
         if let Some(ref value) = obj.is_ipv6_enabled {
             write_characters_element(writer, "IsIPV6Enabled", &value.to_string())?;
@@ -3257,7 +3241,7 @@ impl DistributionConfigSerializer {
         }
         OriginsSerializer::serialize(&mut writer, "Origins", &obj.origins)?;
         if let Some(ref value) = obj.price_class {
-            write_characters_element(writer, "PriceClass", &value.to_string())?;
+            write_characters_element(writer, "PriceClass", &value)?;
         }
         if let Some(ref value) = obj.restrictions {
             &RestrictionsSerializer::serialize(&mut writer, "Restrictions", value)?;
@@ -3266,7 +3250,7 @@ impl DistributionConfigSerializer {
             &ViewerCertificateSerializer::serialize(&mut writer, "ViewerCertificate", value)?;
         }
         if let Some(ref value) = obj.web_acl_id {
-            write_characters_element(writer, "WebACLId", &value.to_string())?;
+            write_characters_element(writer, "WebACLId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3697,8 +3681,8 @@ impl EncryptionEntitySerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         FieldPatternsSerializer::serialize(&mut writer, "FieldPatterns", &obj.field_patterns)?;
-        write_characters_element(writer, "ProviderId", &obj.provider_id.to_string())?;
-        write_characters_element(writer, "PublicKeyId", &obj.public_key_id.to_string())?;
+        write_characters_element(writer, "ProviderId", &obj.provider_id)?;
+        write_characters_element(writer, "PublicKeyId", &obj.public_key_id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3797,7 +3781,7 @@ impl EndPointSerializer {
         if let Some(ref value) = obj.kinesis_stream_config {
             &KinesisStreamConfigSerializer::serialize(&mut writer, "KinesisStreamConfig", value)?;
         }
-        write_characters_element(writer, "StreamType", &obj.stream_type.to_string())?;
+        write_characters_element(writer, "StreamType", &obj.stream_type)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3976,9 +3960,9 @@ impl FieldLevelEncryptionConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         if let Some(ref value) = obj.content_type_profile_config {
             &ContentTypeProfileConfigSerializer::serialize(
@@ -4159,16 +4143,16 @@ impl FieldLevelEncryptionProfileConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         EncryptionEntitiesSerializer::serialize(
             &mut writer,
             "EncryptionEntities",
             &obj.encryption_entities,
         )?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -4610,7 +4594,7 @@ impl GeoRestrictionSerializer {
             &LocationListSerializer::serialize(&mut writer, "Items", value)?;
         }
         write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
-        write_characters_element(writer, "RestrictionType", &obj.restriction_type.to_string())?;
+        write_characters_element(writer, "RestrictionType", &obj.restriction_type)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5619,7 +5603,7 @@ impl InvalidationBatchSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         PathsSerializer::serialize(&mut writer, "Paths", &obj.paths)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5879,10 +5863,10 @@ impl KeyGroupConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         PublicKeyIdListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6077,8 +6061,8 @@ impl KinesisStreamConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "RoleARN", &obj.role_arn.to_string())?;
-        write_characters_element(writer, "StreamARN", &obj.stream_arn.to_string())?;
+        write_characters_element(writer, "RoleARN", &obj.role_arn)?;
+        write_characters_element(writer, "StreamARN", &obj.stream_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6164,15 +6148,11 @@ impl LambdaFunctionAssociationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "EventType", &obj.event_type.to_string())?;
+        write_characters_element(writer, "EventType", &obj.event_type)?;
         if let Some(ref value) = obj.include_body {
             write_characters_element(writer, "IncludeBody", &value.to_string())?;
         }
-        write_characters_element(
-            writer,
-            "LambdaFunctionARN",
-            &obj.lambda_function_arn.to_string(),
-        )?;
+        write_characters_element(writer, "LambdaFunctionARN", &obj.lambda_function_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6995,10 +6975,10 @@ impl LoggingConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         write_characters_element(writer, "IncludeCookies", &obj.include_cookies.to_string())?;
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7278,10 +7258,10 @@ impl OriginSerializer {
         if let Some(ref value) = obj.custom_origin_config {
             &CustomOriginConfigSerializer::serialize(&mut writer, "CustomOriginConfig", value)?;
         }
-        write_characters_element(writer, "DomainName", &obj.domain_name.to_string())?;
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "DomainName", &obj.domain_name)?;
+        write_characters_element(writer, "Id", &obj.id)?;
         if let Some(ref value) = obj.origin_path {
-            write_characters_element(writer, "OriginPath", &value.to_string())?;
+            write_characters_element(writer, "OriginPath", &value)?;
         }
         if let Some(ref value) = obj.origin_shield {
             &OriginShieldSerializer::serialize(&mut writer, "OriginShield", value)?;
@@ -7339,8 +7319,8 @@ impl OriginCustomHeaderSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HeaderName", &obj.header_name.to_string())?;
-        write_characters_element(writer, "HeaderValue", &obj.header_value.to_string())?;
+        write_characters_element(writer, "HeaderName", &obj.header_name)?;
+        write_characters_element(writer, "HeaderValue", &obj.header_value)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7446,7 +7426,7 @@ impl OriginGroupSerializer {
             "FailoverCriteria",
             &obj.failover_criteria,
         )?;
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         OriginGroupMembersSerializer::serialize(&mut writer, "Members", &obj.members)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -7583,7 +7563,7 @@ impl OriginGroupMemberSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "OriginId", &obj.origin_id.to_string())?;
+        write_characters_element(writer, "OriginId", &obj.origin_id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7924,7 +7904,7 @@ impl OriginRequestPolicyConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         OriginRequestPolicyCookiesConfigSerializer::serialize(
             &mut writer,
@@ -7936,7 +7916,7 @@ impl OriginRequestPolicyConfigSerializer {
             "HeadersConfig",
             &obj.headers_config,
         )?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         OriginRequestPolicyQueryStringsConfigSerializer::serialize(
             &mut writer,
             "QueryStringsConfig",
@@ -8023,7 +8003,7 @@ impl OriginRequestPolicyCookiesConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior.to_string())?;
+        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior)?;
         if let Some(ref value) = obj.cookies {
             &CookieNamesSerializer::serialize(&mut writer, "Cookies", value)?;
         }
@@ -8108,7 +8088,7 @@ impl OriginRequestPolicyHeadersConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior.to_string())?;
+        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior)?;
         if let Some(ref value) = obj.headers {
             &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
         }
@@ -8248,11 +8228,7 @@ impl OriginRequestPolicyQueryStringsConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(
-            writer,
-            "QueryStringBehavior",
-            &obj.query_string_behavior.to_string(),
-        )?;
+        write_characters_element(writer, "QueryStringBehavior", &obj.query_string_behavior)?;
         if let Some(ref value) = obj.query_strings {
             &QueryStringNamesSerializer::serialize(&mut writer, "QueryStrings", value)?;
         }
@@ -8396,7 +8372,7 @@ impl OriginShieldSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.origin_shield_region {
-            write_characters_element(writer, "OriginShieldRegion", &value.to_string())?;
+            write_characters_element(writer, "OriginShieldRegion", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8849,12 +8825,12 @@ impl PublicKeyConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
-        write_characters_element(writer, "EncodedKey", &obj.encoded_key.to_string())?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "EncodedKey", &obj.encoded_key)?;
+        write_characters_element(writer, "Name", &obj.name)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9056,8 +9032,8 @@ impl QueryArgProfileSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "ProfileId", &obj.profile_id.to_string())?;
-        write_characters_element(writer, "QueryArg", &obj.query_arg.to_string())?;
+        write_characters_element(writer, "ProfileId", &obj.profile_id)?;
+        write_characters_element(writer, "QueryArg", &obj.query_arg)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9497,7 +9473,7 @@ impl RealtimeMetricsSubscriptionConfigSerializer {
         write_characters_element(
             writer,
             "RealtimeMetricsSubscriptionStatus",
-            &obj.realtime_metrics_subscription_status.to_string(),
+            &obj.realtime_metrics_subscription_status,
         )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9636,12 +9612,8 @@ impl S3OriginSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "DomainName", &obj.domain_name.to_string())?;
-        write_characters_element(
-            writer,
-            "OriginAccessIdentity",
-            &obj.origin_access_identity.to_string(),
-        )?;
+        write_characters_element(writer, "DomainName", &obj.domain_name)?;
+        write_characters_element(writer, "OriginAccessIdentity", &obj.origin_access_identity)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9688,11 +9660,7 @@ impl S3OriginConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(
-            writer,
-            "OriginAccessIdentity",
-            &obj.origin_access_identity.to_string(),
-        )?;
+        write_characters_element(writer, "OriginAccessIdentity", &obj.origin_access_identity)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -10080,14 +10048,14 @@ impl StreamingDistributionConfigSerializer {
         if let Some(ref value) = obj.aliases {
             &AliasesSerializer::serialize(&mut writer, "Aliases", value)?;
         }
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
-        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
+        write_characters_element(writer, "Comment", &obj.comment)?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.logging {
             &StreamingLoggingConfigSerializer::serialize(&mut writer, "Logging", value)?;
         }
         if let Some(ref value) = obj.price_class {
-            write_characters_element(writer, "PriceClass", &value.to_string())?;
+            write_characters_element(writer, "PriceClass", &value)?;
         }
         S3OriginSerializer::serialize(&mut writer, "S3Origin", &obj.s3_origin)?;
         TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
@@ -10343,9 +10311,9 @@ impl StreamingLoggingConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -10417,9 +10385,9 @@ impl TagSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
         if let Some(ref value) = obj.value {
-            write_characters_element(writer, "Value", &value.to_string())?;
+            write_characters_element(writer, "Value", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11284,19 +11252,19 @@ impl ViewerCertificateSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.acm_certificate_arn {
-            write_characters_element(writer, "ACMCertificateArn", &value.to_string())?;
+            write_characters_element(writer, "ACMCertificateArn", &value)?;
         }
         if let Some(ref value) = obj.cloud_front_default_certificate {
             write_characters_element(writer, "CloudFrontDefaultCertificate", &value.to_string())?;
         }
         if let Some(ref value) = obj.iam_certificate_id {
-            write_characters_element(writer, "IAMCertificateId", &value.to_string())?;
+            write_characters_element(writer, "IAMCertificateId", &value)?;
         }
         if let Some(ref value) = obj.minimum_protocol_version {
-            write_characters_element(writer, "MinimumProtocolVersion", &value.to_string())?;
+            write_characters_element(writer, "MinimumProtocolVersion", &value)?;
         }
         if let Some(ref value) = obj.ssl_support_method {
-            write_characters_element(writer, "SSLSupportMethod", &value.to_string())?;
+            write_characters_element(writer, "SSLSupportMethod", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
