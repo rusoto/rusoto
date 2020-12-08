@@ -167,7 +167,7 @@ impl AccelerateConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -250,7 +250,7 @@ impl AccessControlTranslationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Owner", &obj.owner.to_string())?;
+        write_characters_element(writer, "Owner", &obj.owner)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -556,7 +556,7 @@ impl AnalyticsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -622,7 +622,7 @@ impl AnalyticsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &AnalyticsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         StorageClassAnalysisSerializer::serialize(
             &mut writer,
             "StorageClassAnalysis",
@@ -775,7 +775,7 @@ impl AnalyticsFilterSerializer {
             &AnalyticsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -872,13 +872,13 @@ impl AnalyticsS3BucketDestinationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         if let Some(ref value) = obj.bucket_account_id {
-            write_characters_element(writer, "BucketAccountId", &value.to_string())?;
+            write_characters_element(writer, "BucketAccountId", &value)?;
         }
-        write_characters_element(writer, "Format", &obj.format.to_string())?;
+        write_characters_element(writer, "Format", &obj.format)?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1408,22 +1408,22 @@ impl CSVInputSerializer {
             write_characters_element(writer, "AllowQuotedRecordDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.comments {
-            write_characters_element(writer, "Comments", &value.to_string())?;
+            write_characters_element(writer, "Comments", &value)?;
         }
         if let Some(ref value) = obj.field_delimiter {
-            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
+            write_characters_element(writer, "FieldDelimiter", &value)?;
         }
         if let Some(ref value) = obj.file_header_info {
-            write_characters_element(writer, "FileHeaderInfo", &value.to_string())?;
+            write_characters_element(writer, "FileHeaderInfo", &value)?;
         }
         if let Some(ref value) = obj.quote_character {
-            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteCharacter", &value)?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value)?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
+            write_characters_element(writer, "RecordDelimiter", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1458,19 +1458,19 @@ impl CSVOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.field_delimiter {
-            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
+            write_characters_element(writer, "FieldDelimiter", &value)?;
         }
         if let Some(ref value) = obj.quote_character {
-            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteCharacter", &value)?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value)?;
         }
         if let Some(ref value) = obj.quote_fields {
-            write_characters_element(writer, "QuoteFields", &value.to_string())?;
+            write_characters_element(writer, "QuoteFields", &value)?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
+            write_characters_element(writer, "RecordDelimiter", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1569,16 +1569,16 @@ impl CloudFunctionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.cloud_function {
-            write_characters_element(writer, "CloudFunction", &value.to_string())?;
+            write_characters_element(writer, "CloudFunction", &value)?;
         }
         if let Some(ref value) = obj.events {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
         if let Some(ref value) = obj.invocation_role {
-            write_characters_element(writer, "InvocationRole", &value.to_string())?;
+            write_characters_element(writer, "InvocationRole", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1809,7 +1809,7 @@ impl CompletedPartSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.e_tag {
-            write_characters_element(writer, "ETag", &value.to_string())?;
+            write_characters_element(writer, "ETag", &value)?;
         }
         if let Some(ref value) = obj.part_number {
             write_characters_element(writer, "PartNumber", &value.to_string())?;
@@ -1905,10 +1905,10 @@ impl ConditionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.http_error_code_returned_equals {
-            write_characters_element(writer, "HttpErrorCodeReturnedEquals", &value.to_string())?;
+            write_characters_element(writer, "HttpErrorCodeReturnedEquals", &value)?;
         }
         if let Some(ref value) = obj.key_prefix_equals {
-            write_characters_element(writer, "KeyPrefixEquals", &value.to_string())?;
+            write_characters_element(writer, "KeyPrefixEquals", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2154,7 +2154,7 @@ impl CreateBucketConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.location_constraint {
-            write_characters_element(writer, "LocationConstraint", &value.to_string())?;
+            write_characters_element(writer, "LocationConstraint", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2465,7 +2465,7 @@ impl DefaultRetentionSerializer {
             write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.mode {
-            write_characters_element(writer, "Mode", &value.to_string())?;
+            write_characters_element(writer, "Mode", &value)?;
         }
         if let Some(ref value) = obj.years {
             write_characters_element(writer, "Years", &value.to_string())?;
@@ -2736,7 +2736,7 @@ impl DeleteMarkerReplicationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3157,9 +3157,9 @@ impl DestinationSerializer {
             )?;
         }
         if let Some(ref value) = obj.account {
-            write_characters_element(writer, "Account", &value.to_string())?;
+            write_characters_element(writer, "Account", &value)?;
         }
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         if let Some(ref value) = obj.encryption_configuration {
             &EncryptionConfigurationSerializer::serialize(
                 &mut writer,
@@ -3174,7 +3174,7 @@ impl DestinationSerializer {
             &ReplicationTimeSerializer::serialize(&mut writer, "ReplicationTime", value)?;
         }
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3315,12 +3315,12 @@ impl EncryptionSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "EncryptionType", &obj.encryption_type.to_string())?;
+        write_characters_element(writer, "EncryptionType", &obj.encryption_type)?;
         if let Some(ref value) = obj.kms_context {
-            write_characters_element(writer, "KMSContext", &value.to_string())?;
+            write_characters_element(writer, "KMSContext", &value)?;
         }
         if let Some(ref value) = obj.kms_key_id {
-            write_characters_element(writer, "KMSKeyId", &value.to_string())?;
+            write_characters_element(writer, "KMSKeyId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3375,7 +3375,7 @@ impl EncryptionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.replica_kms_key_id {
-            write_characters_element(writer, "ReplicaKmsKeyID", &value.to_string())?;
+            write_characters_element(writer, "ReplicaKmsKeyID", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3504,7 +3504,7 @@ impl ErrorDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3655,7 +3655,7 @@ impl ExistingObjectReplicationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3925,10 +3925,10 @@ impl FilterRuleSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            write_characters_element(writer, "Name", &value.to_string())?;
+            write_characters_element(writer, "Name", &value)?;
         }
         if let Some(ref value) = obj.value {
-            write_characters_element(writer, "Value", &value.to_string())?;
+            write_characters_element(writer, "Value", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5166,7 +5166,7 @@ impl GlacierJobParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Tier", &obj.tier.to_string())?;
+        write_characters_element(writer, "Tier", &obj.tier)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5219,7 +5219,7 @@ impl GrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            write_characters_element(writer, "Permission", &value.to_string())?;
+            write_characters_element(writer, "Permission", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5291,17 +5291,17 @@ impl GranteeSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            write_characters_element(writer, "DisplayName", &value.to_string())?;
+            write_characters_element(writer, "DisplayName", &value)?;
         }
         if let Some(ref value) = obj.email_address {
-            write_characters_element(writer, "EmailAddress", &value.to_string())?;
+            write_characters_element(writer, "EmailAddress", &value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
-        write_characters_element(writer, "xsi:type", &obj.type_.to_string())?;
+        write_characters_element(writer, "xsi:type", &obj.type_)?;
         if let Some(ref value) = obj.uri {
-            write_characters_element(writer, "URI", &value.to_string())?;
+            write_characters_element(writer, "URI", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5605,7 +5605,7 @@ impl IndexDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Suffix", &obj.suffix.to_string())?;
+        write_characters_element(writer, "Suffix", &obj.suffix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5681,7 +5681,7 @@ impl InputSerializationSerializer {
             &CSVInputSerializer::serialize(&mut writer, "CSV", value)?;
         }
         if let Some(ref value) = obj.compression_type {
-            write_characters_element(writer, "CompressionType", &value.to_string())?;
+            write_characters_element(writer, "CompressionType", &value)?;
         }
         if let Some(ref value) = obj.json {
             &JSONInputSerializer::serialize(&mut writer, "JSON", value)?;
@@ -5770,7 +5770,7 @@ impl IntelligentTieringAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -5846,8 +5846,8 @@ impl IntelligentTieringConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &IntelligentTieringFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
+        write_characters_element(writer, "Status", &obj.status)?;
         TieringListSerializer::serialize(&mut writer, "Tiering", &obj.tierings)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5967,7 +5967,7 @@ impl IntelligentTieringFilterSerializer {
             &IntelligentTieringAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -6106,11 +6106,11 @@ impl InventoryConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &InventoryFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         write_characters_element(
             writer,
             "IncludedObjectVersions",
-            &obj.included_object_versions.to_string(),
+            &obj.included_object_versions,
         )?;
         write_characters_element(writer, "IsEnabled", &obj.is_enabled.to_string())?;
         if let Some(ref value) = obj.optional_fields {
@@ -6302,7 +6302,7 @@ impl InventoryFilterSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6538,15 +6538,15 @@ impl InventoryS3BucketDestinationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.account_id {
-            write_characters_element(writer, "AccountId", &value.to_string())?;
+            write_characters_element(writer, "AccountId", &value)?;
         }
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         if let Some(ref value) = obj.encryption {
             &InventoryEncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        write_characters_element(writer, "Format", &obj.format.to_string())?;
+        write_characters_element(writer, "Format", &obj.format)?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6594,7 +6594,7 @@ impl InventoryScheduleSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Frequency", &obj.frequency.to_string())?;
+        write_characters_element(writer, "Frequency", &obj.frequency)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6668,7 +6668,7 @@ impl JSONInputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.type_ {
-            write_characters_element(writer, "Type", &value.to_string())?;
+            write_characters_element(writer, "Type", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6695,7 +6695,7 @@ impl JSONOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.record_delimiter {
-            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
+            write_characters_element(writer, "RecordDelimiter", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6879,13 +6879,9 @@ impl LambdaFunctionConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
-        write_characters_element(
-            writer,
-            "CloudFunction",
-            &obj.lambda_function_arn.to_string(),
-        )?;
+        write_characters_element(writer, "CloudFunction", &obj.lambda_function_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7147,7 +7143,7 @@ impl LifecycleRuleSerializer {
             &LifecycleRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -7163,7 +7159,7 @@ impl LifecycleRuleSerializer {
                 value,
             )?;
         }
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         if let Some(ref value) = obj.transitions {
             &TransitionListSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -7224,7 +7220,7 @@ impl LifecycleRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -7289,7 +7285,7 @@ impl LifecycleRuleFilterSerializer {
             &LifecycleRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -8312,11 +8308,11 @@ impl LoggingEnabledSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "TargetBucket", &obj.target_bucket.to_string())?;
+        write_characters_element(writer, "TargetBucket", &obj.target_bucket)?;
         if let Some(ref value) = obj.target_grants {
             &TargetGrantsSerializer::serialize(&mut writer, "TargetGrants", value)?;
         }
-        write_characters_element(writer, "TargetPrefix", &obj.target_prefix.to_string())?;
+        write_characters_element(writer, "TargetPrefix", &obj.target_prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8495,10 +8491,10 @@ impl MetadataEntrySerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            write_characters_element(writer, "Name", &value.to_string())?;
+            write_characters_element(writer, "Name", &value)?;
         }
         if let Some(ref value) = obj.value {
-            write_characters_element(writer, "Value", &value.to_string())?;
+            write_characters_element(writer, "Value", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8586,7 +8582,7 @@ impl MetricsSerializer {
         if let Some(ref value) = obj.event_threshold {
             &ReplicationTimeValueSerializer::serialize(&mut writer, "EventThreshold", value)?;
         }
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8640,7 +8636,7 @@ impl MetricsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -8698,7 +8694,7 @@ impl MetricsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &MetricsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8788,7 +8784,7 @@ impl MetricsFilterSerializer {
             &MetricsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -9137,7 +9133,7 @@ impl NoncurrentVersionTransitionSerializer {
             write_characters_element(writer, "NoncurrentDays", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9538,9 +9534,9 @@ impl ObjectIdentifierSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
         if let Some(ref value) = obj.version_id {
-            write_characters_element(writer, "VersionId", &value.to_string())?;
+            write_characters_element(writer, "VersionId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9670,7 +9666,7 @@ impl ObjectLockConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.object_lock_enabled {
-            write_characters_element(writer, "ObjectLockEnabled", &value.to_string())?;
+            write_characters_element(writer, "ObjectLockEnabled", &value)?;
         }
         if let Some(ref value) = obj.rule {
             &ObjectLockRuleSerializer::serialize(&mut writer, "Rule", value)?;
@@ -9747,7 +9743,7 @@ impl ObjectLockLegalHoldSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9827,7 +9823,7 @@ impl ObjectLockRetentionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mode {
-            write_characters_element(writer, "Mode", &value.to_string())?;
+            write_characters_element(writer, "Mode", &value)?;
         }
         if let Some(ref value) = obj.retain_until_date {
             write_characters_element(writer, "RetainUntilDate", &value.to_string())?;
@@ -10178,10 +10174,10 @@ impl OwnerSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            write_characters_element(writer, "DisplayName", &value.to_string())?;
+            write_characters_element(writer, "DisplayName", &value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10301,7 +10297,7 @@ impl OwnershipControlsRuleSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "ObjectOwnership", &obj.object_ownership.to_string())?;
+        write_characters_element(writer, "ObjectOwnership", &obj.object_ownership)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -11490,9 +11486,9 @@ impl QueueConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
-        write_characters_element(writer, "Queue", &obj.queue_arn.to_string())?;
+        write_characters_element(writer, "Queue", &obj.queue_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -11557,10 +11553,10 @@ impl QueueConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
         if let Some(ref value) = obj.queue {
-            write_characters_element(writer, "Queue", &value.to_string())?;
+            write_characters_element(writer, "Queue", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11789,19 +11785,19 @@ impl RedirectSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.host_name {
-            write_characters_element(writer, "HostName", &value.to_string())?;
+            write_characters_element(writer, "HostName", &value)?;
         }
         if let Some(ref value) = obj.http_redirect_code {
-            write_characters_element(writer, "HttpRedirectCode", &value.to_string())?;
+            write_characters_element(writer, "HttpRedirectCode", &value)?;
         }
         if let Some(ref value) = obj.protocol {
-            write_characters_element(writer, "Protocol", &value.to_string())?;
+            write_characters_element(writer, "Protocol", &value)?;
         }
         if let Some(ref value) = obj.replace_key_prefix_with {
-            write_characters_element(writer, "ReplaceKeyPrefixWith", &value.to_string())?;
+            write_characters_element(writer, "ReplaceKeyPrefixWith", &value)?;
         }
         if let Some(ref value) = obj.replace_key_with {
-            write_characters_element(writer, "ReplaceKeyWith", &value.to_string())?;
+            write_characters_element(writer, "ReplaceKeyWith", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11853,9 +11849,9 @@ impl RedirectAllRequestsToSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HostName", &obj.host_name.to_string())?;
+        write_characters_element(writer, "HostName", &obj.host_name)?;
         if let Some(ref value) = obj.protocol {
-            write_characters_element(writer, "Protocol", &value.to_string())?;
+            write_characters_element(writer, "Protocol", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11975,7 +11971,7 @@ impl ReplicaModificationsSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -12055,7 +12051,7 @@ impl ReplicationConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Role", &obj.role.to_string())?;
+        write_characters_element(writer, "Role", &obj.role)?;
         ReplicationRulesSerializer::serialize(&mut writer, "Rule", &obj.rules)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12168,7 +12164,7 @@ impl ReplicationRuleSerializer {
             &ReplicationRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         if let Some(ref value) = obj.priority {
             write_characters_element(writer, "Priority", &value.to_string())?;
@@ -12180,7 +12176,7 @@ impl ReplicationRuleSerializer {
                 value,
             )?;
         }
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -12238,7 +12234,7 @@ impl ReplicationRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12304,7 +12300,7 @@ impl ReplicationRuleFilterSerializer {
             &ReplicationRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12430,7 +12426,7 @@ impl ReplicationTimeSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         ReplicationTimeValueSerializer::serialize(&mut writer, "Time", &obj.time)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12528,7 +12524,7 @@ impl RequestPaymentConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Payer", &obj.payer.to_string())?;
+        write_characters_element(writer, "Payer", &obj.payer)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -12726,7 +12722,7 @@ impl RestoreRequestSerializer {
             write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.description {
-            write_characters_element(writer, "Description", &value.to_string())?;
+            write_characters_element(writer, "Description", &value)?;
         }
         if let Some(ref value) = obj.glacier_job_parameters {
             &GlacierJobParametersSerializer::serialize(&mut writer, "GlacierJobParameters", value)?;
@@ -12738,10 +12734,10 @@ impl RestoreRequestSerializer {
             &SelectParametersSerializer::serialize(&mut writer, "SelectParameters", value)?;
         }
         if let Some(ref value) = obj.tier {
-            write_characters_element(writer, "Tier", &value.to_string())?;
+            write_characters_element(writer, "Tier", &value)?;
         }
         if let Some(ref value) = obj.type_ {
-            write_characters_element(writer, "Type", &value.to_string())?;
+            write_characters_element(writer, "Type", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12976,7 +12972,7 @@ impl RuleSerializer {
             &LifecycleExpirationSerializer::serialize(&mut writer, "Expiration", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -12992,8 +12988,8 @@ impl RuleSerializer {
                 value,
             )?;
         }
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
+        write_characters_element(writer, "Status", &obj.status)?;
         if let Some(ref value) = obj.transition {
             &TransitionSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -13133,16 +13129,16 @@ impl S3LocationSerializer {
         if let Some(ref value) = obj.access_control_list {
             &GrantsSerializer::serialize(&mut writer, "AccessControlList", value)?;
         }
-        write_characters_element(writer, "BucketName", &obj.bucket_name.to_string())?;
+        write_characters_element(writer, "BucketName", &obj.bucket_name)?;
         if let Some(ref value) = obj.canned_acl {
-            write_characters_element(writer, "CannedACL", &value.to_string())?;
+            write_characters_element(writer, "CannedACL", &value)?;
         }
         if let Some(ref value) = obj.encryption {
             &EncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         if let Some(ref value) = obj.tagging {
             &TaggingSerializer::serialize(&mut writer, "Tagging", value)?;
@@ -13192,7 +13188,7 @@ impl SSEKMSSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "KeyId", &obj.key_id.to_string())?;
+        write_characters_element(writer, "KeyId", &obj.key_id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13407,8 +13403,8 @@ impl SelectParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Expression", &obj.expression.to_string())?;
-        write_characters_element(writer, "ExpressionType", &obj.expression_type.to_string())?;
+        write_characters_element(writer, "Expression", &obj.expression)?;
+        write_characters_element(writer, "ExpressionType", &obj.expression_type)?;
         InputSerializationSerializer::serialize(
             &mut writer,
             "InputSerialization",
@@ -13502,9 +13498,9 @@ impl ServerSideEncryptionByDefaultSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.kms_master_key_id {
-            write_characters_element(writer, "KMSMasterKeyID", &value.to_string())?;
+            write_characters_element(writer, "KMSMasterKeyID", &value)?;
         }
-        write_characters_element(writer, "SSEAlgorithm", &obj.sse_algorithm.to_string())?;
+        write_characters_element(writer, "SSEAlgorithm", &obj.sse_algorithm)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13828,7 +13824,7 @@ impl SseKmsEncryptedObjectsSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14104,11 +14100,7 @@ impl StorageClassAnalysisDataExportSerializer {
             "Destination",
             &obj.destination,
         )?;
-        write_characters_element(
-            writer,
-            "OutputSchemaVersion",
-            &obj.output_schema_version.to_string(),
-        )?;
+        write_characters_element(writer, "OutputSchemaVersion", &obj.output_schema_version)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14204,8 +14196,8 @@ impl TagSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
-        write_characters_element(writer, "Value", &obj.value.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
+        write_characters_element(writer, "Value", &obj.value)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14351,7 +14343,7 @@ impl TargetGrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            write_characters_element(writer, "Permission", &value.to_string())?;
+            write_characters_element(writer, "Permission", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -14482,7 +14474,7 @@ impl TieringSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "AccessTier", &obj.access_tier.to_string())?;
+        write_characters_element(writer, "AccessTier", &obj.access_tier)?;
         write_characters_element(writer, "Days", &obj.days.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -14645,9 +14637,9 @@ impl TopicConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
-        write_characters_element(writer, "Topic", &obj.topic_arn.to_string())?;
+        write_characters_element(writer, "Topic", &obj.topic_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14712,10 +14704,10 @@ impl TopicConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
         if let Some(ref value) = obj.topic {
-            write_characters_element(writer, "Topic", &value.to_string())?;
+            write_characters_element(writer, "Topic", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -14831,7 +14823,7 @@ impl TransitionSerializer {
             write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15212,10 +15204,10 @@ impl VersioningConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mfa_delete {
-            write_characters_element(writer, "MfaDelete", &value.to_string())?;
+            write_characters_element(writer, "MfaDelete", &value)?;
         }
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }

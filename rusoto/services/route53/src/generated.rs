@@ -200,8 +200,8 @@ impl AlarmIdentifierSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
-        write_characters_element(writer, "Region", &obj.region.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
+        write_characters_element(writer, "Region", &obj.region)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -307,13 +307,13 @@ impl AliasTargetSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "DNSName", &obj.dns_name.to_string())?;
+        write_characters_element(writer, "DNSName", &obj.dns_name)?;
         write_characters_element(
             writer,
             "EvaluateTargetHealth",
             &obj.evaluate_target_health.to_string(),
         )?;
-        write_characters_element(writer, "HostedZoneId", &obj.hosted_zone_id.to_string())?;
+        write_characters_element(writer, "HostedZoneId", &obj.hosted_zone_id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -418,7 +418,7 @@ impl ChangeSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Action", &obj.action.to_string())?;
+        write_characters_element(writer, "Action", &obj.action)?;
         ResourceRecordSetSerializer::serialize(
             &mut writer,
             "ResourceRecordSet",
@@ -467,7 +467,7 @@ impl ChangeBatchSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         ChangesSerializer::serialize(&mut writer, "Changes", &obj.changes)?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2335,13 +2335,13 @@ impl GeoLocationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.continent_code {
-            write_characters_element(writer, "ContinentCode", &value.to_string())?;
+            write_characters_element(writer, "ContinentCode", &value)?;
         }
         if let Some(ref value) = obj.country_code {
-            write_characters_element(writer, "CountryCode", &value.to_string())?;
+            write_characters_element(writer, "CountryCode", &value)?;
         }
         if let Some(ref value) = obj.subdivision_code {
-            write_characters_element(writer, "SubdivisionCode", &value.to_string())?;
+            write_characters_element(writer, "SubdivisionCode", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3514,16 +3514,16 @@ impl HealthCheckConfigSerializer {
             write_characters_element(writer, "FailureThreshold", &value.to_string())?;
         }
         if let Some(ref value) = obj.fully_qualified_domain_name {
-            write_characters_element(writer, "FullyQualifiedDomainName", &value.to_string())?;
+            write_characters_element(writer, "FullyQualifiedDomainName", &value)?;
         }
         if let Some(ref value) = obj.health_threshold {
             write_characters_element(writer, "HealthThreshold", &value.to_string())?;
         }
         if let Some(ref value) = obj.ip_address {
-            write_characters_element(writer, "IPAddress", &value.to_string())?;
+            write_characters_element(writer, "IPAddress", &value)?;
         }
         if let Some(ref value) = obj.insufficient_data_health_status {
-            write_characters_element(writer, "InsufficientDataHealthStatus", &value.to_string())?;
+            write_characters_element(writer, "InsufficientDataHealthStatus", &value)?;
         }
         if let Some(ref value) = obj.inverted {
             write_characters_element(writer, "Inverted", &value.to_string())?;
@@ -3541,12 +3541,12 @@ impl HealthCheckConfigSerializer {
             write_characters_element(writer, "RequestInterval", &value.to_string())?;
         }
         if let Some(ref value) = obj.resource_path {
-            write_characters_element(writer, "ResourcePath", &value.to_string())?;
+            write_characters_element(writer, "ResourcePath", &value)?;
         }
         if let Some(ref value) = obj.search_string {
-            write_characters_element(writer, "SearchString", &value.to_string())?;
+            write_characters_element(writer, "SearchString", &value)?;
         }
-        write_characters_element(writer, "Type", &obj.type_.to_string())?;
+        write_characters_element(writer, "Type", &obj.type_)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3933,7 +3933,7 @@ impl HostedZoneConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         if let Some(ref value) = obj.private_zone {
             write_characters_element(writer, "PrivateZone", &value.to_string())?;
@@ -6101,7 +6101,7 @@ impl ResourceRecordSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Value", &obj.value.to_string())?;
+        write_characters_element(writer, "Value", &obj.value)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6236,34 +6236,34 @@ impl ResourceRecordSetSerializer {
             &AliasTargetSerializer::serialize(&mut writer, "AliasTarget", value)?;
         }
         if let Some(ref value) = obj.failover {
-            write_characters_element(writer, "Failover", &value.to_string())?;
+            write_characters_element(writer, "Failover", &value)?;
         }
         if let Some(ref value) = obj.geo_location {
             &GeoLocationSerializer::serialize(&mut writer, "GeoLocation", value)?;
         }
         if let Some(ref value) = obj.health_check_id {
-            write_characters_element(writer, "HealthCheckId", &value.to_string())?;
+            write_characters_element(writer, "HealthCheckId", &value)?;
         }
         if let Some(ref value) = obj.multi_value_answer {
             write_characters_element(writer, "MultiValueAnswer", &value.to_string())?;
         }
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         if let Some(ref value) = obj.region {
-            write_characters_element(writer, "Region", &value.to_string())?;
+            write_characters_element(writer, "Region", &value)?;
         }
         if let Some(ref value) = obj.resource_records {
             &ResourceRecordsSerializer::serialize(&mut writer, "ResourceRecords", value)?;
         }
         if let Some(ref value) = obj.set_identifier {
-            write_characters_element(writer, "SetIdentifier", &value.to_string())?;
+            write_characters_element(writer, "SetIdentifier", &value)?;
         }
         if let Some(ref value) = obj.ttl {
             write_characters_element(writer, "TTL", &value.to_string())?;
         }
         if let Some(ref value) = obj.traffic_policy_instance_id {
-            write_characters_element(writer, "TrafficPolicyInstanceId", &value.to_string())?;
+            write_characters_element(writer, "TrafficPolicyInstanceId", &value)?;
         }
-        write_characters_element(writer, "Type", &obj.type_.to_string())?;
+        write_characters_element(writer, "Type", &obj.type_)?;
         if let Some(ref value) = obj.weight {
             write_characters_element(writer, "Weight", &value.to_string())?;
         }
@@ -6848,10 +6848,10 @@ impl TagSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.key {
-            write_characters_element(writer, "Key", &value.to_string())?;
+            write_characters_element(writer, "Key", &value)?;
         }
         if let Some(ref value) = obj.value {
-            write_characters_element(writer, "Value", &value.to_string())?;
+            write_characters_element(writer, "Value", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -7944,10 +7944,10 @@ impl VPCSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.vpc_id {
-            write_characters_element(writer, "VPCId", &value.to_string())?;
+            write_characters_element(writer, "VPCId", &value)?;
         }
         if let Some(ref value) = obj.vpc_region {
-            write_characters_element(writer, "VPCRegion", &value.to_string())?;
+            write_characters_element(writer, "VPCRegion", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
