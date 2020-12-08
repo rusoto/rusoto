@@ -22934,13 +22934,14 @@ impl Iam for IamClient {
             .map_err(CreateAccessKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CreateAccessKeyResponseDeserializer::deserialize("CreateAccessKeyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22987,12 +22988,13 @@ impl Iam for IamClient {
             .map_err(CreateGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateGroupResponseDeserializer::deserialize("CreateGroupResult", stack)?;
+            result = CreateGroupResponseDeserializer::deserialize("CreateGroupResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23018,15 +23020,16 @@ impl Iam for IamClient {
             .map_err(CreateInstanceProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateInstanceProfileResponseDeserializer::deserialize(
+            result = CreateInstanceProfileResponseDeserializer::deserialize(
                 "CreateInstanceProfileResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23052,15 +23055,16 @@ impl Iam for IamClient {
             .map_err(CreateLoginProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateLoginProfileResponseDeserializer::deserialize(
+            result = CreateLoginProfileResponseDeserializer::deserialize(
                 "CreateLoginProfileResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23087,15 +23091,16 @@ impl Iam for IamClient {
             .map_err(CreateOpenIDConnectProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateOpenIDConnectProviderResponseDeserializer::deserialize(
+            result = CreateOpenIDConnectProviderResponseDeserializer::deserialize(
                 "CreateOpenIDConnectProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23121,13 +23126,13 @@ impl Iam for IamClient {
             .map_err(CreatePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", stack)?;
+            result = CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23153,15 +23158,16 @@ impl Iam for IamClient {
             .map_err(CreatePolicyVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreatePolicyVersionResponseDeserializer::deserialize(
+            result = CreatePolicyVersionResponseDeserializer::deserialize(
                 "CreatePolicyVersionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23187,12 +23193,13 @@ impl Iam for IamClient {
             .map_err(CreateRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateRoleResponseDeserializer::deserialize("CreateRoleResult", stack)?;
+            result = CreateRoleResponseDeserializer::deserialize("CreateRoleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23218,15 +23225,16 @@ impl Iam for IamClient {
             .map_err(CreateSAMLProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateSAMLProviderResponseDeserializer::deserialize(
+            result = CreateSAMLProviderResponseDeserializer::deserialize(
                 "CreateSAMLProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23252,15 +23260,16 @@ impl Iam for IamClient {
             .map_err(CreateServiceLinkedRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateServiceLinkedRoleResponseDeserializer::deserialize(
+            result = CreateServiceLinkedRoleResponseDeserializer::deserialize(
                 "CreateServiceLinkedRoleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23289,15 +23298,16 @@ impl Iam for IamClient {
             .map_err(CreateServiceSpecificCredentialError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateServiceSpecificCredentialResponseDeserializer::deserialize(
+            result = CreateServiceSpecificCredentialResponseDeserializer::deserialize(
                 "CreateServiceSpecificCredentialResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23323,12 +23333,13 @@ impl Iam for IamClient {
             .map_err(CreateUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateUserResponseDeserializer::deserialize("CreateUserResult", stack)?;
+            result = CreateUserResponseDeserializer::deserialize("CreateUserResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23354,15 +23365,16 @@ impl Iam for IamClient {
             .map_err(CreateVirtualMFADeviceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateVirtualMFADeviceResponseDeserializer::deserialize(
+            result = CreateVirtualMFADeviceResponseDeserializer::deserialize(
                 "CreateVirtualMFADeviceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23743,15 +23755,16 @@ impl Iam for IamClient {
             .map_err(DeleteServiceLinkedRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteServiceLinkedRoleResponseDeserializer::deserialize(
+            result = DeleteServiceLinkedRoleResponseDeserializer::deserialize(
                 "DeleteServiceLinkedRoleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23985,15 +23998,16 @@ impl Iam for IamClient {
             .map_err(GenerateCredentialReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GenerateCredentialReportResponseDeserializer::deserialize(
+            result = GenerateCredentialReportResponseDeserializer::deserialize(
                 "GenerateCredentialReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24022,15 +24036,16 @@ impl Iam for IamClient {
             .map_err(GenerateOrganizationsAccessReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GenerateOrganizationsAccessReportResponseDeserializer::deserialize(
+            result = GenerateOrganizationsAccessReportResponseDeserializer::deserialize(
                 "GenerateOrganizationsAccessReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24059,15 +24074,16 @@ impl Iam for IamClient {
             .map_err(GenerateServiceLastAccessedDetailsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GenerateServiceLastAccessedDetailsResponseDeserializer::deserialize(
+            result = GenerateServiceLastAccessedDetailsResponseDeserializer::deserialize(
                 "GenerateServiceLastAccessedDetailsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24093,15 +24109,16 @@ impl Iam for IamClient {
             .map_err(GetAccessKeyLastUsedError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccessKeyLastUsedResponseDeserializer::deserialize(
+            result = GetAccessKeyLastUsedResponseDeserializer::deserialize(
                 "GetAccessKeyLastUsedResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24130,15 +24147,16 @@ impl Iam for IamClient {
             .map_err(GetAccountAuthorizationDetailsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccountAuthorizationDetailsResponseDeserializer::deserialize(
+            result = GetAccountAuthorizationDetailsResponseDeserializer::deserialize(
                 "GetAccountAuthorizationDetailsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24162,15 +24180,16 @@ impl Iam for IamClient {
             .map_err(GetAccountPasswordPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccountPasswordPolicyResponseDeserializer::deserialize(
+            result = GetAccountPasswordPolicyResponseDeserializer::deserialize(
                 "GetAccountPasswordPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24194,15 +24213,16 @@ impl Iam for IamClient {
             .map_err(GetAccountSummaryError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccountSummaryResponseDeserializer::deserialize(
+            result = GetAccountSummaryResponseDeserializer::deserialize(
                 "GetAccountSummaryResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24229,15 +24249,16 @@ impl Iam for IamClient {
             .map_err(GetContextKeysForCustomPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+            result = GetContextKeysForPolicyResponseDeserializer::deserialize(
                 "GetContextKeysForCustomPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24264,15 +24285,16 @@ impl Iam for IamClient {
             .map_err(GetContextKeysForPrincipalPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+            result = GetContextKeysForPolicyResponseDeserializer::deserialize(
                 "GetContextKeysForPrincipalPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24296,15 +24318,16 @@ impl Iam for IamClient {
             .map_err(GetCredentialReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetCredentialReportResponseDeserializer::deserialize(
+            result = GetCredentialReportResponseDeserializer::deserialize(
                 "GetCredentialReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24330,12 +24353,13 @@ impl Iam for IamClient {
             .map_err(GetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetGroupResponseDeserializer::deserialize("GetGroupResult", stack)?;
+            result = GetGroupResponseDeserializer::deserialize("GetGroupResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24361,13 +24385,14 @@ impl Iam for IamClient {
             .map_err(GetGroupPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetGroupPolicyResponseDeserializer::deserialize("GetGroupPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24393,15 +24418,16 @@ impl Iam for IamClient {
             .map_err(GetInstanceProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetInstanceProfileResponseDeserializer::deserialize(
+            result = GetInstanceProfileResponseDeserializer::deserialize(
                 "GetInstanceProfileResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24427,13 +24453,14 @@ impl Iam for IamClient {
             .map_err(GetLoginProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetLoginProfileResponseDeserializer::deserialize("GetLoginProfileResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24459,15 +24486,16 @@ impl Iam for IamClient {
             .map_err(GetOpenIDConnectProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetOpenIDConnectProviderResponseDeserializer::deserialize(
+            result = GetOpenIDConnectProviderResponseDeserializer::deserialize(
                 "GetOpenIDConnectProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24494,15 +24522,16 @@ impl Iam for IamClient {
             .map_err(GetOrganizationsAccessReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetOrganizationsAccessReportResponseDeserializer::deserialize(
+            result = GetOrganizationsAccessReportResponseDeserializer::deserialize(
                 "GetOrganizationsAccessReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24528,12 +24557,13 @@ impl Iam for IamClient {
             .map_err(GetPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetPolicyResponseDeserializer::deserialize("GetPolicyResult", stack)?;
+            result = GetPolicyResponseDeserializer::deserialize("GetPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24559,13 +24589,14 @@ impl Iam for IamClient {
             .map_err(GetPolicyVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetPolicyVersionResponseDeserializer::deserialize("GetPolicyVersionResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24591,12 +24622,13 @@ impl Iam for IamClient {
             .map_err(GetRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetRoleResponseDeserializer::deserialize("GetRoleResult", stack)?;
+            result = GetRoleResponseDeserializer::deserialize("GetRoleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24622,13 +24654,13 @@ impl Iam for IamClient {
             .map_err(GetRolePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", stack)?;
+            result = GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24654,13 +24686,14 @@ impl Iam for IamClient {
             .map_err(GetSAMLProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetSAMLProviderResponseDeserializer::deserialize("GetSAMLProviderResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24686,13 +24719,14 @@ impl Iam for IamClient {
             .map_err(GetSSHPublicKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetSSHPublicKeyResponseDeserializer::deserialize("GetSSHPublicKeyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24718,15 +24752,16 @@ impl Iam for IamClient {
             .map_err(GetServerCertificateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetServerCertificateResponseDeserializer::deserialize(
+            result = GetServerCertificateResponseDeserializer::deserialize(
                 "GetServerCertificateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24755,15 +24790,16 @@ impl Iam for IamClient {
             .map_err(GetServiceLastAccessedDetailsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetServiceLastAccessedDetailsResponseDeserializer::deserialize(
+            result = GetServiceLastAccessedDetailsResponseDeserializer::deserialize(
                 "GetServiceLastAccessedDetailsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24796,16 +24832,16 @@ impl Iam for IamClient {
             .map_err(GetServiceLastAccessedDetailsWithEntitiesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer::deserialize(
-                    "GetServiceLastAccessedDetailsWithEntitiesResult",
-                    stack,
-                )?;
+            result = GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer::deserialize(
+                "GetServiceLastAccessedDetailsWithEntitiesResult",
+                stack,
+            )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24834,15 +24870,16 @@ impl Iam for IamClient {
             .map_err(GetServiceLinkedRoleDeletionStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetServiceLinkedRoleDeletionStatusResponseDeserializer::deserialize(
+            result = GetServiceLinkedRoleDeletionStatusResponseDeserializer::deserialize(
                 "GetServiceLinkedRoleDeletionStatusResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24868,12 +24905,13 @@ impl Iam for IamClient {
             .map_err(GetUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetUserResponseDeserializer::deserialize("GetUserResult", stack)?;
+            result = GetUserResponseDeserializer::deserialize("GetUserResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24899,13 +24937,13 @@ impl Iam for IamClient {
             .map_err(GetUserPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", stack)?;
+            result = GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24931,13 +24969,14 @@ impl Iam for IamClient {
             .map_err(ListAccessKeysError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListAccessKeysResponseDeserializer::deserialize("ListAccessKeysResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24963,15 +25002,16 @@ impl Iam for IamClient {
             .map_err(ListAccountAliasesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAccountAliasesResponseDeserializer::deserialize(
+            result = ListAccountAliasesResponseDeserializer::deserialize(
                 "ListAccountAliasesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24998,15 +25038,16 @@ impl Iam for IamClient {
             .map_err(ListAttachedGroupPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAttachedGroupPoliciesResponseDeserializer::deserialize(
+            result = ListAttachedGroupPoliciesResponseDeserializer::deserialize(
                 "ListAttachedGroupPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25032,15 +25073,16 @@ impl Iam for IamClient {
             .map_err(ListAttachedRolePoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAttachedRolePoliciesResponseDeserializer::deserialize(
+            result = ListAttachedRolePoliciesResponseDeserializer::deserialize(
                 "ListAttachedRolePoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25066,15 +25108,16 @@ impl Iam for IamClient {
             .map_err(ListAttachedUserPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAttachedUserPoliciesResponseDeserializer::deserialize(
+            result = ListAttachedUserPoliciesResponseDeserializer::deserialize(
                 "ListAttachedUserPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25100,15 +25143,16 @@ impl Iam for IamClient {
             .map_err(ListEntitiesForPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListEntitiesForPolicyResponseDeserializer::deserialize(
+            result = ListEntitiesForPolicyResponseDeserializer::deserialize(
                 "ListEntitiesForPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25134,15 +25178,16 @@ impl Iam for IamClient {
             .map_err(ListGroupPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListGroupPoliciesResponseDeserializer::deserialize(
+            result = ListGroupPoliciesResponseDeserializer::deserialize(
                 "ListGroupPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25168,12 +25213,13 @@ impl Iam for IamClient {
             .map_err(ListGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListGroupsResponseDeserializer::deserialize("ListGroupsResult", stack)?;
+            result = ListGroupsResponseDeserializer::deserialize("ListGroupsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25199,15 +25245,16 @@ impl Iam for IamClient {
             .map_err(ListGroupsForUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListGroupsForUserResponseDeserializer::deserialize(
+            result = ListGroupsForUserResponseDeserializer::deserialize(
                 "ListGroupsForUserResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25233,15 +25280,16 @@ impl Iam for IamClient {
             .map_err(ListInstanceProfilesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListInstanceProfilesResponseDeserializer::deserialize(
+            result = ListInstanceProfilesResponseDeserializer::deserialize(
                 "ListInstanceProfilesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25268,15 +25316,16 @@ impl Iam for IamClient {
             .map_err(ListInstanceProfilesForRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListInstanceProfilesForRoleResponseDeserializer::deserialize(
+            result = ListInstanceProfilesForRoleResponseDeserializer::deserialize(
                 "ListInstanceProfilesForRoleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25302,13 +25351,14 @@ impl Iam for IamClient {
             .map_err(ListMFADevicesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListMFADevicesResponseDeserializer::deserialize("ListMFADevicesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25335,15 +25385,16 @@ impl Iam for IamClient {
             .map_err(ListOpenIDConnectProvidersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListOpenIDConnectProvidersResponseDeserializer::deserialize(
+            result = ListOpenIDConnectProvidersResponseDeserializer::deserialize(
                 "ListOpenIDConnectProvidersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25369,13 +25420,13 @@ impl Iam for IamClient {
             .map_err(ListPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", stack)?;
+            result = ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25404,15 +25455,16 @@ impl Iam for IamClient {
             .map_err(ListPoliciesGrantingServiceAccessError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPoliciesGrantingServiceAccessResponseDeserializer::deserialize(
+            result = ListPoliciesGrantingServiceAccessResponseDeserializer::deserialize(
                 "ListPoliciesGrantingServiceAccessResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25438,15 +25490,16 @@ impl Iam for IamClient {
             .map_err(ListPolicyVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPolicyVersionsResponseDeserializer::deserialize(
+            result = ListPolicyVersionsResponseDeserializer::deserialize(
                 "ListPolicyVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25472,13 +25525,14 @@ impl Iam for IamClient {
             .map_err(ListRolePoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListRolePoliciesResponseDeserializer::deserialize("ListRolePoliciesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25504,13 +25558,13 @@ impl Iam for IamClient {
             .map_err(ListRoleTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListRoleTagsResponseDeserializer::deserialize("ListRoleTagsResult", stack)?;
+            result = ListRoleTagsResponseDeserializer::deserialize("ListRoleTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25536,12 +25590,13 @@ impl Iam for IamClient {
             .map_err(ListRolesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListRolesResponseDeserializer::deserialize("ListRolesResult", stack)?;
+            result = ListRolesResponseDeserializer::deserialize("ListRolesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25567,15 +25622,16 @@ impl Iam for IamClient {
             .map_err(ListSAMLProvidersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSAMLProvidersResponseDeserializer::deserialize(
+            result = ListSAMLProvidersResponseDeserializer::deserialize(
                 "ListSAMLProvidersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25601,15 +25657,16 @@ impl Iam for IamClient {
             .map_err(ListSSHPublicKeysError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSSHPublicKeysResponseDeserializer::deserialize(
+            result = ListSSHPublicKeysResponseDeserializer::deserialize(
                 "ListSSHPublicKeysResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25635,15 +25692,16 @@ impl Iam for IamClient {
             .map_err(ListServerCertificatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListServerCertificatesResponseDeserializer::deserialize(
+            result = ListServerCertificatesResponseDeserializer::deserialize(
                 "ListServerCertificatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25672,15 +25730,16 @@ impl Iam for IamClient {
             .map_err(ListServiceSpecificCredentialsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListServiceSpecificCredentialsResponseDeserializer::deserialize(
+            result = ListServiceSpecificCredentialsResponseDeserializer::deserialize(
                 "ListServiceSpecificCredentialsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25706,15 +25765,16 @@ impl Iam for IamClient {
             .map_err(ListSigningCertificatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSigningCertificatesResponseDeserializer::deserialize(
+            result = ListSigningCertificatesResponseDeserializer::deserialize(
                 "ListSigningCertificatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25740,13 +25800,14 @@ impl Iam for IamClient {
             .map_err(ListUserPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListUserPoliciesResponseDeserializer::deserialize("ListUserPoliciesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25772,13 +25833,13 @@ impl Iam for IamClient {
             .map_err(ListUserTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListUserTagsResponseDeserializer::deserialize("ListUserTagsResult", stack)?;
+            result = ListUserTagsResponseDeserializer::deserialize("ListUserTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25804,12 +25865,13 @@ impl Iam for IamClient {
             .map_err(ListUsersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListUsersResponseDeserializer::deserialize("ListUsersResult", stack)?;
+            result = ListUsersResponseDeserializer::deserialize("ListUsersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -25835,15 +25897,16 @@ impl Iam for IamClient {
             .map_err(ListVirtualMFADevicesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListVirtualMFADevicesResponseDeserializer::deserialize(
+            result = ListVirtualMFADevicesResponseDeserializer::deserialize(
                 "ListVirtualMFADevicesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26044,15 +26107,16 @@ impl Iam for IamClient {
             .map_err(ResetServiceSpecificCredentialError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ResetServiceSpecificCredentialResponseDeserializer::deserialize(
+            result = ResetServiceSpecificCredentialResponseDeserializer::deserialize(
                 "ResetServiceSpecificCredentialResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26141,15 +26205,16 @@ impl Iam for IamClient {
             .map_err(SimulateCustomPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SimulatePolicyResponseDeserializer::deserialize(
+            result = SimulatePolicyResponseDeserializer::deserialize(
                 "SimulateCustomPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26175,15 +26240,16 @@ impl Iam for IamClient {
             .map_err(SimulatePrincipalPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SimulatePolicyResponseDeserializer::deserialize(
+            result = SimulatePolicyResponseDeserializer::deserialize(
                 "SimulatePrincipalPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26430,15 +26496,16 @@ impl Iam for IamClient {
             .map_err(UpdateRoleDescriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateRoleDescriptionResponseDeserializer::deserialize(
+            result = UpdateRoleDescriptionResponseDeserializer::deserialize(
                 "UpdateRoleDescriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26464,15 +26531,16 @@ impl Iam for IamClient {
             .map_err(UpdateSAMLProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateSAMLProviderResponseDeserializer::deserialize(
+            result = UpdateSAMLProviderResponseDeserializer::deserialize(
                 "UpdateSAMLProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26603,15 +26671,16 @@ impl Iam for IamClient {
             .map_err(UploadSSHPublicKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UploadSSHPublicKeyResponseDeserializer::deserialize(
+            result = UploadSSHPublicKeyResponseDeserializer::deserialize(
                 "UploadSSHPublicKeyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26637,15 +26706,16 @@ impl Iam for IamClient {
             .map_err(UploadServerCertificateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UploadServerCertificateResponseDeserializer::deserialize(
+            result = UploadServerCertificateResponseDeserializer::deserialize(
                 "UploadServerCertificateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -26671,15 +26741,16 @@ impl Iam for IamClient {
             .map_err(UploadSigningCertificateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UploadSigningCertificateResponseDeserializer::deserialize(
+            result = UploadSigningCertificateResponseDeserializer::deserialize(
                 "UploadSigningCertificateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

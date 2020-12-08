@@ -3587,15 +3587,16 @@ impl Sqs for SqsClient {
             .map_err(ChangeMessageVisibilityBatchError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ChangeMessageVisibilityBatchResultDeserializer::deserialize(
+            result = ChangeMessageVisibilityBatchResultDeserializer::deserialize(
                 "ChangeMessageVisibilityBatchResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3621,12 +3622,13 @@ impl Sqs for SqsClient {
             .map_err(CreateQueueError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateQueueResultDeserializer::deserialize("CreateQueueResult", stack)?;
+            result = CreateQueueResultDeserializer::deserialize("CreateQueueResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3673,15 +3675,16 @@ impl Sqs for SqsClient {
             .map_err(DeleteMessageBatchError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteMessageBatchResultDeserializer::deserialize(
+            result = DeleteMessageBatchResultDeserializer::deserialize(
                 "DeleteMessageBatchResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3728,15 +3731,16 @@ impl Sqs for SqsClient {
             .map_err(GetQueueAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetQueueAttributesResultDeserializer::deserialize(
+            result = GetQueueAttributesResultDeserializer::deserialize(
                 "GetQueueAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3762,12 +3766,13 @@ impl Sqs for SqsClient {
             .map_err(GetQueueUrlError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult", stack)?;
+            result = GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3794,15 +3799,16 @@ impl Sqs for SqsClient {
             .map_err(ListDeadLetterSourceQueuesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListDeadLetterSourceQueuesResultDeserializer::deserialize(
+            result = ListDeadLetterSourceQueuesResultDeserializer::deserialize(
                 "ListDeadLetterSourceQueuesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3828,13 +3834,13 @@ impl Sqs for SqsClient {
             .map_err(ListQueueTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListQueueTagsResultDeserializer::deserialize("ListQueueTagsResult", stack)?;
+            result = ListQueueTagsResultDeserializer::deserialize("ListQueueTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3860,12 +3866,13 @@ impl Sqs for SqsClient {
             .map_err(ListQueuesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListQueuesResultDeserializer::deserialize("ListQueuesResult", stack)?;
+            result = ListQueuesResultDeserializer::deserialize("ListQueuesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3912,13 +3919,13 @@ impl Sqs for SqsClient {
             .map_err(ReceiveMessageError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult", stack)?;
+            result = ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3965,12 +3972,13 @@ impl Sqs for SqsClient {
             .map_err(SendMessageError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SendMessageResultDeserializer::deserialize("SendMessageResult", stack)?;
+            result = SendMessageResultDeserializer::deserialize("SendMessageResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -3996,13 +4004,14 @@ impl Sqs for SqsClient {
             .map_err(SendMessageBatchError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

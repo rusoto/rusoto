@@ -11,7 +11,7 @@ use xml;
 use xml::reader::{EventReader, Events, ParserConfig, XmlEvent};
 use xml::writer::EventWriter;
 
-use crate::{error::RusotoError, request::HttpResponse};
+use crate::{request::HttpResponse, HttpDispatchError, RusotoError};
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -255,28 +255,40 @@ where
     Ok(obj)
 }
 
-pub async fn parse_response<T, E>(
-    response: &mut HttpResponse,
-    deserialize: fn(&str, &mut XmlResponse<'_>) -> Result<T, XmlParseError>,
-) -> Result<T, RusotoError<E>>
-where
-    T: Default,
-{
-    let xml_response = response.buffer().await?;
-    if xml_response.body.is_empty() {
-        Ok(T::default())
-    } else {
-        let (actual_tag_name, mut stack) = init_parser(&xml_response.body)?;
-        Ok(deserialize(&actual_tag_name, &mut stack)?)
+pub enum XmlResponseError {
+    HttpDispatch(HttpDispatchError),
+    Parse(XmlParseError),
+}
+
+impl<E> From<XmlResponseError> for RusotoError<E> {
+    fn from(err: XmlResponseError) -> Self {
+        match err {
+            XmlResponseError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            XmlResponseError::Parse(err) => RusotoError::from(err),
+        }
     }
 }
 
-fn init_parser(body: &[u8]) -> Result<(String, XmlResponse), XmlParseError> {
-    let reader = EventReader::new_with_config(body, ParserConfig::new().trim_whitespace(false));
-    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-    let _start_document = stack.next();
-    let actual_tag_name = peek_at_name(&mut stack)?;
-    Ok((actual_tag_name, stack))
+pub async fn parse_response(
+    response: &mut HttpResponse,
+    deserialize: &mut (dyn FnMut(&str, &mut XmlResponse<'_>) -> Result<(), XmlParseError> + Send),
+) -> Result<(), XmlResponseError> {
+    let xml_response = response
+        .buffer()
+        .await
+        .map_err(XmlResponseError::HttpDispatch)?;
+    if xml_response.body.is_empty() {
+        Ok(())
+    } else {
+        let reader = EventReader::new_with_config(
+            xml_response.body.as_ref(),
+            ParserConfig::new().trim_whitespace(false),
+        );
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let actual_tag_name = peek_at_name(&mut stack).map_err(XmlResponseError::Parse)?;
+        Ok(deserialize(&actual_tag_name, &mut stack).map_err(XmlResponseError::Parse)?)
+    }
 }
 
 #[cfg(test)]

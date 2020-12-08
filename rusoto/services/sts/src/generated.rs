@@ -1765,12 +1765,13 @@ impl Sts for StsClient {
             .map_err(AssumeRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AssumeRoleResponseDeserializer::deserialize("AssumeRoleResult", stack)?;
+            result = AssumeRoleResponseDeserializer::deserialize("AssumeRoleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1796,15 +1797,16 @@ impl Sts for StsClient {
             .map_err(AssumeRoleWithSAMLError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AssumeRoleWithSAMLResponseDeserializer::deserialize(
+            result = AssumeRoleWithSAMLResponseDeserializer::deserialize(
                 "AssumeRoleWithSAMLResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1831,15 +1833,16 @@ impl Sts for StsClient {
             .map_err(AssumeRoleWithWebIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AssumeRoleWithWebIdentityResponseDeserializer::deserialize(
+            result = AssumeRoleWithWebIdentityResponseDeserializer::deserialize(
                 "AssumeRoleWithWebIdentityResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1866,15 +1869,16 @@ impl Sts for StsClient {
             .map_err(DecodeAuthorizationMessageError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DecodeAuthorizationMessageResponseDeserializer::deserialize(
+            result = DecodeAuthorizationMessageResponseDeserializer::deserialize(
                 "DecodeAuthorizationMessageResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1900,13 +1904,14 @@ impl Sts for StsClient {
             .map_err(GetAccessKeyInfoError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetAccessKeyInfoResponseDeserializer::deserialize("GetAccessKeyInfoResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1932,15 +1937,16 @@ impl Sts for StsClient {
             .map_err(GetCallerIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetCallerIdentityResponseDeserializer::deserialize(
+            result = GetCallerIdentityResponseDeserializer::deserialize(
                 "GetCallerIdentityResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1966,15 +1972,16 @@ impl Sts for StsClient {
             .map_err(GetFederationTokenError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetFederationTokenResponseDeserializer::deserialize(
+            result = GetFederationTokenResponseDeserializer::deserialize(
                 "GetFederationTokenResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -2000,13 +2007,14 @@ impl Sts for StsClient {
             .map_err(GetSessionTokenError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetSessionTokenResponseDeserializer::deserialize("GetSessionTokenResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

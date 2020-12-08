@@ -20530,8 +20530,11 @@ impl S3 for S3Client {
             .map_err(CompleteMultipartUploadError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CompleteMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CompleteMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20673,8 +20676,10 @@ impl S3 for S3Client {
             .map_err(CopyObjectError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CopyObjectOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CopyObjectOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20838,8 +20843,10 @@ impl S3 for S3Client {
             .map_err(CreateMultipartUploadError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21322,8 +21329,10 @@ impl S3 for S3Client {
             .map_err(DeleteObjectsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            DeleteObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = DeleteObjectsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21385,8 +21394,13 @@ impl S3 for S3Client {
             .map_err(GetBucketAccelerateConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketAccelerateConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketAccelerateConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21418,8 +21432,10 @@ impl S3 for S3Client {
             .map_err(GetBucketAclError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketAclOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21455,8 +21471,13 @@ impl S3 for S3Client {
             .map_err(GetBucketAnalyticsConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21488,8 +21509,10 @@ impl S3 for S3Client {
             .map_err(GetBucketCorsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketCorsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketCorsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21521,8 +21544,10 @@ impl S3 for S3Client {
             .map_err(GetBucketEncryptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketEncryptionOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketEncryptionOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21594,8 +21619,13 @@ impl S3 for S3Client {
             .map_err(GetBucketInventoryConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketInventoryConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketInventoryConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21627,8 +21657,10 @@ impl S3 for S3Client {
             .map_err(GetBucketLifecycleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLifecycleOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLifecycleOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21663,8 +21695,13 @@ impl S3 for S3Client {
             .map_err(GetBucketLifecycleConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLifecycleConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLifecycleConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21696,8 +21733,10 @@ impl S3 for S3Client {
             .map_err(GetBucketLocationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLocationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLocationOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21729,8 +21768,10 @@ impl S3 for S3Client {
             .map_err(GetBucketLoggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLoggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLoggingOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21764,8 +21805,13 @@ impl S3 for S3Client {
             .map_err(GetBucketMetricsConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketMetricsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketMetricsConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21797,8 +21843,13 @@ impl S3 for S3Client {
             .map_err(GetBucketNotificationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            NotificationConfigurationDeprecatedDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = NotificationConfigurationDeprecatedDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21831,8 +21882,10 @@ impl S3 for S3Client {
             .map_err(GetBucketNotificationConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            NotificationConfigurationDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = NotificationConfigurationDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21929,8 +21982,10 @@ impl S3 for S3Client {
             .map_err(GetBucketPolicyStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketPolicyStatusOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketPolicyStatusOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21962,8 +22017,10 @@ impl S3 for S3Client {
             .map_err(GetBucketReplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketReplicationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketReplicationOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21995,8 +22052,11 @@ impl S3 for S3Client {
             .map_err(GetBucketRequestPaymentError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketRequestPaymentOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetBucketRequestPaymentOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22028,8 +22088,10 @@ impl S3 for S3Client {
             .map_err(GetBucketTaggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketTaggingOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22061,8 +22123,10 @@ impl S3 for S3Client {
             .map_err(GetBucketVersioningError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketVersioningOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketVersioningOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22094,8 +22158,10 @@ impl S3 for S3Client {
             .map_err(GetBucketWebsiteError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketWebsiteOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketWebsiteOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22268,8 +22334,10 @@ impl S3 for S3Client {
             .map_err(GetObjectAclError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectAclOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22305,8 +22373,10 @@ impl S3 for S3Client {
             .map_err(GetObjectLegalHoldError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectLegalHoldOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectLegalHoldOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22339,8 +22409,11 @@ impl S3 for S3Client {
             .map_err(GetObjectLockConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectLockConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetObjectLockConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22376,8 +22449,10 @@ impl S3 for S3Client {
             .map_err(GetObjectRetentionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectRetentionOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectRetentionOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22412,8 +22487,10 @@ impl S3 for S3Client {
             .map_err(GetObjectTaggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectTaggingOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22475,8 +22552,10 @@ impl S3 for S3Client {
             .map_err(GetPublicAccessBlockError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetPublicAccessBlockOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetPublicAccessBlockOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22653,8 +22732,13 @@ impl S3 for S3Client {
             .map_err(ListBucketAnalyticsConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22730,8 +22814,13 @@ impl S3 for S3Client {
             .map_err(ListBucketInventoryConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketInventoryConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketInventoryConfigurationsOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22769,8 +22858,13 @@ impl S3 for S3Client {
             .map_err(ListBucketMetricsConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketMetricsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketMetricsConfigurationsOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22791,8 +22885,10 @@ impl S3 for S3Client {
             .map_err(ListBucketsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22842,8 +22938,10 @@ impl S3 for S3Client {
             .map_err(ListMultipartUploadsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListMultipartUploadsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListMultipartUploadsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22893,8 +22991,10 @@ impl S3 for S3Client {
             .map_err(ListObjectVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListObjectVersionsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListObjectVersionsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22941,8 +23041,10 @@ impl S3 for S3Client {
             .map_err(ListObjectsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListObjectsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22996,8 +23098,10 @@ impl S3 for S3Client {
             .map_err(ListObjectsV2Error::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListObjectsV2OutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListObjectsV2OutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -23036,8 +23140,10 @@ impl S3 for S3Client {
             .map_err(ListPartsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListPartsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListPartsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -24384,8 +24490,10 @@ impl S3 for S3Client {
             .map_err(UploadPartCopyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UploadPartCopyOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UploadPartCopyOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;

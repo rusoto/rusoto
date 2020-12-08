@@ -12030,15 +12030,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(BatchDeleteScheduledActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = BatchDeleteScheduledActionAnswerDeserializer::deserialize(
+            result = BatchDeleteScheduledActionAnswerDeserializer::deserialize(
                 "BatchDeleteScheduledActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12067,15 +12068,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(BatchPutScheduledUpdateGroupActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = BatchPutScheduledUpdateGroupActionAnswerDeserializer::deserialize(
+            result = BatchPutScheduledUpdateGroupActionAnswerDeserializer::deserialize(
                 "BatchPutScheduledUpdateGroupActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12101,15 +12103,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(CancelInstanceRefreshError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CancelInstanceRefreshAnswerDeserializer::deserialize(
+            result = CancelInstanceRefreshAnswerDeserializer::deserialize(
                 "CancelInstanceRefreshResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12365,15 +12368,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeAccountLimitsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAccountLimitsAnswerDeserializer::deserialize(
+            result = DescribeAccountLimitsAnswerDeserializer::deserialize(
                 "DescribeAccountLimitsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12397,15 +12401,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeAdjustmentTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAdjustmentTypesAnswerDeserializer::deserialize(
+            result = DescribeAdjustmentTypesAnswerDeserializer::deserialize(
                 "DescribeAdjustmentTypesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12431,15 +12436,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeAutoScalingGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AutoScalingGroupsTypeDeserializer::deserialize(
+            result = AutoScalingGroupsTypeDeserializer::deserialize(
                 "DescribeAutoScalingGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12465,15 +12471,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeAutoScalingInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AutoScalingInstancesTypeDeserializer::deserialize(
+            result = AutoScalingInstancesTypeDeserializer::deserialize(
                 "DescribeAutoScalingInstancesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12500,15 +12507,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeAutoScalingNotificationTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize(
+            result = DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize(
                 "DescribeAutoScalingNotificationTypesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12534,15 +12542,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeInstanceRefreshesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeInstanceRefreshesAnswerDeserializer::deserialize(
+            result = DescribeInstanceRefreshesAnswerDeserializer::deserialize(
                 "DescribeInstanceRefreshesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12568,15 +12577,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeLaunchConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = LaunchConfigurationsTypeDeserializer::deserialize(
+            result = LaunchConfigurationsTypeDeserializer::deserialize(
                 "DescribeLaunchConfigurationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12601,15 +12611,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeLifecycleHookTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeLifecycleHookTypesAnswerDeserializer::deserialize(
+            result = DescribeLifecycleHookTypesAnswerDeserializer::deserialize(
                 "DescribeLifecycleHookTypesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12635,15 +12646,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeLifecycleHooksError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeLifecycleHooksAnswerDeserializer::deserialize(
+            result = DescribeLifecycleHooksAnswerDeserializer::deserialize(
                 "DescribeLifecycleHooksResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12672,15 +12684,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeLoadBalancerTargetGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize(
+            result = DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize(
                 "DescribeLoadBalancerTargetGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12706,15 +12719,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeLoadBalancersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeLoadBalancersResponseDeserializer::deserialize(
+            result = DescribeLoadBalancersResponseDeserializer::deserialize(
                 "DescribeLoadBalancersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12739,15 +12753,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeMetricCollectionTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeMetricCollectionTypesAnswerDeserializer::deserialize(
+            result = DescribeMetricCollectionTypesAnswerDeserializer::deserialize(
                 "DescribeMetricCollectionTypesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12776,15 +12791,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeNotificationConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeNotificationConfigurationsAnswerDeserializer::deserialize(
+            result = DescribeNotificationConfigurationsAnswerDeserializer::deserialize(
                 "DescribeNotificationConfigurationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12810,12 +12826,13 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribePoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PoliciesTypeDeserializer::deserialize("DescribePoliciesResult", stack)?;
+            result = PoliciesTypeDeserializer::deserialize("DescribePoliciesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12841,13 +12858,14 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeScalingActivitiesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ActivitiesTypeDeserializer::deserialize("DescribeScalingActivitiesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12871,13 +12889,14 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeScalingProcessTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ProcessesTypeDeserializer::deserialize("DescribeScalingProcessTypesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12903,15 +12922,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeScheduledActionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ScheduledActionsTypeDeserializer::deserialize(
+            result = ScheduledActionsTypeDeserializer::deserialize(
                 "DescribeScheduledActionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12937,12 +12957,13 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = TagsTypeDeserializer::deserialize("DescribeTagsResult", stack)?;
+            result = TagsTypeDeserializer::deserialize("DescribeTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12969,15 +12990,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DescribeTerminationPolicyTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeTerminationPolicyTypesAnswerDeserializer::deserialize(
+            result = DescribeTerminationPolicyTypesAnswerDeserializer::deserialize(
                 "DescribeTerminationPolicyTypesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13003,13 +13025,14 @@ impl Autoscaling for AutoscalingClient {
             .map_err(DetachInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DetachInstancesAnswerDeserializer::deserialize("DetachInstancesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13126,12 +13149,13 @@ impl Autoscaling for AutoscalingClient {
             .map_err(EnterStandbyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EnterStandbyAnswerDeserializer::deserialize("EnterStandbyResult", stack)?;
+            result = EnterStandbyAnswerDeserializer::deserialize("EnterStandbyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13178,12 +13202,13 @@ impl Autoscaling for AutoscalingClient {
             .map_err(ExitStandbyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ExitStandbyAnswerDeserializer::deserialize("ExitStandbyResult", stack)?;
+            result = ExitStandbyAnswerDeserializer::deserialize("ExitStandbyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13253,12 +13278,13 @@ impl Autoscaling for AutoscalingClient {
             .map_err(PutScalingPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PolicyARNTypeDeserializer::deserialize("PutScalingPolicyResult", stack)?;
+            result = PolicyARNTypeDeserializer::deserialize("PutScalingPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13417,15 +13443,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(StartInstanceRefreshError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = StartInstanceRefreshAnswerDeserializer::deserialize(
+            result = StartInstanceRefreshAnswerDeserializer::deserialize(
                 "StartInstanceRefreshResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13472,15 +13499,16 @@ impl Autoscaling for AutoscalingClient {
             .map_err(TerminateInstanceInAutoScalingGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ActivityTypeDeserializer::deserialize(
+            result = ActivityTypeDeserializer::deserialize(
                 "TerminateInstanceInAutoScalingGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

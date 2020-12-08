@@ -6435,13 +6435,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(BuildSuggestersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 BuildSuggestersResponseDeserializer::deserialize("BuildSuggestersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6467,13 +6468,13 @@ impl CloudSearch for CloudSearchClient {
             .map_err(CreateDomainError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                CreateDomainResponseDeserializer::deserialize("CreateDomainResult", stack)?;
+            result = CreateDomainResponseDeserializer::deserialize("CreateDomainResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6499,15 +6500,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DefineAnalysisSchemeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DefineAnalysisSchemeResponseDeserializer::deserialize(
+            result = DefineAnalysisSchemeResponseDeserializer::deserialize(
                 "DefineAnalysisSchemeResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6533,13 +6535,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DefineExpressionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DefineExpressionResponseDeserializer::deserialize("DefineExpressionResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6565,13 +6568,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DefineIndexFieldError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DefineIndexFieldResponseDeserializer::deserialize("DefineIndexFieldResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6597,13 +6601,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DefineSuggesterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DefineSuggesterResponseDeserializer::deserialize("DefineSuggesterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6629,15 +6634,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DeleteAnalysisSchemeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteAnalysisSchemeResponseDeserializer::deserialize(
+            result = DeleteAnalysisSchemeResponseDeserializer::deserialize(
                 "DeleteAnalysisSchemeResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6663,13 +6669,13 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DeleteDomainError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DeleteDomainResponseDeserializer::deserialize("DeleteDomainResult", stack)?;
+            result = DeleteDomainResponseDeserializer::deserialize("DeleteDomainResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6695,13 +6701,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DeleteExpressionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DeleteExpressionResponseDeserializer::deserialize("DeleteExpressionResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6727,13 +6734,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DeleteIndexFieldError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DeleteIndexFieldResponseDeserializer::deserialize("DeleteIndexFieldResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6759,13 +6767,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DeleteSuggesterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DeleteSuggesterResponseDeserializer::deserialize("DeleteSuggesterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6791,15 +6800,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeAnalysisSchemesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAnalysisSchemesResponseDeserializer::deserialize(
+            result = DescribeAnalysisSchemesResponseDeserializer::deserialize(
                 "DescribeAnalysisSchemesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6826,15 +6836,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeAvailabilityOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAvailabilityOptionsResponseDeserializer::deserialize(
+            result = DescribeAvailabilityOptionsResponseDeserializer::deserialize(
                 "DescribeAvailabilityOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6863,15 +6874,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeDomainEndpointOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeDomainEndpointOptionsResponseDeserializer::deserialize(
+            result = DescribeDomainEndpointOptionsResponseDeserializer::deserialize(
                 "DescribeDomainEndpointOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6897,13 +6909,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeDomainsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DescribeDomainsResponseDeserializer::deserialize("DescribeDomainsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6929,15 +6942,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeExpressionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeExpressionsResponseDeserializer::deserialize(
+            result = DescribeExpressionsResponseDeserializer::deserialize(
                 "DescribeExpressionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6963,15 +6977,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeIndexFieldsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeIndexFieldsResponseDeserializer::deserialize(
+            result = DescribeIndexFieldsResponseDeserializer::deserialize(
                 "DescribeIndexFieldsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6998,15 +7013,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeScalingParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeScalingParametersResponseDeserializer::deserialize(
+            result = DescribeScalingParametersResponseDeserializer::deserialize(
                 "DescribeScalingParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7035,15 +7051,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeServiceAccessPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeServiceAccessPoliciesResponseDeserializer::deserialize(
+            result = DescribeServiceAccessPoliciesResponseDeserializer::deserialize(
                 "DescribeServiceAccessPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7069,15 +7086,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(DescribeSuggestersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeSuggestersResponseDeserializer::deserialize(
+            result = DescribeSuggestersResponseDeserializer::deserialize(
                 "DescribeSuggestersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7103,13 +7121,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(IndexDocumentsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 IndexDocumentsResponseDeserializer::deserialize("IndexDocumentsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7133,13 +7152,14 @@ impl CloudSearch for CloudSearchClient {
             .map_err(ListDomainNamesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListDomainNamesResponseDeserializer::deserialize("ListDomainNamesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7166,15 +7186,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(UpdateAvailabilityOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateAvailabilityOptionsResponseDeserializer::deserialize(
+            result = UpdateAvailabilityOptionsResponseDeserializer::deserialize(
                 "UpdateAvailabilityOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7201,15 +7222,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(UpdateDomainEndpointOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateDomainEndpointOptionsResponseDeserializer::deserialize(
+            result = UpdateDomainEndpointOptionsResponseDeserializer::deserialize(
                 "UpdateDomainEndpointOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7235,15 +7257,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(UpdateScalingParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateScalingParametersResponseDeserializer::deserialize(
+            result = UpdateScalingParametersResponseDeserializer::deserialize(
                 "UpdateScalingParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7270,15 +7293,16 @@ impl CloudSearch for CloudSearchClient {
             .map_err(UpdateServiceAccessPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateServiceAccessPoliciesResponseDeserializer::deserialize(
+            result = UpdateServiceAccessPoliciesResponseDeserializer::deserialize(
                 "UpdateServiceAccessPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

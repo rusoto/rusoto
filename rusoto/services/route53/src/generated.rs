@@ -13776,8 +13776,13 @@ impl Route53 for Route53Client {
             .map_err(AssociateVPCWithHostedZoneError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            AssociateVPCWithHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -13817,8 +13822,11 @@ impl Route53 for Route53Client {
             .map_err(ChangeResourceRecordSetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ChangeResourceRecordSetsResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ChangeResourceRecordSetsResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -13888,8 +13896,10 @@ impl Route53 for Route53Client {
             .map_err(CreateHealthCheckError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -13923,8 +13933,10 @@ impl Route53 for Route53Client {
             .map_err(CreateHostedZoneError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -13993,8 +14005,11 @@ impl Route53 for Route53Client {
             .map_err(CreateQueryLoggingConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateQueryLoggingConfigResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CreateQueryLoggingConfigResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14029,8 +14044,13 @@ impl Route53 for Route53Client {
             .map_err(CreateReusableDelegationSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateReusableDelegationSetResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateReusableDelegationSetResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14064,8 +14084,10 @@ impl Route53 for Route53Client {
             .map_err(CreateTrafficPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateTrafficPolicyResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateTrafficPolicyResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14100,8 +14122,13 @@ impl Route53 for Route53Client {
             .map_err(CreateTrafficPolicyInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateTrafficPolicyInstanceResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateTrafficPolicyInstanceResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14139,8 +14166,13 @@ impl Route53 for Route53Client {
             .map_err(CreateTrafficPolicyVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateTrafficPolicyVersionResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateTrafficPolicyVersionResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14183,11 +14215,13 @@ impl Route53 for Route53Client {
             .map_err(CreateVPCAssociationAuthorizationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14273,8 +14307,10 @@ impl Route53 for Route53Client {
             .map_err(DeleteHostedZoneError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            DeleteHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = DeleteHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14520,8 +14556,13 @@ impl Route53 for Route53Client {
             .map_err(DisassociateVPCFromHostedZoneError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14579,8 +14620,10 @@ impl Route53 for Route53Client {
             .map_err(GetAccountLimitError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetAccountLimitResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetAccountLimitResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14607,8 +14650,10 @@ impl Route53 for Route53Client {
             .map_err(GetChangeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetChangeResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetChangeResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14632,8 +14677,10 @@ impl Route53 for Route53Client {
             .map_err(GetCheckerIpRangesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetCheckerIpRangesResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetCheckerIpRangesResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14700,8 +14747,10 @@ impl Route53 for Route53Client {
             .map_err(GetGeoLocationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetGeoLocationResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetGeoLocationResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14731,8 +14780,10 @@ impl Route53 for Route53Client {
             .map_err(GetHealthCheckError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14756,8 +14807,10 @@ impl Route53 for Route53Client {
             .map_err(GetHealthCheckCountError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetHealthCheckCountResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetHealthCheckCountResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14790,8 +14843,13 @@ impl Route53 for Route53Client {
             .map_err(GetHealthCheckLastFailureReasonError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14821,8 +14879,10 @@ impl Route53 for Route53Client {
             .map_err(GetHealthCheckStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetHealthCheckStatusResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetHealthCheckStatusResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14849,8 +14909,10 @@ impl Route53 for Route53Client {
             .map_err(GetHostedZoneError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14874,8 +14936,10 @@ impl Route53 for Route53Client {
             .map_err(GetHostedZoneCountError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetHostedZoneCountResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetHostedZoneCountResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14899,8 +14963,10 @@ impl Route53 for Route53Client {
             .map_err(GetHostedZoneLimitError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetHostedZoneLimitResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetHostedZoneLimitResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14927,8 +14993,11 @@ impl Route53 for Route53Client {
             .map_err(GetQueryLoggingConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetQueryLoggingConfigResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetQueryLoggingConfigResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14955,8 +15024,11 @@ impl Route53 for Route53Client {
             .map_err(GetReusableDelegationSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetReusableDelegationSetResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetReusableDelegationSetResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14983,8 +15055,13 @@ impl Route53 for Route53Client {
             .map_err(GetReusableDelegationSetLimitError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetReusableDelegationSetLimitResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetReusableDelegationSetLimitResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15015,8 +15092,10 @@ impl Route53 for Route53Client {
             .map_err(GetTrafficPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetTrafficPolicyResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetTrafficPolicyResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15043,8 +15122,11 @@ impl Route53 for Route53Client {
             .map_err(GetTrafficPolicyInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetTrafficPolicyInstanceResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetTrafficPolicyInstanceResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15071,8 +15153,13 @@ impl Route53 for Route53Client {
             .map_err(GetTrafficPolicyInstanceCountError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15111,8 +15198,10 @@ impl Route53 for Route53Client {
             .map_err(ListGeoLocationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListGeoLocationsResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListGeoLocationsResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15145,8 +15234,10 @@ impl Route53 for Route53Client {
             .map_err(ListHealthChecksError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListHealthChecksResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListHealthChecksResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15182,8 +15273,10 @@ impl Route53 for Route53Client {
             .map_err(ListHostedZonesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListHostedZonesResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListHostedZonesResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15219,8 +15312,11 @@ impl Route53 for Route53Client {
             .map_err(ListHostedZonesByNameError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListHostedZonesByNameResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListHostedZonesByNameResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15255,8 +15351,10 @@ impl Route53 for Route53Client {
             .map_err(ListHostedZonesByVPCError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListHostedZonesByVPCResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListHostedZonesByVPCResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15292,8 +15390,11 @@ impl Route53 for Route53Client {
             .map_err(ListQueryLoggingConfigsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListQueryLoggingConfigsResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListQueryLoggingConfigsResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15338,8 +15439,11 @@ impl Route53 for Route53Client {
             .map_err(ListResourceRecordSetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListResourceRecordSetsResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListResourceRecordSetsResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15373,8 +15477,13 @@ impl Route53 for Route53Client {
             .map_err(ListReusableDelegationSetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListReusableDelegationSetsResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListReusableDelegationSetsResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15405,8 +15514,10 @@ impl Route53 for Route53Client {
             .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTagsForResourceResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListTagsForResourceResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15445,8 +15556,10 @@ impl Route53 for Route53Client {
             .map_err(ListTagsForResourcesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTagsForResourcesResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListTagsForResourcesResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15479,8 +15592,10 @@ impl Route53 for Route53Client {
             .map_err(ListTrafficPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTrafficPoliciesResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListTrafficPoliciesResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15520,8 +15635,13 @@ impl Route53 for Route53Client {
             .map_err(ListTrafficPolicyInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTrafficPolicyInstancesResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListTrafficPolicyInstancesResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15561,11 +15681,13 @@ impl Route53 for Route53Client {
             .map_err(ListTrafficPolicyInstancesByHostedZoneError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15609,11 +15731,13 @@ impl Route53 for Route53Client {
             .map_err(ListTrafficPolicyInstancesByPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15650,8 +15774,11 @@ impl Route53 for Route53Client {
             .map_err(ListTrafficPolicyVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTrafficPolicyVersionsResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListTrafficPolicyVersionsResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15693,11 +15820,13 @@ impl Route53 for Route53Client {
             .map_err(ListVPCAssociationAuthorizationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15736,8 +15865,10 @@ impl Route53 for Route53Client {
             .map_err(TestDNSAnswerError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            TestDNSAnswerResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = TestDNSAnswerResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15776,8 +15907,10 @@ impl Route53 for Route53Client {
             .map_err(UpdateHealthCheckError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15813,8 +15946,11 @@ impl Route53 for Route53Client {
             .map_err(UpdateHostedZoneCommentError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateHostedZoneCommentResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                UpdateHostedZoneCommentResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15855,8 +15991,13 @@ impl Route53 for Route53Client {
             .map_err(UpdateTrafficPolicyCommentError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateTrafficPolicyCommentResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -15893,8 +16034,13 @@ impl Route53 for Route53Client {
             .map_err(UpdateTrafficPolicyInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;

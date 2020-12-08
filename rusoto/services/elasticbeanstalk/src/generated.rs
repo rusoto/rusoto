@@ -11091,15 +11091,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(ApplyEnvironmentManagedActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
+            result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
                 "ApplyEnvironmentManagedActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11146,15 +11147,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(CheckDNSAvailabilityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
+            result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
                 "CheckDNSAvailabilityResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11180,15 +11182,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(ComposeEnvironmentsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+            result = EnvironmentDescriptionsMessageDeserializer::deserialize(
                 "ComposeEnvironmentsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11214,15 +11217,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(CreateApplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplicationDescriptionMessageDeserializer::deserialize(
+            result = ApplicationDescriptionMessageDeserializer::deserialize(
                 "CreateApplicationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11249,15 +11253,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(CreateApplicationVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+            result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
                 "CreateApplicationVersionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11284,15 +11289,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(CreateConfigurationTemplateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+            result = ConfigurationSettingsDescriptionDeserializer::deserialize(
                 "CreateConfigurationTemplateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11318,13 +11324,14 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(CreateEnvironmentError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 EnvironmentDescriptionDeserializer::deserialize("CreateEnvironmentResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11350,15 +11357,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(CreatePlatformVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreatePlatformVersionResultDeserializer::deserialize(
+            result = CreatePlatformVersionResultDeserializer::deserialize(
                 "CreatePlatformVersionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11382,15 +11390,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(CreateStorageLocationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateStorageLocationResultMessageDeserializer::deserialize(
+            result = CreateStorageLocationResultMessageDeserializer::deserialize(
                 "CreateStorageLocationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11500,15 +11509,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DeletePlatformVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeletePlatformVersionResultDeserializer::deserialize(
+            result = DeletePlatformVersionResultDeserializer::deserialize(
                 "DeletePlatformVersionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11532,15 +11542,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeAccountAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAccountAttributesResultDeserializer::deserialize(
+            result = DescribeAccountAttributesResultDeserializer::deserialize(
                 "DescribeAccountAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11567,15 +11578,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeApplicationVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
+            result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
                 "DescribeApplicationVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11601,15 +11613,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeApplicationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplicationDescriptionsMessageDeserializer::deserialize(
+            result = ApplicationDescriptionsMessageDeserializer::deserialize(
                 "DescribeApplicationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11636,15 +11649,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeConfigurationOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ConfigurationOptionsDescriptionDeserializer::deserialize(
+            result = ConfigurationOptionsDescriptionDeserializer::deserialize(
                 "DescribeConfigurationOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11671,15 +11685,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeConfigurationSettingsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
+            result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
                 "DescribeConfigurationSettingsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11705,15 +11720,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeEnvironmentHealthError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEnvironmentHealthResultDeserializer::deserialize(
+            result = DescribeEnvironmentHealthResultDeserializer::deserialize(
                 "DescribeEnvironmentHealthResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11746,15 +11762,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeEnvironmentManagedActionHistoryError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
+            result = DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
                 "DescribeEnvironmentManagedActionHistoryResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11783,15 +11800,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeEnvironmentManagedActionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
+            result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
                 "DescribeEnvironmentManagedActionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11820,15 +11838,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeEnvironmentResourcesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
+            result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
                 "DescribeEnvironmentResourcesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11854,15 +11873,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeEnvironmentsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+            result = EnvironmentDescriptionsMessageDeserializer::deserialize(
                 "DescribeEnvironmentsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11888,13 +11908,14 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeEventsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 EventDescriptionsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11920,15 +11941,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribeInstancesHealthError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeInstancesHealthResultDeserializer::deserialize(
+            result = DescribeInstancesHealthResultDeserializer::deserialize(
                 "DescribeInstancesHealthResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -11954,15 +11976,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(DescribePlatformVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribePlatformVersionResultDeserializer::deserialize(
+            result = DescribePlatformVersionResultDeserializer::deserialize(
                 "DescribePlatformVersionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12010,15 +12033,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(ListAvailableSolutionStacksError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
+            result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
                 "ListAvailableSolutionStacksResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12044,15 +12068,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(ListPlatformBranchesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPlatformBranchesResultDeserializer::deserialize(
+            result = ListPlatformBranchesResultDeserializer::deserialize(
                 "ListPlatformBranchesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12078,15 +12103,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(ListPlatformVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPlatformVersionsResultDeserializer::deserialize(
+            result = ListPlatformVersionsResultDeserializer::deserialize(
                 "ListPlatformVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12112,15 +12138,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ResourceTagsDescriptionMessageDeserializer::deserialize(
+            result = ResourceTagsDescriptionMessageDeserializer::deserialize(
                 "ListTagsForResourceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12210,15 +12237,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(RetrieveEnvironmentInfoError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
+            result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
                 "RetrieveEnvironmentInfoResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12265,15 +12293,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(TerminateEnvironmentError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EnvironmentDescriptionDeserializer::deserialize(
+            result = EnvironmentDescriptionDeserializer::deserialize(
                 "TerminateEnvironmentResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12299,15 +12328,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(UpdateApplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplicationDescriptionMessageDeserializer::deserialize(
+            result = ApplicationDescriptionMessageDeserializer::deserialize(
                 "UpdateApplicationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12336,15 +12366,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(UpdateApplicationResourceLifecycleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
+            result = ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
                 "UpdateApplicationResourceLifecycleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12371,15 +12402,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(UpdateApplicationVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+            result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
                 "UpdateApplicationVersionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12406,15 +12438,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(UpdateConfigurationTemplateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+            result = ConfigurationSettingsDescriptionDeserializer::deserialize(
                 "UpdateConfigurationTemplateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12440,13 +12473,14 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(UpdateEnvironmentError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 EnvironmentDescriptionDeserializer::deserialize("UpdateEnvironmentResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12496,15 +12530,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             .map_err(ValidateConfigurationSettingsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
+            result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
                 "ValidateConfigurationSettingsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

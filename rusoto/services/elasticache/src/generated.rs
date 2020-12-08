@@ -16693,12 +16693,13 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(AddTagsToResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = TagListMessageDeserializer::deserialize("AddTagsToResourceResult", stack)?;
+            result = TagListMessageDeserializer::deserialize("AddTagsToResourceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16727,15 +16728,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(AuthorizeCacheSecurityGroupIngressError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize(
+            result = AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize(
                 "AuthorizeCacheSecurityGroupIngressResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16761,15 +16763,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(BatchApplyUpdateActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateActionResultsMessageDeserializer::deserialize(
+            result = UpdateActionResultsMessageDeserializer::deserialize(
                 "BatchApplyUpdateActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16795,15 +16798,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(BatchStopUpdateActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateActionResultsMessageDeserializer::deserialize(
+            result = UpdateActionResultsMessageDeserializer::deserialize(
                 "BatchStopUpdateActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16829,15 +16833,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CompleteMigrationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CompleteMigrationResponseDeserializer::deserialize(
+            result = CompleteMigrationResponseDeserializer::deserialize(
                 "CompleteMigrationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16863,12 +16868,13 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CopySnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CopySnapshotResultDeserializer::deserialize("CopySnapshotResult", stack)?;
+            result = CopySnapshotResultDeserializer::deserialize("CopySnapshotResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16894,15 +16900,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CreateCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheClusterResultDeserializer::deserialize(
+            result = CreateCacheClusterResultDeserializer::deserialize(
                 "CreateCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16928,15 +16935,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CreateCacheParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheParameterGroupResultDeserializer::deserialize(
+            result = CreateCacheParameterGroupResultDeserializer::deserialize(
                 "CreateCacheParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16962,15 +16970,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CreateCacheSecurityGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheSecurityGroupResultDeserializer::deserialize(
+            result = CreateCacheSecurityGroupResultDeserializer::deserialize(
                 "CreateCacheSecurityGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16996,15 +17005,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CreateCacheSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheSubnetGroupResultDeserializer::deserialize(
+            result = CreateCacheSubnetGroupResultDeserializer::deserialize(
                 "CreateCacheSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17031,15 +17041,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CreateGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateGlobalReplicationGroupResultDeserializer::deserialize(
+            result = CreateGlobalReplicationGroupResultDeserializer::deserialize(
                 "CreateGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17065,15 +17076,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CreateReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateReplicationGroupResultDeserializer::deserialize(
+            result = CreateReplicationGroupResultDeserializer::deserialize(
                 "CreateReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17099,13 +17111,13 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(CreateSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                CreateSnapshotResultDeserializer::deserialize("CreateSnapshotResult", stack)?;
+            result = CreateSnapshotResultDeserializer::deserialize("CreateSnapshotResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17200,15 +17212,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DecreaseNodeGroupsInGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
+            result = DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
                 "DecreaseNodeGroupsInGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17234,15 +17247,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DecreaseReplicaCountError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DecreaseReplicaCountResultDeserializer::deserialize(
+            result = DecreaseReplicaCountResultDeserializer::deserialize(
                 "DecreaseReplicaCountResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17268,15 +17282,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DeleteCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteCacheClusterResultDeserializer::deserialize(
+            result = DeleteCacheClusterResultDeserializer::deserialize(
                 "DeleteCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17366,15 +17381,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DeleteGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteGlobalReplicationGroupResultDeserializer::deserialize(
+            result = DeleteGlobalReplicationGroupResultDeserializer::deserialize(
                 "DeleteGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17400,15 +17416,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DeleteReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteReplicationGroupResultDeserializer::deserialize(
+            result = DeleteReplicationGroupResultDeserializer::deserialize(
                 "DeleteReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17434,13 +17451,13 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DeleteSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DeleteSnapshotResultDeserializer::deserialize("DeleteSnapshotResult", stack)?;
+            result = DeleteSnapshotResultDeserializer::deserialize("DeleteSnapshotResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17528,13 +17545,14 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeCacheClustersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CacheClusterMessageDeserializer::deserialize("DescribeCacheClustersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17560,15 +17578,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeCacheEngineVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheEngineVersionMessageDeserializer::deserialize(
+            result = CacheEngineVersionMessageDeserializer::deserialize(
                 "DescribeCacheEngineVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17594,15 +17613,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeCacheParameterGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupsMessageDeserializer::deserialize(
+            result = CacheParameterGroupsMessageDeserializer::deserialize(
                 "DescribeCacheParameterGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17628,15 +17648,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeCacheParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupDetailsDeserializer::deserialize(
+            result = CacheParameterGroupDetailsDeserializer::deserialize(
                 "DescribeCacheParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17662,15 +17683,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeCacheSecurityGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheSecurityGroupMessageDeserializer::deserialize(
+            result = CacheSecurityGroupMessageDeserializer::deserialize(
                 "DescribeCacheSecurityGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17696,15 +17718,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeCacheSubnetGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheSubnetGroupMessageDeserializer::deserialize(
+            result = CacheSubnetGroupMessageDeserializer::deserialize(
                 "DescribeCacheSubnetGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17733,15 +17756,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeEngineDefaultParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+            result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
                 "DescribeEngineDefaultParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17767,12 +17791,13 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeEventsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17801,15 +17826,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeGlobalReplicationGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeGlobalReplicationGroupsResultDeserializer::deserialize(
+            result = DescribeGlobalReplicationGroupsResultDeserializer::deserialize(
                 "DescribeGlobalReplicationGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17835,15 +17861,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeReplicationGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReplicationGroupMessageDeserializer::deserialize(
+            result = ReplicationGroupMessageDeserializer::deserialize(
                 "DescribeReplicationGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17869,15 +17896,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeReservedCacheNodesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReservedCacheNodeMessageDeserializer::deserialize(
+            result = ReservedCacheNodeMessageDeserializer::deserialize(
                 "DescribeReservedCacheNodesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17906,15 +17934,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeReservedCacheNodesOfferingsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReservedCacheNodesOfferingMessageDeserializer::deserialize(
+            result = ReservedCacheNodesOfferingMessageDeserializer::deserialize(
                 "DescribeReservedCacheNodesOfferingsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17940,15 +17969,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeServiceUpdatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ServiceUpdatesMessageDeserializer::deserialize(
+            result = ServiceUpdatesMessageDeserializer::deserialize(
                 "DescribeServiceUpdatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17974,15 +18004,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeSnapshotsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeSnapshotsListMessageDeserializer::deserialize(
+            result = DescribeSnapshotsListMessageDeserializer::deserialize(
                 "DescribeSnapshotsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18008,15 +18039,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DescribeUpdateActionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateActionsMessageDeserializer::deserialize(
+            result = UpdateActionsMessageDeserializer::deserialize(
                 "DescribeUpdateActionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18111,15 +18143,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(DisassociateGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DisassociateGlobalReplicationGroupResultDeserializer::deserialize(
+            result = DisassociateGlobalReplicationGroupResultDeserializer::deserialize(
                 "DisassociateGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18148,15 +18181,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(FailoverGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = FailoverGlobalReplicationGroupResultDeserializer::deserialize(
+            result = FailoverGlobalReplicationGroupResultDeserializer::deserialize(
                 "FailoverGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18189,15 +18223,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(IncreaseNodeGroupsInGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
+            result = IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
                 "IncreaseNodeGroupsInGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18223,15 +18258,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(IncreaseReplicaCountError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = IncreaseReplicaCountResultDeserializer::deserialize(
+            result = IncreaseReplicaCountResultDeserializer::deserialize(
                 "IncreaseReplicaCountResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18260,15 +18296,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ListAllowedNodeTypeModificationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AllowedNodeTypeModificationsMessageDeserializer::deserialize(
+            result = AllowedNodeTypeModificationsMessageDeserializer::deserialize(
                 "ListAllowedNodeTypeModificationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18294,13 +18331,13 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                TagListMessageDeserializer::deserialize("ListTagsForResourceResult", stack)?;
+            result = TagListMessageDeserializer::deserialize("ListTagsForResourceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18326,15 +18363,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ModifyCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyCacheClusterResultDeserializer::deserialize(
+            result = ModifyCacheClusterResultDeserializer::deserialize(
                 "ModifyCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18360,15 +18398,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ModifyCacheParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupNameMessageDeserializer::deserialize(
+            result = CacheParameterGroupNameMessageDeserializer::deserialize(
                 "ModifyCacheParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18394,15 +18433,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ModifyCacheSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyCacheSubnetGroupResultDeserializer::deserialize(
+            result = ModifyCacheSubnetGroupResultDeserializer::deserialize(
                 "ModifyCacheSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18429,15 +18469,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ModifyGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyGlobalReplicationGroupResultDeserializer::deserialize(
+            result = ModifyGlobalReplicationGroupResultDeserializer::deserialize(
                 "ModifyGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18463,15 +18504,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ModifyReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyReplicationGroupResultDeserializer::deserialize(
+            result = ModifyReplicationGroupResultDeserializer::deserialize(
                 "ModifyReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18504,15 +18546,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ModifyReplicationGroupShardConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyReplicationGroupShardConfigurationResultDeserializer::deserialize(
+            result = ModifyReplicationGroupShardConfigurationResultDeserializer::deserialize(
                 "ModifyReplicationGroupShardConfigurationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18603,15 +18646,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(PurchaseReservedCacheNodesOfferingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
+            result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
                 "PurchaseReservedCacheNodesOfferingResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18640,15 +18684,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(RebalanceSlotsInGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RebalanceSlotsInGlobalReplicationGroupResultDeserializer::deserialize(
+            result = RebalanceSlotsInGlobalReplicationGroupResultDeserializer::deserialize(
                 "RebalanceSlotsInGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18674,15 +18719,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(RebootCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RebootCacheClusterResultDeserializer::deserialize(
+            result = RebootCacheClusterResultDeserializer::deserialize(
                 "RebootCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18708,13 +18754,14 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(RemoveTagsFromResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 TagListMessageDeserializer::deserialize("RemoveTagsFromResourceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18740,15 +18787,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(ResetCacheParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupNameMessageDeserializer::deserialize(
+            result = CacheParameterGroupNameMessageDeserializer::deserialize(
                 "ResetCacheParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18777,15 +18825,16 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(RevokeCacheSecurityGroupIngressError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
+            result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
                 "RevokeCacheSecurityGroupIngressResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18811,13 +18860,14 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(StartMigrationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 StartMigrationResponseDeserializer::deserialize("StartMigrationResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -18843,12 +18893,13 @@ impl ElastiCache for ElastiCacheClient {
             .map_err(TestFailoverError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = TestFailoverResultDeserializer::deserialize("TestFailoverResult", stack)?;
+            result = TestFailoverResultDeserializer::deserialize("TestFailoverResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

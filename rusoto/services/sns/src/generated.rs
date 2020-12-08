@@ -5581,15 +5581,16 @@ impl Sns for SnsClient {
             .map_err(CheckIfPhoneNumberIsOptedOutError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize(
+            result = CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize(
                 "CheckIfPhoneNumberIsOptedOutResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5615,15 +5616,16 @@ impl Sns for SnsClient {
             .map_err(ConfirmSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ConfirmSubscriptionResponseDeserializer::deserialize(
+            result = ConfirmSubscriptionResponseDeserializer::deserialize(
                 "ConfirmSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5650,15 +5652,16 @@ impl Sns for SnsClient {
             .map_err(CreatePlatformApplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreatePlatformApplicationResponseDeserializer::deserialize(
+            result = CreatePlatformApplicationResponseDeserializer::deserialize(
                 "CreatePlatformApplicationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5684,15 +5687,16 @@ impl Sns for SnsClient {
             .map_err(CreatePlatformEndpointError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateEndpointResponseDeserializer::deserialize(
+            result = CreateEndpointResponseDeserializer::deserialize(
                 "CreatePlatformEndpointResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5718,12 +5722,13 @@ impl Sns for SnsClient {
             .map_err(CreateTopicError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateTopicResponseDeserializer::deserialize("CreateTopicResult", stack)?;
+            result = CreateTopicResponseDeserializer::deserialize("CreateTopicResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5812,15 +5817,16 @@ impl Sns for SnsClient {
             .map_err(GetEndpointAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetEndpointAttributesResponseDeserializer::deserialize(
+            result = GetEndpointAttributesResponseDeserializer::deserialize(
                 "GetEndpointAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5849,15 +5855,16 @@ impl Sns for SnsClient {
             .map_err(GetPlatformApplicationAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetPlatformApplicationAttributesResponseDeserializer::deserialize(
+            result = GetPlatformApplicationAttributesResponseDeserializer::deserialize(
                 "GetPlatformApplicationAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5883,13 +5890,14 @@ impl Sns for SnsClient {
             .map_err(GetSMSAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetSMSAttributesResponseDeserializer::deserialize("GetSMSAttributesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5916,15 +5924,16 @@ impl Sns for SnsClient {
             .map_err(GetSubscriptionAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetSubscriptionAttributesResponseDeserializer::deserialize(
+            result = GetSubscriptionAttributesResponseDeserializer::deserialize(
                 "GetSubscriptionAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5950,15 +5959,16 @@ impl Sns for SnsClient {
             .map_err(GetTopicAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetTopicAttributesResponseDeserializer::deserialize(
+            result = GetTopicAttributesResponseDeserializer::deserialize(
                 "GetTopicAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -5987,15 +5997,16 @@ impl Sns for SnsClient {
             .map_err(ListEndpointsByPlatformApplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListEndpointsByPlatformApplicationResponseDeserializer::deserialize(
+            result = ListEndpointsByPlatformApplicationResponseDeserializer::deserialize(
                 "ListEndpointsByPlatformApplicationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6021,15 +6032,16 @@ impl Sns for SnsClient {
             .map_err(ListPhoneNumbersOptedOutError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPhoneNumbersOptedOutResponseDeserializer::deserialize(
+            result = ListPhoneNumbersOptedOutResponseDeserializer::deserialize(
                 "ListPhoneNumbersOptedOutResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6055,15 +6067,16 @@ impl Sns for SnsClient {
             .map_err(ListPlatformApplicationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPlatformApplicationsResponseDeserializer::deserialize(
+            result = ListPlatformApplicationsResponseDeserializer::deserialize(
                 "ListPlatformApplicationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6089,15 +6102,16 @@ impl Sns for SnsClient {
             .map_err(ListSubscriptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSubscriptionsResponseDeserializer::deserialize(
+            result = ListSubscriptionsResponseDeserializer::deserialize(
                 "ListSubscriptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6123,15 +6137,16 @@ impl Sns for SnsClient {
             .map_err(ListSubscriptionsByTopicError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSubscriptionsByTopicResponseDeserializer::deserialize(
+            result = ListSubscriptionsByTopicResponseDeserializer::deserialize(
                 "ListSubscriptionsByTopicResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6157,15 +6172,16 @@ impl Sns for SnsClient {
             .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListTagsForResourceResponseDeserializer::deserialize(
+            result = ListTagsForResourceResponseDeserializer::deserialize(
                 "ListTagsForResourceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6191,12 +6207,13 @@ impl Sns for SnsClient {
             .map_err(ListTopicsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListTopicsResponseDeserializer::deserialize("ListTopicsResult", stack)?;
+            result = ListTopicsResponseDeserializer::deserialize("ListTopicsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6245,12 +6262,13 @@ impl Sns for SnsClient {
             .map_err(PublishError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PublishResponseDeserializer::deserialize("PublishResult", stack)?;
+            result = PublishResponseDeserializer::deserialize("PublishResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6404,12 +6422,13 @@ impl Sns for SnsClient {
             .map_err(SubscribeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SubscribeResponseDeserializer::deserialize("SubscribeResult", stack)?;
+            result = SubscribeResponseDeserializer::deserialize("SubscribeResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

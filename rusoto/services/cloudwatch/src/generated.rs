@@ -7007,15 +7007,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(DeleteInsightRulesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteInsightRulesOutputDeserializer::deserialize(
+            result = DeleteInsightRulesOutputDeserializer::deserialize(
                 "DeleteInsightRulesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7041,15 +7042,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(DescribeAlarmHistoryError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAlarmHistoryOutputDeserializer::deserialize(
+            result = DescribeAlarmHistoryOutputDeserializer::deserialize(
                 "DescribeAlarmHistoryResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7075,13 +7077,13 @@ impl CloudWatch for CloudWatchClient {
             .map_err(DescribeAlarmsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DescribeAlarmsOutputDeserializer::deserialize("DescribeAlarmsResult", stack)?;
+            result = DescribeAlarmsOutputDeserializer::deserialize("DescribeAlarmsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7107,15 +7109,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(DescribeAlarmsForMetricError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAlarmsForMetricOutputDeserializer::deserialize(
+            result = DescribeAlarmsForMetricOutputDeserializer::deserialize(
                 "DescribeAlarmsForMetricResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7141,15 +7144,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(DescribeAnomalyDetectorsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAnomalyDetectorsOutputDeserializer::deserialize(
+            result = DescribeAnomalyDetectorsOutputDeserializer::deserialize(
                 "DescribeAnomalyDetectorsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7175,15 +7179,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(DescribeInsightRulesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeInsightRulesOutputDeserializer::deserialize(
+            result = DescribeInsightRulesOutputDeserializer::deserialize(
                 "DescribeInsightRulesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7230,15 +7235,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(DisableInsightRulesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DisableInsightRulesOutputDeserializer::deserialize(
+            result = DisableInsightRulesOutputDeserializer::deserialize(
                 "DisableInsightRulesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7285,15 +7291,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(EnableInsightRulesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EnableInsightRulesOutputDeserializer::deserialize(
+            result = EnableInsightRulesOutputDeserializer::deserialize(
                 "EnableInsightRulesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7319,12 +7326,13 @@ impl CloudWatch for CloudWatchClient {
             .map_err(GetDashboardError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetDashboardOutputDeserializer::deserialize("GetDashboardResult", stack)?;
+            result = GetDashboardOutputDeserializer::deserialize("GetDashboardResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7350,15 +7358,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(GetInsightRuleReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetInsightRuleReportOutputDeserializer::deserialize(
+            result = GetInsightRuleReportOutputDeserializer::deserialize(
                 "GetInsightRuleReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7384,13 +7393,13 @@ impl CloudWatch for CloudWatchClient {
             .map_err(GetMetricDataError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetMetricDataOutputDeserializer::deserialize("GetMetricDataResult", stack)?;
+            result = GetMetricDataOutputDeserializer::deserialize("GetMetricDataResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7416,15 +7425,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(GetMetricStatisticsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetMetricStatisticsOutputDeserializer::deserialize(
+            result = GetMetricStatisticsOutputDeserializer::deserialize(
                 "GetMetricStatisticsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7450,15 +7460,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(GetMetricWidgetImageError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetMetricWidgetImageOutputDeserializer::deserialize(
+            result = GetMetricWidgetImageOutputDeserializer::deserialize(
                 "GetMetricWidgetImageResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7484,13 +7495,13 @@ impl CloudWatch for CloudWatchClient {
             .map_err(ListDashboardsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListDashboardsOutputDeserializer::deserialize("ListDashboardsResult", stack)?;
+            result = ListDashboardsOutputDeserializer::deserialize("ListDashboardsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7516,12 +7527,13 @@ impl CloudWatch for CloudWatchClient {
             .map_err(ListMetricsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListMetricsOutputDeserializer::deserialize("ListMetricsResult", stack)?;
+            result = ListMetricsOutputDeserializer::deserialize("ListMetricsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7547,15 +7559,16 @@ impl CloudWatch for CloudWatchClient {
             .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListTagsForResourceOutputDeserializer::deserialize(
+            result = ListTagsForResourceOutputDeserializer::deserialize(
                 "ListTagsForResourceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7625,12 +7638,13 @@ impl CloudWatch for CloudWatchClient {
             .map_err(PutDashboardError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PutDashboardOutputDeserializer::deserialize("PutDashboardResult", stack)?;
+            result = PutDashboardOutputDeserializer::deserialize("PutDashboardResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

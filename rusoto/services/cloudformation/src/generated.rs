@@ -13225,13 +13225,14 @@ impl CloudFormation for CloudFormationClient {
             .map_err(CreateChangeSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CreateChangeSetOutputDeserializer::deserialize("CreateChangeSetResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13257,12 +13258,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(CreateStackError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateStackOutputDeserializer::deserialize("CreateStackResult", stack)?;
+            result = CreateStackOutputDeserializer::deserialize("CreateStackResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13288,15 +13290,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(CreateStackInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateStackInstancesOutputDeserializer::deserialize(
+            result = CreateStackInstancesOutputDeserializer::deserialize(
                 "CreateStackInstancesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13322,13 +13325,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(CreateStackSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                CreateStackSetOutputDeserializer::deserialize("CreateStackSetResult", stack)?;
+            result = CreateStackSetOutputDeserializer::deserialize("CreateStackSetResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13398,15 +13401,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DeleteStackInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteStackInstancesOutputDeserializer::deserialize(
+            result = DeleteStackInstancesOutputDeserializer::deserialize(
                 "DeleteStackInstancesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13478,15 +13482,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeAccountLimitsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAccountLimitsOutputDeserializer::deserialize(
+            result = DescribeAccountLimitsOutputDeserializer::deserialize(
                 "DescribeAccountLimitsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13512,13 +13517,14 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeChangeSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DescribeChangeSetOutputDeserializer::deserialize("DescribeChangeSetResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13547,15 +13553,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackDriftDetectionStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeStackDriftDetectionStatusOutputDeserializer::deserialize(
+            result = DescribeStackDriftDetectionStatusOutputDeserializer::deserialize(
                 "DescribeStackDriftDetectionStatusResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13581,15 +13588,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackEventsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeStackEventsOutputDeserializer::deserialize(
+            result = DescribeStackEventsOutputDeserializer::deserialize(
                 "DescribeStackEventsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13615,15 +13623,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeStackInstanceOutputDeserializer::deserialize(
+            result = DescribeStackInstanceOutputDeserializer::deserialize(
                 "DescribeStackInstanceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13649,15 +13658,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeStackResourceOutputDeserializer::deserialize(
+            result = DescribeStackResourceOutputDeserializer::deserialize(
                 "DescribeStackResourceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13684,15 +13694,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackResourceDriftsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeStackResourceDriftsOutputDeserializer::deserialize(
+            result = DescribeStackResourceDriftsOutputDeserializer::deserialize(
                 "DescribeStackResourceDriftsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13718,15 +13729,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackResourcesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeStackResourcesOutputDeserializer::deserialize(
+            result = DescribeStackResourcesOutputDeserializer::deserialize(
                 "DescribeStackResourcesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13752,13 +13764,14 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DescribeStackSetOutputDeserializer::deserialize("DescribeStackSetResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13784,15 +13797,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStackSetOperationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeStackSetOperationOutputDeserializer::deserialize(
+            result = DescribeStackSetOperationOutputDeserializer::deserialize(
                 "DescribeStackSetOperationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13818,13 +13832,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeStacksError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult", stack)?;
+            result = DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13850,12 +13864,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeTypeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeTypeOutputDeserializer::deserialize("DescribeTypeResult", stack)?;
+            result = DescribeTypeOutputDeserializer::deserialize("DescribeTypeResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13881,15 +13896,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DescribeTypeRegistrationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeTypeRegistrationOutputDeserializer::deserialize(
+            result = DescribeTypeRegistrationOutputDeserializer::deserialize(
                 "DescribeTypeRegistrationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13915,13 +13931,14 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DetectStackDriftError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DetectStackDriftOutputDeserializer::deserialize("DetectStackDriftResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13947,15 +13964,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DetectStackResourceDriftError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DetectStackResourceDriftOutputDeserializer::deserialize(
+            result = DetectStackResourceDriftOutputDeserializer::deserialize(
                 "DetectStackResourceDriftResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13981,15 +13999,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(DetectStackSetDriftError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DetectStackSetDriftOutputDeserializer::deserialize(
+            result = DetectStackSetDriftOutputDeserializer::deserialize(
                 "DetectStackSetDriftResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14015,15 +14034,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(EstimateTemplateCostError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EstimateTemplateCostOutputDeserializer::deserialize(
+            result = EstimateTemplateCostOutputDeserializer::deserialize(
                 "EstimateTemplateCostResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14072,13 +14092,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(GetStackPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult", stack)?;
+            result = GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14104,12 +14124,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(GetTemplateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetTemplateOutputDeserializer::deserialize("GetTemplateResult", stack)?;
+            result = GetTemplateOutputDeserializer::deserialize("GetTemplateResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14135,15 +14156,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(GetTemplateSummaryError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetTemplateSummaryOutputDeserializer::deserialize(
+            result = GetTemplateSummaryOutputDeserializer::deserialize(
                 "GetTemplateSummaryResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14169,13 +14191,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListChangeSetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult", stack)?;
+            result = ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14201,12 +14223,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListExportsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListExportsOutputDeserializer::deserialize("ListExportsResult", stack)?;
+            result = ListExportsOutputDeserializer::deserialize("ListExportsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14232,12 +14255,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListImportsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListImportsOutputDeserializer::deserialize("ListImportsResult", stack)?;
+            result = ListImportsOutputDeserializer::deserialize("ListImportsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14263,15 +14287,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListStackInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListStackInstancesOutputDeserializer::deserialize(
+            result = ListStackInstancesOutputDeserializer::deserialize(
                 "ListStackInstancesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14297,15 +14322,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListStackResourcesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListStackResourcesOutputDeserializer::deserialize(
+            result = ListStackResourcesOutputDeserializer::deserialize(
                 "ListStackResourcesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14332,15 +14358,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListStackSetOperationResultsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListStackSetOperationResultsOutputDeserializer::deserialize(
+            result = ListStackSetOperationResultsOutputDeserializer::deserialize(
                 "ListStackSetOperationResultsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14366,15 +14393,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListStackSetOperationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListStackSetOperationsOutputDeserializer::deserialize(
+            result = ListStackSetOperationsOutputDeserializer::deserialize(
                 "ListStackSetOperationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14400,13 +14428,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListStackSetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListStackSetsOutputDeserializer::deserialize("ListStackSetsResult", stack)?;
+            result = ListStackSetsOutputDeserializer::deserialize("ListStackSetsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14432,12 +14460,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListStacksError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListStacksOutputDeserializer::deserialize("ListStacksResult", stack)?;
+            result = ListStacksOutputDeserializer::deserialize("ListStacksResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14463,15 +14492,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListTypeRegistrationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListTypeRegistrationsOutputDeserializer::deserialize(
+            result = ListTypeRegistrationsOutputDeserializer::deserialize(
                 "ListTypeRegistrationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14497,13 +14527,14 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListTypeVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListTypeVersionsOutputDeserializer::deserialize("ListTypeVersionsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14529,12 +14560,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ListTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListTypesOutputDeserializer::deserialize("ListTypesResult", stack)?;
+            result = ListTypesOutputDeserializer::deserialize("ListTypesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14583,12 +14615,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(RegisterTypeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RegisterTypeOutputDeserializer::deserialize("RegisterTypeResult", stack)?;
+            result = RegisterTypeOutputDeserializer::deserialize("RegisterTypeResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14702,12 +14735,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(UpdateStackError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateStackOutputDeserializer::deserialize("UpdateStackResult", stack)?;
+            result = UpdateStackOutputDeserializer::deserialize("UpdateStackResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14733,15 +14767,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(UpdateStackInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateStackInstancesOutputDeserializer::deserialize(
+            result = UpdateStackInstancesOutputDeserializer::deserialize(
                 "UpdateStackInstancesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14767,13 +14802,13 @@ impl CloudFormation for CloudFormationClient {
             .map_err(UpdateStackSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                UpdateStackSetOutputDeserializer::deserialize("UpdateStackSetResult", stack)?;
+            result = UpdateStackSetOutputDeserializer::deserialize("UpdateStackSetResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14800,15 +14835,16 @@ impl CloudFormation for CloudFormationClient {
             .map_err(UpdateTerminationProtectionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateTerminationProtectionOutputDeserializer::deserialize(
+            result = UpdateTerminationProtectionOutputDeserializer::deserialize(
                 "UpdateTerminationProtectionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14834,13 +14870,14 @@ impl CloudFormation for CloudFormationClient {
             .map_err(ValidateTemplateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ValidateTemplateOutputDeserializer::deserialize("ValidateTemplateResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

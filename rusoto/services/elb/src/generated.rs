@@ -6703,15 +6703,16 @@ impl Elb for ElbClient {
             .map_err(ApplySecurityGroupsToLoadBalancerError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize(
+            result = ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize(
                 "ApplySecurityGroupsToLoadBalancerResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6738,15 +6739,16 @@ impl Elb for ElbClient {
             .map_err(AttachLoadBalancerToSubnetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AttachLoadBalancerToSubnetsOutputDeserializer::deserialize(
+            result = AttachLoadBalancerToSubnetsOutputDeserializer::deserialize(
                 "AttachLoadBalancerToSubnetsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6772,15 +6774,16 @@ impl Elb for ElbClient {
             .map_err(ConfigureHealthCheckError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ConfigureHealthCheckOutputDeserializer::deserialize(
+            result = ConfigureHealthCheckOutputDeserializer::deserialize(
                 "ConfigureHealthCheckResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -6858,15 +6861,16 @@ impl Elb for ElbClient {
             .map_err(CreateLoadBalancerError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateAccessPointOutputDeserializer::deserialize(
+            result = CreateAccessPointOutputDeserializer::deserialize(
                 "CreateLoadBalancerResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7010,15 +7014,16 @@ impl Elb for ElbClient {
             .map_err(DeregisterInstancesFromLoadBalancerError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeregisterEndPointsOutputDeserializer::deserialize(
+            result = DeregisterEndPointsOutputDeserializer::deserialize(
                 "DeregisterInstancesFromLoadBalancerResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7044,15 +7049,16 @@ impl Elb for ElbClient {
             .map_err(DescribeAccountLimitsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAccountLimitsOutputDeserializer::deserialize(
+            result = DescribeAccountLimitsOutputDeserializer::deserialize(
                 "DescribeAccountLimitsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7078,15 +7084,16 @@ impl Elb for ElbClient {
             .map_err(DescribeInstanceHealthError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEndPointStateOutputDeserializer::deserialize(
+            result = DescribeEndPointStateOutputDeserializer::deserialize(
                 "DescribeInstanceHealthResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7115,15 +7122,16 @@ impl Elb for ElbClient {
             .map_err(DescribeLoadBalancerAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
+            result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
                 "DescribeLoadBalancerAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7150,15 +7158,16 @@ impl Elb for ElbClient {
             .map_err(DescribeLoadBalancerPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
+            result = DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
                 "DescribeLoadBalancerPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7187,15 +7196,16 @@ impl Elb for ElbClient {
             .map_err(DescribeLoadBalancerPolicyTypesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize(
+            result = DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize(
                 "DescribeLoadBalancerPolicyTypesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7221,15 +7231,16 @@ impl Elb for ElbClient {
             .map_err(DescribeLoadBalancersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeAccessPointsOutputDeserializer::deserialize(
+            result = DescribeAccessPointsOutputDeserializer::deserialize(
                 "DescribeLoadBalancersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7255,12 +7266,13 @@ impl Elb for ElbClient {
             .map_err(DescribeTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", stack)?;
+            result = DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7287,15 +7299,16 @@ impl Elb for ElbClient {
             .map_err(DetachLoadBalancerFromSubnetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize(
+            result = DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize(
                 "DetachLoadBalancerFromSubnetsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7324,15 +7337,16 @@ impl Elb for ElbClient {
             .map_err(DisableAvailabilityZonesForLoadBalancerError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RemoveAvailabilityZonesOutputDeserializer::deserialize(
+            result = RemoveAvailabilityZonesOutputDeserializer::deserialize(
                 "DisableAvailabilityZonesForLoadBalancerResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7359,15 +7373,16 @@ impl Elb for ElbClient {
             .map_err(EnableAvailabilityZonesForLoadBalancerError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AddAvailabilityZonesOutputDeserializer::deserialize(
+            result = AddAvailabilityZonesOutputDeserializer::deserialize(
                 "EnableAvailabilityZonesForLoadBalancerResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7394,15 +7409,16 @@ impl Elb for ElbClient {
             .map_err(ModifyLoadBalancerAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+            result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
                 "ModifyLoadBalancerAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -7428,15 +7444,16 @@ impl Elb for ElbClient {
             .map_err(RegisterInstancesWithLoadBalancerError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RegisterEndPointsOutputDeserializer::deserialize(
+            result = RegisterEndPointsOutputDeserializer::deserialize(
                 "RegisterInstancesWithLoadBalancerResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

@@ -12450,15 +12450,16 @@ impl Ses for SesClient {
             .map_err(DescribeActiveReceiptRuleSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
+            result = DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
                 "DescribeActiveReceiptRuleSetResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12484,15 +12485,16 @@ impl Ses for SesClient {
             .map_err(DescribeConfigurationSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeConfigurationSetResponseDeserializer::deserialize(
+            result = DescribeConfigurationSetResponseDeserializer::deserialize(
                 "DescribeConfigurationSetResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12518,15 +12520,16 @@ impl Ses for SesClient {
             .map_err(DescribeReceiptRuleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeReceiptRuleResponseDeserializer::deserialize(
+            result = DescribeReceiptRuleResponseDeserializer::deserialize(
                 "DescribeReceiptRuleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12552,15 +12555,16 @@ impl Ses for SesClient {
             .map_err(DescribeReceiptRuleSetError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeReceiptRuleSetResponseDeserializer::deserialize(
+            result = DescribeReceiptRuleSetResponseDeserializer::deserialize(
                 "DescribeReceiptRuleSetResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12584,15 +12588,16 @@ impl Ses for SesClient {
             .map_err(GetAccountSendingEnabledError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccountSendingEnabledResponseDeserializer::deserialize(
+            result = GetAccountSendingEnabledResponseDeserializer::deserialize(
                 "GetAccountSendingEnabledResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12621,15 +12626,16 @@ impl Ses for SesClient {
             .map_err(GetCustomVerificationEmailTemplateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+            result = GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
                 "GetCustomVerificationEmailTemplateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12656,15 +12662,16 @@ impl Ses for SesClient {
             .map_err(GetIdentityDkimAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetIdentityDkimAttributesResponseDeserializer::deserialize(
+            result = GetIdentityDkimAttributesResponseDeserializer::deserialize(
                 "GetIdentityDkimAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12693,15 +12700,16 @@ impl Ses for SesClient {
             .map_err(GetIdentityMailFromDomainAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
+            result = GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
                 "GetIdentityMailFromDomainAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12730,15 +12738,16 @@ impl Ses for SesClient {
             .map_err(GetIdentityNotificationAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetIdentityNotificationAttributesResponseDeserializer::deserialize(
+            result = GetIdentityNotificationAttributesResponseDeserializer::deserialize(
                 "GetIdentityNotificationAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12764,15 +12773,16 @@ impl Ses for SesClient {
             .map_err(GetIdentityPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetIdentityPoliciesResponseDeserializer::deserialize(
+            result = GetIdentityPoliciesResponseDeserializer::deserialize(
                 "GetIdentityPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12801,15 +12811,16 @@ impl Ses for SesClient {
             .map_err(GetIdentityVerificationAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetIdentityVerificationAttributesResponseDeserializer::deserialize(
+            result = GetIdentityVerificationAttributesResponseDeserializer::deserialize(
                 "GetIdentityVerificationAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12831,13 +12842,13 @@ impl Ses for SesClient {
             .map_err(GetSendQuotaError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetSendQuotaResponseDeserializer::deserialize("GetSendQuotaResult", stack)?;
+            result = GetSendQuotaResponseDeserializer::deserialize("GetSendQuotaResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12861,15 +12872,16 @@ impl Ses for SesClient {
             .map_err(GetSendStatisticsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetSendStatisticsResponseDeserializer::deserialize(
+            result = GetSendStatisticsResponseDeserializer::deserialize(
                 "GetSendStatisticsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12895,12 +12907,13 @@ impl Ses for SesClient {
             .map_err(GetTemplateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetTemplateResponseDeserializer::deserialize("GetTemplateResult", stack)?;
+            result = GetTemplateResponseDeserializer::deserialize("GetTemplateResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12926,15 +12939,16 @@ impl Ses for SesClient {
             .map_err(ListConfigurationSetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListConfigurationSetsResponseDeserializer::deserialize(
+            result = ListConfigurationSetsResponseDeserializer::deserialize(
                 "ListConfigurationSetsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12963,15 +12977,16 @@ impl Ses for SesClient {
             .map_err(ListCustomVerificationEmailTemplatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
+            result = ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
                 "ListCustomVerificationEmailTemplatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -12997,13 +13012,14 @@ impl Ses for SesClient {
             .map_err(ListIdentitiesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListIdentitiesResponseDeserializer::deserialize("ListIdentitiesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13029,15 +13045,16 @@ impl Ses for SesClient {
             .map_err(ListIdentityPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListIdentityPoliciesResponseDeserializer::deserialize(
+            result = ListIdentityPoliciesResponseDeserializer::deserialize(
                 "ListIdentityPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13063,15 +13080,16 @@ impl Ses for SesClient {
             .map_err(ListReceiptFiltersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListReceiptFiltersResponseDeserializer::deserialize(
+            result = ListReceiptFiltersResponseDeserializer::deserialize(
                 "ListReceiptFiltersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13097,15 +13115,16 @@ impl Ses for SesClient {
             .map_err(ListReceiptRuleSetsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListReceiptRuleSetsResponseDeserializer::deserialize(
+            result = ListReceiptRuleSetsResponseDeserializer::deserialize(
                 "ListReceiptRuleSetsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13131,13 +13150,13 @@ impl Ses for SesClient {
             .map_err(ListTemplatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListTemplatesResponseDeserializer::deserialize("ListTemplatesResult", stack)?;
+            result = ListTemplatesResponseDeserializer::deserialize("ListTemplatesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13162,15 +13181,16 @@ impl Ses for SesClient {
             .map_err(ListVerifiedEmailAddressesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListVerifiedEmailAddressesResponseDeserializer::deserialize(
+            result = ListVerifiedEmailAddressesResponseDeserializer::deserialize(
                 "ListVerifiedEmailAddressesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13268,12 +13288,13 @@ impl Ses for SesClient {
             .map_err(SendBounceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SendBounceResponseDeserializer::deserialize("SendBounceResult", stack)?;
+            result = SendBounceResponseDeserializer::deserialize("SendBounceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13299,15 +13320,16 @@ impl Ses for SesClient {
             .map_err(SendBulkTemplatedEmailError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SendBulkTemplatedEmailResponseDeserializer::deserialize(
+            result = SendBulkTemplatedEmailResponseDeserializer::deserialize(
                 "SendBulkTemplatedEmailResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13334,15 +13356,16 @@ impl Ses for SesClient {
             .map_err(SendCustomVerificationEmailError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SendCustomVerificationEmailResponseDeserializer::deserialize(
+            result = SendCustomVerificationEmailResponseDeserializer::deserialize(
                 "SendCustomVerificationEmailResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13368,12 +13391,13 @@ impl Ses for SesClient {
             .map_err(SendEmailError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SendEmailResponseDeserializer::deserialize("SendEmailResult", stack)?;
+            result = SendEmailResponseDeserializer::deserialize("SendEmailResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13399,13 +13423,13 @@ impl Ses for SesClient {
             .map_err(SendRawEmailError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                SendRawEmailResponseDeserializer::deserialize("SendRawEmailResult", stack)?;
+            result = SendRawEmailResponseDeserializer::deserialize("SendRawEmailResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13431,15 +13455,16 @@ impl Ses for SesClient {
             .map_err(SendTemplatedEmailError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SendTemplatedEmailResponseDeserializer::deserialize(
+            result = SendTemplatedEmailResponseDeserializer::deserialize(
                 "SendTemplatedEmailResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13638,15 +13663,16 @@ impl Ses for SesClient {
             .map_err(TestRenderTemplateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = TestRenderTemplateResponseDeserializer::deserialize(
+            result = TestRenderTemplateResponseDeserializer::deserialize(
                 "TestRenderTemplateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13858,13 +13884,14 @@ impl Ses for SesClient {
             .map_err(VerifyDomainDkimError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 VerifyDomainDkimResponseDeserializer::deserialize("VerifyDomainDkimResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -13890,15 +13917,16 @@ impl Ses for SesClient {
             .map_err(VerifyDomainIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = VerifyDomainIdentityResponseDeserializer::deserialize(
+            result = VerifyDomainIdentityResponseDeserializer::deserialize(
                 "VerifyDomainIdentityResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

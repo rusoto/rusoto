@@ -20759,15 +20759,16 @@ impl Redshift for RedshiftClient {
             .map_err(AcceptReservedNodeExchangeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
+            result = AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
                 "AcceptReservedNodeExchangeResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -20796,15 +20797,16 @@ impl Redshift for RedshiftClient {
             .map_err(AuthorizeClusterSecurityGroupIngressError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
+            result = AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
                 "AuthorizeClusterSecurityGroupIngressResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -20830,15 +20832,16 @@ impl Redshift for RedshiftClient {
             .map_err(AuthorizeSnapshotAccessError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AuthorizeSnapshotAccessResultDeserializer::deserialize(
+            result = AuthorizeSnapshotAccessResultDeserializer::deserialize(
                 "AuthorizeSnapshotAccessResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -20865,15 +20868,16 @@ impl Redshift for RedshiftClient {
             .map_err(BatchDeleteClusterSnapshotsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
+            result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
                 "BatchDeleteClusterSnapshotsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -20902,15 +20906,16 @@ impl Redshift for RedshiftClient {
             .map_err(BatchModifyClusterSnapshotsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
+            result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
                 "BatchModifyClusterSnapshotsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -20936,13 +20941,13 @@ impl Redshift for RedshiftClient {
             .map_err(CancelResizeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ResizeProgressMessageDeserializer::deserialize("CancelResizeResult", stack)?;
+            result = ResizeProgressMessageDeserializer::deserialize("CancelResizeResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -20968,15 +20973,16 @@ impl Redshift for RedshiftClient {
             .map_err(CopyClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CopyClusterSnapshotResultDeserializer::deserialize(
+            result = CopyClusterSnapshotResultDeserializer::deserialize(
                 "CopyClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21002,13 +21008,13 @@ impl Redshift for RedshiftClient {
             .map_err(CreateClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                CreateClusterResultDeserializer::deserialize("CreateClusterResult", stack)?;
+            result = CreateClusterResultDeserializer::deserialize("CreateClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21035,15 +21041,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateClusterParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateClusterParameterGroupResultDeserializer::deserialize(
+            result = CreateClusterParameterGroupResultDeserializer::deserialize(
                 "CreateClusterParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21070,15 +21077,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateClusterSecurityGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateClusterSecurityGroupResultDeserializer::deserialize(
+            result = CreateClusterSecurityGroupResultDeserializer::deserialize(
                 "CreateClusterSecurityGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21104,15 +21112,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateClusterSnapshotResultDeserializer::deserialize(
+            result = CreateClusterSnapshotResultDeserializer::deserialize(
                 "CreateClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21138,15 +21147,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateClusterSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateClusterSubnetGroupResultDeserializer::deserialize(
+            result = CreateClusterSubnetGroupResultDeserializer::deserialize(
                 "CreateClusterSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21172,15 +21182,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateEventSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateEventSubscriptionResultDeserializer::deserialize(
+            result = CreateEventSubscriptionResultDeserializer::deserialize(
                 "CreateEventSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21207,15 +21218,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateHsmClientCertificateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateHsmClientCertificateResultDeserializer::deserialize(
+            result = CreateHsmClientCertificateResultDeserializer::deserialize(
                 "CreateHsmClientCertificateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21241,15 +21253,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateHsmConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateHsmConfigurationResultDeserializer::deserialize(
+            result = CreateHsmConfigurationResultDeserializer::deserialize(
                 "CreateHsmConfigurationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21275,13 +21288,14 @@ impl Redshift for RedshiftClient {
             .map_err(CreateScheduledActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ScheduledActionDeserializer::deserialize("CreateScheduledActionResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21307,15 +21321,16 @@ impl Redshift for RedshiftClient {
             .map_err(CreateSnapshotCopyGrantError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateSnapshotCopyGrantResultDeserializer::deserialize(
+            result = CreateSnapshotCopyGrantResultDeserializer::deserialize(
                 "CreateSnapshotCopyGrantResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21341,13 +21356,14 @@ impl Redshift for RedshiftClient {
             .map_err(CreateSnapshotScheduleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 SnapshotScheduleDeserializer::deserialize("CreateSnapshotScheduleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21394,12 +21410,13 @@ impl Redshift for RedshiftClient {
             .map_err(CreateUsageLimitError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UsageLimitDeserializer::deserialize("CreateUsageLimitResult", stack)?;
+            result = UsageLimitDeserializer::deserialize("CreateUsageLimitResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21425,13 +21442,13 @@ impl Redshift for RedshiftClient {
             .map_err(DeleteClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DeleteClusterResultDeserializer::deserialize("DeleteClusterResult", stack)?;
+            result = DeleteClusterResultDeserializer::deserialize("DeleteClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21499,15 +21516,16 @@ impl Redshift for RedshiftClient {
             .map_err(DeleteClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteClusterSnapshotResultDeserializer::deserialize(
+            result = DeleteClusterSnapshotResultDeserializer::deserialize(
                 "DeleteClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21722,15 +21740,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeAccountAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AccountAttributeListDeserializer::deserialize(
+            result = AccountAttributeListDeserializer::deserialize(
                 "DescribeAccountAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21756,15 +21775,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterDbRevisionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterDbRevisionsMessageDeserializer::deserialize(
+            result = ClusterDbRevisionsMessageDeserializer::deserialize(
                 "DescribeClusterDbRevisionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21791,15 +21811,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterParameterGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterParameterGroupsMessageDeserializer::deserialize(
+            result = ClusterParameterGroupsMessageDeserializer::deserialize(
                 "DescribeClusterParameterGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21825,15 +21846,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterParameterGroupDetailsDeserializer::deserialize(
+            result = ClusterParameterGroupDetailsDeserializer::deserialize(
                 "DescribeClusterParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21859,15 +21881,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterSecurityGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterSecurityGroupMessageDeserializer::deserialize(
+            result = ClusterSecurityGroupMessageDeserializer::deserialize(
                 "DescribeClusterSecurityGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21893,13 +21916,14 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterSnapshotsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 SnapshotMessageDeserializer::deserialize("DescribeClusterSnapshotsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21925,15 +21949,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterSubnetGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterSubnetGroupMessageDeserializer::deserialize(
+            result = ClusterSubnetGroupMessageDeserializer::deserialize(
                 "DescribeClusterSubnetGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21959,13 +21984,14 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterTracksError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 TrackListMessageDeserializer::deserialize("DescribeClusterTracksResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21991,15 +22017,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClusterVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterVersionsMessageDeserializer::deserialize(
+            result = ClusterVersionsMessageDeserializer::deserialize(
                 "DescribeClusterVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22025,12 +22052,13 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeClustersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClustersMessageDeserializer::deserialize("DescribeClustersResult", stack)?;
+            result = ClustersMessageDeserializer::deserialize("DescribeClustersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22059,15 +22087,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeDefaultClusterParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeDefaultClusterParametersResultDeserializer::deserialize(
+            result = DescribeDefaultClusterParametersResultDeserializer::deserialize(
                 "DescribeDefaultClusterParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22093,15 +22122,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeEventCategoriesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventCategoriesMessageDeserializer::deserialize(
+            result = EventCategoriesMessageDeserializer::deserialize(
                 "DescribeEventCategoriesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22127,15 +22157,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeEventSubscriptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventSubscriptionsMessageDeserializer::deserialize(
+            result = EventSubscriptionsMessageDeserializer::deserialize(
                 "DescribeEventSubscriptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22161,12 +22192,13 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeEventsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22192,15 +22224,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeHsmClientCertificatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = HsmClientCertificateMessageDeserializer::deserialize(
+            result = HsmClientCertificateMessageDeserializer::deserialize(
                 "DescribeHsmClientCertificatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22226,15 +22259,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeHsmConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = HsmConfigurationMessageDeserializer::deserialize(
+            result = HsmConfigurationMessageDeserializer::deserialize(
                 "DescribeHsmConfigurationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22260,13 +22294,13 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeLoggingStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult", stack)?;
+            result = LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22293,15 +22327,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeNodeConfigurationOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = NodeConfigurationOptionsMessageDeserializer::deserialize(
+            result = NodeConfigurationOptionsMessageDeserializer::deserialize(
                 "DescribeNodeConfigurationOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22328,15 +22363,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeOrderableClusterOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = OrderableClusterOptionsMessageDeserializer::deserialize(
+            result = OrderableClusterOptionsMessageDeserializer::deserialize(
                 "DescribeOrderableClusterOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22362,15 +22398,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeReservedNodeOfferingsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReservedNodeOfferingsMessageDeserializer::deserialize(
+            result = ReservedNodeOfferingsMessageDeserializer::deserialize(
                 "DescribeReservedNodeOfferingsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22396,15 +22433,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeReservedNodesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReservedNodesMessageDeserializer::deserialize(
+            result = ReservedNodesMessageDeserializer::deserialize(
                 "DescribeReservedNodesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22430,13 +22468,13 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeResizeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult", stack)?;
+            result = ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22462,15 +22500,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeScheduledActionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ScheduledActionsMessageDeserializer::deserialize(
+            result = ScheduledActionsMessageDeserializer::deserialize(
                 "DescribeScheduledActionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22496,15 +22535,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeSnapshotCopyGrantsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SnapshotCopyGrantMessageDeserializer::deserialize(
+            result = SnapshotCopyGrantMessageDeserializer::deserialize(
                 "DescribeSnapshotCopyGrantsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22531,15 +22571,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeSnapshotSchedulesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
+            result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
                 "DescribeSnapshotSchedulesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22563,13 +22604,14 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeStorageError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CustomerStorageMessageDeserializer::deserialize("DescribeStorageResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22595,15 +22637,16 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeTableRestoreStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = TableRestoreStatusMessageDeserializer::deserialize(
+            result = TableRestoreStatusMessageDeserializer::deserialize(
                 "DescribeTableRestoreStatusResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22629,13 +22672,14 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 TaggedResourceListMessageDeserializer::deserialize("DescribeTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22661,13 +22705,13 @@ impl Redshift for RedshiftClient {
             .map_err(DescribeUsageLimitsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                UsageLimitListDeserializer::deserialize("DescribeUsageLimitsResult", stack)?;
+            result = UsageLimitListDeserializer::deserialize("DescribeUsageLimitsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22693,12 +22737,13 @@ impl Redshift for RedshiftClient {
             .map_err(DisableLoggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = LoggingStatusDeserializer::deserialize("DisableLoggingResult", stack)?;
+            result = LoggingStatusDeserializer::deserialize("DisableLoggingResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22724,15 +22769,16 @@ impl Redshift for RedshiftClient {
             .map_err(DisableSnapshotCopyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DisableSnapshotCopyResultDeserializer::deserialize(
+            result = DisableSnapshotCopyResultDeserializer::deserialize(
                 "DisableSnapshotCopyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22758,12 +22804,13 @@ impl Redshift for RedshiftClient {
             .map_err(EnableLoggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = LoggingStatusDeserializer::deserialize("EnableLoggingResult", stack)?;
+            result = LoggingStatusDeserializer::deserialize("EnableLoggingResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22789,15 +22836,16 @@ impl Redshift for RedshiftClient {
             .map_err(EnableSnapshotCopyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EnableSnapshotCopyResultDeserializer::deserialize(
+            result = EnableSnapshotCopyResultDeserializer::deserialize(
                 "EnableSnapshotCopyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22823,13 +22871,14 @@ impl Redshift for RedshiftClient {
             .map_err(GetClusterCredentialsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ClusterCredentialsDeserializer::deserialize("GetClusterCredentialsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22858,15 +22907,16 @@ impl Redshift for RedshiftClient {
             .map_err(GetReservedNodeExchangeOfferingsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
+            result = GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
                 "GetReservedNodeExchangeOfferingsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22892,13 +22942,13 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ModifyClusterResultDeserializer::deserialize("ModifyClusterResult", stack)?;
+            result = ModifyClusterResultDeserializer::deserialize("ModifyClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22924,15 +22974,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyClusterDbRevisionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyClusterDbRevisionResultDeserializer::deserialize(
+            result = ModifyClusterDbRevisionResultDeserializer::deserialize(
                 "ModifyClusterDbRevisionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22958,15 +23009,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyClusterIamRolesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyClusterIamRolesResultDeserializer::deserialize(
+            result = ModifyClusterIamRolesResultDeserializer::deserialize(
                 "ModifyClusterIamRolesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22992,15 +23044,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyClusterMaintenanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyClusterMaintenanceResultDeserializer::deserialize(
+            result = ModifyClusterMaintenanceResultDeserializer::deserialize(
                 "ModifyClusterMaintenanceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23027,15 +23080,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyClusterParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+            result = ClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ModifyClusterParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23061,15 +23115,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyClusterSnapshotResultDeserializer::deserialize(
+            result = ModifyClusterSnapshotResultDeserializer::deserialize(
                 "ModifyClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23116,15 +23171,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyClusterSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyClusterSubnetGroupResultDeserializer::deserialize(
+            result = ModifyClusterSubnetGroupResultDeserializer::deserialize(
                 "ModifyClusterSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23150,15 +23206,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyEventSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyEventSubscriptionResultDeserializer::deserialize(
+            result = ModifyEventSubscriptionResultDeserializer::deserialize(
                 "ModifyEventSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23184,13 +23241,14 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyScheduledActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ScheduledActionDeserializer::deserialize("ModifyScheduledActionResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23219,15 +23277,16 @@ impl Redshift for RedshiftClient {
             .map_err(ModifySnapshotCopyRetentionPeriodError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize(
+            result = ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize(
                 "ModifySnapshotCopyRetentionPeriodResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23253,13 +23312,14 @@ impl Redshift for RedshiftClient {
             .map_err(ModifySnapshotScheduleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 SnapshotScheduleDeserializer::deserialize("ModifySnapshotScheduleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23285,12 +23345,13 @@ impl Redshift for RedshiftClient {
             .map_err(ModifyUsageLimitError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UsageLimitDeserializer::deserialize("ModifyUsageLimitResult", stack)?;
+            result = UsageLimitDeserializer::deserialize("ModifyUsageLimitResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23316,12 +23377,13 @@ impl Redshift for RedshiftClient {
             .map_err(PauseClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PauseClusterResultDeserializer::deserialize("PauseClusterResult", stack)?;
+            result = PauseClusterResultDeserializer::deserialize("PauseClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23348,15 +23410,16 @@ impl Redshift for RedshiftClient {
             .map_err(PurchaseReservedNodeOfferingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PurchaseReservedNodeOfferingResultDeserializer::deserialize(
+            result = PurchaseReservedNodeOfferingResultDeserializer::deserialize(
                 "PurchaseReservedNodeOfferingResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23382,13 +23445,13 @@ impl Redshift for RedshiftClient {
             .map_err(RebootClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                RebootClusterResultDeserializer::deserialize("RebootClusterResult", stack)?;
+            result = RebootClusterResultDeserializer::deserialize("RebootClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23415,15 +23478,16 @@ impl Redshift for RedshiftClient {
             .map_err(ResetClusterParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+            result = ClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ResetClusterParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23449,13 +23513,13 @@ impl Redshift for RedshiftClient {
             .map_err(ResizeClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ResizeClusterResultDeserializer::deserialize("ResizeClusterResult", stack)?;
+            result = ResizeClusterResultDeserializer::deserialize("ResizeClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23482,15 +23546,16 @@ impl Redshift for RedshiftClient {
             .map_err(RestoreFromClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RestoreFromClusterSnapshotResultDeserializer::deserialize(
+            result = RestoreFromClusterSnapshotResultDeserializer::deserialize(
                 "RestoreFromClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23519,15 +23584,16 @@ impl Redshift for RedshiftClient {
             .map_err(RestoreTableFromClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RestoreTableFromClusterSnapshotResultDeserializer::deserialize(
+            result = RestoreTableFromClusterSnapshotResultDeserializer::deserialize(
                 "RestoreTableFromClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23553,13 +23619,13 @@ impl Redshift for RedshiftClient {
             .map_err(ResumeClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ResumeClusterResultDeserializer::deserialize("ResumeClusterResult", stack)?;
+            result = ResumeClusterResultDeserializer::deserialize("ResumeClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23588,15 +23654,16 @@ impl Redshift for RedshiftClient {
             .map_err(RevokeClusterSecurityGroupIngressError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RevokeClusterSecurityGroupIngressResultDeserializer::deserialize(
+            result = RevokeClusterSecurityGroupIngressResultDeserializer::deserialize(
                 "RevokeClusterSecurityGroupIngressResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23622,15 +23689,16 @@ impl Redshift for RedshiftClient {
             .map_err(RevokeSnapshotAccessError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RevokeSnapshotAccessResultDeserializer::deserialize(
+            result = RevokeSnapshotAccessResultDeserializer::deserialize(
                 "RevokeSnapshotAccessResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23656,15 +23724,16 @@ impl Redshift for RedshiftClient {
             .map_err(RotateEncryptionKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RotateEncryptionKeyResultDeserializer::deserialize(
+            result = RotateEncryptionKeyResultDeserializer::deserialize(
                 "RotateEncryptionKeyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

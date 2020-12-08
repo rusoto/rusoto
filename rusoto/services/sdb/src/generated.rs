@@ -1951,13 +1951,13 @@ impl SimpleDb for SimpleDbClient {
             .map_err(DomainMetadataError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DomainMetadataResultDeserializer::deserialize("DomainMetadataResult", stack)?;
+            result = DomainMetadataResultDeserializer::deserialize("DomainMetadataResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1983,13 +1983,13 @@ impl SimpleDb for SimpleDbClient {
             .map_err(GetAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetAttributesResultDeserializer::deserialize("GetAttributesResult", stack)?;
+            result = GetAttributesResultDeserializer::deserialize("GetAttributesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -2015,12 +2015,13 @@ impl SimpleDb for SimpleDbClient {
             .map_err(ListDomainsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListDomainsResultDeserializer::deserialize("ListDomainsResult", stack)?;
+            result = ListDomainsResultDeserializer::deserialize("ListDomainsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -2064,12 +2065,13 @@ impl SimpleDb for SimpleDbClient {
             .map_err(SelectError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SelectResultDeserializer::deserialize("SelectResult", stack)?;
+            result = SelectResultDeserializer::deserialize("SelectResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

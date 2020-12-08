@@ -1684,12 +1684,13 @@ impl ImportExport for ImportExportClient {
             .map_err(CancelJobError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CancelJobOutputDeserializer::deserialize("CancelJobResult", stack)?;
+            result = CancelJobOutputDeserializer::deserialize("CancelJobResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1720,12 +1721,13 @@ impl ImportExport for ImportExportClient {
             .map_err(CreateJobError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateJobOutputDeserializer::deserialize("CreateJobResult", stack)?;
+            result = CreateJobOutputDeserializer::deserialize("CreateJobResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1756,13 +1758,14 @@ impl ImportExport for ImportExportClient {
             .map_err(GetShippingLabelError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetShippingLabelOutputDeserializer::deserialize("GetShippingLabelResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1793,12 +1796,13 @@ impl ImportExport for ImportExportClient {
             .map_err(GetStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetStatusOutputDeserializer::deserialize("GetStatusResult", stack)?;
+            result = GetStatusOutputDeserializer::deserialize("GetStatusResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1825,12 +1829,13 @@ impl ImportExport for ImportExportClient {
             .map_err(ListJobsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListJobsOutputDeserializer::deserialize("ListJobsResult", stack)?;
+            result = ListJobsOutputDeserializer::deserialize("ListJobsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1861,12 +1866,13 @@ impl ImportExport for ImportExportClient {
             .map_err(UpdateJobError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateJobOutputDeserializer::deserialize("UpdateJobResult", stack)?;
+            result = UpdateJobOutputDeserializer::deserialize("UpdateJobResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
