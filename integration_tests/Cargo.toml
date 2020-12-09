@@ -3,10 +3,10 @@ name = "rusoto_tests"
 description = "AWS SDK for Rust - Integration Tests"
 version = "0.45.0"
 authors = [
-    "Anthony DiMarco <ocramida@gmail.com>",
-    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
-    "Matthew Mayer <matthewkmayer@gmail.com>",
-    "Nikita Pekin <contact@nikitapek.in>"
+	"Anthony DiMarco <ocramida@gmail.com>",
+	"Jimmy Cuadra <jimmy@jimmycuadra.com>",
+	"Matthew Mayer <matthewkmayer@gmail.com>",
+	"Nikita Pekin <contact@nikitapek.in>",
 ]
 license = "MIT"
 repository = "https://github.com/rusoto/rusoto"
@@ -338,8 +338,8 @@ optional = true
 path = "../rusoto/services/iot-jobs-data"
 
 [dependencies.rusoto_iotsecuretunneling]
- optional = true
- path = "../rusoto/services/iotsecuretunneling"
+optional = true
+path = "../rusoto/services/iotsecuretunneling"
 
 [dependencies.rusoto_kafka]
 optional = true
@@ -589,6 +589,10 @@ path = "../rusoto/services/support"
 optional = true
 path = "../rusoto/services/swf"
 
+[dependencies.rusoto_timestream_query]
+optional = true
+path = "../rusoto/services/timestream-query"
+
 [dependencies.rusoto_transcribe]
 optional = true
 path = "../rusoto/services/transcribe"
@@ -805,6 +809,7 @@ all = [
 	"sts",
 	"support",
 	"swf",
+	"timestream-query",
 	"transcribe",
 	"transfer",
 	"translate",
@@ -819,8 +824,8 @@ all = [
 	"apigatewaymanagementapi",
 	"apigatewayv2",
 	"ram",
-	"qldb"
-	]
+	"qldb",
+]
 core = []
 acm = ["rusoto_acm"]
 acm-pca = ["rusoto_acm_pca"]
@@ -963,6 +968,7 @@ storagegateway = ["rusoto_storagegateway"]
 sts = ["rusoto_sts", "rusoto_ec2"]
 support = ["rusoto_support"]
 swf = ["rusoto_swf"]
+timestream-query = ["rusoto_timestream_query"]
 transcribe = ["rusoto_transcribe"]
 transfer = ["rusoto_transfer"]
 translate = ["rusoto_translate"]
