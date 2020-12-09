@@ -68,8 +68,7 @@ async fn aws_s3api_get_object(s3: &S3Client, bucket: String, key: String) -> Res
 #[tokio::main]
 async fn main() {
     let opt = S3Api::from_args();
-    Region::from(opt.region);
-    let s3 = S3Client::new(Region::default());
+    let s3 = S3Client::new(Region::from(opt.region));
     if let Err(err) = match opt.command {
         Command::ListBuckets => aws_s3api_list_buckets(&s3).await,
         Command::GetObject {
