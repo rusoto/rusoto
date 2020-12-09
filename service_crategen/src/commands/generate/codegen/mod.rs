@@ -762,6 +762,11 @@ fn generate_struct_fields<P: GenerateProtocol>(
             // does not mention that the slot values themselves can be null.
             } else if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{
                 lines.push(format!("pub {}: Option<::std::collections::HashMap<String, Option<String>>>,", name))
+			// In the official documentation the field type is required, but Type can contain
+			// a ColumnInfo, causing an infinite recursion; we need to treat the type field as if it were
+			// an instance of ColumnInfo, as seen above.
+			} else if service.name() == "Timestream Query" && shape_name == "ColumnInfo" && rs_type == "Type" {
+                lines.push(format!("pub {}: Box<{}>,", name, rs_type))
             } else if name == "match" {
                 lines.push(format!("pub route_{}: Option<{}>,", name, rs_type))
             } else if shape.required(member_name) {
