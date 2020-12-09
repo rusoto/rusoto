@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix incorrect parse logic for timestamp headers in JSON based protocols
 - Update to botocore 1.19.12
 - Add Amazon Timestream write support, crate `rusoto_timestream_write`.
+- Add Amazon Timestream query support, crate `rusoto_timestream_query`.
 
 ## [0.45.0] - 2020-07-22
 
