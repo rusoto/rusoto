@@ -1233,6 +1233,12 @@
     "protocolVersion": "2018-06-27",
     "baseTypeName": "Textract"
   },
+  "timestream-query": {
+    "version": "0.45.0",
+    "coreVersion": "0.45.0",
+    "protocolVersion": "2018-11-01",
+    "baseTypeName": "TimestreamQuery"
+  },
   "timestream-write": {
     "version": "0.45.0",
     "coreVersion": "0.45.0",
