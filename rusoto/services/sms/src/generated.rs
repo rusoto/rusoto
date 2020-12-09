@@ -54,31 +54,39 @@ use serde_json;
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppSummary {
-    /// <p>Unique ID of the application.</p>
+    /// <p>The unique ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>Time of creation of this application.</p>
+    /// <p>The creation time of the application.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>Description of the application.</p>
+    /// <p>The description of the application.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Timestamp of the application's creation.</p>
+    /// <p>The ID of the application.</p>
+    #[serde(rename = "importedAppId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub imported_app_id: Option<String>,
+    /// <p>The last modified time of the application.</p>
     #[serde(rename = "lastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<f64>,
-    /// <p>Timestamp of the application's most recent successful replication.</p>
+    /// <p>The timestamp of the application's most recent successful replication.</p>
     #[serde(rename = "latestReplicationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_replication_time: Option<f64>,
+    /// <p>Status of the launch configuration.</p>
+    #[serde(rename = "launchConfigurationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_configuration_status: Option<String>,
     /// <p>Details about the latest launch of the application.</p>
     #[serde(rename = "launchDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_details: Option<LaunchDetails>,
-    /// <p>Launch status of the application.</p>
+    /// <p>The launch status of the application.</p>
     #[serde(rename = "launchStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_status: Option<String>,
@@ -86,11 +94,15 @@ pub struct AppSummary {
     #[serde(rename = "launchStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_status_message: Option<String>,
-    /// <p>Name of the application.</p>
+    /// <p>The name of the application.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Replication status of the application.</p>
+    /// <p>Status of the replication configuration.</p>
+    #[serde(rename = "replicationConfigurationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_configuration_status: Option<String>,
+    /// <p>The replication status of the application.</p>
     #[serde(rename = "replicationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_status: Option<String>,
@@ -98,7 +110,7 @@ pub struct AppSummary {
     #[serde(rename = "replicationStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_status_message: Option<String>,
-    /// <p>Name of the service role in the customer's account used by AWS SMS.</p>
+    /// <p>The name of the service role in the customer's account used by AWS SMS.</p>
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
@@ -110,14 +122,45 @@ pub struct AppSummary {
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    /// <p>Number of server groups present in the application.</p>
+    /// <p>The number of server groups present in the application.</p>
     #[serde(rename = "totalServerGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_server_groups: Option<i64>,
-    /// <p>Number of servers present in the application.</p>
+    /// <p>The number of servers present in the application.</p>
     #[serde(rename = "totalServers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_servers: Option<i64>,
+}
+
+/// <p>Configuration for validating an application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AppValidationConfiguration {
+    /// <p>The validation strategy.</p>
+    #[serde(rename = "appValidationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_validation_strategy: Option<String>,
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The validation parameters.</p>
+    #[serde(rename = "ssmValidationParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssm_validation_parameters: Option<SSMValidationParameters>,
+    /// <p>The ID of the validation.</p>
+    #[serde(rename = "validationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_id: Option<String>,
+}
+
+/// <p>Output from validating an application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppValidationOutput {
+    /// <p>Output from using SSM to validate the application.</p>
+    #[serde(rename = "ssmOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssm_output: Option<SSMOutput>,
 }
 
 /// <p>Represents a connector.</p>
@@ -132,7 +175,7 @@ pub struct Connector {
     #[serde(rename = "capabilityList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capability_list: Option<Vec<String>>,
-    /// <p>The identifier of the connector.</p>
+    /// <p>The ID of the connector.</p>
     #[serde(rename = "connectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connector_id: Option<String>,
@@ -152,7 +195,7 @@ pub struct Connector {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The identifier of the VM manager.</p>
+    /// <p>The ID of the VM manager.</p>
     #[serde(rename = "vmManagerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_id: Option<String>,
@@ -169,27 +212,27 @@ pub struct Connector {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
-    /// <p>A unique, case-sensitive identifier you provide to ensure idempotency of application creation.</p>
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of application creation.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>Description of the new application</p>
+    /// <p>The description of the new application</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Name of the new application.</p>
+    /// <p>The name of the new application.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Name of service role in customer's account to be used by AWS SMS.</p>
+    /// <p>The name of the service role in the customer's account to be used by AWS SMS.</p>
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    /// <p>List of server groups to include in the application.</p>
+    /// <p>The server groups to include in the application.</p>
     #[serde(rename = "serverGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_groups: Option<Vec<ServerGroup>>,
-    /// <p>List of tags to be associated with the application.</p>
+    /// <p>The tags to be associated with the application.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -198,15 +241,15 @@ pub struct CreateAppRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResponse {
-    /// <p>Summary description of the application.</p>
+    /// <p>A summary description of the application.</p>
     #[serde(rename = "appSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_summary: Option<AppSummary>,
-    /// <p>List of server groups included in the application.</p>
+    /// <p>The server groups included in the application.</p>
     #[serde(rename = "serverGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_groups: Option<Vec<ServerGroup>>,
-    /// <p>List of taags associated with the application.</p>
+    /// <p>The tags associated with the application.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -219,7 +262,7 @@ pub struct CreateReplicationJobRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>When <i>true</i>, the replication job produces encrypted AMIs. See also <code>KmsKeyId</code> below.</p>
+    /// <p>Indicates whether the replication job produces encrypted AMIs.</p>
     #[serde(rename = "encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
@@ -227,7 +270,7 @@ pub struct CreateReplicationJobRequest {
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<i64>,
-    /// <p>KMS key ID for replication jobs that produce encrypted AMIs. Can be any of the following: </p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to KMS key ID</p> </li> <li> <p>ARN referring to KMS key alias</p> </li> </ul> <p> If encrypted is <i>true</i> but a KMS key id is not specified, the customer's default KMS key for EBS is used. </p>
+    /// <p>The ID of the KMS key for replication jobs that produce encrypted AMIs. This value can be any of the following:</p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to the KMS key ID</p> </li> <li> <p>ARN referring to the KMS key alias</p> </li> </ul> <p> If encrypted is <i>true</i> but a KMS key ID is not specified, the customer's default KMS key for Amazon EBS is used. </p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -235,7 +278,7 @@ pub struct CreateReplicationJobRequest {
     #[serde(rename = "licenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_type: Option<String>,
-    /// <p>The maximum number of SMS-created AMIs to retain. The oldest will be deleted once the maximum number is reached and a new AMI is created.</p>
+    /// <p>The maximum number of SMS-created AMIs to retain. The oldest is deleted after the maximum number is reached and a new AMI is created.</p>
     #[serde(rename = "numberOfRecentAmisToKeep")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_recent_amis_to_keep: Option<i64>,
@@ -243,14 +286,14 @@ pub struct CreateReplicationJobRequest {
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    /// <p><p/></p>
+    /// <p>Indicates whether to run the replication job one time.</p>
     #[serde(rename = "runOnce")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_once: Option<bool>,
     /// <p>The seed replication time.</p>
     #[serde(rename = "seedReplicationTime")]
     pub seed_replication_time: f64,
-    /// <p>The identifier of the server.</p>
+    /// <p>The ID of the server.</p>
     #[serde(rename = "serverId")]
     pub server_id: String,
 }
@@ -267,7 +310,7 @@ pub struct CreateReplicationJobResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppLaunchConfigurationRequest {
-    /// <p>ID of the application associated with the launch configuration.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -280,7 +323,7 @@ pub struct DeleteAppLaunchConfigurationResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppReplicationConfigurationRequest {
-    /// <p>ID of the application associated with the replication configuration.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -293,15 +336,15 @@ pub struct DeleteAppReplicationConfigurationResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
-    /// <p>ID of the application to delete.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>While deleting the application, stop all replication jobs corresponding to the servers in the application.</p>
+    /// <p>Indicates whether to stop all replication jobs corresponding to the servers in the application while deleting the application.</p>
     #[serde(rename = "forceStopAppReplication")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_stop_app_replication: Option<bool>,
-    /// <p>While deleting the application, terminate the stack corresponding to the application.</p>
+    /// <p>Indicates whether to terminate the stack corresponding to the application while deleting the application.</p>
     #[serde(rename = "forceTerminateApp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_terminate_app: Option<bool>,
@@ -313,8 +356,20 @@ pub struct DeleteAppResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAppValidationConfigurationRequest {
+    /// <p>The ID of the application.</p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAppValidationConfigurationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationJobRequest {
-    /// <p>The identifier of the replication job.</p>
+    /// <p>The ID of the replication job.</p>
     #[serde(rename = "replicationJobId")]
     pub replication_job_id: String,
 }
@@ -334,7 +389,7 @@ pub struct DeleteServerCatalogResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConnectorRequest {
-    /// <p>The identifier of the connector.</p>
+    /// <p>The ID of the connector.</p>
     #[serde(rename = "connectorId")]
     pub connector_id: String,
 }
@@ -346,11 +401,11 @@ pub struct DisassociateConnectorResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateChangeSetRequest {
-    /// <p>ID of the application associated with the change set.</p>
+    /// <p>The ID of the application associated with the change set.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>Format for the change set.</p>
+    /// <p>The format for the change set.</p>
     #[serde(rename = "changesetFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub changeset_format: Option<String>,
@@ -359,7 +414,7 @@ pub struct GenerateChangeSetRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateChangeSetResponse {
-    /// <p>Location of the Amazon S3 object.</p>
+    /// <p>The location of the Amazon S3 object.</p>
     #[serde(rename = "s3Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_location: Option<S3Location>,
@@ -368,11 +423,11 @@ pub struct GenerateChangeSetResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateTemplateRequest {
-    /// <p>ID of the application associated with the Amazon CloudFormation template.</p>
+    /// <p>The ID of the application associated with the AWS CloudFormation template.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>Format for generating the Amazon CloudFormation template.</p>
+    /// <p>The format for generating the AWS CloudFormation template.</p>
     #[serde(rename = "templateFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_format: Option<String>,
@@ -381,7 +436,7 @@ pub struct GenerateTemplateRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateTemplateResponse {
-    /// <p>Location of the Amazon S3 object.</p>
+    /// <p>The location of the Amazon S3 object.</p>
     #[serde(rename = "s3Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_location: Option<S3Location>,
@@ -390,7 +445,7 @@ pub struct GenerateTemplateResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppLaunchConfigurationRequest {
-    /// <p>ID of the application launch configuration.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -399,15 +454,19 @@ pub struct GetAppLaunchConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppLaunchConfigurationResponse {
-    /// <p>ID of the application associated with the launch configuration.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>Name of the service role in the customer's account that Amazon CloudFormation uses to launch the application.</p>
+    /// <p>Indicates whether the application is configured to launch automatically after replication is complete.</p>
+    #[serde(rename = "autoLaunch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_launch: Option<bool>,
+    /// <p>The name of the service role in the customer's account that AWS CloudFormation uses to launch the application.</p>
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    /// <p>List of launch configurations for server groups in this application.</p>
+    /// <p>The launch configurations for server groups in this application.</p>
     #[serde(rename = "serverGroupLaunchConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_group_launch_configurations: Option<Vec<ServerGroupLaunchConfiguration>>,
@@ -416,7 +475,7 @@ pub struct GetAppLaunchConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppReplicationConfigurationRequest {
-    /// <p>ID of the application associated with the replication configuration.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -425,7 +484,7 @@ pub struct GetAppReplicationConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppReplicationConfigurationResponse {
-    /// <p>Replication configurations associated with server groups in this application.</p>
+    /// <p>The replication configurations associated with server groups in this application.</p>
     #[serde(rename = "serverGroupReplicationConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_group_replication_configurations: Option<Vec<ServerGroupReplicationConfiguration>>,
@@ -434,7 +493,7 @@ pub struct GetAppReplicationConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppRequest {
-    /// <p>ID of the application whose information is being retrieved.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -447,14 +506,52 @@ pub struct GetAppResponse {
     #[serde(rename = "appSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_summary: Option<AppSummary>,
-    /// <p>List of server groups belonging to the application.</p>
+    /// <p>The server groups that belong to the application.</p>
     #[serde(rename = "serverGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_groups: Option<Vec<ServerGroup>>,
-    /// <p>List of tags associated with the application.</p>
+    /// <p>The tags associated with the application.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAppValidationConfigurationRequest {
+    /// <p>The ID of the application.</p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAppValidationConfigurationResponse {
+    /// <p>The configuration for application validation.</p>
+    #[serde(rename = "appValidationConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_validation_configurations: Option<Vec<AppValidationConfiguration>>,
+    /// <p>The configuration for instance validation.</p>
+    #[serde(rename = "serverGroupValidationConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_group_validation_configurations: Option<Vec<ServerGroupValidationConfiguration>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAppValidationOutputRequest {
+    /// <p>The ID of the application.</p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAppValidationOutputResponse {
+    /// <p>The validation output.</p>
+    #[serde(rename = "validationOutputList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_output_list: Option<Vec<ValidationOutput>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -494,7 +591,7 @@ pub struct GetReplicationJobsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The identifier of the replication job.</p>
+    /// <p>The ID of the replication job.</p>
     #[serde(rename = "replicationJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_id: Option<String>,
@@ -524,7 +621,7 @@ pub struct GetReplicationRunsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The identifier of the replication job.</p>
+    /// <p>The ID of the replication job.</p>
     #[serde(rename = "replicationJobId")]
     pub replication_job_id: String,
 }
@@ -557,7 +654,7 @@ pub struct GetServersRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>List of <code>VmServerAddress</code> objects</p>
+    /// <p>The server addresses.</p>
     #[serde(rename = "vmServerAddressList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_server_address_list: Option<Vec<VmServerAddress>>,
@@ -586,6 +683,19 @@ pub struct GetServersResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ImportAppCatalogRequest {
+    /// <p>The name of the service role. If you omit this parameter, we create a service-linked role for AWS Migration Hub in your account. Otherwise, the role that you provide must have the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/new-customer-setup.html#sms-managed">policy and trust policy</a> described in the <i>AWS Migration Hub User Guide</i>.</p>
+    #[serde(rename = "roleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImportAppCatalogResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportServerCatalogRequest {}
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -595,7 +705,7 @@ pub struct ImportServerCatalogResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchAppRequest {
-    /// <p>ID of the application to launch.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -609,15 +719,15 @@ pub struct LaunchAppResponse {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LaunchDetails {
-    /// <p>Latest time this application was launched successfully.</p>
+    /// <p>The latest time that this application was launched successfully.</p>
     #[serde(rename = "latestLaunchTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_launch_time: Option<f64>,
-    /// <p>Identifier of the latest stack launched for this application.</p>
+    /// <p>The ID of the latest stack launched for this application.</p>
     #[serde(rename = "stackId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_id: Option<String>,
-    /// <p>Name of the latest stack launched for this application.</p>
+    /// <p>The name of the latest stack launched for this application.</p>
     #[serde(rename = "stackName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_name: Option<String>,
@@ -626,11 +736,11 @@ pub struct LaunchDetails {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
-    /// <p><p/></p>
+    /// <p>The unique application IDs.</p>
     #[serde(rename = "appIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results to return in a single call. The default value is 50. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. </p>
+    /// <p>The maximum number of results to return in a single call. The default value is 100. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -643,7 +753,7 @@ pub struct ListAppsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResponse {
-    /// <p>A list of application summaries.</p>
+    /// <p>The application summaries.</p>
     #[serde(rename = "apps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apps: Option<Vec<AppSummary>>,
@@ -653,18 +763,56 @@ pub struct ListAppsResponse {
     pub next_token: Option<String>,
 }
 
+/// <p>Contains the status of validating an application.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct NotificationContext {
+    /// <p>The status of the validation.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The status message.</p>
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The ID of the validation.</p>
+    #[serde(rename = "validationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct NotifyAppValidationOutputRequest {
+    /// <p>The ID of the application.</p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p>The notification information.</p>
+    #[serde(rename = "notificationContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_context: Option<NotificationContext>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NotifyAppValidationOutputResponse {}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppLaunchConfigurationRequest {
-    /// <p>ID of the application associated with the launch configuration.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>Name of service role in the customer's account that Amazon CloudFormation uses to launch the application.</p>
+    /// <p>Indicates whether the application is configured to launch automatically after replication is complete.</p>
+    #[serde(rename = "autoLaunch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_launch: Option<bool>,
+    /// <p>The name of service role in the customer's account that AWS CloudFormation uses to launch the application.</p>
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    /// <p>Launch configurations for server groups in the application.</p>
+    /// <p>Information about the launch configurations for server groups in the application.</p>
     #[serde(rename = "serverGroupLaunchConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_group_launch_configurations: Option<Vec<ServerGroupLaunchConfiguration>>,
@@ -677,11 +825,11 @@ pub struct PutAppLaunchConfigurationResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppReplicationConfigurationRequest {
-    /// <p>ID of the application tassociated with the replication configuration.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>Replication configurations for server groups in the application.</p>
+    /// <p>Information about the replication configurations for server groups in the application.</p>
     #[serde(rename = "serverGroupReplicationConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_group_replication_configurations: Option<Vec<ServerGroupReplicationConfiguration>>,
@@ -691,6 +839,26 @@ pub struct PutAppReplicationConfigurationRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppReplicationConfigurationResponse {}
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAppValidationConfigurationRequest {
+    /// <p>The ID of the application.</p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p>The configuration for application validation.</p>
+    #[serde(rename = "appValidationConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_validation_configurations: Option<Vec<AppValidationConfiguration>>,
+    /// <p>The configuration for instance validation.</p>
+    #[serde(rename = "serverGroupValidationConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_group_validation_configurations: Option<Vec<ServerGroupValidationConfiguration>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutAppValidationConfigurationResponse {}
+
 /// <p>Represents a replication job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -699,7 +867,7 @@ pub struct ReplicationJob {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Whether the replication job should produce encrypted AMIs or not. See also <code>KmsKeyId</code> below.</p>
+    /// <p>Indicates whether the replication job should produce encrypted AMIs.</p>
     #[serde(rename = "encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
@@ -707,7 +875,7 @@ pub struct ReplicationJob {
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<i64>,
-    /// <p>KMS key ID for replication jobs that produce encrypted AMIs. Can be any of the following: </p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to KMS key ID</p> </li> <li> <p>ARN referring to KMS key alias</p> </li> </ul> <p> If encrypted is <i>true</i> but a KMS key id is not specified, the customer's default KMS key for EBS is used. </p>
+    /// <p>The ID of the KMS key for replication jobs that produce encrypted AMIs. This value can be any of the following: </p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to the KMS key ID</p> </li> <li> <p>ARN referring to the KMS key alias</p> </li> </ul> <p>If encrypted is enabled but a KMS key ID is not specified, the customer's default KMS key for Amazon EBS is used.</p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -723,11 +891,11 @@ pub struct ReplicationJob {
     #[serde(rename = "nextReplicationRunStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_replication_run_start_time: Option<f64>,
-    /// <p>Number of recent AMIs to keep in the customer's account for a replication job. By default the value is set to zero, meaning that all AMIs are kept.</p>
+    /// <p>The number of recent AMIs to keep in the customer's account for a replication job. By default, the value is set to zero, meaning that all AMIs are kept.</p>
     #[serde(rename = "numberOfRecentAmisToKeep")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_recent_amis_to_keep: Option<i64>,
-    /// <p>The identifier of the replication job.</p>
+    /// <p>The ID of the replication job.</p>
     #[serde(rename = "replicationJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_id: Option<String>,
@@ -735,11 +903,11 @@ pub struct ReplicationJob {
     #[serde(rename = "replicationRunList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_list: Option<Vec<ReplicationRun>>,
-    /// <p>The name of the IAM role to be used by the Server Migration Service.</p>
+    /// <p>The name of the IAM role to be used by AWS SMS.</p>
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    /// <p><p/></p>
+    /// <p>Indicates whether to run the replication job one time.</p>
     #[serde(rename = "runOnce")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_once: Option<bool>,
@@ -747,7 +915,7 @@ pub struct ReplicationJob {
     #[serde(rename = "seedReplicationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub seed_replication_time: Option<f64>,
-    /// <p>The identifier of the server.</p>
+    /// <p>The ID of the server.</p>
     #[serde(rename = "serverId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_id: Option<String>,
@@ -773,7 +941,7 @@ pub struct ReplicationJob {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationRun {
-    /// <p>The identifier of the Amazon Machine Image (AMI) from the replication run.</p>
+    /// <p>The ID of the Amazon Machine Image (AMI) from the replication run.</p>
     #[serde(rename = "amiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_id: Option<String>,
@@ -785,15 +953,15 @@ pub struct ReplicationRun {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Whether the replication run should produce encrypted AMI or not. See also <code>KmsKeyId</code> below.</p>
+    /// <p>Indicates whether the replication run should produce an encrypted AMI.</p>
     #[serde(rename = "encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
-    /// <p>KMS key ID for replication jobs that produce encrypted AMIs. Can be any of the following: </p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to KMS key ID</p> </li> <li> <p>ARN referring to KMS key alias</p> </li> </ul> <p> If encrypted is <i>true</i> but a KMS key id is not specified, the customer's default KMS key for EBS is used. </p>
+    /// <p>The ID of the KMS key for replication jobs that produce encrypted AMIs. This value can be any of the following:</p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to the KMS key ID</p> </li> <li> <p>ARN referring to the KMS key alias</p> </li> </ul> <p> If encrypted is <i>true</i> but a KMS key ID is not specified, the customer's default KMS key for Amazon EBS is used. </p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>The identifier of the replication run.</p>
+    /// <p>The ID of the replication run.</p>
     #[serde(rename = "replicationRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_id: Option<String>,
@@ -801,7 +969,7 @@ pub struct ReplicationRun {
     #[serde(rename = "scheduledStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_start_time: Option<f64>,
-    /// <p>Details of the current stage of the replication run.</p>
+    /// <p>Details about the current stage of the replication run.</p>
     #[serde(rename = "stageDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_details: Option<ReplicationRunStageDetails>,
@@ -823,33 +991,71 @@ pub struct ReplicationRun {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationRunStageDetails {
-    /// <p>String describing the current stage of a replication run.</p>
+    /// <p>The current stage of a replication run.</p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
-    /// <p>String describing the progress of the current stage of a replication run.</p>
+    /// <p>The progress of the current stage of a replication run.</p>
     #[serde(rename = "stageProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_progress: Option<String>,
 }
 
-/// <p>Location of the Amazon S3 object in the customer's account.</p>
+/// <p>Location of an Amazon S3 object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Location {
-    /// <p>Amazon S3 bucket name.</p>
+    /// <p>The Amazon S3 bucket name.</p>
     #[serde(rename = "bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    /// <p>Amazon S3 bucket key.</p>
+    /// <p>The Amazon S3 bucket key.</p>
     #[serde(rename = "key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
 }
 
+/// <p>Contains the location of validation output.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SSMOutput {
+    #[serde(rename = "s3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_location: Option<S3Location>,
+}
+
+/// <p>Contains validation parameters.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SSMValidationParameters {
+    /// <p>The command to run the validation script</p>
+    #[serde(rename = "command")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub command: Option<String>,
+    /// <p>The timeout interval, in seconds.</p>
+    #[serde(rename = "executionTimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_timeout_seconds: Option<i64>,
+    /// <p>The ID of the instance. The instance must have the following tag: UserForSMSApplicationValidation=true.</p>
+    #[serde(rename = "instanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
+    /// <p>The name of the S3 bucket for output.</p>
+    #[serde(rename = "outputS3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_s3_bucket_name: Option<String>,
+    /// <p>The type of validation script.</p>
+    #[serde(rename = "scriptType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub script_type: Option<String>,
+    /// <p>The location of the validation script.</p>
+    #[serde(rename = "source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<Source>,
+}
+
 /// <p>Represents a server.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Server {
-    /// <p>The identifier of the replication job.</p>
+    /// <p>The ID of the replication job.</p>
     #[serde(rename = "replicationJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_id: Option<String>,
@@ -857,7 +1063,7 @@ pub struct Server {
     #[serde(rename = "replicationJobTerminated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_terminated: Option<bool>,
-    /// <p>The identifier of the server.</p>
+    /// <p>The ID of the server.</p>
     #[serde(rename = "serverId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_id: Option<String>,
@@ -871,18 +1077,18 @@ pub struct Server {
     pub vm_server: Option<VmServer>,
 }
 
-/// <p>A logical grouping of servers.</p>
+/// <p>Logical grouping of servers.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerGroup {
-    /// <p>Name of a server group.</p>
+    /// <p>The name of a server group.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Identifier of a server group.</p>
+    /// <p>The ID of a server group.</p>
     #[serde(rename = "serverGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_group_id: Option<String>,
-    /// <p>List of servers belonging to a server group.</p>
+    /// <p>The servers that belong to a server group.</p>
     #[serde(rename = "serverList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_list: Option<Vec<Server>>,
@@ -891,15 +1097,15 @@ pub struct ServerGroup {
 /// <p>Launch configuration for a server group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerGroupLaunchConfiguration {
-    /// <p>Launch order of servers in the server group.</p>
+    /// <p>The launch order of servers in the server group.</p>
     #[serde(rename = "launchOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_order: Option<i64>,
-    /// <p>Identifier of the server group the launch configuration is associated with.</p>
+    /// <p>The ID of the server group with which the launch configuration is associated.</p>
     #[serde(rename = "serverGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_group_id: Option<String>,
-    /// <p>Launch configuration for servers in the server group.</p>
+    /// <p>The launch configuration for servers in the server group.</p>
     #[serde(rename = "serverLaunchConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_launch_configurations: Option<Vec<ServerLaunchConfiguration>>,
@@ -908,44 +1114,68 @@ pub struct ServerGroupLaunchConfiguration {
 /// <p>Replication configuration for a server group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerGroupReplicationConfiguration {
-    /// <p>Identifier of the server group this replication configuration is associated with.</p>
+    /// <p>The ID of the server group with which this replication configuration is associated.</p>
     #[serde(rename = "serverGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_group_id: Option<String>,
-    /// <p>Replication configuration for servers in the server group.</p>
+    /// <p>The replication configuration for servers in the server group.</p>
     #[serde(rename = "serverReplicationConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_replication_configurations: Option<Vec<ServerReplicationConfiguration>>,
 }
 
+/// <p>Configuration for validating an instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ServerGroupValidationConfiguration {
+    /// <p>The ID of the server group.</p>
+    #[serde(rename = "serverGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_group_id: Option<String>,
+    /// <p>The validation configuration.</p>
+    #[serde(rename = "serverValidationConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_validation_configurations: Option<Vec<ServerValidationConfiguration>>,
+}
+
 /// <p>Launch configuration for a server.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerLaunchConfiguration {
-    /// <p>If true, a publicly accessible IP address is created when launching the server.</p>
+    /// <p>Indicates whether a publicly accessible IP address is created when launching the server.</p>
     #[serde(rename = "associatePublicIpAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub associate_public_ip_address: Option<bool>,
-    /// <p>Name of the EC2 SSH Key to be used for connecting to the launched server.</p>
+    #[serde(rename = "configureScript")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configure_script: Option<S3Location>,
+    /// <p>The type of configuration script.</p>
+    #[serde(rename = "configureScriptType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configure_script_type: Option<String>,
+    /// <p>The name of the Amazon EC2 SSH key to be used for connecting to the launched server.</p>
     #[serde(rename = "ec2KeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_key_name: Option<String>,
-    /// <p>Instance type to be used for launching the server.</p>
+    /// <p>The name of the IAM instance profile.</p>
+    #[serde(rename = "iamInstanceProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_instance_profile_name: Option<String>,
+    /// <p>The instance type to use when launching the server.</p>
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>Logical ID of the server in the Amazon CloudFormation template.</p>
+    /// <p>The logical ID of the server in the AWS CloudFormation template.</p>
     #[serde(rename = "logicalId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_id: Option<String>,
-    /// <p>Identifier of the security group that applies to the launched server.</p>
+    /// <p>The ID of the security group that applies to the launched server.</p>
     #[serde(rename = "securityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group: Option<String>,
-    /// <p>Identifier of the server the launch configuration is associated with.</p>
+    /// <p>The ID of the server with which the launch configuration is associated.</p>
     #[serde(rename = "server")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server: Option<Server>,
-    /// <p>Identifier of the subnet the server should be launched into.</p>
+    /// <p>The ID of the subnet the server should be launched into.</p>
     #[serde(rename = "subnet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet: Option<String>,
@@ -953,7 +1183,7 @@ pub struct ServerLaunchConfiguration {
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_data: Option<UserData>,
-    /// <p>Identifier of the VPC the server should be launched into.</p>
+    /// <p>The ID of the VPC into which the server should be launched.</p>
     #[serde(rename = "vpc")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc: Option<String>,
@@ -962,53 +1192,94 @@ pub struct ServerLaunchConfiguration {
 /// <p>Replication configuration of a server.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerReplicationConfiguration {
-    /// <p>Identifier of the server this replication configuration is associated with.</p>
+    /// <p>The ID of the server with which this replication configuration is associated.</p>
     #[serde(rename = "server")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server: Option<Server>,
-    /// <p>Parameters for replicating the server.</p>
+    /// <p>The parameters for replicating the server.</p>
     #[serde(rename = "serverReplicationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_replication_parameters: Option<ServerReplicationParameters>,
 }
 
-/// <p>Replication parameters for replicating a server.</p>
+/// <p>The replication parameters for replicating a server.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerReplicationParameters {
-    /// <p>When true, the replication job produces encrypted AMIs. See also <code>KmsKeyId</code> below.</p>
+    /// <p>Indicates whether the replication job produces encrypted AMIs.</p>
     #[serde(rename = "encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
-    /// <p>Frequency of creating replication jobs for the server.</p>
+    /// <p>The frequency of creating replication jobs for the server.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<i64>,
-    /// <p><p/> <p>KMS key ID for replication jobs that produce encrypted AMIs. Can be any of the following: </p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to KMS key ID</p> </li> <li> <p>ARN referring to KMS key alias</p> </li> </ul> <p> If encrypted is <i>true</i> but a KMS key id is not specified, the customer&#39;s default KMS key for EBS is used. </p></p>
+    /// <p>The ID of the KMS key for replication jobs that produce encrypted AMIs. This value can be any of the following:</p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to the KMS key ID</p> </li> <li> <p>ARN referring to the KMS key alias</p> </li> </ul> <p>If encrypted is enabled but a KMS key ID is not specified, the customer's default KMS key for Amazon EBS is used.</p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>License type for creating a replication job for the server.</p>
+    /// <p>The license type for creating a replication job for the server.</p>
     #[serde(rename = "licenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_type: Option<String>,
-    /// <p>Number of recent AMIs to keep when creating a replication job for this server.</p>
+    /// <p>The number of recent AMIs to keep when creating a replication job for this server.</p>
     #[serde(rename = "numberOfRecentAmisToKeep")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_recent_amis_to_keep: Option<i64>,
-    /// <p><p/></p>
+    /// <p>Indicates whether to run the replication job one time.</p>
     #[serde(rename = "runOnce")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_once: Option<bool>,
-    /// <p>Seed time for creating a replication job for the server.</p>
+    /// <p>The seed time for creating a replication job for the server.</p>
     #[serde(rename = "seedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub seed_time: Option<f64>,
 }
 
+/// <p>Configuration for validating an instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ServerValidationConfiguration {
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "server")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server: Option<Server>,
+    /// <p>The validation strategy.</p>
+    #[serde(rename = "serverValidationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_validation_strategy: Option<String>,
+    /// <p>The validation parameters.</p>
+    #[serde(rename = "userDataValidationParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_data_validation_parameters: Option<UserDataValidationParameters>,
+    /// <p>The ID of the validation.</p>
+    #[serde(rename = "validationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_id: Option<String>,
+}
+
+/// <p>Contains output from validating an instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ServerValidationOutput {
+    #[serde(rename = "server")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server: Option<Server>,
+}
+
+/// <p>Contains the location of a validation script.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Source {
+    #[serde(rename = "s3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_location: Option<S3Location>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAppReplicationRequest {
-    /// <p>ID of the application to replicate.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -1020,12 +1291,28 @@ pub struct StartAppReplicationResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartOnDemandAppReplicationRequest {
+    /// <p>The ID of the application.</p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p>The description of the replication run.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartOnDemandAppReplicationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOnDemandReplicationRunRequest {
     /// <p>The description of the replication run.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the replication job.</p>
+    /// <p>The ID of the replication job.</p>
     #[serde(rename = "replicationJobId")]
     pub replication_job_id: String,
 }
@@ -1033,7 +1320,7 @@ pub struct StartOnDemandReplicationRunRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOnDemandReplicationRunResponse {
-    /// <p>The identifier of the replication run.</p>
+    /// <p>The ID of the replication run.</p>
     #[serde(rename = "replicationRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_id: Option<String>,
@@ -1042,7 +1329,7 @@ pub struct StartOnDemandReplicationRunResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAppReplicationRequest {
-    /// <p>ID of the application to stop replicating.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -1052,14 +1339,14 @@ pub struct StopAppReplicationRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAppReplicationResponse {}
 
-/// <p>A label that can be assigned to an application.</p>
+/// <p>Key/value pair that can be assigned to an application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
-    /// <p>Tag key.</p>
+    /// <p>The tag key.</p>
     #[serde(rename = "key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>Tag value.</p>
+    /// <p>The tag value.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -1068,7 +1355,7 @@ pub struct Tag {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateAppRequest {
-    /// <p>ID of the application to terminate.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
@@ -1081,27 +1368,27 @@ pub struct TerminateAppResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
-    /// <p>ID of the application to update.</p>
+    /// <p>The ID of the application.</p>
     #[serde(rename = "appId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>New description of the application.</p>
+    /// <p>The new description of the application.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>New name of the application.</p>
+    /// <p>The new name of the application.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Name of the service role in the customer's account used by AWS SMS.</p>
+    /// <p>The name of the service role in the customer's account used by AWS SMS.</p>
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    /// <p>List of server groups in the application to update.</p>
+    /// <p>The server groups in the application to update.</p>
     #[serde(rename = "serverGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_groups: Option<Vec<ServerGroup>>,
-    /// <p>List of tags to associate with the application.</p>
+    /// <p>The tags to associate with the application.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1110,15 +1397,15 @@ pub struct UpdateAppRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppResponse {
-    /// <p>Summary description of the application.</p>
+    /// <p>A summary description of the application.</p>
     #[serde(rename = "appSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_summary: Option<AppSummary>,
-    /// <p>List of updated server groups in the application.</p>
+    /// <p>The updated server groups in the application.</p>
     #[serde(rename = "serverGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_groups: Option<Vec<ServerGroup>>,
-    /// <p>List of tags associated with the application.</p>
+    /// <p>The tags associated with the application.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1131,7 +1418,7 @@ pub struct UpdateReplicationJobRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>When true, the replication job produces encrypted AMIs . See also <code>KmsKeyId</code> below.</p>
+    /// <p>When true, the replication job produces encrypted AMIs. For more information, <code>KmsKeyId</code>.</p>
     #[serde(rename = "encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
@@ -1139,7 +1426,7 @@ pub struct UpdateReplicationJobRequest {
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<i64>,
-    /// <p><p/> <p>KMS key ID for replication jobs that produce encrypted AMIs. Can be any of the following: </p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to KMS key ID</p> </li> <li> <p>ARN referring to KMS key alias</p> </li> </ul> <p> If encrypted is <i>true</i> but a KMS key id is not specified, the customer&#39;s default KMS key for EBS is used. </p></p>
+    /// <p>The ID of the KMS key for replication jobs that produce encrypted AMIs. This value can be any of the following:</p> <ul> <li> <p>KMS key ID</p> </li> <li> <p>KMS key alias</p> </li> <li> <p>ARN referring to the KMS key ID</p> </li> <li> <p>ARN referring to the KMS key alias</p> </li> </ul> <p>If encrypted is enabled but a KMS key ID is not specified, the customer's default KMS key for Amazon EBS is used.</p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -1151,11 +1438,11 @@ pub struct UpdateReplicationJobRequest {
     #[serde(rename = "nextReplicationRunStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_replication_run_start_time: Option<f64>,
-    /// <p>The maximum number of SMS-created AMIs to retain. The oldest will be deleted once the maximum number is reached and a new AMI is created.</p>
+    /// <p>The maximum number of SMS-created AMIs to retain. The oldest is deleted after the maximum number is reached and a new AMI is created.</p>
     #[serde(rename = "numberOfRecentAmisToKeep")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_recent_amis_to_keep: Option<i64>,
-    /// <p>The identifier of the replication job.</p>
+    /// <p>The ID of the replication job.</p>
     #[serde(rename = "replicationJobId")]
     pub replication_job_id: String,
     /// <p>The name of the IAM role to be used by AWS SMS.</p>
@@ -1177,6 +1464,53 @@ pub struct UserData {
     pub s_3_location: Option<S3Location>,
 }
 
+/// <p>Contains validation parameters.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct UserDataValidationParameters {
+    /// <p>The type of validation script.</p>
+    #[serde(rename = "scriptType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub script_type: Option<String>,
+    /// <p>The location of the validation script.</p>
+    #[serde(rename = "source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<Source>,
+}
+
+/// <p>Contains validation output.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ValidationOutput {
+    /// <p>The output from validating an application.</p>
+    #[serde(rename = "appValidationOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_validation_output: Option<AppValidationOutput>,
+    /// <p>The latest time that the validation was performed.</p>
+    #[serde(rename = "latestValidationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_validation_time: Option<f64>,
+    /// <p>The name of the validation.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The output from validation an instance.</p>
+    #[serde(rename = "serverValidationOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_validation_output: Option<ServerValidationOutput>,
+    /// <p>The status of the validation.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The status message.</p>
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The ID of the validation.</p>
+    #[serde(rename = "validationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_id: Option<String>,
+}
+
 /// <p>Represents a VM server.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VmServer {
@@ -1196,7 +1530,7 @@ pub struct VmServer {
     #[serde(rename = "vmPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_path: Option<String>,
-    /// <p>Information about the VM server location.</p>
+    /// <p>The VM server location.</p>
     #[serde(rename = "vmServerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_server_address: Option<VmServerAddress>,
@@ -1205,11 +1539,11 @@ pub struct VmServer {
 /// <p>Represents a VM server location.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VmServerAddress {
-    /// <p>The identifier of the VM.</p>
+    /// <p>The ID of the VM.</p>
     #[serde(rename = "vmId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_id: Option<String>,
-    /// <p>The identifier of the VM manager.</p>
+    /// <p>The ID of the VM manager.</p>
     #[serde(rename = "vmManagerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_id: Option<String>,
@@ -1573,6 +1907,82 @@ impl fmt::Display for DeleteAppReplicationConfigurationError {
     }
 }
 impl Error for DeleteAppReplicationConfigurationError {}
+/// Errors returned by DeleteAppValidationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppValidationConfigurationError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
+    UnauthorizedOperation(String),
+}
+
+impl DeleteAppValidationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteAppValidationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(
+                        DeleteAppValidationConfigurationError::InternalError(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DeleteAppValidationConfigurationError::InvalidParameter(err.msg),
+                    )
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        DeleteAppValidationConfigurationError::MissingRequiredParameter(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        DeleteAppValidationConfigurationError::OperationNotPermitted(err.msg),
+                    )
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        DeleteAppValidationConfigurationError::UnauthorizedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAppValidationConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAppValidationConfigurationError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppValidationConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppValidationConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppValidationConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppValidationConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteAppValidationConfigurationError {}
 /// Errors returned by DeleteReplicationJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationJobError {
@@ -2071,6 +2481,146 @@ impl fmt::Display for GetAppReplicationConfigurationError {
     }
 }
 impl Error for GetAppReplicationConfigurationError {}
+/// Errors returned by GetAppValidationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetAppValidationConfigurationError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
+    UnauthorizedOperation(String),
+}
+
+impl GetAppValidationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAppValidationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(GetAppValidationConfigurationError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        GetAppValidationConfigurationError::InvalidParameter(err.msg),
+                    )
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        GetAppValidationConfigurationError::MissingRequiredParameter(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        GetAppValidationConfigurationError::OperationNotPermitted(err.msg),
+                    )
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        GetAppValidationConfigurationError::UnauthorizedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAppValidationConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAppValidationConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetAppValidationConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppValidationConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppValidationConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppValidationConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetAppValidationConfigurationError {}
+/// Errors returned by GetAppValidationOutput
+#[derive(Debug, PartialEq)]
+pub enum GetAppValidationOutputError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
+    UnauthorizedOperation(String),
+}
+
+impl GetAppValidationOutputError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppValidationOutputError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(GetAppValidationOutputError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetAppValidationOutputError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        GetAppValidationOutputError::MissingRequiredParameter(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        GetAppValidationOutputError::OperationNotPermitted(err.msg),
+                    )
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        GetAppValidationOutputError::UnauthorizedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAppValidationOutputError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAppValidationOutputError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetAppValidationOutputError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetAppValidationOutputError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppValidationOutputError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GetAppValidationOutputError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAppValidationOutputError {}
 /// Errors returned by GetConnectors
 #[derive(Debug, PartialEq)]
 pub enum GetConnectorsError {
@@ -2196,6 +2746,12 @@ impl Error for GetReplicationRunsError {}
 /// Errors returned by GetServers
 #[derive(Debug, PartialEq)]
 pub enum GetServersError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
 }
@@ -2204,6 +2760,15 @@ impl GetServersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(GetServersError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetServersError::InvalidParameter(err.msg))
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(GetServersError::MissingRequiredParameter(err.msg))
+                }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetServersError::UnauthorizedOperation(err.msg))
                 }
@@ -2218,11 +2783,74 @@ impl fmt::Display for GetServersError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            GetServersError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetServersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetServersError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
             GetServersError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for GetServersError {}
+/// Errors returned by ImportAppCatalog
+#[derive(Debug, PartialEq)]
+pub enum ImportAppCatalogError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
+    UnauthorizedOperation(String),
+}
+
+impl ImportAppCatalogError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportAppCatalogError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(ImportAppCatalogError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ImportAppCatalogError::InvalidParameter(err.msg))
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(ImportAppCatalogError::MissingRequiredParameter(
+                        err.msg,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(ImportAppCatalogError::OperationNotPermitted(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(ImportAppCatalogError::UnauthorizedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ImportAppCatalogError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ImportAppCatalogError::InternalError(ref cause) => write!(f, "{}", cause),
+            ImportAppCatalogError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ImportAppCatalogError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            ImportAppCatalogError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ImportAppCatalogError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ImportAppCatalogError {}
 /// Errors returned by ImportServerCatalog
 #[derive(Debug, PartialEq)]
 pub enum ImportServerCatalogError {
@@ -2395,6 +3023,76 @@ impl fmt::Display for ListAppsError {
     }
 }
 impl Error for ListAppsError {}
+/// Errors returned by NotifyAppValidationOutput
+#[derive(Debug, PartialEq)]
+pub enum NotifyAppValidationOutputError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
+    UnauthorizedOperation(String),
+}
+
+impl NotifyAppValidationOutputError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<NotifyAppValidationOutputError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(NotifyAppValidationOutputError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(NotifyAppValidationOutputError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        NotifyAppValidationOutputError::MissingRequiredParameter(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        NotifyAppValidationOutputError::OperationNotPermitted(err.msg),
+                    )
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        NotifyAppValidationOutputError::UnauthorizedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for NotifyAppValidationOutputError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            NotifyAppValidationOutputError::InternalError(ref cause) => write!(f, "{}", cause),
+            NotifyAppValidationOutputError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            NotifyAppValidationOutputError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            NotifyAppValidationOutputError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            NotifyAppValidationOutputError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for NotifyAppValidationOutputError {}
 /// Errors returned by PutAppLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutAppLaunchConfigurationError {
@@ -2539,6 +3237,80 @@ impl fmt::Display for PutAppReplicationConfigurationError {
     }
 }
 impl Error for PutAppReplicationConfigurationError {}
+/// Errors returned by PutAppValidationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutAppValidationConfigurationError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
+    UnauthorizedOperation(String),
+}
+
+impl PutAppValidationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutAppValidationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(PutAppValidationConfigurationError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        PutAppValidationConfigurationError::InvalidParameter(err.msg),
+                    )
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        PutAppValidationConfigurationError::MissingRequiredParameter(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        PutAppValidationConfigurationError::OperationNotPermitted(err.msg),
+                    )
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        PutAppValidationConfigurationError::UnauthorizedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAppValidationConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAppValidationConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            PutAppValidationConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppValidationConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppValidationConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppValidationConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutAppValidationConfigurationError {}
 /// Errors returned by StartAppReplication
 #[derive(Debug, PartialEq)]
 pub enum StartAppReplicationError {
@@ -2601,9 +3373,83 @@ impl fmt::Display for StartAppReplicationError {
     }
 }
 impl Error for StartAppReplicationError {}
+/// Errors returned by StartOnDemandAppReplication
+#[derive(Debug, PartialEq)]
+pub enum StartOnDemandAppReplicationError {
+    /// <p>An internal error occurred.</p>
+    InternalError(String),
+    /// <p>A specified parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>A required parameter is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
+    UnauthorizedOperation(String),
+}
+
+impl StartOnDemandAppReplicationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartOnDemandAppReplicationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalError" => {
+                    return RusotoError::Service(StartOnDemandAppReplicationError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        StartOnDemandAppReplicationError::InvalidParameter(err.msg),
+                    )
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        StartOnDemandAppReplicationError::MissingRequiredParameter(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        StartOnDemandAppReplicationError::OperationNotPermitted(err.msg),
+                    )
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        StartOnDemandAppReplicationError::UnauthorizedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartOnDemandAppReplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartOnDemandAppReplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            StartOnDemandAppReplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartOnDemandAppReplicationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartOnDemandAppReplicationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartOnDemandAppReplicationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for StartOnDemandAppReplicationError {}
 /// Errors returned by StartOnDemandReplicationRun
 #[derive(Debug, PartialEq)]
 pub enum StartOnDemandReplicationRunError {
+    /// <p>The user has the required permissions, so the request would have succeeded, but a dry run was performed.</p>
+    DryRunOperation(String),
     /// <p>A specified parameter is not valid.</p>
     InvalidParameter(String),
     /// <p>A required parameter is missing.</p>
@@ -2622,6 +3468,11 @@ impl StartOnDemandReplicationRunError {
     ) -> RusotoError<StartOnDemandReplicationRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "DryRunOperationException" => {
+                    return RusotoError::Service(StartOnDemandReplicationRunError::DryRunOperation(
+                        err.msg,
+                    ))
+                }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         StartOnDemandReplicationRunError::InvalidParameter(err.msg),
@@ -2658,6 +3509,7 @@ impl fmt::Display for StartOnDemandReplicationRunError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            StartOnDemandReplicationRunError::DryRunOperation(ref cause) => write!(f, "{}", cause),
             StartOnDemandReplicationRunError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             StartOnDemandReplicationRunError::MissingRequiredParameter(ref cause) => {
                 write!(f, "{}", cause)
@@ -2950,25 +3802,34 @@ pub trait ServerMigrationService {
         input: CreateReplicationJobRequest,
     ) -> Result<CreateReplicationJobResponse, RusotoError<CreateReplicationJobError>>;
 
-    /// <p>Deletes an existing application. Optionally deletes the launched stack associated with the application and all AWS SMS replication jobs for servers in the application.</p>
+    /// <p>Deletes the specified application. Optionally deletes the launched stack associated with the application and all AWS SMS replication jobs for servers in the application.</p>
     async fn delete_app(
         &self,
         input: DeleteAppRequest,
     ) -> Result<DeleteAppResponse, RusotoError<DeleteAppError>>;
 
-    /// <p>Deletes existing launch configuration for an application.</p>
+    /// <p>Deletes the launch configuration for the specified application.</p>
     async fn delete_app_launch_configuration(
         &self,
         input: DeleteAppLaunchConfigurationRequest,
     ) -> Result<DeleteAppLaunchConfigurationResponse, RusotoError<DeleteAppLaunchConfigurationError>>;
 
-    /// <p>Deletes existing replication configuration for an application.</p>
+    /// <p>Deletes the replication configuration for the specified application.</p>
     async fn delete_app_replication_configuration(
         &self,
         input: DeleteAppReplicationConfigurationRequest,
     ) -> Result<
         DeleteAppReplicationConfigurationResponse,
         RusotoError<DeleteAppReplicationConfigurationError>,
+    >;
+
+    /// <p>Deletes the validation configuration for the specified application.</p>
+    async fn delete_app_validation_configuration(
+        &self,
+        input: DeleteAppValidationConfigurationRequest,
+    ) -> Result<
+        DeleteAppValidationConfigurationResponse,
+        RusotoError<DeleteAppValidationConfigurationError>,
     >;
 
     /// <p>Deletes the specified replication job.</p> <p>After you delete a replication job, there are no further replication runs. AWS deletes the contents of the Amazon S3 bucket used to store AWS SMS artifacts. The AMIs created by the replication runs are not deleted.</p>
@@ -2994,25 +3855,25 @@ pub trait ServerMigrationService {
         input: GenerateChangeSetRequest,
     ) -> Result<GenerateChangeSetResponse, RusotoError<GenerateChangeSetError>>;
 
-    /// <p>Generates an Amazon CloudFormation template based on the current launch configuration and writes it to an Amazon S3 object in the customer’s Amazon S3 bucket.</p>
+    /// <p>Generates an AWS CloudFormation template based on the current launch configuration and writes it to an Amazon S3 object in the customer’s Amazon S3 bucket.</p>
     async fn generate_template(
         &self,
         input: GenerateTemplateRequest,
     ) -> Result<GenerateTemplateResponse, RusotoError<GenerateTemplateError>>;
 
-    /// <p>Retrieve information about an application.</p>
+    /// <p>Retrieve information about the specified application.</p>
     async fn get_app(
         &self,
         input: GetAppRequest,
     ) -> Result<GetAppResponse, RusotoError<GetAppError>>;
 
-    /// <p>Retrieves the application launch configuration associated with an application.</p>
+    /// <p>Retrieves the application launch configuration associated with the specified application.</p>
     async fn get_app_launch_configuration(
         &self,
         input: GetAppLaunchConfigurationRequest,
     ) -> Result<GetAppLaunchConfigurationResponse, RusotoError<GetAppLaunchConfigurationError>>;
 
-    /// <p>Retrieves an application replication configuration associatd with an application.</p>
+    /// <p>Retrieves the application replication configuration associated with the specified application.</p>
     async fn get_app_replication_configuration(
         &self,
         input: GetAppReplicationConfigurationRequest,
@@ -3020,6 +3881,21 @@ pub trait ServerMigrationService {
         GetAppReplicationConfigurationResponse,
         RusotoError<GetAppReplicationConfigurationError>,
     >;
+
+    /// <p>Retrieves information about a configuration for validating an application.</p>
+    async fn get_app_validation_configuration(
+        &self,
+        input: GetAppValidationConfigurationRequest,
+    ) -> Result<
+        GetAppValidationConfigurationResponse,
+        RusotoError<GetAppValidationConfigurationError>,
+    >;
+
+    /// <p>Retrieves output from validating an application.</p>
+    async fn get_app_validation_output(
+        &self,
+        input: GetAppValidationOutputRequest,
+    ) -> Result<GetAppValidationOutputResponse, RusotoError<GetAppValidationOutputError>>;
 
     /// <p>Describes the connectors registered with the AWS SMS.</p>
     async fn get_connectors(
@@ -3045,30 +3921,42 @@ pub trait ServerMigrationService {
         input: GetServersRequest,
     ) -> Result<GetServersResponse, RusotoError<GetServersError>>;
 
-    /// <p>Gathers a complete list of on-premises servers. Connectors must be installed and monitoring all servers that you want to import.</p> <p>This call returns immediately, but might take additional time to retrieve all the servers.</p>
+    /// <p>Allows application import from AWS Migration Hub.</p>
+    async fn import_app_catalog(
+        &self,
+        input: ImportAppCatalogRequest,
+    ) -> Result<ImportAppCatalogResponse, RusotoError<ImportAppCatalogError>>;
+
+    /// <p>Gathers a complete list of on-premises servers. Connectors must be installed and monitoring all servers to import.</p> <p>This call returns immediately, but might take additional time to retrieve all the servers.</p>
     async fn import_server_catalog(
         &self,
     ) -> Result<ImportServerCatalogResponse, RusotoError<ImportServerCatalogError>>;
 
-    /// <p>Launches an application stack.</p>
+    /// <p>Launches the specified application as a stack in AWS CloudFormation.</p>
     async fn launch_app(
         &self,
         input: LaunchAppRequest,
     ) -> Result<LaunchAppResponse, RusotoError<LaunchAppError>>;
 
-    /// <p>Returns a list of summaries for all applications.</p>
+    /// <p>Retrieves summaries for all applications.</p>
     async fn list_apps(
         &self,
         input: ListAppsRequest,
     ) -> Result<ListAppsResponse, RusotoError<ListAppsError>>;
 
-    /// <p>Creates a launch configuration for an application.</p>
+    /// <p>Provides information to AWS SMS about whether application validation is successful.</p>
+    async fn notify_app_validation_output(
+        &self,
+        input: NotifyAppValidationOutputRequest,
+    ) -> Result<NotifyAppValidationOutputResponse, RusotoError<NotifyAppValidationOutputError>>;
+
+    /// <p>Creates or updates the launch configuration for the specified application.</p>
     async fn put_app_launch_configuration(
         &self,
         input: PutAppLaunchConfigurationRequest,
     ) -> Result<PutAppLaunchConfigurationResponse, RusotoError<PutAppLaunchConfigurationError>>;
 
-    /// <p>Creates or updates a replication configuration for an application.</p>
+    /// <p>Creates or updates the replication configuration for the specified application.</p>
     async fn put_app_replication_configuration(
         &self,
         input: PutAppReplicationConfigurationRequest,
@@ -3077,31 +3965,46 @@ pub trait ServerMigrationService {
         RusotoError<PutAppReplicationConfigurationError>,
     >;
 
-    /// <p>Starts replicating an application.</p>
+    /// <p>Creates or updates a validation configuration for the specified application.</p>
+    async fn put_app_validation_configuration(
+        &self,
+        input: PutAppValidationConfigurationRequest,
+    ) -> Result<
+        PutAppValidationConfigurationResponse,
+        RusotoError<PutAppValidationConfigurationError>,
+    >;
+
+    /// <p>Starts replicating the specified application by creating replication jobs for each server in the application.</p>
     async fn start_app_replication(
         &self,
         input: StartAppReplicationRequest,
     ) -> Result<StartAppReplicationResponse, RusotoError<StartAppReplicationError>>;
 
-    /// <p>Starts an on-demand replication run for the specified replication job. This replication run starts immediately. This replication run is in addition to the ones already scheduled.</p> <p>There is a limit on the number of on-demand replications runs you can request in a 24-hour period.</p>
+    /// <p>Starts an on-demand replication run for the specified application.</p>
+    async fn start_on_demand_app_replication(
+        &self,
+        input: StartOnDemandAppReplicationRequest,
+    ) -> Result<StartOnDemandAppReplicationResponse, RusotoError<StartOnDemandAppReplicationError>>;
+
+    /// <p>Starts an on-demand replication run for the specified replication job. This replication run starts immediately. This replication run is in addition to the ones already scheduled.</p> <p>There is a limit on the number of on-demand replications runs that you can request in a 24-hour period.</p>
     async fn start_on_demand_replication_run(
         &self,
         input: StartOnDemandReplicationRunRequest,
     ) -> Result<StartOnDemandReplicationRunResponse, RusotoError<StartOnDemandReplicationRunError>>;
 
-    /// <p>Stops replicating an application.</p>
+    /// <p>Stops replicating the specified application by deleting the replication job for each server in the application.</p>
     async fn stop_app_replication(
         &self,
         input: StopAppReplicationRequest,
     ) -> Result<StopAppReplicationResponse, RusotoError<StopAppReplicationError>>;
 
-    /// <p>Terminates the stack for an application.</p>
+    /// <p>Terminates the stack for the specified application.</p>
     async fn terminate_app(
         &self,
         input: TerminateAppRequest,
     ) -> Result<TerminateAppResponse, RusotoError<TerminateAppError>>;
 
-    /// <p>Updates an application.</p>
+    /// <p>Updates the specified application.</p>
     async fn update_app(
         &self,
         input: UpdateAppRequest,
@@ -3196,7 +4099,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             .deserialize::<CreateReplicationJobResponse, _>()
     }
 
-    /// <p>Deletes an existing application. Optionally deletes the launched stack associated with the application and all AWS SMS replication jobs for servers in the application.</p>
+    /// <p>Deletes the specified application. Optionally deletes the launched stack associated with the application and all AWS SMS replication jobs for servers in the application.</p>
     async fn delete_app(
         &self,
         input: DeleteAppRequest,
@@ -3217,7 +4120,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteAppResponse, _>()
     }
 
-    /// <p>Deletes existing launch configuration for an application.</p>
+    /// <p>Deletes the launch configuration for the specified application.</p>
     async fn delete_app_launch_configuration(
         &self,
         input: DeleteAppLaunchConfigurationRequest,
@@ -3240,7 +4143,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             .deserialize::<DeleteAppLaunchConfigurationResponse, _>()
     }
 
-    /// <p>Deletes existing replication configuration for an application.</p>
+    /// <p>Deletes the replication configuration for the specified application.</p>
     async fn delete_app_replication_configuration(
         &self,
         input: DeleteAppReplicationConfigurationRequest,
@@ -3266,6 +4169,34 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DeleteAppReplicationConfigurationResponse, _>()
+    }
+
+    /// <p>Deletes the validation configuration for the specified application.</p>
+    async fn delete_app_validation_configuration(
+        &self,
+        input: DeleteAppValidationConfigurationRequest,
+    ) -> Result<
+        DeleteAppValidationConfigurationResponse,
+        RusotoError<DeleteAppValidationConfigurationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.DeleteAppValidationConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteAppValidationConfigurationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteAppValidationConfigurationResponse, _>()
     }
 
     /// <p>Deletes the specified replication job.</p> <p>After you delete a replication job, there are no further replication runs. AWS deletes the contents of the Amazon S3 bucket used to store AWS SMS artifacts. The AMIs created by the replication runs are not deleted.</p>
@@ -3352,7 +4283,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GenerateChangeSetResponse, _>()
     }
 
-    /// <p>Generates an Amazon CloudFormation template based on the current launch configuration and writes it to an Amazon S3 object in the customer’s Amazon S3 bucket.</p>
+    /// <p>Generates an AWS CloudFormation template based on the current launch configuration and writes it to an Amazon S3 object in the customer’s Amazon S3 bucket.</p>
     async fn generate_template(
         &self,
         input: GenerateTemplateRequest,
@@ -3373,7 +4304,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GenerateTemplateResponse, _>()
     }
 
-    /// <p>Retrieve information about an application.</p>
+    /// <p>Retrieve information about the specified application.</p>
     async fn get_app(
         &self,
         input: GetAppRequest,
@@ -3394,7 +4325,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetAppResponse, _>()
     }
 
-    /// <p>Retrieves the application launch configuration associated with an application.</p>
+    /// <p>Retrieves the application launch configuration associated with the specified application.</p>
     async fn get_app_launch_configuration(
         &self,
         input: GetAppLaunchConfigurationRequest,
@@ -3417,7 +4348,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             .deserialize::<GetAppLaunchConfigurationResponse, _>()
     }
 
-    /// <p>Retrieves an application replication configuration associatd with an application.</p>
+    /// <p>Retrieves the application replication configuration associated with the specified application.</p>
     async fn get_app_replication_configuration(
         &self,
         input: GetAppReplicationConfigurationRequest,
@@ -3440,6 +4371,53 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetAppReplicationConfigurationResponse, _>()
+    }
+
+    /// <p>Retrieves information about a configuration for validating an application.</p>
+    async fn get_app_validation_configuration(
+        &self,
+        input: GetAppValidationConfigurationRequest,
+    ) -> Result<
+        GetAppValidationConfigurationResponse,
+        RusotoError<GetAppValidationConfigurationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.GetAppValidationConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetAppValidationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAppValidationConfigurationResponse, _>()
+    }
+
+    /// <p>Retrieves output from validating an application.</p>
+    async fn get_app_validation_output(
+        &self,
+        input: GetAppValidationOutputRequest,
+    ) -> Result<GetAppValidationOutputResponse, RusotoError<GetAppValidationOutputError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.GetAppValidationOutput",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetAppValidationOutputError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAppValidationOutputResponse, _>()
     }
 
     /// <p>Describes the connectors registered with the AWS SMS.</p>
@@ -3526,7 +4504,28 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetServersResponse, _>()
     }
 
-    /// <p>Gathers a complete list of on-premises servers. Connectors must be installed and monitoring all servers that you want to import.</p> <p>This call returns immediately, but might take additional time to retrieve all the servers.</p>
+    /// <p>Allows application import from AWS Migration Hub.</p>
+    async fn import_app_catalog(
+        &self,
+        input: ImportAppCatalogRequest,
+    ) -> Result<ImportAppCatalogResponse, RusotoError<ImportAppCatalogError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.ImportAppCatalog",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ImportAppCatalogError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ImportAppCatalogResponse, _>()
+    }
+
+    /// <p>Gathers a complete list of on-premises servers. Connectors must be installed and monitoring all servers to import.</p> <p>This call returns immediately, but might take additional time to retrieve all the servers.</p>
     async fn import_server_catalog(
         &self,
     ) -> Result<ImportServerCatalogResponse, RusotoError<ImportServerCatalogError>> {
@@ -3545,7 +4544,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ImportServerCatalogResponse, _>()
     }
 
-    /// <p>Launches an application stack.</p>
+    /// <p>Launches the specified application as a stack in AWS CloudFormation.</p>
     async fn launch_app(
         &self,
         input: LaunchAppRequest,
@@ -3566,7 +4565,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<LaunchAppResponse, _>()
     }
 
-    /// <p>Returns a list of summaries for all applications.</p>
+    /// <p>Retrieves summaries for all applications.</p>
     async fn list_apps(
         &self,
         input: ListAppsRequest,
@@ -3587,7 +4586,30 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResponse, _>()
     }
 
-    /// <p>Creates a launch configuration for an application.</p>
+    /// <p>Provides information to AWS SMS about whether application validation is successful.</p>
+    async fn notify_app_validation_output(
+        &self,
+        input: NotifyAppValidationOutputRequest,
+    ) -> Result<NotifyAppValidationOutputResponse, RusotoError<NotifyAppValidationOutputError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.NotifyAppValidationOutput",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, NotifyAppValidationOutputError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<NotifyAppValidationOutputResponse, _>()
+    }
+
+    /// <p>Creates or updates the launch configuration for the specified application.</p>
     async fn put_app_launch_configuration(
         &self,
         input: PutAppLaunchConfigurationRequest,
@@ -3610,7 +4632,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             .deserialize::<PutAppLaunchConfigurationResponse, _>()
     }
 
-    /// <p>Creates or updates a replication configuration for an application.</p>
+    /// <p>Creates or updates the replication configuration for the specified application.</p>
     async fn put_app_replication_configuration(
         &self,
         input: PutAppReplicationConfigurationRequest,
@@ -3635,7 +4657,32 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             .deserialize::<PutAppReplicationConfigurationResponse, _>()
     }
 
-    /// <p>Starts replicating an application.</p>
+    /// <p>Creates or updates a validation configuration for the specified application.</p>
+    async fn put_app_validation_configuration(
+        &self,
+        input: PutAppValidationConfigurationRequest,
+    ) -> Result<
+        PutAppValidationConfigurationResponse,
+        RusotoError<PutAppValidationConfigurationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.PutAppValidationConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutAppValidationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutAppValidationConfigurationResponse, _>()
+    }
+
+    /// <p>Starts replicating the specified application by creating replication jobs for each server in the application.</p>
     async fn start_app_replication(
         &self,
         input: StartAppReplicationRequest,
@@ -3656,7 +4703,30 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<StartAppReplicationResponse, _>()
     }
 
-    /// <p>Starts an on-demand replication run for the specified replication job. This replication run starts immediately. This replication run is in addition to the ones already scheduled.</p> <p>There is a limit on the number of on-demand replications runs you can request in a 24-hour period.</p>
+    /// <p>Starts an on-demand replication run for the specified application.</p>
+    async fn start_on_demand_app_replication(
+        &self,
+        input: StartOnDemandAppReplicationRequest,
+    ) -> Result<StartOnDemandAppReplicationResponse, RusotoError<StartOnDemandAppReplicationError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.StartOnDemandAppReplication",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartOnDemandAppReplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartOnDemandAppReplicationResponse, _>()
+    }
+
+    /// <p>Starts an on-demand replication run for the specified replication job. This replication run starts immediately. This replication run is in addition to the ones already scheduled.</p> <p>There is a limit on the number of on-demand replications runs that you can request in a 24-hour period.</p>
     async fn start_on_demand_replication_run(
         &self,
         input: StartOnDemandReplicationRunRequest,
@@ -3679,7 +4749,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             .deserialize::<StartOnDemandReplicationRunResponse, _>()
     }
 
-    /// <p>Stops replicating an application.</p>
+    /// <p>Stops replicating the specified application by deleting the replication job for each server in the application.</p>
     async fn stop_app_replication(
         &self,
         input: StopAppReplicationRequest,
@@ -3700,7 +4770,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<StopAppReplicationResponse, _>()
     }
 
-    /// <p>Terminates the stack for an application.</p>
+    /// <p>Terminates the stack for the specified application.</p>
     async fn terminate_app(
         &self,
         input: TerminateAppRequest,
@@ -3721,7 +4791,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<TerminateAppResponse, _>()
     }
 
-    /// <p>Updates an application.</p>
+    /// <p>Updates the specified application.</p>
     async fn update_app(
         &self,
         input: UpdateAppRequest,

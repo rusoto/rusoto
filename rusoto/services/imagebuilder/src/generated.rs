@@ -29,7 +29,11 @@ use serde_json;
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Ami {
-    /// <p>The description of the EC2 AMI. </p>
+    /// <p> The account ID of the owner of the AMI. </p>
+    #[serde(rename = "accountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The description of the EC2 AMI. Minimum and maximum length are in characters.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -57,7 +61,7 @@ pub struct AmiDistributionConfiguration {
     #[serde(rename = "amiTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The description of the distribution configuration. </p>
+    /// <p>The description of the distribution configuration. Minimum and maximum length are in characters.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -73,6 +77,10 @@ pub struct AmiDistributionConfiguration {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p> The ID of an account to which you want to distribute an image. </p>
+    #[serde(rename = "targetAccountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_account_ids: Option<Vec<String>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -448,7 +456,7 @@ pub struct CreateImageRecipeRequest {
     /// <p> The name of the image recipe. </p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The parent image of the image recipe. The value of the string can be the ARN of the parent image or an AMI ID. The format for the ARN follows this example: <code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/2019.x.x</code>. The ARN ends with <code>/20xx.x.x</code>, which communicates to EC2 Image Builder that you want to use the latest AMI created in 20xx (year). You can provide the specific version that you want to use, or you can use a wildcard in all of the fields. If you enter an AMI ID for the string value, you must have access to the AMI, and the AMI must be in the same Region in which you are using Image Builder. </p>
+    /// <p>The parent image of the image recipe. The value of the string can be the ARN of the parent image or an AMI ID. The format for the ARN follows this example: <code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/xxxx.x.x</code>. You can provide the specific version that you want to use, or you can use a wildcard in all of the fields. If you enter an AMI ID for the string value, you must have access to the AMI, and the AMI must be in the same Region in which you are using Image Builder. </p>
     #[serde(rename = "parentImage")]
     pub parent_image: String,
     /// <p>The semantic version of the image recipe. </p>
@@ -1653,7 +1661,7 @@ pub struct ListComponentsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionConfigurationsRequest {
-    /// <p>The filters. </p>
+    /// <p><p>The filters. </p> <ul> <li> <p> <code>name</code> - The name of this distribution configuration.</p> </li> </ul></p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -2026,11 +2034,11 @@ pub struct S3Logs {
 /// <p>A schedule configures how often and when a pipeline will automatically create a new image. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
-    /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, EC2 Image Builder will build a new image only when there are known changes pending. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time.</p>
+    /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, and you use semantic version filters on the source image or components in your image recipe, EC2 Image Builder will build a new image only when there are new versions of the image or components in your recipe that match the semantic version filter. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time. For semantic version syntax, see <a href="https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_CreateComponent.html">CreateComponent</a> in the <i> EC2 Image Builder API Reference</i>.</p>
     #[serde(rename = "pipelineExecutionStartCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_execution_start_condition: Option<String>,
-    /// <p>The expression determines how often EC2 Image Builder evaluates your <code>pipelineExecutionStartCondition</code>.</p>
+    /// <p>The cron expression determines how often EC2 Image Builder evaluates your <code>pipelineExecutionStartCondition</code>.</p> <p>For information on how to format a cron expression in Image Builder, see <a href="https://docs.aws.amazon.com/imagebuilder/latest/userguide/image-builder-cron.html">Use cron expressions in EC2 Image Builder</a>.</p>
     #[serde(rename = "scheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,

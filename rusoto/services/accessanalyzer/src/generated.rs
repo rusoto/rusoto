@@ -120,6 +120,22 @@ pub struct AnalyzerSummary {
     pub type_: String,
 }
 
+/// <p>Retroactively applies an archive rule.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ApplyArchiveRuleRequest {
+    /// <p>The Amazon resource name (ARN) of the analyzer.</p>
+    #[serde(rename = "analyzerArn")]
+    pub analyzer_arn: String,
+    /// <p>A client token.</p>
+    #[serde(rename = "clientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The name of the rule to apply.</p>
+    #[serde(rename = "ruleName")]
+    pub rule_name: String,
+}
+
 /// <p>Contains information about an archive rule.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -739,6 +755,54 @@ pub struct ValidationExceptionField {
     pub name: String,
 }
 
+/// Errors returned by ApplyArchiveRule
+#[derive(Debug, PartialEq)]
+pub enum ApplyArchiveRuleError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>Internal server error.</p>
+    InternalServer(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>Throttling limit exceeded error.</p>
+    Throttling(String),
+}
+
+impl ApplyArchiveRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApplyArchiveRuleError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ApplyArchiveRuleError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(ApplyArchiveRuleError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ApplyArchiveRuleError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ApplyArchiveRuleError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ApplyArchiveRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ApplyArchiveRuleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ApplyArchiveRuleError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ApplyArchiveRuleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ApplyArchiveRuleError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ApplyArchiveRuleError {}
 /// Errors returned by CreateAnalyzer
 #[derive(Debug, PartialEq)]
 pub enum CreateAnalyzerError {
@@ -1622,13 +1686,19 @@ impl Error for UpdateFindingsError {}
 /// Trait representing the capabilities of the Access Analyzer API. Access Analyzer clients implement this trait.
 #[async_trait]
 pub trait AccessAnalyzer {
+    /// <p>Retroactively applies the archive rule to existing findings that meet the archive rule criteria.</p>
+    async fn apply_archive_rule(
+        &self,
+        input: ApplyArchiveRuleRequest,
+    ) -> Result<(), RusotoError<ApplyArchiveRuleError>>;
+
     /// <p>Creates an analyzer for your account.</p>
     async fn create_analyzer(
         &self,
         input: CreateAnalyzerRequest,
     ) -> Result<CreateAnalyzerResponse, RusotoError<CreateAnalyzerError>>;
 
-    /// <p>Creates an archive rule for the specified analyzer. Archive rules automatically archive findings that meet the criteria you define when you create the rule.</p>
+    /// <p>Creates an archive rule for the specified analyzer. Archive rules automatically archive new findings that meet the criteria you define when you create the rule.</p>
     async fn create_archive_rule(
         &self,
         input: CreateArchiveRuleRequest,
@@ -1658,7 +1728,7 @@ pub trait AccessAnalyzer {
         input: GetAnalyzerRequest,
     ) -> Result<GetAnalyzerResponse, RusotoError<GetAnalyzerError>>;
 
-    /// <p>Retrieves information about an archive rule.</p>
+    /// <p>Retrieves information about an archive rule.</p> <p>To learn about filter keys that you can use to create an archive rule, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html">Access Analyzer filter keys</a> in the <b>IAM User Guide</b>.</p>
     async fn get_archive_rule(
         &self,
         input: GetArchiveRuleRequest,
@@ -1688,7 +1758,7 @@ pub trait AccessAnalyzer {
         input: ListArchiveRulesRequest,
     ) -> Result<ListArchiveRulesResponse, RusotoError<ListArchiveRulesError>>;
 
-    /// <p>Retrieves a list of findings generated by the specified analyzer.</p>
+    /// <p>Retrieves a list of findings generated by the specified analyzer.</p> <p>To learn about filter keys that you can use to create an archive rule, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html">Access Analyzer filter keys</a> in the <b>IAM User Guide</b>.</p>
     async fn list_findings(
         &self,
         input: ListFindingsRequest,
@@ -1770,6 +1840,36 @@ impl AccessAnalyzerClient {
 
 #[async_trait]
 impl AccessAnalyzer for AccessAnalyzerClient {
+    /// <p>Retroactively applies the archive rule to existing findings that meet the archive rule criteria.</p>
+    #[allow(unused_mut)]
+    async fn apply_archive_rule(
+        &self,
+        input: ApplyArchiveRuleRequest,
+    ) -> Result<(), RusotoError<ApplyArchiveRuleError>> {
+        let request_uri = "/archive-rule";
+
+        let mut request = SignedRequest::new("PUT", "access-analyzer", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ApplyArchiveRuleError::from_response(response))
+        }
+    }
+
     /// <p>Creates an analyzer for your account.</p>
     #[allow(unused_mut)]
     async fn create_analyzer(
@@ -1801,7 +1901,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         }
     }
 
-    /// <p>Creates an archive rule for the specified analyzer. Archive rules automatically archive findings that meet the criteria you define when you create the rule.</p>
+    /// <p>Creates an archive rule for the specified analyzer. Archive rules automatically archive new findings that meet the criteria you define when you create the rule.</p>
     #[allow(unused_mut)]
     async fn create_archive_rule(
         &self,
@@ -1973,7 +2073,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         }
     }
 
-    /// <p>Retrieves information about an archive rule.</p>
+    /// <p>Retrieves information about an archive rule.</p> <p>To learn about filter keys that you can use to create an archive rule, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html">Access Analyzer filter keys</a> in the <b>IAM User Guide</b>.</p>
     #[allow(unused_mut)]
     async fn get_archive_rule(
         &self,
@@ -2148,7 +2248,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         }
     }
 
-    /// <p>Retrieves a list of findings generated by the specified analyzer.</p>
+    /// <p>Retrieves a list of findings generated by the specified analyzer.</p> <p>To learn about filter keys that you can use to create an archive rule, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html">Access Analyzer filter keys</a> in the <b>IAM User Guide</b>.</p>
     #[allow(unused_mut)]
     async fn list_findings(
         &self,

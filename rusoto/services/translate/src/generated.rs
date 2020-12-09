@@ -158,7 +158,7 @@ pub struct ImportTerminologyResponse {
 /// <p>The input configuration properties for requesting a batch translation job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDataConfig {
-    /// <p>The multipurpose internet mail extension (MIME) type of the input files. Valid values are <code>text/plain</code> for plaintext files and <code>text/html</code> for HTML files.</p>
+    /// <p><p>Describes the format of the data that you submit to Amazon Translate as input. You can specify one of the following multipurpose internet mail extension (MIME) types:</p> <ul> <li> <p> <code>text/html</code>: The input data consists of one or more HTML files. Amazon Translate translates only the text that resides in the <code>html</code> element in each file.</p> </li> <li> <p> <code>text/plain</code>: The input data consists of one or more unformatted text files. Amazon Translate translates every character in this type of input.</p> </li> <li> <p> <code>application/vnd.openxmlformats-officedocument.wordprocessingml.document</code>: The input data consists of one or more Word documents (.docx).</p> </li> <li> <p> <code>application/vnd.openxmlformats-officedocument.presentationml.presentation</code>: The input data consists of one or more PowerPoint Presentation files (.pptx).</p> </li> <li> <p> <code>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</code>: The input data consists of one or more Excel Workbook files (.xlsx).</p> </li> </ul> <important> <p>If you structure your input data as HTML, ensure that you set this parameter to <code>text/html</code>. By doing so, you cut costs by limiting the translation to the contents of the <code>html</code> element in each file. Otherwise, if you set this parameter to <code>text/plain</code>, your costs will cover the translation of every character.</p> </important></p>
     #[serde(rename = "ContentType")]
     pub content_type: String,
     /// <p>The URI of the AWS S3 folder that contains the input file. The folder must be in the same Region as the API endpoint you are calling.</p>
@@ -251,7 +251,7 @@ pub struct OutputDataConfig {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTextTranslationJobRequest {
-    /// <p>The client token of the EC2 instance calling the request. This token is auto-generated when using the Amazon Translate SDK. Otherwise, use the <a href="docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> EC2 operation to retreive an instance's client token. For more information, see <a href="docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html#client-tokens">Client Tokens</a> in the EC2 User Guide.</p>
+    /// <p>A unique identifier for the request. This token is auto-generated when using the Amazon Translate SDK.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
     /// <p>The Amazon Resource Name (ARN) of an AWS Identity Access and Management (IAM) role that grants Amazon Translate read access to your input data. For more nformation, see <a>identity-and-access-management</a>.</p>
@@ -286,7 +286,7 @@ pub struct StartTextTranslationJobResponse {
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p><p>The status of the job. Possible values include:</p> <ul> <li> <p> <code>SUBMITTED</code> - The job has been received and is queued for processing.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon Translate is processing the job.</p> </li> <li> <p> <code>COMPLETED</code> - The job was successfully completed and the output is available.</p> </li> <li> <p> <code>COMPLETED</em>WITH<em>ERRORS</code> - The job was completed with errors. The errors can be analyzed in the job&#39;s output.</p> </li> <li> <p> <code>FAILED</code> - The job did not complete. To get details, use the <a>DescribeTextTranslationJob</a> operation.</p> </li> <li> <p> <code>STOP</em>REQUESTED</code> - The user who started the job has requested that it be stopped.</p> </li> <li> <p> <code>STOPPED</code> - The job has been stopped.</p> </li> </ul></p>
+    /// <p><p>The status of the job. Possible values include:</p> <ul> <li> <p> <code>SUBMITTED</code> - The job has been received and is queued for processing.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon Translate is processing the job.</p> </li> <li> <p> <code>COMPLETED</code> - The job was successfully completed and the output is available.</p> </li> <li> <p> <code>COMPLETED</em>WITH<em>ERROR</code> - The job was completed with errors. The errors can be analyzed in the job&#39;s output.</p> </li> <li> <p> <code>FAILED</code> - The job did not complete. To get details, use the <a>DescribeTextTranslationJob</a> operation.</p> </li> <li> <p> <code>STOP</em>REQUESTED</code> - The user who started the job has requested that it be stopped.</p> </li> <li> <p> <code>STOPPED</code> - The job has been stopped.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
@@ -523,6 +523,8 @@ pub struct TranslateTextResponse {
 pub enum DeleteTerminologyError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
+    /// <p>The value of the parameter is invalid. Review the value of the parameter you are using to correct it, and then retry your operation.</p>
+    InvalidParameterValue(String),
     /// <p>The resource you are looking for has not been found. Review the resource you're looking for and see if a different resource will accomplish your needs before retrying the revised request.</p>
     ResourceNotFound(String),
     /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
@@ -535,6 +537,11 @@ impl DeleteTerminologyError {
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteTerminologyError::InternalServer(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DeleteTerminologyError::InvalidParameterValue(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTerminologyError::ResourceNotFound(err.msg))
@@ -554,6 +561,7 @@ impl fmt::Display for DeleteTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteTerminologyError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteTerminologyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             DeleteTerminologyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteTerminologyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }

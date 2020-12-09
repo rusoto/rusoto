@@ -42,7 +42,7 @@ pub struct Alias {
     pub type_: Option<String>,
 }
 
-/// <p>Value of a segment annotation. Has one of three value types: Number, Boolean or String.</p>
+/// <p>Value of a segment annotation. Has one of three value types: Number, Boolean, or String.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AnnotationValue {
@@ -60,11 +60,20 @@ pub struct AnnotationValue {
     pub string_value: Option<String>,
 }
 
-/// <p>A list of availability zones corresponding to the segments in a trace.</p>
+/// <p>The service within the service graph that has anomalously high fault rates. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AnomalousService {
+    #[serde(rename = "ServiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_id: Option<ServiceId>,
+}
+
+/// <p>A list of Availability Zones corresponding to the segments in a trace.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AvailabilityZoneDetail {
-    /// <p>The name of a corresponding availability zone.</p>
+    /// <p>The name of a corresponding Availability Zone.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -139,12 +148,20 @@ pub struct CreateGroupRequest {
     /// <p>The case-sensitive name of the new group. Default is a reserved name and names must be unique.</p>
     #[serde(rename = "GroupName")]
     pub group_name: String,
+    /// <p><p>The structure containing configurations related to insights.</p> <ul> <li> <p>The InsightsEnabled boolean can be set to true to enable insights for the new group or false to disable insights for the new group.</p> </li> <li> <p>The NotifcationsEnabled boolean can be set to true to enable insights notifications for the new group. Notifications may only be enabled on a group with InsightsEnabled set to true.</p> </li> </ul></p>
+    #[serde(rename = "InsightsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insights_configuration: Option<InsightsConfiguration>,
+    /// <p><p>A map that contains one or more tag keys and tag values to attach to an X-Ray group. For more information about ways to use tags, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference</i>.</p> <p>The following restrictions apply to tags:</p> <ul> <li> <p>Maximum number of user-applied tags per resource: 50</p> </li> <li> <p>Maximum tag key length: 128 Unicode characters</p> </li> <li> <p>Maximum tag value length: 256 Unicode characters</p> </li> <li> <p>Valid values for key and value: a-z, A-Z, 0-9, space, and the following characters: _ . : / = + - and @</p> </li> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>Don&#39;t use <code>aws:</code> as a prefix for keys; it&#39;s reserved for AWS use.</p> </li> </ul></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResult {
-    /// <p>The group that was created. Contains the name of the group that was created, the ARN of the group that was generated based on the group name, and the filter expression that was assigned to the group.</p>
+    /// <p>The group that was created. Contains the name of the group that was created, the Amazon Resource Name (ARN) of the group that was generated based on the group name, the filter expression, and the insight configuration that was assigned to the group.</p>
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<Group>,
@@ -156,6 +173,10 @@ pub struct CreateSamplingRuleRequest {
     /// <p>The rule definition.</p>
     #[serde(rename = "SamplingRule")]
     pub sampling_rule: SamplingRule,
+    /// <p><p>A map that contains one or more tag keys and tag values to attach to an X-Ray sampling rule. For more information about ways to use tags, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference</i>.</p> <p>The following restrictions apply to tags:</p> <ul> <li> <p>Maximum number of user-applied tags per resource: 50</p> </li> <li> <p>Maximum tag key length: 128 Unicode characters</p> </li> <li> <p>Maximum tag value length: 256 Unicode characters</p> </li> <li> <p>Valid values for key and value: a-z, A-Z, 0-9, space, and the following characters: _ . : / = + - and @</p> </li> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>Don&#39;t use <code>aws:</code> as a prefix for keys; it&#39;s reserved for AWS use.</p> </li> </ul></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -436,6 +457,20 @@ pub struct FaultStatistics {
     pub total_count: Option<i64>,
 }
 
+/// <p>The predicted high and low fault count. This is used to determine if a service has become anomalous and if an insight should be created.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ForecastStatistics {
+    /// <p>The upper limit of fault counts for a service.</p>
+    #[serde(rename = "FaultCountHigh")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fault_count_high: Option<i64>,
+    /// <p>The lower limit of fault counts for a service.</p>
+    #[serde(rename = "FaultCountLow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fault_count_low: Option<i64>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEncryptionConfigRequest {}
@@ -465,7 +500,7 @@ pub struct GetGroupRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResult {
-    /// <p>The group that was requested. Contains the name of the group, the ARN of the group, and the filter expression that assigned to the group.</p>
+    /// <p>The group that was requested. Contains the name of the group, the ARN of the group, the filter expression, and the insight configuration assigned to the group.</p>
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<Group>,
@@ -487,6 +522,147 @@ pub struct GetGroupsResult {
     #[serde(rename = "Groups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub groups: Option<Vec<GroupSummary>>,
+    /// <p>Pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetInsightEventsRequest {
+    /// <p>The insight's unique identifier. Use the GetInsightSummaries action to retrieve an InsightId.</p>
+    #[serde(rename = "InsightId")]
+    pub insight_id: String,
+    /// <p>Used to retrieve at most the specified value of events.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Specify the pagination token returned by a previous request to retrieve the next page of events. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetInsightEventsResult {
+    /// <p>A detailed description of the event. This includes the time of the event, client and root cause impact statistics, and the top anomalous service at the time of the event.</p>
+    #[serde(rename = "InsightEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_events: Option<Vec<InsightEvent>>,
+    /// <p>Use this token to retrieve the next page of insight events.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetInsightImpactGraphRequest {
+    /// <p>The estimated end time of the insight, in Unix time seconds. The EndTime is exclusive of the value provided. The time range between the start time and end time can't be more than six hours. </p>
+    #[serde(rename = "EndTime")]
+    pub end_time: f64,
+    /// <p>The insight's unique identifier. Use the GetInsightSummaries action to retrieve an InsightId.</p>
+    #[serde(rename = "InsightId")]
+    pub insight_id: String,
+    /// <p>Specify the pagination token returned by a previous request to retrieve the next page of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The estimated start time of the insight, in Unix time seconds. The StartTime is inclusive of the value provided and can't be more than 30 days old.</p>
+    #[serde(rename = "StartTime")]
+    pub start_time: f64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetInsightImpactGraphResult {
+    /// <p>The provided end time. </p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The insight's unique identifier.</p>
+    #[serde(rename = "InsightId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_id: Option<String>,
+    /// <p>Pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The time, in Unix seconds, at which the service graph ended.</p>
+    #[serde(rename = "ServiceGraphEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_graph_end_time: Option<f64>,
+    /// <p>The time, in Unix seconds, at which the service graph started.</p>
+    #[serde(rename = "ServiceGraphStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_graph_start_time: Option<f64>,
+    /// <p>The AWS instrumented services related to the insight.</p>
+    #[serde(rename = "Services")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub services: Option<Vec<InsightImpactGraphService>>,
+    /// <p>The provided start time.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetInsightRequest {
+    /// <p>The insight's unique identifier. Use the GetInsightSummaries action to retrieve an InsightId.</p>
+    #[serde(rename = "InsightId")]
+    pub insight_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetInsightResult {
+    /// <p>The summary information of an insight.</p>
+    #[serde(rename = "Insight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight: Option<Insight>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetInsightSummariesRequest {
+    /// <p>The end of the time frame in which the insights ended. The end time can't be more than 30 days old.</p>
+    #[serde(rename = "EndTime")]
+    pub end_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the group. Required if the GroupName isn't provided.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The name of the group. Required if the GroupARN isn't provided.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The maximum number of results to display.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The beginning of the time frame in which the insights started. The start time can't be more than 30 days old.</p>
+    #[serde(rename = "StartTime")]
+    pub start_time: f64,
+    /// <p>The list of insight states. </p>
+    #[serde(rename = "States")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub states: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetInsightSummariesResult {
+    /// <p>The summary of each insight within the group matching the provided filters. The summary contains the InsightID, start and end time, the root cause service, the root cause and client impact statistics, the top anomalous services, and the status of the insight.</p>
+    #[serde(rename = "InsightSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_summaries: Option<Vec<InsightSummary>>,
     /// <p>Pagination token.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -568,11 +744,11 @@ pub struct GetServiceGraphRequest {
     /// <p>The end of the timeframe for which to generate a graph.</p>
     #[serde(rename = "EndTime")]
     pub end_time: f64,
-    /// <p>The ARN of a group to generate a graph based on.</p>
+    /// <p>The Amazon Resource Name (ARN) of a group based on which you want to generate a graph.</p>
     #[serde(rename = "GroupARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_arn: Option<String>,
-    /// <p>The name of a group to generate a graph based on.</p>
+    /// <p>The name of a group based on which you want to generate a graph.</p>
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
@@ -620,7 +796,11 @@ pub struct GetTimeSeriesServiceStatisticsRequest {
     #[serde(rename = "EntitySelectorExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_selector_expression: Option<String>,
-    /// <p>The ARN of the group for which to pull statistics from.</p>
+    /// <p>The forecasted high and low fault count values. Forecast enabled requests require the EntitySelectorExpression ID be provided.</p>
+    #[serde(rename = "ForecastStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forecast_statistics: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the group for which to pull statistics from.</p>
     #[serde(rename = "GroupARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_arn: Option<String>,
@@ -644,7 +824,7 @@ pub struct GetTimeSeriesServiceStatisticsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTimeSeriesServiceStatisticsResult {
-    /// <p>A flag indicating whether or not a group's filter expression has been consistent, or if a returned aggregation may show statistics from an older version of the group's filter expression.</p>
+    /// <p>A flag indicating whether or not a group's filter expression has been consistent, or if a returned aggregation might show statistics from an older version of the group's filter expression.</p>
     #[serde(rename = "ContainsOldGroupVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contains_old_group_versions: Option<bool>,
@@ -701,7 +881,7 @@ pub struct GetTraceSummariesRequest {
     #[serde(rename = "Sampling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sampling: Option<bool>,
-    /// <p>A paramater to indicate whether to enable sampling on trace summaries. Input parameters are Name and Value.</p>
+    /// <p>A parameter to indicate whether to enable sampling on trace summaries. Input parameters are Name and Value.</p>
     #[serde(rename = "SamplingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sampling_strategy: Option<SamplingStrategy>,
@@ -721,7 +901,7 @@ pub struct GetTraceSummariesResult {
     #[serde(rename = "ApproximateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approximate_time: Option<f64>,
-    /// <p>If the requested time frame contained more than one page of results, you can use this token to retrieve the next page. The first page contains the most most recent results, closest to the end of the time frame.</p>
+    /// <p>If the requested time frame contained more than one page of results, you can use this token to retrieve the next page. The first page contains the most recent results, closest to the end of the time frame.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -743,7 +923,7 @@ pub struct Group {
     #[serde(rename = "FilterExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_expression: Option<String>,
-    /// <p>The ARN of the group generated based on the GroupName.</p>
+    /// <p>The Amazon Resource Name (ARN) of the group generated based on the GroupName.</p>
     #[serde(rename = "GroupARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_arn: Option<String>,
@@ -751,6 +931,10 @@ pub struct Group {
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
+    /// <p><p>The structure containing configurations related to insights.</p> <ul> <li> <p>The InsightsEnabled boolean can be set to true to enable insights for the group or false to disable insights for the group.</p> </li> <li> <p>The NotifcationsEnabled boolean can be set to true to enable insights notifications through Amazon EventBridge for the group.</p> </li> </ul></p>
+    #[serde(rename = "InsightsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insights_configuration: Option<InsightsConfiguration>,
 }
 
 /// <p>Details for a group without metadata.</p>
@@ -769,6 +953,10 @@ pub struct GroupSummary {
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
+    /// <p><p>The structure containing configurations related to insights.</p> <ul> <li> <p>The InsightsEnabled boolean can be set to true to enable insights for the group or false to disable insights for the group.</p> </li> <li> <p>The NotificationsEnabled boolean can be set to true to enable insights notifications. Notifications can only be enabled on a group with InsightsEnabled set to true.</p> </li> </ul></p>
+    #[serde(rename = "InsightsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insights_configuration: Option<InsightsConfiguration>,
 }
 
 /// <p>An entry in a histogram for a statistic. A histogram maps the range of observed values on the X axis, and the prevalence of each value on the Y axis.</p>
@@ -811,6 +999,195 @@ pub struct Http {
     pub user_agent: Option<String>,
 }
 
+/// <p>When fault rates go outside of the expected range, X-Ray creates an insight. Insights tracks emergent issues within your applications.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Insight {
+    /// <p>The categories that label and describe the type of insight.</p>
+    #[serde(rename = "Categories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub categories: Option<Vec<String>>,
+    /// <p>The impact statistics of the client side service. This includes the number of requests to the client service and whether the requests were faults or okay.</p>
+    #[serde(rename = "ClientRequestImpactStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_impact_statistics: Option<RequestImpactStatistics>,
+    /// <p>The time, in Unix seconds, at which the insight ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the group that the insight belongs to.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The name of the group that the insight belongs to.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The insights unique identifier. </p>
+    #[serde(rename = "InsightId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_id: Option<String>,
+    #[serde(rename = "RootCauseServiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_cause_service_id: Option<ServiceId>,
+    /// <p>The impact statistics of the root cause service. This includes the number of requests to the client service and whether the requests were faults or okay.</p>
+    #[serde(rename = "RootCauseServiceRequestImpactStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_cause_service_request_impact_statistics: Option<RequestImpactStatistics>,
+    /// <p>The time, in Unix seconds, at which the insight began.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The current state of the insight.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A brief description of the insight.</p>
+    #[serde(rename = "Summary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    /// <p>The service within the insight that is most impacted by the incident.</p>
+    #[serde(rename = "TopAnomalousServices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_anomalous_services: Option<Vec<AnomalousService>>,
+}
+
+/// <p>X-Ray reevaluates insights periodically until they are resolved, and records each intermediate state in an event. You can review incident events in the Impact Timeline on the Inspect page in the X-Ray console.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InsightEvent {
+    /// <p>The impact statistics of the client side service. This includes the number of requests to the client service and whether the requests were faults or okay.</p>
+    #[serde(rename = "ClientRequestImpactStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_impact_statistics: Option<RequestImpactStatistics>,
+    /// <p>The time, in Unix seconds, at which the event was recorded.</p>
+    #[serde(rename = "EventTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_time: Option<f64>,
+    /// <p>The impact statistics of the root cause service. This includes the number of requests to the client service and whether the requests were faults or okay.</p>
+    #[serde(rename = "RootCauseServiceRequestImpactStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_cause_service_request_impact_statistics: Option<RequestImpactStatistics>,
+    /// <p>A brief description of the event.</p>
+    #[serde(rename = "Summary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    /// <p>The service during the event that is most impacted by the incident.</p>
+    #[serde(rename = "TopAnomalousServices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_anomalous_services: Option<Vec<AnomalousService>>,
+}
+
+/// <p>The connection between two service in an insight impact graph.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InsightImpactGraphEdge {
+    /// <p>Identifier of the edge. Unique within a service map.</p>
+    #[serde(rename = "ReferenceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_id: Option<i64>,
+}
+
+/// <p>Information about an application that processed requests, users that made requests, or downstream services, resources, and applications that an application used. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InsightImpactGraphService {
+    /// <p>Identifier of the AWS account in which the service runs.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>Connections to downstream services.</p>
+    #[serde(rename = "Edges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edges: Option<Vec<InsightImpactGraphEdge>>,
+    /// <p>The canonical name of the service.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of names for the service, including the canonical name.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub names: Option<Vec<String>>,
+    /// <p>Identifier for the service. Unique within the service map.</p>
+    #[serde(rename = "ReferenceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_id: Option<i64>,
+    /// <p><p>Identifier for the service. Unique within the service map.</p> <ul> <li> <p>AWS Resource - The type of an AWS resource. For example, AWS::EC2::Instance for an application running on Amazon EC2 or AWS::DynamoDB::Table for an Amazon DynamoDB table that the application used. </p> </li> <li> <p>AWS Service - The type of an AWS service. For example, AWS::DynamoDB for downstream calls to Amazon DynamoDB that didn&#39;t target a specific table. </p> </li> <li> <p>AWS Service - The type of an AWS service. For example, AWS::DynamoDB for downstream calls to Amazon DynamoDB that didn&#39;t target a specific table. </p> </li> <li> <p>remote - A downstream service of indeterminate type.</p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Information that describes an insight.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InsightSummary {
+    /// <p> Categories The categories that label and describe the type of insight.</p>
+    #[serde(rename = "Categories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub categories: Option<Vec<String>>,
+    /// <p>The impact statistics of the client side service. This includes the number of requests to the client service and whether the requests were faults or okay. </p>
+    #[serde(rename = "ClientRequestImpactStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_impact_statistics: Option<RequestImpactStatistics>,
+    /// <p>The time, in Unix seconds, at which the insight ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the group that the insight belongs to.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The name of the group that the insight belongs to.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The insights unique identifier. </p>
+    #[serde(rename = "InsightId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_id: Option<String>,
+    /// <p>The time, in Unix seconds, that the insight was last updated.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    #[serde(rename = "RootCauseServiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_cause_service_id: Option<ServiceId>,
+    /// <p>The impact statistics of the root cause service. This includes the number of requests to the client service and whether the requests were faults or okay. </p>
+    #[serde(rename = "RootCauseServiceRequestImpactStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_cause_service_request_impact_statistics: Option<RequestImpactStatistics>,
+    /// <p>The time, in Unix seconds, at which the insight began.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The current state of the insight.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A brief description of the insight.</p>
+    #[serde(rename = "Summary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    /// <p>The service within the insight that is most impacted by the incident.</p>
+    #[serde(rename = "TopAnomalousServices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_anomalous_services: Option<Vec<AnomalousService>>,
+}
+
+/// <p>The structure containing configurations related to insights.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct InsightsConfiguration {
+    /// <p>Set the InsightsEnabled value to true to enable insights or false to disable insights.</p>
+    #[serde(rename = "InsightsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insights_enabled: Option<bool>,
+    /// <p>Set the NotificationsEnabled value to true to enable insights notifications. Notifications can only be enabled on a group with InsightsEnabled set to true.</p>
+    #[serde(rename = "NotificationsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notifications_enabled: Option<bool>,
+}
+
 /// <p>A list of EC2 instance IDs corresponding to the segments in a trace. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -819,6 +1196,31 @@ pub struct InstanceIdDetail {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>A pagination token. If multiple pages of results are returned, use the <code>NextToken</code> value returned with the current page of results as the value of this parameter to get the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Number (ARN) of an X-Ray group or sampling rule.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A pagination token. If multiple pages of results are returned, use the <code>NextToken</code> value returned with the current page of results to get the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of tags, as key and value pairs, that is associated with the specified X-Ray group or sampling rule.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -883,6 +1285,24 @@ pub struct PutTraceSegmentsResult {
     pub unprocessed_trace_segments: Option<Vec<UnprocessedTraceSegment>>,
 }
 
+/// <p>Statistics that describe how the incident has impacted a service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RequestImpactStatistics {
+    /// <p>The number of requests that have resulted in a fault,</p>
+    #[serde(rename = "FaultCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fault_count: Option<i64>,
+    /// <p>The number of successful requests.</p>
+    #[serde(rename = "OkCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ok_count: Option<i64>,
+    /// <p>The total number of requests to the service.</p>
+    #[serde(rename = "TotalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_count: Option<i64>,
+}
+
 /// <p>A list of resources ARNs corresponding to the segments in a trace.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -911,7 +1331,7 @@ pub struct ResponseTimeRootCause {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResponseTimeRootCauseEntity {
-    /// <p>The types and messages of the exceptions.</p>
+    /// <p>The type and messages of the exceptions.</p>
     #[serde(rename = "Coverage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub coverage: Option<f64>,
@@ -1088,7 +1508,7 @@ pub struct SamplingRuleUpdate {
     pub url_path: Option<String>,
 }
 
-/// <p>Aggregated request sampling data for a sampling rule across all services for a 10 second window.</p>
+/// <p>Aggregated request sampling data for a sampling rule across all services for a 10-second window.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SamplingStatisticSummary {
@@ -1165,7 +1585,7 @@ pub struct SamplingTargetDocument {
     #[serde(rename = "Interval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interval: Option<i64>,
-    /// <p>The number of requests per second that X-Ray allocated this service.</p>
+    /// <p>The number of requests per second that X-Ray allocated for this service.</p>
     #[serde(rename = "ReservoirQuota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reservoir_quota: Option<i64>,
@@ -1193,7 +1613,7 @@ pub struct Segment {
     pub id: Option<String>,
 }
 
-/// <p>Information about an application that processed requests, users that made requests, or downstream services, resources and applications that an application used.</p>
+/// <p>Information about an application that processed requests, users that made requests, or downstream services, resources, and applications that an application used.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
@@ -1245,7 +1665,7 @@ pub struct Service {
     #[serde(rename = "SummaryStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary_statistics: Option<ServiceStatistics>,
-    /// <p><p>The type of service.</p> <ul> <li> <p>AWS Resource - The type of an AWS resource. For example, <code>AWS::EC2::Instance</code> for a application running on Amazon EC2 or <code>AWS::DynamoDB::Table</code> for an Amazon DynamoDB table that the application used.</p> </li> <li> <p>AWS Service - The type of an AWS service. For example, <code>AWS::DynamoDB</code> for downstream calls to Amazon DynamoDB that didn&#39;t target a specific table.</p> </li> <li> <p> <code>client</code> - Represents the clients that sent requests to a root service.</p> </li> <li> <p> <code>remote</code> - A downstream service of indeterminate type.</p> </li> </ul></p>
+    /// <p><p>The type of service.</p> <ul> <li> <p>AWS Resource - The type of an AWS resource. For example, <code>AWS::EC2::Instance</code> for an application running on Amazon EC2 or <code>AWS::DynamoDB::Table</code> for an Amazon DynamoDB table that the application used.</p> </li> <li> <p>AWS Service - The type of an AWS service. For example, <code>AWS::DynamoDB</code> for downstream calls to Amazon DynamoDB that didn&#39;t target a specific table.</p> </li> <li> <p> <code>client</code> - Represents the clients that sent requests to a root service.</p> </li> <li> <p> <code>remote</code> - A downstream service of indeterminate type.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1299,6 +1719,32 @@ pub struct ServiceStatistics {
     pub total_response_time: Option<f64>,
 }
 
+/// <p><p>A map that contains tag keys and tag values to attach to an AWS X-Ray group or sampling rule. For more information about ways to use tags, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference</i>.</p> <p>The following restrictions apply to tags:</p> <ul> <li> <p>Maximum number of user-applied tags per resource: 50</p> </li> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>Don&#39;t use <code>aws:</code> as a prefix for keys; it&#39;s reserved for AWS use. You cannot edit or delete system tags.</p> </li> </ul></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Tag {
+    /// <p>A tag key, such as <code>Stage</code> or <code>Name</code>. A tag key cannot be empty. The key can be a maximum of 128 characters, and can contain only Unicode letters, numbers, or separators, or the following special characters: <code>+ - = . _ : /</code> </p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>An optional tag value, such as <code>Production</code> or <code>test-only</code>. The value can be a maximum of 255 characters, and contain only Unicode letters, numbers, or separators, or the following special characters: <code>+ - = . _ : /</code> </p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Number (ARN) of an X-Ray group or sampling rule.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p><p>A map that contains one or more tag keys and tag values to attach to an X-Ray group or sampling rule. For more information about ways to use tags, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference</i>.</p> <p>The following restrictions apply to tags:</p> <ul> <li> <p>Maximum number of user-applied tags per resource: 50</p> </li> <li> <p>Maximum tag key length: 128 Unicode characters</p> </li> <li> <p>Maximum tag value length: 256 Unicode characters</p> </li> <li> <p>Valid values for key and value: a-z, A-Z, 0-9, space, and the following characters: _ . : / = + - and @</p> </li> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>Don&#39;t use <code>aws:</code> as a prefix for keys; it&#39;s reserved for AWS use. You cannot edit or delete system tags.</p> </li> </ul></p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1339,6 +1785,10 @@ pub struct TimeSeriesServiceStatistics {
     #[serde(rename = "ResponseTimeHistogram")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_time_histogram: Option<Vec<HistogramEntry>>,
+    /// <p>The forecasted high and low fault count values.</p>
+    #[serde(rename = "ServiceForecastStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_forecast_statistics: Option<ForecastStatistics>,
     #[serde(rename = "ServiceSummaryStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_summary_statistics: Option<ServiceStatistics>,
@@ -1360,6 +1810,10 @@ pub struct Trace {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>LimitExceeded is set to true when the trace has exceeded one of the defined quotas. For more information about quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/xray.html">AWS X-Ray endpoints and quotas</a>.</p>
+    #[serde(rename = "LimitExceeded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit_exceeded: Option<bool>,
     /// <p>Segment documents for the segments and subsegments that comprise the trace.</p>
     #[serde(rename = "Segments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1374,7 +1828,7 @@ pub struct TraceSummary {
     #[serde(rename = "Annotations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotations: Option<::std::collections::HashMap<String, Vec<ValueWithServiceIds>>>,
-    /// <p>A list of availability zones for any zone corresponding to the trace segments.</p>
+    /// <p>A list of Availability Zones for any zone corresponding to the trace segments.</p>
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<AvailabilityZoneDetail>>,
@@ -1390,7 +1844,7 @@ pub struct TraceSummary {
     #[serde(rename = "ErrorRootCauses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_root_causes: Option<Vec<ErrorRootCause>>,
-    /// <p>A collection of FaultRootCause structures corresponding to the the trace segments.</p>
+    /// <p>A collection of FaultRootCause structures corresponding to the trace segments.</p>
     #[serde(rename = "FaultRootCauses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fault_root_causes: Option<Vec<FaultRootCause>>,
@@ -1504,6 +1958,21 @@ pub struct UnprocessedTraceSegment {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Number (ARN) of an X-Ray group or sampling rule.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>Keys for one or more tags that you want to remove from an X-Ray group or sampling rule.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>The updated filter expression defining criteria by which to group traces.</p>
     #[serde(rename = "FilterExpression")]
@@ -1517,12 +1986,16 @@ pub struct UpdateGroupRequest {
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
+    /// <p><p>The structure containing configurations related to insights.</p> <ul> <li> <p>The InsightsEnabled boolean can be set to true to enable insights for the group or false to disable insights for the group.</p> </li> <li> <p>The NotifcationsEnabled boolean can be set to true to enable insights notifications for the group. Notifications can only be enabled on a group with InsightsEnabled set to true.</p> </li> </ul></p>
+    #[serde(rename = "InsightsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insights_configuration: Option<InsightsConfiguration>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResult {
-    /// <p>The group that was updated. Contains the name of the group that was updated, the ARN of the group that was updated, and the updated filter expression assigned to the group.</p>
+    /// <p>The group that was updated. Contains the name of the group that was updated, the ARN of the group that was updated, the updated filter expression, and the updated insight configuration assigned to the group.</p>
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<Group>,
@@ -1855,6 +2328,152 @@ impl fmt::Display for GetGroupsError {
     }
 }
 impl Error for GetGroupsError {}
+/// Errors returned by GetInsight
+#[derive(Debug, PartialEq)]
+pub enum GetInsightError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+}
+
+impl GetInsightError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetInsightError::InvalidRequest(err.msg))
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(GetInsightError::Throttled(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetInsightError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetInsightError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetInsightError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetInsightError {}
+/// Errors returned by GetInsightEvents
+#[derive(Debug, PartialEq)]
+pub enum GetInsightEventsError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+}
+
+impl GetInsightEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightEventsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetInsightEventsError::InvalidRequest(err.msg))
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(GetInsightEventsError::Throttled(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetInsightEventsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetInsightEventsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetInsightEventsError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetInsightEventsError {}
+/// Errors returned by GetInsightImpactGraph
+#[derive(Debug, PartialEq)]
+pub enum GetInsightImpactGraphError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+}
+
+impl GetInsightImpactGraphError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightImpactGraphError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetInsightImpactGraphError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(GetInsightImpactGraphError::Throttled(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetInsightImpactGraphError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetInsightImpactGraphError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetInsightImpactGraphError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetInsightImpactGraphError {}
+/// Errors returned by GetInsightSummaries
+#[derive(Debug, PartialEq)]
+pub enum GetInsightSummariesError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+}
+
+impl GetInsightSummariesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightSummariesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetInsightSummariesError::InvalidRequest(err.msg))
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(GetInsightSummariesError::Throttled(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetInsightSummariesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetInsightSummariesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetInsightSummariesError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetInsightSummariesError {}
 /// Errors returned by GetSamplingRules
 #[derive(Debug, PartialEq)]
 pub enum GetSamplingRulesError {
@@ -2121,6 +2740,50 @@ impl fmt::Display for GetTraceSummariesError {
     }
 }
 impl Error for GetTraceSummariesError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The resource was not found. Verify that the name or Amazon Resource Name (ARN) of the resource is correct.</p>
+    ResourceNotFound(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Throttled(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum PutEncryptionConfigError {
@@ -2229,6 +2892,96 @@ impl fmt::Display for PutTraceSegmentsError {
     }
 }
 impl Error for PutTraceSegmentsError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The resource was not found. Verify that the name or Amazon Resource Name (ARN) of the resource is correct.</p>
+    ResourceNotFound(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// <p>You have exceeded the maximum number of tags you can apply to this resource.</p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(TagResourceError::Throttled(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Throttled(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The resource was not found. Verify that the name or Amazon Resource Name (ARN) of the resource is correct.</p>
+    ResourceNotFound(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(UntagResourceError::Throttled(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
@@ -2351,6 +3104,30 @@ pub trait XRay {
         input: GetGroupsRequest,
     ) -> Result<GetGroupsResult, RusotoError<GetGroupsError>>;
 
+    /// <p>Retrieves the summary information of an insight. This includes impact to clients and root cause services, the top anomalous services, the category, the state of the insight, and the start and end time of the insight.</p>
+    async fn get_insight(
+        &self,
+        input: GetInsightRequest,
+    ) -> Result<GetInsightResult, RusotoError<GetInsightError>>;
+
+    /// <p>X-Ray reevaluates insights periodically until they're resolved, and records each intermediate state as an event. You can review an insight's events in the Impact Timeline on the Inspect page in the X-Ray console.</p>
+    async fn get_insight_events(
+        &self,
+        input: GetInsightEventsRequest,
+    ) -> Result<GetInsightEventsResult, RusotoError<GetInsightEventsError>>;
+
+    /// <p>Retrieves a service graph structure filtered by the specified insight. The service graph is limited to only structural information. For a complete service graph, use this API with the GetServiceGraph API.</p>
+    async fn get_insight_impact_graph(
+        &self,
+        input: GetInsightImpactGraphRequest,
+    ) -> Result<GetInsightImpactGraphResult, RusotoError<GetInsightImpactGraphError>>;
+
+    /// <p>Retrieves the summaries of all insights in the specified group matching the provided filter values.</p>
+    async fn get_insight_summaries(
+        &self,
+        input: GetInsightSummariesRequest,
+    ) -> Result<GetInsightSummariesResult, RusotoError<GetInsightSummariesError>>;
+
     /// <p>Retrieves all sampling rules.</p>
     async fn get_sampling_rules(
         &self,
@@ -2396,6 +3173,12 @@ pub trait XRay {
         input: GetTraceSummariesRequest,
     ) -> Result<GetTraceSummariesResult, RusotoError<GetTraceSummariesError>>;
 
+    /// <p>Returns a list of tags that are applied to the specified AWS X-Ray group or sampling rule.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Updates the encryption configuration for X-Ray data.</p>
     async fn put_encryption_config(
         &self,
@@ -2408,11 +3191,23 @@ pub trait XRay {
         input: PutTelemetryRecordsRequest,
     ) -> Result<PutTelemetryRecordsResult, RusotoError<PutTelemetryRecordsError>>;
 
-    /// <p><p>Uploads segment documents to AWS X-Ray. The <a href="https://docs.aws.amazon.com/xray/index.html">X-Ray SDK</a> generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
+    /// <p><p>Uploads segment documents to AWS X-Ray. The <a href="https://docs.aws.amazon.com/xray/index.html">X-Ray SDK</a> generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required segment document fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in-progress segment when your application receives a request that will take a long time to serve, to trace that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, for instance, <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
     async fn put_trace_segments(
         &self,
         input: PutTraceSegmentsRequest,
     ) -> Result<PutTraceSegmentsResult, RusotoError<PutTraceSegmentsError>>;
+
+    /// <p>Applies tags to an existing AWS X-Ray group or sampling rule.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes tags from an AWS X-Ray group or sampling rule. You cannot edit or delete system tags (those with an <code>aws:</code> prefix).</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates a group resource.</p>
     async fn update_group(
@@ -2710,6 +3505,130 @@ impl XRay for XRayClient {
         }
     }
 
+    /// <p>Retrieves the summary information of an insight. This includes impact to clients and root cause services, the top anomalous services, the category, the state of the insight, and the start and end time of the insight.</p>
+    #[allow(unused_mut)]
+    async fn get_insight(
+        &self,
+        input: GetInsightRequest,
+    ) -> Result<GetInsightResult, RusotoError<GetInsightError>> {
+        let request_uri = "/Insight";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetInsightResult, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetInsightError::from_response(response))
+        }
+    }
+
+    /// <p>X-Ray reevaluates insights periodically until they're resolved, and records each intermediate state as an event. You can review an insight's events in the Impact Timeline on the Inspect page in the X-Ray console.</p>
+    #[allow(unused_mut)]
+    async fn get_insight_events(
+        &self,
+        input: GetInsightEventsRequest,
+    ) -> Result<GetInsightEventsResult, RusotoError<GetInsightEventsError>> {
+        let request_uri = "/InsightEvents";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetInsightEventsResult, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetInsightEventsError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves a service graph structure filtered by the specified insight. The service graph is limited to only structural information. For a complete service graph, use this API with the GetServiceGraph API.</p>
+    #[allow(unused_mut)]
+    async fn get_insight_impact_graph(
+        &self,
+        input: GetInsightImpactGraphRequest,
+    ) -> Result<GetInsightImpactGraphResult, RusotoError<GetInsightImpactGraphError>> {
+        let request_uri = "/InsightImpactGraph";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetInsightImpactGraphResult, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetInsightImpactGraphError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves the summaries of all insights in the specified group matching the provided filter values.</p>
+    #[allow(unused_mut)]
+    async fn get_insight_summaries(
+        &self,
+        input: GetInsightSummariesRequest,
+    ) -> Result<GetInsightSummariesResult, RusotoError<GetInsightSummariesError>> {
+        let request_uri = "/InsightSummaries";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetInsightSummariesResult, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetInsightSummariesError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves all sampling rules.</p>
     #[allow(unused_mut)]
     async fn get_sampling_rules(
@@ -2931,6 +3850,37 @@ impl XRay for XRayClient {
         }
     }
 
+    /// <p>Returns a list of tags that are applied to the specified AWS X-Ray group or sampling rule.</p>
+    #[allow(unused_mut)]
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = "/ListTagsForResource";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Updates the encryption configuration for X-Ray data.</p>
     #[allow(unused_mut)]
     async fn put_encryption_config(
@@ -2993,7 +3943,7 @@ impl XRay for XRayClient {
         }
     }
 
-    /// <p><p>Uploads segment documents to AWS X-Ray. The <a href="https://docs.aws.amazon.com/xray/index.html">X-Ray SDK</a> generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
+    /// <p><p>Uploads segment documents to AWS X-Ray. The <a href="https://docs.aws.amazon.com/xray/index.html">X-Ray SDK</a> generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required segment document fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in-progress segment when your application receives a request that will take a long time to serve, to trace that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, for instance, <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn put_trace_segments(
         &self,
@@ -3021,6 +3971,68 @@ impl XRay for XRayClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutTraceSegmentsError::from_response(response))
+        }
+    }
+
+    /// <p>Applies tags to an existing AWS X-Ray group or sampling rule.</p>
+    #[allow(unused_mut)]
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let request_uri = "/TagResource";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes tags from an AWS X-Ray group or sampling rule. You cannot edit or delete system tags (those with an <code>aws:</code> prefix).</p>
+    #[allow(unused_mut)]
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let request_uri = "/UntagResource";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 

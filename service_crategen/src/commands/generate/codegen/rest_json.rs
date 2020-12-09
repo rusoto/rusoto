@@ -92,7 +92,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 parse_status_code = generate_status_code_parser(operation, service),
                 output_type = output_type,
                 load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or_else(|| "".to_string()),
-                parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
+                parse_headers = rest_response_parser::generate_response_headers_parser(service, operation, self as &dyn GenerateProtocol)
                     .unwrap_or_else(|| "".to_owned()),
                 request_uri_formatter = rest_request_generator::generate_uri_formatter(
                     &request_uri,

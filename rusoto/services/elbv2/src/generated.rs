@@ -60,7 +60,7 @@ impl ElbClient {
     }
 }
 
-/// <p>Information about an action.</p>
+/// <p>Information about an action.</p> <p>Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>, and it must be the last action to be performed.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -73,7 +73,7 @@ pub struct Action {
     pub fixed_response_config: Option<FixedResponseActionConfig>,
     /// <p>Information for creating an action that distributes requests among one or more target groups. For Network Load Balancers, you can specify a single target group. Specify only when <code>Type</code> is <code>forward</code>. If you specify both <code>ForwardConfig</code> and <code>TargetGroupArn</code>, you can specify only one target group using <code>ForwardConfig</code> and it must be the same target group specified in <code>TargetGroupArn</code>.</p>
     pub forward_config: Option<ForwardActionConfig>,
-    /// <p>The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first. The last action to be performed must be one of the following types of actions: a <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>.</p>
+    /// <p>The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.</p>
     pub order: Option<i64>,
     /// <p>[Application Load Balancer] Information for creating a redirect action. Specify only when <code>Type</code> is <code>redirect</code>.</p>
     pub redirect_config: Option<RedirectActionConfig>,
@@ -992,6 +992,8 @@ impl AuthenticateOidcActionUserInfoEndpointDeserializer {
 pub struct AvailabilityZone {
     /// <p>[Network Load Balancers] If you need static IP addresses for your load balancer, you can specify one Elastic IP address per Availability Zone when you create an internal-facing load balancer. For internal load balancers, you can specify a private IP address from the IPv4 range of the subnet.</p>
     pub load_balancer_addresses: Option<Vec<LoadBalancerAddress>>,
+    /// <p>[Application Load Balancers on Outposts] The ID of the Outpost.</p>
+    pub outpost_id: Option<String>,
     /// <p>The ID of the subnet. You can specify one subnet per Availability Zone.</p>
     pub subnet_id: Option<String>,
     /// <p>The name of the Availability Zone.</p>
@@ -1015,6 +1017,9 @@ impl AvailabilityZoneDeserializer {
                             stack,
                         )?,
                     );
+                }
+                "OutpostId" => {
+                    obj.outpost_id = Some(OutpostIdDeserializer::deserialize("OutpostId", stack)?);
                 }
                 "SubnetId" => {
                     obj.subnet_id = Some(SubnetIdDeserializer::deserialize("SubnetId", stack)?);
@@ -1226,7 +1231,7 @@ pub struct CreateListenerInput {
     pub alpn_policy: Option<Vec<String>>,
     /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list for the listener, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions for the default rule.</p>
     pub default_actions: Vec<Action>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -1236,6 +1241,8 @@ pub struct CreateListenerInput {
     pub protocol: String,
     /// <p>[HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. The following are the possible values:</p> <ul> <li> <p> <code>ELBSecurityPolicy-2016-08</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-TLS-1-0-2015-04</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-TLS-1-1-2017-01</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-TLS-1-2-2017-01</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-TLS-1-2-Ext-2018-06</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-FS-2018-06</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-FS-1-1-2019-08</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-FS-1-2-2019-08</code> </p> </li> <li> <p> <code>ELBSecurityPolicy-FS-1-2-Res-2019-08</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Network Load Balancers Guide</i>.</p>
     pub ssl_policy: Option<String>,
+    /// <p>The tags to assign to the listener.</p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// Serialize `CreateListenerInput` contents to a `SignedRequest`.
@@ -1275,6 +1282,9 @@ impl CreateListenerInputSerializer {
         if let Some(ref field_value) = obj.ssl_policy {
             params.put(&format!("{}{}", prefix, "SslPolicy"), &field_value);
         }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+        }
     }
 }
 
@@ -1309,6 +1319,8 @@ impl CreateListenerOutputDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerInput {
+    /// <p>[Application Load Balancers on Outposts] The ID of the customer-owned address pool (CoIP pool).</p>
+    pub customer_owned_ipv_4_pool: Option<String>,
     /// <p>[Application Load Balancers] The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: Option<String>,
     /// <p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-".</p>
@@ -1317,11 +1329,11 @@ pub struct CreateLoadBalancerInput {
     pub scheme: Option<String>,
     /// <p>[Application Load Balancers] The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet if you need static IP addresses for your internet-facing load balancer. For internal load balancers, you can specify one private IP address per subnet from the IPv4 range of the subnet.</p>
+    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Application Load Balancers on Outposts] You must specify one Outpost subnet.</p> <p>[Application Load Balancers on Local Zones] You can specify subnets from one or more Local Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet if you need static IP addresses for your internet-facing load balancer. For internal load balancers, you can specify one private IP address per subnet from the IPv4 range of the subnet.</p>
     pub subnet_mappings: Option<Vec<SubnetMapping>>,
-    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones.</p>
+    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones.</p> <p>[Application Load Balancers on Outposts] You must specify one Outpost subnet.</p> <p>[Application Load Balancers on Local Zones] You can specify subnets from one or more Local Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones.</p>
     pub subnets: Option<Vec<String>>,
-    /// <p>One or more tags to assign to the load balancer.</p>
+    /// <p>The tags to assign to the load balancer.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The type of load balancer. The default is <code>application</code>.</p>
     pub type_: Option<String>,
@@ -1336,6 +1348,12 @@ impl CreateLoadBalancerInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.customer_owned_ipv_4_pool {
+            params.put(
+                &format!("{}{}", prefix, "CustomerOwnedIpv4Pool"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.ip_address_type {
             params.put(&format!("{}{}", prefix, "IpAddressType"), &field_value);
         }
@@ -1404,14 +1422,16 @@ impl CreateLoadBalancerOutputDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleInput {
-    /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>, and it must be the last action to be performed.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions.</p>
     pub actions: Vec<Action>,
-    /// <p>The conditions. Each rule can include zero or one of the following conditions: <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and <code>source-ip</code>, and zero or more of the following conditions: <code>http-header</code> and <code>query-string</code>.</p>
+    /// <p>The conditions.</p>
     pub conditions: Vec<RuleCondition>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
     /// <p>The rule priority. A listener can't have multiple rules with the same priority.</p>
     pub priority: i64,
+    /// <p>The tags to assign to the rule.</p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// Serialize `CreateRuleInput` contents to a `SignedRequest`.
@@ -1431,6 +1451,9 @@ impl CreateRuleInputSerializer {
         );
         params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
         params.put(&format!("{}{}", prefix, "Priority"), &obj.priority);
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+        }
     }
 }
 
@@ -1469,7 +1492,7 @@ pub struct CreateTargetGroupInput {
     pub health_check_enabled: Option<bool>,
     /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For HTTP and HTTPS health checks, the range is 5–300 seconds. For TCP health checks, the supported values are 10 and 30 seconds. If the target type is <code>instance</code> or <code>ip</code>, the default is 30 seconds. If the target type is <code>lambda</code>, the default is 35 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
-    /// <p>[HTTP/HTTPS health checks] The ping path that is the destination on the targets for health checks. The default is /.</p>
+    /// <p>[HTTP/HTTPS health checks] The destination for health checks on the targets.</p> <p>[HTTP1 or HTTP2 protocol version] The ping path. The default is /.</p> <p>[GRPC protocol version] The path of a custom health check method with the format /package.service/method. The default is /AWS.ALB/healthcheck.</p>
     pub health_check_path: Option<String>,
     /// <p>The port the load balancer uses when performing health checks on targets. The default is <code>traffic-port</code>, which is the port on which each target receives traffic from the load balancer.</p>
     pub health_check_port: Option<String>,
@@ -1479,7 +1502,7 @@ pub struct CreateTargetGroupInput {
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy. For target groups with a protocol of HTTP or HTTPS, the default is 5. For target groups with a protocol of TCP or TLS, the default is 3. If the target type is <code>lambda</code>, the default is 5.</p>
     pub healthy_threshold_count: Option<i64>,
-    /// <p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a successful response from a target.</p>
+    /// <p>[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.</p>
     pub matcher: Option<Matcher>,
     /// <p>The name of the target group.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>
     pub name: String,
@@ -1487,7 +1510,11 @@ pub struct CreateTargetGroupInput {
     pub port: Option<i64>,
     /// <p>The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.</p>
     pub protocol: Option<String>,
-    /// <p><p>The type of target that you must specify when registering targets with this target group. You can&#39;t specify targets for a target group using more than one target type.</p> <ul> <li> <p> <code>instance</code> - Targets are specified by instance ID. This is the default value. If the target group protocol is UDP or TCP_UDP, the target type must be <code>instance</code>.</p> </li> <li> <p> <code>ip</code> - Targets are specified by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can&#39;t specify publicly routable IP addresses.</p> </li> <li> <p> <code>lambda</code> - The target groups contains a single Lambda function.</p> </li> </ul></p>
+    /// <p>[HTTP/HTTPS protocol] The protocol version. Specify <code>GRPC</code> to send requests to targets using gRPC. Specify <code>HTTP2</code> to send requests to targets using HTTP/2. The default is <code>HTTP1</code>, which sends requests to targets using HTTP/1.1.</p>
+    pub protocol_version: Option<String>,
+    /// <p>The tags to assign to the target group.</p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p><p>The type of target that you must specify when registering targets with this target group. You can&#39;t specify targets for a target group using more than one target type.</p> <ul> <li> <p> <code>instance</code> - Targets are specified by instance ID. This is the default value.</p> </li> <li> <p> <code>ip</code> - Targets are specified by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can&#39;t specify publicly routable IP addresses.</p> </li> <li> <p> <code>lambda</code> - The target groups contains a single Lambda function.</p> </li> </ul></p>
     pub target_type: Option<String>,
     /// <p>The number of consecutive health check failures required before considering a target unhealthy. For target groups with a protocol of HTTP or HTTPS, the default is 2. For target groups with a protocol of TCP or TLS, this value must be the same as the healthy threshold count. If the target type is <code>lambda</code>, the default is 2.</p>
     pub unhealthy_threshold_count: Option<i64>,
@@ -1547,6 +1574,12 @@ impl CreateTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.protocol {
             params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
         }
+        if let Some(ref field_value) = obj.protocol_version {
+            params.put(&format!("{}{}", prefix, "ProtocolVersion"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+        }
         if let Some(ref field_value) = obj.target_type {
             params.put(&format!("{}{}", prefix, "TargetType"), &field_value);
         }
@@ -1597,6 +1630,14 @@ impl CreateTargetGroupOutputDeserializer {
 #[allow(dead_code)]
 struct CreatedTimeDeserializer;
 impl CreatedTimeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct CustomerOwnedIpv4PoolDeserializer;
+impl CustomerOwnedIpv4PoolDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
@@ -2771,6 +2812,14 @@ impl ForwardActionConfigSerializer {
 }
 
 #[allow(dead_code)]
+struct GrpcCodeDeserializer;
+impl GrpcCodeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
 struct HealthCheckEnabledDeserializer;
 impl HealthCheckEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -3216,12 +3265,14 @@ impl ListenersDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancer {
-    /// <p>The Availability Zones for the load balancer.</p>
+    /// <p>The subnets for the load balancer.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
     /// <p>The ID of the Amazon Route 53 hosted zone associated with the load balancer.</p>
     pub canonical_hosted_zone_id: Option<String>,
     /// <p>The date and time the load balancer was created.</p>
     pub created_time: Option<String>,
+    /// <p>[Application Load Balancers on Outposts] The ID of the customer-owned address pool.</p>
+    pub customer_owned_ipv_4_pool: Option<String>,
     /// <p>The public DNS name of the load balancer.</p>
     pub dns_name: Option<String>,
     /// <p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses).</p>
@@ -3267,6 +3318,13 @@ impl LoadBalancerDeserializer {
                 "CreatedTime" => {
                     obj.created_time =
                         Some(CreatedTimeDeserializer::deserialize("CreatedTime", stack)?);
+                }
+                "CustomerOwnedIpv4Pool" => {
+                    obj.customer_owned_ipv_4_pool =
+                        Some(CustomerOwnedIpv4PoolDeserializer::deserialize(
+                            "CustomerOwnedIpv4Pool",
+                            stack,
+                        )?);
                 }
                 "DNSName" => {
                     obj.dns_name = Some(DNSNameDeserializer::deserialize("DNSName", stack)?);
@@ -3422,7 +3480,7 @@ impl LoadBalancerArnsSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoadBalancerAttribute {
-    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http.drop<em>invalid</em>header<em>fields.enabled</code> - Indicates whether HTTP headers with invalid header fields are removed by the load balancer (<code>true</code>) or routed to targets (<code>false</code>). The default is <code>false</code>.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load</em>balancing.cross_zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http.desync<em>mitigation</em>mode</code> - Determines how the load balancer handles requests that might pose a security risk to your application. The possible values are <code>monitor</code>, <code>defensive</code>, and <code>strictest</code>. The default is <code>defensive</code>.</p> </li> <li> <p> <code>routing.http.drop<em>invalid</em>header<em>fields.enabled</code> - Indicates whether HTTP headers with invalid header fields are removed by the load balancer (<code>true</code>) or routed to targets (<code>false</code>). The default is <code>false</code>.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load</em>balancing.cross_zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -3625,13 +3683,15 @@ impl MarkerDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p>Information to use when checking for a successful response from a target.</p>
+/// <p>The codes to use when checking for a successful response from a target. If the protocol version is gRPC, these are gRPC codes. Otherwise, these are HTTP codes.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Matcher {
-    /// <p>The HTTP codes.</p> <p>For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p> <p>For Network Load Balancers, this is 200–399.</p>
-    pub http_code: String,
+    /// <p>You can specify values between 0 and 99. You can specify multiple values (for example, "0,1") or a range of values (for example, "0-5"). The default value is 12.</p>
+    pub grpc_code: Option<String>,
+    /// <p>For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p> <p>For Network Load Balancers, this is "200–399".</p>
+    pub http_code: Option<String>,
 }
 
 #[allow(dead_code)]
@@ -3644,8 +3704,11 @@ impl MatcherDeserializer {
     ) -> Result<Matcher, XmlParseError> {
         deserialize_elements::<_, Matcher, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "GrpcCode" => {
+                    obj.grpc_code = Some(GrpcCodeDeserializer::deserialize("GrpcCode", stack)?);
+                }
                 "HttpCode" => {
-                    obj.http_code = HttpCodeDeserializer::deserialize("HttpCode", stack)?;
+                    obj.http_code = Some(HttpCodeDeserializer::deserialize("HttpCode", stack)?);
                 }
                 _ => skip_tree(stack),
             }
@@ -3663,7 +3726,12 @@ impl MatcherSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "HttpCode"), &obj.http_code);
+        if let Some(ref field_value) = obj.grpc_code {
+            params.put(&format!("{}{}", prefix, "GrpcCode"), &field_value);
+        }
+        if let Some(ref field_value) = obj.http_code {
+            params.put(&format!("{}{}", prefix, "HttpCode"), &field_value);
+        }
     }
 }
 
@@ -3682,7 +3750,7 @@ pub struct ModifyListenerInput {
     pub alpn_policy: Option<Vec<String>>,
     /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions for the default rule.</p>
     pub default_actions: Option<Vec<Action>>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -3830,9 +3898,9 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyRuleInput {
-    /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>, and it must be the last action to be performed.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions.</p>
     pub actions: Option<Vec<Action>>,
-    /// <p>The conditions. Each rule can include zero or one of the following conditions: <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and <code>source-ip</code>, and zero or more of the following conditions: <code>http-header</code> and <code>query-string</code>.</p>
+    /// <p>The conditions.</p>
     pub conditions: Option<Vec<RuleCondition>>,
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     pub rule_arn: String,
@@ -3956,9 +4024,9 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
 pub struct ModifyTargetGroupInput {
     /// <p>Indicates whether health checks are enabled.</p>
     pub health_check_enabled: Option<bool>,
-    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
+    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For HTTP and HTTPS health checks, the range is 5 to 300 seconds. For TPC health checks, the supported values are 10 or 30 seconds.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
     pub health_check_interval_seconds: Option<i64>,
-    /// <p>[HTTP/HTTPS health checks] The ping path that is the destination for the health check request.</p>
+    /// <p>[HTTP/HTTPS health checks] The destination for health checks on the targets.</p> <p>[HTTP1 or HTTP2 protocol version] The ping path. The default is /.</p> <p>[GRPC protocol version] The path of a custom health check method with the format /package.service/method. The default is /AWS.ALB/healthcheck.</p>
     pub health_check_path: Option<String>,
     /// <p>The port the load balancer uses when performing health checks on targets.</p>
     pub health_check_port: Option<String>,
@@ -3968,11 +4036,11 @@ pub struct ModifyTargetGroupInput {
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>
     pub healthy_threshold_count: Option<i64>,
-    /// <p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a successful response from a target.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
+    /// <p>[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
     pub matcher: Option<Matcher>,
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
-    /// <p>The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy threshold count.</p>
+    /// <p>The number of consecutive health check failures required before considering the target unhealthy. For target groups with a protocol of TCP or TLS, this value must be the same as the healthy threshold count.</p>
     pub unhealthy_threshold_count: Option<i64>,
 }
 
@@ -4075,6 +4143,14 @@ impl NameDeserializer {
     }
 }
 #[allow(dead_code)]
+struct OutpostIdDeserializer;
+impl OutpostIdDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
 struct PathDeserializer;
 impl PathDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -4155,6 +4231,14 @@ impl PrivateIPv4AddressDeserializer {
 #[allow(dead_code)]
 struct ProtocolEnumDeserializer;
 impl ProtocolEnumDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct ProtocolVersionDeserializer;
+impl ProtocolVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
@@ -4442,7 +4526,7 @@ impl RedirectActionStatusCodeEnumDeserializer {
 pub struct RegisterTargetsInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
-    /// <p>The targets.</p> <p>To register a target by instance ID, specify the instance ID. To register a target by IP address, specify the IP address. To register a Lambda function, specify the ARN of the Lambda function.</p>
+    /// <p>The targets.</p>
     pub targets: Vec<TargetDescription>,
 }
 
@@ -4672,7 +4756,7 @@ impl RuleArnsSerializer {
     }
 }
 
-/// <p>Information about a condition for a rule.</p>
+/// <p>Information about a condition for a rule.</p> <p>Each rule can optionally include up to one of each of the following conditions: <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and <code>source-ip</code>. Each rule can also optionally include one or more of each of the following conditions: <code>http-header</code> and <code>query-string</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4691,7 +4775,7 @@ pub struct RuleCondition {
     pub query_string_config: Option<QueryStringConditionConfig>,
     /// <p>Information for a source IP condition. Specify only when <code>Field</code> is <code>source-ip</code>.</p>
     pub source_ip_config: Option<SourceIpConditionConfig>,
-    /// <p><p>The condition value. You can use <code>Values</code> if the rule contains only <code>host-header</code> and <code>path-pattern</code> conditions. Otherwise, you can use <code>HostHeaderConfig</code> for <code>host-header</code> conditions and <code>PathPatternConfig</code> for <code>path-pattern</code> conditions.</p> <p>If <code>Field</code> is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If <code>Field</code> is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/<em>). A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
+    /// <p><p>The condition value. Specify only when <code>Field</code> is <code>host-header</code> or <code>path-pattern</code>. Alternatively, to specify multiple host names or multiple path patterns, use <code>HostHeaderConfig</code> or <code>PathPatternConfig</code>.</p> <p>If <code>Field</code> is <code>host-header</code> and you are not using <code>HostHeaderConfig</code>, you can specify a single host name (for example, my.example.com) in <code>Values</code>. A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If <code>Field</code> is <code>path-pattern</code> and you are not using <code>PathPatternConfig</code>, you can specify a single path pattern (for example, /img/<em>) in <code>Values</code>. A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub values: Option<Vec<String>>,
 }
 
@@ -5166,7 +5250,7 @@ impl SetSubnetsInputSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetSubnetsOutput {
-    /// <p>Information about the subnet and Availability Zone.</p>
+    /// <p>Information about the subnets.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
@@ -5675,7 +5759,7 @@ pub struct TargetGroup {
     pub health_check_enabled: Option<bool>,
     /// <p>The approximate amount of time, in seconds, between health checks of an individual target.</p>
     pub health_check_interval_seconds: Option<i64>,
-    /// <p>The destination for the health check request.</p>
+    /// <p>The destination for health checks on the targets.</p>
     pub health_check_path: Option<String>,
     /// <p>The port to use to connect with the target.</p>
     pub health_check_port: Option<String>,
@@ -5687,12 +5771,14 @@ pub struct TargetGroup {
     pub healthy_threshold_count: Option<i64>,
     /// <p>The Amazon Resource Names (ARN) of the load balancers that route traffic to this target group.</p>
     pub load_balancer_arns: Option<Vec<String>>,
-    /// <p>The HTTP codes to use when checking for a successful response from a target.</p>
+    /// <p>The HTTP or gRPC codes to use when checking for a successful response from a target.</p>
     pub matcher: Option<Matcher>,
     /// <p>The port on which the targets are listening. Not used if the target is a Lambda function.</p>
     pub port: Option<i64>,
     /// <p>The protocol to use for routing traffic to the targets.</p>
     pub protocol: Option<String>,
+    /// <p>[HTTP/HTTPS protocol] The protocol version. The possible values are <code>GRPC</code>, <code>HTTP1</code>, and <code>HTTP2</code>.</p>
+    pub protocol_version: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: Option<String>,
     /// <p>The name of the target group.</p>
@@ -5772,6 +5858,12 @@ impl TargetGroupDeserializer {
                 "Protocol" => {
                     obj.protocol = Some(ProtocolEnumDeserializer::deserialize("Protocol", stack)?);
                 }
+                "ProtocolVersion" => {
+                    obj.protocol_version = Some(ProtocolVersionDeserializer::deserialize(
+                        "ProtocolVersion",
+                        stack,
+                    )?);
+                }
                 "TargetGroupArn" => {
                     obj.target_group_arn = Some(TargetGroupArnDeserializer::deserialize(
                         "TargetGroupArn",
@@ -5831,7 +5923,7 @@ impl TargetGroupArnsSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGroupAttribute {
-    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds. If the target is a Lambda function, this attribute is not supported.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible values are <code>lb<em>cookie</code> for Application Load Balancers or <code>source</em>ip</code> for Network Load Balancers.</p> </li> </ul> <p>The following attributes are supported only if the load balancer is an Application Load Balancer and the target is an instance or an IP address:</p> <ul> <li> <p> <code>load<em>balancing.algorithm.type</code> - The load balancing algorithm determines how the load balancer selects targets when routing requests. The value is <code>round</em>robin</code> or <code>least<em>outstanding</em>requests</code>. The default is <code>round<em>robin</code>.</p> </li> <li> <p> <code>slow</em>start.duration<em>seconds</code> - The time period, in seconds, during which a newly registered target receives an increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). Slow start mode is disabled by default.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration<em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attribute is supported only if the load balancer is an Application Load Balancer and the target is a Lambda function:</p> <ul> <li> <p> <code>lambda.multi</em>value<em>headers.enabled</code> - Indicates whether the request and response headers that are exchanged between the load balancer and the Lambda function include arrays of values or strings. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>. If the value is <code>false</code> and the request contains a duplicate header field name or query parameter key, the load balancer uses the last value sent by the client.</p> </li> </ul> <p>The following attribute is supported only by Network Load Balancers:</p> <ul> <li> <p> <code>proxy</em>protocol_v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds. If the target is a Lambda function, this attribute is not supported.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible values are <code>lb<em>cookie</code> for Application Load Balancers or <code>source</em>ip</code> for Network Load Balancers.</p> </li> </ul> <p>The following attributes are supported only if the load balancer is an Application Load Balancer and the target is an instance or an IP address:</p> <ul> <li> <p> <code>load<em>balancing.algorithm.type</code> - The load balancing algorithm determines how the load balancer selects targets when routing requests. The value is <code>round</em>robin</code> or <code>least<em>outstanding</em>requests</code>. The default is <code>round<em>robin</code>.</p> </li> <li> <p> <code>slow</em>start.duration<em>seconds</code> - The time period, in seconds, during which a newly registered target receives an increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). The default is 0 seconds (disabled).</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration<em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attribute is supported only if the load balancer is an Application Load Balancer and the target is a Lambda function:</p> <ul> <li> <p> <code>lambda.multi</em>value<em>headers.enabled</code> - Indicates whether the request and response headers that are exchanged between the load balancer and the Lambda function include arrays of values or strings. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>. If the value is <code>false</code> and the request contains a duplicate header field name or query parameter key, the load balancer uses the last value sent by the client.</p> </li> </ul> <p>The following attribute is supported only by Network Load Balancers:</p> <ul> <li> <p> <code>proxy</em>protocol_v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -6457,6 +6549,8 @@ pub enum CreateListenerError {
     TooManyListeners(String),
     /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
+    /// <p>You've reached the limit on the number of tags per load balancer.</p>
+    TooManyTags(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
     /// <p>You've reached the limit on the number of unique target groups per load balancer across all listeners. If a target group is used by multiple actions for a load balancer, it is counted as only one use.</p>
@@ -6545,6 +6639,11 @@ impl CreateListenerError {
                             ),
                         )
                     }
+                    "TooManyTags" => {
+                        return RusotoError::Service(CreateListenerError::TooManyTags(
+                            parsed_error.message,
+                        ))
+                    }
                     "TooManyTargets" => {
                         return RusotoError::Service(CreateListenerError::TooManyTargets(
                             parsed_error.message,
@@ -6597,6 +6696,7 @@ impl fmt::Display for CreateListenerError {
             CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => {
                 write!(f, "{}", cause)
             }
+            CreateListenerError::TooManyTags(ref cause) => write!(f, "{}", cause),
             CreateListenerError::TooManyTargets(ref cause) => write!(f, "{}", cause),
             CreateListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
                 write!(f, "{}", cause)
@@ -6779,6 +6879,8 @@ pub enum CreateRuleError {
     TooManyRegistrationsForTargetId(String),
     /// <p>You've reached the limit on the number of rules per load balancer.</p>
     TooManyRules(String),
+    /// <p>You've reached the limit on the number of tags per load balancer.</p>
+    TooManyTags(String),
     /// <p>You've reached the limit on the number of target groups for your AWS account.</p>
     TooManyTargetGroups(String),
     /// <p>You've reached the limit on the number of targets.</p>
@@ -6847,6 +6949,11 @@ impl CreateRuleError {
                             parsed_error.message,
                         ))
                     }
+                    "TooManyTags" => {
+                        return RusotoError::Service(CreateRuleError::TooManyTags(
+                            parsed_error.message,
+                        ))
+                    }
                     "TooManyTargetGroups" => {
                         return RusotoError::Service(CreateRuleError::TooManyTargetGroups(
                             parsed_error.message,
@@ -6898,6 +7005,7 @@ impl fmt::Display for CreateRuleError {
             CreateRuleError::TooManyActions(ref cause) => write!(f, "{}", cause),
             CreateRuleError::TooManyRegistrationsForTargetId(ref cause) => write!(f, "{}", cause),
             CreateRuleError::TooManyRules(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyTags(ref cause) => write!(f, "{}", cause),
             CreateRuleError::TooManyTargetGroups(ref cause) => write!(f, "{}", cause),
             CreateRuleError::TooManyTargets(ref cause) => write!(f, "{}", cause),
             CreateRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
@@ -6915,6 +7023,8 @@ pub enum CreateTargetGroupError {
     DuplicateTargetGroupName(String),
     /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
+    /// <p>You've reached the limit on the number of tags per load balancer.</p>
+    TooManyTags(String),
     /// <p>You've reached the limit on the number of target groups for your AWS account.</p>
     TooManyTargetGroups(String),
 }
@@ -6938,6 +7048,11 @@ impl CreateTargetGroupError {
                                 parsed_error.message,
                             ),
                         )
+                    }
+                    "TooManyTags" => {
+                        return RusotoError::Service(CreateTargetGroupError::TooManyTags(
+                            parsed_error.message,
+                        ))
                     }
                     "TooManyTargetGroups" => {
                         return RusotoError::Service(CreateTargetGroupError::TooManyTargetGroups(
@@ -6967,6 +7082,7 @@ impl fmt::Display for CreateTargetGroupError {
             CreateTargetGroupError::InvalidConfigurationRequest(ref cause) => {
                 write!(f, "{}", cause)
             }
+            CreateTargetGroupError::TooManyTags(ref cause) => write!(f, "{}", cause),
             CreateTargetGroupError::TooManyTargetGroups(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -8769,7 +8885,7 @@ pub trait Elb {
         input: AddListenerCertificatesInput,
     ) -> Result<AddListenerCertificatesOutput, RusotoError<AddListenerCertificatesError>>;
 
-    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
+    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, target groups, listeners, and rules.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
     async fn add_tags(
         &self,
         input: AddTagsInput,
@@ -8787,7 +8903,7 @@ pub trait Elb {
         input: CreateLoadBalancerInput,
     ) -> Result<CreateLoadBalancerOutput, RusotoError<CreateLoadBalancerError>>;
 
-    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Each rule consists of a priority, one or more actions, and one or more conditions. Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     async fn create_rule(
         &self,
         input: CreateRuleInput,
@@ -8811,7 +8927,7 @@ pub trait Elb {
         input: DeleteLoadBalancerInput,
     ) -> Result<DeleteLoadBalancerOutput, RusotoError<DeleteLoadBalancerError>>;
 
-    /// <p>Deletes the specified rule.</p>
+    /// <p>Deletes the specified rule.</p> <p>You can't delete the default rule.</p>
     async fn delete_rule(
         &self,
         input: DeleteRuleInput,
@@ -8874,7 +8990,7 @@ pub trait Elb {
         input: DescribeSSLPoliciesInput,
     ) -> Result<DescribeSSLPoliciesOutput, RusotoError<DescribeSSLPoliciesError>>;
 
-    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
+    /// <p>Describes the tags for the specified Elastic Load Balancing resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, target groups, listeners, or rules.</p>
     async fn describe_tags(
         &self,
         input: DescribeTagsInput,
@@ -8940,7 +9056,7 @@ pub trait Elb {
         input: RemoveListenerCertificatesInput,
     ) -> Result<RemoveListenerCertificatesOutput, RusotoError<RemoveListenerCertificatesError>>;
 
-    /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
+    /// <p>Removes the specified tags from the specified Elastic Load Balancing resources. You can remove the tags for one or more Application Load Balancers, Network Load Balancers, target groups, listeners, or rules.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     async fn remove_tags(
         &self,
         input: RemoveTagsInput,
@@ -9043,7 +9159,7 @@ impl Elb for ElbClient {
         Ok(result)
     }
 
-    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
+    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, target groups, listeners, and rules.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
     async fn add_tags(
         &self,
         input: AddTagsInput,
@@ -9129,7 +9245,7 @@ impl Elb for ElbClient {
         Ok(result)
     }
 
-    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Each rule consists of a priority, one or more actions, and one or more conditions. Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     async fn create_rule(
         &self,
         input: CreateRuleInput,
@@ -9234,7 +9350,7 @@ impl Elb for ElbClient {
         Ok(result)
     }
 
-    /// <p>Deletes the specified rule.</p>
+    /// <p>Deletes the specified rule.</p> <p>You can't delete the default rule.</p>
     async fn delete_rule(
         &self,
         input: DeleteRuleInput,
@@ -9531,7 +9647,7 @@ impl Elb for ElbClient {
         Ok(result)
     }
 
-    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
+    /// <p>Describes the tags for the specified Elastic Load Balancing resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, target groups, listeners, or rules.</p>
     async fn describe_tags(
         &self,
         input: DescribeTagsInput,
@@ -9866,7 +9982,7 @@ impl Elb for ElbClient {
         Ok(result)
     }
 
-    /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
+    /// <p>Removes the specified tags from the specified Elastic Load Balancing resources. You can remove the tags for one or more Application Load Balancers, Network Load Balancers, target groups, listeners, or rules.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     async fn remove_tags(
         &self,
         input: RemoveTagsInput,

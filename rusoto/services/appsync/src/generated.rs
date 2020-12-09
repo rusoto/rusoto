@@ -46,7 +46,7 @@ pub struct AdditionalAuthenticationProvider {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiCache {
-    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resovlers that you specify are cached.</p> </li> </ul></p>
+    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resolvers that you specify are cached.</p> </li> </ul></p>
     #[serde(rename = "apiCachingBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_caching_behavior: Option<String>,
@@ -66,16 +66,20 @@ pub struct ApiCache {
     #[serde(rename = "ttl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ttl: Option<i64>,
-    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are avaible, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are available, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds.</p> </li> </ul></p>
+/// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time and deletion time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time and deletion time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time and and deletion time in seconds and accepts a user-provided expiration time in seconds. Expired API keys are kept for 60 days after the expiration time. Key expiration time can be updated while the key is not deleted. </p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds. After the expiration time, using the key to authenticate will fail. But the key can be reinstated before deletion.</p> </li> <li> <p>Deletion is stored in Amazon DynamoDB as seconds. The key will be deleted after deletion time. </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKey {
+    /// <p>The time after which the API key is deleted. The date is represented as seconds since the epoch, rounded down to the nearest hour.</p>
+    #[serde(rename = "deletes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletes: Option<i64>,
     /// <p>A description of the purpose of the API key.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -118,7 +122,7 @@ pub struct AwsIamConfig {
 /// <p>The caching configuration for a resolver that has caching enabled.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CachingConfig {
-    /// <p>The caching keys for a resolver that has caching enabled.</p> <p>Valid values are entries from the <code>$context.identity</code> and <code>$context.arguments</code> maps.</p>
+    /// <p>The caching keys for a resolver that has caching enabled.</p> <p>Valid values are entries from the <code>$context.arguments</code>, <code>$context.source</code>, and <code>$context.identity</code> maps.</p>
     #[serde(rename = "cachingKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caching_keys: Option<Vec<String>>,
@@ -147,7 +151,7 @@ pub struct CognitoUserPoolConfig {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiCacheRequest {
-    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resovlers that you specify are cached.</p> </li> </ul></p>
+    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resolvers that you specify are cached.</p> </li> </ul></p>
     #[serde(rename = "apiCachingBehavior")]
     pub api_caching_behavior: String,
     /// <p>The GraphQL API Id.</p>
@@ -164,7 +168,7 @@ pub struct CreateApiCacheRequest {
     /// <p>TTL in seconds for cache entries.</p> <p>Valid values are between 1 and 3600 seconds.</p>
     #[serde(rename = "ttl")]
     pub ttl: i64,
-    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are avaible, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are available, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -276,7 +280,8 @@ pub struct CreateFunctionRequest {
     pub name: String,
     /// <p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>
     #[serde(rename = "requestMappingTemplate")]
-    pub request_mapping_template: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_mapping_template: Option<String>,
     /// <p>The <code>Function</code> response mapping template. </p>
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -361,9 +366,10 @@ pub struct CreateResolverRequest {
     #[serde(rename = "pipelineConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_config: Option<PipelineConfig>,
-    /// <p>The mapping template to be used for requests.</p> <p>A resolver uses a request mapping template to convert a GraphQL expression into a format that a data source can understand. Mapping templates are written in Apache Velocity Template Language (VTL).</p>
+    /// <p>The mapping template to be used for requests.</p> <p>A resolver uses a request mapping template to convert a GraphQL expression into a format that a data source can understand. Mapping templates are written in Apache Velocity Template Language (VTL).</p> <p>VTL request mapping templates are optional when using a Lambda data source. For all other data sources, VTL request and response mapping templates are required.</p>
     #[serde(rename = "requestMappingTemplate")]
-    pub request_mapping_template: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_mapping_template: Option<String>,
     /// <p>The mapping template to be used for responses from the data source.</p>
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -870,6 +876,10 @@ pub struct GraphqlApi {
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_config: Option<UserPoolConfig>,
+    /// <p>The ARN of the AWS Web Application Firewall (WAF) ACL associated with this <code>GraphqlApi</code>, if one exists.</p>
+    #[serde(rename = "wafWebAclArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub waf_web_acl_arn: Option<String>,
     /// <p>A flag representing whether X-Ray tracing is enabled for this <code>GraphqlApi</code>.</p>
     #[serde(rename = "xrayEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1362,7 +1372,7 @@ pub struct UntagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiCacheRequest {
-    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resovlers that you specify are cached.</p> </li> </ul></p>
+    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resolvers that you specify are cached.</p> </li> </ul></p>
     #[serde(rename = "apiCachingBehavior")]
     pub api_caching_behavior: String,
     /// <p>The GraphQL API Id.</p>
@@ -1371,7 +1381,7 @@ pub struct UpdateApiCacheRequest {
     /// <p>TTL in seconds for cache entries.</p> <p>Valid values are between 1 and 3600 seconds.</p>
     #[serde(rename = "ttl")]
     pub ttl: i64,
-    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are avaible, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are available, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -1489,7 +1499,8 @@ pub struct UpdateFunctionRequest {
     pub name: String,
     /// <p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>
     #[serde(rename = "requestMappingTemplate")]
-    pub request_mapping_template: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_mapping_template: Option<String>,
     /// <p>The <code>Function</code> request mapping template. </p>
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1574,9 +1585,10 @@ pub struct UpdateResolverRequest {
     #[serde(rename = "pipelineConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_config: Option<PipelineConfig>,
-    /// <p>The new request mapping template.</p>
+    /// <p>The new request mapping template.</p> <p>A resolver uses a request mapping template to convert a GraphQL expression into a format that a data source can understand. Mapping templates are written in Apache Velocity Template Language (VTL).</p> <p>VTL request mapping templates are optional when using a Lambda data source. For all other data sources, VTL request and response mapping templates are required.</p>
     #[serde(rename = "requestMappingTemplate")]
-    pub request_mapping_template: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_mapping_template: Option<String>,
     /// <p>The new response mapping template.</p>
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3985,7 +3997,7 @@ pub trait AppSync {
         input: GetTypeRequest,
     ) -> Result<GetTypeResponse, RusotoError<GetTypeError>>;
 
-    /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
+    /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically 60 days after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
     async fn list_api_keys(
         &self,
         input: ListApiKeysRequest,
@@ -4057,7 +4069,7 @@ pub trait AppSync {
         input: UpdateApiCacheRequest,
     ) -> Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>>;
 
-    /// <p>Updates an API key.</p>
+    /// <p>Updates an API key. The key can be updated while it is not deleted.</p>
     async fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
@@ -4852,7 +4864,7 @@ impl AppSync for AppSyncClient {
         }
     }
 
-    /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
+    /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically 60 days after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_api_keys(
         &self,
@@ -5275,7 +5287,7 @@ impl AppSync for AppSyncClient {
         }
     }
 
-    /// <p>Updates an API key.</p>
+    /// <p>Updates an API key. The key can be updated while it is not deleted.</p>
     #[allow(unused_mut)]
     async fn update_api_key(
         &self,

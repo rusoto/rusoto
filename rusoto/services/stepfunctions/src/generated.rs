@@ -101,10 +101,14 @@ pub struct ActivityScheduledEventDetails {
     #[serde(rename = "heartbeatInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub heartbeat_in_seconds: Option<i64>,
-    /// <p>The JSON data input to the activity task.</p>
+    /// <p>The JSON data input to the activity task. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
+    /// <p>Contains details about the input for an execution history event.</p>
+    #[serde(rename = "inputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_details: Option<HistoryEventExecutionDataDetails>,
     /// <p>The Amazon Resource Name (ARN) of the scheduled activity.</p>
     #[serde(rename = "resource")]
     pub resource: String,
@@ -128,10 +132,14 @@ pub struct ActivityStartedEventDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivitySucceededEventDetails {
-    /// <p>The JSON data output by the activity task.</p>
+    /// <p>The JSON data output by the activity task. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
+    /// <p>Contains details about the output of an execution history event.</p>
+    #[serde(rename = "outputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_details: Option<HistoryEventExecutionDataDetails>,
 }
 
 /// <p>Contains details about an activity timeout that occurred during an execution.</p>
@@ -146,6 +154,16 @@ pub struct ActivityTimedOutEventDetails {
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
+}
+
+/// <p>Provides details about execution input or output.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CloudWatchEventsExecutionDataDetails {
+    /// <p>Indicates whether input or output was included in the response. Always <code>true</code> for API calls. </p>
+    #[serde(rename = "included")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub included: Option<bool>,
 }
 
 /// <p><p/></p>
@@ -200,6 +218,10 @@ pub struct CreateStateMachineInput {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p>Selects whether AWS X-Ray tracing is enabled.</p>
+    #[serde(rename = "tracingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_configuration: Option<TracingConfiguration>,
     /// <p>Determines whether a Standard or Express state machine is created. The default is <code>STANDARD</code>. You cannot update the <code>type</code> of a state machine once it has been created.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -277,17 +299,24 @@ pub struct DescribeExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) that id entifies the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    /// <p>The string that contains the JSON input data of the execution.</p>
+    /// <p>The string that contains the JSON input data of the execution. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "input")]
-    pub input: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input: Option<String>,
+    #[serde(rename = "inputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_details: Option<CloudWatchEventsExecutionDataDetails>,
     /// <p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>" # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul> <p>To enable logging with CloudWatch Logs, the name should only contain 0-9, A-Z, a-z, - and _.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The JSON output data of the execution.</p> <note> <p>This field is set only if the execution succeeds. If the execution fails, this field is null.</p> </note></p>
+    /// <p><p>The JSON output data of the execution. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p> <note> <p>This field is set only if the execution succeeds. If the execution fails, this field is null.</p> </note></p>
     #[serde(rename = "output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
+    #[serde(rename = "outputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_details: Option<CloudWatchEventsExecutionDataDetails>,
     /// <p>The date the execution is started.</p>
     #[serde(rename = "startDate")]
     pub start_date: f64,
@@ -301,6 +330,10 @@ pub struct DescribeExecutionOutput {
     #[serde(rename = "stopDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_date: Option<f64>,
+    /// <p>The AWS X-Ray trace header which was passed to the execution.</p>
+    #[serde(rename = "traceHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trace_header: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -329,6 +362,10 @@ pub struct DescribeStateMachineForExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) of the state machine associated with the execution.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
+    /// <p>Selects whether AWS X-Ray tracing is enabled.</p>
+    #[serde(rename = "tracingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_configuration: Option<TracingConfiguration>,
     /// <p>The date and time the state machine associated with an execution was updated. For a newly created state machine, this is the creation date.</p>
     #[serde(rename = "updateDate")]
     pub update_date: f64,
@@ -367,6 +404,10 @@ pub struct DescribeStateMachineOutput {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>Selects whether AWS X-Ray tracing is enabled.</p>
+    #[serde(rename = "tracingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_configuration: Option<TracingConfiguration>,
     /// <p>The <code>type</code> of the state machine (<code>STANDARD</code> or <code>EXPRESS</code>).</p>
     #[serde(rename = "type")]
     pub type_: String,
@@ -429,10 +470,14 @@ pub struct ExecutionListItem {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionStartedEventDetails {
-    /// <p>The JSON data input to the execution.</p>
+    /// <p>The JSON data input to the execution. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
+    /// <p>Contains details about the input for an execution history event.</p>
+    #[serde(rename = "inputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_details: Option<HistoryEventExecutionDataDetails>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role used for executing AWS Lambda tasks.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -443,10 +488,14 @@ pub struct ExecutionStartedEventDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionSucceededEventDetails {
-    /// <p>The JSON data output by the execution.</p>
+    /// <p>The JSON data output by the execution. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
+    /// <p>Contains details about the output of an execution history event.</p>
+    #[serde(rename = "outputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_details: Option<HistoryEventExecutionDataDetails>,
 }
 
 /// <p>Contains details about the execution timeout that occurred during the execution.</p>
@@ -478,7 +527,7 @@ pub struct GetActivityTaskInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetActivityTaskOutput {
-    /// <p>The string that contains the JSON input data for the task.</p>
+    /// <p>The string that contains the JSON input data for the task. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
@@ -494,6 +543,10 @@ pub struct GetExecutionHistoryInput {
     /// <p>The Amazon Resource Name (ARN) of the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
+    /// <p>You can select whether execution data (input or output of a history event) is returned. The default is <code>true</code>.</p>
+    #[serde(rename = "includeExecutionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_execution_data: Option<bool>,
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -652,6 +705,16 @@ pub struct HistoryEvent {
     pub type_: String,
 }
 
+/// <p>Provides details about input or output in an execution history event.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HistoryEventExecutionDataDetails {
+    /// <p>Indicates whether input or output was truncated in the response. Always <code>false</code> for API calls.</p>
+    #[serde(rename = "truncated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truncated: Option<bool>,
+}
+
 /// <p>Contains details about a lambda function that failed during an execution.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -684,10 +747,14 @@ pub struct LambdaFunctionScheduleFailedEventDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionScheduledEventDetails {
-    /// <p>The JSON data input to the lambda function.</p>
+    /// <p>The JSON data input to the lambda function. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
+    /// <p>Contains details about input for an execution history event.</p>
+    #[serde(rename = "inputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_details: Option<HistoryEventExecutionDataDetails>,
     /// <p>The Amazon Resource Name (ARN) of the scheduled lambda function.</p>
     #[serde(rename = "resource")]
     pub resource: String,
@@ -715,10 +782,14 @@ pub struct LambdaFunctionStartFailedEventDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionSucceededEventDetails {
-    /// <p>The JSON data output by the lambda function.</p>
+    /// <p>The JSON data output by the lambda function. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
+    /// <p>Contains details about the output of an execution history event.</p>
+    #[serde(rename = "outputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_details: Option<HistoryEventExecutionDataDetails>,
 }
 
 /// <p>Contains details about a lambda function timeout that occurred during an execution.</p>
@@ -849,7 +920,7 @@ pub struct LoggingConfiguration {
     #[serde(rename = "destinations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destinations: Option<Vec<LogDestination>>,
-    /// <p>Determines whether execution data is included in your log. When set to <code>FALSE</code>, data is excluded.</p>
+    /// <p>Determines whether execution data is included in your log. When set to <code>false</code>, data is excluded.</p>
     #[serde(rename = "includeExecutionData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_execution_data: Option<bool>,
@@ -918,7 +989,7 @@ pub struct SendTaskHeartbeatOutput {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTaskSuccessInput {
-    /// <p>The JSON output of the task.</p>
+    /// <p>The JSON output of the task. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "output")]
     pub output: String,
     /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
@@ -933,7 +1004,7 @@ pub struct SendTaskSuccessOutput {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExecutionInput {
-    /// <p><p>The string that contains the JSON input data for the execution, for example:</p> <p> <code>&quot;input&quot;: &quot;{&quot;first_name&quot; : &quot;test&quot;}&quot;</code> </p> <note> <p>If you don&#39;t include any JSON input data, you still must include the two braces, for example: <code>&quot;input&quot;: &quot;{}&quot;</code> </p> </note></p>
+    /// <p>The string that contains the JSON input data for the execution, for example:</p> <p> <code>"input": "{\"first_name\" : \"test\"}"</code> </p> <note> <p>If you don't include any JSON input data, you still must include the two braces, for example: <code>"input": "{}"</code> </p> </note> <p>Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
@@ -944,6 +1015,10 @@ pub struct StartExecutionInput {
     /// <p>The Amazon Resource Name (ARN) of the state machine to execute.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
+    /// <p>Passes the AWS X-Ray trace header. The trace header can also be passed in the request payload.</p>
+    #[serde(rename = "traceHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trace_header: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -961,10 +1036,14 @@ pub struct StartExecutionOutput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StateEnteredEventDetails {
-    /// <p>The string that contains the JSON input data for the state.</p>
+    /// <p>The string that contains the JSON input data for the state. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
+    /// <p>Contains details about the input for an execution history event.</p>
+    #[serde(rename = "inputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_details: Option<HistoryEventExecutionDataDetails>,
     /// <p>The name of the state.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -977,10 +1056,14 @@ pub struct StateExitedEventDetails {
     /// <p>The name of the state.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>" # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul> <p>To enable logging with CloudWatch Logs, the name should only contain 0-9, A-Z, a-z, - and _.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The JSON output data of the state.</p>
+    /// <p>The JSON output data of the state. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
+    /// <p>Contains details about the output of an execution history event.</p>
+    #[serde(rename = "outputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_details: Option<HistoryEventExecutionDataDetails>,
 }
 
 /// <p>Contains details about the state machine.</p>
@@ -1077,7 +1160,11 @@ pub struct TaskFailedEventDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskScheduledEventDetails {
-    /// <p>The JSON data passed to the resource referenced in a task state.</p>
+    /// <p>The maximum allowed duration between two heartbeats for the task.</p>
+    #[serde(rename = "heartbeatInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub heartbeat_in_seconds: Option<i64>,
+    /// <p>The JSON data passed to the resource referenced in a task state. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "parameters")]
     pub parameters: String,
     /// <p>The region of the scheduled task</p>
@@ -1151,10 +1238,14 @@ pub struct TaskSubmitFailedEventDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskSubmittedEventDetails {
-    /// <p>The response from a resource when a task has started.</p>
+    /// <p>The response from a resource when a task has started. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
+    /// <p>Contains details about the output of an execution history event.</p>
+    #[serde(rename = "outputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_details: Option<HistoryEventExecutionDataDetails>,
     /// <p>The service name of the resource in a task state.</p>
     #[serde(rename = "resource")]
     pub resource: String,
@@ -1167,10 +1258,14 @@ pub struct TaskSubmittedEventDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskSucceededEventDetails {
-    /// <p>The full JSON response from a resource when a task has succeeded. This response becomes the output of the related task.</p>
+    /// <p>The full JSON response from a resource when a task has succeeded. This response becomes the output of the related task. Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
     #[serde(rename = "output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
+    /// <p>Contains details about the output of an execution history event.</p>
+    #[serde(rename = "outputDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_details: Option<HistoryEventExecutionDataDetails>,
     /// <p>The service name of the resource in a task state.</p>
     #[serde(rename = "resource")]
     pub resource: String,
@@ -1197,6 +1292,15 @@ pub struct TaskTimedOutEventDetails {
     /// <p>The action of the resource called by a task state.</p>
     #[serde(rename = "resourceType")]
     pub resource_type: String,
+}
+
+/// <p>Selects whether or not the state machine's AWS X-Ray tracing is enabled. Default is <code>false</code> </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TracingConfiguration {
+    /// <p>When set to <code>true</code>, AWS X-Ray tracing is enabled.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1232,6 +1336,10 @@ pub struct UpdateStateMachineInput {
     /// <p>The Amazon Resource Name (ARN) of the state machine.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
+    /// <p>Selects whether AWS X-Ray tracing is enabled.</p>
+    #[serde(rename = "tracingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_configuration: Option<TracingConfiguration>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1297,6 +1405,8 @@ pub enum CreateStateMachineError {
     InvalidLoggingConfiguration(String),
     /// <p>The provided name is invalid.</p>
     InvalidName(String),
+    /// <p>Your <code>tracingConfiguration</code> key does not match, or <code>enabled</code> has not been set to <code>true</code> or <code>false</code>.</p>
+    InvalidTracingConfiguration(String),
     /// <p>A state machine with the same name but a different definition or role ARN already exists.</p>
     StateMachineAlreadyExists(String),
     /// <p>The specified state machine is being deleted.</p>
@@ -1328,6 +1438,11 @@ impl CreateStateMachineError {
                 }
                 "InvalidName" => {
                     return RusotoError::Service(CreateStateMachineError::InvalidName(err.msg))
+                }
+                "InvalidTracingConfiguration" => {
+                    return RusotoError::Service(
+                        CreateStateMachineError::InvalidTracingConfiguration(err.msg),
+                    )
                 }
                 "StateMachineAlreadyExists" => {
                     return RusotoError::Service(
@@ -1369,6 +1484,9 @@ impl fmt::Display for CreateStateMachineError {
                 write!(f, "{}", cause)
             }
             CreateStateMachineError::InvalidName(ref cause) => write!(f, "{}", cause),
+            CreateStateMachineError::InvalidTracingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateStateMachineError::StateMachineAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateStateMachineError::StateMachineDeleting(ref cause) => write!(f, "{}", cause),
             CreateStateMachineError::StateMachineLimitExceeded(ref cause) => write!(f, "{}", cause),
@@ -2167,6 +2285,8 @@ pub enum UpdateStateMachineError {
     InvalidDefinition(String),
     /// <p><p/></p>
     InvalidLoggingConfiguration(String),
+    /// <p>Your <code>tracingConfiguration</code> key does not match, or <code>enabled</code> has not been set to <code>true</code> or <code>false</code>.</p>
+    InvalidTracingConfiguration(String),
     /// <p>Request is missing a required parameter. This error occurs if both <code>definition</code> and <code>roleArn</code> are not specified.</p>
     MissingRequiredParameter(String),
     /// <p>The specified state machine is being deleted.</p>
@@ -2190,6 +2310,11 @@ impl UpdateStateMachineError {
                 "InvalidLoggingConfiguration" => {
                     return RusotoError::Service(
                         UpdateStateMachineError::InvalidLoggingConfiguration(err.msg),
+                    )
+                }
+                "InvalidTracingConfiguration" => {
+                    return RusotoError::Service(
+                        UpdateStateMachineError::InvalidTracingConfiguration(err.msg),
                     )
                 }
                 "MissingRequiredParameter" => {
@@ -2223,6 +2348,9 @@ impl fmt::Display for UpdateStateMachineError {
             UpdateStateMachineError::InvalidLoggingConfiguration(ref cause) => {
                 write!(f, "{}", cause)
             }
+            UpdateStateMachineError::InvalidTracingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdateStateMachineError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
             UpdateStateMachineError::StateMachineDeleting(ref cause) => write!(f, "{}", cause),
             UpdateStateMachineError::StateMachineDoesNotExist(ref cause) => write!(f, "{}", cause),
@@ -2239,7 +2367,7 @@ pub trait StepFunctions {
         input: CreateActivityInput,
     ) -> Result<CreateActivityOutput, RusotoError<CreateActivityError>>;
 
-    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a> in the AWS Step Functions User Guide.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code>, <code>definition</code>, <code>type</code>, and <code>LoggingConfiguration</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a> in the AWS Step Functions User Guide.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code>, <code>definition</code>, <code>type</code>, <code>LoggingConfiguration</code> and <code>TracingConfiguration</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
@@ -2426,7 +2554,7 @@ impl StepFunctions for StepFunctionsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateActivityOutput, _>()
     }
 
-    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a> in the AWS Step Functions User Guide.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code>, <code>definition</code>, <code>type</code>, and <code>LoggingConfiguration</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a> in the AWS Step Functions User Guide.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code>, <code>definition</code>, <code>type</code>, <code>LoggingConfiguration</code> and <code>TracingConfiguration</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_state_machine(
         &self,
         input: CreateStateMachineInput,

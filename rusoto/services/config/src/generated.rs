@@ -241,7 +241,7 @@ pub struct BaseConfigurationItem {
     #[serde(rename = "configurationItemCaptureTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_item_capture_time: Option<f64>,
-    /// <p>The configuration item status.</p>
+    /// <p><p>The configuration item status. The valid values are:</p> <ul> <li> <p>OK – The resource configuration has been updated</p> </li> <li> <p>ResourceDiscovered – The resource was newly discovered</p> </li> <li> <p>ResourceNotRecorded – The resource was discovered but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> <li> <p>ResourceDeleted – The resource was deleted</p> </li> <li> <p>ResourceDeletedNotRecorded – The resource was deleted but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> </ul> <note> <p>The CIs do not incur any cost.</p> </note></p>
     #[serde(rename = "configurationItemStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_item_status: Option<String>,
@@ -477,7 +477,7 @@ pub struct ConfigRule {
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_execution_frequency: Option<String>,
-    /// <p>Defines which resources can trigger an evaluation for the rule. The scope can include one or more resource types, a combination of one resource type and one resource ID, or a combination of a tag key and value. Specify a scope to constrain the resources that can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes.</p>
+    /// <p><p>Defines which resources can trigger an evaluation for the rule. The scope can include one or more resource types, a combination of one resource type and one resource ID, or a combination of a tag key and value. Specify a scope to constrain the resources that can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes.</p> <note> <p>The scope can be empty. </p> </note></p>
     #[serde(rename = "Scope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<Scope>,
@@ -546,6 +546,7 @@ pub struct ConfigRuleEvaluationStatus {
     #[serde(rename = "FirstEvaluationStarted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_evaluation_started: Option<bool>,
+    /// <p>The time that you last turned off the AWS Config rule.</p>
     #[serde(rename = "LastDeactivatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_deactivated_time: Option<f64>,
@@ -622,6 +623,10 @@ pub struct ConfigurationAggregator {
     #[serde(rename = "ConfigurationAggregatorName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_aggregator_name: Option<String>,
+    /// <p>AWS service that created the configuration aggregator.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
     /// <p>The time stamp when the configuration aggregator was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -668,7 +673,7 @@ pub struct ConfigurationItem {
     #[serde(rename = "configurationItemMD5Hash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_item_md5_hash: Option<String>,
-    /// <p>The configuration item status.</p>
+    /// <p><p>The configuration item status. The valid values are:</p> <ul> <li> <p>OK – The resource configuration has been updated</p> </li> <li> <p>ResourceDiscovered – The resource was newly discovered</p> </li> <li> <p>ResourceNotRecorded – The resource was discovered but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> <li> <p>ResourceDeleted – The resource was deleted</p> </li> <li> <p>ResourceDeletedNotRecorded – The resource was deleted but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> </ul> <note> <p>The CIs do not incur any cost.</p> </note></p>
     #[serde(rename = "configurationItemStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_item_status: Option<String>,
@@ -818,7 +823,8 @@ pub struct ConformancePackDetail {
     pub created_by: Option<String>,
     /// <p>Conformance pack template that is used to create a pack. The delivery bucket name should start with awsconfigconforms. For example: "Resource": "arn:aws:s3:::your_bucket_name/*".</p>
     #[serde(rename = "DeliveryS3Bucket")]
-    pub delivery_s3_bucket: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_bucket: Option<String>,
     /// <p>The prefix for the Amazon S3 bucket.</p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -872,7 +878,7 @@ pub struct ConformancePackEvaluationResult {
     pub result_recorded_time: f64,
 }
 
-/// <p>Input parameters in the form of key-value pairs for the conformance pack, both of which you define. Keys can have a maximum character length of 128 characters, and values can have a maximum length of 256 characters.</p>
+/// <p>Input parameters in the form of key-value pairs for the conformance pack, both of which you define. Keys can have a maximum character length of 255 characters, and values can have a maximum length of 4096 characters.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConformancePackInputParameter {
     /// <p>One part of a key-value pair.</p>
@@ -2656,7 +2662,8 @@ pub struct OrganizationConformancePack {
     pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
     /// <p>Location of an Amazon S3 bucket where AWS Config can deliver evaluation results and conformance pack template that is used to create a pack. </p>
     #[serde(rename = "DeliveryS3Bucket")]
-    pub delivery_s3_bucket: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_bucket: Option<String>,
     /// <p>Any folder structure you want to add to an Amazon S3 bucket.</p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2916,7 +2923,8 @@ pub struct PutConformancePackRequest {
     pub conformance_pack_name: String,
     /// <p>AWS Config stores intermediate files while processing conformance pack template.</p>
     #[serde(rename = "DeliveryS3Bucket")]
-    pub delivery_s3_bucket: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_bucket: Option<String>,
     /// <p>The prefix for the Amazon S3 bucket. </p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3014,7 +3022,8 @@ pub struct PutOrganizationConformancePackRequest {
     pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
     /// <p>Location of an Amazon S3 bucket where AWS Config can deliver evaluation results. AWS Config stores intermediate files while processing conformance pack template. </p> <p>The delivery bucket name should start with awsconfigconforms. For example: "Resource": "arn:aws:s3:::your_bucket_name/*". For more information, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/conformance-pack-organization-apis.html">Permissions for cross account bucket access</a>.</p>
     #[serde(rename = "DeliveryS3Bucket")]
-    pub delivery_s3_bucket: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_bucket: Option<String>,
     /// <p>The prefix for the Amazon S3 bucket.</p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3203,7 +3212,7 @@ pub struct RemediationConfiguration {
     #[serde(rename = "ExecutionControls")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_controls: Option<ExecutionControls>,
-    /// <p>The maximum number of failed attempts for auto-remediation. If you do not select a number, the default is 5.</p> <p>For example, if you specify MaximumAutomaticAttempts as 5 with RetryAttemptsSeconds as 50 seconds, AWS Config throws an exception after the 5th failed attempt within 50 seconds.</p>
+    /// <p>The maximum number of failed attempts for auto-remediation. If you do not select a number, the default is 5.</p> <p>For example, if you specify MaximumAutomaticAttempts as 5 with RetryAttemptsSeconds as 50 seconds, AWS Config will put a RemediationException on your behalf for the failing resource after the 5th failed attempt within 50 seconds.</p>
     #[serde(rename = "MaximumAutomaticAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_automatic_attempts: Option<i64>,
@@ -3215,7 +3224,7 @@ pub struct RemediationConfiguration {
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    /// <p>Maximum time in seconds that AWS Config runs auto-remediation. If you do not select a number, the default is 60 seconds. </p> <p>For example, if you specify RetryAttemptsSeconds as 50 seconds and MaximumAutomaticAttempts as 5, AWS Config will run auto-remediations 5 times within 50 seconds before throwing an exception. </p>
+    /// <p>Maximum time in seconds that AWS Config runs auto-remediation. If you do not select a number, the default is 60 seconds. </p> <p>For example, if you specify RetryAttemptsSeconds as 50 seconds and MaximumAutomaticAttempts as 5, AWS Config will run auto-remediations 5 times within 50 seconds before throwing an exception.</p>
     #[serde(rename = "RetryAttemptSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_attempt_seconds: Option<i64>,
@@ -3225,7 +3234,7 @@ pub struct RemediationConfiguration {
     /// <p>The type of the target. Target executes remediation. For example, SSM document.</p>
     #[serde(rename = "TargetType")]
     pub target_type: String,
-    /// <p>Version of the target. For example, version of the SSM document.</p>
+    /// <p><p>Version of the target. For example, version of the SSM document.</p> <note> <p>If you make backward incompatible changes to the SSM document, you must call PutRemediationConfiguration API again to ensure the remediations can run.</p> </note></p>
     #[serde(rename = "TargetVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_version: Option<String>,
@@ -3472,6 +3481,7 @@ pub struct SelectAggregateResourceConfigRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
+    /// <p>The maximum number of query results returned on each page. AWS Config also allows the Limit request parameter.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -4986,6 +4996,8 @@ pub enum DescribeConformancePackStatusError {
     InvalidLimit(String),
     /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
 }
 
 impl DescribeConformancePackStatusError {
@@ -5004,6 +5016,11 @@ impl DescribeConformancePackStatusError {
                         DescribeConformancePackStatusError::InvalidNextToken(err.msg),
                     )
                 }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePackStatusError::InvalidParameterValue(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -5019,6 +5036,9 @@ impl fmt::Display for DescribeConformancePackStatusError {
             DescribeConformancePackStatusError::InvalidNextToken(ref cause) => {
                 write!(f, "{}", cause)
             }
+            DescribeConformancePackStatusError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
@@ -5030,6 +5050,8 @@ pub enum DescribeConformancePacksError {
     InvalidLimit(String),
     /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
     /// <p>You specified one or more conformance packs that do not exist.</p>
     NoSuchConformancePack(String),
 }
@@ -5047,6 +5069,11 @@ impl DescribeConformancePacksError {
                     return RusotoError::Service(DescribeConformancePacksError::InvalidNextToken(
                         err.msg,
                     ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePacksError::InvalidParameterValue(err.msg),
+                    )
                 }
                 "NoSuchConformancePackException" => {
                     return RusotoError::Service(
@@ -5066,6 +5093,9 @@ impl fmt::Display for DescribeConformancePacksError {
         match *self {
             DescribeConformancePacksError::InvalidLimit(ref cause) => write!(f, "{}", cause),
             DescribeConformancePacksError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeConformancePacksError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeConformancePacksError::NoSuchConformancePack(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -7152,6 +7182,8 @@ impl Error for PutRemediationConfigurationsError {}
 /// Errors returned by PutRemediationExceptions
 #[derive(Debug, PartialEq)]
 pub enum PutRemediationExceptionsError {
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
+    InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
 }
@@ -7160,6 +7192,11 @@ impl PutRemediationExceptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRemediationExceptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InsufficientPermissionsException" => {
+                    return RusotoError::Service(
+                        PutRemediationExceptionsError::InsufficientPermissions(err.msg),
+                    )
+                }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         PutRemediationExceptionsError::InvalidParameterValue(err.msg),
@@ -7176,6 +7213,9 @@ impl fmt::Display for PutRemediationExceptionsError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            PutRemediationExceptionsError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PutRemediationExceptionsError::InvalidParameterValue(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -7709,13 +7749,13 @@ pub trait ConfigService {
         input: DeleteEvaluationResultsRequest,
     ) -> Result<DeleteEvaluationResultsResponse, RusotoError<DeleteEvaluationResultsError>>;
 
-    /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. Only a master account can delete an organization config rule.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
+    /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. </p> <p>Only a master account and a delegated administrator account can delete an organization config rule. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
     async fn delete_organization_config_rule(
         &self,
         input: DeleteOrganizationConfigRuleRequest,
     ) -> Result<(), RusotoError<DeleteOrganizationConfigRuleError>>;
 
-    /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. Only a master account can delete an organization conformance pack.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
+    /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. </p> <p> Only a master account or a delegated administrator account can delete an organization conformance pack. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
     async fn delete_organization_conformance_pack(
         &self,
         input: DeleteOrganizationConformancePackRequest,
@@ -7736,7 +7776,7 @@ pub trait ConfigService {
         RusotoError<DeleteRemediationConfigurationError>,
     >;
 
-    /// <p>Deletes one or more remediation exceptions mentioned in the resource keys.</p>
+    /// <p><p>Deletes one or more remediation exceptions mentioned in the resource keys.</p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
     async fn delete_remediation_exceptions(
         &self,
         input: DeleteRemediationExceptionsRequest,
@@ -7883,7 +7923,7 @@ pub trait ConfigService {
         input: DescribeDeliveryChannelsRequest,
     ) -> Result<DescribeDeliveryChannelsResponse, RusotoError<DescribeDeliveryChannelsError>>;
 
-    /// <p><p>Provides organization config rule deployment status for an organization.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Provides organization config rule deployment status for an organization.</p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> </note></p>
     async fn describe_organization_config_rule_statuses(
         &self,
         input: DescribeOrganizationConfigRuleStatusesRequest,
@@ -7892,7 +7932,7 @@ pub trait ConfigService {
         RusotoError<DescribeOrganizationConfigRuleStatusesError>,
     >;
 
-    /// <p><p>Returns a list of organization config rules.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Returns a list of organization config rules. </p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.&#x2028;</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> </note></p>
     async fn describe_organization_config_rules(
         &self,
         input: DescribeOrganizationConfigRulesRequest,
@@ -7901,7 +7941,7 @@ pub trait ConfigService {
         RusotoError<DescribeOrganizationConfigRulesError>,
     >;
 
-    /// <p><p>Provides organization conformance pack deployment status for an organization.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Provides organization conformance pack deployment status for an organization. </p> <p> Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> </note></p>
     async fn describe_organization_conformance_pack_statuses(
         &self,
         input: DescribeOrganizationConformancePackStatusesRequest,
@@ -7910,7 +7950,7 @@ pub trait ConfigService {
         RusotoError<DescribeOrganizationConformancePackStatusesError>,
     >;
 
-    /// <p><p>Returns a list of organization conformance packs.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Returns a list of organization conformance packs. </p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> </note></p>
     async fn describe_organization_conformance_packs(
         &self,
         input: DescribeOrganizationConformancePacksRequest,
@@ -7937,7 +7977,7 @@ pub trait ConfigService {
         RusotoError<DescribeRemediationConfigurationsError>,
     >;
 
-    /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
+    /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
     async fn describe_remediation_exceptions(
         &self,
         input: DescribeRemediationExceptionsRequest,
@@ -8056,7 +8096,7 @@ pub trait ConfigService {
         input: GetDiscoveredResourceCountsRequest,
     ) -> Result<GetDiscoveredResourceCountsResponse, RusotoError<GetDiscoveredResourceCountsError>>;
 
-    /// <p><p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <note> <p>Only a master account can call this API.</p> </note></p>
+    /// <p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p>
     async fn get_organization_config_rule_detailed_status(
         &self,
         input: GetOrganizationConfigRuleDetailedStatusRequest,
@@ -8065,7 +8105,7 @@ pub trait ConfigService {
         RusotoError<GetOrganizationConfigRuleDetailedStatusError>,
     >;
 
-    /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account can call this API.</p>
+    /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p>
     async fn get_organization_conformance_pack_detailed_status(
         &self,
         input: GetOrganizationConformancePackDetailedStatusRequest,
@@ -8125,7 +8165,7 @@ pub trait ConfigService {
         input: PutConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<PutConfigurationRecorderError>>;
 
-    /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
+    /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. </p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
     async fn put_conformance_pack(
         &self,
         input: PutConformancePackRequest,
@@ -8143,13 +8183,13 @@ pub trait ConfigService {
         input: PutEvaluationsRequest,
     ) -> Result<PutEvaluationsResponse, RusotoError<PutEvaluationsError>>;
 
-    /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations. Only a master account can create or update an organization config rule.</p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150.</p> <note> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
+    /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations.</p> <p> Only a master account and a delegated administrator can create or update an organization config rule. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added. </p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegated-administrator</code> for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account or a delegated administrator that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150 and 3 delegated administrator per organization. </p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
     async fn put_organization_config_rule(
         &self,
         input: PutOrganizationConfigRuleRequest,
     ) -> Result<PutOrganizationConfigRuleResponse, RusotoError<PutOrganizationConfigRuleError>>;
 
-    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with GetRole action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the confomance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack.</p> </note></p>
+    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>Only a master account and a delegated administrator can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegate-admin</code> for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the conformance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack and 3 delegated administrator per organization. </p> </note></p>
     async fn put_organization_conformance_pack(
         &self,
         input: PutOrganizationConformancePackRequest,
@@ -8158,19 +8198,19 @@ pub trait ConfigService {
         RusotoError<PutOrganizationConformancePackError>,
     >;
 
-    /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
+    /// <p><p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p> <note> <p>If you make backward incompatible changes to the SSM document, you must call this again to ensure the remediations can run.</p> </note></p>
     async fn put_remediation_configurations(
         &self,
         input: PutRemediationConfigurationsRequest,
     ) -> Result<PutRemediationConfigurationsResponse, RusotoError<PutRemediationConfigurationsError>>;
 
-    /// <p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p>
+    /// <p><p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
     async fn put_remediation_exceptions(
         &self,
         input: PutRemediationExceptionsRequest,
     ) -> Result<PutRemediationExceptionsResponse, RusotoError<PutRemediationExceptionsError>>;
 
-    /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> </note></p>
+    /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> <p>Write-only schema properites are not recorded as part of the published configuration item.</p> </note></p>
     async fn put_resource_config(
         &self,
         input: PutResourceConfigRequest,
@@ -8450,7 +8490,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<DeleteEvaluationResultsResponse, _>()
     }
 
-    /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. Only a master account can delete an organization config rule.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
+    /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. </p> <p>Only a master account and a delegated administrator account can delete an organization config rule. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
     async fn delete_organization_config_rule(
         &self,
         input: DeleteOrganizationConfigRuleRequest,
@@ -8470,7 +8510,7 @@ impl ConfigService for ConfigServiceClient {
         Ok(())
     }
 
-    /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. Only a master account can delete an organization conformance pack.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
+    /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. </p> <p> Only a master account or a delegated administrator account can delete an organization conformance pack. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
     async fn delete_organization_conformance_pack(
         &self,
         input: DeleteOrganizationConformancePackRequest,
@@ -8538,7 +8578,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<DeleteRemediationConfigurationResponse, _>()
     }
 
-    /// <p>Deletes one or more remediation exceptions mentioned in the resource keys.</p>
+    /// <p><p>Deletes one or more remediation exceptions mentioned in the resource keys.</p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
     async fn delete_remediation_exceptions(
         &self,
         input: DeleteRemediationExceptionsRequest,
@@ -8998,7 +9038,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<DescribeDeliveryChannelsResponse, _>()
     }
 
-    /// <p><p>Provides organization config rule deployment status for an organization.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Provides organization config rule deployment status for an organization.</p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> </note></p>
     async fn describe_organization_config_rule_statuses(
         &self,
         input: DescribeOrganizationConfigRuleStatusesRequest,
@@ -9026,7 +9066,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<DescribeOrganizationConfigRuleStatusesResponse, _>()
     }
 
-    /// <p><p>Returns a list of organization config rules.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Returns a list of organization config rules. </p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.&#x2028;</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> </note></p>
     async fn describe_organization_config_rules(
         &self,
         input: DescribeOrganizationConfigRulesRequest,
@@ -9051,7 +9091,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<DescribeOrganizationConfigRulesResponse, _>()
     }
 
-    /// <p><p>Provides organization conformance pack deployment status for an organization.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Provides organization conformance pack deployment status for an organization. </p> <p> Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> </note></p>
     async fn describe_organization_conformance_pack_statuses(
         &self,
         input: DescribeOrganizationConformancePackStatusesRequest,
@@ -9079,7 +9119,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<DescribeOrganizationConformancePackStatusesResponse, _>()
     }
 
-    /// <p><p>Returns a list of organization conformance packs.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> <p>Only a master account can call this API.</p> </note></p>
+    /// <p><p>Returns a list of organization conformance packs. </p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> </note></p>
     async fn describe_organization_conformance_packs(
         &self,
         input: DescribeOrganizationConformancePacksRequest,
@@ -9163,7 +9203,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<DescribeRemediationConfigurationsResponse, _>()
     }
 
-    /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
+    /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
     async fn describe_remediation_exceptions(
         &self,
         input: DescribeRemediationExceptionsRequest,
@@ -9534,7 +9574,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<GetDiscoveredResourceCountsResponse, _>()
     }
 
-    /// <p><p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <note> <p>Only a master account can call this API.</p> </note></p>
+    /// <p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p>
     async fn get_organization_config_rule_detailed_status(
         &self,
         input: GetOrganizationConfigRuleDetailedStatusRequest,
@@ -9562,7 +9602,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<GetOrganizationConfigRuleDetailedStatusResponse, _>()
     }
 
-    /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account can call this API.</p>
+    /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account and a delegated administrator account can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p>
     async fn get_organization_conformance_pack_detailed_status(
         &self,
         input: GetOrganizationConformancePackDetailedStatusRequest,
@@ -9763,7 +9803,7 @@ impl ConfigService for ConfigServiceClient {
         Ok(())
     }
 
-    /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
+    /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. </p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
     async fn put_conformance_pack(
         &self,
         input: PutConformancePackRequest,
@@ -9816,7 +9856,7 @@ impl ConfigService for ConfigServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutEvaluationsResponse, _>()
     }
 
-    /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations. Only a master account can create or update an organization config rule.</p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150.</p> <note> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
+    /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations.</p> <p> Only a master account and a delegated administrator can create or update an organization config rule. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added. </p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegated-administrator</code> for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account or a delegated administrator that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150 and 3 delegated administrator per organization. </p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
     async fn put_organization_config_rule(
         &self,
         input: PutOrganizationConfigRuleRequest,
@@ -9839,7 +9879,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<PutOrganizationConfigRuleResponse, _>()
     }
 
-    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with GetRole action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the confomance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack.</p> </note></p>
+    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>Only a master account and a delegated administrator can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegate-admin</code> for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the conformance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack and 3 delegated administrator per organization. </p> </note></p>
     async fn put_organization_conformance_pack(
         &self,
         input: PutOrganizationConformancePackRequest,
@@ -9864,7 +9904,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<PutOrganizationConformancePackResponse, _>()
     }
 
-    /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
+    /// <p><p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p> <note> <p>If you make backward incompatible changes to the SSM document, you must call this again to ensure the remediations can run.</p> </note></p>
     async fn put_remediation_configurations(
         &self,
         input: PutRemediationConfigurationsRequest,
@@ -9887,7 +9927,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<PutRemediationConfigurationsResponse, _>()
     }
 
-    /// <p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p>
+    /// <p><p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
     async fn put_remediation_exceptions(
         &self,
         input: PutRemediationExceptionsRequest,
@@ -9909,7 +9949,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<PutRemediationExceptionsResponse, _>()
     }
 
-    /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> </note></p>
+    /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> <p>Write-only schema properites are not recorded as part of the published configuration item.</p> </note></p>
     async fn put_resource_config(
         &self,
         input: PutResourceConfigRequest,

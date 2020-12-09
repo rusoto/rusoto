@@ -73,6 +73,27 @@ pub struct BatchDeleteBuildsOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchGetBuildBatchesInput {
+    /// <p>An array that contains the batch build identifiers to retrieve.</p>
+    #[serde(rename = "ids")]
+    pub ids: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchGetBuildBatchesOutput {
+    /// <p>An array of <code>BuildBatch</code> objects that represent the retrieved batch builds.</p>
+    #[serde(rename = "buildBatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batches: Option<Vec<BuildBatch>>,
+    /// <p>An array that contains the identifiers of any batch builds that are not found.</p>
+    #[serde(rename = "buildBatchesNotFound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batches_not_found: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetBuildsInput {
     /// <p>The IDs of the builds.</p>
     #[serde(rename = "ids")]
@@ -155,6 +176,19 @@ pub struct BatchGetReportsOutput {
     pub reports_not_found: Option<Vec<String>>,
 }
 
+/// <p>Specifies restrictions for the batch build.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct BatchRestrictions {
+    /// <p>An array of strings that specify the compute types that are allowed for the batch build. See <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html">Build environment compute types</a> in the <i>AWS CodeBuild User Guide</i> for these values. </p>
+    #[serde(rename = "computeTypesAllowed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_types_allowed: Option<Vec<String>>,
+    /// <p>Specifies the maximum number of builds allowed.</p>
+    #[serde(rename = "maximumBuildsAllowed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_builds_allowed: Option<i64>,
+}
+
 /// <p>Information about a build.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -167,6 +201,10 @@ pub struct Build {
     #[serde(rename = "artifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifacts: Option<BuildArtifacts>,
+    /// <p>The ARN of the batch build that this build is a member of, if applicable.</p>
+    #[serde(rename = "buildBatchArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_arn: Option<String>,
     /// <p>Whether the build is complete. True if complete; otherwise, false.</p>
     #[serde(rename = "buildComplete")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -187,7 +225,11 @@ pub struct Build {
     #[serde(rename = "currentPhase")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_phase: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>Contains information about the debug session for this build.</p>
+    #[serde(rename = "debugSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_session: Option<DebugSession>,
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,
@@ -311,6 +353,188 @@ pub struct BuildArtifacts {
     pub sha_25_6sum: Option<String>,
 }
 
+/// <p>Contains information about a batch build.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BuildBatch {
+    /// <p>The ARN of the batch build.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A <code>BuildArtifacts</code> object the defines the build artifacts for this batch build.</p>
+    #[serde(rename = "artifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifacts: Option<BuildArtifacts>,
+    #[serde(rename = "buildBatchConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_config: Option<ProjectBuildBatchConfig>,
+    /// <p>The number of the batch build. For each project, the <code>buildBatchNumber</code> of its first batch build is <code>1</code>. The <code>buildBatchNumber</code> of each subsequent batch build is incremented by <code>1</code>. If a batch build is deleted, the <code>buildBatchNumber</code> of other batch builds does not change.</p>
+    #[serde(rename = "buildBatchNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_number: Option<i64>,
+    /// <p>The status of the batch build.</p>
+    #[serde(rename = "buildBatchStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_status: Option<String>,
+    /// <p>An array of <code>BuildGroup</code> objects that define the build groups for the batch build.</p>
+    #[serde(rename = "buildGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_groups: Option<Vec<BuildGroup>>,
+    /// <p>Specifies the maximum amount of time, in minutes, that the build in a batch must be completed in.</p>
+    #[serde(rename = "buildTimeoutInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_timeout_in_minutes: Option<i64>,
+    #[serde(rename = "cache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache: Option<ProjectCache>,
+    /// <p>Indicates if the batch build is complete.</p>
+    #[serde(rename = "complete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub complete: Option<bool>,
+    /// <p>The current phase of the batch build.</p>
+    #[serde(rename = "currentPhase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_phase: Option<String>,
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the batch build output artifacts.</p> <note> <p>You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
+    #[serde(rename = "encryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_key: Option<String>,
+    /// <p>The date and time that the batch build ended.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    #[serde(rename = "environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<ProjectEnvironment>,
+    /// <p>An array of <code>ProjectFileSystemLocation</code> objects for the batch build project. A <code>ProjectFileSystemLocation</code> object specifies the <code>identifier</code>, <code>location</code>, <code>mountOptions</code>, <code>mountPoint</code>, and <code>type</code> of a file system created using Amazon Elastic File System. </p>
+    #[serde(rename = "fileSystemLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_locations: Option<Vec<ProjectFileSystemLocation>>,
+    /// <p>The identifier of the batch build.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p><p>The entity that started the batch build. Valid values include:</p> <ul> <li> <p>If AWS CodePipeline started the build, the pipeline&#39;s name (for example, <code>codepipeline/my-demo-pipeline</code>).</p> </li> <li> <p>If an AWS Identity and Access Management (IAM) user started the build, the user&#39;s name.</p> </li> <li> <p>If the Jenkins plugin for AWS CodeBuild started the build, the string <code>CodeBuild-Jenkins-Plugin</code>.</p> </li> </ul></p>
+    #[serde(rename = "initiator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub initiator: Option<String>,
+    #[serde(rename = "logConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_config: Option<LogsConfig>,
+    /// <p>An array of <code>BuildBatchPhase</code> objects the specify the phases of the batch build.</p>
+    #[serde(rename = "phases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phases: Option<Vec<BuildBatchPhase>>,
+    /// <p>The name of the batch build project.</p>
+    #[serde(rename = "projectName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_name: Option<String>,
+    /// <p>Specifies the amount of time, in minutes, that the batch build is allowed to be queued before it times out.</p>
+    #[serde(rename = "queuedTimeoutInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queued_timeout_in_minutes: Option<i64>,
+    /// <p><p>The identifier of the resolved version of this batch build&#39;s source code.</p> <ul> <li> <p>For AWS CodeCommit, GitHub, GitHub Enterprise, and BitBucket, the commit ID.</p> </li> <li> <p>For AWS CodePipeline, the source revision provided by AWS CodePipeline.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3), this does not apply.</p> </li> </ul></p>
+    #[serde(rename = "resolvedSourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_source_version: Option<String>,
+    /// <p>An array of <code>BuildArtifacts</code> objects the define the build artifacts for this batch build.</p>
+    #[serde(rename = "secondaryArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_artifacts: Option<Vec<BuildArtifacts>>,
+    /// <p><p>An array of <code>ProjectSourceVersion</code> objects. Each <code>ProjectSourceVersion</code> must be one of: </p> <ul> <li> <p>For AWS CodeCommit: the commit ID, branch, or Git tag to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example, <code>pr/25</code>). If a branch name is specified, the branch&#39;s HEAD commit ID is used. If not specified, the default branch&#39;s HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch&#39;s HEAD commit ID is used. If not specified, the default branch&#39;s HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul></p>
+    #[serde(rename = "secondarySourceVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_source_versions: Option<Vec<ProjectSourceVersion>>,
+    /// <p>An array of <code>ProjectSource</code> objects that define the sources for the batch build.</p>
+    #[serde(rename = "secondarySources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_sources: Option<Vec<ProjectSource>>,
+    /// <p>The name of a service role used for builds in the batch.</p>
+    #[serde(rename = "serviceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role: Option<String>,
+    #[serde(rename = "source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ProjectSource>,
+    /// <p>The identifier of the version of the source code to be built.</p>
+    #[serde(rename = "sourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_version: Option<String>,
+    /// <p>The date and time that the batch build started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p>Specifies filters when retrieving batch builds.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BuildBatchFilter {
+    /// <p>The status of the batch builds to retrieve. Only batch builds that have this status will be retrieved.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Contains information about a stage for a batch build.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BuildBatchPhase {
+    /// <p>Additional information about the batch build phase. Especially to help troubleshoot a failed btach build.</p>
+    #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contexts: Option<Vec<PhaseContext>>,
+    /// <p>How long, in seconds, between the starting and ending times of the batch build's phase.</p>
+    #[serde(rename = "durationInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_in_seconds: Option<i64>,
+    /// <p>When the batch build phase ended, expressed in Unix time format.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p><p>The current status of the batch build phase. Valid values include:</p> <dl> <dt>FAILED</dt> <dd> <p>The build phase failed.</p> </dd> <dt>FAULT</dt> <dd> <p>The build phase faulted.</p> </dd> <dt>IN<em>PROGRESS</dt> <dd> <p>The build phase is still in progress.</p> </dd> <dt>QUEUED</dt> <dd> <p>The build has been submitted and is queued behind other submitted builds.</p> </dd> <dt>STOPPED</dt> <dd> <p>The build phase stopped.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The build phase succeeded.</p> </dd> <dt>TIMED</em>OUT</dt> <dd> <p>The build phase timed out.</p> </dd> </dl></p>
+    #[serde(rename = "phaseStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phase_status: Option<String>,
+    /// <p><p>The name of the batch build phase. Valid values include:</p> <dl> <dt>COMBINE<em>ARTIFACTS</dt> <dd> <p>Build output artifacts are being combined and uploaded to the output location.</p> </dd> <dt>DOWNLOAD</em>BATCHSPEC</dt> <dd> <p>The batch build specification is being downloaded.</p> </dd> <dt>FAILED</dt> <dd> <p>One or more of the builds failed.</p> </dd> <dt>IN_PROGRESS</dt> <dd> <p>The batch build is in progress.</p> </dd> <dt>STOPPED</dt> <dd> <p>The batch build was stopped.</p> </dd> <dt>SUBMITTED</dt> <dd> <p>The btach build has been submitted.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The batch build succeeded.</p> </dd> </dl></p>
+    #[serde(rename = "phaseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phase_type: Option<String>,
+    /// <p>When the batch build phase started, expressed in Unix time format.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+/// <p>Contains information about a batch build build group. Build groups are used to combine builds that can run in parallel, while still being able to set dependencies on other build groups.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BuildGroup {
+    /// <p>A <code>BuildSummary</code> object that contains a summary of the current build group.</p>
+    #[serde(rename = "currentBuildSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_build_summary: Option<BuildSummary>,
+    /// <p>An array of strings that contain the identifiers of the build groups that this build group depends on.</p>
+    #[serde(rename = "dependsOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub depends_on: Option<Vec<String>>,
+    /// <p>Contains the identifier of the build group.</p>
+    #[serde(rename = "identifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<String>,
+    /// <p>Specifies if failures in this build group can be ignored.</p>
+    #[serde(rename = "ignoreFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ignore_failure: Option<bool>,
+    /// <p>An array of <code>BuildSummary</code> objects that contain summaries of previous build groups.</p>
+    #[serde(rename = "priorBuildSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prior_build_summary_list: Option<Vec<BuildSummary>>,
+}
+
 /// <p>Information about a build that could not be successfully deleted.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -341,7 +565,7 @@ pub struct BuildPhase {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p><p>The current status of the build phase. Valid values include:</p> <ul> <li> <p> <code>FAILED</code>: The build phase failed.</p> </li> <li> <p> <code>FAULT</code>: The build phase faulted.</p> </li> <li> <p> <code>IN<em>PROGRESS</code>: The build phase is still in progress.</p> </li> <li> <p> <code>QUEUED</code>: The build has been submitted and is queued behind other submitted builds.</p> </li> <li> <p> <code>STOPPED</code>: The build phase stopped.</p> </li> <li> <p> <code>SUCCEEDED</code>: The build phase succeeded.</p> </li> <li> <p> <code>TIMED</em>OUT</code>: The build phase timed out.</p> </li> </ul></p>
+    /// <p><p>The current status of the build phase. Valid values include:</p> <dl> <dt>FAILED</dt> <dd> <p>The build phase failed.</p> </dd> <dt>FAULT</dt> <dd> <p>The build phase faulted.</p> </dd> <dt>IN<em>PROGRESS</dt> <dd> <p>The build phase is still in progress.</p> </dd> <dt>QUEUED</dt> <dd> <p>The build has been submitted and is queued behind other submitted builds.</p> </dd> <dt>STOPPED</dt> <dd> <p>The build phase stopped.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The build phase succeeded.</p> </dd> <dt>TIMED</em>OUT</dt> <dd> <p>The build phase timed out.</p> </dd> </dl></p>
     #[serde(rename = "phaseStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phase_status: Option<String>,
@@ -368,6 +592,32 @@ pub struct BuildStatusConfig {
     pub target_url: Option<String>,
 }
 
+/// <p>Contains summary information about a batch build group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BuildSummary {
+    /// <p>The batch build ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p><p>The status of the build group.</p> <dl> <dt>FAILED</dt> <dd> <p>The build group failed.</p> </dd> <dt>FAULT</dt> <dd> <p>The build group faulted.</p> </dd> <dt>IN<em>PROGRESS</dt> <dd> <p>The build group is still in progress.</p> </dd> <dt>STOPPED</dt> <dd> <p>The build group stopped.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The build group succeeded.</p> </dd> <dt>TIMED</em>OUT</dt> <dd> <p>The build group timed out.</p> </dd> </dl></p>
+    #[serde(rename = "buildStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_status: Option<String>,
+    /// <p>A <code>ResolvedArtifact</code> object that represents the primary build artifacts for the build group.</p>
+    #[serde(rename = "primaryArtifact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_artifact: Option<ResolvedArtifact>,
+    /// <p>When the build was started, expressed in Unix time format.</p>
+    #[serde(rename = "requestedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requested_on: Option<f64>,
+    /// <p>An array of <code>ResolvedArtifact</code> objects that represents the secondary build artifacts for the build group.</p>
+    #[serde(rename = "secondaryArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_artifacts: Option<Vec<ResolvedArtifact>>,
+}
+
 /// <p> Information about Amazon CloudWatch Logs for a build project. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogsConfig {
@@ -384,6 +634,82 @@ pub struct CloudWatchLogsConfig {
     pub stream_name: Option<String>,
 }
 
+/// <p>Contains code coverage report information.</p> <p>Line coverage measures how many statements your tests cover. A statement is a single instruction, not including comments, conditionals, etc.</p> <p>Branch coverage determines if your tests cover every possible branch of a control structure, such as an <code>if</code> or <code>case</code> statement.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CodeCoverage {
+    /// <p>The percentage of branches that are covered by your tests.</p>
+    #[serde(rename = "branchCoveragePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_coverage_percentage: Option<f64>,
+    /// <p>The number of conditional branches that are covered by your tests.</p>
+    #[serde(rename = "branchesCovered")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branches_covered: Option<i64>,
+    /// <p>The number of conditional branches that are not covered by your tests.</p>
+    #[serde(rename = "branchesMissed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branches_missed: Option<i64>,
+    /// <p>The date and time that the tests were run.</p>
+    #[serde(rename = "expired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expired: Option<f64>,
+    /// <p>The path of the test report file.</p>
+    #[serde(rename = "filePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_path: Option<String>,
+    /// <p>The identifier of the code coverage report.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The percentage of lines that are covered by your tests.</p>
+    #[serde(rename = "lineCoveragePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub line_coverage_percentage: Option<f64>,
+    /// <p>The number of lines that are covered by your tests.</p>
+    #[serde(rename = "linesCovered")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lines_covered: Option<i64>,
+    /// <p>The number of lines that are not covered by your tests.</p>
+    #[serde(rename = "linesMissed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lines_missed: Option<i64>,
+    /// <p>The ARN of the report.</p>
+    #[serde(rename = "reportARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_arn: Option<String>,
+}
+
+/// <p>Contains a summary of a code coverage report.</p> <p>Line coverage measures how many statements your tests cover. A statement is a single instruction, not including comments, conditionals, etc.</p> <p>Branch coverage determines if your tests cover every possible branch of a control structure, such as an <code>if</code> or <code>case</code> statement.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CodeCoverageReportSummary {
+    /// <p>The percentage of branches that are covered by your tests.</p>
+    #[serde(rename = "branchCoveragePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_coverage_percentage: Option<f64>,
+    /// <p>The number of conditional branches that are covered by your tests.</p>
+    #[serde(rename = "branchesCovered")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branches_covered: Option<i64>,
+    /// <p>The number of conditional branches that are not covered by your tests.</p>
+    #[serde(rename = "branchesMissed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branches_missed: Option<i64>,
+    /// <p>The percentage of lines that are covered by your tests.</p>
+    #[serde(rename = "lineCoveragePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub line_coverage_percentage: Option<f64>,
+    /// <p>The number of lines that are covered by your tests.</p>
+    #[serde(rename = "linesCovered")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lines_covered: Option<i64>,
+    /// <p>The number of lines that are not covered by your tests.</p>
+    #[serde(rename = "linesMissed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lines_missed: Option<i64>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectInput {
@@ -394,6 +720,10 @@ pub struct CreateProjectInput {
     #[serde(rename = "badgeEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub badge_enabled: Option<bool>,
+    /// <p>A <a>ProjectBuildBatchConfig</a> object that defines the batch build options for the project.</p>
+    #[serde(rename = "buildBatchConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_config: Option<ProjectBuildBatchConfig>,
     /// <p>Stores recently used information so that it can be quickly accessed at a later time.</p>
     #[serde(rename = "cache")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -402,7 +732,7 @@ pub struct CreateProjectInput {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p>You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,
@@ -413,26 +743,26 @@ pub struct CreateProjectInput {
     #[serde(rename = "fileSystemLocations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_locations: Option<Vec<ProjectFileSystemLocation>>,
-    /// <p> Information about logs for the build project. These can be logs in Amazon CloudWatch Logs, logs uploaded to a specified S3 bucket, or both. </p>
+    /// <p>Information about logs for the build project. These can be logs in Amazon CloudWatch Logs, logs uploaded to a specified S3 bucket, or both. </p>
     #[serde(rename = "logsConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logs_config: Option<LogsConfig>,
     /// <p>The name of the build project.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p> The number of minutes a build is allowed to be queued before it times out. </p>
+    /// <p>The number of minutes a build is allowed to be queued before it times out. </p>
     #[serde(rename = "queuedTimeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queued_timeout_in_minutes: Option<i64>,
-    /// <p> An array of <code>ProjectArtifacts</code> objects. </p>
+    /// <p>An array of <code>ProjectArtifacts</code> objects. </p>
     #[serde(rename = "secondaryArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_artifacts: Option<Vec<ProjectArtifacts>>,
-    /// <p> An array of <code>ProjectSourceVersion</code> objects. If <code>secondarySourceVersions</code> is specified at the build level, then they take precedence over these <code>secondarySourceVersions</code> (at the project level). </p>
+    /// <p>An array of <code>ProjectSourceVersion</code> objects. If <code>secondarySourceVersions</code> is specified at the build level, then they take precedence over these <code>secondarySourceVersions</code> (at the project level). </p>
     #[serde(rename = "secondarySourceVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_source_versions: Option<Vec<ProjectSourceVersion>>,
-    /// <p> An array of <code>ProjectSource</code> objects. </p>
+    /// <p>An array of <code>ProjectSource</code> objects. </p>
     #[serde(rename = "secondarySources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_sources: Option<Vec<ProjectSource>>,
@@ -442,7 +772,7 @@ pub struct CreateProjectInput {
     /// <p>Information about the build input source code for the build project.</p>
     #[serde(rename = "source")]
     pub source: ProjectSource,
-    /// <p> A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of: </p> <ul> <li> <p>For AWS CodeCommit: the commit ID, branch, or Git tag to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> If <code>sourceVersion</code> is specified at the build level, then that version takes precedence over this <code>sourceVersion</code> (at the project level). </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    /// <p>A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of: </p> <ul> <li> <p>For AWS CodeCommit: the commit ID, branch, or Git tag to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p>If <code>sourceVersion</code> is specified at the build level, then that version takes precedence over this <code>sourceVersion</code> (at the project level). </p> <p>For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_version: Option<String>,
@@ -499,11 +829,15 @@ pub struct CreateReportGroupOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebhookInput {
-    /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p> It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
+    /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p>It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
     #[serde(rename = "branchFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branch_filter: Option<String>,
-    /// <p> An array of arrays of <code>WebhookFilter</code> objects used to determine which webhooks are triggered. At least one <code>WebhookFilter</code> in the array must specify <code>EVENT</code> as its <code>type</code>. </p> <p> For a build to be triggered, at least one filter group in the <code>filterGroups</code> array must pass. For a filter group to pass, each of its filters must pass. </p>
+    /// <p>Specifies the type of build this webhook will trigger.</p>
+    #[serde(rename = "buildType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_type: Option<String>,
+    /// <p>An array of arrays of <code>WebhookFilter</code> objects used to determine which webhooks are triggered. At least one <code>WebhookFilter</code> in the array must specify <code>EVENT</code> as its <code>type</code>. </p> <p>For a build to be triggered, at least one filter group in the <code>filterGroups</code> array must pass. For a filter group to pass, each of its filters must pass. </p>
     #[serde(rename = "filterGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_groups: Option<Vec<Vec<WebhookFilter>>>,
@@ -521,6 +855,45 @@ pub struct CreateWebhookOutput {
     pub webhook: Option<Webhook>,
 }
 
+/// <p>Contains information about the debug session for a build. For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/session-manager.html">Viewing a running build in Session Manager</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DebugSession {
+    /// <p>Specifies if session debugging is enabled for this build.</p>
+    #[serde(rename = "sessionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_enabled: Option<bool>,
+    /// <p>Contains the identifier of the Session Manager session used for the build. To work with the paused build, you open this session to examine, control, and resume the build.</p>
+    #[serde(rename = "sessionTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_target: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteBuildBatchInput {
+    /// <p>The identifier of the batch build to delete.</p>
+    #[serde(rename = "id")]
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteBuildBatchOutput {
+    /// <p>An array of strings that contain the identifiers of the builds that were deleted.</p>
+    #[serde(rename = "buildsDeleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub builds_deleted: Option<Vec<String>>,
+    /// <p>An array of <code>BuildNotDeleted</code> objects that specify the builds that could not be deleted.</p>
+    #[serde(rename = "buildsNotDeleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub builds_not_deleted: Option<Vec<BuildNotDeleted>>,
+    /// <p>The status code.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectInput {
@@ -536,9 +909,13 @@ pub struct DeleteProjectOutput {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReportGroupInput {
-    /// <p> The ARN of the report group to delete. </p>
+    /// <p>The ARN of the report group to delete. </p>
     #[serde(rename = "arn")]
     pub arn: String,
+    /// <p>If <code>true</code>, deletes any reports that belong to a report group before deleting the report group. </p> <p>If <code>false</code>, you must delete any reports in the report group. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ListReportsForReportGroup.html">ListReportsForReportGroup</a> to get the reports in a report group. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_DeleteReport.html">DeleteReport</a> to delete the reports. If you call <code>DeleteReportGroup</code> for a report group that contains one or more reports, an exception is thrown. </p>
+    #[serde(rename = "deleteReports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_reports: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -597,6 +974,51 @@ pub struct DeleteWebhookInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeCodeCoveragesInput {
+    /// <p>The maximum line coverage percentage to report.</p>
+    #[serde(rename = "maxLineCoveragePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_line_coverage_percentage: Option<f64>,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The minimum line coverage percentage to report.</p>
+    #[serde(rename = "minLineCoveragePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_line_coverage_percentage: Option<f64>,
+    /// <p>The <code>nextToken</code> value returned from a previous call to <code>DescribeCodeCoverages</code>. This specifies the next item to return. To return the beginning of the list, exclude this parameter.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The ARN of the report for which test cases are returned. </p>
+    #[serde(rename = "reportArn")]
+    pub report_arn: String,
+    /// <p><p>Specifies how the results are sorted. Possible values are:</p> <dl> <dt>FILE<em>PATH</dt> <dd> <p>The results are sorted by file path.</p> </dd> <dt>LINE</em>COVERAGE_PERCENTAGE</dt> <dd> <p>The results are sorted by the percentage of lines that are covered.</p> </dd> </dl></p>
+    #[serde(rename = "sortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>Specifies if the results are sorted in ascending or descending order.</p>
+    #[serde(rename = "sortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCodeCoveragesOutput {
+    /// <p>An array of <code>CodeCoverage</code> objects that contain the results.</p>
+    #[serde(rename = "codeCoverages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_coverages: Option<Vec<CodeCoverage>>,
+    /// <p>If there are more items to return, this contains a token that is passed to a subsequent call to <code>DescribeCodeCoverages</code> to retrieve the next set of items.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -683,7 +1105,7 @@ pub struct EnvironmentVariable {
     /// <p>The name or key of the environment variable.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p><p>The type of environment variable. Valid values include:</p> <ul> <li> <p> <code>PARAMETER<em>STORE</code>: An environment variable stored in Amazon EC2 Systems Manager Parameter Store. To learn how to specify a parameter store environment variable, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#parameter-store-build-spec"> parameter store reference-key in the buildspec file</a>.</p> </li> <li> <p> <code>PLAINTEXT</code>: An environment variable in plain text format. This is the default value.</p> </li> <li> <p> <code>SECRETS</em>MANAGER</code>: An environment variable stored in AWS Secrets Manager. To learn how to specify a secrets manager environment variable, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#secrets-manager-build-spec"> secrets manager reference-key in the buildspec file</a>.</p> </li> </ul></p>
+    /// <p><p>The type of environment variable. Valid values include:</p> <ul> <li> <p> <code>PARAMETER<em>STORE</code>: An environment variable stored in Amazon EC2 Systems Manager Parameter Store. To learn how to specify a parameter store environment variable, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.parameter-store">env/parameter-store</a> in the <i>AWS CodeBuild User Guide</i>.</p> </li> <li> <p> <code>PLAINTEXT</code>: An environment variable in plain text format. This is the default value.</p> </li> <li> <p> <code>SECRETS</em>MANAGER</code>: An environment variable stored in AWS Secrets Manager. To learn how to specify a secrets manager environment variable, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.secrets-manager">env/secrets-manager</a> in the <i>AWS CodeBuild User Guide</i>.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -773,6 +1195,78 @@ pub struct InvalidateProjectCacheInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvalidateProjectCacheOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListBuildBatchesForProjectInput {
+    /// <p>A <code>BuildBatchFilter</code> object that specifies the filters for the search.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<BuildBatchFilter>,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The <code>nextToken</code> value returned from a previous call to <code>ListBuildBatchesForProject</code>. This specifies the next item to return. To return the beginning of the list, exclude this parameter.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the project.</p>
+    #[serde(rename = "projectName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_name: Option<String>,
+    /// <p><p>Specifies the sort order of the returned items. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the batch build identifiers in ascending order by identifier.</p> </li> <li> <p> <code>DESCENDING</code>: List the batch build identifiers in descending order by identifier.</p> </li> </ul></p>
+    #[serde(rename = "sortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListBuildBatchesForProjectOutput {
+    /// <p>An array of strings that contains the batch build identifiers.</p>
+    #[serde(rename = "ids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ids: Option<Vec<String>>,
+    /// <p>If there are more items to return, this contains a token that is passed to a subsequent call to <code>ListBuildBatchesForProject</code> to retrieve the next set of items.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListBuildBatchesInput {
+    /// <p>A <code>BuildBatchFilter</code> object that specifies the filters for the search.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<BuildBatchFilter>,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The <code>nextToken</code> value returned from a previous call to <code>ListBuildBatches</code>. This specifies the next item to return. To return the beginning of the list, exclude this parameter.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p>Specifies the sort order of the returned items. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the batch build identifiers in ascending order by identifier.</p> </li> <li> <p> <code>DESCENDING</code>: List the batch build identifiers in descending order by identifier.</p> </li> </ul></p>
+    #[serde(rename = "sortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListBuildBatchesOutput {
+    /// <p>An array of strings that contains the batch build identifiers.</p>
+    #[serde(rename = "ids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ids: Option<Vec<String>>,
+    /// <p>If there are more items to return, this contains a token that is passed to a subsequent call to <code>ListBuildBatches</code> to retrieve the next set of items.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -937,7 +1431,7 @@ pub struct ListReportsForReportGroupOutput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p> The list of returned report group ARNs. </p>
+    /// <p> The list of report ARNs. </p>
     #[serde(rename = "reports")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reports: Option<Vec<String>>,
@@ -1153,6 +1647,10 @@ pub struct Project {
     #[serde(rename = "badge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub badge: Option<ProjectBadge>,
+    /// <p>A <a>ProjectBuildBatchConfig</a> object that defines the batch build options for the project.</p>
+    #[serde(rename = "buildBatchConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_config: Option<ProjectBuildBatchConfig>,
     /// <p>Information about the cache for the build project.</p>
     #[serde(rename = "cache")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1165,7 +1663,7 @@ pub struct Project {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p>You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,
@@ -1181,7 +1679,7 @@ pub struct Project {
     #[serde(rename = "lastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<f64>,
-    /// <p> Information about logs for the build project. A project can create logs in Amazon CloudWatch Logs, an S3 bucket, or both. </p>
+    /// <p>Information about logs for the build project. A project can create logs in Amazon CloudWatch Logs, an S3 bucket, or both. </p>
     #[serde(rename = "logsConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logs_config: Option<LogsConfig>,
@@ -1189,19 +1687,19 @@ pub struct Project {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p> The number of minutes a build is allowed to be queued before it times out. </p>
+    /// <p>The number of minutes a build is allowed to be queued before it times out. </p>
     #[serde(rename = "queuedTimeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queued_timeout_in_minutes: Option<i64>,
-    /// <p> An array of <code>ProjectArtifacts</code> objects. </p>
+    /// <p>An array of <code>ProjectArtifacts</code> objects. </p>
     #[serde(rename = "secondaryArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_artifacts: Option<Vec<ProjectArtifacts>>,
-    /// <p> An array of <code>ProjectSourceVersion</code> objects. If <code>secondarySourceVersions</code> is specified at the build level, then they take over these <code>secondarySourceVersions</code> (at the project level). </p>
+    /// <p>An array of <code>ProjectSourceVersion</code> objects. If <code>secondarySourceVersions</code> is specified at the build level, then they take over these <code>secondarySourceVersions</code> (at the project level). </p>
     #[serde(rename = "secondarySourceVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_source_versions: Option<Vec<ProjectSourceVersion>>,
-    /// <p> An array of <code>ProjectSource</code> objects. </p>
+    /// <p>An array of <code>ProjectSource</code> objects. </p>
     #[serde(rename = "secondarySources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_sources: Option<Vec<ProjectSource>>,
@@ -1213,7 +1711,7 @@ pub struct Project {
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<ProjectSource>,
-    /// <p>A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID, branch, or Git tag to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> If <code>sourceVersion</code> is specified at the build level, then that version takes precedence over this <code>sourceVersion</code> (at the project level). </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    /// <p>A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID, branch, or Git tag to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p>If <code>sourceVersion</code> is specified at the build level, then that version takes precedence over this <code>sourceVersion</code> (at the project level). </p> <p>For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_version: Option<String>,
@@ -1250,11 +1748,11 @@ pub struct ProjectArtifacts {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p><p>Along with <code>path</code> and <code>namespaceType</code>, the pattern that AWS CodeBuild uses to name and store the output artifact:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, AWS CodePipeline ignores this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO<em>ARTIFACTS</code>, this value is ignored if specified, because no build output is produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output artifact object. If you set the name to be a forward slash (&quot;/&quot;), the artifact is stored in the root of the output bucket.</p> </li> </ul> <p>For example:</p> <ul> <li> <p> If <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD</em>ID</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, then the output artifact is stored in <code>MyArtifacts/<i>build-ID</i>/MyArtifact.zip</code>. </p> </li> <li> <p> If <code>path</code> is empty, <code>namespaceType</code> is set to <code>NONE</code>, and <code>name</code> is set to &quot;<code>/</code>&quot;, the output artifact is stored in the root of the output bucket. </p> </li> <li> <p> If <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD_ID</code>, and <code>name</code> is set to &quot;<code>/</code>&quot;, the output artifact is stored in <code>MyArtifacts/<i>build-ID</i> </code>. </p> </li> </ul></p>
+    /// <p><p>Along with <code>path</code> and <code>namespaceType</code>, the pattern that AWS CodeBuild uses to name and store the output artifact:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, AWS CodePipeline ignores this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO<em>ARTIFACTS</code>, this value is ignored if specified, because no build output is produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output artifact object. If you set the name to be a forward slash (&quot;/&quot;), the artifact is stored in the root of the output bucket.</p> </li> </ul> <p>For example:</p> <ul> <li> <p> If <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD</em>ID</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, then the output artifact is stored in <code>MyArtifacts/&lt;build-ID&gt;/MyArtifact.zip</code>. </p> </li> <li> <p> If <code>path</code> is empty, <code>namespaceType</code> is set to <code>NONE</code>, and <code>name</code> is set to &quot;<code>/</code>&quot;, the output artifact is stored in the root of the output bucket. </p> </li> <li> <p> If <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD_ID</code>, and <code>name</code> is set to &quot;<code>/</code>&quot;, the output artifact is stored in <code>MyArtifacts/&lt;build-ID&gt;</code>. </p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Along with <code>path</code> and <code>name</code>, the pattern that AWS CodeBuild uses to determine the name and location to store the output artifact:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, AWS CodePipeline ignores this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, this value is ignored if specified, because no build output is produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, valid values include:</p> <ul> <li> <p> <code>BUILD_ID</code>: Include the build ID in the location of the build output artifact.</p> </li> <li> <p> <code>NONE</code>: Do not include the build ID. This is the default if <code>namespaceType</code> is not specified.</p> </li> </ul> </li> </ul> <p>For example, if <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD_ID</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, the output artifact is stored in <code>MyArtifacts/<i>build-ID</i>/MyArtifact.zip</code>.</p>
+    /// <p>Along with <code>path</code> and <code>name</code>, the pattern that AWS CodeBuild uses to determine the name and location to store the output artifact:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, AWS CodePipeline ignores this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, this value is ignored if specified, because no build output is produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, valid values include:</p> <ul> <li> <p> <code>BUILD_ID</code>: Include the build ID in the location of the build output artifact.</p> </li> <li> <p> <code>NONE</code>: Do not include the build ID. This is the default if <code>namespaceType</code> is not specified.</p> </li> </ul> </li> </ul> <p>For example, if <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD_ID</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, the output artifact is stored in <code>MyArtifacts/&lt;build-ID&gt;/MyArtifact.zip</code>.</p>
     #[serde(rename = "namespaceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub namespace_type: Option<String>,
@@ -1289,6 +1787,27 @@ pub struct ProjectBadge {
     pub badge_request_url: Option<String>,
 }
 
+/// <p>Contains configuration information about a batch build project.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProjectBuildBatchConfig {
+    /// <p>Specifies if the build artifacts for the batch build should be combined into a single artifact location.</p>
+    #[serde(rename = "combineArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub combine_artifacts: Option<bool>,
+    /// <p>A <code>BatchRestrictions</code> object that specifies the restrictions for the batch build.</p>
+    #[serde(rename = "restrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restrictions: Option<BatchRestrictions>,
+    /// <p>Specifies the service role ARN for the batch build project.</p>
+    #[serde(rename = "serviceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role: Option<String>,
+    /// <p>Specifies the maximum amount of time, in minutes, that the batch build must be completed in.</p>
+    #[serde(rename = "timeoutInMins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_mins: Option<i64>,
+}
+
 /// <p>Information about the cache for the build project.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProjectCache {
@@ -1319,7 +1838,7 @@ pub struct ProjectEnvironment {
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables: Option<Vec<EnvironmentVariable>>,
-    /// <p><p>The image tag or image digest that identifies the Docker image to use for this build project. Use the following formats:</p> <ul> <li> <p>For an image tag: <code>registry/repository:tag</code>. For example, to specify an image with the tag &quot;latest,&quot; use <code>registry/repository:latest</code>.</p> </li> <li> <p>For an image digest: <code>registry/repository@digest</code>. For example, to specify an image with the digest &quot;sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf,&quot; use <code>registry/repository@sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf</code>.</p> </li> </ul></p>
+    /// <p><p>The image tag or image digest that identifies the Docker image to use for this build project. Use the following formats:</p> <ul> <li> <p>For an image tag: <code>&lt;registry&gt;/&lt;repository&gt;:&lt;tag&gt;</code>. For example, in the Docker repository that CodeBuild uses to manage its Docker images, this would be <code>aws/codebuild/standard:4.0</code>. To specify the latest version of this image, this would be <code>aws/codebuild/standard:latest</code>.</p> </li> <li> <p>For an image digest: <code>&lt;registry&gt;/&lt;repository&gt;@&lt;digest&gt;</code>. For example, to specify an image with the digest &quot;sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf,&quot; use <code>&lt;registry&gt;/&lt;repository&gt;@sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf</code>.</p> </li> </ul></p>
     #[serde(rename = "image")]
     pub image: String,
     /// <p> The type of credentials AWS CodeBuild uses to pull images in your build. There are two valid values: </p> <ul> <li> <p> <code>CODEBUILD</code> specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild's service principal. </p> </li> <li> <p> <code>SERVICE_ROLE</code> specifies that AWS CodeBuild uses your build project's service role. </p> </li> </ul> <p> When you use a cross-account or private registry image, you must use SERVICE_ROLE credentials. When you use an AWS CodeBuild curated image, you must use CODEBUILD credentials. </p>
@@ -1391,7 +1910,7 @@ pub struct ProjectSource {
     #[serde(rename = "insecureSsl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub insecure_ssl: Option<bool>,
-    /// <p><p>Information about the location of the source code to be built. Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, <code>location</code> should not be specified. If it is specified, AWS CodePipeline ignores it. This is because AWS CodePipeline uses the settings in a pipeline&#39;s source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the buildspec file (for example, <code>https://git-codecommit.<i>region-ID</i>.amazonaws.com/v1/repos/<i>repo-name</i> </code>).</p> </li> <li> <p>For source code in an Amazon Simple Storage Service (Amazon S3) input bucket, one of the following. </p> <ul> <li> <p> The path to the ZIP file that contains the source code (for example, <code> <i>bucket-name</i>/<i>path</i>/<i>to</i>/<i>object-name</i>.zip</code>). </p> </li> <li> <p> The path to the folder that contains the source code (for example, <code> <i>bucket-name</i>/<i>path</i>/<i>to</i>/<i>source-code</i>/<i>folder</i>/</code>). </p> </li> </ul> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the buildspec file. You must connect your AWS account to your GitHub account. Use the AWS CodeBuild console to start creating a build project. When you use the console to connect (or reconnect) with GitHub, on the GitHub <b>Authorize application</b> page, for <b>Organization access</b>, choose <b>Request access</b> next to each repository you want to allow AWS CodeBuild to have access to, and then choose <b>Authorize application</b>. (After you have connected to your GitHub account, you do not need to finish creating the build project. You can leave the AWS CodeBuild console.) To instruct AWS CodeBuild to use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> <li> <p>For source code in a Bitbucket repository, the HTTPS clone URL to the repository that contains the source and the buildspec file. You must connect your AWS account to your Bitbucket account. Use the AWS CodeBuild console to start creating a build project. When you use the console to connect (or reconnect) with Bitbucket, on the Bitbucket <b>Confirm access to your account</b> page, choose <b>Grant access</b>. (After you have connected to your Bitbucket account, you do not need to finish creating the build project. You can leave the AWS CodeBuild console.) To instruct AWS CodeBuild to use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> </ul></p>
+    /// <p><p>Information about the location of the source code to be built. Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, <code>location</code> should not be specified. If it is specified, AWS CodePipeline ignores it. This is because AWS CodePipeline uses the settings in a pipeline&#39;s source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the buildspec file (for example, <code>https://git-codecommit.&lt;region-ID&gt;.amazonaws.com/v1/repos/&lt;repo-name&gt;</code>).</p> </li> <li> <p>For source code in an Amazon Simple Storage Service (Amazon S3) input bucket, one of the following. </p> <ul> <li> <p>The path to the ZIP file that contains the source code (for example, <code>&lt;bucket-name&gt;/&lt;path&gt;/&lt;object-name&gt;.zip</code>). </p> </li> <li> <p>The path to the folder that contains the source code (for example, <code>&lt;bucket-name&gt;/&lt;path-to-source-code&gt;/&lt;folder&gt;/</code>). </p> </li> </ul> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the buildspec file. You must connect your AWS account to your GitHub account. Use the AWS CodeBuild console to start creating a build project. When you use the console to connect (or reconnect) with GitHub, on the GitHub <b>Authorize application</b> page, for <b>Organization access</b>, choose <b>Request access</b> next to each repository you want to allow AWS CodeBuild to have access to, and then choose <b>Authorize application</b>. (After you have connected to your GitHub account, you do not need to finish creating the build project. You can leave the AWS CodeBuild console.) To instruct AWS CodeBuild to use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> <li> <p>For source code in a Bitbucket repository, the HTTPS clone URL to the repository that contains the source and the buildspec file. You must connect your AWS account to your Bitbucket account. Use the AWS CodeBuild console to start creating a build project. When you use the console to connect (or reconnect) with Bitbucket, on the Bitbucket <b>Confirm access to your account</b> page, choose <b>Grant access</b>. (After you have connected to your Bitbucket account, you do not need to finish creating the build project. You can leave the AWS CodeBuild console.) To instruct AWS CodeBuild to use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> </ul></p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -1450,7 +1969,7 @@ pub struct RegistryCredential {
     pub credential_provider: String,
 }
 
-/// <p> Information about the results from running a series of test cases during the run of a build project. The test cases are specified in the buildspec for the build project using one or more paths to the test case files. You can specify any type of tests you want, such as unit tests, integration tests, and functional tests. </p>
+/// <p>Information about the results from running a series of test cases during the run of a build project. The test cases are specified in the buildspec for the build project using one or more paths to the test case files. You can specify any type of tests you want, such as unit tests, integration tests, and functional tests. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Report {
@@ -1458,6 +1977,10 @@ pub struct Report {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>A <code>CodeCoverageReportSummary</code> object that contains a code coverage summary for this report.</p>
+    #[serde(rename = "codeCoverageSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_coverage_summary: Option<CodeCoverageReportSummary>,
     /// <p> The date and time this report run occurred. </p>
     #[serde(rename = "created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1494,7 +2017,7 @@ pub struct Report {
     #[serde(rename = "truncated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub truncated: Option<bool>,
-    /// <p> The type of the report that was run. </p>
+    /// <p><p>The type of the report that was run.</p> <dl> <dt>CODE_COVERAGE</dt> <dd> <p>A code coverage report.</p> </dd> <dt>TEST</dt> <dd> <p>A test report.</p> </dd> </dl></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1555,6 +2078,70 @@ pub struct ReportGroup {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Represents a resolved build artifact. A resolve artifact is an artifact that is built and deployed to the destination, such as Amazon Simple Storage Service (Amazon S3).</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResolvedArtifact {
+    /// <p>The identifier of the artifact.</p>
+    #[serde(rename = "identifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<String>,
+    /// <p>The location of the artifact.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
+    /// <p>Specifies the type of artifact.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RetryBuildBatchInput {
+    /// <p>Specifies the identifier of the batch build to restart.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A unique, case sensitive identifier you provide to ensure the idempotency of the <code>RetryBuildBatch</code> request. The token is included in the <code>RetryBuildBatch</code> request and is valid for five minutes. If you repeat the <code>RetryBuildBatch</code> request with the same token, but change a parameter, AWS CodeBuild returns a parameter mismatch error.</p>
+    #[serde(rename = "idempotencyToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idempotency_token: Option<String>,
+    /// <p>Specifies the type of retry to perform.</p>
+    #[serde(rename = "retryType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RetryBuildBatchOutput {
+    #[serde(rename = "buildBatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch: Option<BuildBatch>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RetryBuildInput {
+    /// <p>Specifies the identifier of the build to restart.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A unique, case sensitive identifier you provide to ensure the idempotency of the <code>RetryBuild</code> request. The token is included in the <code>RetryBuild</code> request and is valid for five minutes. If you repeat the <code>RetryBuild</code> request with the same token, but change a parameter, AWS CodeBuild returns a parameter mismatch error.</p>
+    #[serde(rename = "idempotencyToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idempotency_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RetryBuildOutput {
+    #[serde(rename = "build")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build: Option<Build>,
 }
 
 /// <p> Information about S3 logs for a build project. </p>
@@ -1630,6 +2217,139 @@ pub struct SourceCredentialsInfo {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartBuildBatchInput {
+    /// <p>An array of <code>ProjectArtifacts</code> objects that contains information about the build output artifact overrides for the build project.</p>
+    #[serde(rename = "artifactsOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifacts_override: Option<ProjectArtifacts>,
+    /// <p>A <code>BuildBatchConfigOverride</code> object that contains batch build configuration overrides.</p>
+    #[serde(rename = "buildBatchConfigOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_config_override: Option<ProjectBuildBatchConfig>,
+    /// <p>Overrides the build timeout specified in the batch build project.</p>
+    #[serde(rename = "buildTimeoutInMinutesOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_timeout_in_minutes_override: Option<i64>,
+    /// <p>A buildspec file declaration that overrides, for this build only, the latest one already defined in the build project.</p> <p>If this value is set, it can be either an inline buildspec definition, the path to an alternate buildspec file relative to the value of the built-in <code>CODEBUILD_SRC_DIR</code> environment variable, or the path to an S3 bucket. The bucket must be in the same AWS Region as the build project. Specify the buildspec file using its ARN (for example, <code>arn:aws:s3:::my-codebuild-sample2/buildspec.yml</code>). If this value is not provided or is set to an empty string, the source code must contain a buildspec file in its root directory. For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-name-storage">Buildspec File Name and Storage Location</a>. </p>
+    #[serde(rename = "buildspecOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub buildspec_override: Option<String>,
+    /// <p>A <code>ProjectCache</code> object that specifies cache overrides.</p>
+    #[serde(rename = "cacheOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_override: Option<ProjectCache>,
+    /// <p>The name of a certificate for this batch build that overrides the one specified in the batch build project.</p>
+    #[serde(rename = "certificateOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_override: Option<String>,
+    /// <p>The name of a compute type for this batch build that overrides the one specified in the batch build project.</p>
+    #[serde(rename = "computeTypeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_type_override: Option<String>,
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) that overrides the one specified in the batch build project. The CMK key encrypts the build output artifacts.</p> <note> <p>You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
+    #[serde(rename = "encryptionKeyOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_key_override: Option<String>,
+    /// <p>A container type for this batch build that overrides the one specified in the batch build project.</p>
+    #[serde(rename = "environmentTypeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_type_override: Option<String>,
+    /// <p>An array of <code>EnvironmentVariable</code> objects that override, or add to, the environment variables defined in the batch build project.</p>
+    #[serde(rename = "environmentVariablesOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_variables_override: Option<Vec<EnvironmentVariable>>,
+    /// <p>The user-defined depth of history, with a minimum value of 0, that overrides, for this batch build only, any previous depth of history defined in the batch build project.</p>
+    #[serde(rename = "gitCloneDepthOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_clone_depth_override: Option<i64>,
+    /// <p>A <code>GitSubmodulesConfig</code> object that overrides the Git submodules configuration for this batch build.</p>
+    #[serde(rename = "gitSubmodulesConfigOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_submodules_config_override: Option<GitSubmodulesConfig>,
+    /// <p>A unique, case sensitive identifier you provide to ensure the idempotency of the <code>StartBuildBatch</code> request. The token is included in the <code>StartBuildBatch</code> request and is valid for five minutes. If you repeat the <code>StartBuildBatch</code> request with the same token, but change a parameter, AWS CodeBuild returns a parameter mismatch error.</p>
+    #[serde(rename = "idempotencyToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idempotency_token: Option<String>,
+    /// <p>The name of an image for this batch build that overrides the one specified in the batch build project.</p>
+    #[serde(rename = "imageOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_override: Option<String>,
+    /// <p>The type of credentials AWS CodeBuild uses to pull images in your batch build. There are two valid values: </p> <dl> <dt>CODEBUILD</dt> <dd> <p>Specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild's service principal.</p> </dd> <dt>SERVICE_ROLE</dt> <dd> <p>Specifies that AWS CodeBuild uses your build project's service role. </p> </dd> </dl> <p>When using a cross-account or private registry image, you must use <code>SERVICE_ROLE</code> credentials. When using an AWS CodeBuild curated image, you must use <code>CODEBUILD</code> credentials. </p>
+    #[serde(rename = "imagePullCredentialsTypeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_pull_credentials_type_override: Option<String>,
+    /// <p>Enable this flag to override the insecure SSL setting that is specified in the batch build project. The insecure SSL setting determines whether to ignore SSL warnings while connecting to the project source code. This override applies only if the build's source is GitHub Enterprise.</p>
+    #[serde(rename = "insecureSslOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insecure_ssl_override: Option<bool>,
+    /// <p>A <code>LogsConfig</code> object that override the log settings defined in the batch build project.</p>
+    #[serde(rename = "logsConfigOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logs_config_override: Option<LogsConfig>,
+    /// <p>Enable this flag to override privileged mode in the batch build project.</p>
+    #[serde(rename = "privilegedModeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privileged_mode_override: Option<bool>,
+    /// <p>The name of the project.</p>
+    #[serde(rename = "projectName")]
+    pub project_name: String,
+    /// <p>The number of minutes a batch build is allowed to be queued before it times out.</p>
+    #[serde(rename = "queuedTimeoutInMinutesOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queued_timeout_in_minutes_override: Option<i64>,
+    /// <p>A <code>RegistryCredential</code> object that overrides credentials for access to a private registry.</p>
+    #[serde(rename = "registryCredentialOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_credential_override: Option<RegistryCredential>,
+    /// <p><p>Set to <code>true</code> to report to your source provider the status of a batch build&#39;s start and completion. If you use this option with a source provider other than GitHub, GitHub Enterprise, or Bitbucket, an <code>invalidInputException</code> is thrown. </p> <note> <p>The status of a build triggered by a webhook is always reported to your source provider. </p> </note></p>
+    #[serde(rename = "reportBuildBatchStatusOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_build_batch_status_override: Option<bool>,
+    /// <p>An array of <code>ProjectArtifacts</code> objects that override the secondary artifacts defined in the batch build project.</p>
+    #[serde(rename = "secondaryArtifactsOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_artifacts_override: Option<Vec<ProjectArtifacts>>,
+    /// <p>An array of <code>ProjectSource</code> objects that override the secondary sources defined in the batch build project.</p>
+    #[serde(rename = "secondarySourcesOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_sources_override: Option<Vec<ProjectSource>>,
+    /// <p>An array of <code>ProjectSourceVersion</code> objects that override the secondary source versions in the batch build project.</p>
+    #[serde(rename = "secondarySourcesVersionOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_sources_version_override: Option<Vec<ProjectSourceVersion>>,
+    /// <p>The name of a service role for this batch build that overrides the one specified in the batch build project.</p>
+    #[serde(rename = "serviceRoleOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role_override: Option<String>,
+    /// <p>A <code>SourceAuth</code> object that overrides the one defined in the batch build project. This override applies only if the build project's source is BitBucket or GitHub.</p>
+    #[serde(rename = "sourceAuthOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_auth_override: Option<SourceAuth>,
+    /// <p>A location that overrides, for this batch build, the source location defined in the batch build project.</p>
+    #[serde(rename = "sourceLocationOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_location_override: Option<String>,
+    /// <p>The source input type that overrides the source input defined in the batch build project.</p>
+    #[serde(rename = "sourceTypeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type_override: Option<String>,
+    /// <p>The version of the batch build input to be built, for this build only. If not specified, the latest version is used. If specified, the contents depends on the source provider:</p> <dl> <dt>AWS CodeCommit</dt> <dd> <p>The commit ID, branch, or Git tag to use.</p> </dd> <dt>GitHub</dt> <dd> <p>The commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Bitbucket</dt> <dd> <p>The commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Amazon Simple Storage Service (Amazon S3)</dt> <dd> <p>The version ID of the object that represents the build input ZIP file to use.</p> </dd> </dl> <p>If <code>sourceVersion</code> is specified at the project level, then this <code>sourceVersion</code> (at the build level) takes precedence. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    #[serde(rename = "sourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_version: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartBuildBatchOutput {
+    /// <p>A <code>BuildBatch</code> object that contains information about the batch build.</p>
+    #[serde(rename = "buildBatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch: Option<BuildBatch>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBuildInput {
     /// <p>Build output artifact settings that override, for this build only, the latest ones already defined in the build project.</p>
     #[serde(rename = "artifactsOverride")]
@@ -1655,7 +2375,11 @@ pub struct StartBuildInput {
     #[serde(rename = "computeTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_type_override: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) that overrides the one specified in the build project. The CMK key encrypts the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>Specifies if session debugging is enabled for this build. For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/session-manager.html">Viewing a running build in Session Manager</a>.</p>
+    #[serde(rename = "debugSessionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_session_enabled: Option<bool>,
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) that overrides the one specified in the build project. The CMK key encrypts the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
     #[serde(rename = "encryptionKeyOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key_override: Option<String>,
@@ -1683,7 +2407,7 @@ pub struct StartBuildInput {
     #[serde(rename = "imageOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_override: Option<String>,
-    /// <p> The type of credentials AWS CodeBuild uses to pull images in your build. There are two valid values: </p> <ul> <li> <p> <code>CODEBUILD</code> specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild's service principal.</p> </li> <li> <p> <code>SERVICE_ROLE</code> specifies that AWS CodeBuild uses your build project's service role. </p> </li> </ul> <p> When using a cross-account or private registry image, you must use SERVICE_ROLE credentials. When using an AWS CodeBuild curated image, you must use CODEBUILD credentials. </p>
+    /// <p>The type of credentials AWS CodeBuild uses to pull images in your build. There are two valid values: </p> <dl> <dt>CODEBUILD</dt> <dd> <p>Specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild's service principal.</p> </dd> <dt>SERVICE_ROLE</dt> <dd> <p>Specifies that AWS CodeBuild uses your build project's service role. </p> </dd> </dl> <p>When using a cross-account or private registry image, you must use <code>SERVICE_ROLE</code> credentials. When using an AWS CodeBuild curated image, you must use <code>CODEBUILD</code> credentials. </p>
     #[serde(rename = "imagePullCredentialsTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pull_credentials_type_override: Option<String>,
@@ -1742,7 +2466,7 @@ pub struct StartBuildInput {
     #[serde(rename = "sourceTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type_override: Option<String>,
-    /// <p>A version of the build input to be built, for this build only. If not specified, the latest version is used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID, branch, or Git tag to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> If <code>sourceVersion</code> is specified at the project level, then this <code>sourceVersion</code> (at the build level) takes precedence. </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    /// <p>The version of the build input to be built, for this build only. If not specified, the latest version is used. If specified, the contents depends on the source provider:</p> <dl> <dt>AWS CodeCommit</dt> <dd> <p>The commit ID, branch, or Git tag to use.</p> </dd> <dt>GitHub</dt> <dd> <p>The commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Bitbucket</dt> <dd> <p>The commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Amazon Simple Storage Service (Amazon S3)</dt> <dd> <p>The version ID of the object that represents the build input ZIP file to use.</p> </dd> </dl> <p>If <code>sourceVersion</code> is specified at the project level, then this <code>sourceVersion</code> (at the build level) takes precedence. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_version: Option<String>,
@@ -1759,6 +2483,22 @@ pub struct StartBuildOutput {
     #[serde(rename = "build")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build: Option<Build>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopBuildBatchInput {
+    /// <p>The identifier of the batch build to stop.</p>
+    #[serde(rename = "id")]
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopBuildBatchOutput {
+    #[serde(rename = "buildBatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch: Option<BuildBatch>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1829,11 +2569,15 @@ pub struct TestCase {
     pub test_raw_data_path: Option<String>,
 }
 
-/// <p> A filter used to return specific types of test cases. </p>
+/// <p>A filter used to return specific types of test cases. In order to pass the filter, the report must meet all of the filter properties.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestCaseFilter {
-    /// <p> The status used to filter test cases. Valid statuses are <code>SUCCEEDED</code>, <code>FAILED</code>, <code>ERROR</code>, <code>SKIPPED</code>, and <code>UNKNOWN</code>. A <code>TestCaseFilter</code> can have one status. </p>
+    /// <p>A keyword that is used to filter on the <code>name</code> or the <code>prefix</code> of the test cases. Only test cases where the keyword is a substring of the <code>name</code> or the <code>prefix</code> will be returned.</p>
+    #[serde(rename = "keyword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub keyword: Option<String>,
+    /// <p><p>The status used to filter test cases. A <code>TestCaseFilter</code> can have one status. Valid values are:</p> <ul> <li> <p> <code>SUCCEEDED</code> </p> </li> <li> <p> <code>FAILED</code> </p> </li> <li> <p> <code>ERROR</code> </p> </li> <li> <p> <code>SKIPPED</code> </p> </li> <li> <p> <code>UNKNOWN</code> </p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1865,6 +2609,9 @@ pub struct UpdateProjectInput {
     #[serde(rename = "badgeEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub badge_enabled: Option<bool>,
+    #[serde(rename = "buildBatchConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_batch_config: Option<ProjectBuildBatchConfig>,
     /// <p>Stores recently used information so that it can be quickly accessed at a later time.</p>
     #[serde(rename = "cache")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1873,7 +2620,7 @@ pub struct UpdateProjectInput {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,
@@ -1975,6 +2722,10 @@ pub struct UpdateWebhookInput {
     #[serde(rename = "branchFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branch_filter: Option<String>,
+    /// <p>Specifies the type of build this webhook will trigger.</p>
+    #[serde(rename = "buildType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_type: Option<String>,
     /// <p> An array of arrays of <code>WebhookFilter</code> objects used to determine if a webhook event can trigger a build. A filter group must contain at least one <code>EVENT</code> <code>WebhookFilter</code>. </p>
     #[serde(rename = "filterGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2018,23 +2769,27 @@ pub struct VpcConfig {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Webhook {
-    /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p> It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
+    /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p>It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
     #[serde(rename = "branchFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branch_filter: Option<String>,
-    /// <p> An array of arrays of <code>WebhookFilter</code> objects used to determine which webhooks are triggered. At least one <code>WebhookFilter</code> in the array must specify <code>EVENT</code> as its <code>type</code>. </p> <p> For a build to be triggered, at least one filter group in the <code>filterGroups</code> array must pass. For a filter group to pass, each of its filters must pass. </p>
+    /// <p>Specifies the type of build this webhook will trigger.</p>
+    #[serde(rename = "buildType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_type: Option<String>,
+    /// <p>An array of arrays of <code>WebhookFilter</code> objects used to determine which webhooks are triggered. At least one <code>WebhookFilter</code> in the array must specify <code>EVENT</code> as its <code>type</code>. </p> <p>For a build to be triggered, at least one filter group in the <code>filterGroups</code> array must pass. For a filter group to pass, each of its filters must pass. </p>
     #[serde(rename = "filterGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_groups: Option<Vec<Vec<WebhookFilter>>>,
-    /// <p> A timestamp that indicates the last time a repository's secret token was modified. </p>
+    /// <p>A timestamp that indicates the last time a repository's secret token was modified. </p>
     #[serde(rename = "lastModifiedSecret")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_secret: Option<f64>,
-    /// <p> The AWS CodeBuild endpoint where webhook events are sent.</p>
+    /// <p>The AWS CodeBuild endpoint where webhook events are sent.</p>
     #[serde(rename = "payloadUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_url: Option<String>,
-    /// <p><p> The secret token of the associated repository. </p> <note> <p> A Bitbucket webhook does not support <code>secret</code>. </p> </note></p>
+    /// <p><p>The secret token of the associated repository. </p> <note> <p>A Bitbucket webhook does not support <code>secret</code>. </p> </note></p>
     #[serde(rename = "secret")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret: Option<String>,
@@ -2089,6 +2844,36 @@ impl fmt::Display for BatchDeleteBuildsError {
     }
 }
 impl Error for BatchDeleteBuildsError {}
+/// Errors returned by BatchGetBuildBatches
+#[derive(Debug, PartialEq)]
+pub enum BatchGetBuildBatchesError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
+
+impl BatchGetBuildBatchesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetBuildBatchesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchGetBuildBatchesError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchGetBuildBatchesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchGetBuildBatchesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchGetBuildBatchesError {}
 /// Errors returned by BatchGetBuilds
 #[derive(Debug, PartialEq)]
 pub enum BatchGetBuildsError {
@@ -2345,6 +3130,36 @@ impl fmt::Display for CreateWebhookError {
     }
 }
 impl Error for CreateWebhookError {}
+/// Errors returned by DeleteBuildBatch
+#[derive(Debug, PartialEq)]
+pub enum DeleteBuildBatchError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
+
+impl DeleteBuildBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBuildBatchError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteBuildBatchError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteBuildBatchError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteBuildBatchError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteBuildBatchError {}
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
@@ -2547,6 +3362,36 @@ impl fmt::Display for DeleteWebhookError {
     }
 }
 impl Error for DeleteWebhookError {}
+/// Errors returned by DescribeCodeCoverages
+#[derive(Debug, PartialEq)]
+pub enum DescribeCodeCoveragesError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
+
+impl DescribeCodeCoveragesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCodeCoveragesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DescribeCodeCoveragesError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeCodeCoveragesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeCodeCoveragesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeCodeCoveragesError {}
 /// Errors returned by DescribeTestCases
 #[derive(Debug, PartialEq)]
 pub enum DescribeTestCasesError {
@@ -2707,6 +3552,78 @@ impl fmt::Display for InvalidateProjectCacheError {
     }
 }
 impl Error for InvalidateProjectCacheError {}
+/// Errors returned by ListBuildBatches
+#[derive(Debug, PartialEq)]
+pub enum ListBuildBatchesError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
+
+impl ListBuildBatchesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildBatchesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListBuildBatchesError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListBuildBatchesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListBuildBatchesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListBuildBatchesError {}
+/// Errors returned by ListBuildBatchesForProject
+#[derive(Debug, PartialEq)]
+pub enum ListBuildBatchesForProjectError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListBuildBatchesForProjectError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListBuildBatchesForProjectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListBuildBatchesForProjectError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListBuildBatchesForProjectError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListBuildBatchesForProjectError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListBuildBatchesForProjectError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListBuildBatchesForProjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListBuildBatchesForProjectError {}
 /// Errors returned by ListBuilds
 #[derive(Debug, PartialEq)]
 pub enum ListBuildsError {
@@ -2991,12 +3908,18 @@ impl fmt::Display for ListSharedReportGroupsError {
 impl Error for ListSharedReportGroupsError {}
 /// Errors returned by ListSourceCredentials
 #[derive(Debug, PartialEq)]
-pub enum ListSourceCredentialsError {}
+pub enum ListSourceCredentialsError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
 
 impl ListSourceCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSourceCredentialsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListSourceCredentialsError::InvalidInput(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3007,7 +3930,9 @@ impl ListSourceCredentialsError {
 impl fmt::Display for ListSourceCredentialsError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {}
+        match *self {
+            ListSourceCredentialsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
     }
 }
 impl Error for ListSourceCredentialsError {}
@@ -3047,6 +3972,84 @@ impl fmt::Display for PutResourcePolicyError {
     }
 }
 impl Error for PutResourcePolicyError {}
+/// Errors returned by RetryBuild
+#[derive(Debug, PartialEq)]
+pub enum RetryBuildError {
+    /// <p>An AWS service limit was exceeded for the calling AWS account.</p>
+    AccountLimitExceeded(String),
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl RetryBuildError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryBuildError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccountLimitExceededException" => {
+                    return RusotoError::Service(RetryBuildError::AccountLimitExceeded(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(RetryBuildError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RetryBuildError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RetryBuildError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RetryBuildError::AccountLimitExceeded(ref cause) => write!(f, "{}", cause),
+            RetryBuildError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RetryBuildError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RetryBuildError {}
+/// Errors returned by RetryBuildBatch
+#[derive(Debug, PartialEq)]
+pub enum RetryBuildBatchError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl RetryBuildBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryBuildBatchError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(RetryBuildBatchError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RetryBuildBatchError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RetryBuildBatchError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RetryBuildBatchError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RetryBuildBatchError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RetryBuildBatchError {}
 /// Errors returned by StartBuild
 #[derive(Debug, PartialEq)]
 pub enum StartBuildError {
@@ -3089,6 +4092,42 @@ impl fmt::Display for StartBuildError {
     }
 }
 impl Error for StartBuildError {}
+/// Errors returned by StartBuildBatch
+#[derive(Debug, PartialEq)]
+pub enum StartBuildBatchError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl StartBuildBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBuildBatchError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(StartBuildBatchError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StartBuildBatchError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartBuildBatchError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartBuildBatchError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartBuildBatchError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartBuildBatchError {}
 /// Errors returned by StopBuild
 #[derive(Debug, PartialEq)]
 pub enum StopBuildError {
@@ -3125,6 +4164,42 @@ impl fmt::Display for StopBuildError {
     }
 }
 impl Error for StopBuildError {}
+/// Errors returned by StopBuildBatch
+#[derive(Debug, PartialEq)]
+pub enum StopBuildBatchError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl StopBuildBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBuildBatchError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(StopBuildBatchError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StopBuildBatchError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopBuildBatchError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopBuildBatchError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopBuildBatchError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopBuildBatchError {}
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
@@ -3248,6 +4323,12 @@ pub trait CodeBuild {
         input: BatchDeleteBuildsInput,
     ) -> Result<BatchDeleteBuildsOutput, RusotoError<BatchDeleteBuildsError>>;
 
+    /// <p>Retrieves information about one or more batch builds.</p>
+    async fn batch_get_build_batches(
+        &self,
+        input: BatchGetBuildBatchesInput,
+    ) -> Result<BatchGetBuildBatchesOutput, RusotoError<BatchGetBuildBatchesError>>;
+
     /// <p>Gets information about one or more builds.</p>
     async fn batch_get_builds(
         &self,
@@ -3290,6 +4371,12 @@ pub trait CodeBuild {
         input: CreateWebhookInput,
     ) -> Result<CreateWebhookOutput, RusotoError<CreateWebhookError>>;
 
+    /// <p>Deletes a batch build.</p>
+    async fn delete_build_batch(
+        &self,
+        input: DeleteBuildBatchInput,
+    ) -> Result<DeleteBuildBatchOutput, RusotoError<DeleteBuildBatchError>>;
+
     /// <p> Deletes a build project. When you delete a project, its builds are not deleted. </p>
     async fn delete_project(
         &self,
@@ -3302,7 +4389,7 @@ pub trait CodeBuild {
         input: DeleteReportInput,
     ) -> Result<DeleteReportOutput, RusotoError<DeleteReportError>>;
 
-    /// <p> <code>DeleteReportGroup</code>: Deletes a report group. Before you delete a report group, you must delete its reports. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ListReportsForReportGroup.html">ListReportsForReportGroup</a> to get the reports in a report group. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_DeleteReport.html">DeleteReport</a> to delete the reports. If you call <code>DeleteReportGroup</code> for a report group that contains one or more reports, an exception is thrown. </p>
+    /// <p>Deletes a report group. Before you delete a report group, you must delete its reports. </p>
     async fn delete_report_group(
         &self,
         input: DeleteReportGroupInput,
@@ -3325,6 +4412,12 @@ pub trait CodeBuild {
         &self,
         input: DeleteWebhookInput,
     ) -> Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>>;
+
+    /// <p>Retrieves one or more code coverage reports.</p>
+    async fn describe_code_coverages(
+        &self,
+        input: DescribeCodeCoveragesInput,
+    ) -> Result<DescribeCodeCoveragesOutput, RusotoError<DescribeCodeCoveragesError>>;
 
     /// <p> Returns a list of details about test cases for a report. </p>
     async fn describe_test_cases(
@@ -3349,6 +4442,18 @@ pub trait CodeBuild {
         &self,
         input: InvalidateProjectCacheInput,
     ) -> Result<InvalidateProjectCacheOutput, RusotoError<InvalidateProjectCacheError>>;
+
+    /// <p>Retrieves the identifiers of your build batches in the current region.</p>
+    async fn list_build_batches(
+        &self,
+        input: ListBuildBatchesInput,
+    ) -> Result<ListBuildBatchesOutput, RusotoError<ListBuildBatchesError>>;
+
+    /// <p>Retrieves the identifiers of the build batches for a specific project.</p>
+    async fn list_build_batches_for_project(
+        &self,
+        input: ListBuildBatchesForProjectInput,
+    ) -> Result<ListBuildBatchesForProjectOutput, RusotoError<ListBuildBatchesForProjectError>>;
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
     async fn list_builds(
@@ -3414,17 +4519,41 @@ pub trait CodeBuild {
         input: PutResourcePolicyInput,
     ) -> Result<PutResourcePolicyOutput, RusotoError<PutResourcePolicyError>>;
 
+    /// <p>Restarts a build.</p>
+    async fn retry_build(
+        &self,
+        input: RetryBuildInput,
+    ) -> Result<RetryBuildOutput, RusotoError<RetryBuildError>>;
+
+    /// <p>Restarts a batch build.</p>
+    async fn retry_build_batch(
+        &self,
+        input: RetryBuildBatchInput,
+    ) -> Result<RetryBuildBatchOutput, RusotoError<RetryBuildBatchError>>;
+
     /// <p>Starts running a build.</p>
     async fn start_build(
         &self,
         input: StartBuildInput,
     ) -> Result<StartBuildOutput, RusotoError<StartBuildError>>;
 
+    /// <p>Starts a batch build for a project.</p>
+    async fn start_build_batch(
+        &self,
+        input: StartBuildBatchInput,
+    ) -> Result<StartBuildBatchOutput, RusotoError<StartBuildBatchError>>;
+
     /// <p>Attempts to stop running a build.</p>
     async fn stop_build(
         &self,
         input: StopBuildInput,
     ) -> Result<StopBuildOutput, RusotoError<StopBuildError>>;
+
+    /// <p>Stops a running batch build.</p>
+    async fn stop_build_batch(
+        &self,
+        input: StopBuildBatchInput,
+    ) -> Result<StopBuildBatchOutput, RusotoError<StopBuildBatchError>>;
 
     /// <p>Changes the settings of a build project.</p>
     async fn update_project(
@@ -3500,6 +4629,24 @@ impl CodeBuild for CodeBuildClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchDeleteBuildsOutput, _>()
+    }
+
+    /// <p>Retrieves information about one or more batch builds.</p>
+    async fn batch_get_build_batches(
+        &self,
+        input: BatchGetBuildBatchesInput,
+    ) -> Result<BatchGetBuildBatchesOutput, RusotoError<BatchGetBuildBatchesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.BatchGetBuildBatches");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, BatchGetBuildBatchesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetBuildBatchesOutput, _>()
     }
 
     /// <p>Gets information about one or more builds.</p>
@@ -3628,6 +4775,24 @@ impl CodeBuild for CodeBuildClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateWebhookOutput, _>()
     }
 
+    /// <p>Deletes a batch build.</p>
+    async fn delete_build_batch(
+        &self,
+        input: DeleteBuildBatchInput,
+    ) -> Result<DeleteBuildBatchOutput, RusotoError<DeleteBuildBatchError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.DeleteBuildBatch");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteBuildBatchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteBuildBatchOutput, _>()
+    }
+
     /// <p> Deletes a build project. When you delete a project, its builds are not deleted. </p>
     async fn delete_project(
         &self,
@@ -3664,7 +4829,7 @@ impl CodeBuild for CodeBuildClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteReportOutput, _>()
     }
 
-    /// <p> <code>DeleteReportGroup</code>: Deletes a report group. Before you delete a report group, you must delete its reports. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ListReportsForReportGroup.html">ListReportsForReportGroup</a> to get the reports in a report group. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_DeleteReport.html">DeleteReport</a> to delete the reports. If you call <code>DeleteReportGroup</code> for a report group that contains one or more reports, an exception is thrown. </p>
+    /// <p>Deletes a report group. Before you delete a report group, you must delete its reports. </p>
     async fn delete_report_group(
         &self,
         input: DeleteReportGroupInput,
@@ -3735,6 +4900,24 @@ impl CodeBuild for CodeBuildClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteWebhookOutput, _>()
+    }
+
+    /// <p>Retrieves one or more code coverage reports.</p>
+    async fn describe_code_coverages(
+        &self,
+        input: DescribeCodeCoveragesInput,
+    ) -> Result<DescribeCodeCoveragesOutput, RusotoError<DescribeCodeCoveragesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.DescribeCodeCoverages");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeCodeCoveragesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeCodeCoveragesOutput, _>()
     }
 
     /// <p> Returns a list of details about test cases for a report. </p>
@@ -3809,6 +4992,47 @@ impl CodeBuild for CodeBuildClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<InvalidateProjectCacheOutput, _>()
+    }
+
+    /// <p>Retrieves the identifiers of your build batches in the current region.</p>
+    async fn list_build_batches(
+        &self,
+        input: ListBuildBatchesInput,
+    ) -> Result<ListBuildBatchesOutput, RusotoError<ListBuildBatchesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.ListBuildBatches");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListBuildBatchesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListBuildBatchesOutput, _>()
+    }
+
+    /// <p>Retrieves the identifiers of the build batches for a specific project.</p>
+    async fn list_build_batches_for_project(
+        &self,
+        input: ListBuildBatchesForProjectInput,
+    ) -> Result<ListBuildBatchesForProjectOutput, RusotoError<ListBuildBatchesForProjectError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "CodeBuild_20161006.ListBuildBatchesForProject",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListBuildBatchesForProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListBuildBatchesForProjectOutput, _>()
     }
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
@@ -4015,6 +5239,42 @@ impl CodeBuild for CodeBuildClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutResourcePolicyOutput, _>()
     }
 
+    /// <p>Restarts a build.</p>
+    async fn retry_build(
+        &self,
+        input: RetryBuildInput,
+    ) -> Result<RetryBuildOutput, RusotoError<RetryBuildError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.RetryBuild");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RetryBuildError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RetryBuildOutput, _>()
+    }
+
+    /// <p>Restarts a batch build.</p>
+    async fn retry_build_batch(
+        &self,
+        input: RetryBuildBatchInput,
+    ) -> Result<RetryBuildBatchOutput, RusotoError<RetryBuildBatchError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.RetryBuildBatch");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RetryBuildBatchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RetryBuildBatchOutput, _>()
+    }
+
     /// <p>Starts running a build.</p>
     async fn start_build(
         &self,
@@ -4033,6 +5293,24 @@ impl CodeBuild for CodeBuildClient {
         proto::json::ResponsePayload::new(&response).deserialize::<StartBuildOutput, _>()
     }
 
+    /// <p>Starts a batch build for a project.</p>
+    async fn start_build_batch(
+        &self,
+        input: StartBuildBatchInput,
+    ) -> Result<StartBuildBatchOutput, RusotoError<StartBuildBatchError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.StartBuildBatch");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartBuildBatchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartBuildBatchOutput, _>()
+    }
+
     /// <p>Attempts to stop running a build.</p>
     async fn stop_build(
         &self,
@@ -4049,6 +5327,24 @@ impl CodeBuild for CodeBuildClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopBuildOutput, _>()
+    }
+
+    /// <p>Stops a running batch build.</p>
+    async fn stop_build_batch(
+        &self,
+        input: StopBuildBatchInput,
+    ) -> Result<StopBuildBatchOutput, RusotoError<StopBuildBatchError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeBuild_20161006.StopBuildBatch");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopBuildBatchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopBuildBatchOutput, _>()
     }
 
     /// <p>Changes the settings of a build project.</p>

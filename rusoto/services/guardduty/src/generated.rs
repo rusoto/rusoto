@@ -156,7 +156,7 @@ pub struct ArchiveFindingsRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
 
-/// <p>Contains information about the API operation.</p>
+/// <p>Contains information about the API action.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AwsApiCallAction {
@@ -172,7 +172,11 @@ pub struct AwsApiCallAction {
     #[serde(rename = "DomainDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_details: Option<DomainDetails>,
-    /// <p>The remote IP information of the connection.</p>
+    /// <p>The error code of the failed AWS API action.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The remote IP information of the connection that initiated the AWS API call.</p>
     #[serde(rename = "RemoteIpDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_ip_details: Option<RemoteIpDetails>,
@@ -246,6 +250,15 @@ pub struct City {
     pub city_name: Option<String>,
 }
 
+/// <p>Contains information on the status of CloudTrail as a data source for the detector.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CloudTrailConfigurationResult {
+    /// <p>Describes whether CloudTrail is enabled as a data source for the detector.</p>
+    #[serde(rename = "Status")]
+    pub status: String,
+}
+
 /// <p>Contains information about the condition.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Condition {
@@ -296,6 +309,10 @@ pub struct CreateDetectorRequest {
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
+    /// <p>An object that describes which data sources will be enabled for the detector.</p>
+    #[serde(rename = "DataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_sources: Option<DataSourceConfigurations>,
     /// <p>A Boolean value that specifies whether the detector is to be enabled.</p>
     #[serde(rename = "Enable")]
     pub enable: bool,
@@ -493,6 +510,43 @@ pub struct CreateThreatIntelSetResponse {
     pub threat_intel_set_id: String,
 }
 
+/// <p>Contains information on the status of DNS logs as a data source.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DNSLogsConfigurationResult {
+    /// <p>Denotes whether DNS logs is enabled as a data source.</p>
+    #[serde(rename = "Status")]
+    pub status: String,
+}
+
+/// <p>Contains information about which data sources are enabled.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DataSourceConfigurations {
+    /// <p>Describes whether S3 data event logs are enabled as a data source.</p>
+    #[serde(rename = "S3Logs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_logs: Option<S3LogsConfiguration>,
+}
+
+/// <p>Contains information on the status of data sources for the detector.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DataSourceConfigurationsResult {
+    /// <p>An object that contains information on the status of CloudTrail as a data source.</p>
+    #[serde(rename = "CloudTrail")]
+    pub cloud_trail: CloudTrailConfigurationResult,
+    /// <p>An object that contains information on the status of DNS logs as a data source.</p>
+    #[serde(rename = "DNSLogs")]
+    pub dns_logs: DNSLogsConfigurationResult,
+    /// <p>An object that contains information on the status of VPC flow logs as a data source.</p>
+    #[serde(rename = "FlowLogs")]
+    pub flow_logs: FlowLogsConfigurationResult,
+    /// <p>An object that contains information on the status of S3 Data event logs as a data source.</p>
+    #[serde(rename = "S3Logs")]
+    pub s3_logs: S3LogsConfigurationResult,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
@@ -509,7 +563,7 @@ pub struct DeclineInvitationsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-/// <p>Contains information on the server side encryption method used in the S3 bucket. See <a href="https://docs.aws.amazon.com/AmazonS3/atest/dev/serv-side-encryption.html">S3 Server-Side Encryption</a> for more information.</p>
+/// <p>Contains information on the server side encryption method used in the S3 bucket. See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">S3 Server-Side Encryption</a> for more information.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultServerSideEncryption {
@@ -644,6 +698,10 @@ pub struct DescribeOrganizationConfigurationResponse {
     /// <p>Indicates whether GuardDuty is automatically enabled for accounts added to the organization.</p>
     #[serde(rename = "AutoEnable")]
     pub auto_enable: bool,
+    /// <p>An object that describes which data sources are enabled automatically for member accounts.</p>
+    #[serde(rename = "DataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_sources: Option<OrganizationDataSourceConfigurationsResult>,
     /// <p>Indicates whether the maximum number of allowed member accounts are already associated with the delegated administrator master account.</p>
     #[serde(rename = "MemberAccountLimitReached")]
     pub member_account_limit_reached: bool,
@@ -866,6 +924,15 @@ pub struct FindingStatistics {
     pub count_by_severity: Option<::std::collections::HashMap<String, i64>>,
 }
 
+/// <p>Contains information on the status of VPC flow logs as a data source.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FlowLogsConfigurationResult {
+    /// <p>Denotes whether VPC flow logs is enabled as a data source.</p>
+    #[serde(rename = "Status")]
+    pub status: String,
+}
+
 /// <p>Contains information about the location of the remote IP address.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -895,6 +962,10 @@ pub struct GetDetectorResponse {
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
+    /// <p>An object that describes which data sources are enabled for the detector.</p>
+    #[serde(rename = "DataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_sources: Option<DataSourceConfigurationsResult>,
     /// <p>The publishing frequency of the finding.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1061,6 +1132,28 @@ pub struct GetMasterAccountResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetMemberDetectorsRequest {
+    /// <p>The account ID of the member account.</p>
+    #[serde(rename = "AccountIds")]
+    pub account_ids: Vec<String>,
+    /// <p>The detector ID for the master account.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetMemberDetectorsResponse {
+    /// <p>An object that describes which data sources are enabled for a member account.</p>
+    #[serde(rename = "MemberDataSourceConfigurations")]
+    pub member_data_source_configurations: Vec<MemberDataSourceConfiguration>,
+    /// <p>A list of member account IDs that were unable to be processed along with an explanation for why they were not processed.</p>
+    #[serde(rename = "UnprocessedAccounts")]
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to describe.</p>
     #[serde(rename = "AccountIds")]
@@ -1111,6 +1204,45 @@ pub struct GetThreatIntelSetResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetUsageStatisticsRequest {
+    /// <p>The ID of the detector that specifies the GuardDuty service whose usage statistics you want to retrieve.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+    /// <p>The maximum number of results to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to use for paginating results that are returned in the response. Set the value of this parameter to null for the first request to a list action. For subsequent calls, use the NextToken value returned from the previous request to continue listing results after the first page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The currency unit you would like to view your usage statistics in. Current valid values are USD.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+    /// <p>Represents the criteria used for querying usage.</p>
+    #[serde(rename = "UsageCriteria")]
+    pub usage_criteria: UsageCriteria,
+    /// <p>The type of usage statistics to retrieve.</p>
+    #[serde(rename = "UsageStatisticType")]
+    pub usage_statistic_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetUsageStatisticsResponse {
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The usage statistics object. If a UsageStatisticType was provided, the objects representing other types will be null.</p>
+    #[serde(rename = "UsageStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage_statistics: Option<UsageStatistics>,
 }
 
 /// <p>Contains information about the EC2 instance profile.</p>
@@ -1216,11 +1348,11 @@ pub struct InviteMembersRequest {
     /// <p>The unique ID of the detector of the GuardDuty account that you want to invite members with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>A Boolean value that specifies whether you want to disable email notification to the accounts that you’re inviting to GuardDuty as members.</p>
+    /// <p>A Boolean value that specifies whether you want to disable email notification to the accounts that you are inviting to GuardDuty as members.</p>
     #[serde(rename = "DisableEmailNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_email_notification: Option<bool>,
-    /// <p>The invitation message that you want to send to the accounts that you’re inviting to GuardDuty as members.</p>
+    /// <p>The invitation message that you want to send to the accounts that you're inviting to GuardDuty as members.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
@@ -1584,6 +1716,18 @@ pub struct Member {
     pub updated_at: String,
 }
 
+/// <p>Contains information on which data sources are enabled for a member account.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MemberDataSourceConfiguration {
+    /// <p>The account ID for the member account.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>Contains information on the status of data sources for the account.</p>
+    #[serde(rename = "DataSources")]
+    pub data_sources: DataSourceConfigurationsResult,
+}
+
 /// <p>Contains information about the NETWORK_CONNECTION action described in the finding.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1684,6 +1828,43 @@ pub struct Organization {
     #[serde(rename = "Org")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub org: Option<String>,
+}
+
+/// <p>An object that contains information on which data sources will be configured to be automatically enabled for new members within the organization.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OrganizationDataSourceConfigurations {
+    /// <p>Describes whether S3 data event logs are enabled for new members of the organization.</p>
+    #[serde(rename = "S3Logs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_logs: Option<OrganizationS3LogsConfiguration>,
+}
+
+/// <p>An object that contains information on which data sources are automatically enabled for new members within the organization.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationDataSourceConfigurationsResult {
+    /// <p>Describes whether S3 data event logs are enabled as a data source.</p>
+    #[serde(rename = "S3Logs")]
+    pub s3_logs: OrganizationS3LogsConfigurationResult,
+}
+
+/// <p>Describes whether S3 data event logs will be automatically enabled for new members of the organization.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OrganizationS3LogsConfiguration {
+    /// <p>A value that contains information on whether S3 data event logs will be enabled automatically as a data source for the organization.</p>
+    #[serde(rename = "AutoEnable")]
+    pub auto_enable: bool,
+}
+
+/// <p>The current configuration of S3 data event logs as a data source for the organization.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationS3LogsConfigurationResult {
+    /// <p>A value that describes whether S3 data event logs are automatically enabled for new members of the organization.</p>
+    #[serde(rename = "AutoEnable")]
+    pub auto_enable: bool,
 }
 
 /// <p>Contains information on the owner of the bucket.</p>
@@ -1846,6 +2027,7 @@ pub struct Resource {
     pub s3_bucket_details: Option<Vec<S3BucketDetail>>,
 }
 
+/// <p>Contains information on the S3 bucket.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3BucketDetail {
@@ -1881,6 +2063,24 @@ pub struct S3BucketDetail {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Describes whether S3 data event logs will be enabled as a data source.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct S3LogsConfiguration {
+    /// <p> The status of S3 data event logs as a data source.</p>
+    #[serde(rename = "Enable")]
+    pub enable: bool,
+}
+
+/// <p>Describes whether S3 data event logs will be enabled as a data source.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct S3LogsConfigurationResult {
+    /// <p>A value that describes whether S3 data event logs are automatically enabled for new members of the organization.</p>
+    #[serde(rename = "Status")]
+    pub status: String,
 }
 
 /// <p>Contains information about the security groups associated with the EC2 instance.</p>
@@ -2038,6 +2238,20 @@ pub struct ThreatIntelligenceDetail {
     pub threat_names: Option<Vec<String>>,
 }
 
+/// <p>Contains the total usage with the corresponding currency unit for that value.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Total {
+    /// <p>The total usage.</p>
+    #[serde(rename = "Amount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amount: Option<String>,
+    /// <p>The currency unit that the amount is given in.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnarchiveFindingsRequest {
@@ -2083,6 +2297,10 @@ pub struct UntagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorRequest {
+    /// <p>An object that describes which data sources will be updated.</p>
+    #[serde(rename = "DataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_sources: Option<DataSourceConfigurations>,
     /// <p>The unique ID of the detector to update.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -2186,10 +2404,37 @@ pub struct UpdateIPSetResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateMemberDetectorsRequest {
+    /// <p>A list of member account IDs to be updated.</p>
+    #[serde(rename = "AccountIds")]
+    pub account_ids: Vec<String>,
+    /// <p>An object describes which data sources will be updated.</p>
+    #[serde(rename = "DataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_sources: Option<DataSourceConfigurations>,
+    /// <p>The detector ID of the master account.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateMemberDetectorsResponse {
+    /// <p>A list of member account IDs that were unable to be processed along with an explanation for why they were not processed.</p>
+    #[serde(rename = "UnprocessedAccounts")]
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOrganizationConfigurationRequest {
     /// <p>Indicates whether to automatically enable member accounts in the organization.</p>
     #[serde(rename = "AutoEnable")]
     pub auto_enable: bool,
+    /// <p>An object describes which data sources will be updated.</p>
+    #[serde(rename = "DataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_sources: Option<OrganizationDataSourceConfigurations>,
     /// <p>The ID of the detector to update the delegated administrator for.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -2244,6 +2489,87 @@ pub struct UpdateThreatIntelSetRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThreatIntelSetResponse {}
+
+/// <p>Contains information on the total of usage based on account IDs.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UsageAccountResult {
+    /// <p>The Account ID that generated usage.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>Represents the total of usage for the Account ID.</p>
+    #[serde(rename = "Total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<Total>,
+}
+
+/// <p>Contains information about the criteria used to query usage statistics.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UsageCriteria {
+    /// <p>The account IDs to aggregate usage statistics from.</p>
+    #[serde(rename = "AccountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_ids: Option<Vec<String>>,
+    /// <p>The data sources to aggregate usage statistics from.</p>
+    #[serde(rename = "DataSources")]
+    pub data_sources: Vec<String>,
+    /// <p>The resources to aggregate usage statistics from. Only accepts exact resource names.</p>
+    #[serde(rename = "Resources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resources: Option<Vec<String>>,
+}
+
+/// <p>Contains information on the result of usage based on data source type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UsageDataSourceResult {
+    /// <p>The data source type that generated usage.</p>
+    #[serde(rename = "DataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source: Option<String>,
+    /// <p>Represents the total of usage for the specified data source.</p>
+    #[serde(rename = "Total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<Total>,
+}
+
+/// <p>Contains information on the sum of usage based on an AWS resource.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UsageResourceResult {
+    /// <p>The AWS resource that generated usage.</p>
+    #[serde(rename = "Resource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource: Option<String>,
+    /// <p>Represents the sum total of usage for the specified resource type.</p>
+    #[serde(rename = "Total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<Total>,
+}
+
+/// <p>Contains the result of GuardDuty usage. If a UsageStatisticType is provided the result for other types will be null. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UsageStatistics {
+    /// <p>The usage statistic sum organized by account ID.</p>
+    #[serde(rename = "SumByAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sum_by_account: Option<Vec<UsageAccountResult>>,
+    /// <p>The usage statistic sum organized by on data source.</p>
+    #[serde(rename = "SumByDataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sum_by_data_source: Option<Vec<UsageDataSourceResult>>,
+    /// <p>The usage statistic sum organized by resource.</p>
+    #[serde(rename = "SumByResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sum_by_resource: Option<Vec<UsageResourceResult>>,
+    /// <p>Lists the top 50 resources that have generated the most GuardDuty usage, in order from most to least expensive.</p>
+    #[serde(rename = "TopResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_resources: Option<Vec<UsageResourceResult>>,
+}
 
 /// Errors returned by AcceptInvitation
 #[derive(Debug, PartialEq)]
@@ -3401,6 +3727,44 @@ impl fmt::Display for GetMasterAccountError {
     }
 }
 impl Error for GetMasterAccountError {}
+/// Errors returned by GetMemberDetectors
+#[derive(Debug, PartialEq)]
+pub enum GetMemberDetectorsError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl GetMemberDetectorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMemberDetectorsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetMemberDetectorsError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(GetMemberDetectorsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetMemberDetectorsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetMemberDetectorsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetMemberDetectorsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetMemberDetectorsError {}
 /// Errors returned by GetMembers
 #[derive(Debug, PartialEq)]
 pub enum GetMembersError {
@@ -3475,6 +3839,44 @@ impl fmt::Display for GetThreatIntelSetError {
     }
 }
 impl Error for GetThreatIntelSetError {}
+/// Errors returned by GetUsageStatistics
+#[derive(Debug, PartialEq)]
+pub enum GetUsageStatisticsError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl GetUsageStatisticsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsageStatisticsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetUsageStatisticsError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(GetUsageStatisticsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetUsageStatisticsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetUsageStatisticsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUsageStatisticsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetUsageStatisticsError {}
 /// Errors returned by InviteMembers
 #[derive(Debug, PartialEq)]
 pub enum InviteMembersError {
@@ -4223,6 +4625,44 @@ impl fmt::Display for UpdateIPSetError {
     }
 }
 impl Error for UpdateIPSetError {}
+/// Errors returned by UpdateMemberDetectors
+#[derive(Debug, PartialEq)]
+pub enum UpdateMemberDetectorsError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl UpdateMemberDetectorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMemberDetectorsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateMemberDetectorsError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateMemberDetectorsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateMemberDetectorsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateMemberDetectorsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMemberDetectorsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateMemberDetectorsError {}
 /// Errors returned by UpdateOrganizationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateOrganizationConfigurationError {
@@ -4364,7 +4804,7 @@ pub trait GuardDuty {
         input: ArchiveFindingsRequest,
     ) -> Result<ArchiveFindingsResponse, RusotoError<ArchiveFindingsError>>;
 
-    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each Region where you enable the service. You can have only one detector per account per Region.</p>
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each Region where you enable the service. You can have only one detector per account per Region. All data sources are enabled in a new detector by default.</p>
     async fn create_detector(
         &self,
         input: CreateDetectorRequest,
@@ -4382,7 +4822,7 @@ pub trait GuardDuty {
         input: CreateIPSetRequest,
     ) -> Result<CreateIPSetResponse, RusotoError<CreateIPSetError>>;
 
-    /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. The current AWS account can then invite these members to manage GuardDuty in their accounts.</p>
+    /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. This step is a prerequisite for managing the associated member accounts either by invitation or through an organization.</p> <p>When using <code>Create Members</code> as an organizations delegated administrator this action will enable GuardDuty in the added member accounts, with the exception of the organization master account, which must enable GuardDuty prior to being added as a member.</p> <p>If you are adding accounts by invitation use this action after GuardDuty has been enabled in potential member accounts and before using <a href="https://docs.aws.amazon.com/guardduty/latest/APIReference/API_InviteMembers.html"> <code>Invite Members</code> </a>.</p>
     async fn create_members(
         &self,
         input: CreateMembersRequest,
@@ -4546,6 +4986,12 @@ pub trait GuardDuty {
         input: GetMasterAccountRequest,
     ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>>;
 
+    /// <p>Describes which data sources are enabled for the member account's detector.</p>
+    async fn get_member_detectors(
+        &self,
+        input: GetMemberDetectorsRequest,
+    ) -> Result<GetMemberDetectorsResponse, RusotoError<GetMemberDetectorsError>>;
+
     /// <p>Retrieves GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
     async fn get_members(
         &self,
@@ -4557,6 +5003,12 @@ pub trait GuardDuty {
         &self,
         input: GetThreatIntelSetRequest,
     ) -> Result<GetThreatIntelSetResponse, RusotoError<GetThreatIntelSetError>>;
+
+    /// <p>Lists Amazon GuardDuty usage statistics over the last 30 days for the specified detector ID. For newly enabled detectors or data sources the cost returned will include only the usage so far under 30 days, this may differ from the cost metrics in the console, which projects usage over 30 days to provide a monthly cost estimate. For more information see <a href="https://docs.aws.amazon.com/guardduty/latest/ug/monitoring_costs.html#usage-calculations">Understanding How Usage Costs are Calculated</a>.</p>
+    async fn get_usage_statistics(
+        &self,
+        input: GetUsageStatisticsRequest,
+    ) -> Result<GetUsageStatisticsResponse, RusotoError<GetUsageStatisticsError>>;
 
     /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty, and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
     async fn invite_members(
@@ -4680,6 +5132,12 @@ pub trait GuardDuty {
         &self,
         input: UpdateIPSetRequest,
     ) -> Result<UpdateIPSetResponse, RusotoError<UpdateIPSetError>>;
+
+    /// <p>Contains information on member accounts to be updated.</p>
+    async fn update_member_detectors(
+        &self,
+        input: UpdateMemberDetectorsRequest,
+    ) -> Result<UpdateMemberDetectorsResponse, RusotoError<UpdateMemberDetectorsError>>;
 
     /// <p>Updates the delegated administrator account with the values provided.</p>
     async fn update_organization_configuration(
@@ -4810,7 +5268,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each Region where you enable the service. You can have only one detector per account per Region.</p>
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each Region where you enable the service. You can have only one detector per account per Region. All data sources are enabled in a new detector by default.</p>
     #[allow(unused_mut)]
     async fn create_detector(
         &self,
@@ -4909,7 +5367,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. The current AWS account can then invite these members to manage GuardDuty in their accounts.</p>
+    /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. This step is a prerequisite for managing the associated member accounts either by invitation or through an organization.</p> <p>When using <code>Create Members</code> as an organizations delegated administrator this action will enable GuardDuty in the added member accounts, with the exception of the organization master account, which must enable GuardDuty prior to being added as a member.</p> <p>If you are adding accounts by invitation use this action after GuardDuty has been enabled in potential member accounts and before using <a href="https://docs.aws.amazon.com/guardduty/latest/APIReference/API_InviteMembers.html"> <code>Invite Members</code> </a>.</p>
     #[allow(unused_mut)]
     async fn create_members(
         &self,
@@ -5726,6 +6184,40 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
+    /// <p>Describes which data sources are enabled for the member account's detector.</p>
+    #[allow(unused_mut)]
+    async fn get_member_detectors(
+        &self,
+        input: GetMemberDetectorsRequest,
+    ) -> Result<GetMemberDetectorsResponse, RusotoError<GetMemberDetectorsError>> {
+        let request_uri = format!(
+            "/detector/{detector_id}/member/detector/get",
+            detector_id = input.detector_id
+        );
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetMemberDetectorsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetMemberDetectorsError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
     #[allow(unused_mut)]
     async fn get_members(
@@ -5789,6 +6281,40 @@ impl GuardDuty for GuardDutyClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetThreatIntelSetError::from_response(response))
+        }
+    }
+
+    /// <p>Lists Amazon GuardDuty usage statistics over the last 30 days for the specified detector ID. For newly enabled detectors or data sources the cost returned will include only the usage so far under 30 days, this may differ from the cost metrics in the console, which projects usage over 30 days to provide a monthly cost estimate. For more information see <a href="https://docs.aws.amazon.com/guardduty/latest/ug/monitoring_costs.html#usage-calculations">Understanding How Usage Costs are Calculated</a>.</p>
+    #[allow(unused_mut)]
+    async fn get_usage_statistics(
+        &self,
+        input: GetUsageStatisticsRequest,
+    ) -> Result<GetUsageStatisticsResponse, RusotoError<GetUsageStatisticsError>> {
+        let request_uri = format!(
+            "/detector/{detector_id}/usage/statistics",
+            detector_id = input.detector_id
+        );
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetUsageStatisticsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetUsageStatisticsError::from_response(response))
         }
     }
 
@@ -6505,6 +7031,40 @@ impl GuardDuty for GuardDutyClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateIPSetError::from_response(response))
+        }
+    }
+
+    /// <p>Contains information on member accounts to be updated.</p>
+    #[allow(unused_mut)]
+    async fn update_member_detectors(
+        &self,
+        input: UpdateMemberDetectorsRequest,
+    ) -> Result<UpdateMemberDetectorsResponse, RusotoError<UpdateMemberDetectorsError>> {
+        let request_uri = format!(
+            "/detector/{detector_id}/member/detector/update",
+            detector_id = input.detector_id
+        );
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateMemberDetectorsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateMemberDetectorsError::from_response(response))
         }
     }
 

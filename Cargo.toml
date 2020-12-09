@@ -209,6 +209,8 @@ members = [
     "rusoto/services/support",
     "rusoto/services/swf",
     "rusoto/services/textract",
+    "rusoto/services/timestream-query",
+    "rusoto/services/timestream-write",
     "rusoto/services/transcribe",
     "rusoto/services/transfer",
     "rusoto/services/translate",

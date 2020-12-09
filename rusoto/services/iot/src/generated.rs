@@ -142,6 +142,10 @@ pub struct Action {
     #[serde(rename = "stepFunctions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_functions: Option<StepFunctionsAction>,
+    /// <p>The Timestream rule action writes attributes (measures) from an MQTT message into an Amazon Timestream table. For more information, see the <a href="https://docs.aws.amazon.com/iot/latest/developerguide/timestream-rule-action.html">Timestream</a> topic rule action documentation.</p>
+    #[serde(rename = "timestream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestream: Option<TimestreamAction>,
 }
 
 /// <p>Information about an active Device Defender security profile behavior violation.</p>
@@ -323,6 +327,10 @@ pub struct AssociateTargetsWithJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>A list of thing group ARNs that define the targets of the job.</p>
     #[serde(rename = "targets")]
     pub targets: Vec<String>,
@@ -446,6 +454,10 @@ pub struct AuditCheckDetails {
     #[serde(rename = "nonCompliantResourcesCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_resources_count: Option<i64>,
+    /// <p> Describes how many of the non-compliant resources created during the evaluation of an audit check were marked as suppressed. </p>
+    #[serde(rename = "suppressedNonCompliantResourcesCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppressed_non_compliant_resources_count: Option<i64>,
     /// <p>The number of resources on which the check was performed.</p>
     #[serde(rename = "totalResourcesCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -468,6 +480,10 @@ pub struct AuditFinding {
     #[serde(rename = "findingTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_time: Option<f64>,
+    /// <p> Indicates whether the audit finding was suppressed or not during reporting. </p>
+    #[serde(rename = "isSuppressed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_suppressed: Option<bool>,
     /// <p>The resource that was found to be noncompliant with the audit check.</p>
     #[serde(rename = "nonCompliantResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -590,6 +606,28 @@ pub struct AuditNotificationTarget {
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
+}
+
+/// <p> Filters out specific findings of a Device Defender audit. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AuditSuppression {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The expiration date (epoch timestamp in seconds) that you want the suppression to adhere to. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
 }
 
 /// <p>The audits that were performed.</p>
@@ -1265,6 +1303,34 @@ pub struct ConfirmTopicRuleDestinationResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    /// <p> The epoch timestamp in seconds at which this suppression expires. </p>
+    #[serde(rename = "clientRequestToken")]
+    pub client_request_token: String,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The epoch timestamp in seconds at which this suppression expires. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAuditSuppressionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -1532,6 +1598,10 @@ pub struct CreateJobRequest {
     /// <p>A job identifier which must be unique for your AWS account. We recommend using a UUID. Alpha-numeric characters, "-" and "_" are valid for use here.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>Configuration information for pre-signed S3 URLs.</p>
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2230,6 +2300,19 @@ pub struct DeleteAccountAuditConfigurationResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAuditSuppressionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>The name of the authorizer to delete.</p>
     #[serde(rename = "authorizerName")]
@@ -2336,6 +2419,10 @@ pub struct DeleteJobExecutionRequest {
     /// <p>The ID of the job whose execution on a particular device will be deleted.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>The name of the thing whose job execution will be deleted.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -2351,6 +2438,10 @@ pub struct DeleteJobRequest {
     /// <p>The ID of the job to be deleted.</p> <p>After a job deletion is completed, you may reuse this jobId when you create a new job. However, this is not recommended, and you must ensure that your devices are not using the jobId to refer to the deleted job.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2689,6 +2780,38 @@ pub struct DescribeAuditMitigationActionsTaskResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAuditSuppressionResponse {
+    #[serde(rename = "checkName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_name: Option<String>,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The epoch timestamp in seconds at which this suppression expires. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<ResourceIdentifier>,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditTaskRequest {
     /// <p>The ID of the audit whose information you want to get.</p>
     #[serde(rename = "taskId")]
@@ -2905,6 +3028,10 @@ pub struct DescribeDomainConfigurationResponse {
     #[serde(rename = "domainType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_type: Option<String>,
+    /// <p>The date and time the domain configuration's status was last changed.</p>
+    #[serde(rename = "lastStatusChangeDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_status_change_date: Option<f64>,
     /// <p>A list containing summary information about the server certificate included in the domain configuration.</p>
     #[serde(rename = "serverCertificates")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3499,7 +3626,7 @@ pub struct DetachPrincipalPolicyRequest {
     /// <p>The name of the policy to detach.</p>
     #[serde(rename = "policyName")]
     pub policy_name: String,
-    /// <p>The principal.</p> <p>If the principal is a certificate, specify the certificate ARN. If the principal is an Amazon Cognito identity, specify the identity ID.</p>
+    /// <p>The principal.</p> <p>Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     pub principal: String,
 }
@@ -3703,10 +3830,10 @@ pub struct ExponentialRolloutRate {
     /// <p>The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.</p>
     #[serde(rename = "baseRatePerMinute")]
     pub base_rate_per_minute: i64,
-    /// <p>The exponential factor to increase the rate of rollout for a job.</p>
+    /// <p>The exponential factor to increase the rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>
     #[serde(rename = "incrementFactor")]
     pub increment_factor: f64,
-    /// <p>The criteria to initiate the increase in rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>
+    /// <p>The criteria to initiate the increase in rate of rollout for a job.</p>
     #[serde(rename = "rateIncreaseCriteria")]
     pub rate_increase_criteria: RateIncreaseCriteria,
 }
@@ -3788,7 +3915,7 @@ pub struct GetEffectivePoliciesRequest {
     #[serde(rename = "cognitoIdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_identity_pool_id: Option<String>,
-    /// <p>The principal.</p>
+    /// <p>The principal. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal: Option<String>,
@@ -4306,6 +4433,10 @@ pub struct Job {
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>Configuration for pre-signed S3 URLs.</p>
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4625,7 +4756,7 @@ pub struct ListAttachedPoliciesRequest {
     #[serde(rename = "recursive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
-    /// <p>The group or principal for which the policies will be listed.</p>
+    /// <p>The group or principal for which the policies will be listed. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "target")]
     pub target: String,
 }
@@ -4654,6 +4785,10 @@ pub struct ListAuditFindingsRequest {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    /// <p> Boolean flag indicating whether only the suppressed findings or the unsuppressed findings should be listed. If this parameter isn't provided, the response will list both suppressed and unsuppressed findings. </p>
+    #[serde(rename = "listSuppressedFindings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_suppressed_findings: Option<bool>,
     /// <p>The maximum number of results to return at one time. The default is 25.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4771,6 +4906,42 @@ pub struct ListAuditMitigationActionsTasksResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAuditSuppressionsRequest {
+    /// <p> Determines whether suppressions are listed in ascending order by expiration date or not. If parameter isn't provided, <code>ascendingOrder=true</code>. </p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ascending_order: Option<bool>,
+    #[serde(rename = "checkName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_name: Option<String>,
+    /// <p> The maximum number of results to return at one time. The default is 25. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> The token for the next set of results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "resourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<ResourceIdentifier>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAuditSuppressionsResponse {
+    /// <p> A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> List of audit suppressions. </p>
+    #[serde(rename = "suppressions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppressions: Option<Vec<AuditSuppression>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditTasksRequest {
     /// <p>The end of the time period.</p>
     #[serde(rename = "endTime")]
@@ -4783,7 +4954,7 @@ pub struct ListAuditTasksRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The beginning of the time period. Audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
+    /// <p>The beginning of the time period. Audit information is retained for a limited time (90 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
     /// <p>A filter to limit the output to audits with the specified completion status: can be one of "IN_PROGRESS", "COMPLETED", "FAILED", or "CANCELED".</p>
@@ -4854,7 +5025,7 @@ pub struct ListBillingGroupsRequest {
     #[serde(rename = "namePrefixFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_prefix_filter: Option<String>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4867,7 +5038,7 @@ pub struct ListBillingGroupsResponse {
     #[serde(rename = "billingGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_groups: Option<Vec<GroupNameAndArn>>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5094,6 +5265,10 @@ pub struct ListJobExecutionsForThingRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5127,6 +5302,10 @@ pub struct ListJobsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5356,7 +5535,7 @@ pub struct ListPrincipalPoliciesRequest {
     #[serde(rename = "pageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The principal.</p>
+    /// <p>The principal. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     pub principal: String,
 }
@@ -5383,7 +5562,7 @@ pub struct ListPrincipalThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5396,7 +5575,7 @@ pub struct ListPrincipalThingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalThingsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5613,7 +5792,7 @@ pub struct ListStreamsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5625,7 +5804,7 @@ pub struct ListTagsForResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5700,7 +5879,7 @@ pub struct ListThingGroupsForThingRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5712,7 +5891,7 @@ pub struct ListThingGroupsForThingRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsForThingResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5733,7 +5912,7 @@ pub struct ListThingGroupsRequest {
     #[serde(rename = "namePrefixFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_prefix_filter: Option<String>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5750,7 +5929,7 @@ pub struct ListThingGroupsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5764,6 +5943,14 @@ pub struct ListThingGroupsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingPrincipalsRequest {
+    /// <p>The maximum number of results to return in this operation.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -5773,6 +5960,10 @@ pub struct ListThingPrincipalsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingPrincipalsResponse {
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The principals associated with the thing.</p>
     #[serde(rename = "principals")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5786,7 +5977,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5801,7 +5992,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTaskReportsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5822,7 +6013,7 @@ pub struct ListThingRegistrationTasksRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5835,7 +6026,7 @@ pub struct ListThingRegistrationTasksRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTasksResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5853,7 +6044,7 @@ pub struct ListThingTypesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5867,7 +6058,7 @@ pub struct ListThingTypesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingTypesResponse {
-    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token for the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5887,7 +6078,7 @@ pub struct ListThingsInBillingGroupRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5896,7 +6087,7 @@ pub struct ListThingsInBillingGroupRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInBillingGroupResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5913,7 +6104,7 @@ pub struct ListThingsInThingGroupRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5929,7 +6120,7 @@ pub struct ListThingsInThingGroupRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInThingGroupResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5955,7 +6146,7 @@ pub struct ListThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5969,7 +6160,7 @@ pub struct ListThingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5986,7 +6177,7 @@ pub struct ListTopicRuleDestinationsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5999,7 +6190,7 @@ pub struct ListTopicRuleDestinationsResponse {
     #[serde(rename = "destinationSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_summaries: Option<Vec<TopicRuleDestinationSummary>>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6013,7 +6204,7 @@ pub struct ListTopicRulesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token used to retrieve the next value.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6031,7 +6222,7 @@ pub struct ListTopicRulesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicRulesResponse {
-    /// <p>A token used to retrieve the next value.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6048,7 +6239,7 @@ pub struct ListV2LoggingLevelsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6065,7 +6256,7 @@ pub struct ListV2LoggingLevelsResponse {
     #[serde(rename = "logTargetConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_target_configurations: Option<Vec<LogTargetConfiguration>>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -7617,7 +7808,7 @@ pub struct TestAuthorizationRequest {
     #[serde(rename = "policyNamesToSkip")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_names_to_skip: Option<Vec<String>>,
-    /// <p>The principal.</p>
+    /// <p>The principal. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal: Option<String>,
@@ -7914,6 +8105,49 @@ pub struct TimeoutConfig {
     pub in_progress_timeout_in_minutes: Option<i64>,
 }
 
+/// <p>The Timestream rule action writes attributes (measures) from an MQTT message into an Amazon Timestream table. For more information, see the <a href="https://docs.aws.amazon.com/iot/latest/developerguide/timestream-rule-action.html">Timestream</a> topic rule action documentation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TimestreamAction {
+    /// <p>The name of an Amazon Timestream database.</p>
+    #[serde(rename = "databaseName")]
+    pub database_name: String,
+    /// <p>Metadata attributes of the time series that are written in each measure record.</p>
+    #[serde(rename = "dimensions")]
+    pub dimensions: Vec<TimestreamDimension>,
+    /// <p>The ARN of the role that grants permission to write to the Amazon Timestream database table.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>The name of the database table into which to write the measure records.</p>
+    #[serde(rename = "tableName")]
+    pub table_name: String,
+    /// <p>Specifies an application-defined value to replace the default value assigned to the Timestream record's timestamp in the <code>time</code> column.</p> <p>You can use this property to specify the value and the precision of the Timestream record's timestamp. You can specify a value from the message payload or a value computed by a substitution template.</p> <p>If omitted, the topic rule action assigns the timestamp, in milliseconds, at the time it processed the rule. </p>
+    #[serde(rename = "timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<TimestreamTimestamp>,
+}
+
+/// <p>Metadata attributes of the time series that are written in each measure record.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TimestreamDimension {
+    /// <p>The metadata dimension name. This is the name of the column in the Amazon Timestream database table record.</p> <p>Dimensions cannot be named: <code>measure_name</code>, <code>measure_value</code>, or <code>time</code>. These names are reserved. Dimension names cannot start with <code>ts_</code> or <code>measure_value</code> and they cannot contain the colon (<code>:</code>) character.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The value to write in this column of the database record.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
+/// <p>Describes how to interpret an application-defined timestamp value from an MQTT message payload and the precision of that value.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TimestreamTimestamp {
+    /// <p>The precision of the timestamp value that results from the expression described in <code>value</code>.</p> <p>Valid values: <code>SECONDS</code> | <code>MILLISECONDS</code> | <code>MICROSECONDS</code> | <code>NANOSECONDS</code>. The default is <code>MILLISECONDS</code>.</p>
+    #[serde(rename = "unit")]
+    pub unit: String,
+    /// <p>An expression that returns a long epoch time value.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
 /// <p>Specifies the TLS context to use for the test authorizer request.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8065,7 +8299,7 @@ pub struct TopicRulePayload {
     #[serde(rename = "ruleDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_disabled: Option<bool>,
-    /// <p>The SQL statement used to query the topic. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html#aws-iot-sql-reference">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    /// <p>The SQL statement used to query the topic. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-sql-reference.html">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>
     #[serde(rename = "sql")]
     pub sql: String,
 }
@@ -8159,6 +8393,31 @@ pub struct UpdateAccountAuditConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountAuditConfigurationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The expiration date (epoch timestamp in seconds) that you want the suppression to adhere to. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAuditSuppressionResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8431,6 +8690,10 @@ pub struct UpdateJobRequest {
     /// <p>The ID of the job to be updated.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>Configuration information for pre-signed S3 URLs.</p>
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -9817,6 +10080,68 @@ impl fmt::Display for ConfirmTopicRuleDestinationError {
     }
 }
 impl Error for ConfirmTopicRuleDestinationError {}
+/// Errors returned by CreateAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum CreateAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CreateAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateAuditSuppressionError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAuditSuppressionError {}
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
@@ -11495,6 +11820,52 @@ impl fmt::Display for DeleteAccountAuditConfigurationError {
     }
 }
 impl Error for DeleteAccountAuditConfigurationError {}
+/// Errors returned by DeleteAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum DeleteAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DeleteAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAuditSuppressionError {}
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
@@ -12292,6 +12663,8 @@ impl Error for DeletePolicyVersionError {}
 /// Errors returned by DeleteProvisioningTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisioningTemplateError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
     /// <p>An unexpected error has occurred.</p>
@@ -12312,6 +12685,11 @@ impl DeleteProvisioningTemplateError {
     ) -> RusotoError<DeleteProvisioningTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
                 "DeleteConflictException" => {
                     return RusotoError::Service(DeleteProvisioningTemplateError::DeleteConflict(
                         err.msg,
@@ -12353,6 +12731,9 @@ impl fmt::Display for DeleteProvisioningTemplateError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteProvisioningTemplateError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteProvisioningTemplateError::DeleteConflict(ref cause) => write!(f, "{}", cause),
             DeleteProvisioningTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
             DeleteProvisioningTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
@@ -12366,6 +12747,8 @@ impl Error for DeleteProvisioningTemplateError {}
 /// Errors returned by DeleteProvisioningTemplateVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisioningTemplateVersionError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
     /// <p>An unexpected error has occurred.</p>
@@ -12386,6 +12769,11 @@ impl DeleteProvisioningTemplateVersionError {
     ) -> RusotoError<DeleteProvisioningTemplateVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
                 "DeleteConflictException" => {
                     return RusotoError::Service(
                         DeleteProvisioningTemplateVersionError::DeleteConflict(err.msg),
@@ -12427,6 +12815,9 @@ impl fmt::Display for DeleteProvisioningTemplateVersionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteProvisioningTemplateVersionError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteProvisioningTemplateVersionError::DeleteConflict(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -13311,6 +13702,60 @@ impl fmt::Display for DescribeAuditMitigationActionsTaskError {
     }
 }
 impl Error for DescribeAuditMitigationActionsTaskError {}
+/// Errors returned by DescribeAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum DescribeAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAuditSuppressionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAuditSuppressionError {}
 /// Errors returned by DescribeAuditTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuditTaskError {
@@ -16197,6 +16642,52 @@ impl fmt::Display for ListAuditMitigationActionsTasksError {
     }
 }
 impl Error for ListAuditMitigationActionsTasksError {}
+/// Errors returned by ListAuditSuppressions
+#[derive(Debug, PartialEq)]
+pub enum ListAuditSuppressionsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListAuditSuppressionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAuditSuppressionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListAuditSuppressionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListAuditSuppressionsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListAuditSuppressionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAuditSuppressionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAuditSuppressionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAuditSuppressionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAuditSuppressionsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAuditSuppressionsError {}
 /// Errors returned by ListAuditTasks
 #[derive(Debug, PartialEq)]
 pub enum ListAuditTasksError {
@@ -17888,6 +18379,8 @@ pub enum ListThingGroupsError {
     InvalidRequest(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
 }
 
 impl ListThingGroupsError {
@@ -17903,6 +18396,9 @@ impl ListThingGroupsError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListThingGroupsError::ResourceNotFound(err.msg))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThingGroupsError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -17917,6 +18413,7 @@ impl fmt::Display for ListThingGroupsError {
             ListThingGroupsError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListThingGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListThingGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -17930,6 +18427,8 @@ pub enum ListThingGroupsForThingError {
     InvalidRequest(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
 }
 
 impl ListThingGroupsForThingError {
@@ -17951,6 +18450,9 @@ impl ListThingGroupsForThingError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThingGroupsForThingError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -17965,6 +18467,7 @@ impl fmt::Display for ListThingGroupsForThingError {
             ListThingGroupsForThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListThingGroupsForThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListThingGroupsForThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsForThingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -18326,6 +18829,8 @@ pub enum ListThingsInThingGroupError {
     InvalidRequest(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
 }
 
 impl ListThingsInThingGroupError {
@@ -18347,6 +18852,9 @@ impl ListThingsInThingGroupError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThingsInThingGroupError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -18361,6 +18869,7 @@ impl fmt::Display for ListThingsInThingGroupError {
             ListThingsInThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListThingsInThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListThingsInThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingsInThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -19426,6 +19935,8 @@ pub enum SetV2LoggingLevelError {
     Internal(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
     /// <p>The resource is not configured.</p>
     NotConfigured(String),
     /// <p>The service is temporarily unavailable.</p>
@@ -19441,6 +19952,9 @@ impl SetV2LoggingLevelError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(SetV2LoggingLevelError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(SetV2LoggingLevelError::LimitExceeded(err.msg))
                 }
                 "NotConfiguredException" => {
                     return RusotoError::Service(SetV2LoggingLevelError::NotConfigured(err.msg))
@@ -19463,6 +19977,7 @@ impl fmt::Display for SetV2LoggingLevelError {
         match *self {
             SetV2LoggingLevelError::Internal(ref cause) => write!(f, "{}", cause),
             SetV2LoggingLevelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetV2LoggingLevelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             SetV2LoggingLevelError::NotConfigured(ref cause) => write!(f, "{}", cause),
             SetV2LoggingLevelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
@@ -20141,6 +20656,60 @@ impl fmt::Display for UpdateAccountAuditConfigurationError {
     }
 }
 impl Error for UpdateAccountAuditConfigurationError {}
+/// Errors returned by UpdateAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum UpdateAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl UpdateAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAuditSuppressionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAuditSuppressionError {}
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
@@ -21506,6 +22075,12 @@ pub trait Iot {
         input: ConfirmTopicRuleDestinationRequest,
     ) -> Result<ConfirmTopicRuleDestinationResponse, RusotoError<ConfirmTopicRuleDestinationError>>;
 
+    /// <p> Creates a Device Defender audit suppression. </p>
+    async fn create_audit_suppression(
+        &self,
+        input: CreateAuditSuppressionRequest,
+    ) -> Result<CreateAuditSuppressionResponse, RusotoError<CreateAuditSuppressionError>>;
+
     /// <p>Creates an authorizer.</p>
     async fn create_authorizer(
         &self,
@@ -21554,7 +22129,7 @@ pub trait Iot {
         input: CreateKeysAndCertificateRequest,
     ) -> Result<CreateKeysAndCertificateResponse, RusotoError<CreateKeysAndCertificateError>>;
 
-    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
+    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Only certain types of mitigation actions can be applied to specific check names. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-defender-mitigation-actions.html">Mitigation actions</a>. Each mitigation action can apply only one type of change.</p>
     async fn create_mitigation_action(
         &self,
         input: CreateMitigationActionRequest,
@@ -21661,6 +22236,12 @@ pub trait Iot {
         DeleteAccountAuditConfigurationResponse,
         RusotoError<DeleteAccountAuditConfigurationError>,
     >;
+
+    /// <p> Deletes a Device Defender audit suppression. </p>
+    async fn delete_audit_suppression(
+        &self,
+        input: DeleteAuditSuppressionRequest,
+    ) -> Result<DeleteAuditSuppressionResponse, RusotoError<DeleteAuditSuppressionError>>;
 
     /// <p>Deletes an authorizer.</p>
     async fn delete_authorizer(
@@ -21845,6 +22426,12 @@ pub trait Iot {
         DescribeAuditMitigationActionsTaskResponse,
         RusotoError<DescribeAuditMitigationActionsTaskError>,
     >;
+
+    /// <p> Gets information about a Device Defender audit suppression. </p>
+    async fn describe_audit_suppression(
+        &self,
+        input: DescribeAuditSuppressionRequest,
+    ) -> Result<DescribeAuditSuppressionResponse, RusotoError<DescribeAuditSuppressionError>>;
 
     /// <p>Gets information about a Device Defender audit.</p>
     async fn describe_audit_task(
@@ -22122,7 +22709,7 @@ pub trait Iot {
         input: ListAttachedPoliciesRequest,
     ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>>;
 
-    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 90 days.)</p>
     async fn list_audit_findings(
         &self,
         input: ListAuditFindingsRequest,
@@ -22145,6 +22732,12 @@ pub trait Iot {
         ListAuditMitigationActionsTasksResponse,
         RusotoError<ListAuditMitigationActionsTasksError>,
     >;
+
+    /// <p> Lists your Device Defender audit listings. </p>
+    async fn list_audit_suppressions(
+        &self,
+        input: ListAuditSuppressionsRequest,
+    ) -> Result<ListAuditSuppressionsResponse, RusotoError<ListAuditSuppressionsError>>;
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
     async fn list_audit_tasks(
@@ -22374,7 +22967,7 @@ pub trait Iot {
         input: ListThingTypesRequest,
     ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>>;
 
-    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
+    /// <p><p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p> <note> <p>You will not be charged for calling this API if an <code>Access denied</code> error is returned. You will also not be charged if no attributes or pagination token was provided in request and no pagination token and no results were returned.</p> </note></p>
     async fn list_things(
         &self,
         input: ListThingsRequest,
@@ -22566,6 +23159,12 @@ pub trait Iot {
         RusotoError<UpdateAccountAuditConfigurationError>,
     >;
 
+    /// <p> Updates a Device Defender audit suppression. </p>
+    async fn update_audit_suppression(
+        &self,
+        input: UpdateAuditSuppressionRequest,
+    ) -> Result<UpdateAuditSuppressionResponse, RusotoError<UpdateAuditSuppressionError>>;
+
     /// <p>Updates an authorizer.</p>
     async fn update_authorizer(
         &self,
@@ -22584,7 +23183,7 @@ pub trait Iot {
         input: UpdateCACertificateRequest,
     ) -> Result<(), RusotoError<UpdateCACertificateError>>;
 
-    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Certificates must be in the ACTIVE state to authenticate devices that use a certificate to connect to AWS IoT.</p> <p>Within a few minutes of updating a certificate from the ACTIVE state to any other state, AWS IoT disconnects all devices that used that certificate to connect. Devices cannot use a certificate that is not in the ACTIVE state to reconnect.</p>
     async fn update_certificate(
         &self,
         input: UpdateCertificateRequest,
@@ -22848,6 +23447,12 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -23251,6 +23856,38 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Creates a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn create_audit_suppression(
+        &self,
+        input: CreateAuditSuppressionRequest,
+    ) -> Result<CreateAuditSuppressionResponse, RusotoError<CreateAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/create";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAuditSuppressionError::from_response(response))
+        }
+    }
+
     /// <p>Creates an authorizer.</p>
     #[allow(unused_mut)]
     async fn create_authorizer(
@@ -23530,7 +24167,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
+    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Only certain types of mitigation actions can be applied to specific check names. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-defender-mitigation-actions.html">Mitigation actions</a>. Each mitigation action can apply only one type of change.</p>
     #[allow(unused_mut)]
     async fn create_mitigation_action(
         &self,
@@ -24127,6 +24764,38 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Deletes a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn delete_audit_suppression(
+        &self,
+        input: DeleteAuditSuppressionRequest,
+    ) -> Result<DeleteAuditSuppressionResponse, RusotoError<DeleteAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/delete";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAuditSuppressionError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an authorizer.</p>
     #[allow(unused_mut)]
     async fn delete_authorizer(
@@ -24387,6 +25056,9 @@ impl Iot for IotClient {
         if let Some(ref x) = input.force {
             params.put("force", x);
         }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
         request.set_params(params);
 
         let mut response = self
@@ -24426,6 +25098,9 @@ impl Iot for IotClient {
         let mut params = Params::new();
         if let Some(ref x) = input.force {
             params.put("force", x);
+        }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
         }
         request.set_params(params);
 
@@ -25155,6 +25830,38 @@ impl Iot for IotClient {
             Err(DescribeAuditMitigationActionsTaskError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p> Gets information about a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn describe_audit_suppression(
+        &self,
+        input: DescribeAuditSuppressionRequest,
+    ) -> Result<DescribeAuditSuppressionResponse, RusotoError<DescribeAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/describe";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAuditSuppressionError::from_response(response))
         }
     }
 
@@ -26669,7 +27376,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 90 days.)</p>
     #[allow(unused_mut)]
     async fn list_audit_findings(
         &self,
@@ -26802,6 +27509,38 @@ impl Iot for IotClient {
             Err(ListAuditMitigationActionsTasksError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p> Lists your Device Defender audit listings. </p>
+    #[allow(unused_mut)]
+    async fn list_audit_suppressions(
+        &self,
+        input: ListAuditSuppressionsRequest,
+    ) -> Result<ListAuditSuppressionsResponse, RusotoError<ListAuditSuppressionsError>> {
+        let request_uri = "/audit/suppressions/list";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAuditSuppressionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAuditSuppressionsError::from_response(response))
         }
     }
 
@@ -27248,6 +27987,9 @@ impl Iot for IotClient {
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
         }
@@ -27289,6 +28031,9 @@ impl Iot for IotClient {
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
@@ -28182,6 +28927,15 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -28332,7 +29086,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
+    /// <p><p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p> <note> <p>You will not be charged for calling this API if an <code>Access denied</code> error is returned. You will also not be charged if no attributes or pagination token was provided in request and no pagination token and no results were returned.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_things(
         &self,
@@ -29452,6 +30206,38 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Updates a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn update_audit_suppression(
+        &self,
+        input: UpdateAuditSuppressionRequest,
+    ) -> Result<UpdateAuditSuppressionResponse, RusotoError<UpdateAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/update";
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAuditSuppressionError::from_response(response))
+        }
+    }
+
     /// <p>Updates an authorizer.</p>
     #[allow(unused_mut)]
     async fn update_authorizer(
@@ -29565,7 +30351,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Certificates must be in the ACTIVE state to authenticate devices that use a certificate to connect to AWS IoT.</p> <p>Within a few minutes of updating a certificate from the ACTIVE state to any other state, AWS IoT disconnects all devices that used that certificate to connect. Devices cannot use a certificate that is not in the ACTIVE state to reconnect.</p>
     #[allow(unused_mut)]
     async fn update_certificate(
         &self,
@@ -29781,6 +30567,12 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client

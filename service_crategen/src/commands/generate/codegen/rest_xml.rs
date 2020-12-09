@@ -37,7 +37,7 @@ impl GenerateProtocol for RestXmlGenerator {
             let (request_uri, _) =
                 rest_request_generator::parse_query_string(&operation.http.request_uri);
             let parse_non_payload =
-                rest_response_parser::generate_response_headers_parser(service, operation)
+                rest_response_parser::generate_response_headers_parser(service, operation, self as &dyn GenerateProtocol)
                     .unwrap_or_else(|| "".to_owned());
             writeln!(writer,
                      "{documentation}

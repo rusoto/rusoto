@@ -138,6 +138,10 @@ pub struct AutoBranchCreationConfig {
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
+    /// <p> Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. Enabling performance mode will mean that hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
     /// <p> Enables pull request preview for the autocreated branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,6 +244,10 @@ pub struct Branch {
     /// <p> Enables notifications for a branch that is part of an Amplify app. </p>
     #[serde(rename = "enableNotification")]
     pub enable_notification: bool,
+    /// <p> Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. Enabling performance mode will mean that hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
     /// <p> Enables pull request preview for the branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     pub enable_pull_request_preview: bool,
@@ -434,6 +442,10 @@ pub struct CreateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
+    /// <p> Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. Enabling performance mode will mean that hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
     /// <p> Enables pull request preview for this branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -576,7 +588,7 @@ pub struct CustomRule {
     /// <p> The source pattern for a URL rewrite or redirect rule. </p>
     #[serde(rename = "source")]
     pub source: String,
-    /// <p> The status code for a URL rewrite or redirect rule. </p>
+    /// <p><p> The status code for a URL rewrite or redirect rule. </p> <dl> <dt>200</dt> <dd> <p>Represents a 200 rewrite rule.</p> </dd> <dt>301</dt> <dd> <p>Represents a 301 (moved pemanently) redirect rule. This and all future requests should be directed to the target URL. </p> </dd> <dt>302</dt> <dd> <p>Represents a 302 temporary redirect rule.</p> </dd> <dt>404</dt> <dd> <p>Represents a 404 redirect rule.</p> </dd> <dt>404-200</dt> <dd> <p>Represents a 404 rewrite rule.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1546,6 +1558,10 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
+    /// <p> Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. Enabling performance mode will mean that hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
     /// <p> Enables pull request preview for this branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]

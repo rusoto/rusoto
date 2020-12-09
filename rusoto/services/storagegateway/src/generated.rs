@@ -71,7 +71,7 @@ pub struct ActivateGatewayInput {
     #[serde(rename = "GatewayType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_type: Option<String>,
-    /// <p>The value that indicates the type of medium changer to use for tape gateway. This field is optional.</p> <p>Valid Values: <code>STK-L700</code> | <code>AWS-Gateway-VTL</code> </p>
+    /// <p>The value that indicates the type of medium changer to use for tape gateway. This field is optional.</p> <p>Valid Values: <code>STK-L700</code> | <code>AWS-Gateway-VTL</code> | <code>IBM-03584L32-0402</code> </p>
     #[serde(rename = "MediumChangerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub medium_changer_type: Option<String>,
@@ -175,6 +175,10 @@ pub struct AddWorkingStorageOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignTapePoolInput {
+    /// <p>Set permissions to bypass governance retention. If the lock type of the archived tape is <code>Governance</code>, the tape's archived age is not older than <code>RetentionLockInDays</code>, and the user does not already have <code>BypassGovernanceRetention</code>, setting this to TRUE enables the user to bypass the retention lock. This parameter is set to true by default for calls from the console.</p> <p>Valid values: <code>TRUE</code> | <code>FALSE</code> </p>
+    #[serde(rename = "BypassGovernanceRetention")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bypass_governance_retention: Option<bool>,
     /// <p>The ID of the pool that you want to add your tape to for archiving. The tape in this pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p> <p>Valid Values: <code>GLACIER</code> | <code>DEEP_ARCHIVE</code> </p>
     #[serde(rename = "PoolId")]
     pub pool_id: String,
@@ -242,10 +246,10 @@ pub struct AutomaticTapeCreationPolicyInfo {
     pub gateway_arn: Option<String>,
 }
 
-/// <p>An automatic tape creation policy consists of automatic tape creation rules where each rule defines when and how to create new tapes.</p>
+/// <p>An automatic tape creation policy consists of automatic tape creation rules where each rule defines when and how to create new tapes. For more information about automatic tape creation, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedCreateTapes.html#CreateTapesAutomatically">Creating Tapes Automatically</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutomaticTapeCreationRule {
-    /// <p>The minimum number of available virtual tapes that the gateway maintains at all times. If the number of tapes on the gateway goes below this value, the gateway creates as many new tapes as are needed to have <code>MinimumNumTapes</code> on the gateway.</p>
+    /// <p>The minimum number of available virtual tapes that the gateway maintains at all times. If the number of tapes on the gateway goes below this value, the gateway creates as many new tapes as are needed to have <code>MinimumNumTapes</code> on the gateway. For more information about automatic tape creation, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedCreateTapes.html#CreateTapesAutomatically">Creating Tapes Automatically</a>.</p>
     #[serde(rename = "MinimumNumTapes")]
     pub minimum_num_tapes: i64,
     /// <p>The ID of the pool that you want to add your tape to for archiving. The tape in this pool is archived in the Amazon S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p> <p>Valid Values: <code>GLACIER</code> | <code>DEEP_ARCHIVE</code> </p>
@@ -257,6 +261,10 @@ pub struct AutomaticTapeCreationRule {
     /// <p>The size, in bytes, of the virtual tape capacity.</p>
     #[serde(rename = "TapeSizeInBytes")]
     pub tape_size_in_bytes: i64,
+    /// <p>Set to <code>true</code> to indicate that tapes are to be archived as write-once-read-many (WORM). Set to <code>false</code> when WORM is not enabled for tapes.</p>
+    #[serde(rename = "Worm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worm: Option<bool>,
 }
 
 /// <p>Lists refresh cache information.</p>
@@ -272,14 +280,14 @@ pub struct CacheAttributes {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CachediSCSIVolume {
-    /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>
+    /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this timestamp.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
-    /// <p>If the cached volume was created from a snapshot, this field contains the snapshot ID used, e.g. snap-78e22663. Otherwise, this field is not included.</p>
+    /// <p>If the cached volume was created from a snapshot, this field contains the snapshot ID used, e.g., snap-78e22663. Otherwise, this field is not included.</p>
     #[serde(rename = "SourceSnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_snapshot_id: Option<String>,
@@ -295,7 +303,7 @@ pub struct CachediSCSIVolume {
     #[serde(rename = "VolumeAttachmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_attachment_status: Option<String>,
-    /// <p>The unique identifier of the volume, e.g. vol-AE4B946D.</p>
+    /// <p>The unique identifier of the volume, e.g., vol-AE4B946D.</p>
     #[serde(rename = "VolumeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_id: Option<String>,
@@ -379,7 +387,7 @@ pub struct ChapInfo {
     #[serde(rename = "SecretToAuthenticateInitiator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_to_authenticate_initiator: Option<String>,
-    /// <p>The secret key that the target must provide to participate in mutual CHAP with the initiator (e.g. Windows client).</p>
+    /// <p>The secret key that the target must provide to participate in mutual CHAP with the initiator (e.g., Windows client).</p>
     #[serde(rename = "SecretToAuthenticateTarget")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_to_authenticate_target: Option<String>,
@@ -486,6 +494,10 @@ pub struct CreateNFSFileShareInput {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
+    /// <p>The notification policy of the file share.</p>
+    #[serde(rename = "NotificationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_policy: Option<String>,
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -525,6 +537,10 @@ pub struct CreateNFSFileShareOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSMBFileShareInput {
+    /// <p>The files and folders on this share will only be visible to users with read access.</p>
+    #[serde(rename = "AccessBasedEnumeration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_based_enumeration: Option<bool>,
     /// <p><p>A list of users or groups in the Active Directory that will be granted administrator privileges on the file share. These users can do all file operations as the super-user. Acceptable formats include: <code>DOMAIN\User1</code>, <code>user1</code>, <code>@group1</code>, and <code>@DOMAIN\group1</code>.</p> <important> <p>Use this option very carefully, because any user in this list can do anything they like on the file share, regardless of file permissions.</p> </important></p>
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -578,6 +594,10 @@ pub struct CreateSMBFileShareInput {
     /// <p>The ARN of the backend storage used for storing file data. A prefix name can be added to the S3 bucket name. It must end with a "/".</p>
     #[serde(rename = "LocationARN")]
     pub location_arn: String,
+    /// <p>The notification policy of the file share.</p>
+    #[serde(rename = "NotificationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_policy: Option<String>,
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -733,6 +753,38 @@ pub struct CreateStorediSCSIVolumeOutput {
     pub volume_size_in_bytes: Option<i64>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateTapePoolInput {
+    /// <p>The name of the new custom tape pool.</p>
+    #[serde(rename = "PoolName")]
+    pub pool_name: String,
+    /// <p>Tape retention lock time is set in days. Tape retention lock can be enabled for up to 100 years (36,500 days).</p>
+    #[serde(rename = "RetentionLockTimeInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_lock_time_in_days: Option<i64>,
+    /// <p>Tape retention lock can be configured in two modes. When configured in governance mode, AWS accounts with specific IAM permissions are authorized to remove the tape retention lock from archived virtual tapes. When configured in compliance mode, the tape retention lock cannot be removed by any user, including the root AWS account.</p>
+    #[serde(rename = "RetentionLockType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_lock_type: Option<String>,
+    /// <p>The storage class that is associated with the new custom pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p>
+    #[serde(rename = "StorageClass")]
+    pub storage_class: String,
+    /// <p><p>A list of up to 50 tags that can be assigned to tape pool. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateTapePoolOutput {
+    /// <p>The unique Amazon Resource Name (ARN) that represents the custom tape pool. Use the <a>ListTapePools</a> operation to return a list of tape pools for your account and AWS Region.</p>
+    #[serde(rename = "PoolARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_arn: Option<String>,
+}
+
 /// <p>CreateTapeWithBarcodeInput</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -762,6 +814,10 @@ pub struct CreateTapeWithBarcodeInput {
     /// <p><p>The size, in bytes, of the virtual tape that you want to create.</p> <note> <p>The size must be aligned by gigabyte (1024<em>1024</em>1024 bytes).</p> </note></p>
     #[serde(rename = "TapeSizeInBytes")]
     pub tape_size_in_bytes: i64,
+    /// <p>Set to <code>TRUE</code> if the tape you are creating is to be configured as a write-once-read-many (WORM) tape.</p>
+    #[serde(rename = "Worm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worm: Option<bool>,
 }
 
 /// <p>CreateTapeOutput</p>
@@ -809,6 +865,10 @@ pub struct CreateTapesInput {
     /// <p><p>The size, in bytes, of the virtual tapes that you want to create.</p> <note> <p>The size must be aligned by gigabyte (1024<em>1024</em>1024 bytes).</p> </note></p>
     #[serde(rename = "TapeSizeInBytes")]
     pub tape_size_in_bytes: i64,
+    /// <p>Set to <code>TRUE</code> if the tape you are creating is to be configured as a write-once-read-many (WORM) tape.</p>
+    #[serde(rename = "Worm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worm: Option<bool>,
 }
 
 /// <p>CreateTapeOutput</p>
@@ -840,7 +900,7 @@ pub struct DeleteAutomaticTapeCreationPolicyOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBandwidthRateLimitInput {
-    /// <p>One of the BandwidthType values that indicates the gateway bandwidth rate limit to delete.</p> <p>Valid Values: <code>Upload</code> | <code>Download</code> | <code>All</code> </p>
+    /// <p>One of the BandwidthType values that indicates the gateway bandwidth rate limit to delete.</p> <p>Valid Values: <code>UPLOAD</code> | <code>DOWNLOAD</code> | <code>ALL</code> </p>
     #[serde(rename = "BandwidthType")]
     pub bandwidth_type: String,
     #[serde(rename = "GatewayARN")]
@@ -943,6 +1003,10 @@ pub struct DeleteSnapshotScheduleOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTapeArchiveInput {
+    /// <p>Set to <code>TRUE</code> to delete an archived tape that belongs to a custom pool with tape retention lock. Only archived tapes with tape retention lock set to <code>governance</code> can be deleted. Archived tapes with tape retention lock set to <code>compliance</code> can't be deleted.</p>
+    #[serde(rename = "BypassGovernanceRetention")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bypass_governance_retention: Option<bool>,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape to delete from the virtual tape shelf (VTS).</p>
     #[serde(rename = "TapeARN")]
     pub tape_arn: String,
@@ -962,6 +1026,10 @@ pub struct DeleteTapeArchiveOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTapeInput {
+    /// <p>Set to <code>TRUE</code> to delete an archived tape that belongs to a custom pool with tape retention lock. Only archived tapes with tape retention lock set to <code>governance</code> can be deleted. Archived tapes with tape retention lock set to <code>compliance</code> can't be deleted.</p>
+    #[serde(rename = "BypassGovernanceRetention")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bypass_governance_retention: Option<bool>,
     /// <p>The unique Amazon Resource Name (ARN) of the gateway that the virtual tape to delete is associated with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -978,6 +1046,23 @@ pub struct DeleteTapeOutput {
     #[serde(rename = "TapeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteTapePoolInput {
+    /// <p>The Amazon Resource Name (ARN) of the custom tape pool to delete.</p>
+    #[serde(rename = "PoolARN")]
+    pub pool_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteTapePoolOutput {
+    /// <p>The Amazon Resource Name (ARN) of the custom tape pool being deleted.</p>
+    #[serde(rename = "PoolARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_arn: Option<String>,
 }
 
 /// <p>A JSON object containing the <a>DeleteVolumeInput$VolumeARN</a> to delete.</p>
@@ -1135,10 +1220,14 @@ pub struct DescribeGatewayInformationInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGatewayInformationOutput {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch Log Group that is used to monitor events in the gateway.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that is used to monitor events in the gateway.</p>
     #[serde(rename = "CloudWatchLogGroupARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_log_group_arn: Option<String>,
+    /// <p>Date after which this gateway will not receive software updates for new features and bug fixes.</p>
+    #[serde(rename = "DeprecationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deprecation_date: Option<String>,
     /// <p>The ID of the Amazon EC2 instance that was used to launch the gateway.</p>
     #[serde(rename = "Ec2InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1190,6 +1279,10 @@ pub struct DescribeGatewayInformationOutput {
     #[serde(rename = "NextUpdateAvailabilityDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_update_availability_date: Option<String>,
+    /// <p>Date after which this gateway will not receive software updates for new features.</p>
+    #[serde(rename = "SoftwareUpdatesEndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_updates_end_date: Option<String>,
     /// <p>A list of up to 50 tags assigned to the gateway, sorted alphabetically by key name. Each tag is a key-value pair. For a gateway with more than 10 tags assigned, you can view all tags using the <code>ListTagsForResource</code> API operation.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1293,6 +1386,10 @@ pub struct DescribeSMBSettingsOutput {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    /// <p>The shares on this gateway appear when listing shares.</p>
+    #[serde(rename = "FileSharesVisible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_shares_visible: Option<bool>,
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -1877,7 +1974,7 @@ pub struct ListTagsForResourceOutput {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>he Amazon Resource Name (ARN) of the resource for which you want to list tags.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource for which you want to list tags.</p>
     #[serde(rename = "ResourceARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
@@ -1885,6 +1982,36 @@ pub struct ListTagsForResourceOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTapePoolsInput {
+    /// <p>An optional number limit for the tape pools in the list returned by this call.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>A string that indicates the position at which to begin the returned list of tape pools.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of each of the custom tape pools you want to list. If you don't specify a custom tape pool ARN, the response lists all custom tape pools. </p>
+    #[serde(rename = "PoolARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_ar_ns: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTapePoolsOutput {
+    /// <p>A string that indicates the position at which to begin the returned list of tape pools. Use the marker in your next request to continue pagination of tape pools. If there are no more tape pools to list, this element does not appear in the response body. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>An array of <code>PoolInfo</code> objects, where each object describes a single custom tape pool. If there are no custom tape pools, the <code>PoolInfos</code> is an empty array. </p>
+    #[serde(rename = "PoolInfos")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_infos: Option<Vec<PoolInfo>>,
 }
 
 /// <p><p>A JSON object that contains one or more of the following fields:</p> <ul> <li> <p> <a>ListTapesInput$Limit</a> </p> </li> <li> <p> <a>ListTapesInput$Marker</a> </p> </li> <li> <p> <a>ListTapesInput$TapeARNs</a> </p> </li> </ul></p>
@@ -2058,6 +2185,10 @@ pub struct NFSFileShareInfo {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
+    /// <p>The notification policy of the file share.</p>
+    #[serde(rename = "NotificationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_policy: Option<String>,
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_acl: Option<String>,
@@ -2118,6 +2249,36 @@ pub struct NotifyWhenUploadedOutput {
     #[serde(rename = "NotificationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_id: Option<String>,
+}
+
+/// <p>Describes a custom tape pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PoolInfo {
+    /// <p>The Amazon Resource Name (ARN) of the custom tape pool. Use the <a>ListTapePools</a> operation to return a list of custom tape pools for your account and AWS Region.</p>
+    #[serde(rename = "PoolARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_arn: Option<String>,
+    /// <p>The name of the custom tape pool. <code>PoolName</code> can use all ASCII characters, except '/' and '\'.</p>
+    #[serde(rename = "PoolName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_name: Option<String>,
+    /// <p>Status of the custom tape pool. Pool can be <code>ACTIVE</code> or <code>DELETED</code>.</p>
+    #[serde(rename = "PoolStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_status: Option<String>,
+    /// <p>Tape retention lock time is set in days. Tape retention lock can be enabled for up to 100 years (36,500 days).</p>
+    #[serde(rename = "RetentionLockTimeInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_lock_time_in_days: Option<i64>,
+    /// <p>Tape retention lock type, which can be configured in two modes. When configured in governance mode, AWS accounts with specific IAM permissions are authorized to remove the tape retention lock from archived virtual tapes. When configured in compliance mode, the tape retention lock cannot be removed by any user, including the root AWS account.</p>
+    #[serde(rename = "RetentionLockType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_lock_type: Option<String>,
+    /// <p>The storage class that is associated with the custom pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p>
+    #[serde(rename = "StorageClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_class: Option<String>,
 }
 
 /// <p>RefreshCacheInput</p>
@@ -2233,6 +2394,10 @@ pub struct RetrieveTapeRecoveryPointOutput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SMBFileShareInfo {
+    /// <p>Indicates whether <code>AccessBasedEnumeration</code> is enabled.</p>
+    #[serde(rename = "AccessBasedEnumeration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_based_enumeration: Option<bool>,
     /// <p>A list of users or groups in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. Acceptable formats include: <code>DOMAIN\User1</code>, <code>user1</code>, <code>@group1</code>, and <code>@DOMAIN\group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2290,6 +2455,10 @@ pub struct SMBFileShareInfo {
     #[serde(rename = "LocationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_arn: Option<String>,
+    /// <p>The notification policy of the file share.</p>
+    #[serde(rename = "NotificationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_policy: Option<String>,
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_acl: Option<String>,
@@ -2423,7 +2592,7 @@ pub struct StorageGatewayError {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StorediSCSIVolume {
-    /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>
+    /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this timestamp.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
@@ -2454,7 +2623,7 @@ pub struct StorediSCSIVolume {
     #[serde(rename = "VolumeDiskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_disk_id: Option<String>,
-    /// <p>The unique identifier of the volume, e.g. vol-AE4B946D.</p>
+    /// <p>The unique identifier of the volume, e.g., vol-AE4B946D.</p>
     #[serde(rename = "VolumeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_id: Option<String>,
@@ -2502,6 +2671,10 @@ pub struct Tape {
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
+    /// <p>The date that the tape enters a custom tape pool.</p>
+    #[serde(rename = "PoolEntryDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_entry_date: Option<f64>,
     /// <p>The ID of the pool that contains tapes that will be archived. The tapes in this pool are archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p> <p>Valid Values: <code>GLACIER</code> | <code>DEEP_ARCHIVE</code> </p>
     #[serde(rename = "PoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2510,6 +2683,10 @@ pub struct Tape {
     #[serde(rename = "Progress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress: Option<f64>,
+    /// <p>The date that the tape is first archived with tape retention lock enabled.</p>
+    #[serde(rename = "RetentionStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_start_date: Option<f64>,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape.</p>
     #[serde(rename = "TapeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2538,23 +2715,35 @@ pub struct Tape {
     #[serde(rename = "VTLDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vtl_device: Option<String>,
+    /// <p>If the tape is archived as write-once-read-many (WORM), this value is <code>true</code>.</p>
+    #[serde(rename = "Worm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worm: Option<bool>,
 }
 
 /// <p>Represents a virtual tape that is archived in the virtual tape shelf (VTS).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TapeArchive {
-    /// <p>The time that the archiving of the virtual tape was completed.</p> <p>The default time stamp format is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
+    /// <p>The time that the archiving of the virtual tape was completed.</p> <p>The default timestamp format is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
     #[serde(rename = "CompletionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time: Option<f64>,
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
+    /// <p>The time that the tape entered the custom tape pool.</p> <p>The default timestamp format is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
+    #[serde(rename = "PoolEntryDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_entry_date: Option<f64>,
     /// <p>The ID of the pool that was used to archive the tape. The tapes in this pool are archived in the S3 storage class that is associated with the pool.</p> <p>Valid Values: <code>GLACIER</code> | <code>DEEP_ARCHIVE</code> </p>
     #[serde(rename = "PoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pool_id: Option<String>,
+    /// <p>If the archived tape is subject to tape retention lock, the date that the archived tape started being retained.</p>
+    #[serde(rename = "RetentionStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_start_date: Option<f64>,
     /// <p>The Amazon Resource Name (ARN) of the tape gateway that the virtual tape is being retrieved to.</p> <p>The virtual tape is retrieved from the virtual tape shelf (VTS).</p>
     #[serde(rename = "RetrievedTo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2583,6 +2772,10 @@ pub struct TapeArchive {
     #[serde(rename = "TapeUsedInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_used_in_bytes: Option<i64>,
+    /// <p>Set to <code>true</code> if the archived tape is stored as write-once-read-many (WORM).</p>
+    #[serde(rename = "Worm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worm: Option<bool>,
 }
 
 /// <p>Describes a virtual tape.</p>
@@ -2593,10 +2786,18 @@ pub struct TapeInfo {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
+    /// <p>The date that the tape entered the custom tape pool with tape retention lock enabled.</p>
+    #[serde(rename = "PoolEntryDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pool_entry_date: Option<f64>,
     /// <p>The ID of the pool that you want to add your tape to for archiving. The tape in this pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p> <p>Valid Values: <code>GLACIER</code> | <code>DEEP_ARCHIVE</code> </p>
     #[serde(rename = "PoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pool_id: Option<String>,
+    /// <p>The date that the tape became subject to tape retention lock.</p>
+    #[serde(rename = "RetentionStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_start_date: Option<f64>,
     /// <p>The Amazon Resource Name (ARN) of a virtual tape.</p>
     #[serde(rename = "TapeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2623,7 +2824,7 @@ pub struct TapeRecoveryPointInfo {
     #[serde(rename = "TapeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_arn: Option<String>,
-    /// <p>The time when the point-in-time view of the virtual tape was replicated for later recovery.</p> <p>The default time stamp format of the tape recovery point time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
+    /// <p>The time when the point-in-time view of the virtual tape was replicated for later recovery.</p> <p>The default timestamp format of the tape recovery point time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
     #[serde(rename = "TapeRecoveryPointTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_recovery_point_time: Option<f64>,
@@ -2716,7 +2917,7 @@ pub struct UpdateChapCredentialsOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayInformationInput {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that you want to use to monitor and log events in the gateway.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">What is Amazon CloudWatch logs?</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that you want to use to monitor and log events in the gateway.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">What is Amazon CloudWatch Logs?</a> </p>
     #[serde(rename = "CloudWatchLogGroupARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_log_group_arn: Option<String>,
@@ -2831,6 +3032,10 @@ pub struct UpdateNFSFileShareInput {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
+    /// <p>The notification policy of the file share.</p>
+    #[serde(rename = "NotificationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_policy: Option<String>,
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2863,6 +3068,10 @@ pub struct UpdateNFSFileShareOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSMBFileShareInput {
+    /// <p>The files and folders on this share will only be visible to users with read access.</p>
+    #[serde(rename = "AccessBasedEnumeration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_based_enumeration: Option<bool>,
     /// <p>A list of users or groups in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. Acceptable formats include: <code>DOMAIN\User1</code>, <code>user1</code>, <code>@group1</code>, and <code>@DOMAIN\group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2906,6 +3115,10 @@ pub struct UpdateSMBFileShareInput {
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
+    /// <p>The notification policy of the file share.</p>
+    #[serde(rename = "NotificationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_policy: Option<String>,
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2936,6 +3149,24 @@ pub struct UpdateSMBFileShareOutput {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_share_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateSMBFileShareVisibilityInput {
+    /// <p>The shares on this gateway appear when listing shares.</p>
+    #[serde(rename = "FileSharesVisible")]
+    pub file_shares_visible: bool,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateSMBFileShareVisibilityOutput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2992,7 +3223,7 @@ pub struct UpdateSnapshotScheduleOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVTLDeviceTypeInput {
-    /// <p>The type of medium changer you want to select.</p> <p>Valid Values: <code>STK-L700</code> | <code>AWS-Gateway-VTL</code> </p>
+    /// <p>The type of medium changer you want to select.</p> <p>Valid Values: <code>STK-L700</code> | <code>AWS-Gateway-VTL</code> | <code>IBM-03584L32-0402</code> </p>
     #[serde(rename = "DeviceType")]
     pub device_type: String,
     /// <p>The Amazon Resource Name (ARN) of the medium changer you want to select.</p>
@@ -3727,6 +3958,44 @@ impl fmt::Display for CreateStorediSCSIVolumeError {
     }
 }
 impl Error for CreateStorediSCSIVolumeError {}
+/// Errors returned by CreateTapePool
+#[derive(Debug, PartialEq)]
+pub enum CreateTapePoolError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl CreateTapePoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTapePoolError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(CreateTapePoolError::InternalServerError(err.msg))
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(CreateTapePoolError::InvalidGatewayRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateTapePoolError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateTapePoolError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTapePoolError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateTapePoolError {}
 /// Errors returned by CreateTapeWithBarcode
 #[derive(Debug, PartialEq)]
 pub enum CreateTapeWithBarcodeError {
@@ -4121,6 +4390,44 @@ impl fmt::Display for DeleteTapeArchiveError {
     }
 }
 impl Error for DeleteTapeArchiveError {}
+/// Errors returned by DeleteTapePool
+#[derive(Debug, PartialEq)]
+pub enum DeleteTapePoolError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl DeleteTapePoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTapePoolError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(DeleteTapePoolError::InternalServerError(err.msg))
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(DeleteTapePoolError::InvalidGatewayRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteTapePoolError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteTapePoolError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTapePoolError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteTapePoolError {}
 /// Errors returned by DeleteVolume
 #[derive(Debug, PartialEq)]
 pub enum DeleteVolumeError {
@@ -5223,6 +5530,42 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by ListTapePools
+#[derive(Debug, PartialEq)]
+pub enum ListTapePoolsError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl ListTapePoolsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTapePoolsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListTapePoolsError::InternalServerError(err.msg))
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(ListTapePoolsError::InvalidGatewayRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTapePoolsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTapePoolsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTapePoolsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTapePoolsError {}
 /// Errors returned by ListTapes
 #[derive(Debug, PartialEq)]
 pub enum ListTapesError {
@@ -6153,6 +6496,52 @@ impl fmt::Display for UpdateSMBFileShareError {
     }
 }
 impl Error for UpdateSMBFileShareError {}
+/// Errors returned by UpdateSMBFileShareVisibility
+#[derive(Debug, PartialEq)]
+pub enum UpdateSMBFileShareVisibilityError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl UpdateSMBFileShareVisibilityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateSMBFileShareVisibilityError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        UpdateSMBFileShareVisibilityError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        UpdateSMBFileShareVisibilityError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateSMBFileShareVisibilityError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateSMBFileShareVisibilityError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSMBFileShareVisibilityError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateSMBFileShareVisibilityError {}
 /// Errors returned by UpdateSMBSecurityStrategy
 #[derive(Debug, PartialEq)]
 pub enum UpdateSMBSecurityStrategyError {
@@ -6346,13 +6735,13 @@ pub trait StorageGateway {
         input: CreateNFSFileShareInput,
     ) -> Result<CreateNFSFileShareOutput, RusotoError<CreateNFSFileShareError>>;
 
-    /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway expose file shares using an SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using an SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
     async fn create_smb_file_share(
         &self,
         input: CreateSMBFileShareInput,
     ) -> Result<CreateSMBFileShareOutput, RusotoError<CreateSMBFileShareError>>;
 
-    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
+    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take an ad hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the <code>CreateSnapshot</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
     async fn create_snapshot(
         &self,
         input: CreateSnapshotInput,
@@ -6367,13 +6756,19 @@ pub trait StorageGateway {
         RusotoError<CreateSnapshotFromVolumeRecoveryPointError>,
     >;
 
-    /// <p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway type.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>
+    /// <p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway type.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request, you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>
     async fn create_storedi_scsi_volume(
         &self,
         input: CreateStorediSCSIVolumeInput,
     ) -> Result<CreateStorediSCSIVolumeOutput, RusotoError<CreateStorediSCSIVolumeError>>;
 
-    /// <p><p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and can not be reused if it has already been used on a tape. This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note></p>
+    /// <p>Creates a new custom tape pool. You can use custom tape pool to enable tape retention lock on tapes that are archived in the custom pool.</p>
+    async fn create_tape_pool(
+        &self,
+        input: CreateTapePoolInput,
+    ) -> Result<CreateTapePoolOutput, RusotoError<CreateTapePoolError>>;
+
+    /// <p><p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and cannot be reused if it has already been used on a tape. This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note></p>
     async fn create_tape_with_barcode(
         &self,
         input: CreateTapeWithBarcodeInput,
@@ -6418,7 +6813,7 @@ pub trait StorageGateway {
         input: DeleteGatewayInput,
     ) -> Result<DeleteGatewayOutput, RusotoError<DeleteGatewayError>>;
 
-    /// <p><p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href="https://docs.aws.amazon.com/storagegatewaylatest/userguide/backing-up-volumes.html">Backing up your volumes</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). This operation is only supported in stored and cached volume gateway types.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
+    /// <p><p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/backing-up-volumes.html">Backing up your volumes</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). This operation is only supported in stored and cached volume gateway types.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
     async fn delete_snapshot_schedule(
         &self,
         input: DeleteSnapshotScheduleInput,
@@ -6436,6 +6831,12 @@ pub trait StorageGateway {
         input: DeleteTapeArchiveInput,
     ) -> Result<DeleteTapeArchiveOutput, RusotoError<DeleteTapeArchiveError>>;
 
+    /// <p>Delete a custom tape pool. A custom tape pool can only be deleted if there are no tapes in the pool and if there are no automatic tape creation policies that reference the custom tape pool.</p>
+    async fn delete_tape_pool(
+        &self,
+        input: DeleteTapePoolInput,
+    ) -> Result<DeleteTapePoolOutput, RusotoError<DeleteTapePoolError>>;
+
     /// <p>Deletes the specified storage volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. This operation is only supported in the cached volume and stored volume types. For stored volume gateways, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume.</p> <p>Before you delete a volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>
     async fn delete_volume(
         &self,
@@ -6451,7 +6852,7 @@ pub trait StorageGateway {
         RusotoError<DescribeAvailabilityMonitorTestError>,
     >;
 
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume, and tape gateway types.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
@@ -6604,6 +7005,12 @@ pub trait StorageGateway {
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
+    /// <p>Lists custom tape pools. You specify custom tape pools to list by specifying one or more custom tape pool Amazon Resource Names (ARNs). If you don't specify a custom tape pool ARN, the operation lists all custom tape pools.</p> <p>This operation supports pagination. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tape pools in the response. If the number of tape pools returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tape pools.</p>
+    async fn list_tape_pools(
+        &self,
+        input: ListTapePoolsInput,
+    ) -> Result<ListTapePoolsOutput, RusotoError<ListTapePoolsError>>;
+
     /// <p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway type.</p>
     async fn list_tapes(
         &self,
@@ -6715,7 +7122,7 @@ pub trait StorageGateway {
         input: UpdateChapCredentialsInput,
     ) -> Result<UpdateChapCredentialsOutput, RusotoError<UpdateChapCredentialsError>>;
 
-    /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For Gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>
+    /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>
     async fn update_gateway_information(
         &self,
         input: UpdateGatewayInformationInput,
@@ -6733,17 +7140,23 @@ pub trait StorageGateway {
         input: UpdateMaintenanceStartTimeInput,
     ) -> Result<UpdateMaintenanceStartTimeOutput, RusotoError<UpdateMaintenanceStartTimeError>>;
 
-    /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
+    /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share settings:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul></p>
     async fn update_nfs_file_share(
         &self,
         input: UpdateNFSFileShareInput,
     ) -> Result<UpdateNFSFileShareOutput, RusotoError<UpdateNFSFileShareError>>;
 
-    /// <p><p>Updates a Server Message Block (SMB) file share.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported for file gateways.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Updates a Server Message Block (SMB) file share. This operation is only supported for file gateways.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
     async fn update_smb_file_share(
         &self,
         input: UpdateSMBFileShareInput,
     ) -> Result<UpdateSMBFileShareOutput, RusotoError<UpdateSMBFileShareError>>;
+
+    /// <p>Controls whether the shares on a gateway are visible in a net view or browse list.</p>
+    async fn update_smb_file_share_visibility(
+        &self,
+        input: UpdateSMBFileShareVisibilityInput,
+    ) -> Result<UpdateSMBFileShareVisibilityOutput, RusotoError<UpdateSMBFileShareVisibilityError>>;
 
     /// <p><p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p> <note> <p>This API is called Security level in the User Guide.</p> <p>A higher security level can affect performance of the gateway.</p> </note></p>
     async fn update_smb_security_strategy(
@@ -7005,7 +7418,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateNFSFileShareOutput, _>()
     }
 
-    /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway expose file shares using an SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using an SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
     async fn create_smb_file_share(
         &self,
         input: CreateSMBFileShareInput,
@@ -7023,7 +7436,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateSMBFileShareOutput, _>()
     }
 
-    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
+    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take an ad hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the <code>CreateSnapshot</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
     async fn create_snapshot(
         &self,
         input: CreateSnapshotInput,
@@ -7069,7 +7482,7 @@ impl StorageGateway for StorageGatewayClient {
             .deserialize::<CreateSnapshotFromVolumeRecoveryPointOutput, _>()
     }
 
-    /// <p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway type.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>
+    /// <p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway type.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request, you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>
     async fn create_storedi_scsi_volume(
         &self,
         input: CreateStorediSCSIVolumeInput,
@@ -7091,7 +7504,25 @@ impl StorageGateway for StorageGatewayClient {
             .deserialize::<CreateStorediSCSIVolumeOutput, _>()
     }
 
-    /// <p><p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and can not be reused if it has already been used on a tape. This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note></p>
+    /// <p>Creates a new custom tape pool. You can use custom tape pool to enable tape retention lock on tapes that are archived in the custom pool.</p>
+    async fn create_tape_pool(
+        &self,
+        input: CreateTapePoolInput,
+    ) -> Result<CreateTapePoolOutput, RusotoError<CreateTapePoolError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "StorageGateway_20130630.CreateTapePool");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateTapePoolError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateTapePoolOutput, _>()
+    }
+
+    /// <p><p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and cannot be reused if it has already been used on a tape. This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note></p>
     async fn create_tape_with_barcode(
         &self,
         input: CreateTapeWithBarcodeInput,
@@ -7237,7 +7668,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteGatewayOutput, _>()
     }
 
-    /// <p><p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href="https://docs.aws.amazon.com/storagegatewaylatest/userguide/backing-up-volumes.html">Backing up your volumes</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). This operation is only supported in stored and cached volume gateway types.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
+    /// <p><p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/backing-up-volumes.html">Backing up your volumes</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). This operation is only supported in stored and cached volume gateway types.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
     async fn delete_snapshot_schedule(
         &self,
         input: DeleteSnapshotScheduleInput,
@@ -7295,6 +7726,24 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTapeArchiveOutput, _>()
     }
 
+    /// <p>Delete a custom tape pool. A custom tape pool can only be deleted if there are no tapes in the pool and if there are no automatic tape creation policies that reference the custom tape pool.</p>
+    async fn delete_tape_pool(
+        &self,
+        input: DeleteTapePoolInput,
+    ) -> Result<DeleteTapePoolOutput, RusotoError<DeleteTapePoolError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "StorageGateway_20130630.DeleteTapePool");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteTapePoolError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteTapePoolOutput, _>()
+    }
+
     /// <p>Deletes the specified storage volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. This operation is only supported in the cached volume and stored volume types. For stored volume gateways, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume.</p> <p>Before you delete a volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>
     async fn delete_volume(
         &self,
@@ -7338,7 +7787,7 @@ impl StorageGateway for StorageGatewayClient {
             .deserialize::<DescribeAvailabilityMonitorTestOutput, _>()
     }
 
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume, and tape gateway types.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
@@ -7858,6 +8307,24 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceOutput, _>()
     }
 
+    /// <p>Lists custom tape pools. You specify custom tape pools to list by specifying one or more custom tape pool Amazon Resource Names (ARNs). If you don't specify a custom tape pool ARN, the operation lists all custom tape pools.</p> <p>This operation supports pagination. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tape pools in the response. If the number of tape pools returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tape pools.</p>
+    async fn list_tape_pools(
+        &self,
+        input: ListTapePoolsInput,
+    ) -> Result<ListTapePoolsOutput, RusotoError<ListTapePoolsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "StorageGateway_20130630.ListTapePools");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListTapePoolsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTapePoolsOutput, _>()
+    }
+
     /// <p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway type.</p>
     async fn list_tapes(
         &self,
@@ -8229,7 +8696,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateChapCredentialsOutput, _>()
     }
 
-    /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For Gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>
+    /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>
     async fn update_gateway_information(
         &self,
         input: UpdateGatewayInformationInput,
@@ -8296,7 +8763,7 @@ impl StorageGateway for StorageGatewayClient {
             .deserialize::<UpdateMaintenanceStartTimeOutput, _>()
     }
 
-    /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
+    /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share settings:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul></p>
     async fn update_nfs_file_share(
         &self,
         input: UpdateNFSFileShareInput,
@@ -8314,7 +8781,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateNFSFileShareOutput, _>()
     }
 
-    /// <p><p>Updates a Server Message Block (SMB) file share.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported for file gateways.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Updates a Server Message Block (SMB) file share. This operation is only supported for file gateways.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
     async fn update_smb_file_share(
         &self,
         input: UpdateSMBFileShareInput,
@@ -8330,6 +8797,29 @@ impl StorageGateway for StorageGatewayClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateSMBFileShareOutput, _>()
+    }
+
+    /// <p>Controls whether the shares on a gateway are visible in a net view or browse list.</p>
+    async fn update_smb_file_share_visibility(
+        &self,
+        input: UpdateSMBFileShareVisibilityInput,
+    ) -> Result<UpdateSMBFileShareVisibilityOutput, RusotoError<UpdateSMBFileShareVisibilityError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.UpdateSMBFileShareVisibility",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateSMBFileShareVisibilityError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateSMBFileShareVisibilityOutput, _>()
     }
 
     /// <p><p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p> <note> <p>This API is called Security level in the User Guide.</p> <p>A higher security level can affect performance of the gateway.</p> </note></p>

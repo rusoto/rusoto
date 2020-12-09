@@ -25,6 +25,37 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>The Amazon QuickSight customizations associated with your AWS account or a QuickSight namespace in a specific AWS Region.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AccountCustomization {
+    /// <p>The default theme for this QuickSight subscription.</p>
+    #[serde(rename = "DefaultTheme")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_theme: Option<String>,
+}
+
+/// <p>The QuickSight settings associated with your AWS account.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccountSettings {
+    /// <p>The "account name" you provided for the QuickSight subscription in your AWS account. You create this name when you sign up for QuickSight. It is unique in all of AWS and it appears only in the console when users sign in.</p>
+    #[serde(rename = "AccountName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_name: Option<String>,
+    /// <p>The default QuickSight namespace for your AWS account. </p>
+    #[serde(rename = "DefaultNamespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_namespace: Option<String>,
+    /// <p>The edition of QuickSight that you're currently subscribed to: Enterprise edition or Standard edition.</p>
+    #[serde(rename = "Edition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edition: Option<String>,
+    /// <p>The main notification email for your QuickSight subscription.</p>
+    #[serde(rename = "NotificationEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_email: Option<String>,
+}
+
 /// <p>The active AWS Identity and Access Management (IAM) policy assignment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -55,6 +86,136 @@ pub struct AmazonElasticsearchParameters {
     /// <p>The Amazon Elasticsearch Service domain.</p>
     #[serde(rename = "Domain")]
     pub domain: String,
+}
+
+/// <p>Metadata structure for an analysis in Amazon QuickSight</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Analysis {
+    /// <p>The ID of the analysis.</p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the analysis.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time that the analysis was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The ARNs of the datasets of the analysis.</p>
+    #[serde(rename = "DataSetArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_set_arns: Option<Vec<String>>,
+    /// <p>Errors associated with the analysis.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<AnalysisError>>,
+    /// <p>The time that the analysis was last updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>The descriptive name of the analysis.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of the associated sheets with the unique identifier and name of each sheet.</p>
+    #[serde(rename = "Sheets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sheets: Option<Vec<Sheet>>,
+    /// <p>Status associated with the analysis.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The ARN of the theme of the analysis.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
+}
+
+/// <p>A metadata error structure for an analysis.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AnalysisError {
+    /// <p>The message associated with the analysis error.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The type of the analysis error.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>A filter that you apply when searching for one or more analyses.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AnalysisSearchFilter {
+    /// <p>The name of the value that you want to use as a filter, for example <code>"Name": "QUICKSIGHT_USER"</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The comparison operator that you want to use as a filter, for example <code>"Operator": "StringEquals"</code>.</p>
+    #[serde(rename = "Operator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operator: Option<String>,
+    /// <p>The value of the named item, in this case <code>QUICKSIGHT_USER</code>, that you want to use as a filter, for example <code>"Value"</code>. An example is <code>"arn:aws:quicksight:us-east-1:1:user/default/UserName1"</code>.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>The source entity of an analysis.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AnalysisSourceEntity {
+    /// <p>The source template for the source entity of the analysis.</p>
+    #[serde(rename = "SourceTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_template: Option<AnalysisSourceTemplate>,
+}
+
+/// <p>The source template of an analysis.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AnalysisSourceTemplate {
+    /// <p>The Amazon Resource Name (ARN) of the source template of an analysis.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>The dataset references of the source template of an analysis.</p>
+    #[serde(rename = "DataSetReferences")]
+    pub data_set_references: Vec<DataSetReference>,
+}
+
+/// <p>The summary metadata that describes an analysis.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AnalysisSummary {
+    /// <p>The ID of the analysis. This ID displays in the URL.</p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the analysis.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time that the analysis was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The time that the analysis was last updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>The name of the analysis. This name is displayed in the QuickSight console. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The last known status for the analysis.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>Amazon Athena parameters.</p>
@@ -175,6 +336,15 @@ pub struct CastColumnTypeOperation {
     pub new_column_type: String,
 }
 
+/// <p>Metadata that contains a description for a column.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ColumnDescription {
+    /// <p>The text of a description for a column.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+}
+
 /// <p>Groupings of columns that work together in certain Amazon QuickSight features. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnGroup {
@@ -229,10 +399,120 @@ pub struct ColumnSchema {
 /// <p>A tag for a column in a <a>TagColumnOperation</a> structure. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnTag {
+    /// <p>A description for a column.</p>
+    #[serde(rename = "ColumnDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub column_description: Option<ColumnDescription>,
     /// <p>A geospatial role for a column.</p>
     #[serde(rename = "ColumnGeographicRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub column_geographic_role: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAccountCustomizationRequest {
+    /// <p>The QuickSight customizations you're adding in the current AWS Region. You can add these to an AWS account and a QuickSight namespace. </p> <p>For example, you can add a default theme by setting <code>AccountCustomization</code> to the midnight theme: <code>"AccountCustomization": { "DefaultTheme": "arn:aws:quicksight::aws:theme/MIDNIGHT" }</code>. Or, you can add a custom theme by specifying <code>"AccountCustomization": { "DefaultTheme": "arn:aws:quicksight:us-west-2:111122223333:theme/bdb844d0-0fe9-4d9d-b520-0fe602d93639" }</code>. </p>
+    #[serde(rename = "AccountCustomization")]
+    pub account_customization: AccountCustomization,
+    /// <p>The ID for the AWS account that you want to customize QuickSight for.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The QuickSight namespace that you want to add customizations to.</p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+    /// <p>A list of the tags that you want to attach to this resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAccountCustomizationResponse {
+    /// <p>The QuickSight customizations you're adding in the current AWS Region. </p>
+    #[serde(rename = "AccountCustomization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_customization: Option<AccountCustomization>,
+    /// <p>The Amazon Resource Name (ARN) for the customization that you created for this AWS account.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID for the AWS account that you want to customize QuickSight for.</p>
+    #[serde(rename = "AwsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
+    /// <p>The namespace associated with the customization you're creating. </p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAnalysisRequest {
+    /// <p>The ID for the analysis that you're creating. This ID displays in the URL of the analysis.</p>
+    #[serde(rename = "AnalysisId")]
+    pub analysis_id: String,
+    /// <p>The ID of the AWS account where you are creating an analysis.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>A descriptive name for the analysis that you're creating. This name displays for the analysis in the QuickSight console. </p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The parameter names and override values that you want to use. An analysis can have any parameter type, and some parameters might accept multiple values. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<Parameters>,
+    /// <p>A structure that describes the principals and the resource-level permissions on an analysis. You can use the <code>Permissions</code> structure to grant permissions by providing a list of AWS Identity and Access Management (IAM) action information for each principal listed by Amazon Resource Name (ARN). </p> <p>To specify no permissions, omit <code>Permissions</code>.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>A source entity to use for the analysis that you're creating. This metadata structure contains details that describe a source template and one or more datasets.</p>
+    #[serde(rename = "SourceEntity")]
+    pub source_entity: AnalysisSourceEntity,
+    /// <p>Contains a map of the key-value pairs for the resource tag or tags assigned to the analysis.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The ARN for the theme to apply to the analysis that you're creating. To see the theme in the QuickSight console, make sure that you have access to it.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAnalysisResponse {
+    /// <p>The ID of the analysis.</p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>The ARN for the analysis.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The status of the creation of the analysis. </p>
+    #[serde(rename = "CreationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_status: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
 }
 
 /// <p>A transform operation that creates calculated columns. Columns created in one such operation form a lexical closure.</p>
@@ -252,7 +532,7 @@ pub struct CreateDashboardRequest {
     /// <p>The ID for the dashboard, also added to the IAM policy.</p>
     #[serde(rename = "DashboardId")]
     pub dashboard_id: String,
-    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .csv format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
+    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .CSV format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
     #[serde(rename = "DashboardPublishOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dashboard_publish_options: Option<DashboardPublishOptions>,
@@ -263,7 +543,7 @@ pub struct CreateDashboardRequest {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Parameters>,
-    /// <p>A structure that contains the permissions of the dashboard. You can use this structure for granting permissions with principal and action information.</p>
+    /// <p>A structure that contains the permissions of the dashboard. You can use this structure for granting permissions by providing a list of IAM action information for each principal ARN. </p> <p>To specify no permissions, omit the permissions list.</p>
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<ResourcePermission>>,
@@ -618,6 +898,57 @@ pub struct CreateIngestionResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateNamespaceRequest {
+    /// <p>The ID for the AWS account that you want to create the QuickSight namespace in.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>Specifies the type of your user identity directory. Currently, this supports users with an identity type of <code>QUICKSIGHT</code>.</p>
+    #[serde(rename = "IdentityStore")]
+    pub identity_store: String,
+    /// <p>The name that you want to use to describe the new namespace.</p>
+    #[serde(rename = "Namespace")]
+    pub namespace: String,
+    /// <p>The tags that you want to associate with the namespace that you're creating.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateNamespaceResponse {
+    /// <p>The ARN of the QuickSight namespace you created. </p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The AWS Region that you want to use for the free SPICE capacity for the new namespace. This is set to the region that you run CreateNamespace in. </p>
+    #[serde(rename = "CapacityRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_region: Option<String>,
+    /// <p>The status of the creation of the namespace. This is an asynchronous process. A status of <code>CREATED</code> means that your namespace is ready to use. If an error occurs, it indicates if the process is <code>retryable</code> or <code>non-retryable</code>. In the case of a non-retryable error, refer to the error message for follow-up tasks.</p>
+    #[serde(rename = "CreationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_status: Option<String>,
+    /// <p>Specifies the type of your user identity directory. Currently, this supports users with an identity type of <code>QUICKSIGHT</code>.</p>
+    #[serde(rename = "IdentityStore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_store: Option<String>,
+    /// <p>The name of the new namespace that you created.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTemplateAliasRequest {
     /// <p>The name that you want to give to the template alias that you're creating. Don't start the alias name with the <code>$</code> character. Alias names that start with <code>$</code> are reserved by QuickSight. </p>
     #[serde(rename = "AliasName")]
@@ -808,7 +1139,7 @@ pub struct CreateThemeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CredentialPair {
-    /// <p>A set of alternate data source parameters that you want to share for these credentials. The credentials are applied in tandem with the data source parameters when you copy a data source by using a create or update request. The API compares the <code>DataSourceParameters</code> structure that's in the request with the structures in the <code>AlternateDataSourceParameters</code> allowlist. If the structures are an exact match, the request is allowed to use the new data source with the existing credentials. If the <code>AlternateDataSourceParameters</code> list is null, the <code>DataSourceParameters</code> originally used with these <code>Credentials</code> is automatically allowed.</p>
+    /// <p>A set of alternate data source parameters that you want to share for these credentials. The credentials are applied in tandem with the data source parameters when you copy a data source by using a create or update request. The API operation compares the <code>DataSourceParameters</code> structure that's in the request with the structures in the <code>AlternateDataSourceParameters</code> allow list. If the structures are an exact match, the request is allowed to use the new data source with the existing credentials. If the <code>AlternateDataSourceParameters</code> list is null, the <code>DataSourceParameters</code> originally used with these <code>Credentials</code> is automatically allowed.</p>
     #[serde(rename = "AlternateDataSourceParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alternate_data_source_parameters: Option<Vec<DataSourceParameters>>,
@@ -989,7 +1320,7 @@ pub struct DashboardVersion {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The Amazon Resource Numbers (ARNs) for the datasets that are associated with a version of the dashboard.</p>
+    /// <p>The Amazon Resource Numbers (ARNs) for the datasets that are associated with this version of the dashboard.</p>
     #[serde(rename = "DataSetArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_set_arns: Option<Vec<String>>,
@@ -997,10 +1328,14 @@ pub struct DashboardVersion {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Errors.</p>
+    /// <p>Errors associated with this dashboard version.</p>
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<DashboardError>>,
+    /// <p>A list of the associated sheets with the unique identifier and name of each sheet.</p>
+    #[serde(rename = "Sheets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sheets: Option<Vec<Sheet>>,
     /// <p>Source entity ARN.</p>
     #[serde(rename = "SourceEntityArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1009,7 +1344,11 @@ pub struct DashboardVersion {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Version number.</p>
+    /// <p>The ARN of the theme associated with a version of the dashboard.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
+    /// <p>Version number for this version of the dashboard.</p>
     #[serde(rename = "VersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_number: Option<i64>,
@@ -1045,7 +1384,7 @@ pub struct DashboardVersionSummary {
     pub version_number: Option<i64>,
 }
 
-/// <p>The theme colors that are used for data colors in charts. The colors description is a hexidecimal color code that consists of six alphanumerical characters, prefixed with <code>#</code>, for example #37BFF5. </p>
+/// <p>The theme colors that are used for data colors in charts. The colors description is a hexadecimal color code that consists of six alphanumerical characters, prefixed with <code>#</code>, for example #37BFF5. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataColorPalette {
     /// <p>The hexadecimal codes for the colors.</p>
@@ -1194,7 +1533,7 @@ pub struct DataSetSummary {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSource {
-    /// <p>A set of alternate data source parameters that you want to share for the credentials stored with this data source. The credentials are applied in tandem with the data source parameters when you copy a data source by using a create or update request. The API compares the <code>DataSourceParameters</code> structure that's in the request with the structures in the <code>AlternateDataSourceParameters</code> allowlist. If the structures are an exact match, the request is allowed to use the credentials from this existing data source. If the <code>AlternateDataSourceParameters</code> list is null, the <code>Credentials</code> originally used with this <code>DataSourceParameters</code> are automatically allowed.</p>
+    /// <p>A set of alternate data source parameters that you want to share for the credentials stored with this data source. The credentials are applied in tandem with the data source parameters when you copy a data source by using a create or update request. The API operation compares the <code>DataSourceParameters</code> structure that's in the request with the structures in the <code>AlternateDataSourceParameters</code> allow list. If the structures are an exact match, the request is allowed to use the credentials from this existing data source. If the <code>AlternateDataSourceParameters</code> list is null, the <code>Credentials</code> originally used with this <code>DataSourceParameters</code> are automatically allowed.</p>
     #[serde(rename = "AlternateDataSourceParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alternate_data_source_parameters: Option<Vec<DataSourceParameters>>,
@@ -1353,28 +1692,97 @@ pub struct DataSourceParameters {
     pub twitter_parameters: Option<TwitterParameters>,
 }
 
-/// <p>Date time parameter.</p>
+/// <p>A date-time parameter.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DateTimeParameter {
-    /// <p>A display name for the dataset.</p>
+    /// <p>A display name for the date-time parameter.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Values.</p>
+    /// <p>The values for the date-time parameter.</p>
     #[serde(rename = "Values")]
     pub values: Vec<f64>,
 }
 
-/// <p>Decimal parameter.</p>
+/// <p>A decimal parameter.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecimalParameter {
-    /// <p>A display name for the dataset.</p>
+    /// <p>A display name for the decimal parameter.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Values.</p>
+    /// <p>The values for the decimal parameter.</p>
     #[serde(rename = "Values")]
     pub values: Vec<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAccountCustomizationRequest {
+    /// <p>The ID for the AWS account that you want to delete QuickSight customizations from in this AWS Region.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The QuickSight namespace that you're deleting the customizations from.</p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAccountCustomizationResponse {
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAnalysisRequest {
+    /// <p>The ID of the analysis that you're deleting.</p>
+    #[serde(rename = "AnalysisId")]
+    pub analysis_id: String,
+    /// <p>The ID of the AWS account where you want to delete an analysis.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>This option defaults to the value <code>NoForceDeleteWithoutRecovery</code>. To immediately delete the analysis, add the <code>ForceDeleteWithoutRecovery</code> option. You can't restore an analysis after it's deleted. </p>
+    #[serde(rename = "ForceDeleteWithoutRecovery")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_delete_without_recovery: Option<bool>,
+    /// <p>A value that specifies the number of days that QuickSight waits before it deletes the analysis. You can't use this parameter with the <code>ForceDeleteWithoutRecovery</code> option in the same API call. The default value is 30.</p>
+    #[serde(rename = "RecoveryWindowInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recovery_window_in_days: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAnalysisResponse {
+    /// <p>The ID of the deleted analysis.</p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the deleted analysis.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that the analysis is scheduled to be deleted.</p>
+    #[serde(rename = "DeletionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_time: Option<f64>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1555,6 +1963,30 @@ pub struct DeleteIAMPolicyAssignmentResponse {
     #[serde(rename = "AssignmentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assignment_name: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteNamespaceRequest {
+    /// <p>The ID for the AWS account that you want to delete the QuickSight namespace from.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The namespace that you want to delete.</p>
+    #[serde(rename = "Namespace")]
+    pub namespace: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteNamespaceResponse {
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1760,6 +2192,140 @@ pub struct DeleteUserRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAccountCustomizationRequest {
+    /// <p>The ID for the AWS account that you want to describe QuickSight customizations for.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The QuickSight namespace that you want to describe QuickSight customizations for.</p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+    /// <p>The <code>Resolved</code> flag works with the other parameters to determine which view of QuickSight customizations is returned. You can add this flag to your command to use the same view that QuickSight uses to identify which customizations to apply to the console. Omit this flag, or set it to <code>no-resolved</code>, to reveal customizations that are configured at different levels. </p>
+    #[serde(rename = "Resolved")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAccountCustomizationResponse {
+    /// <p>The QuickSight customizations that exist in the current AWS Region. </p>
+    #[serde(rename = "AccountCustomization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_customization: Option<AccountCustomization>,
+    /// <p>The Amazon Resource Name (ARN) of the customization that's associated with this AWS account.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID for the AWS account that you're describing.</p>
+    #[serde(rename = "AwsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
+    /// <p>The QuickSight namespace that you're describing. </p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAccountSettingsRequest {
+    /// <p>The ID for the AWS account that contains the settings that you want to list.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAccountSettingsResponse {
+    /// <p>The QuickSight settings for this AWS account. This information includes the edition of Amazon QuickSight that you subscribed to (Standard or Enterprise) and the notification email for the QuickSight subscription. In the QuickSight console, the QuickSight subscription is sometimes referred to as a QuickSight "account" even though it's technically not an account by itself. Instead, it's a subscription to the QuickSight service for your AWS account. The edition that you subscribe to applies to QuickSight in every AWS Region where you use it.</p>
+    #[serde(rename = "AccountSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_settings: Option<AccountSettings>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAnalysisPermissionsRequest {
+    /// <p>The ID of the analysis whose permissions you're describing. The ID is part of the analysis URL.</p>
+    #[serde(rename = "AnalysisId")]
+    pub analysis_id: String,
+    /// <p>The ID of the AWS account that contains the analysis whose permissions you're describing. You must be using the AWS account that the analysis is in.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAnalysisPermissionsResponse {
+    /// <p>The Amazon Resource Name (ARN) of the analysis whose permissions you're describing.</p>
+    #[serde(rename = "AnalysisArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_arn: Option<String>,
+    /// <p>The ID of the analysis whose permissions you're describing.</p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>A structure that describes the principals and the resource-level permissions on an analysis.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAnalysisRequest {
+    /// <p>The ID of the analysis that you're describing. The ID is part of the URL of the analysis.</p>
+    #[serde(rename = "AnalysisId")]
+    pub analysis_id: String,
+    /// <p>The ID of the AWS account that contains the analysis. You must be using the AWS account that the analysis is in.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAnalysisResponse {
+    /// <p>A metadata structure that contains summary information for the analysis that you're describing.</p>
+    #[serde(rename = "Analysis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis: Option<Analysis>,
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2065,6 +2631,34 @@ pub struct DescribeIngestionResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeNamespaceRequest {
+    /// <p>The ID for the AWS account that contains the QuickSight namespace that you want to describe.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The namespace that you want to describe.</p>
+    #[serde(rename = "Namespace")]
+    pub namespace: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeNamespaceResponse {
+    /// <p>The information about the namespace that you're describing. The response includes the namespace ARN, name, AWS Region, creation status, and identity store. <code>DescribeNamespace</code> also works for namespaces that are in the process of being created. For incomplete namespaces, this API operation lists the namespace error types and messages associated with the creation process.</p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<NamespaceInfoV2>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTemplateAliasRequest {
     /// <p>The name of the template alias that you want to describe. If you name a specific alias, you describe the version that the alias points to. You can specify the latest version of the template by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. The keyword <code>$PUBLISHED</code> doesn't apply to templates.</p>
     #[serde(rename = "AliasName")]
@@ -2152,6 +2746,7 @@ pub struct DescribeTemplateRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplateResponse {
+    /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2369,7 +2964,7 @@ pub struct GetDashboardEmbedUrlRequest {
     #[serde(rename = "UndoRedoDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub undo_redo_disabled: Option<bool>,
-    /// <p><p>The Amazon QuickSight user&#39;s Amazon Resource Name (ARN), for use with <code>QUICKSIGHT</code> identity type. You can use this for any Amazon QuickSight users in your account (readers, authors, or admins) authenticated as one of the following:</p> <ul> <li> <p>Active Directory (AD) users or group members</p> </li> <li> <p>Invited nonfederated users</p> </li> <li> <p>IAM users and IAM role-based sessions authenticated through Federated Single Sign-On using SAML, OpenID Connect, or IAM federation.</p> </li> </ul></p>
+    /// <p>The Amazon QuickSight user's Amazon Resource Name (ARN), for use with <code>QUICKSIGHT</code> identity type. You can use this for any Amazon QuickSight users in your account (readers, authors, or admins) authenticated as one of the following:</p> <ul> <li> <p>Active Directory (AD) users or group members</p> </li> <li> <p>Invited nonfederated users</p> </li> <li> <p>IAM users and IAM role-based sessions authenticated through Federated Single Sign-On using SAML, OpenID Connect, or IAM federation.</p> </li> </ul> <p>Omit this parameter for users in the third group – IAM users and IAM role-based sessions.</p>
     #[serde(rename = "UserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_arn: Option<String>,
@@ -2378,7 +2973,7 @@ pub struct GetDashboardEmbedUrlRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDashboardEmbedUrlResponse {
-    /// <p>A single-use URL that you can put into your server-side webpage to embed your dashboard. This URL is valid for 5 minutes. The API provides the URL with an <code>auth_code</code> value that enables one (and only one) sign-on to a user session that is valid for 10 hours. </p>
+    /// <p>A single-use URL that you can put into your server-side webpage to embed your dashboard. This URL is valid for 5 minutes. The API operation provides the URL with an <code>auth_code</code> value that enables one (and only one) sign-on to a user session that is valid for 10 hours. </p>
     #[serde(rename = "EmbedUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embed_url: Option<String>,
@@ -2392,7 +2987,44 @@ pub struct GetDashboardEmbedUrlResponse {
     pub status: Option<i64>,
 }
 
-/// <p>A <i>group</i> in Amazon QuickSight consists of a set of users. You can use groups to make it easier to manage access and security. Currently, an Amazon QuickSight subscription can't contain more than 500 Amazon QuickSight groups.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSessionEmbedUrlRequest {
+    /// <p>The ID for the AWS account associated with your QuickSight subscription.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p><p>The URL you use to access the embedded session. The entry point URL is constrained to the following paths:</p> <ul> <li> <p> <code>/start</code> </p> </li> <li> <p> <code>/start/analyses</code> </p> </li> <li> <p> <code>/start/dashboards</code> </p> </li> <li> <p> <code>/start/favorites</code> </p> </li> <li> <p> <code>/dashboards/<i>DashboardId</i> </code> - where <code>DashboardId</code> is the actual ID key from the QuickSight console URL of the dashboard</p> </li> <li> <p> <code>/analyses/<i>AnalysisId</i> </code> - where <code>AnalysisId</code> is the actual ID key from the QuickSight console URL of the analysis</p> </li> </ul></p>
+    #[serde(rename = "EntryPoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entry_point: Option<String>,
+    /// <p>How many minutes the session is valid. The session lifetime must be 15-600 minutes.</p>
+    #[serde(rename = "SessionLifetimeInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_lifetime_in_minutes: Option<i64>,
+    /// <p>The Amazon QuickSight user's Amazon Resource Name (ARN), for use with <code>QUICKSIGHT</code> identity type. You can use this for any type of Amazon QuickSight users in your account (readers, authors, or admins). They need to be authenticated as one of the following:</p> <ol> <li> <p>Active Directory (AD) users or group members</p> </li> <li> <p>Invited nonfederated users</p> </li> <li> <p>IAM users and IAM role-based sessions authenticated through Federated Single Sign-On using SAML, OpenID Connect, or IAM federation</p> </li> </ol> <p>Omit this parameter for users in the third group – IAM users and IAM role-based sessions.</p>
+    #[serde(rename = "UserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSessionEmbedUrlResponse {
+    /// <p>A single-use URL that you can put into your server-side web page to embed your QuickSight session. This URL is valid for 5 minutes. The API operation provides the URL with an <code>auth_code</code> value that enables one (and only one) sign-on to a user session that is valid for 10 hours. </p>
+    #[serde(rename = "EmbedUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embed_url: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+/// <p>A <i>group</i> in Amazon QuickSight consists of a set of users. You can use groups to make it easier to manage access and security. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Group {
@@ -2537,14 +3169,14 @@ pub struct InputColumn {
     pub type_: String,
 }
 
-/// <p>Integer parameter.</p>
+/// <p>An integer parameter.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IntegerParameter {
-    /// <p>A display name for the dataset.</p>
+    /// <p>The name of the integer parameter.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Values.</p>
+    /// <p>The values for the integer parameter.</p>
     #[serde(rename = "Values")]
     pub values: Vec<i64>,
 }
@@ -2572,6 +3204,43 @@ pub struct JoinInstruction {
     /// <p>Type.</p>
     #[serde(rename = "Type")]
     pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAnalysesRequest {
+    /// <p>The ID of the AWS account that contains the analyses.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A pagination token that can be used in a subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAnalysesResponse {
+    /// <p>Metadata describing each of the analyses that are listed.</p>
+    #[serde(rename = "AnalysisSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_summary_list: Option<Vec<AnalysisSummary>>,
+    /// <p>A pagination token that can be used in a subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2922,6 +3591,43 @@ pub struct ListIngestionsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ingestions: Option<Vec<Ingestion>>,
     /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListNamespacesRequest {
+    /// <p>The ID for the AWS account that contains the QuickSight namespaces that you want to list.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A pagination token that can be used in a subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListNamespacesResponse {
+    /// <p>The information about the namespaces in this AWS account. The response includes the namespace ARN, name, AWS Region, notification email address, creation status, and identity store.</p>
+    #[serde(rename = "Namespaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespaces: Option<Vec<NamespaceInfoV2>>,
+    /// <p>A pagination token that can be used in a subsequent request.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -3357,10 +4063,58 @@ pub struct MySqlParameters {
     pub port: i64,
 }
 
+/// <p>Errors that occur during namespace creation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NamespaceError {
+    /// <p>The message for the error.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The error type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The error type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NamespaceInfoV2 {
+    /// <p>The namespace ARN.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The namespace AWS Region.</p>
+    #[serde(rename = "CapacityRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_region: Option<String>,
+    /// <p>The creation status of a namespace that is not yet completely created.</p>
+    #[serde(rename = "CreationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_status: Option<String>,
+    /// <p>The identity store used for the namespace.</p>
+    #[serde(rename = "IdentityStore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_store: Option<String>,
+    /// <p>The name of the error.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>An error that occurred when the namespace was created.</p>
+    #[serde(rename = "NamespaceError")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_error: Option<NamespaceError>,
+}
+
 /// <p>Output column.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputColumn {
+    /// <p>A description for a column.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     /// <p>A display name for the dataset.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3371,11 +4125,11 @@ pub struct OutputColumn {
     pub type_: Option<String>,
 }
 
-/// <p>Parameters.</p>
+/// <p>A list of QuickSight parameters and the list's override values.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Parameters {
-    /// <p>DateTime parameters.</p>
+    /// <p>Date-time parameters.</p>
     #[serde(rename = "DateTimeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub date_time_parameters: Option<Vec<DateTimeParameter>>,
@@ -3495,6 +4249,10 @@ pub struct RegisterUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
+    /// <p>(Enterprise edition only) The name of the custom permissions profile that you want to assign to this user. Customized permissions allows you to control a user's access by restricting access the following operations:</p> <ul> <li> <p>Create and update data sources</p> </li> <li> <p>Create and update datasets</p> </li> <li> <p>Create and update email reports</p> </li> <li> <p>Subscribe to email reports</p> </li> </ul> <p>To add custom permissions to an existing user, use <code> <a>UpdateUser</a> </code> instead.</p> <p>A set of custom permissions includes any combination of these restrictions. Currently, you need to create the profile names for custom permission sets by using the QuickSight console. Then, you use the <code>RegisterUser</code> API operation to assign the named set of permissions to a QuickSight user. </p> <p>QuickSight custom permissions are applied through IAM policies. Therefore, they override the permissions typically granted by assigning QuickSight users to one of the default security cohorts in QuickSight (admin, author, reader).</p> <p>This feature is available only to QuickSight Enterprise edition subscriptions that use SAML 2.0-Based Federation for Single Sign-On (SSO).</p>
+    #[serde(rename = "CustomPermissionsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_permissions_name: Option<String>,
     /// <p>The email address of the user that you want to register.</p>
     #[serde(rename = "Email")]
     pub email: String,
@@ -3532,7 +4290,7 @@ pub struct RegisterUserResponse {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<i64>,
-    /// <p>The user name.</p>
+    /// <p>The user's user name.</p>
     #[serde(rename = "User")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<User>,
@@ -3574,12 +4332,44 @@ pub struct RenameColumnOperation {
 /// <p>Permission for the resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourcePermission {
-    /// <p>The action to grant or revoke permissions on, for example <code>"quicksight:DescribeDashboard"</code>.</p>
+    /// <p>The IAM action to grant or revoke permissions on, for example <code>"quicksight:DescribeDashboard"</code>.</p>
     #[serde(rename = "Actions")]
     pub actions: Vec<String>,
-    /// <p><p>The Amazon Resource Name (ARN) of the principal. This can be one of the following:</p> <ul> <li> <p>The ARN of an Amazon QuickSight user, group, or namespace. (This is most common.)</p> </li> <li> <p>The ARN of an AWS account root: This is an IAM ARN rather than a QuickSight ARN. Use this option only to share resources (templates) across AWS accounts. (This is less common.) </p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the principal. This can be one of the following:</p> <ul> <li> <p>The ARN of an Amazon QuickSight user or group associated with a data source or dataset. (This is common.)</p> </li> <li> <p>The ARN of an Amazon QuickSight user, group, or namespace associated with an analysis, dashboard, template, or theme. (This is common.)</p> </li> <li> <p>The ARN of an AWS account root: This is an IAM ARN rather than a QuickSight ARN. Use this option only to share resources (templates) across AWS accounts. (This is less common.) </p> </li> </ul></p>
     #[serde(rename = "Principal")]
     pub principal: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RestoreAnalysisRequest {
+    /// <p>The ID of the analysis that you're restoring.</p>
+    #[serde(rename = "AnalysisId")]
+    pub analysis_id: String,
+    /// <p>The ID of the AWS account that contains the analysis.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RestoreAnalysisResponse {
+    /// <p>The ID of the analysis that you're restoring. </p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the analysis that you're restoring.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
 }
 
 /// <p>Information about rows for a data set SPICE ingestion.</p>
@@ -3602,6 +4392,10 @@ pub struct RowLevelPermissionDataSet {
     /// <p>The Amazon Resource Name (ARN) of the permission dataset.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
+    /// <p>The namespace associated with the row-level permissions dataset.</p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
     /// <p>Permission policy.</p>
     #[serde(rename = "PermissionPolicy")]
     pub permission_policy: String,
@@ -3628,6 +4422,46 @@ pub struct S3Source {
     #[serde(rename = "UploadSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_settings: Option<UploadSettings>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SearchAnalysesRequest {
+    /// <p>The ID of the AWS account that contains the analyses that you're searching for.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The structure for the search filters that you want to apply to your search. </p>
+    #[serde(rename = "Filters")]
+    pub filters: Vec<AnalysisSearchFilter>,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A pagination token that can be used in a subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SearchAnalysesResponse {
+    /// <p>Metadata describing the analyses that you searched for.</p>
+    #[serde(rename = "AnalysisSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_summary_list: Option<Vec<AnalysisSummary>>,
+    /// <p>A pagination token that can be used in a subsequent request. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3676,6 +4510,20 @@ pub struct ServiceNowParameters {
     /// <p>URL of the base site.</p>
     #[serde(rename = "SiteBaseUrl")]
     pub site_base_url: String,
+}
+
+/// <p>A <i>sheet</i>, which is an object that contains a set of visuals that are viewed together on one page in the Amazon QuickSight console. Every analysis and dashboard contains at least one sheet. Each sheet contains at least one visualization widget, for example a chart, pivot table, or narrative insight. Sheets can be associated with other components, such as controls, filters, and so on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Sheet {
+    /// <p>The name of a sheet. This name is displayed on the sheet's tab in the QuickSight console.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The unique identifier associated with a sheet.</p>
+    #[serde(rename = "SheetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sheet_id: Option<String>,
 }
 
 /// <p>Sheet controls option.</p>
@@ -3749,14 +4597,14 @@ pub struct SslProperties {
     pub disable_ssl: Option<bool>,
 }
 
-/// <p>String parameter.</p>
+/// <p>A string parameter.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StringParameter {
-    /// <p>A display name for the dataset.</p>
+    /// <p>A display name for a string parameter.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Values.</p>
+    /// <p>The values of a string parameter.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
@@ -3807,7 +4655,7 @@ pub struct TagResourceResponse {
     pub status: Option<i64>,
 }
 
-/// <p>A template object. A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create a dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with the analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p> <p>You can share templates across AWS accounts by allowing users in other AWS accounts to create a template or a dashboard from an existing template.</p>
+/// <p>A template object. A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create a dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with an analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p> <p>You can share templates across AWS accounts by allowing users in other AWS accounts to create a template or a dashboard from an existing template.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Template {
@@ -3942,7 +4790,7 @@ pub struct TemplateVersion {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>Schema of the dataset identified by the placeholder. The idea is that any dashboard created from the template should be bound to new datasets matching the same schema described through this API. .</p>
+    /// <p>Schema of the dataset identified by the placeholder. Any dashboard created from this template should be bound to new datasets matching the same schema described through this API operation.</p>
     #[serde(rename = "DataSetConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_set_configurations: Option<Vec<DataSetConfiguration>>,
@@ -3950,11 +4798,15 @@ pub struct TemplateVersion {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Errors associated with the template.</p>
+    /// <p>Errors associated with this template version.</p>
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<TemplateError>>,
-    /// <p>The Amazon Resource Name (ARN) of the analysis or template which was used to create this template.</p>
+    /// <p>A list of the associated sheets with the unique identifier and name of each sheet.</p>
+    #[serde(rename = "Sheets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sheets: Option<Vec<Sheet>>,
+    /// <p>The Amazon Resource Name (ARN) of an analysis or template that was used to create this template.</p>
     #[serde(rename = "SourceEntityArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_entity_arn: Option<String>,
@@ -3962,7 +4814,11 @@ pub struct TemplateVersion {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The version number of the template.</p>
+    /// <p>The ARN of the theme associated with this version of the template.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
+    /// <p>The version number of the template version.</p>
     #[serde(rename = "VersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_number: Option<i64>,
@@ -4008,7 +4864,7 @@ pub struct TeradataParameters {
     pub port: i64,
 }
 
-/// <p><p/></p>
+/// <p>Summary information about a theme.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Theme {
@@ -4246,7 +5102,7 @@ pub struct TwitterParameters {
     pub query: String,
 }
 
-/// <p>The theme colors that apply to UI and to charts, excluding data colors. The colors description is a hexidecimal color code that consists of six alphanumerical characters, prefixed with <code>#</code>, for example #37BFF5. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/themes-in-quicksight.html">Using Themes in Amazon QuickSight</a> in the <i>Amazon QuickSight User Guide.</i> </p>
+/// <p>The theme colors that apply to UI and to charts, excluding data colors. The colors description is a hexadecimal color code that consists of six alphanumerical characters, prefixed with <code>#</code>, for example #37BFF5. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/themes-in-quicksight.html">Using Themes in Amazon QuickSight</a> in the <i>Amazon QuickSight User Guide.</i> </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UIColorPalette {
     /// <p>This color is that applies to selected states and buttons.</p>
@@ -4341,6 +5197,172 @@ pub struct UntagResourceResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAccountCustomizationRequest {
+    /// <p>The QuickSight customizations you're updating in the current AWS Region. </p>
+    #[serde(rename = "AccountCustomization")]
+    pub account_customization: AccountCustomization,
+    /// <p>The ID for the AWS account that you want to update QuickSight customizations for.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The namespace that you want to update QuickSight customizations for.</p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAccountCustomizationResponse {
+    /// <p>The QuickSight customizations you're updating in the current AWS Region. </p>
+    #[serde(rename = "AccountCustomization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_customization: Option<AccountCustomization>,
+    /// <p>The Amazon Resource Name (ARN) for the updated customization for this AWS account.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID for the AWS account that you want to update QuickSight customizations for.</p>
+    #[serde(rename = "AwsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
+    /// <p>The namespace associated with the customization that you're updating.</p>
+    #[serde(rename = "Namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAccountSettingsRequest {
+    /// <p>The ID for the AWS account that contains the QuickSight settings that you want to list.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The default namespace for this AWS account. Currently, the default is <code>default</code>. AWS Identity and Access Management (IAM) users that register for the first time with QuickSight provide an email that becomes associated with the default namespace.</p>
+    #[serde(rename = "DefaultNamespace")]
+    pub default_namespace: String,
+    /// <p>The email address that you want QuickSight to send notifications to regarding your AWS account or QuickSight subscription.</p>
+    #[serde(rename = "NotificationEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_email: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAccountSettingsResponse {
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAnalysisPermissionsRequest {
+    /// <p>The ID of the analysis whose permissions you're updating. The ID is part of the analysis URL.</p>
+    #[serde(rename = "AnalysisId")]
+    pub analysis_id: String,
+    /// <p>The ID of the AWS account that contains the analysis whose permissions you're updating. You must be using the AWS account that the analysis is in.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>A structure that describes the permissions to add and the principal to add them to.</p>
+    #[serde(rename = "GrantPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grant_permissions: Option<Vec<ResourcePermission>>,
+    /// <p>A structure that describes the permissions to remove and the principal to remove them from.</p>
+    #[serde(rename = "RevokePermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revoke_permissions: Option<Vec<ResourcePermission>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAnalysisPermissionsResponse {
+    /// <p>The Amazon Resource Name (ARN) of the analysis that you updated.</p>
+    #[serde(rename = "AnalysisArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_arn: Option<String>,
+    /// <p>The ID of the analysis that you updated permissions for.</p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>A structure that describes the principals and the resource-level permissions on an analysis.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAnalysisRequest {
+    /// <p>The ID for the analysis that you're updating. This ID displays in the URL of the analysis.</p>
+    #[serde(rename = "AnalysisId")]
+    pub analysis_id: String,
+    /// <p>The ID of the AWS account that contains the analysis that you're updating.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>A descriptive name for the analysis that you're updating. This name displays for the analysis in the QuickSight console.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The parameter names and override values that you want to use. An analysis can have any parameter type, and some parameters might accept multiple values. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<Parameters>,
+    /// <p>A source entity to use for the analysis that you're updating. This metadata structure contains details that describe a source template and one or more datasets.</p>
+    #[serde(rename = "SourceEntity")]
+    pub source_entity: AnalysisSourceEntity,
+    /// <p>The Amazon Resource Name (ARN) for the theme to apply to the analysis that you're creating. To see the theme in the QuickSight console, make sure that you have access to it.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAnalysisResponse {
+    /// <p>The ID of the analysis.</p>
+    #[serde(rename = "AnalysisId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_id: Option<String>,
+    /// <p>The ARN of the analysis that you're updating.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>The update status of the last update that was made to the analysis.</p>
+    #[serde(rename = "UpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDashboardPermissionsRequest {
     /// <p>The ID of the AWS account that contains the dashboard whose permissions you're updating.</p>
     #[serde(rename = "AwsAccountId")]
@@ -4427,7 +5449,7 @@ pub struct UpdateDashboardRequest {
     /// <p>The ID for the dashboard.</p>
     #[serde(rename = "DashboardId")]
     pub dashboard_id: String,
-    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .csv format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
+    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .CSV format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
     #[serde(rename = "DashboardPublishOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dashboard_publish_options: Option<DashboardPublishOptions>,
@@ -5038,15 +6060,23 @@ pub struct UpdateUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
+    /// <p>(Enterprise edition only) The name of the custom permissions profile that you want to assign to this user. Customized permissions allows you to control a user's access by restricting access the following operations:</p> <ul> <li> <p>Create and update data sources</p> </li> <li> <p>Create and update datasets</p> </li> <li> <p>Create and update email reports</p> </li> <li> <p>Subscribe to email reports</p> </li> </ul> <p>A set of custom permissions includes any combination of these restrictions. Currently, you need to create the profile names for custom permission sets by using the QuickSight console. Then, you use the <code>RegisterUser</code> API operation to assign the named set of permissions to a QuickSight user. </p> <p>QuickSight custom permissions are applied through IAM policies. Therefore, they override the permissions typically granted by assigning QuickSight users to one of the default security cohorts in QuickSight (admin, author, reader).</p> <p>This feature is available only to QuickSight Enterprise edition subscriptions that use SAML 2.0-Based Federation for Single Sign-On (SSO).</p>
+    #[serde(rename = "CustomPermissionsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_permissions_name: Option<String>,
     /// <p>The email address of the user that you want to update.</p>
     #[serde(rename = "Email")]
     pub email: String,
     /// <p>The namespace. Currently, you should set this to <code>default</code>.</p>
     #[serde(rename = "Namespace")]
     pub namespace: String,
-    /// <p><p>The Amazon QuickSight role of the user. The user role can be one of the following:</p> <ul> <li> <p> <code>READER</code>: A user who has read-only access to dashboards.</p> </li> <li> <p> <code>AUTHOR</code>: A user who can create data sources, datasets, analyses, and dashboards.</p> </li> <li> <p> <code>ADMIN</code>: A user who is an author, who can also manage Amazon QuickSight settings.</p> </li> </ul></p>
+    /// <p>The Amazon QuickSight role of the user. The role can be one of the following default security cohorts:</p> <ul> <li> <p> <code>READER</code>: A user who has read-only access to dashboards.</p> </li> <li> <p> <code>AUTHOR</code>: A user who can create data sources, datasets, analyses, and dashboards.</p> </li> <li> <p> <code>ADMIN</code>: A user who is an author, who can also manage Amazon QuickSight settings.</p> </li> </ul> <p>The name of the QuickSight role is invisible to the user except for the console screens dealing with permissions.</p>
     #[serde(rename = "Role")]
     pub role: String,
+    /// <p>A flag that you use to indicate that you want to remove all custom permissions from this user. Using this parameter resets the user to the state it was in before a custom permissions profile was applied. This parameter defaults to NULL and it doesn't accept any other value.</p>
+    #[serde(rename = "UnapplyCustomPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unapply_custom_permissions: Option<bool>,
     /// <p>The Amazon QuickSight user name that you want to update.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
@@ -5094,7 +6124,7 @@ pub struct UploadSettings {
     pub text_qualifier: Option<String>,
 }
 
-/// <p>A registered user of Amazon QuickSight. Currently, an Amazon QuickSight subscription can't contain more than 20 million users.</p>
+/// <p>A registered user of Amazon QuickSight. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct User {
@@ -5106,6 +6136,10 @@ pub struct User {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The custom permissions profile associated with this user.</p>
+    #[serde(rename = "CustomPermissionsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_permissions_name: Option<String>,
     /// <p>The user's email address.</p>
     #[serde(rename = "Email")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5198,6 +6232,162 @@ impl fmt::Display for CancelIngestionError {
     }
 }
 impl Error for CancelIngestionError {}
+/// Errors returned by CreateAccountCustomization
+#[derive(Debug, PartialEq)]
+pub enum CreateAccountCustomizationError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl CreateAccountCustomizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateAccountCustomizationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateAccountCustomizationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateAccountCustomizationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        CreateAccountCustomizationError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateAccountCustomizationError::ResourceExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateAccountCustomizationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(
+                        CreateAccountCustomizationError::ResourceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateAccountCustomizationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAccountCustomizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAccountCustomizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateAccountCustomizationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateAccountCustomizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAccountCustomizationError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateAccountCustomizationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAccountCustomizationError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAccountCustomizationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAccountCustomizationError {}
+/// Errors returned by CreateAnalysis
+#[derive(Debug, PartialEq)]
+pub enum CreateAnalysisError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl CreateAnalysisError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAnalysisError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(CreateAnalysisError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateAnalysisError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CreateAnalysisError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateAnalysisError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateAnalysisError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateAnalysisError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(CreateAnalysisError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAnalysisError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAnalysisError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateAnalysisError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateAnalysisError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateAnalysisError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateAnalysisError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAnalysisError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateAnalysisError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAnalysisError {}
 /// Errors returned by CreateDashboard
 #[derive(Debug, PartialEq)]
 pub enum CreateDashboardError {
@@ -5581,7 +6771,7 @@ impl Error for CreateGroupMembershipError {}
 pub enum CreateIAMPolicyAssignmentError {
     /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
     AccessDenied(String),
-    /// <p>A resource is already in a state that indicates an action is happening that must complete before a new update can be applied.</p>
+    /// <p>A resource is already in a state that indicates an operation is happening that must complete before a new update can be applied.</p>
     ConcurrentUpdating(String),
     /// <p>An internal failure occurred.</p>
     InternalFailure(String),
@@ -5726,6 +6916,92 @@ impl fmt::Display for CreateIngestionError {
     }
 }
 impl Error for CreateIngestionError {}
+/// Errors returned by CreateNamespace
+#[derive(Debug, PartialEq)]
+pub enum CreateNamespaceError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>A limit is exceeded.</p>
+    LimitExceeded(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl CreateNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNamespaceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateNamespaceError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateNamespaceError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateNamespaceError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CreateNamespaceError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateNamespaceError::LimitExceeded(err.msg))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(CreateNamespaceError::PreconditionNotMet(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateNamespaceError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateNamespaceError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CreateNamespaceError::ResourceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateNamespaceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateNamespaceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateNamespaceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateNamespaceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateNamespaceError {}
 /// Errors returned by CreateTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateTemplateError {
@@ -6026,6 +7302,148 @@ impl fmt::Display for CreateThemeAliasError {
     }
 }
 impl Error for CreateThemeAliasError {}
+/// Errors returned by DeleteAccountCustomization
+#[derive(Debug, PartialEq)]
+pub enum DeleteAccountCustomizationError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl DeleteAccountCustomizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteAccountCustomizationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteAccountCustomizationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteAccountCustomizationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DeleteAccountCustomizationError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteAccountCustomizationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteAccountCustomizationError::ResourceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteAccountCustomizationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAccountCustomizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAccountCustomizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteAccountCustomizationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAccountCustomizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAccountCustomizationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAccountCustomizationError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAccountCustomizationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAccountCustomizationError {}
+/// Errors returned by DeleteAnalysis
+#[derive(Debug, PartialEq)]
+pub enum DeleteAnalysisError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DeleteAnalysisError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnalysisError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteAnalysisError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteAnalysisError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DeleteAnalysisError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteAnalysisError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteAnalysisError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DeleteAnalysisError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAnalysisError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAnalysisError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAnalysisError {}
 /// Errors returned by DeleteDashboard
 #[derive(Debug, PartialEq)]
 pub enum DeleteDashboardError {
@@ -6347,7 +7765,7 @@ impl Error for DeleteGroupMembershipError {}
 pub enum DeleteIAMPolicyAssignmentError {
     /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
     AccessDenied(String),
-    /// <p>A resource is already in a state that indicates an action is happening that must complete before a new update can be applied.</p>
+    /// <p>A resource is already in a state that indicates an operation is happening that must complete before a new update can be applied.</p>
     ConcurrentUpdating(String),
     /// <p>An internal failure occurred.</p>
     InternalFailure(String),
@@ -6424,6 +7842,74 @@ impl fmt::Display for DeleteIAMPolicyAssignmentError {
     }
 }
 impl Error for DeleteIAMPolicyAssignmentError {}
+/// Errors returned by DeleteNamespace
+#[derive(Debug, PartialEq)]
+pub enum DeleteNamespaceError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl DeleteNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNamespaceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteNamespaceError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteNamespaceError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DeleteNamespaceError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(DeleteNamespaceError::PreconditionNotMet(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteNamespaceError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(DeleteNamespaceError::ResourceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteNamespaceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteNamespaceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteNamespaceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteNamespaceError {}
 /// Errors returned by DeleteTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteTemplateError {
@@ -6691,6 +8177,8 @@ pub enum DeleteUserError {
     InternalFailure(String),
     /// <p>One or more parameters has a value that isn't valid.</p>
     InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
     /// <p>One or more resources can't be found.</p>
     ResourceNotFound(String),
     /// <p>This resource is currently unavailable.</p>
@@ -6711,6 +8199,9 @@ impl DeleteUserError {
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteUserError::InvalidParameterValue(err.msg))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(DeleteUserError::PreconditionNotMet(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserError::ResourceNotFound(err.msg))
@@ -6735,6 +8226,7 @@ impl fmt::Display for DeleteUserError {
             DeleteUserError::AccessDenied(ref cause) => write!(f, "{}", cause),
             DeleteUserError::InternalFailure(ref cause) => write!(f, "{}", cause),
             DeleteUserError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
             DeleteUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteUserError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             DeleteUserError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -6751,6 +8243,8 @@ pub enum DeleteUserByPrincipalIdError {
     InternalFailure(String),
     /// <p>One or more parameters has a value that isn't valid.</p>
     InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
     /// <p>One or more resources can't be found.</p>
     ResourceNotFound(String),
     /// <p>This resource is currently unavailable.</p>
@@ -6777,6 +8271,11 @@ impl DeleteUserByPrincipalIdError {
                     return RusotoError::Service(
                         DeleteUserByPrincipalIdError::InvalidParameterValue(err.msg),
                     )
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(DeleteUserByPrincipalIdError::PreconditionNotMet(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserByPrincipalIdError::ResourceNotFound(
@@ -6807,6 +8306,7 @@ impl fmt::Display for DeleteUserByPrincipalIdError {
             DeleteUserByPrincipalIdError::InvalidParameterValue(ref cause) => {
                 write!(f, "{}", cause)
             }
+            DeleteUserByPrincipalIdError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
             DeleteUserByPrincipalIdError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteUserByPrincipalIdError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             DeleteUserByPrincipalIdError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -6814,6 +8314,292 @@ impl fmt::Display for DeleteUserByPrincipalIdError {
     }
 }
 impl Error for DeleteUserByPrincipalIdError {}
+/// Errors returned by DescribeAccountCustomization
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccountCustomizationError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl DescribeAccountCustomizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAccountCustomizationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeAccountCustomizationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        DescribeAccountCustomizationError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeAccountCustomizationError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeAccountCustomizationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeAccountCustomizationError::ResourceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeAccountCustomizationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAccountCustomizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAccountCustomizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeAccountCustomizationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAccountCustomizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAccountCustomizationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAccountCustomizationError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAccountCustomizationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAccountCustomizationError {}
+/// Errors returned by DescribeAccountSettings
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccountSettingsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl DescribeAccountSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeAccountSettingsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeAccountSettingsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeAccountSettingsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAccountSettingsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(DescribeAccountSettingsError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeAccountSettingsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAccountSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAccountSettingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeAccountSettingsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAccountSettingsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAccountSettingsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAccountSettingsError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeAccountSettingsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAccountSettingsError {}
+/// Errors returned by DescribeAnalysis
+#[derive(Debug, PartialEq)]
+pub enum DescribeAnalysisError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeAnalysisError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAnalysisError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeAnalysisError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeAnalysisError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DescribeAnalysisError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAnalysisError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeAnalysisError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DescribeAnalysisError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAnalysisError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAnalysisError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAnalysisError {}
+/// Errors returned by DescribeAnalysisPermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeAnalysisPermissionsError {
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeAnalysisPermissionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAnalysisPermissionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeAnalysisPermissionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeAnalysisPermissionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeAnalysisPermissionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeAnalysisPermissionsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        DescribeAnalysisPermissionsError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAnalysisPermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAnalysisPermissionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisPermissionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAnalysisPermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisPermissionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisPermissionsError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeAnalysisPermissionsError {}
 /// Errors returned by DescribeDashboard
 #[derive(Debug, PartialEq)]
 pub enum DescribeDashboardError {
@@ -7406,6 +9192,70 @@ impl fmt::Display for DescribeIngestionError {
     }
 }
 impl Error for DescribeIngestionError {}
+/// Errors returned by DescribeNamespace
+#[derive(Debug, PartialEq)]
+pub enum DescribeNamespaceError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl DescribeNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNamespaceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeNamespaceError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeNamespaceError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DescribeNamespaceError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeNamespaceError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(DescribeNamespaceError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeNamespaceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeNamespaceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeNamespaceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeNamespaceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeNamespaceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeNamespaceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeNamespaceError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeNamespaceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeNamespaceError {}
 /// Errors returned by DescribeTemplate
 #[derive(Debug, PartialEq)]
 pub enum DescribeTemplateError {
@@ -7829,6 +9679,8 @@ pub enum DescribeUserError {
     InternalFailure(String),
     /// <p>One or more parameters has a value that isn't valid.</p>
     InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
     /// <p>One or more resources can't be found.</p>
     ResourceNotFound(String),
     /// <p>This resource is currently unavailable.</p>
@@ -7849,6 +9701,9 @@ impl DescribeUserError {
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeUserError::InvalidParameterValue(err.msg))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(DescribeUserError::PreconditionNotMet(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserError::ResourceNotFound(err.msg))
@@ -7873,6 +9728,7 @@ impl fmt::Display for DescribeUserError {
             DescribeUserError::AccessDenied(ref cause) => write!(f, "{}", cause),
             DescribeUserError::InternalFailure(ref cause) => write!(f, "{}", cause),
             DescribeUserError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
             DescribeUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DescribeUserError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             DescribeUserError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -7990,6 +9846,142 @@ impl fmt::Display for GetDashboardEmbedUrlError {
     }
 }
 impl Error for GetDashboardEmbedUrlError {}
+/// Errors returned by GetSessionEmbedUrl
+#[derive(Debug, PartialEq)]
+pub enum GetSessionEmbedUrlError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>The user with the provided name isn't found. This error can happen in any operation that requires finding a user based on a provided user name, such as <code>DeleteUser</code>, <code>DescribeUser</code>, and so on.</p>
+    QuickSightUserNotFound(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of minutes specified for the lifetime of a session isn't valid. The session lifetime must be 15-600 minutes.</p>
+    SessionLifetimeInMinutesInvalid(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl GetSessionEmbedUrlError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSessionEmbedUrlError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "QuickSightUserNotFoundException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::QuickSightUserNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::ResourceNotFound(err.msg))
+                }
+                "SessionLifetimeInMinutesInvalidException" => {
+                    return RusotoError::Service(
+                        GetSessionEmbedUrlError::SessionLifetimeInMinutesInvalid(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(GetSessionEmbedUrlError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSessionEmbedUrlError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSessionEmbedUrlError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSessionEmbedUrlError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetSessionEmbedUrlError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetSessionEmbedUrlError::QuickSightUserNotFound(ref cause) => write!(f, "{}", cause),
+            GetSessionEmbedUrlError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            GetSessionEmbedUrlError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetSessionEmbedUrlError::SessionLifetimeInMinutesInvalid(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSessionEmbedUrlError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetSessionEmbedUrlError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSessionEmbedUrlError {}
+/// Errors returned by ListAnalyses
+#[derive(Debug, PartialEq)]
+pub enum ListAnalysesError {
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl ListAnalysesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAnalysesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListAnalysesError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListAnalysesError::InvalidNextToken(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListAnalysesError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(ListAnalysesError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAnalysesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAnalysesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAnalysesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListAnalysesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListAnalysesError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAnalysesError {}
 /// Errors returned by ListDashboardVersions
 #[derive(Debug, PartialEq)]
 pub enum ListDashboardVersionsError {
@@ -8453,7 +10445,7 @@ impl Error for ListIAMPolicyAssignmentsError {}
 pub enum ListIAMPolicyAssignmentsForUserError {
     /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
     AccessDenied(String),
-    /// <p>A resource is already in a state that indicates an action is happening that must complete before a new update can be applied.</p>
+    /// <p>A resource is already in a state that indicates an operation is happening that must complete before a new update can be applied.</p>
     ConcurrentUpdating(String),
     /// <p>An internal failure occurred.</p>
     InternalFailure(String),
@@ -8608,6 +10600,80 @@ impl fmt::Display for ListIngestionsError {
     }
 }
 impl Error for ListIngestionsError {}
+/// Errors returned by ListNamespaces
+#[derive(Debug, PartialEq)]
+pub enum ListNamespacesError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl ListNamespacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNamespacesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListNamespacesError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListNamespacesError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListNamespacesError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListNamespacesError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(ListNamespacesError::PreconditionNotMet(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListNamespacesError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(ListNamespacesError::ResourceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListNamespacesError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListNamespacesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListNamespacesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListNamespacesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListNamespacesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListNamespacesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListNamespacesError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            ListNamespacesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListNamespacesError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListNamespacesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListNamespacesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -9073,6 +11139,8 @@ pub enum ListUserGroupsError {
     InternalFailure(String),
     /// <p>One or more parameters has a value that isn't valid.</p>
     InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
     /// <p>One or more resources can't be found.</p>
     ResourceNotFound(String),
     /// <p>This resource is currently unavailable.</p>
@@ -9095,6 +11163,9 @@ impl ListUserGroupsError {
                     return RusotoError::Service(ListUserGroupsError::InvalidParameterValue(
                         err.msg,
                     ))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(ListUserGroupsError::PreconditionNotMet(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUserGroupsError::ResourceNotFound(err.msg))
@@ -9119,6 +11190,7 @@ impl fmt::Display for ListUserGroupsError {
             ListUserGroupsError::AccessDenied(ref cause) => write!(f, "{}", cause),
             ListUserGroupsError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListUserGroupsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListUserGroupsError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
             ListUserGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListUserGroupsError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             ListUserGroupsError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -9137,6 +11209,8 @@ pub enum ListUsersError {
     InvalidNextToken(String),
     /// <p>One or more parameters has a value that isn't valid.</p>
     InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
     /// <p>One or more resources can't be found.</p>
     ResourceNotFound(String),
     /// <p>This resource is currently unavailable.</p>
@@ -9160,6 +11234,9 @@ impl ListUsersError {
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListUsersError::InvalidParameterValue(err.msg))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(ListUsersError::PreconditionNotMet(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUsersError::ResourceNotFound(err.msg))
@@ -9185,6 +11262,7 @@ impl fmt::Display for ListUsersError {
             ListUsersError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListUsersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
             ListUsersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListUsersError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
             ListUsersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListUsersError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             ListUsersError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -9270,6 +11348,134 @@ impl fmt::Display for RegisterUserError {
     }
 }
 impl Error for RegisterUserError {}
+/// Errors returned by RestoreAnalysis
+#[derive(Debug, PartialEq)]
+pub enum RestoreAnalysisError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl RestoreAnalysisError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreAnalysisError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(RestoreAnalysisError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(RestoreAnalysisError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(RestoreAnalysisError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RestoreAnalysisError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(RestoreAnalysisError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(RestoreAnalysisError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RestoreAnalysisError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RestoreAnalysisError::Conflict(ref cause) => write!(f, "{}", cause),
+            RestoreAnalysisError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RestoreAnalysisError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            RestoreAnalysisError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RestoreAnalysisError::Throttling(ref cause) => write!(f, "{}", cause),
+            RestoreAnalysisError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RestoreAnalysisError {}
+/// Errors returned by SearchAnalyses
+#[derive(Debug, PartialEq)]
+pub enum SearchAnalysesError {
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl SearchAnalysesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchAnalysesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(SearchAnalysesError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(SearchAnalysesError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(SearchAnalysesError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(SearchAnalysesError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(SearchAnalysesError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(SearchAnalysesError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SearchAnalysesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SearchAnalysesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            SearchAnalysesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            SearchAnalysesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SearchAnalysesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SearchAnalysesError::Throttling(ref cause) => write!(f, "{}", cause),
+            SearchAnalysesError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SearchAnalysesError {}
 /// Errors returned by SearchDashboards
 #[derive(Debug, PartialEq)]
 pub enum SearchDashboardsError {
@@ -9448,6 +11654,296 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateAccountCustomization
+#[derive(Debug, PartialEq)]
+pub enum UpdateAccountCustomizationError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl UpdateAccountCustomizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateAccountCustomizationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateAccountCustomizationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateAccountCustomizationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        UpdateAccountCustomizationError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAccountCustomizationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateAccountCustomizationError::ResourceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateAccountCustomizationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAccountCustomizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAccountCustomizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateAccountCustomizationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAccountCustomizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAccountCustomizationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAccountCustomizationError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAccountCustomizationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAccountCustomizationError {}
+/// Errors returned by UpdateAccountSettings
+#[derive(Debug, PartialEq)]
+pub enum UpdateAccountSettingsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>This resource is currently unavailable.</p>
+    ResourceUnavailable(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+}
+
+impl UpdateAccountSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAccountSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateAccountSettingsError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateAccountSettingsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(UpdateAccountSettingsError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAccountSettingsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(UpdateAccountSettingsError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateAccountSettingsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAccountSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAccountSettingsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateAccountSettingsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAccountSettingsError {}
+/// Errors returned by UpdateAnalysis
+#[derive(Debug, PartialEq)]
+pub enum UpdateAnalysisError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl UpdateAnalysisError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnalysisError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateAnalysisError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateAnalysisError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(UpdateAnalysisError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(UpdateAnalysisError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAnalysisError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateAnalysisError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(UpdateAnalysisError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAnalysisError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAnalysisError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAnalysisError {}
+/// Errors returned by UpdateAnalysisPermissions
+#[derive(Debug, PartialEq)]
+pub enum UpdateAnalysisPermissionsError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl UpdateAnalysisPermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnalysisPermissionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateAnalysisPermissionsError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateAnalysisPermissionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        UpdateAnalysisPermissionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAnalysisPermissionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateAnalysisPermissionsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        UpdateAnalysisPermissionsError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAnalysisPermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAnalysisPermissionsError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisPermissionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisPermissionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAnalysisPermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisPermissionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateAnalysisPermissionsError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateAnalysisPermissionsError {}
 /// Errors returned by UpdateDashboard
 #[derive(Debug, PartialEq)]
 pub enum UpdateDashboardError {
@@ -10029,7 +12525,7 @@ impl Error for UpdateGroupError {}
 pub enum UpdateIAMPolicyAssignmentError {
     /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
     AccessDenied(String),
-    /// <p>A resource is already in a state that indicates an action is happening that must complete before a new update can be applied.</p>
+    /// <p>A resource is already in a state that indicates an operation is happening that must complete before a new update can be applied.</p>
     ConcurrentUpdating(String),
     /// <p>An internal failure occurred.</p>
     InternalFailure(String),
@@ -10535,6 +13031,8 @@ pub enum UpdateUserError {
     InternalFailure(String),
     /// <p>One or more parameters has a value that isn't valid.</p>
     InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
     /// <p>One or more resources can't be found.</p>
     ResourceNotFound(String),
     /// <p>This resource is currently unavailable.</p>
@@ -10555,6 +13053,9 @@ impl UpdateUserError {
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateUserError::InvalidParameterValue(err.msg))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(UpdateUserError::PreconditionNotMet(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserError::ResourceNotFound(err.msg))
@@ -10579,6 +13080,7 @@ impl fmt::Display for UpdateUserError {
             UpdateUserError::AccessDenied(ref cause) => write!(f, "{}", cause),
             UpdateUserError::InternalFailure(ref cause) => write!(f, "{}", cause),
             UpdateUserError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
             UpdateUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             UpdateUserError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             UpdateUserError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -10595,7 +13097,19 @@ pub trait Quicksight {
         input: CancelIngestionRequest,
     ) -> Result<CancelIngestionResponse, RusotoError<CancelIngestionError>>;
 
-    /// <p>Creates a dashboard from a template. To first create a template, see the <a>CreateTemplate</a> API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
+    /// <p>Creates Amazon QuickSight customizations the current AWS Region. Currently, you can add a custom default theme by using the <code>CreateAccountCustomization</code> or <code>UpdateAccountCustomization</code> API operation. To further customize QuickSight by removing QuickSight sample assets and videos for all new users, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/customizing-quicksight.html">Customizing QuickSight</a> in the <i>Amazon QuickSight User Guide.</i> </p> <p>You can create customizations for your AWS account or, if you specify a namespace, for a QuickSight namespace instead. Customizations that apply to a namespace always override customizations that apply to an AWS account. To find out which customizations apply, use the <code>DescribeAccountCustomization</code> API operation.</p> <p>Before you use the <code>CreateAccountCustomization</code> API operation to add a theme as the namespace default, make sure that you first share the theme with the namespace. If you don't share it with the namespace, the theme isn't visible to your users even if you make it the default theme. To check if the theme is shared, view the current permissions by using the <code> <a>DescribeThemePermissions</a> </code> API operation. To share the theme, grant permissions by using the <code> <a>UpdateThemePermissions</a> </code> API operation. </p>
+    async fn create_account_customization(
+        &self,
+        input: CreateAccountCustomizationRequest,
+    ) -> Result<CreateAccountCustomizationResponse, RusotoError<CreateAccountCustomizationError>>;
+
+    /// <p>Creates an analysis in Amazon QuickSight.</p>
+    async fn create_analysis(
+        &self,
+        input: CreateAnalysisRequest,
+    ) -> Result<CreateAnalysisResponse, RusotoError<CreateAnalysisError>>;
+
+    /// <p>Creates a dashboard from a template. To first create a template, see the <code> <a>CreateTemplate</a> </code> API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
     async fn create_dashboard(
         &self,
         input: CreateDashboardRequest,
@@ -10637,6 +13151,12 @@ pub trait Quicksight {
         input: CreateIngestionRequest,
     ) -> Result<CreateIngestionResponse, RusotoError<CreateIngestionError>>;
 
+    /// <p>(Enterprise edition only) Creates a new namespace for you to use with Amazon QuickSight.</p> <p>A namespace allows you to isolate the QuickSight users and groups that are registered for that namespace. Users that access the namespace can share assets only with other users or groups in the same namespace. They can't see users and groups in other namespaces. You can create a namespace after your AWS account is subscribed to QuickSight. The namespace must be unique within the AWS account. By default, there is a limit of 100 namespaces per AWS account. To increase your limit, create a ticket with AWS Support. </p>
+    async fn create_namespace(
+        &self,
+        input: CreateNamespaceRequest,
+    ) -> Result<CreateNamespaceResponse, RusotoError<CreateNamespaceError>>;
+
     /// <p>Creates a template from an existing QuickSight analysis or template. You can use the resulting template to create a dashboard.</p> <p>A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create s dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with the analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p>
     async fn create_template(
         &self,
@@ -10661,6 +13181,18 @@ pub trait Quicksight {
         input: CreateThemeAliasRequest,
     ) -> Result<CreateThemeAliasResponse, RusotoError<CreateThemeAliasError>>;
 
+    /// <p>Deletes all Amazon QuickSight customizations in this AWS Region for the specified AWS account and QuickSight namespace.</p>
+    async fn delete_account_customization(
+        &self,
+        input: DeleteAccountCustomizationRequest,
+    ) -> Result<DeleteAccountCustomizationResponse, RusotoError<DeleteAccountCustomizationError>>;
+
+    /// <p>Deletes an analysis from Amazon QuickSight. You can optionally include a recovery window during which you can restore the analysis. If you don't specify a recovery window value, the operation defaults to 30 days. QuickSight attaches a <code>DeletionTime</code> stamp to the response that specifies the end of the recovery window. At the end of the recovery window, QuickSight deletes the analysis permanently.</p> <p>At any time before recovery window ends, you can use the <code>RestoreAnalysis</code> API operation to remove the <code>DeletionTime</code> stamp and cancel the deletion of the analysis. The analysis remains visible in the API until it's deleted, so you can describe it but you can't make a template from it.</p> <p>An analysis that's scheduled for deletion isn't accessible in the QuickSight console. To access it in the console, restore it. Deleting an analysis doesn't delete the dashboards that you publish from it.</p>
+    async fn delete_analysis(
+        &self,
+        input: DeleteAnalysisRequest,
+    ) -> Result<DeleteAnalysisResponse, RusotoError<DeleteAnalysisError>>;
+
     /// <p>Deletes a dashboard.</p>
     async fn delete_dashboard(
         &self,
@@ -10673,7 +13205,7 @@ pub trait Quicksight {
         input: DeleteDataSetRequest,
     ) -> Result<DeleteDataSetResponse, RusotoError<DeleteDataSetError>>;
 
-    /// <p>Deletes the data source permanently. This action breaks all the datasets that reference the deleted data source.</p>
+    /// <p>Deletes the data source permanently. This operation breaks all the datasets that reference the deleted data source.</p>
     async fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
@@ -10696,6 +13228,12 @@ pub trait Quicksight {
         &self,
         input: DeleteIAMPolicyAssignmentRequest,
     ) -> Result<DeleteIAMPolicyAssignmentResponse, RusotoError<DeleteIAMPolicyAssignmentError>>;
+
+    /// <p>Deletes a namespace and the users and groups that are associated with the namespace. This is an asynchronous process. Assets including dashboards, analyses, datasets and data sources are not deleted. To delete these assets, you use the API operations for the relevant asset. </p>
+    async fn delete_namespace(
+        &self,
+        input: DeleteNamespaceRequest,
+    ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>>;
 
     /// <p>Deletes a template.</p>
     async fn delete_template(
@@ -10732,6 +13270,30 @@ pub trait Quicksight {
         &self,
         input: DeleteUserByPrincipalIdRequest,
     ) -> Result<DeleteUserByPrincipalIdResponse, RusotoError<DeleteUserByPrincipalIdError>>;
+
+    /// <p><p>Describes the customizations associated with the provided AWS account and Amazon QuickSight namespace in an AWS Region. The QuickSight console evaluates which customizations to apply by running this API operation with the <code>Resolved</code> flag included. </p> <p>To determine what customizations display when you run this command, it can help to visualize the relationship of the entities involved. </p> <ul> <li> <p> <code>AWS Account</code> - The AWS account exists at the top of the hierarchy. It has the potential to use all of the AWS Regions and AWS Services. When you subscribe to QuickSight, you choose one AWS Region to use as your home Region. That&#39;s where your free SPICE capacity is located. You can use QuickSight in any supported AWS Region. </p> </li> <li> <p> <code>AWS Region</code> - In each AWS Region where you sign in to QuickSight at least once, QuickSight acts as a separate instance of the same service. If you have a user directory, it resides in us-east-1, which is the US East (N. Virginia). Generally speaking, these users have access to QuickSight in any AWS Region, unless they are constrained to a namespace. </p> <p>To run the command in a different AWS Region, you change your Region settings. If you&#39;re using the AWS CLI, you can use one of the following options:</p> <ul> <li> <p>Use <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html">command line options</a>. </p> </li> <li> <p>Use <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html">named profiles</a>. </p> </li> <li> <p>Run <code>aws configure</code> to change your default AWS Region. Use Enter to key the same settings for your keys. For more information, see <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html">Configuring the AWS CLI</a>.</p> </li> </ul> </li> <li> <p> <code>Namespace</code> - A QuickSight namespace is a partition that contains users and assets (data sources, datasets, dashboards, and so on). To access assets that are in a specific namespace, users and groups must also be part of the same namespace. People who share a namespace are completely isolated from users and assets in other namespaces, even if they are in the same AWS account and AWS Region.</p> </li> <li> <p> <code>Applied customizations</code> - Within an AWS Region, a set of QuickSight customizations can apply to an AWS account or to a namespace. Settings that you apply to a namespace override settings that you apply to an AWS account. All settings are isolated to a single AWS Region. To apply them in other AWS Regions, run the <code>CreateAccountCustomization</code> command in each AWS Region where you want to apply the same customizations. </p> </li> </ul></p>
+    async fn describe_account_customization(
+        &self,
+        input: DescribeAccountCustomizationRequest,
+    ) -> Result<DescribeAccountCustomizationResponse, RusotoError<DescribeAccountCustomizationError>>;
+
+    /// <p>Describes the settings that were used when your QuickSight subscription was first created in this AWS account.</p>
+    async fn describe_account_settings(
+        &self,
+        input: DescribeAccountSettingsRequest,
+    ) -> Result<DescribeAccountSettingsResponse, RusotoError<DescribeAccountSettingsError>>;
+
+    /// <p>Provides a summary of the metadata for an analysis.</p>
+    async fn describe_analysis(
+        &self,
+        input: DescribeAnalysisRequest,
+    ) -> Result<DescribeAnalysisResponse, RusotoError<DescribeAnalysisError>>;
+
+    /// <p>Provides the read and write permissions for an analysis.</p>
+    async fn describe_analysis_permissions(
+        &self,
+        input: DescribeAnalysisPermissionsRequest,
+    ) -> Result<DescribeAnalysisPermissionsResponse, RusotoError<DescribeAnalysisPermissionsError>>;
 
     /// <p>Provides a summary for a dashboard.</p>
     async fn describe_dashboard(
@@ -10790,6 +13352,12 @@ pub trait Quicksight {
         input: DescribeIngestionRequest,
     ) -> Result<DescribeIngestionResponse, RusotoError<DescribeIngestionError>>;
 
+    /// <p>Describes the current namespace.</p>
+    async fn describe_namespace(
+        &self,
+        input: DescribeNamespaceRequest,
+    ) -> Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>>;
+
     /// <p>Describes a template's metadata.</p>
     async fn describe_template(
         &self,
@@ -10832,11 +13400,23 @@ pub trait Quicksight {
         input: DescribeUserRequest,
     ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>>;
 
-    /// <p>Generates a URL and authorization code that you can embed in your web server code. Before you use this command, make sure that you have configured the dashboards and permissions. </p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user's browser. The following rules apply to the combination of URL and authorization code:</p> <ul> <li> <p>They must be used together.</p> </li> <li> <p>They can be used one time only.</p> </li> <li> <p>They are valid for 5 minutes after you run this command.</p> </li> <li> <p>The resulting user session is valid for 10 hours.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p>
+    /// <p>Generates a session URL and authorization code that you can use to embed an Amazon QuickSight read-only dashboard in your web server code. Before you use this command, make sure that you have configured the dashboards and permissions. </p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user's browser. The following rules apply to the combination of URL and authorization code:</p> <ul> <li> <p>They must be used together.</p> </li> <li> <p>They can be used one time only.</p> </li> <li> <p>They are valid for 5 minutes after you run this command.</p> </li> <li> <p>The resulting user session is valid for 10 hours.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight</a> in the <i>Amazon QuickSight User Guide</i> .</p>
     async fn get_dashboard_embed_url(
         &self,
         input: GetDashboardEmbedUrlRequest,
     ) -> Result<GetDashboardEmbedUrlResponse, RusotoError<GetDashboardEmbedUrlError>>;
+
+    /// <p><p>Generates a session URL and authorization code that you can use to embed the Amazon QuickSight console in your web server code. Use <code>GetSessionEmbedUrl</code> where you want to provide an authoring portal that allows users to create data sources, datasets, analyses, and dashboards. The users who access an embedded QuickSight console need belong to the author or admin security cohort. If you want to restrict permissions to some of these features, add a custom permissions profile to the user with the <code> <a>UpdateUser</a> </code> API operation. Use <code> <a>RegisterUser</a> </code> API operation to add a new user with a custom permission profile attached. For more information, see the following sections in the <i>Amazon QuickSight User Guide</i>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-the-quicksight-console.html">Embedding the Amazon QuickSight Console</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/quicksight/latest/user/customizing-permissions-to-the-quicksight-console.html">Customizing Access to the Amazon QuickSight Console</a> </p> </li> </ul></p>
+    async fn get_session_embed_url(
+        &self,
+        input: GetSessionEmbedUrlRequest,
+    ) -> Result<GetSessionEmbedUrlResponse, RusotoError<GetSessionEmbedUrlError>>;
+
+    /// <p>Lists Amazon QuickSight analyses that exist in the specified AWS account.</p>
+    async fn list_analyses(
+        &self,
+        input: ListAnalysesRequest,
+    ) -> Result<ListAnalysesResponse, RusotoError<ListAnalysesError>>;
 
     /// <p>Lists all the versions of the dashboards in the QuickSight subscription.</p>
     async fn list_dashboard_versions(
@@ -10894,6 +13474,12 @@ pub trait Quicksight {
         &self,
         input: ListIngestionsRequest,
     ) -> Result<ListIngestionsResponse, RusotoError<ListIngestionsError>>;
+
+    /// <p>Lists the namespaces for the specified AWS account.</p>
+    async fn list_namespaces(
+        &self,
+        input: ListNamespacesRequest,
+    ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>>;
 
     /// <p>Lists the tags assigned to a resource.</p>
     async fn list_tags_for_resource(
@@ -10955,7 +13541,19 @@ pub trait Quicksight {
         input: RegisterUserRequest,
     ) -> Result<RegisterUserResponse, RusotoError<RegisterUserError>>;
 
-    /// <p>Searchs for dashboards that belong to a user. </p>
+    /// <p>Restores an analysis.</p>
+    async fn restore_analysis(
+        &self,
+        input: RestoreAnalysisRequest,
+    ) -> Result<RestoreAnalysisResponse, RusotoError<RestoreAnalysisError>>;
+
+    /// <p>Searches for analyses that belong to the user specified in the filter.</p>
+    async fn search_analyses(
+        &self,
+        input: SearchAnalysesRequest,
+    ) -> Result<SearchAnalysesResponse, RusotoError<SearchAnalysesError>>;
+
+    /// <p>Searches for dashboards that belong to a user. </p>
     async fn search_dashboards(
         &self,
         input: SearchDashboardsRequest,
@@ -10972,6 +13570,30 @@ pub trait Quicksight {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates Amazon QuickSight customizations the current AWS Region. Currently, the only customization you can use is a theme.</p> <p>You can use customizations for your AWS account or, if you specify a namespace, for a QuickSight namespace instead. Customizations that apply to a namespace override customizations that apply to an AWS account. To find out which customizations apply, use the <code>DescribeAccountCustomization</code> API operation. </p>
+    async fn update_account_customization(
+        &self,
+        input: UpdateAccountCustomizationRequest,
+    ) -> Result<UpdateAccountCustomizationResponse, RusotoError<UpdateAccountCustomizationError>>;
+
+    /// <p>Updates the Amazon QuickSight settings in your AWS account.</p>
+    async fn update_account_settings(
+        &self,
+        input: UpdateAccountSettingsRequest,
+    ) -> Result<UpdateAccountSettingsResponse, RusotoError<UpdateAccountSettingsError>>;
+
+    /// <p>Updates an analysis in Amazon QuickSight</p>
+    async fn update_analysis(
+        &self,
+        input: UpdateAnalysisRequest,
+    ) -> Result<UpdateAnalysisResponse, RusotoError<UpdateAnalysisError>>;
+
+    /// <p>Updates the read and write permissions for an analysis.</p>
+    async fn update_analysis_permissions(
+        &self,
+        input: UpdateAnalysisPermissionsRequest,
+    ) -> Result<UpdateAnalysisPermissionsResponse, RusotoError<UpdateAnalysisPermissionsError>>;
 
     /// <p>Updates a dashboard in an AWS account.</p>
     async fn update_dashboard(
@@ -11146,7 +13768,85 @@ impl Quicksight for QuicksightClient {
         }
     }
 
-    /// <p>Creates a dashboard from a template. To first create a template, see the <a>CreateTemplate</a> API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
+    /// <p>Creates Amazon QuickSight customizations the current AWS Region. Currently, you can add a custom default theme by using the <code>CreateAccountCustomization</code> or <code>UpdateAccountCustomization</code> API operation. To further customize QuickSight by removing QuickSight sample assets and videos for all new users, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/customizing-quicksight.html">Customizing QuickSight</a> in the <i>Amazon QuickSight User Guide.</i> </p> <p>You can create customizations for your AWS account or, if you specify a namespace, for a QuickSight namespace instead. Customizations that apply to a namespace always override customizations that apply to an AWS account. To find out which customizations apply, use the <code>DescribeAccountCustomization</code> API operation.</p> <p>Before you use the <code>CreateAccountCustomization</code> API operation to add a theme as the namespace default, make sure that you first share the theme with the namespace. If you don't share it with the namespace, the theme isn't visible to your users even if you make it the default theme. To check if the theme is shared, view the current permissions by using the <code> <a>DescribeThemePermissions</a> </code> API operation. To share the theme, grant permissions by using the <code> <a>UpdateThemePermissions</a> </code> API operation. </p>
+    #[allow(unused_mut)]
+    async fn create_account_customization(
+        &self,
+        input: CreateAccountCustomizationRequest,
+    ) -> Result<CreateAccountCustomizationResponse, RusotoError<CreateAccountCustomizationError>>
+    {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/customizations",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace {
+            params.put("namespace", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAccountCustomizationResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAccountCustomizationError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an analysis in Amazon QuickSight.</p>
+    #[allow(unused_mut)]
+    async fn create_analysis(
+        &self,
+        input: CreateAnalysisRequest,
+    ) -> Result<CreateAnalysisResponse, RusotoError<CreateAnalysisError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/analyses/{analysis_id}",
+            analysis_id = input.analysis_id,
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAnalysisResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAnalysisError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a dashboard from a template. To first create a template, see the <code> <a>CreateTemplate</a> </code> API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
     #[allow(unused_mut)]
     async fn create_dashboard(
         &self,
@@ -11388,6 +14088,41 @@ impl Quicksight for QuicksightClient {
         }
     }
 
+    /// <p>(Enterprise edition only) Creates a new namespace for you to use with Amazon QuickSight.</p> <p>A namespace allows you to isolate the QuickSight users and groups that are registered for that namespace. Users that access the namespace can share assets only with other users or groups in the same namespace. They can't see users and groups in other namespaces. You can create a namespace after your AWS account is subscribed to QuickSight. The namespace must be unique within the AWS account. By default, there is a limit of 100 namespaces per AWS account. To increase your limit, create a ticket with AWS Support. </p>
+    #[allow(unused_mut)]
+    async fn create_namespace(
+        &self,
+        input: CreateNamespaceRequest,
+    ) -> Result<CreateNamespaceResponse, RusotoError<CreateNamespaceError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateNamespaceResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateNamespaceError::from_response(response))
+        }
+    }
+
     /// <p>Creates a template from an existing QuickSight analysis or template. You can use the resulting template to create a dashboard.</p> <p>A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create s dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with the analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p>
     #[allow(unused_mut)]
     async fn create_template(
@@ -11534,6 +14269,87 @@ impl Quicksight for QuicksightClient {
         }
     }
 
+    /// <p>Deletes all Amazon QuickSight customizations in this AWS Region for the specified AWS account and QuickSight namespace.</p>
+    #[allow(unused_mut)]
+    async fn delete_account_customization(
+        &self,
+        input: DeleteAccountCustomizationRequest,
+    ) -> Result<DeleteAccountCustomizationResponse, RusotoError<DeleteAccountCustomizationError>>
+    {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/customizations",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace {
+            params.put("namespace", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAccountCustomizationResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAccountCustomizationError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an analysis from Amazon QuickSight. You can optionally include a recovery window during which you can restore the analysis. If you don't specify a recovery window value, the operation defaults to 30 days. QuickSight attaches a <code>DeletionTime</code> stamp to the response that specifies the end of the recovery window. At the end of the recovery window, QuickSight deletes the analysis permanently.</p> <p>At any time before recovery window ends, you can use the <code>RestoreAnalysis</code> API operation to remove the <code>DeletionTime</code> stamp and cancel the deletion of the analysis. The analysis remains visible in the API until it's deleted, so you can describe it but you can't make a template from it.</p> <p>An analysis that's scheduled for deletion isn't accessible in the QuickSight console. To access it in the console, restore it. Deleting an analysis doesn't delete the dashboards that you publish from it.</p>
+    #[allow(unused_mut)]
+    async fn delete_analysis(
+        &self,
+        input: DeleteAnalysisRequest,
+    ) -> Result<DeleteAnalysisResponse, RusotoError<DeleteAnalysisError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/analyses/{analysis_id}",
+            analysis_id = input.analysis_id,
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.force_delete_without_recovery {
+            params.put("force-delete-without-recovery", x);
+        }
+        if let Some(ref x) = input.recovery_window_in_days {
+            params.put("recovery-window-in-days", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAnalysisResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAnalysisError::from_response(response))
+        }
+    }
+
     /// <p>Deletes a dashboard.</p>
     #[allow(unused_mut)]
     async fn delete_dashboard(
@@ -11606,7 +14422,7 @@ impl Quicksight for QuicksightClient {
         }
     }
 
-    /// <p>Deletes the data source permanently. This action breaks all the datasets that reference the deleted data source.</p>
+    /// <p>Deletes the data source permanently. This operation breaks all the datasets that reference the deleted data source.</p>
     #[allow(unused_mut)]
     async fn delete_data_source(
         &self,
@@ -11729,6 +14545,39 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIAMPolicyAssignmentError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a namespace and the users and groups that are associated with the namespace. This is an asynchronous process. Assets including dashboards, analyses, datasets and data sources are not deleted. To delete these assets, you use the API operations for the relevant asset. </p>
+    #[allow(unused_mut)]
+    async fn delete_namespace(
+        &self,
+        input: DeleteNamespaceRequest,
+    ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/namespaces/{namespace}",
+            aws_account_id = input.aws_account_id,
+            namespace = input.namespace
+        );
+
+        let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteNamespaceResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteNamespaceError::from_response(response))
         }
     }
 
@@ -11943,6 +14792,147 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUserByPrincipalIdError::from_response(response))
+        }
+    }
+
+    /// <p><p>Describes the customizations associated with the provided AWS account and Amazon QuickSight namespace in an AWS Region. The QuickSight console evaluates which customizations to apply by running this API operation with the <code>Resolved</code> flag included. </p> <p>To determine what customizations display when you run this command, it can help to visualize the relationship of the entities involved. </p> <ul> <li> <p> <code>AWS Account</code> - The AWS account exists at the top of the hierarchy. It has the potential to use all of the AWS Regions and AWS Services. When you subscribe to QuickSight, you choose one AWS Region to use as your home Region. That&#39;s where your free SPICE capacity is located. You can use QuickSight in any supported AWS Region. </p> </li> <li> <p> <code>AWS Region</code> - In each AWS Region where you sign in to QuickSight at least once, QuickSight acts as a separate instance of the same service. If you have a user directory, it resides in us-east-1, which is the US East (N. Virginia). Generally speaking, these users have access to QuickSight in any AWS Region, unless they are constrained to a namespace. </p> <p>To run the command in a different AWS Region, you change your Region settings. If you&#39;re using the AWS CLI, you can use one of the following options:</p> <ul> <li> <p>Use <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html">command line options</a>. </p> </li> <li> <p>Use <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html">named profiles</a>. </p> </li> <li> <p>Run <code>aws configure</code> to change your default AWS Region. Use Enter to key the same settings for your keys. For more information, see <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html">Configuring the AWS CLI</a>.</p> </li> </ul> </li> <li> <p> <code>Namespace</code> - A QuickSight namespace is a partition that contains users and assets (data sources, datasets, dashboards, and so on). To access assets that are in a specific namespace, users and groups must also be part of the same namespace. People who share a namespace are completely isolated from users and assets in other namespaces, even if they are in the same AWS account and AWS Region.</p> </li> <li> <p> <code>Applied customizations</code> - Within an AWS Region, a set of QuickSight customizations can apply to an AWS account or to a namespace. Settings that you apply to a namespace override settings that you apply to an AWS account. All settings are isolated to a single AWS Region. To apply them in other AWS Regions, run the <code>CreateAccountCustomization</code> command in each AWS Region where you want to apply the same customizations. </p> </li> </ul></p>
+    #[allow(unused_mut)]
+    async fn describe_account_customization(
+        &self,
+        input: DescribeAccountCustomizationRequest,
+    ) -> Result<DescribeAccountCustomizationResponse, RusotoError<DescribeAccountCustomizationError>>
+    {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/customizations",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace {
+            params.put("namespace", x);
+        }
+        if let Some(ref x) = input.resolved {
+            params.put("resolved", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAccountCustomizationResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccountCustomizationError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the settings that were used when your QuickSight subscription was first created in this AWS account.</p>
+    #[allow(unused_mut)]
+    async fn describe_account_settings(
+        &self,
+        input: DescribeAccountSettingsRequest,
+    ) -> Result<DescribeAccountSettingsResponse, RusotoError<DescribeAccountSettingsError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/settings",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAccountSettingsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccountSettingsError::from_response(response))
+        }
+    }
+
+    /// <p>Provides a summary of the metadata for an analysis.</p>
+    #[allow(unused_mut)]
+    async fn describe_analysis(
+        &self,
+        input: DescribeAnalysisRequest,
+    ) -> Result<DescribeAnalysisResponse, RusotoError<DescribeAnalysisError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/analyses/{analysis_id}",
+            analysis_id = input.analysis_id,
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAnalysisResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAnalysisError::from_response(response))
+        }
+    }
+
+    /// <p>Provides the read and write permissions for an analysis.</p>
+    #[allow(unused_mut)]
+    async fn describe_analysis_permissions(
+        &self,
+        input: DescribeAnalysisPermissionsRequest,
+    ) -> Result<DescribeAnalysisPermissionsResponse, RusotoError<DescribeAnalysisPermissionsError>>
+    {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/analyses/{analysis_id}/permissions",
+            analysis_id = input.analysis_id,
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAnalysisPermissionsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAnalysisPermissionsError::from_response(response))
         }
     }
 
@@ -12256,6 +15246,39 @@ impl Quicksight for QuicksightClient {
         }
     }
 
+    /// <p>Describes the current namespace.</p>
+    #[allow(unused_mut)]
+    async fn describe_namespace(
+        &self,
+        input: DescribeNamespaceRequest,
+    ) -> Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/namespaces/{namespace}",
+            aws_account_id = input.aws_account_id,
+            namespace = input.namespace
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeNamespaceResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeNamespaceError::from_response(response))
+        }
+    }
+
     /// <p>Describes a template's metadata.</p>
     #[allow(unused_mut)]
     async fn describe_template(
@@ -12509,7 +15532,7 @@ impl Quicksight for QuicksightClient {
         }
     }
 
-    /// <p>Generates a URL and authorization code that you can embed in your web server code. Before you use this command, make sure that you have configured the dashboards and permissions. </p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user's browser. The following rules apply to the combination of URL and authorization code:</p> <ul> <li> <p>They must be used together.</p> </li> <li> <p>They can be used one time only.</p> </li> <li> <p>They are valid for 5 minutes after you run this command.</p> </li> <li> <p>The resulting user session is valid for 10 hours.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p>
+    /// <p>Generates a session URL and authorization code that you can use to embed an Amazon QuickSight read-only dashboard in your web server code. Before you use this command, make sure that you have configured the dashboards and permissions. </p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user's browser. The following rules apply to the combination of URL and authorization code:</p> <ul> <li> <p>They must be used together.</p> </li> <li> <p>They can be used one time only.</p> </li> <li> <p>They are valid for 5 minutes after you run this command.</p> </li> <li> <p>The resulting user session is valid for 10 hours.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight</a> in the <i>Amazon QuickSight User Guide</i> .</p>
     #[allow(unused_mut)]
     async fn get_dashboard_embed_url(
         &self,
@@ -12555,6 +15578,91 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetDashboardEmbedUrlError::from_response(response))
+        }
+    }
+
+    /// <p><p>Generates a session URL and authorization code that you can use to embed the Amazon QuickSight console in your web server code. Use <code>GetSessionEmbedUrl</code> where you want to provide an authoring portal that allows users to create data sources, datasets, analyses, and dashboards. The users who access an embedded QuickSight console need belong to the author or admin security cohort. If you want to restrict permissions to some of these features, add a custom permissions profile to the user with the <code> <a>UpdateUser</a> </code> API operation. Use <code> <a>RegisterUser</a> </code> API operation to add a new user with a custom permission profile attached. For more information, see the following sections in the <i>Amazon QuickSight User Guide</i>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-the-quicksight-console.html">Embedding the Amazon QuickSight Console</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/quicksight/latest/user/customizing-permissions-to-the-quicksight-console.html">Customizing Access to the Amazon QuickSight Console</a> </p> </li> </ul></p>
+    #[allow(unused_mut)]
+    async fn get_session_embed_url(
+        &self,
+        input: GetSessionEmbedUrlRequest,
+    ) -> Result<GetSessionEmbedUrlResponse, RusotoError<GetSessionEmbedUrlError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/session-embed-url",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.entry_point {
+            params.put("entry-point", x);
+        }
+        if let Some(ref x) = input.session_lifetime_in_minutes {
+            params.put("session-lifetime", x);
+        }
+        if let Some(ref x) = input.user_arn {
+            params.put("user-arn", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSessionEmbedUrlResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSessionEmbedUrlError::from_response(response))
+        }
+    }
+
+    /// <p>Lists Amazon QuickSight analyses that exist in the specified AWS account.</p>
+    #[allow(unused_mut)]
+    async fn list_analyses(
+        &self,
+        input: ListAnalysesRequest,
+    ) -> Result<ListAnalysesResponse, RusotoError<ListAnalysesError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/analyses",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAnalysesResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAnalysesError::from_response(response))
         }
     }
 
@@ -12935,6 +16043,47 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListIngestionsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the namespaces for the specified AWS account.</p>
+    #[allow(unused_mut)]
+    async fn list_namespaces(
+        &self,
+        input: ListNamespacesRequest,
+    ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/namespaces",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListNamespacesResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListNamespacesError::from_response(response))
         }
     }
 
@@ -13344,7 +16493,75 @@ impl Quicksight for QuicksightClient {
         }
     }
 
-    /// <p>Searchs for dashboards that belong to a user. </p>
+    /// <p>Restores an analysis.</p>
+    #[allow(unused_mut)]
+    async fn restore_analysis(
+        &self,
+        input: RestoreAnalysisRequest,
+    ) -> Result<RestoreAnalysisResponse, RusotoError<RestoreAnalysisError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/restore/analyses/{analysis_id}",
+            analysis_id = input.analysis_id,
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RestoreAnalysisResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RestoreAnalysisError::from_response(response))
+        }
+    }
+
+    /// <p>Searches for analyses that belong to the user specified in the filter.</p>
+    #[allow(unused_mut)]
+    async fn search_analyses(
+        &self,
+        input: SearchAnalysesRequest,
+    ) -> Result<SearchAnalysesResponse, RusotoError<SearchAnalysesError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/search/analyses",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchAnalysesResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchAnalysesError::from_response(response))
+        }
+    }
+
+    /// <p>Searches for dashboards that belong to a user. </p>
     #[allow(unused_mut)]
     async fn search_dashboards(
         &self,
@@ -13449,6 +16666,156 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates Amazon QuickSight customizations the current AWS Region. Currently, the only customization you can use is a theme.</p> <p>You can use customizations for your AWS account or, if you specify a namespace, for a QuickSight namespace instead. Customizations that apply to a namespace override customizations that apply to an AWS account. To find out which customizations apply, use the <code>DescribeAccountCustomization</code> API operation. </p>
+    #[allow(unused_mut)]
+    async fn update_account_customization(
+        &self,
+        input: UpdateAccountCustomizationRequest,
+    ) -> Result<UpdateAccountCustomizationResponse, RusotoError<UpdateAccountCustomizationError>>
+    {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/customizations",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace {
+            params.put("namespace", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAccountCustomizationResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAccountCustomizationError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the Amazon QuickSight settings in your AWS account.</p>
+    #[allow(unused_mut)]
+    async fn update_account_settings(
+        &self,
+        input: UpdateAccountSettingsRequest,
+    ) -> Result<UpdateAccountSettingsResponse, RusotoError<UpdateAccountSettingsError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/settings",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAccountSettingsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAccountSettingsError::from_response(response))
+        }
+    }
+
+    /// <p>Updates an analysis in Amazon QuickSight</p>
+    #[allow(unused_mut)]
+    async fn update_analysis(
+        &self,
+        input: UpdateAnalysisRequest,
+    ) -> Result<UpdateAnalysisResponse, RusotoError<UpdateAnalysisError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/analyses/{analysis_id}",
+            analysis_id = input.analysis_id,
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAnalysisResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAnalysisError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the read and write permissions for an analysis.</p>
+    #[allow(unused_mut)]
+    async fn update_analysis_permissions(
+        &self,
+        input: UpdateAnalysisPermissionsRequest,
+    ) -> Result<UpdateAnalysisPermissionsResponse, RusotoError<UpdateAnalysisPermissionsError>>
+    {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/analyses/{analysis_id}/permissions",
+            analysis_id = input.analysis_id,
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAnalysisPermissionsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAnalysisPermissionsError::from_response(response))
         }
     }
 

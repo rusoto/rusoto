@@ -213,7 +213,11 @@ pub struct CompleteLayerUploadResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryRequest {
-    /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
+    /// <p>The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.</p>
+    #[serde(rename = "encryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_configuration: Option<EncryptionConfiguration>,
+    /// <p>The image scanning configuration for the repository. This determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
     #[serde(rename = "imageScanningConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_scanning_configuration: Option<ImageScanningConfiguration>,
@@ -461,6 +465,18 @@ pub struct DescribeRepositoriesResponse {
     pub repositories: Option<Vec<Repository>>,
 }
 
+/// <p>The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.</p> <p>By default, when no encryption configuration is set or the <code>AES256</code> encryption type is used, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts your data at rest using an AES-256 encryption algorithm. This does not require any action on your part.</p> <p>For more control over the encryption of the contents of your repository, you can use server-side encryption with customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) to encrypt your images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/encryption-at-rest.html">Amazon ECR encryption at rest</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EncryptionConfiguration {
+    /// <p>The encryption type to use.</p> <p>If you use the <code>KMS</code> encryption type, the contents of the repository will be encrypted using server-side encryption with customer master keys (CMKs) stored in AWS KMS. When you use AWS KMS to encrypt your data, you can either use the default AWS managed CMK for Amazon ECR, or specify your own CMK, which you already created. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs Stored in AWS Key Management Service (SSE-KMS)</a> in the <i>Amazon Simple Storage Service Console Developer Guide.</i>.</p> <p>If you use the <code>AES256</code> encryption type, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts the images in the repository using an AES-256 encryption algorithm. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Protecting Data Using Server-Side Encryption with Amazon S3-Managed Encryption Keys (SSE-S3)</a> in the <i>Amazon Simple Storage Service Console Developer Guide.</i>.</p>
+    #[serde(rename = "encryptionType")]
+    pub encryption_type: String,
+    /// <p>If you use the <code>KMS</code> encryption type, specify the CMK to use for encryption. The alias, key ID, or full ARN of the CMK can be specified. The key must exist in the same Region as the repository. If no key is specified, the default AWS managed CMK for Amazon ECR will be used.</p>
+    #[serde(rename = "kmsKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizationTokenRequest {
@@ -642,7 +658,7 @@ pub struct Image {
     #[serde(rename = "imageManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest: Option<String>,
-    /// <p>The media type associated with the image manifest.</p>
+    /// <p>The manifest media type of the image.</p>
     #[serde(rename = "imageManifestMediaType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest_media_type: Option<String>,
@@ -660,10 +676,18 @@ pub struct Image {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageDetail {
+    /// <p>The artifact media type of the image.</p>
+    #[serde(rename = "artifactMediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_media_type: Option<String>,
     /// <p>The <code>sha256</code> digest of the image manifest.</p>
     #[serde(rename = "imageDigest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_digest: Option<String>,
+    /// <p>The media type of the image manifest.</p>
+    #[serde(rename = "imageManifestMediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_manifest_media_type: Option<String>,
     /// <p>The date and time, expressed in standard JavaScript date format, at which the current image was pushed to the repository. </p>
     #[serde(rename = "imagePushedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1013,7 +1037,7 @@ pub struct PutImageRequest {
     #[serde(rename = "imageManifestMediaType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest_media_type: Option<String>,
-    /// <p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or OCI formats.</p>
+    /// <p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or Open Container Initiative (OCI) formats.</p>
     #[serde(rename = "imageTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tag: Option<String>,
@@ -1139,6 +1163,10 @@ pub struct Repository {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
+    /// <p>The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.</p>
+    #[serde(rename = "encryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_configuration: Option<EncryptionConfiguration>,
     #[serde(rename = "imageScanningConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_scanning_configuration: Option<ImageScanningConfiguration>,
@@ -1158,7 +1186,7 @@ pub struct Repository {
     #[serde(rename = "repositoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
-    /// <p>The URI for the repository. You can use this URI for Docker <code>push</code> or <code>pull</code> operations.</p>
+    /// <p>The URI for the repository. You can use this URI for container image <code>push</code> and <code>pull</code> operations.</p>
     #[serde(rename = "repositoryUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_uri: Option<String>,
@@ -1507,6 +1535,8 @@ pub enum CompleteLayerUploadError {
     InvalidLayer(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The image layer already exists in the associated repository.</p>
     LayerAlreadyExists(String),
     /// <p>Layer parts must be at least 5 MiB in size.</p>
@@ -1515,7 +1545,7 @@ pub enum CompleteLayerUploadError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+    /// <p>The upload could not be found, or the specified upload ID is not valid for this repository.</p>
     UploadNotFound(String),
 }
 
@@ -1533,6 +1563,9 @@ impl CompleteLayerUploadError {
                     return RusotoError::Service(CompleteLayerUploadError::InvalidParameter(
                         err.msg,
                     ))
+                }
+                "KmsException" => {
+                    return RusotoError::Service(CompleteLayerUploadError::Kms(err.msg))
                 }
                 "LayerAlreadyExistsException" => {
                     return RusotoError::Service(CompleteLayerUploadError::LayerAlreadyExists(
@@ -1569,6 +1602,7 @@ impl fmt::Display for CompleteLayerUploadError {
             CompleteLayerUploadError::EmptyUpload(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::InvalidLayer(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::Kms(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::LayerAlreadyExists(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::LayerPartTooSmall(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
@@ -1585,6 +1619,8 @@ pub enum CreateRepositoryError {
     InvalidParameter(String),
     /// <p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     InvalidTagParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository already exists in the specified registry.</p>
@@ -1607,6 +1643,7 @@ impl CreateRepositoryError {
                         err.msg,
                     ))
                 }
+                "KmsException" => return RusotoError::Service(CreateRepositoryError::Kms(err.msg)),
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateRepositoryError::LimitExceeded(err.msg))
                 }
@@ -1634,6 +1671,7 @@ impl fmt::Display for CreateRepositoryError {
         match *self {
             CreateRepositoryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::Kms(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::RepositoryAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::Server(ref cause) => write!(f, "{}", cause),
@@ -1703,6 +1741,8 @@ impl Error for DeleteLifecyclePolicyError {}
 pub enum DeleteRepositoryError {
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The specified repository contains images. To delete a repository that contains images, you must force the deletion with the <code>force</code> parameter.</p>
     RepositoryNotEmpty(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
@@ -1718,6 +1758,7 @@ impl DeleteRepositoryError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRepositoryError::InvalidParameter(err.msg))
                 }
+                "KmsException" => return RusotoError::Service(DeleteRepositoryError::Kms(err.msg)),
                 "RepositoryNotEmptyException" => {
                     return RusotoError::Service(DeleteRepositoryError::RepositoryNotEmpty(err.msg))
                 }
@@ -1739,6 +1780,7 @@ impl fmt::Display for DeleteRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteRepositoryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::Kms(ref cause) => write!(f, "{}", cause),
             DeleteRepositoryError::RepositoryNotEmpty(ref cause) => write!(f, "{}", cause),
             DeleteRepositoryError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             DeleteRepositoryError::Server(ref cause) => write!(f, "{}", cause),
@@ -2225,6 +2267,8 @@ impl Error for GetRepositoryPolicyError {}
 pub enum InitiateLayerUploadError {
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
@@ -2239,6 +2283,9 @@ impl InitiateLayerUploadError {
                     return RusotoError::Service(InitiateLayerUploadError::InvalidParameter(
                         err.msg,
                     ))
+                }
+                "KmsException" => {
+                    return RusotoError::Service(InitiateLayerUploadError::Kms(err.msg))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(InitiateLayerUploadError::RepositoryNotFound(
@@ -2260,6 +2307,7 @@ impl fmt::Display for InitiateLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             InitiateLayerUploadError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            InitiateLayerUploadError::Kms(ref cause) => write!(f, "{}", cause),
             InitiateLayerUploadError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             InitiateLayerUploadError::Server(ref cause) => write!(f, "{}", cause),
         }
@@ -2363,6 +2411,8 @@ pub enum PutImageError {
     ImageTagAlreadyExists(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
     LayersNotFound(String),
     /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
@@ -2391,6 +2441,7 @@ impl PutImageError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutImageError::InvalidParameter(err.msg))
                 }
+                "KmsException" => return RusotoError::Service(PutImageError::Kms(err.msg)),
                 "LayersNotFoundException" => {
                     return RusotoError::Service(PutImageError::LayersNotFound(err.msg))
                 }
@@ -2419,6 +2470,7 @@ impl fmt::Display for PutImageError {
             PutImageError::ImageDigestDoesNotMatch(ref cause) => write!(f, "{}", cause),
             PutImageError::ImageTagAlreadyExists(ref cause) => write!(f, "{}", cause),
             PutImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutImageError::Kms(ref cause) => write!(f, "{}", cause),
             PutImageError::LayersNotFound(ref cause) => write!(f, "{}", cause),
             PutImageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             PutImageError::ReferencedImagesNotFound(ref cause) => write!(f, "{}", cause),
@@ -2685,7 +2737,7 @@ pub enum StartLifecyclePolicyPreviewError {
     InvalidParameter(String),
     /// <p>The lifecycle policy could not be found, and no policy is set to the repository.</p>
     LifecyclePolicyNotFound(String),
-    /// <p>The previous lifecycle policy preview request has not completed. Please try again later.</p>
+    /// <p>The previous lifecycle policy preview request has not completed. Wait and try again.</p>
     LifecyclePolicyPreviewInProgress(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
@@ -2863,13 +2915,15 @@ pub enum UploadLayerPartError {
     InvalidLayerPart(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+    /// <p>The upload could not be found, or the specified upload ID is not valid for this repository.</p>
     UploadNotFound(String),
 }
 
@@ -2883,6 +2937,7 @@ impl UploadLayerPartError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(UploadLayerPartError::InvalidParameter(err.msg))
                 }
+                "KmsException" => return RusotoError::Service(UploadLayerPartError::Kms(err.msg)),
                 "LimitExceededException" => {
                     return RusotoError::Service(UploadLayerPartError::LimitExceeded(err.msg))
                 }
@@ -2908,6 +2963,7 @@ impl fmt::Display for UploadLayerPartError {
         match *self {
             UploadLayerPartError::InvalidLayerPart(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UploadLayerPartError::Kms(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::Server(ref cause) => write!(f, "{}", cause),

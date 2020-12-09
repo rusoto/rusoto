@@ -82,10 +82,339 @@ pub struct AvailabilityZone {
     pub zone_name: Option<String>,
 }
 
+/// <p>Contains information about settings for logging access for the stage.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayAccessLogSettings {
+    /// <p>The ARN of the CloudWatch Logs log group that receives the access logs.</p>
+    #[serde(rename = "DestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_arn: Option<String>,
+    /// <p>A single-line format of the access logs of data, as specified by selected <code>$context</code> variables. The format must include at least <code>$context.requestId</code>.</p>
+    #[serde(rename = "Format")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+}
+
+/// <p>Contains information about settings for canary deployment in the stage.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayCanarySettings {
+    /// <p>The deployment identifier for the canary deployment.</p>
+    #[serde(rename = "DeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The percentage of traffic that is diverted to a canary deployment.</p>
+    #[serde(rename = "PercentTraffic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent_traffic: Option<f64>,
+    /// <p>Stage variables that are overridden in the canary release deployment. The variables include new stage variables that are introduced in the canary.</p> <p>Each variable is represented as a string-to-string map between the stage variable name and the variable value.</p>
+    #[serde(rename = "StageVariableOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_variable_overrides: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Indicates whether the canary deployment uses the stage cache.</p>
+    #[serde(rename = "UseStageCache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_stage_cache: Option<bool>,
+}
+
+/// <p>Contains information about the endpoints for the API.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayEndpointConfiguration {
+    /// <p>A list of endpoint types for the REST API.</p> <p>For an edge-optimized API, the endpoint type is <code>EDGE</code>. For a Regional API, the endpoint type is <code>REGIONAL</code>. For a private API, the endpoint type is <code>PRIVATE</code>.</p>
+    #[serde(rename = "Types")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub types: Option<Vec<String>>,
+}
+
+/// <p>Defines settings for a method for the stage.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayMethodSettings {
+    /// <p>Indicates whether the cached responses are encrypted. </p>
+    #[serde(rename = "CacheDataEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_data_encrypted: Option<bool>,
+    /// <p>Specifies the time to live (TTL), in seconds, for cached responses. The higher the TTL, the longer the response is cached.</p>
+    #[serde(rename = "CacheTtlInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_ttl_in_seconds: Option<i64>,
+    /// <p>Indicates whether responses are cached and returned for requests. For responses to be cached, a cache cluster must be enabled on the stage.</p>
+    #[serde(rename = "CachingEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caching_enabled: Option<bool>,
+    /// <p>Indicates whether data trace logging is enabled for the method. Data trace logging affects the log entries that are pushed to CloudWatch Logs.</p>
+    #[serde(rename = "DataTraceEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_trace_enabled: Option<bool>,
+    /// <p>The HTTP method. You can use an asterisk (*) as a wildcard to apply method settings to multiple methods.</p>
+    #[serde(rename = "HttpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p>The logging level for this method. The logging level affects the log entries that are pushed to CloudWatch Logs.</p> <p>If the logging level is <code>ERROR</code>, then the logs only include error-level entries.</p> <p>If the logging level is <code>INFO</code>, then the logs include both <code>ERROR</code> events and extra informational events.</p> <p>Valid values: <code>OFF</code> | <code>ERROR</code> | <code>INFO</code> </p>
+    #[serde(rename = "LoggingLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_level: Option<String>,
+    /// <p>Indicates whether CloudWatch metrics are enabled for the method. </p>
+    #[serde(rename = "MetricsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metrics_enabled: Option<bool>,
+    /// <p>Indicates whether authorization is required for a cache invalidation request.</p>
+    #[serde(rename = "RequireAuthorizationForCacheControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub require_authorization_for_cache_control: Option<bool>,
+    /// <p>The resource path for this method. Forward slashes (/) are encoded as ~1 . The initial slash must include a forward slash.</p> <p>For example, the path value <code>/resource/subresource</code> must be encoded as <code>/~1resource~1subresource</code>.</p> <p>To specify the root path, use only a slash (/). You can use an asterisk (*) as a wildcard to apply method settings to multiple methods.</p>
+    #[serde(rename = "ResourcePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_path: Option<String>,
+    /// <p>The throttling burst limit for the method.</p>
+    #[serde(rename = "ThrottlingBurstLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttling_burst_limit: Option<i64>,
+    /// <p>The throttling rate limit for the method.</p>
+    #[serde(rename = "ThrottlingRateLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttling_rate_limit: Option<f64>,
+    /// <p>Indicates how to handle unauthorized requests for cache invalidation.</p> <p>Valid values: <code>FAIL_WITH_403</code> | <code>SUCCEED_WITH_RESPONSE_HEADER</code> | <code>SUCCEED_WITHOUT_RESPONSE_HEADER</code> </p>
+    #[serde(rename = "UnauthorizedCacheControlHeaderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unauthorized_cache_control_header_strategy: Option<String>,
+}
+
+/// <p>contains information about a REST API in version 1 of Amazon API Gateway.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayRestApiDetails {
+    /// <p>The source of the API key for metering requests according to a usage plan.</p> <p> <code>HEADER</code> indicates whether to read the API key from the X-API-Key header of a request.</p> <p> <code>AUTHORIZER</code> indicates whether to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</p>
+    #[serde(rename = "ApiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
+    /// <p>The list of binary media types supported by the REST API.</p>
+    #[serde(rename = "BinaryMediaTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub binary_media_types: Option<Vec<String>>,
+    /// <p>Indicates when the API was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<String>,
+    /// <p>A description of the REST API.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The endpoint configuration of the REST API.</p>
+    #[serde(rename = "EndpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<AwsApiGatewayEndpointConfiguration>,
+    /// <p>The identifier of the REST API.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The minimum size in bytes of a payload before compression is enabled.</p> <p>If <code>null</code>, then compression is disabled.</p> <p>If 0, then all payloads are compressed.</p>
+    #[serde(rename = "MinimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
+    /// <p>The name of the REST API.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The version identifier for the REST API.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+/// <p>Provides information about a version 1 Amazon API Gateway stage.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayStageDetails {
+    /// <p>Settings for logging access for the stage.</p>
+    #[serde(rename = "AccessLogSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log_settings: Option<AwsApiGatewayAccessLogSettings>,
+    /// <p>Indicates whether a cache cluster is enabled for the stage.</p>
+    #[serde(rename = "CacheClusterEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_enabled: Option<bool>,
+    /// <p>If a cache cluster is enabled, the size of the cache cluster.</p>
+    #[serde(rename = "CacheClusterSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_size: Option<String>,
+    /// <p>If a cache cluster is enabled, the status of the cache cluster.</p>
+    #[serde(rename = "CacheClusterStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_status: Option<String>,
+    /// <p>Information about settings for canary deployment in the stage.</p>
+    #[serde(rename = "CanarySettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_settings: Option<AwsApiGatewayCanarySettings>,
+    /// <p>The identifier of the client certificate for the stage.</p>
+    #[serde(rename = "ClientCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_certificate_id: Option<String>,
+    /// <p>Indicates when the stage was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<String>,
+    /// <p>The identifier of the deployment that the stage points to.</p>
+    #[serde(rename = "DeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>A description of the stage.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The version of the API documentation that is associated with the stage.</p>
+    #[serde(rename = "DocumentationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documentation_version: Option<String>,
+    /// <p>Indicates when the stage was most recently updated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "LastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<String>,
+    /// <p>Defines the method settings for the stage.</p>
+    #[serde(rename = "MethodSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_settings: Option<Vec<AwsApiGatewayMethodSettings>>,
+    /// <p>The name of the stage.</p>
+    #[serde(rename = "StageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    /// <p>Indicates whether active tracing with AWS X-Ray is enabled for the stage.</p>
+    #[serde(rename = "TracingEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_enabled: Option<bool>,
+    /// <p><p>A map that defines the stage variables for the stage.</p> <p>Variable names can have alphanumeric and underscore characters.</p> <p>Variable values can contain the following characters:</p> <ul> <li> <p>Uppercase and lowercase letters</p> </li> <li> <p>Numbers</p> </li> <li> <p>Special characters -._~:/?#&amp;=,</p> </li> </ul></p>
+    #[serde(rename = "Variables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARN of the web ACL associated with the stage.</p>
+    #[serde(rename = "WebAclArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_acl_arn: Option<String>,
+}
+
+/// <p>Contains information about a version 2 API in Amazon API Gateway.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayV2ApiDetails {
+    /// <p>The URI of the API. </p> <p>Uses the format <code> <i>&lt;api-id&gt;</i>.execute-api.<i>&lt;region&gt;</i>.amazonaws.com</code> </p> <p>The stage name is typically appended to the URI to form a complete path to a deployed API stage.</p>
+    #[serde(rename = "ApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_endpoint: Option<String>,
+    /// <p>The identifier of the API.</p>
+    #[serde(rename = "ApiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_id: Option<String>,
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. </p>
+    #[serde(rename = "ApiKeySelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_selection_expression: Option<String>,
+    /// <p>A cross-origin resource sharing (CORS) configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<AwsCorsConfiguration>,
+    /// <p>Indicates when the API was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<String>,
+    /// <p>A description of the API.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the API.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The API protocol for the API.</p> <p>Valid values: <code>WEBSOCKET</code> | <code>HTTP</code> </p>
+    #[serde(rename = "ProtocolType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol_type: Option<String>,
+    /// <p>The route selection expression for the API.</p> <p>For HTTP APIs, must be <code>${request.method} ${request.path}</code>. This is the default value for HTTP APIs.</p> <p>For WebSocket APIs, there is no default value.</p>
+    #[serde(rename = "RouteSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_selection_expression: Option<String>,
+    /// <p>The version identifier for the API.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+/// <p>Contains route settings for a stage.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayV2RouteSettings {
+    /// <p>Indicates whether data trace logging is enabled. Data trace logging affects the log entries that are pushed to CloudWatch Logs. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "DataTraceEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_trace_enabled: Option<bool>,
+    /// <p>Indicates whether detailed metrics are enabled.</p>
+    #[serde(rename = "DetailedMetricsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detailed_metrics_enabled: Option<bool>,
+    /// <p>The logging level. The logging level affects the log entries that are pushed to CloudWatch Logs. Supported only for WebSocket APIs.</p> <p>If the logging level is <code>ERROR</code>, then the logs only include error-level entries.</p> <p>If the logging level is <code>INFO</code>, then the logs include both <code>ERROR</code> events and extra informational events.</p> <p>Valid values: <code>OFF</code> | <code>ERROR</code> | <code>INFO</code> </p>
+    #[serde(rename = "LoggingLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_level: Option<String>,
+    /// <p>The throttling burst limit.</p>
+    #[serde(rename = "ThrottlingBurstLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttling_burst_limit: Option<i64>,
+    /// <p>The throttling rate limit.</p>
+    #[serde(rename = "ThrottlingRateLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttling_rate_limit: Option<f64>,
+}
+
+/// <p>Contains information about a version 2 stage for Amazon API Gateway.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsApiGatewayV2StageDetails {
+    /// <p>Information about settings for logging access for the stage.</p>
+    #[serde(rename = "AccessLogSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log_settings: Option<AwsApiGatewayAccessLogSettings>,
+    /// <p>Indicates whether the stage is managed by API Gateway.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Indicates whether updates to an API automatically trigger a new deployment.</p>
+    #[serde(rename = "AutoDeploy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deploy: Option<bool>,
+    /// <p>Indicates when the stage was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<String>,
+    /// <p>Default route settings for the stage.</p>
+    #[serde(rename = "DefaultRouteSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_route_settings: Option<AwsApiGatewayV2RouteSettings>,
+    /// <p>The identifier of the deployment that the stage is associated with. </p>
+    #[serde(rename = "DeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The description of the stage.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The status of the last deployment of a stage. Supported only if the stage has automatic deployment enabled.</p>
+    #[serde(rename = "LastDeploymentStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_deployment_status_message: Option<String>,
+    /// <p>Indicates when the stage was most recently updated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "LastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<String>,
+    /// <p>The route settings for the stage.</p>
+    #[serde(rename = "RouteSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_settings: Option<AwsApiGatewayV2RouteSettings>,
+    /// <p>The name of the stage.</p>
+    #[serde(rename = "StageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    /// <p><p>A map that defines the stage variables for the stage.</p> <p>Variable names can have alphanumeric and underscore characters.</p> <p>Variable values can contain the following characters:</p> <ul> <li> <p>Uppercase and lowercase letters</p> </li> <li> <p>Numbers</p> </li> <li> <p>Special characters -._~:/?#&amp;=,</p> </li> </ul></p>
+    #[serde(rename = "StageVariables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Provides details about an auto scaling group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsAutoScalingAutoScalingGroupDetails {
-    /// <p>The datetime when the auto scaling group was created.</p>
+    /// <p>Indicates when the auto scaling group was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<String>,
@@ -107,9 +436,245 @@ pub struct AwsAutoScalingAutoScalingGroupDetails {
     pub load_balancer_names: Option<Vec<String>>,
 }
 
+/// <p>Provides details about an AWS Certificate Manager certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCertificateManagerCertificateDetails {
+    /// <p>The ARN of the private certificate authority (CA) that will be used to issue the certificate.</p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_authority_arn: Option<String>,
+    /// <p>Indicates when the certificate was requested.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The fully qualified domain name (FQDN), such as www.example.com, that is secured by the certificate.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>Contains information about the initial validation of each domain name that occurs as a result of the <code>RequestCertificate</code> request.</p> <p>Only provided if the certificate type is <code>AMAZON_ISSUED</code>.</p>
+    #[serde(rename = "DomainValidationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_validation_options:
+        Option<Vec<AwsCertificateManagerCertificateDomainValidationOption>>,
+    /// <p>Contains a list of Extended Key Usage X.509 v3 extension objects. Each object specifies a purpose for which the certificate public key can be used and consists of a name and an object identifier (OID).</p>
+    #[serde(rename = "ExtendedKeyUsages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extended_key_usages: Option<Vec<AwsCertificateManagerCertificateExtendedKeyUsage>>,
+    /// <p>For a failed certificate request, the reason for the failure.</p> <p>Valid values: <code>NO_AVAILABLE_CONTACTS</code> | <code>ADDITIONAL_VERIFICATION_REQUIRED</code> | <code>DOMAIN_NOT_ALLOWED</code> | <code>INVALID_PUBLIC_DOMAIN</code> | <code>DOMAIN_VALIDATION_DENIED</code> | <code>CAA_ERROR</code> | <code>PCA_LIMIT_EXCEEDED</code> | <code>PCA_INVALID_ARN</code> | <code>PCA_INVALID_STATE</code> | <code>PCA_REQUEST_FAILED</code> | <code>PCA_NAME_CONSTRAINTS_VALIDATION</code> | <code>PCA_RESOURCE_NOT_FOUND</code> | <code>PCA_INVALID_ARGS</code> | <code>PCA_INVALID_DURATION</code> | <code>PCA_ACCESS_DENIED</code> | <code>SLR_NOT_FOUND</code> | <code>OTHER</code> </p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>Indicates when the certificate was imported. Provided if the certificate type is <code>IMPORTED</code>.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "ImportedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub imported_at: Option<String>,
+    /// <p>The list of ARNs for the AWS resources that use the certificate.</p>
+    #[serde(rename = "InUseBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub in_use_by: Option<Vec<String>>,
+    /// <p>Indicates when the certificate was issued. Provided if the certificate type is <code>AMAZON_ISSUED</code>.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "IssuedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issued_at: Option<String>,
+    /// <p>The name of the certificate authority that issued and signed the certificate.</p>
+    #[serde(rename = "Issuer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issuer: Option<String>,
+    /// <p>The algorithm that was used to generate the public-private key pair.</p> <p>Valid values: <code>RSA_2048</code> | <code>RSA_1024</code> |<code> RSA_4096</code> | <code>EC_prime256v1</code> | <code>EC_secp384r1</code> | <code>EC_secp521r1</code> </p>
+    #[serde(rename = "KeyAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_algorithm: Option<String>,
+    /// <p>A list of key usage X.509 v3 extension objects.</p>
+    #[serde(rename = "KeyUsages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_usages: Option<Vec<AwsCertificateManagerCertificateKeyUsage>>,
+    /// <p>The time after which the certificate becomes invalid.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "NotAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_after: Option<String>,
+    /// <p>The time before which the certificate is not valid.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "NotBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_before: Option<String>,
+    /// <p>Provides a value that specifies whether to add the certificate to a transparency log.</p>
+    #[serde(rename = "Options")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub options: Option<AwsCertificateManagerCertificateOptions>,
+    /// <p>Whether the certificate is eligible for renewal.</p> <p>Valid values: <code>ELIGIBLE</code> | <code>INELIGIBLE</code> </p>
+    #[serde(rename = "RenewalEligibility")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_eligibility: Option<String>,
+    /// <p>Information about the status of the AWS Certificate Manager managed renewal for the certificate. Provided only when the certificate type is <code>AMAZON_ISSUED</code>.</p>
+    #[serde(rename = "RenewalSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_summary: Option<AwsCertificateManagerCertificateRenewalSummary>,
+    /// <p>The serial number of the certificate.</p>
+    #[serde(rename = "Serial")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub serial: Option<String>,
+    /// <p>The algorithm that was used to sign the certificate.</p>
+    #[serde(rename = "SignatureAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signature_algorithm: Option<String>,
+    /// <p>The status of the certificate.</p> <p>Valid values: <code>PENDING_VALIDATION</code> | <code>ISSUED</code> | <code>INACTIVE</code> | <code>EXPIRED</code> | <code>VALIDATION_TIMED_OUT</code> | <code>REVOKED</code> | <code>FAILED</code> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The name of the entity that is associated with the public key contained in the certificate.</p>
+    #[serde(rename = "Subject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject: Option<String>,
+    /// <p>One or more domain names (subject alternative names) included in the certificate. This list contains the domain names that are bound to the public key that is contained in the certificate.</p> <p>The subject alternative names include the canonical domain name (CN) of the certificate and additional domain names that can be used to connect to the website.</p>
+    #[serde(rename = "SubjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<Vec<String>>,
+    /// <p>The source of the certificate. For certificates that AWS Certificate Manager provides, <code>Type</code> is <code>AMAZON_ISSUED</code>. For certificates that are imported with <code>ImportCertificate</code>, <code>Type</code> is <code>IMPORTED</code>.</p> <p>Valid values: <code>IMPORTED</code> | <code>AMAZON_ISSUED</code> | <code>PRIVATE</code> </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p><p>Contains information about one of the following:</p> <ul> <li> <p>The initial validation of each domain name that occurs as a result of the <code>RequestCertificate</code> request</p> </li> <li> <p>The validation of each domain name in the certificate, as it pertains to AWS Certificate Manager managed renewal</p> </li> </ul></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCertificateManagerCertificateDomainValidationOption {
+    /// <p>A fully qualified domain name (FQDN) in the certificate.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The CNAME record that is added to the DNS database for domain validation.</p>
+    #[serde(rename = "ResourceRecord")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_record: Option<AwsCertificateManagerCertificateResourceRecord>,
+    /// <p>The domain name that AWS Certificate Manager uses to send domain validation emails.</p>
+    #[serde(rename = "ValidationDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_domain: Option<String>,
+    /// <p>A list of email addresses that AWS Certificate Manager uses to send domain validation emails.</p>
+    #[serde(rename = "ValidationEmails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_emails: Option<Vec<String>>,
+    /// <p>The method used to validate the domain name.</p>
+    #[serde(rename = "ValidationMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_method: Option<String>,
+    /// <p>The validation status of the domain name.</p>
+    #[serde(rename = "ValidationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_status: Option<String>,
+}
+
+/// <p>Contains information about an extended key usage X.509 v3 extension object.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCertificateManagerCertificateExtendedKeyUsage {
+    /// <p>The name of an extension value. Indicates the purpose for which the certificate public key can be used.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>An object identifier (OID) for the extension value.</p> <p>The format is numbers separated by periods.</p>
+    #[serde(rename = "OId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub o_id: Option<String>,
+}
+
+/// <p>Contains information about a key usage X.509 v3 extension object.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCertificateManagerCertificateKeyUsage {
+    /// <p>The key usage extension name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Contains other options for the certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCertificateManagerCertificateOptions {
+    /// <p>Whether to add the certificate to a transparency log.</p> <p>Valid values: <code>DISABLED</code> | <code>ENABLED</code> </p>
+    #[serde(rename = "CertificateTransparencyLoggingPreference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_transparency_logging_preference: Option<String>,
+}
+
+/// <p>Contains information about the AWS Certificate Manager managed renewal for an <code>AMAZON_ISSUED</code> certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCertificateManagerCertificateRenewalSummary {
+    /// <p>Information about the validation of each domain name in the certificate, as it pertains to AWS Certificate Manager managed renewal. Provided only when the certificate type is <code>AMAZON_ISSUED</code>.</p>
+    #[serde(rename = "DomainValidationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_validation_options:
+        Option<Vec<AwsCertificateManagerCertificateDomainValidationOption>>,
+    /// <p>The status of the AWS Certificate Manager managed renewal of the certificate.</p> <p>Valid values: <code>PENDING_AUTO_RENEWAL</code> | <code>PENDING_VALIDATION</code> | <code>SUCCESS</code> | <code>FAILED</code> </p>
+    #[serde(rename = "RenewalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_status: Option<String>,
+    /// <p>The reason that a renewal request was unsuccessful.</p> <p>Valid values: <code>NO_AVAILABLE_CONTACTS</code> | <code>ADDITIONAL_VERIFICATION_REQUIRED</code> | <code>DOMAIN_NOT_ALLOWED</code> | <code>INVALID_PUBLIC_DOMAIN</code> | <code>DOMAIN_VALIDATION_DENIED</code> | <code>CAA_ERROR</code> | <code>PCA_LIMIT_EXCEEDED</code> | <code>PCA_INVALID_ARN</code> | <code>PCA_INVALID_STATE</code> | <code>PCA_REQUEST_FAILED</code> | <code>PCA_NAME_CONSTRAINTS_VALIDATION</code> | <code>PCA_RESOURCE_NOT_FOUND</code> | <code>PCA_INVALID_ARGS</code> | <code>PCA_INVALID_DURATION</code> | <code>PCA_ACCESS_DENIED</code> | <code>SLR_NOT_FOUND</code> | <code>OTHER</code> </p>
+    #[serde(rename = "RenewalStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_status_reason: Option<String>,
+    /// <p>Indicates when the renewal summary was last updated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "UpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+}
+
+/// <p>Provides details about the CNAME record that is added to the DNS database for domain validation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCertificateManagerCertificateResourceRecord {
+    /// <p>The name of the resource.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The type of resource.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value of the resource.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>Information about a cache behavior for the distribution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionCacheBehavior {
+    /// <p><p>The protocol that viewers can use to access the files in an origin. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code> - Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code> - CloudFront responds to HTTP requests with an HTTP status code of 301 (Moved Permanently) and the HTTPS URL. The viewer then uses the new URL to resubmit.</p> </li> <li> <p> <code>https-only</code> - CloudFront responds to HTTP request with an HTTP status code of 403 (Forbidden).</p> </li> </ul></p>
+    #[serde(rename = "ViewerProtocolPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub viewer_protocol_policy: Option<String>,
+}
+
+/// <p>Provides information about caching for the distribution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionCacheBehaviors {
+    /// <p>The cache behaviors for the distribution.</p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<AwsCloudFrontDistributionCacheBehavior>>,
+}
+
+/// <p>Contains information about the default cache configuration for the distribution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionDefaultCacheBehavior {
+    /// <p><p>The protocol that viewers can use to access the files in an origin. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code> - Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code> - CloudFront responds to HTTP requests with an HTTP status code of 301 (Moved Permanently) and the HTTPS URL. The viewer then uses the new URL to resubmit.</p> </li> <li> <p> <code>https-only</code> - CloudFront responds to HTTP request with an HTTP status code of 403 (Forbidden).</p> </li> </ul></p>
+    #[serde(rename = "ViewerProtocolPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub viewer_protocol_policy: Option<String>,
+}
+
 /// <p>A distribution configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudFrontDistributionDetails {
+    /// <p>Provides information about the cache configuration for the distribution.</p>
+    #[serde(rename = "CacheBehaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_behaviors: Option<AwsCloudFrontDistributionCacheBehaviors>,
+    /// <p>The default cache behavior for the configuration.</p>
+    #[serde(rename = "DefaultCacheBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_cache_behavior: Option<AwsCloudFrontDistributionDefaultCacheBehavior>,
+    /// <p>The object that CloudFront sends in response to requests from the origin (for example, index.html) when a viewer requests the root URL for the distribution (http://www.example.com) instead of an object in your distribution (http://www.example.com/product-description.html). </p>
+    #[serde(rename = "DefaultRootObject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_root_object: Option<String>,
     /// <p>The domain name corresponding to the distribution.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -118,7 +683,7 @@ pub struct AwsCloudFrontDistributionDetails {
     #[serde(rename = "ETag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub e_tag: Option<String>,
-    /// <p>The date and time that the distribution was last modified.</p>
+    /// <p>Indicates when that the distribution was last modified.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<String>,
@@ -126,6 +691,10 @@ pub struct AwsCloudFrontDistributionDetails {
     #[serde(rename = "Logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging: Option<AwsCloudFrontDistributionLogging>,
+    /// <p>Provides information about the origin groups in the distribution.</p>
+    #[serde(rename = "OriginGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_groups: Option<AwsCloudFrontDistributionOriginGroups>,
     /// <p>A complex type that contains information about origins for this distribution.</p>
     #[serde(rename = "Origins")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -161,6 +730,46 @@ pub struct AwsCloudFrontDistributionLogging {
     pub prefix: Option<String>,
 }
 
+/// <p>Information about an origin group for the distribution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionOriginGroup {
+    /// <p>Provides the criteria for an origin group to fail over.</p>
+    #[serde(rename = "FailoverCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failover_criteria: Option<AwsCloudFrontDistributionOriginGroupFailover>,
+}
+
+/// <p>Provides information about when an origin group fails over.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionOriginGroupFailover {
+    /// <p>Information about the status codes that cause an origin group to fail over.</p>
+    #[serde(rename = "StatusCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_codes: Option<AwsCloudFrontDistributionOriginGroupFailoverStatusCodes>,
+}
+
+/// <p>The status codes that cause an origin group to fail over.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionOriginGroupFailoverStatusCodes {
+    /// <p>The list of status code values that can cause a failover to the next origin.</p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<i64>>,
+    /// <p>The number of status codes that can cause a failover.</p>
+    #[serde(rename = "Quantity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quantity: Option<i64>,
+}
+
+/// <p>Provides information about origin groups that are associated with the distribution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionOriginGroups {
+    /// <p>The list of origin groups.</p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<AwsCloudFrontDistributionOriginGroup>>,
+}
+
 /// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon Elemental MediaStore, or other server from which CloudFront gets your files.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudFrontDistributionOriginItem {
@@ -176,6 +785,19 @@ pub struct AwsCloudFrontDistributionOriginItem {
     #[serde(rename = "OriginPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origin_path: Option<String>,
+    /// <p>An origin that is an S3 bucket that is not configured with static website hosting.</p>
+    #[serde(rename = "S3OriginConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_origin_config: Option<AwsCloudFrontDistributionOriginS3OriginConfig>,
+}
+
+/// <p>Information about an origin that is an S3 bucket that is not configured with static website hosting.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudFrontDistributionOriginS3OriginConfig {
+    /// <p>The CloudFront origin access identity to associate with the origin.</p>
+    #[serde(rename = "OriginAccessIdentity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_access_identity: Option<String>,
 }
 
 /// <p>A complex type that contains information about origins and origin groups for this distribution.</p>
@@ -185,6 +807,71 @@ pub struct AwsCloudFrontDistributionOrigins {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<AwsCloudFrontDistributionOriginItem>>,
+}
+
+/// <p>Provides details about a CloudTrail trail.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCloudTrailTrailDetails {
+    /// <p>The ARN of the log group that CloudTrail logs are delivered to.</p>
+    #[serde(rename = "CloudWatchLogsLogGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logs_log_group_arn: Option<String>,
+    /// <p>The ARN of the role that the CloudWatch Logs endpoint assumes when it writes to the log group.</p>
+    #[serde(rename = "CloudWatchLogsRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logs_role_arn: Option<String>,
+    /// <p>Indicates whether the trail has custom event selectors.</p>
+    #[serde(rename = "HasCustomEventSelectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_custom_event_selectors: Option<bool>,
+    /// <p>The Region where the trail was created.</p>
+    #[serde(rename = "HomeRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_region: Option<String>,
+    /// <p>Indicates whether the trail publishes events from global services such as IAM to the log files.</p>
+    #[serde(rename = "IncludeGlobalServiceEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_global_service_events: Option<bool>,
+    /// <p>Indicates whether the trail applies only to the current Region or to all Regions.</p>
+    #[serde(rename = "IsMultiRegionTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_multi_region_trail: Option<bool>,
+    /// <p>Whether the trail is created for all accounts in an organization in AWS Organizations, or only for the current AWS account.</p>
+    #[serde(rename = "IsOrganizationTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_organization_trail: Option<bool>,
+    /// <p>The AWS KMS key ID to use to encrypt the logs.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>Indicates whether CloudTrail log file validation is enabled.</p>
+    #[serde(rename = "LogFileValidationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_file_validation_enabled: Option<bool>,
+    /// <p>The name of the trail.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The name of the S3 bucket where the log files are published.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The S3 key prefix. The key prefix is added after the name of the S3 bucket where the log files are published.</p>
+    #[serde(rename = "S3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_key_prefix: Option<String>,
+    /// <p>The ARN of the SNS topic that is used for notifications of log file delivery.</p>
+    #[serde(rename = "SnsTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sns_topic_arn: Option<String>,
+    /// <p>The name of the SNS topic that is used for notifications of log file delivery.</p>
+    #[serde(rename = "SnsTopicName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sns_topic_name: Option<String>,
+    /// <p>The ARN of the trail.</p>
+    #[serde(rename = "TrailArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trail_arn: Option<String>,
 }
 
 /// <p>Information about an AWS CodeBuild project.</p>
@@ -288,6 +975,406 @@ pub struct AwsCodeBuildProjectVpcConfig {
     pub vpc_id: Option<String>,
 }
 
+/// <p>Contains the cross-origin resource sharing (CORS) configuration for the API. CORS is only supported for HTTP APIs.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsCorsConfiguration {
+    /// <p>Indicates whether the CORS request includes credentials.</p>
+    #[serde(rename = "AllowCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_credentials: Option<bool>,
+    /// <p>The allowed headers for CORS requests.</p>
+    #[serde(rename = "AllowHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_headers: Option<Vec<String>>,
+    /// <p>The allowed methods for CORS requests.</p>
+    #[serde(rename = "AllowMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_methods: Option<Vec<String>>,
+    /// <p>The allowed origins for CORS requests.</p>
+    #[serde(rename = "AllowOrigins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_origins: Option<Vec<String>>,
+    /// <p>The exposed headers for CORS requests.</p>
+    #[serde(rename = "ExposeHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expose_headers: Option<Vec<String>>,
+    /// <p>The number of seconds for which the browser caches preflight request results.</p>
+    #[serde(rename = "MaxAge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_age: Option<i64>,
+}
+
+/// <p>Contains a definition of an attribute for the table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableAttributeDefinition {
+    /// <p>The name of the attribute.</p>
+    #[serde(rename = "AttributeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_name: Option<String>,
+    /// <p>The type of the attribute.</p>
+    #[serde(rename = "AttributeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_type: Option<String>,
+}
+
+/// <p>Provides information about the billing for read/write capacity on the table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableBillingModeSummary {
+    /// <p>The method used to charge for read and write throughput and to manage capacity.</p>
+    #[serde(rename = "BillingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode: Option<String>,
+    /// <p>If the billing mode is <code>PAY_PER_REQUEST</code>, indicates when the billing mode was set to that value.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "LastUpdateToPayPerRequestDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_to_pay_per_request_date_time: Option<String>,
+}
+
+/// <p>Provides details about a DynamoDB table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableDetails {
+    /// <p>A list of attribute definitions for the table.</p>
+    #[serde(rename = "AttributeDefinitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_definitions: Option<Vec<AwsDynamoDbTableAttributeDefinition>>,
+    /// <p>Information about the billing for read/write capacity on the table.</p>
+    #[serde(rename = "BillingModeSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode_summary: Option<AwsDynamoDbTableBillingModeSummary>,
+    /// <p>Indicates when the table was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<String>,
+    /// <p>List of global secondary indexes for the table.</p>
+    #[serde(rename = "GlobalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_indexes: Option<Vec<AwsDynamoDbTableGlobalSecondaryIndex>>,
+    /// <p>The version of global tables being used.</p>
+    #[serde(rename = "GlobalTableVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_version: Option<String>,
+    /// <p>The number of items in the table.</p>
+    #[serde(rename = "ItemCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_count: Option<i64>,
+    /// <p>The primary key structure for the table.</p>
+    #[serde(rename = "KeySchema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_schema: Option<Vec<AwsDynamoDbTableKeySchema>>,
+    /// <p>The ARN of the latest stream for the table.</p>
+    #[serde(rename = "LatestStreamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_stream_arn: Option<String>,
+    /// <p>The label of the latest stream. The label is not a unique identifier.</p>
+    #[serde(rename = "LatestStreamLabel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_stream_label: Option<String>,
+    /// <p>The list of local secondary indexes for the table.</p>
+    #[serde(rename = "LocalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_secondary_indexes: Option<Vec<AwsDynamoDbTableLocalSecondaryIndex>>,
+    /// <p>Information about the provisioned throughput for the table.</p>
+    #[serde(rename = "ProvisionedThroughput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput: Option<AwsDynamoDbTableProvisionedThroughput>,
+    /// <p>The list of replicas of this table.</p>
+    #[serde(rename = "Replicas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replicas: Option<Vec<AwsDynamoDbTableReplica>>,
+    /// <p>Information about the restore for the table.</p>
+    #[serde(rename = "RestoreSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_summary: Option<AwsDynamoDbTableRestoreSummary>,
+    /// <p>Information about the server-side encryption for the table.</p>
+    #[serde(rename = "SseDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_description: Option<AwsDynamoDbTableSseDescription>,
+    /// <p>The current DynamoDB Streams configuration for the table.</p>
+    #[serde(rename = "StreamSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_specification: Option<AwsDynamoDbTableStreamSpecification>,
+    /// <p>The identifier of the table.</p>
+    #[serde(rename = "TableId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_id: Option<String>,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+    /// <p>The total size of the table in bytes.</p>
+    #[serde(rename = "TableSizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_size_bytes: Option<i64>,
+    /// <p>The current status of the table.</p>
+    #[serde(rename = "TableStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_status: Option<String>,
+}
+
+/// <p>Information abut a global secondary index for the table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableGlobalSecondaryIndex {
+    /// <p>Whether the index is currently backfilling.</p>
+    #[serde(rename = "Backfilling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backfilling: Option<bool>,
+    /// <p>The ARN of the index.</p>
+    #[serde(rename = "IndexArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_arn: Option<String>,
+    /// <p>The name of the index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The total size in bytes of the index.</p>
+    #[serde(rename = "IndexSizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_size_bytes: Option<i64>,
+    /// <p>The current status of the index.</p>
+    #[serde(rename = "IndexStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_status: Option<String>,
+    /// <p>The number of items in the index.</p>
+    #[serde(rename = "ItemCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_count: Option<i64>,
+    /// <p>The key schema for the index.</p>
+    #[serde(rename = "KeySchema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_schema: Option<Vec<AwsDynamoDbTableKeySchema>>,
+    /// <p>Attributes that are copied from the table into an index.</p>
+    #[serde(rename = "Projection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projection: Option<AwsDynamoDbTableProjection>,
+    /// <p>Information about the provisioned throughput settings for the indexes.</p>
+    #[serde(rename = "ProvisionedThroughput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput: Option<AwsDynamoDbTableProvisionedThroughput>,
+}
+
+/// <p>A component of the key schema for the DynamoDB table, a global secondary index, or a local secondary index.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableKeySchema {
+    /// <p>The name of the key schema attribute.</p>
+    #[serde(rename = "AttributeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_name: Option<String>,
+    /// <p>The type of key used for the key schema attribute.</p>
+    #[serde(rename = "KeyType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_type: Option<String>,
+}
+
+/// <p>Information about a local secondary index for a DynamoDB table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableLocalSecondaryIndex {
+    /// <p>The ARN of the index.</p>
+    #[serde(rename = "IndexArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_arn: Option<String>,
+    /// <p>The name of the index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The complete key schema for the index.</p>
+    #[serde(rename = "KeySchema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_schema: Option<Vec<AwsDynamoDbTableKeySchema>>,
+    /// <p>Attributes that are copied from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected.</p>
+    #[serde(rename = "Projection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projection: Option<AwsDynamoDbTableProjection>,
+}
+
+/// <p>For global and local secondary indexes, identifies the attributes that are copied from the table into the index.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableProjection {
+    /// <p>The nonkey attributes that are projected into the index. For each attribute, provide the attribute name.</p>
+    #[serde(rename = "NonKeyAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_key_attributes: Option<Vec<String>>,
+    /// <p>The types of attributes that are projected into the index.</p>
+    #[serde(rename = "ProjectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projection_type: Option<String>,
+}
+
+/// <p>Information about the provisioned throughput for the table or for a global secondary index.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableProvisionedThroughput {
+    /// <p>Indicates when the provisioned throughput was last decreased.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "LastDecreaseDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_decrease_date_time: Option<String>,
+    /// <p>Indicates when the provisioned throughput was last increased.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "LastIncreaseDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_increase_date_time: Option<String>,
+    /// <p>The number of times during the current UTC calendar day that the provisioned throughput was decreased.</p>
+    #[serde(rename = "NumberOfDecreasesToday")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_decreases_today: Option<i64>,
+    /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>.</p>
+    #[serde(rename = "ReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_capacity_units: Option<i64>,
+    /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException</code>.</p>
+    #[serde(rename = "WriteCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub write_capacity_units: Option<i64>,
+}
+
+/// <p>Replica-specific configuration for the provisioned throughput.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableProvisionedThroughputOverride {
+    /// <p>The read capacity units for the replica.</p>
+    #[serde(rename = "ReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_capacity_units: Option<i64>,
+}
+
+/// <p>Information about a replica of a DynamoDB table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableReplica {
+    /// <p>List of global secondary indexes for the replica.</p>
+    #[serde(rename = "GlobalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_indexes: Option<Vec<AwsDynamoDbTableReplicaGlobalSecondaryIndex>>,
+    /// <p>The identifier of the AWS KMS customer master key (CMK) that will be used for AWS KMS encryption for the replica.</p>
+    #[serde(rename = "KmsMasterKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p>Replica-specific configuration for the provisioned throughput.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<AwsDynamoDbTableProvisionedThroughputOverride>,
+    /// <p>The name of the Region where the replica is located.</p>
+    #[serde(rename = "RegionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+    /// <p>The current status of the replica.</p>
+    #[serde(rename = "ReplicaStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_status: Option<String>,
+    /// <p>Detailed information about the replica status.</p>
+    #[serde(rename = "ReplicaStatusDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_status_description: Option<String>,
+}
+
+/// <p>Information about a global secondary index for a DynamoDB table replica.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableReplicaGlobalSecondaryIndex {
+    /// <p>The name of the index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>Replica-specific configuration for the provisioned throughput for the index.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<AwsDynamoDbTableProvisionedThroughputOverride>,
+}
+
+/// <p>Information about the restore for the table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableRestoreSummary {
+    /// <p>Indicates the point in time that the table was restored to.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "RestoreDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_date_time: Option<String>,
+    /// <p>Whether a restore is currently in progress.</p>
+    #[serde(rename = "RestoreInProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_in_progress: Option<bool>,
+    /// <p>The ARN of the source backup from which the table was restored.</p>
+    #[serde(rename = "SourceBackupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup_arn: Option<String>,
+    /// <p>The ARN of the source table for the backup.</p>
+    #[serde(rename = "SourceTableArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_table_arn: Option<String>,
+}
+
+/// <p>Information about the server-side encryption for the table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableSseDescription {
+    /// <p>If the key is inaccessible, the date and time when DynamoDB detected that the key was inaccessible.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "InaccessibleEncryptionDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inaccessible_encryption_date_time: Option<String>,
+    /// <p>The ARN of the AWS KMS customer master key (CMK) that is used for the AWS KMS encryption.</p>
+    #[serde(rename = "KmsMasterKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_arn: Option<String>,
+    /// <p>The type of server-side encryption.</p>
+    #[serde(rename = "SseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_type: Option<String>,
+    /// <p>The status of the server-side encryption.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>The current DynamoDB Streams configuration for the table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsDynamoDbTableStreamSpecification {
+    /// <p>Indicates whether DynamoDB Streams is enabled on the table.</p>
+    #[serde(rename = "StreamEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_enabled: Option<bool>,
+    /// <p>Determines the information that is written to the table.</p>
+    #[serde(rename = "StreamViewType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_view_type: Option<String>,
+}
+
+/// <p>Information about an Elastic IP address.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsEc2EipDetails {
+    /// <p>The identifier that AWS assigns to represent the allocation of the Elastic IP address for use with Amazon VPC.</p>
+    #[serde(rename = "AllocationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocation_id: Option<String>,
+    /// <p>The identifier that represents the association of the Elastic IP address with an EC2 instance.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
+    /// <p>The domain in which to allocate the address.</p> <p>If the address is for use with EC2 instances in a VPC, then <code>Domain</code> is <code>vpc</code>. Otherwise, <code>Domain</code> is <code>standard</code>. </p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    /// <p>The identifier of the EC2 instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
+    /// <p>The name of the location from which the Elastic IP address is advertised.</p>
+    #[serde(rename = "NetworkBorderGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_border_group: Option<String>,
+    /// <p>The identifier of the network interface.</p>
+    #[serde(rename = "NetworkInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_id: Option<String>,
+    /// <p>The AWS account ID of the owner of the network interface.</p>
+    #[serde(rename = "NetworkInterfaceOwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_owner_id: Option<String>,
+    /// <p>The private IP address that is associated with the Elastic IP address.</p>
+    #[serde(rename = "PrivateIpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_ip_address: Option<String>,
+    /// <p>A public IP address that is associated with the EC2 instance.</p>
+    #[serde(rename = "PublicIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_ip: Option<String>,
+    /// <p>The identifier of an IP address pool. This parameter allows Amazon EC2 to select an IP address from the address pool.</p>
+    #[serde(rename = "PublicIpv4Pool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_ipv_4_pool: Option<String>,
+}
+
 /// <p>The details of an Amazon EC2 instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsEc2InstanceDetails {
@@ -311,7 +1398,7 @@ pub struct AwsEc2InstanceDetails {
     #[serde(rename = "KeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_name: Option<String>,
-    /// <p>The date/time the instance was launched.</p>
+    /// <p>Indicates when the instance was launched.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LaunchedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launched_at: Option<String>,
@@ -332,7 +1419,7 @@ pub struct AwsEc2InstanceDetails {
 /// <p>Information about the network interface attachment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsEc2NetworkInterfaceAttachment {
-    /// <p>The timestamp indicating when the attachment initiated.</p>
+    /// <p>Indicates when the attachment initiated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "AttachTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attach_time: Option<String>,
@@ -542,7 +1629,7 @@ pub struct AwsEc2VolumeDetails {
     #[serde(rename = "Attachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments: Option<Vec<AwsEc2VolumeAttachment>>,
-    /// <p>The datetime when the volume was created.</p>
+    /// <p>Indicates when the volume was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
@@ -690,6 +1777,293 @@ pub struct AwsElasticsearchDomainVPCOptions {
     pub vpc_id: Option<String>,
 }
 
+/// <p>Contains information about a stickiness policy that was created using <code>CreateAppCookieStickinessPolicy</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbAppCookieStickinessPolicy {
+    /// <p>The name of the application cookie used for stickiness.</p>
+    #[serde(rename = "CookieName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cookie_name: Option<String>,
+    /// <p>The mnemonic name for the policy being created. The name must be unique within the set of policies for the load balancer.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
+/// <p>Contains information about a stickiness policy that was created using <code>CreateLBCookieStickinessPolicy</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLbCookieStickinessPolicy {
+    /// <p>The amount of time, in seconds, after which the cookie is considered stale. If an expiration period is not specified, the stickiness session lasts for the duration of the browser session.</p>
+    #[serde(rename = "CookieExpirationPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cookie_expiration_period: Option<i64>,
+    /// <p>The name of the policy. The name must be unique within the set of policies for the load balancer.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
+/// <p>Contains information about the access log configuration for the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerAccessLog {
+    /// <p>The interval in minutes for publishing the access logs.</p> <p>You can publish access logs either every 5 minutes or every 60 minutes.</p>
+    #[serde(rename = "EmitInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emit_interval: Option<i64>,
+    /// <p>Indicates whether access logs are enabled for the load balancer.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The name of the S3 bucket where the access logs are stored.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The logical hierarchy that was created for the S3 bucket.</p> <p>If a prefix is not provided, the log is placed at the root level of the bucket.</p>
+    #[serde(rename = "S3BucketPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_prefix: Option<String>,
+}
+
+/// <p>Contains attributes for the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerAttributes {
+    /// <p>Information about the access log configuration for the load balancer.</p> <p>If the access log is enabled, the load balancer captures detailed information about all requests. It delivers the information to a specified S3 bucket.</p>
+    #[serde(rename = "AccessLog")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log: Option<AwsElbLoadBalancerAccessLog>,
+    /// <p>Information about the connection draining configuration for the load balancer.</p> <p>If connection draining is enabled, the load balancer allows existing requests to complete before it shifts traffic away from a deregistered or unhealthy instance.</p>
+    #[serde(rename = "ConnectionDraining")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_draining: Option<AwsElbLoadBalancerConnectionDraining>,
+    /// <p>Connection settings for the load balancer.</p> <p>If an idle timeout is configured, the load balancer allows connections to remain idle for the specified duration. When a connection is idle, no data is sent over the connection.</p>
+    #[serde(rename = "ConnectionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_settings: Option<AwsElbLoadBalancerConnectionSettings>,
+    /// <p>Cross-zone load balancing settings for the load balancer.</p> <p>If cross-zone load balancing is enabled, the load balancer routes the request traffic evenly across all instances regardless of the Availability Zones.</p>
+    #[serde(rename = "CrossZoneLoadBalancing")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_zone_load_balancing: Option<AwsElbLoadBalancerCrossZoneLoadBalancing>,
+}
+
+/// <p>Provides information about the configuration of an EC2 instance for the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerBackendServerDescription {
+    /// <p>The port on which the EC2 instance is listening.</p>
+    #[serde(rename = "InstancePort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_port: Option<i64>,
+    /// <p>The names of the policies that are enabled for the EC2 instance.</p>
+    #[serde(rename = "PolicyNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_names: Option<Vec<String>>,
+}
+
+/// <p>Contains information about the connection draining configuration for the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerConnectionDraining {
+    /// <p>Indicates whether connection draining is enabled for the load balancer.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The maximum time, in seconds, to keep the existing connections open before deregistering the instances.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+}
+
+/// <p>Contains connection settings for the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerConnectionSettings {
+    /// <p>The time, in seconds, that the connection can be idle (no data is sent over the connection) before it is closed by the load balancer.</p>
+    #[serde(rename = "IdleTimeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idle_timeout: Option<i64>,
+}
+
+/// <p>Contains cross-zone load balancing settings for the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerCrossZoneLoadBalancing {
+    /// <p>Indicates whether cross-zone load balancing is enabled for the load balancer.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+/// <p>Contains details about a Classic Load Balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerDetails {
+    /// <p>The list of Availability Zones for the load balancer.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>Information about the configuration of the EC2 instances.</p>
+    #[serde(rename = "BackendServerDescriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_server_descriptions: Option<Vec<AwsElbLoadBalancerBackendServerDescription>>,
+    /// <p>The name of the Amazon Route 53 hosted zone for the load balancer.</p>
+    #[serde(rename = "CanonicalHostedZoneName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canonical_hosted_zone_name: Option<String>,
+    /// <p>The ID of the Amazon Route 53 hosted zone for the load balancer.</p>
+    #[serde(rename = "CanonicalHostedZoneNameID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canonical_hosted_zone_name_id: Option<String>,
+    /// <p>Indicates when the load balancer was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The DNS name of the load balancer.</p>
+    #[serde(rename = "DnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
+    /// <p>Information about the health checks that are conducted on the load balancer.</p>
+    #[serde(rename = "HealthCheck")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_check: Option<AwsElbLoadBalancerHealthCheck>,
+    /// <p>List of EC2 instances for the load balancer.</p>
+    #[serde(rename = "Instances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instances: Option<Vec<AwsElbLoadBalancerInstance>>,
+    /// <p>The policies that are enabled for the load balancer listeners.</p>
+    #[serde(rename = "ListenerDescriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener_descriptions: Option<Vec<AwsElbLoadBalancerListenerDescription>>,
+    /// <p>The attributes for a load balancer.</p>
+    #[serde(rename = "LoadBalancerAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_balancer_attributes: Option<AwsElbLoadBalancerAttributes>,
+    /// <p>The name of the load balancer.</p>
+    #[serde(rename = "LoadBalancerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_balancer_name: Option<String>,
+    /// <p>The policies for a load balancer.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policies: Option<AwsElbLoadBalancerPolicies>,
+    /// <p>The type of load balancer. Only provided if the load balancer is in a VPC.</p> <p>If <code>Scheme</code> is <code>internet-facing</code>, the load balancer has a public DNS name that resolves to a public IP address.</p> <p>If <code>Scheme</code> is <code>internal</code>, the load balancer has a public DNS name that resolves to a private IP address.</p>
+    #[serde(rename = "Scheme")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheme: Option<String>,
+    /// <p>The security groups for the load balancer. Only provided if the load balancer is in a VPC.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
+    /// <p>Information about the security group for the load balancer. This is the security group that is used for inbound rules.</p>
+    #[serde(rename = "SourceSecurityGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_security_group: Option<AwsElbLoadBalancerSourceSecurityGroup>,
+    /// <p>The list of subnet identifiers for the load balancer.</p>
+    #[serde(rename = "Subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnets: Option<Vec<String>>,
+    /// <p>The identifier of the VPC for the load balancer.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>Contains information about the health checks that are conducted on the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerHealthCheck {
+    /// <p>The number of consecutive health check successes required before the instance is moved to the Healthy state.</p>
+    #[serde(rename = "HealthyThreshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub healthy_threshold: Option<i64>,
+    /// <p>The approximate interval, in seconds, between health checks of an individual instance.</p>
+    #[serde(rename = "Interval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval: Option<i64>,
+    /// <p>The instance that is being checked. The target specifies the protocol and port. The available protocols are TCP, SSL, HTTP, and HTTPS. The range of valid ports is 1 through 65535.</p> <p>For the HTTP and HTTPS protocols, the target also specifies the ping path.</p> <p>For the TCP protocol, the target is specified as <code>TCP: <i>&lt;port&gt;</i> </code>.</p> <p>For the SSL protocol, the target is specified as <code>SSL.<i>&lt;port&gt;</i> </code>.</p> <p>For the HTTP and HTTPS protocols, the target is specified as <code> <i>&lt;protocol&gt;</i>:<i>&lt;port&gt;</i>/<i>&lt;path to ping&gt;</i> </code>.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+    /// <p>The amount of time, in seconds, during which no response means a failed health check.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The number of consecutive health check failures that must occur before the instance is moved to the Unhealthy state.</p>
+    #[serde(rename = "UnhealthyThreshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unhealthy_threshold: Option<i64>,
+}
+
+/// <p>Provides information about an EC2 instance for a load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerInstance {
+    /// <p>The instance identifier.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
+}
+
+/// <p>Information about a load balancer listener.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerListener {
+    /// <p>The port on which the instance is listening.</p>
+    #[serde(rename = "InstancePort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_port: Option<i64>,
+    /// <p>The protocol to use to route traffic to instances.</p> <p>Valid values: <code>HTTP</code> | <code>HTTPS</code> | <code>TCP</code> | <code>SSL</code> </p>
+    #[serde(rename = "InstanceProtocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_protocol: Option<String>,
+    /// <p>The port on which the load balancer is listening.</p> <p>On EC2-VPC, you can specify any port from the range 1-65535.</p> <p>On EC2-Classic, you can specify any port from the following list: 25, 80, 443, 465, 587, 1024-65535.</p>
+    #[serde(rename = "LoadBalancerPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_balancer_port: Option<i64>,
+    /// <p>The load balancer transport protocol to use for routing.</p> <p>Valid values: <code>HTTP</code> | <code>HTTPS</code> | <code>TCP</code> | <code>SSL</code> </p>
+    #[serde(rename = "Protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+    /// <p>The ARN of the server certificate.</p>
+    #[serde(rename = "SslCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssl_certificate_id: Option<String>,
+}
+
+/// <p>Lists the policies that are enabled for a load balancer listener.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerListenerDescription {
+    /// <p>Information about the listener.</p>
+    #[serde(rename = "Listener")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener: Option<AwsElbLoadBalancerListener>,
+    /// <p>The policies enabled for the listener.</p>
+    #[serde(rename = "PolicyNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_names: Option<Vec<String>>,
+}
+
+/// <p>Contains information about the policies for a load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerPolicies {
+    /// <p>The stickiness policies that are created using <code>CreateAppCookieStickinessPolicy</code>.</p>
+    #[serde(rename = "AppCookieStickinessPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_cookie_stickiness_policies: Option<Vec<AwsElbAppCookieStickinessPolicy>>,
+    /// <p>The stickiness policies that are created using <code>CreateLBCookieStickinessPolicy</code>.</p>
+    #[serde(rename = "LbCookieStickinessPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lb_cookie_stickiness_policies: Option<Vec<AwsElbLbCookieStickinessPolicy>>,
+    /// <p>The policies other than the stickiness policies.</p>
+    #[serde(rename = "OtherPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub other_policies: Option<Vec<String>>,
+}
+
+/// <p>Contains information about the security group for the load balancer.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsElbLoadBalancerSourceSecurityGroup {
+    /// <p>The name of the security group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The owner of the security group.</p>
+    #[serde(rename = "OwnerAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_alias: Option<String>,
+}
+
 /// <p>Information about a load balancer.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsElbv2LoadBalancerDetails {
@@ -701,7 +2075,7 @@ pub struct AwsElbv2LoadBalancerDetails {
     #[serde(rename = "CanonicalHostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub canonical_hosted_zone_id: Option<String>,
-    /// <p>The date and time the load balancer was created.</p>
+    /// <p>Indicates when the load balancer was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<String>,
@@ -738,7 +2112,15 @@ pub struct AwsElbv2LoadBalancerDetails {
 /// <p>IAM access key details related to a finding.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsIamAccessKeyDetails {
-    /// <p>The creation date/time of the IAM access key related to a finding.</p>
+    /// <p>The identifier of the access key.</p>
+    #[serde(rename = "AccessKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_key_id: Option<String>,
+    /// <p>The AWS account ID of the account for the key.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>Indicates when the IAM access key was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
@@ -754,10 +2136,253 @@ pub struct AwsIamAccessKeyDetails {
     #[serde(rename = "PrincipalType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_type: Option<String>,
+    /// <p>Information about the session that the key was used for.</p>
+    #[serde(rename = "SessionContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_context: Option<AwsIamAccessKeySessionContext>,
     /// <p>The status of the IAM access key related to a finding.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>Provides information about the session that the key was used for.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamAccessKeySessionContext {
+    /// <p>Attributes of the session that the key was used for.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<AwsIamAccessKeySessionContextAttributes>,
+    /// <p>Information about the entity that created the session.</p>
+    #[serde(rename = "SessionIssuer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_issuer: Option<AwsIamAccessKeySessionContextSessionIssuer>,
+}
+
+/// <p>Attributes of the session that the key was used for.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamAccessKeySessionContextAttributes {
+    /// <p>Indicates when the session was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<String>,
+    /// <p>Indicates whether the session used multi-factor authentication (MFA).</p>
+    #[serde(rename = "MfaAuthenticated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mfa_authenticated: Option<bool>,
+}
+
+/// <p>Information about the entity that created the session.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamAccessKeySessionContextSessionIssuer {
+    /// <p>The identifier of the AWS account that created the session.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The ARN of the session.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The principal ID of the principal (user, role, or group) that created the session.</p>
+    #[serde(rename = "PrincipalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_id: Option<String>,
+    /// <p>The type of principal (user, role, or group) that created the session.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The name of the principal that created the session.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_name: Option<String>,
+}
+
+/// <p>A managed policy that is attached to an IAM principal.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamAttachedManagedPolicy {
+    /// <p>The ARN of the policy.</p>
+    #[serde(rename = "PolicyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_arn: Option<String>,
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
+/// <p>Contains details about an IAM group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamGroupDetails {
+    /// <p>A list of the managed policies that are attached to the IAM group.</p>
+    #[serde(rename = "AttachedManagedPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attached_managed_policies: Option<Vec<AwsIamAttachedManagedPolicy>>,
+    /// <p>Indicates when the IAM group was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<String>,
+    /// <p>The identifier of the IAM group.</p>
+    #[serde(rename = "GroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+    /// <p>The name of the IAM group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The list of inline policies that are embedded in the group.</p>
+    #[serde(rename = "GroupPolicyList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_policy_list: Option<Vec<AwsIamGroupPolicy>>,
+    /// <p>The path to the group.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+}
+
+/// <p>A managed policy that is attached to the IAM group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamGroupPolicy {
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
+/// <p>Information about an instance profile.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamInstanceProfile {
+    /// <p>The ARN of the instance profile.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Indicates when the instance profile was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<String>,
+    /// <p>The identifier of the instance profile.</p>
+    #[serde(rename = "InstanceProfileId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile_id: Option<String>,
+    /// <p>The name of the instance profile.</p>
+    #[serde(rename = "InstanceProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile_name: Option<String>,
+    /// <p>The path to the instance profile.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The roles associated with the instance profile.</p>
+    #[serde(rename = "Roles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub roles: Option<Vec<AwsIamInstanceProfileRole>>,
+}
+
+/// <p>Information about a role associated with an instance profile.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamInstanceProfileRole {
+    /// <p>The ARN of the role.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The policy that grants an entity permission to assume the role.</p>
+    #[serde(rename = "AssumeRolePolicyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assume_role_policy_document: Option<String>,
+    /// <p>Indicates when the role was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<String>,
+    /// <p>The path to the role.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The identifier of the role.</p>
+    #[serde(rename = "RoleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_id: Option<String>,
+    /// <p>The name of the role.</p>
+    #[serde(rename = "RoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_name: Option<String>,
+}
+
+/// <p>Information about the policy used to set the permissions boundary for an IAM principal.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamPermissionsBoundary {
+    /// <p>The ARN of the policy used to set the permissions boundary.</p>
+    #[serde(rename = "PermissionsBoundaryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_boundary_arn: Option<String>,
+    /// <p>The usage type for the permissions boundary.</p>
+    #[serde(rename = "PermissionsBoundaryType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_boundary_type: Option<String>,
+}
+
+/// <p>Represents an IAM permissions policy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamPolicyDetails {
+    /// <p>The number of users, groups, and roles that the policy is attached to.</p>
+    #[serde(rename = "AttachmentCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment_count: Option<i64>,
+    /// <p>When the policy was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<String>,
+    /// <p>The identifier of the default version of the policy.</p>
+    #[serde(rename = "DefaultVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_version_id: Option<String>,
+    /// <p>A description of the policy.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Whether the policy can be attached to a user, group, or role.</p>
+    #[serde(rename = "IsAttachable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_attachable: Option<bool>,
+    /// <p>The path to the policy.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The number of users and roles that use the policy to set the permissions boundary.</p>
+    #[serde(rename = "PermissionsBoundaryUsageCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_boundary_usage_count: Option<i64>,
+    /// <p>The unique identifier of the policy.</p>
+    #[serde(rename = "PolicyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_id: Option<String>,
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+    /// <p>List of versions of the policy.</p>
+    #[serde(rename = "PolicyVersionList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_version_list: Option<Vec<AwsIamPolicyVersion>>,
+    /// <p>When the policy was most recently updated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "UpdateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_date: Option<String>,
+}
+
+/// <p>A version of an IAM policy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamPolicyVersion {
+    /// <p>Indicates when the version was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<String>,
+    /// <p>Whether the version is the default version.</p>
+    #[serde(rename = "IsDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default_version: Option<bool>,
+    /// <p>The identifier of the policy version.</p>
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<String>,
 }
 
 /// <p>Contains information about an IAM role, including all of the role's policies.</p>
@@ -767,10 +2392,18 @@ pub struct AwsIamRoleDetails {
     #[serde(rename = "AssumeRolePolicyDocument")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assume_role_policy_document: Option<String>,
-    /// <p>The date and time, in ISO 8601 date-time format, when the role was created.</p>
+    /// <p>The list of the managed policies that are attached to the role.</p>
+    #[serde(rename = "AttachedManagedPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attached_managed_policies: Option<Vec<AwsIamAttachedManagedPolicy>>,
+    /// <p>Indicates when the role was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreateDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_date: Option<String>,
+    /// <p>The list of instance profiles that contain this role.</p>
+    #[serde(rename = "InstanceProfileList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile_list: Option<Vec<AwsIamInstanceProfile>>,
     /// <p>The maximum session duration (in seconds) that you want to set for the specified role.</p>
     #[serde(rename = "MaxSessionDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -779,6 +2412,9 @@ pub struct AwsIamRoleDetails {
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
+    #[serde(rename = "PermissionsBoundary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_boundary: Option<AwsIamPermissionsBoundary>,
     /// <p>The stable and unique string identifying the role.</p>
     #[serde(rename = "RoleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -787,6 +2423,65 @@ pub struct AwsIamRoleDetails {
     #[serde(rename = "RoleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
+    /// <p>The list of inline policies that are embedded in the role.</p>
+    #[serde(rename = "RolePolicyList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_policy_list: Option<Vec<AwsIamRolePolicy>>,
+}
+
+/// <p>An inline policy that is embedded in the role.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamRolePolicy {
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
+/// <p>Information about an IAM user.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamUserDetails {
+    /// <p>A list of the managed policies that are attached to the user.</p>
+    #[serde(rename = "AttachedManagedPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attached_managed_policies: Option<Vec<AwsIamAttachedManagedPolicy>>,
+    /// <p>Indicates when the user was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<String>,
+    /// <p>A list of IAM groups that the user belongs to.</p>
+    #[serde(rename = "GroupList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_list: Option<Vec<String>>,
+    /// <p>The path to the user.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The permissions boundary for the user.</p>
+    #[serde(rename = "PermissionsBoundary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_boundary: Option<AwsIamPermissionsBoundary>,
+    /// <p>The unique identifier for the user.</p>
+    #[serde(rename = "UserId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// <p>The name of the user.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_name: Option<String>,
+    /// <p>The list of inline policies that are embedded in the user.</p>
+    #[serde(rename = "UserPolicyList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_policy_list: Option<Vec<AwsIamUserPolicy>>,
+}
+
+/// <p>Information about an inline policy that is embedded in the user.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsIamUserPolicy {
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
 }
 
 /// <p>Contains metadata about a customer master key (CMK).</p>
@@ -796,10 +2491,14 @@ pub struct AwsKmsKeyDetails {
     #[serde(rename = "AWSAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_account_id: Option<String>,
-    /// <p>The date and time when the CMK was created.</p>
+    /// <p>Indicates when the CMK was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    /// <p>A description of the key.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     /// <p>The globally unique identifier for the CMK.</p>
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -879,7 +2578,7 @@ pub struct AwsLambdaFunctionDetails {
     #[serde(rename = "KmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
-    /// <p>The date and time that the function was last updated, in ISO-8601 format (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    /// <p>Indicates when the function was last updated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<String>,
@@ -997,7 +2696,7 @@ pub struct AwsLambdaLayerVersionDetails {
     #[serde(rename = "CompatibleRuntimes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compatible_runtimes: Option<Vec<String>>,
-    /// <p>The date that the version was created, in ISO 8601 format. For example, 2018-11-27T15:10:45.123+0000. </p>
+    /// <p>Indicates when the version was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<String>,
@@ -1005,6 +2704,304 @@ pub struct AwsLambdaLayerVersionDetails {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
+}
+
+/// <p>An IAM role that is associated with the Amazon RDS DB cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbClusterAssociatedRole {
+    /// <p>The ARN of the IAM role.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The status of the association between the IAM role and the DB cluster.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Information about an Amazon RDS DB cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbClusterDetails {
+    /// <p>The status of the database activity stream.</p>
+    #[serde(rename = "ActivityStreamStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub activity_stream_status: Option<String>,
+    /// <p>For all database engines except Aurora, specifies the allocated storage size in gibibytes (GiB).</p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocated_storage: Option<i64>,
+    /// <p>A list of the IAM roles that are associated with the DB cluster.</p>
+    #[serde(rename = "AssociatedRoles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub associated_roles: Option<Vec<AwsRdsDbClusterAssociatedRole>>,
+    /// <p>A list of Availability Zones (AZs) where instances in the DB cluster can be created.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>The number of days for which automated backups are retained.</p>
+    #[serde(rename = "BackupRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_retention_period: Option<i64>,
+    /// <p>Indicates when the DB cluster was created, in Universal Coordinated Time (UTC).</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "ClusterCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_create_time: Option<String>,
+    /// <p>Whether tags are copied from the DB cluster to snapshots of the DB cluster.</p>
+    #[serde(rename = "CopyTagsToSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_tags_to_snapshot: Option<bool>,
+    /// <p>Whether the DB cluster is a clone of a DB cluster owned by a different AWS account.</p>
+    #[serde(rename = "CrossAccountClone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_account_clone: Option<bool>,
+    /// <p>A list of custom endpoints for the DB cluster.</p>
+    #[serde(rename = "CustomEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_endpoints: Option<Vec<String>>,
+    /// <p>The name of the database.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
+    /// <p>The DB cluster identifier that the user assigned to the cluster. This identifier is the unique key that identifies a DB cluster.</p>
+    #[serde(rename = "DbClusterIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The list of instances that make up the DB cluster.</p>
+    #[serde(rename = "DbClusterMembers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_members: Option<Vec<AwsRdsDbClusterMember>>,
+    /// <p>The list of option group memberships for this DB cluster.</p>
+    #[serde(rename = "DbClusterOptionGroupMemberships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_option_group_memberships: Option<Vec<AwsRdsDbClusterOptionGroupMembership>>,
+    /// <p>The name of the DB cluster parameter group for the DB cluster.</p>
+    #[serde(rename = "DbClusterParameterGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_parameter_group: Option<String>,
+    /// <p>The identifier of the DB cluster. The identifier must be unique within each AWS Region and is immutable.</p>
+    #[serde(rename = "DbClusterResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_resource_id: Option<String>,
+    /// <p>The subnet group that is associated with the DB cluster, including the name, description, and subnets in the subnet group.</p>
+    #[serde(rename = "DbSubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_subnet_group: Option<String>,
+    /// <p>Whether the DB cluster has deletion protection enabled.</p>
+    #[serde(rename = "DeletionProtection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_protection: Option<bool>,
+    /// <p>The Active Directory domain membership records that are associated with the DB cluster.</p>
+    #[serde(rename = "DomainMemberships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_memberships: Option<Vec<AwsRdsDbDomainMembership>>,
+    /// <p>A list of log types that this DB cluster is configured to export to CloudWatch Logs.</p>
+    #[serde(rename = "EnabledCloudWatchLogsExports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled_cloud_watch_logs_exports: Option<Vec<String>>,
+    /// <p>The connection endpoint for the primary instance of the DB cluster.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint: Option<String>,
+    /// <p>The name of the database engine to use for this DB cluster.</p>
+    #[serde(rename = "Engine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+    /// <p>The database engine mode of the DB cluster.</p>
+    #[serde(rename = "EngineMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_mode: Option<String>,
+    /// <p>The version number of the database engine to use.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p>Specifies the identifier that Amazon Route 53 assigns when you create a hosted zone.</p>
+    #[serde(rename = "HostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hosted_zone_id: Option<String>,
+    /// <p>Whether the HTTP endpoint for an Aurora Serverless DB cluster is enabled.</p>
+    #[serde(rename = "HttpEndpointEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_endpoint_enabled: Option<bool>,
+    /// <p>Whether the mapping of IAM accounts to database accounts is enabled.</p>
+    #[serde(rename = "IamDatabaseAuthenticationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_database_authentication_enabled: Option<bool>,
+    /// <p>The ARN of the AWS KMS master key that is used to encrypt the database instances in the DB cluster.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The name of the master user for the DB cluster.</p>
+    #[serde(rename = "MasterUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_username: Option<String>,
+    /// <p>Whether the DB cluster has instances in multiple Availability Zones.</p>
+    #[serde(rename = "MultiAz")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multi_az: Option<bool>,
+    /// <p>The port number on which the DB instances in the DB cluster accept connections.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+    /// <p>The range of time each day when automated backups are created, if automated backups are enabled.</p> <p>Uses the format <code>HH:MM-HH:MM</code>. For example, <code>04:52-05:22</code>.</p>
+    #[serde(rename = "PreferredBackupWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_backup_window: Option<String>,
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Uses the format <code>&lt;day&gt;:HH:MM-&lt;day&gt;:HH:MM</code>.</p> <p>For the day values, use <code>mon</code>|<code>tue</code>|<code>wed</code>|<code>thu</code>|<code>fri</code>|<code>sat</code>|<code>sun</code>.</p> <p>For example, <code>sun:09:32-sun:10:02</code>.</p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_maintenance_window: Option<String>,
+    /// <p>The identifiers of the read replicas that are associated with this DB cluster.</p>
+    #[serde(rename = "ReadReplicaIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_replica_identifiers: Option<Vec<String>>,
+    /// <p>The reader endpoint for the DB cluster.</p>
+    #[serde(rename = "ReaderEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reader_endpoint: Option<String>,
+    /// <p>The current status of this DB cluster.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Whether the DB cluster is encrypted.</p>
+    #[serde(rename = "StorageEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_encrypted: Option<bool>,
+    /// <p>A list of VPC security groups that the DB cluster belongs to.</p>
+    #[serde(rename = "VpcSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_security_groups: Option<Vec<AwsRdsDbInstanceVpcSecurityGroup>>,
+}
+
+/// <p>Information about an instance in the DB cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbClusterMember {
+    /// <p>The status of the DB cluster parameter group for this member of the DB cluster.</p>
+    #[serde(rename = "DbClusterParameterGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_parameter_group_status: Option<String>,
+    /// <p>The instance identifier for this member of the DB cluster.</p>
+    #[serde(rename = "DbInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_identifier: Option<String>,
+    /// <p>Whether the cluster member is the primary instance for the DB cluster.</p>
+    #[serde(rename = "IsClusterWriter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_cluster_writer: Option<bool>,
+    /// <p>Specifies the order in which an Aurora replica is promoted to the primary instance when the existing primary instance fails.</p>
+    #[serde(rename = "PromotionTier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub promotion_tier: Option<i64>,
+}
+
+/// <p>Information about an option group membership for a DB cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbClusterOptionGroupMembership {
+    /// <p>The name of the DB cluster option group.</p>
+    #[serde(rename = "DbClusterOptionGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_option_group_name: Option<String>,
+    /// <p>The status of the DB cluster option group.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Information about an Amazon RDS DB cluster snapshot.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbClusterSnapshotDetails {
+    /// <p>Specifies the allocated storage size in gibibytes (GiB).</p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocated_storage: Option<i64>,
+    /// <p>A list of Availability Zones where instances in the DB cluster can be created.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>Indicates when the DB cluster was created, in Universal Coordinated Time (UTC).</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "ClusterCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_create_time: Option<String>,
+    /// <p>The DB cluster identifier.</p>
+    #[serde(rename = "DbClusterIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The identifier of the DB cluster snapshot.</p>
+    #[serde(rename = "DbClusterSnapshotIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_snapshot_identifier: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Engine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+    /// <p>The version of the database engine to use.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p>Whether mapping of IAM accounts to database accounts is enabled.</p>
+    #[serde(rename = "IamDatabaseAuthenticationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_database_authentication_enabled: Option<bool>,
+    /// <p>The ARN of the AWS KMS master key that is used to encrypt the database instances in the DB cluster.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The license model information for this DB cluster snapshot.</p>
+    #[serde(rename = "LicenseModel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license_model: Option<String>,
+    /// <p>The name of the master user for the DB cluster.</p>
+    #[serde(rename = "MasterUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_username: Option<String>,
+    /// <p>Specifies the percentage of the estimated data that has been transferred.</p>
+    #[serde(rename = "PercentProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent_progress: Option<i64>,
+    /// <p>The port number on which the DB instances in the DB cluster accept connections.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+    /// <p>Indicates when the snapshot was taken.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "SnapshotCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_create_time: Option<String>,
+    /// <p>The type of DB cluster snapshot.</p>
+    #[serde(rename = "SnapshotType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_type: Option<String>,
+    /// <p>The status of this DB cluster snapshot.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Whether the DB cluster is encrypted.</p>
+    #[serde(rename = "StorageEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_encrypted: Option<bool>,
+    /// <p>The VPC ID that is associated with the DB cluster snapshot.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>Information about an Active Directory domain membership record associated with the DB instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbDomainMembership {
+    /// <p>The identifier of the Active Directory domain.</p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    /// <p>The fully qualified domain name of the Active Directory domain.</p>
+    #[serde(rename = "Fqdn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fqdn: Option<String>,
+    /// <p>The name of the IAM role to use when making API calls to the Directory Service.</p>
+    #[serde(rename = "IamRoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_name: Option<String>,
+    /// <p>The status of the Active Directory Domain membership for the DB instance.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>An AWS Identity and Access Management (IAM) role associated with the DB instance.</p>
@@ -1027,14 +3024,38 @@ pub struct AwsRdsDbInstanceAssociatedRole {
 /// <p>Contains the details of an Amazon RDS DB instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsRdsDbInstanceDetails {
+    /// <p>The amount of storage (in gigabytes) to initially allocate for the DB instance.</p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocated_storage: Option<i64>,
     /// <p>The AWS Identity and Access Management (IAM) roles associated with the DB instance.</p>
     #[serde(rename = "AssociatedRoles")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_roles: Option<Vec<AwsRdsDbInstanceAssociatedRole>>,
+    /// <p>Indicates whether minor version patches are applied automatically.</p>
+    #[serde(rename = "AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_minor_version_upgrade: Option<bool>,
+    /// <p>The Availability Zone where the DB instance will be created.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>The number of days for which to retain automated backups.</p>
+    #[serde(rename = "BackupRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_retention_period: Option<i64>,
     /// <p>The identifier of the CA certificate for this DB instance.</p>
     #[serde(rename = "CACertificateIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ca_certificate_identifier: Option<String>,
+    /// <p>The name of the character set that this DB instance is associated with.</p>
+    #[serde(rename = "CharacterSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub character_set_name: Option<String>,
+    /// <p>Whether to copy resource tags to snapshots of the DB instance.</p>
+    #[serde(rename = "CopyTagsToSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_tags_to_snapshot: Option<bool>,
     /// <p>If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.</p>
     #[serde(rename = "DBClusterIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1055,6 +3076,22 @@ pub struct AwsRdsDbInstanceDetails {
     #[serde(rename = "DbInstancePort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub db_instance_port: Option<i64>,
+    /// <p>The current status of the DB instance.</p>
+    #[serde(rename = "DbInstanceStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_status: Option<String>,
+    /// <p>A list of the DB parameter groups to assign to the DB instance.</p>
+    #[serde(rename = "DbParameterGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_parameter_groups: Option<Vec<AwsRdsDbParameterGroup>>,
+    /// <p>A list of the DB security groups to assign to the DB instance.</p>
+    #[serde(rename = "DbSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_security_groups: Option<Vec<String>>,
+    /// <p>Information about the subnet group that is associated with the DB instance.</p>
+    #[serde(rename = "DbSubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_subnet_group: Option<AwsRdsDbSubnetGroup>,
     /// <p>The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed. </p>
     #[serde(rename = "DbiResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1063,6 +3100,14 @@ pub struct AwsRdsDbInstanceDetails {
     #[serde(rename = "DeletionProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_protection: Option<bool>,
+    /// <p>The Active Directory domain membership records associated with the DB instance.</p>
+    #[serde(rename = "DomainMemberships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_memberships: Option<Vec<AwsRdsDbDomainMembership>>,
+    /// <p>A list of log types that this DB instance is configured to export to CloudWatch Logs.</p>
+    #[serde(rename = "EnabledCloudWatchLogsExports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled_cloud_watch_logs_exports: Option<Vec<String>>,
     /// <p>Specifies the connection endpoint.</p>
     #[serde(rename = "Endpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1075,30 +3120,133 @@ pub struct AwsRdsDbInstanceDetails {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
+    /// <p>The ARN of the CloudWatch Logs log stream that receives the enhanced monitoring metrics data for the DB instance.</p>
+    #[serde(rename = "EnhancedMonitoringResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enhanced_monitoring_resource_arn: Option<String>,
     /// <p><p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.</p> <p>IAM database authentication can be enabled for the following database engines.</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora 5.6 or higher</p> </li> </ul></p>
     #[serde(rename = "IAMDatabaseAuthenticationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_database_authentication_enabled: Option<bool>,
-    /// <p>Provides the date and time the DB instance was created.</p>
+    /// <p>Indicates when the DB instance was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "InstanceCreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_create_time: Option<String>,
+    /// <p>Specifies the provisioned IOPS (I/O operations per second) for this DB instance.</p>
+    #[serde(rename = "Iops")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iops: Option<i64>,
     /// <p>If <code>StorageEncrypted</code> is true, the AWS KMS key identifier for the encrypted DB instance.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
+    /// <p>Specifies the latest time to which a database can be restored with point-in-time restore.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "LatestRestorableTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_restorable_time: Option<String>,
+    /// <p>License model information for this DB instance.</p>
+    #[serde(rename = "LicenseModel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license_model: Option<String>,
+    #[serde(rename = "ListenerEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener_endpoint: Option<AwsRdsDbInstanceEndpoint>,
+    /// <p>The master user name of the DB instance.</p>
+    #[serde(rename = "MasterUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_username: Option<String>,
+    /// <p>The upper limit to which Amazon RDS can automatically scale the storage of the DB instance.</p>
+    #[serde(rename = "MaxAllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_allocated_storage: Option<i64>,
+    /// <p>The interval, in seconds, between points when enhanced monitoring metrics are collected for the DB instance.</p>
+    #[serde(rename = "MonitoringInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_interval: Option<i64>,
+    /// <p>The ARN for the IAM role that permits Amazon RDS to send enhanced monitoring metrics to CloudWatch Logs.</p>
+    #[serde(rename = "MonitoringRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_role_arn: Option<String>,
+    /// <p>Whether the DB instance is a multiple Availability Zone deployment.</p>
+    #[serde(rename = "MultiAz")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multi_az: Option<bool>,
+    /// <p>The list of option group memberships for this DB instance.</p>
+    #[serde(rename = "OptionGroupMemberships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option_group_memberships: Option<Vec<AwsRdsDbOptionGroupMembership>>,
+    /// <p>Changes to the DB instance that are currently pending.</p>
+    #[serde(rename = "PendingModifiedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_modified_values: Option<AwsRdsDbPendingModifiedValues>,
+    /// <p>Indicates whether Performance Insights is enabled for the DB instance.</p>
+    #[serde(rename = "PerformanceInsightsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub performance_insights_enabled: Option<bool>,
+    /// <p>The identifier of the AWS KMS key used to encrypt the Performance Insights data.</p>
+    #[serde(rename = "PerformanceInsightsKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub performance_insights_kms_key_id: Option<String>,
+    /// <p>The number of days to retain Performance Insights data.</p>
+    #[serde(rename = "PerformanceInsightsRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub performance_insights_retention_period: Option<i64>,
+    /// <p>The range of time each day when automated backups are created, if automated backups are enabled.</p> <p>Uses the format <code>HH:MM-HH:MM</code>. For example, <code>04:52-05:22</code>.</p>
+    #[serde(rename = "PreferredBackupWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_backup_window: Option<String>,
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Uses the format <code>&lt;day&gt;:HH:MM-&lt;day&gt;:HH:MM</code>.</p> <p>For the day values, use <code>mon</code>|<code>tue</code>|<code>wed</code>|<code>thu</code>|<code>fri</code>|<code>sat</code>|<code>sun</code>.</p> <p>For example, <code>sun:09:32-sun:10:02</code>.</p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_maintenance_window: Option<String>,
+    /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
+    #[serde(rename = "ProcessorFeatures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processor_features: Option<Vec<AwsRdsDbProcessorFeature>>,
+    /// <p>The order in which to promote an Aurora replica to the primary instance after a failure of the existing primary instance.</p>
+    #[serde(rename = "PromotionTier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub promotion_tier: Option<i64>,
     /// <p>Specifies the accessibility options for the DB instance.</p> <p>A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address.</p> <p>A value of false specifies an internal instance with a DNS name that resolves to a private IP address. </p>
     #[serde(rename = "PubliclyAccessible")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publicly_accessible: Option<bool>,
+    /// <p>List of identifiers of Aurora DB clusters to which the RDS DB instance is replicated as a read replica.</p>
+    #[serde(rename = "ReadReplicaDBClusterIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_replica_db_cluster_identifiers: Option<Vec<String>>,
+    /// <p>List of identifiers of the read replicas associated with this DB instance.</p>
+    #[serde(rename = "ReadReplicaDBInstanceIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_replica_db_instance_identifiers: Option<Vec<String>>,
+    /// <p>If this DB instance is a read replica, contains the identifier of the source DB instance.</p>
+    #[serde(rename = "ReadReplicaSourceDBInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_replica_source_db_instance_identifier: Option<String>,
+    /// <p>For a DB instance with multi-Availability Zone support, the name of the secondary Availability Zone.</p>
+    #[serde(rename = "SecondaryAvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_availability_zone: Option<String>,
+    /// <p>The status of a read replica. If the instance isn't a read replica, this is empty.</p>
+    #[serde(rename = "StatusInfos")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_infos: Option<Vec<AwsRdsDbStatusInfo>>,
     /// <p>Specifies whether the DB instance is encrypted.</p>
     #[serde(rename = "StorageEncrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_encrypted: Option<bool>,
+    /// <p>The storage type for the DB instance.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
     /// <p>The ARN from the key store with which the instance is associated for TDE encryption.</p>
     #[serde(rename = "TdeCredentialArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tde_credential_arn: Option<String>,
+    /// <p>The time zone of the DB instance.</p>
+    #[serde(rename = "Timezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timezone: Option<String>,
     /// <p>A list of VPC security groups that the DB instance belongs to.</p>
     #[serde(rename = "VpcSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1135,10 +3283,755 @@ pub struct AwsRdsDbInstanceVpcSecurityGroup {
     pub vpc_security_group_id: Option<String>,
 }
 
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbOptionGroupMembership {
+    /// <p><p/></p>
+    #[serde(rename = "OptionGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option_group_name: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbParameterGroup {
+    /// <p><p/></p>
+    #[serde(rename = "DbParameterGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_parameter_group_name: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "ParameterApplyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_apply_status: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbPendingModifiedValues {
+    /// <p><p/></p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocated_storage: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "BackupRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_retention_period: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "CaCertificateIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ca_certificate_identifier: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "DbInstanceClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_class: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "DbInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_identifier: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "DbSubnetGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_subnet_group_name: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Iops")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iops: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "LicenseModel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license_model: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "MasterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_password: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "MultiAZ")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multi_az: Option<bool>,
+    /// <p><p/></p>
+    #[serde(rename = "PendingCloudWatchLogsExports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_cloud_watch_logs_exports: Option<AwsRdsPendingCloudWatchLogsExports>,
+    /// <p><p/></p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "ProcessorFeatures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processor_features: Option<Vec<AwsRdsDbProcessorFeature>>,
+    /// <p><p/></p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbProcessorFeature {
+    /// <p><p/></p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbSnapshotDetails {
+    /// <p><p/></p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocated_storage: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "DbInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_identifier: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "DbSnapshotIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_snapshot_identifier: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "DbiResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dbi_resource_id: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encrypted: Option<bool>,
+    /// <p><p/></p>
+    #[serde(rename = "Engine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "IamDatabaseAuthenticationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_database_authentication_enabled: Option<bool>,
+    /// <p><p/></p>
+    #[serde(rename = "InstanceCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_create_time: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Iops")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iops: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "LicenseModel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license_model: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "MasterUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_username: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "OptionGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option_group_name: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "PercentProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent_progress: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "ProcessorFeatures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processor_features: Option<Vec<AwsRdsDbProcessorFeature>>,
+    /// <p><p/></p>
+    #[serde(rename = "SnapshotCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_create_time: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "SnapshotType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_type: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "SourceDbSnapshotIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_db_snapshot_identifier: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "SourceRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_region: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "TdeCredentialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tde_credential_arn: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "Timezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timezone: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>Information about the status of a read replica.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbStatusInfo {
+    /// <p>If the read replica is currently in an error state, provides the error details.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>Whether the read replica instance is operating normally.</p>
+    #[serde(rename = "Normal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub normal: Option<bool>,
+    /// <p>The status of the read replica instance.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The type of status. For a read replica, the status type is read replication.</p>
+    #[serde(rename = "StatusType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_type: Option<String>,
+}
+
+/// <p>Information about the subnet group for the database instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbSubnetGroup {
+    /// <p>The ARN of the subnet group.</p>
+    #[serde(rename = "DbSubnetGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_subnet_group_arn: Option<String>,
+    /// <p>The description of the subnet group.</p>
+    #[serde(rename = "DbSubnetGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_subnet_group_description: Option<String>,
+    /// <p>The name of the subnet group.</p>
+    #[serde(rename = "DbSubnetGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_subnet_group_name: Option<String>,
+    /// <p>The status of the subnet group.</p>
+    #[serde(rename = "SubnetGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_group_status: Option<String>,
+    /// <p>A list of subnets in the subnet group.</p>
+    #[serde(rename = "Subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnets: Option<Vec<AwsRdsDbSubnetGroupSubnet>>,
+    /// <p>The VPC ID of the subnet group.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>Information about a subnet in a subnet group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbSubnetGroupSubnet {
+    /// <p>Information about the Availability Zone for a subnet in the subnet group.</p>
+    #[serde(rename = "SubnetAvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_availability_zone: Option<AwsRdsDbSubnetGroupSubnetAvailabilityZone>,
+    /// <p>The identifier of a subnet in the subnet group.</p>
+    #[serde(rename = "SubnetIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_identifier: Option<String>,
+    /// <p>The status of a subnet in the subnet group.</p>
+    #[serde(rename = "SubnetStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_status: Option<String>,
+}
+
+/// <p>An Availability Zone for a subnet in a subnet group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsDbSubnetGroupSubnetAvailabilityZone {
+    /// <p>The name of the Availability Zone for a subnet in the subnet group.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Identifies the log types to enable and disable.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRdsPendingCloudWatchLogsExports {
+    /// <p>A list of log types that are being disabled.</p>
+    #[serde(rename = "LogTypesToDisable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_types_to_disable: Option<Vec<String>>,
+    /// <p>A list of log types that are being enabled.</p>
+    #[serde(rename = "LogTypesToEnable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_types_to_enable: Option<Vec<String>>,
+}
+
+/// <p>A node in an Amazon Redshift cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterClusterNode {
+    /// <p>The role of the node. A node might be a leader node or a compute node.</p>
+    #[serde(rename = "NodeRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_role: Option<String>,
+    /// <p>The private IP address of the node.</p>
+    #[serde(rename = "PrivateIpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_ip_address: Option<String>,
+    /// <p>The public IP address of the node.</p>
+    #[serde(rename = "PublicIpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_ip_address: Option<String>,
+}
+
+/// <p>A cluster parameter group that is associated with an Amazon Redshift cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterClusterParameterGroup {
+    /// <p>The list of parameter statuses.</p>
+    #[serde(rename = "ClusterParameterStatusList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_parameter_status_list: Option<Vec<AwsRedshiftClusterClusterParameterStatus>>,
+    /// <p>The status of updates to the parameters.</p>
+    #[serde(rename = "ParameterApplyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_apply_status: Option<String>,
+    /// <p>The name of the parameter group.</p>
+    #[serde(rename = "ParameterGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_group_name: Option<String>,
+}
+
+/// <p>The status of a parameter in a cluster parameter group for an Amazon Redshift cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterClusterParameterStatus {
+    /// <p>The error that prevented the parameter from being applied to the database.</p>
+    #[serde(rename = "ParameterApplyErrorDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_apply_error_description: Option<String>,
+    /// <p>The status of the parameter. Indicates whether the parameter is in sync with the database, waiting for a cluster reboot, or encountered an error when it was applied.</p> <p>Valid values: <code>in-sync</code> | <code>pending-reboot</code> | <code>applying</code> | <code>invalid-parameter</code> | <code>apply-deferred</code> | <code>apply-error</code> | <code>unknown-error</code> </p>
+    #[serde(rename = "ParameterApplyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_apply_status: Option<String>,
+    /// <p>The name of the parameter.</p>
+    #[serde(rename = "ParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_name: Option<String>,
+}
+
+/// <p>A security group that is associated with the cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterClusterSecurityGroup {
+    /// <p>The name of the cluster security group.</p>
+    #[serde(rename = "ClusterSecurityGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_security_group_name: Option<String>,
+    /// <p>The status of the cluster security group.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Information about a cross-Region snapshot copy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterClusterSnapshotCopyStatus {
+    /// <p>The destination Region that snapshots are automatically copied to when cross-Region snapshot copy is enabled.</p>
+    #[serde(rename = "DestinationRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_region: Option<String>,
+    /// <p>The number of days that manual snapshots are retained in the destination region after they are copied from a source region.</p> <p>If the value is -1, then the manual snapshot is retained indefinitely.</p> <p>Valid values: Either -1 or an integer between 1 and 3,653</p>
+    #[serde(rename = "ManualSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manual_snapshot_retention_period: Option<i64>,
+    /// <p>The number of days to retain automated snapshots in the destination Region after they are copied from a source Region.</p>
+    #[serde(rename = "RetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_period: Option<i64>,
+    /// <p>The name of the snapshot copy grant.</p>
+    #[serde(rename = "SnapshotCopyGrantName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_copy_grant_name: Option<String>,
+}
+
+/// <p>A time windows during which maintenance was deferred for an Amazon Redshift cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterDeferredMaintenanceWindow {
+    /// <p>The end of the time window for which maintenance was deferred.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "DeferMaintenanceEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub defer_maintenance_end_time: Option<String>,
+    /// <p>The identifier of the maintenance window.</p>
+    #[serde(rename = "DeferMaintenanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub defer_maintenance_identifier: Option<String>,
+    /// <p>The start of the time window for which maintenance was deferred.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "DeferMaintenanceStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub defer_maintenance_start_time: Option<String>,
+}
+
+/// <p>Details about an Amazon Redshift cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterDetails {
+    /// <p>Indicates whether major version upgrades are applied automatically to the cluster during the maintenance window.</p>
+    #[serde(rename = "AllowVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_version_upgrade: Option<bool>,
+    /// <p>The number of days that automatic cluster snapshots are retained.</p>
+    #[serde(rename = "AutomatedSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automated_snapshot_retention_period: Option<i64>,
+    /// <p>The name of the Availability Zone in which the cluster is located.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p><p>The availability status of the cluster for queries. Possible values are the following:</p> <ul> <li> <p> <code>Available</code> - The cluster is available for queries.</p> </li> <li> <p> <code>Unavailable</code> - The cluster is not available for queries.</p> </li> <li> <p> <code>Maintenance</code> - The cluster is intermittently available for queries due to maintenance activities.</p> </li> <li> <p> <code>Modifying</code> -The cluster is intermittently available for queries due to changes that modify the cluster.</p> </li> <li> <p> <code>Failed</code> - The cluster failed and is not available for queries.</p> </li> </ul></p>
+    #[serde(rename = "ClusterAvailabilityStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_availability_status: Option<String>,
+    /// <p>Indicates when the cluster was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "ClusterCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_create_time: Option<String>,
+    /// <p>The unique identifier of the cluster.</p>
+    #[serde(rename = "ClusterIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_identifier: Option<String>,
+    /// <p>The nodes in the cluster.</p>
+    #[serde(rename = "ClusterNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_nodes: Option<Vec<AwsRedshiftClusterClusterNode>>,
+    /// <p>The list of cluster parameter groups that are associated with this cluster.</p>
+    #[serde(rename = "ClusterParameterGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_parameter_groups: Option<Vec<AwsRedshiftClusterClusterParameterGroup>>,
+    /// <p>The public key for the cluster.</p>
+    #[serde(rename = "ClusterPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_public_key: Option<String>,
+    /// <p>The specific revision number of the database in the cluster.</p>
+    #[serde(rename = "ClusterRevisionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_revision_number: Option<String>,
+    /// <p>A list of cluster security groups that are associated with the cluster.</p>
+    #[serde(rename = "ClusterSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_security_groups: Option<Vec<AwsRedshiftClusterClusterSecurityGroup>>,
+    /// <p>Information about the destination Region and retention period for the cross-Region snapshot copy.</p>
+    #[serde(rename = "ClusterSnapshotCopyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_snapshot_copy_status: Option<AwsRedshiftClusterClusterSnapshotCopyStatus>,
+    /// <p>The current status of the cluster.</p> <p>Valid values: <code>available</code> | <code>available, prep-for-resize</code> | <code>available, resize-cleanup</code> |<code> cancelling-resize</code> | <code>creating</code> | <code>deleting</code> | <code>final-snapshot</code> | <code>hardware-failure</code> | <code>incompatible-hsm</code> |<code> incompatible-network</code> | <code>incompatible-parameters</code> | <code>incompatible-restore</code> | <code>modifying</code> | <code>paused</code> | <code>rebooting</code> | <code>renaming</code> | <code>resizing</code> | <code>rotating-keys</code> | <code>storage-full</code> | <code>updating-hsm</code> </p>
+    #[serde(rename = "ClusterStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_status: Option<String>,
+    /// <p>The name of the subnet group that is associated with the cluster. This parameter is valid only when the cluster is in a VPC.</p>
+    #[serde(rename = "ClusterSubnetGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_subnet_group_name: Option<String>,
+    /// <p>The version ID of the Amazon Redshift engine that runs on the cluster.</p>
+    #[serde(rename = "ClusterVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_version: Option<String>,
+    /// <p>The name of the initial database that was created when the cluster was created.</p> <p>The same name is returned for the life of the cluster.</p> <p>If an initial database is not specified, a database named <code>devdev</code> is created by default.</p>
+    #[serde(rename = "DBName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_name: Option<String>,
+    /// <p>List of time windows during which maintenance was deferred.</p>
+    #[serde(rename = "DeferredMaintenanceWindows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deferred_maintenance_windows: Option<Vec<AwsRedshiftClusterDeferredMaintenanceWindow>>,
+    /// <p>Information about the status of the Elastic IP (EIP) address.</p>
+    #[serde(rename = "ElasticIpStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elastic_ip_status: Option<AwsRedshiftClusterElasticIpStatus>,
+    /// <p>The number of nodes that you can use the elastic resize method to resize the cluster to.</p>
+    #[serde(rename = "ElasticResizeNumberOfNodeOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elastic_resize_number_of_node_options: Option<String>,
+    /// <p>Indicates whether the data in the cluster is encrypted at rest.</p>
+    #[serde(rename = "Encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encrypted: Option<bool>,
+    /// <p>The connection endpoint.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint: Option<AwsRedshiftClusterEndpoint>,
+    /// <p>Indicates whether to create the cluster with enhanced VPC routing enabled.</p>
+    #[serde(rename = "EnhancedVpcRouting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enhanced_vpc_routing: Option<bool>,
+    /// <p>Indicates when the next snapshot is expected to be taken. The cluster must have a valid snapshot schedule and have backups enabled.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "ExpectedNextSnapshotScheduleTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_next_snapshot_schedule_time: Option<String>,
+    /// <p>The status of the next expected snapshot.</p> <p>Valid values: <code>OnTrack</code> | <code>Pending</code> </p>
+    #[serde(rename = "ExpectedNextSnapshotScheduleTimeStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_next_snapshot_schedule_time_status: Option<String>,
+    /// <p>Information about whether the Amazon Redshift cluster finished applying any changes to hardware security module (HSM) settings that were specified in a modify cluster command.</p>
+    #[serde(rename = "HsmStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hsm_status: Option<AwsRedshiftClusterHsmStatus>,
+    /// <p>A list of IAM roles that the cluster can use to access other AWS services.</p>
+    #[serde(rename = "IamRoles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_roles: Option<Vec<AwsRedshiftClusterIamRole>>,
+    /// <p>The identifier of the AWS KMS encryption key that is used to encrypt data in the cluster.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The name of the maintenance track for the cluster.</p>
+    #[serde(rename = "MaintenanceTrackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maintenance_track_name: Option<String>,
+    /// <p>The default number of days to retain a manual snapshot.</p> <p>If the value is -1, the snapshot is retained indefinitely.</p> <p>This setting doesn't change the retention period of existing snapshots.</p> <p>Valid values: Either -1 or an integer between 1 and 3,653</p>
+    #[serde(rename = "ManualSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manual_snapshot_retention_period: Option<i64>,
+    /// <p>The master user name for the cluster. This name is used to connect to the database that is specified in as the value of <code>DBName</code>.</p>
+    #[serde(rename = "MasterUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_username: Option<String>,
+    /// <p>Indicates the start of the next maintenance window.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "NextMaintenanceWindowStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_maintenance_window_start_time: Option<String>,
+    /// <p>The node type for the nodes in the cluster.</p>
+    #[serde(rename = "NodeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_type: Option<String>,
+    /// <p>The number of compute nodes in the cluster.</p>
+    #[serde(rename = "NumberOfNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_nodes: Option<i64>,
+    /// <p>A list of cluster operations that are waiting to start.</p>
+    #[serde(rename = "PendingActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_actions: Option<Vec<String>>,
+    /// <p>A list of changes to the cluster that are currently pending.</p>
+    #[serde(rename = "PendingModifiedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_modified_values: Option<AwsRedshiftClusterPendingModifiedValues>,
+    /// <p>The weekly time range, in Universal Coordinated Time (UTC), during which system maintenance can occur.</p> <p>Format: <code> <i>&lt;day&gt;</i>:HH:MM-<i>&lt;day&gt;</i>:HH:MM</code> </p> <p>For the day values, use <code>mon</code> | <code>tue</code> | <code>wed</code> | <code>thu</code> | <code>fri</code> | <code>sat</code> | <code>sun</code> </p> <p>For example, <code>sun:09:32-sun:10:02</code> </p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_maintenance_window: Option<String>,
+    /// <p>Whether the cluster can be accessed from a public network.</p>
+    #[serde(rename = "PubliclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publicly_accessible: Option<bool>,
+    /// <p>Information about the resize operation for the cluster.</p>
+    #[serde(rename = "ResizeInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resize_info: Option<AwsRedshiftClusterResizeInfo>,
+    /// <p>Information about the status of a cluster restore action. Only applies to a cluster that was created by restoring a snapshot.</p>
+    #[serde(rename = "RestoreStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_status: Option<AwsRedshiftClusterRestoreStatus>,
+    /// <p>A unique identifier for the cluster snapshot schedule.</p>
+    #[serde(rename = "SnapshotScheduleIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_schedule_identifier: Option<String>,
+    /// <p>The current state of the cluster snapshot schedule.</p> <p>Valid values: <code>MODIFYING</code> | <code>ACTIVE</code> | <code>FAILED</code> </p>
+    #[serde(rename = "SnapshotScheduleState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_schedule_state: Option<String>,
+    /// <p>The identifier of the VPC that the cluster is in, if the cluster is in a VPC.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+    /// <p>The list of VPC security groups that the cluster belongs to, if the cluster is in a VPC.</p>
+    #[serde(rename = "VpcSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_security_groups: Option<Vec<AwsRedshiftClusterVpcSecurityGroup>>,
+}
+
+/// <p>The status of the elastic IP (EIP) address for an Amazon Redshift cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterElasticIpStatus {
+    /// <p>The elastic IP address for the cluster.</p>
+    #[serde(rename = "ElasticIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elastic_ip: Option<String>,
+    /// <p>The status of the elastic IP address.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>The connection endpoint for an Amazon Redshift cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterEndpoint {
+    /// <p>The DNS address of the cluster.</p>
+    #[serde(rename = "Address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address: Option<String>,
+    /// <p>The port that the database engine listens on.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+}
+
+/// <p>Information about whether an Amazon Redshift cluster finished applying any hardware changes to security module (HSM) settings that were specified in a modify cluster command.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterHsmStatus {
+    /// <p>The name of the HSM client certificate that the Amazon Redshift cluster uses to retrieve the data encryption keys that are stored in an HSM.</p>
+    #[serde(rename = "HsmClientCertificateIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hsm_client_certificate_identifier: Option<String>,
+    /// <p>The name of the HSM configuration that contains the information that the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>
+    #[serde(rename = "HsmConfigurationIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hsm_configuration_identifier: Option<String>,
+    /// <p>Indicates whether the Amazon Redshift cluster has finished applying any HSM settings changes specified in a modify cluster command.</p> <p>Type: String</p> <p>Valid values: <code>active</code> | <code>applying</code> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>An IAM role that the cluster can use to access other AWS services.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterIamRole {
+    /// <p>The status of the IAM role's association with the cluster.</p> <p>Valid values: <code>in-sync</code> | <code>adding</code> | <code>removing</code> </p>
+    #[serde(rename = "ApplyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_status: Option<String>,
+    /// <p>The ARN of the IAM role.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
+}
+
+/// <p>Changes to the Amazon Redshift cluster that are currently pending.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterPendingModifiedValues {
+    /// <p>The pending or in-progress change to the automated snapshot retention period.</p>
+    #[serde(rename = "AutomatedSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automated_snapshot_retention_period: Option<i64>,
+    /// <p>The pending or in-progress change to the identifier for the cluster.</p>
+    #[serde(rename = "ClusterIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_identifier: Option<String>,
+    /// <p>The pending or in-progress change to the cluster type.</p>
+    #[serde(rename = "ClusterType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_type: Option<String>,
+    /// <p>The pending or in-progress change to the service version.</p>
+    #[serde(rename = "ClusterVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_version: Option<String>,
+    /// <p>The encryption type for a cluster.</p>
+    #[serde(rename = "EncryptionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_type: Option<String>,
+    /// <p>Indicates whether to create the cluster with enhanced VPC routing enabled.</p>
+    #[serde(rename = "EnhancedVpcRouting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enhanced_vpc_routing: Option<bool>,
+    /// <p>The name of the maintenance track that the cluster changes to during the next maintenance window.</p>
+    #[serde(rename = "MaintenanceTrackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maintenance_track_name: Option<String>,
+    /// <p>The pending or in-progress change to the master user password for the cluster.</p>
+    #[serde(rename = "MasterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_password: Option<String>,
+    /// <p>The pending or in-progress change to the cluster's node type.</p>
+    #[serde(rename = "NodeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_type: Option<String>,
+    /// <p>The pending or in-progress change to the number of nodes in the cluster.</p>
+    #[serde(rename = "NumberOfNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_nodes: Option<i64>,
+    /// <p>The pending or in-progress change to whether the cluster can be connected to from the public network.</p>
+    #[serde(rename = "PubliclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publicly_accessible: Option<bool>,
+}
+
+/// <p>Information about the resize operation for the cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterResizeInfo {
+    /// <p>Indicates whether the resize operation can be canceled.</p>
+    #[serde(rename = "AllowCancelResize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_cancel_resize: Option<bool>,
+    /// <p>The type of resize operation.</p> <p>Valid values: <code>ClassicResize</code> </p>
+    #[serde(rename = "ResizeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resize_type: Option<String>,
+}
+
+/// <p>Information about the status of a cluster restore action. It only applies if the cluster was created by restoring a snapshot.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterRestoreStatus {
+    /// <p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup.</p> <p>This field is only updated when you restore to DC2 and DS2 node types.</p>
+    #[serde(rename = "CurrentRestoreRateInMegaBytesPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_restore_rate_in_mega_bytes_per_second: Option<f64>,
+    /// <p>The amount of time an in-progress restore has been running, or the amount of time it took a completed restore to finish.</p> <p>This field is only updated when you restore to DC2 and DS2 node types.</p>
+    #[serde(rename = "ElapsedTimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elapsed_time_in_seconds: Option<i64>,
+    /// <p>The estimate of the time remaining before the restore is complete. Returns 0 for a completed restore.</p> <p>This field is only updated when you restore to DC2 and DS2 node types.</p>
+    #[serde(rename = "EstimatedTimeToCompletionInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_time_to_completion_in_seconds: Option<i64>,
+    /// <p>The number of megabytes that were transferred from snapshot storage.</p> <p>This field is only updated when you restore to DC2 and DS2 node types.</p>
+    #[serde(rename = "ProgressInMegaBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress_in_mega_bytes: Option<i64>,
+    /// <p>The size of the set of snapshot data that was used to restore the cluster.</p> <p>This field is only updated when you restore to DC2 and DS2 node types.</p>
+    #[serde(rename = "SnapshotSizeInMegaBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_size_in_mega_bytes: Option<i64>,
+    /// <p>The status of the restore action.</p> <p>Valid values: <code>starting</code> | <code>restoring</code> | <code>completed</code> | <code>failed</code> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>A VPC security group that the cluster belongs to, if the cluster is in a VPC.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsRedshiftClusterVpcSecurityGroup {
+    /// <p>The status of the VPC security group.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The identifier of the VPC security group.</p>
+    #[serde(rename = "VpcSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_security_group_id: Option<String>,
+}
+
 /// <p>The details of an Amazon S3 bucket.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsS3BucketDetails {
-    /// <p>The date and time when the S3 bucket was created.</p>
+    /// <p>Indicates when the S3 bucket was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
@@ -1198,7 +4091,7 @@ pub struct AwsS3ObjectDetails {
     #[serde(rename = "ETag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub e_tag: Option<String>,
-    /// <p>The date and time when the object was last modified.</p>
+    /// <p>Indicates when the object was last modified.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<String>,
@@ -1216,6 +4109,52 @@ pub struct AwsS3ObjectDetails {
     pub version_id: Option<String>,
 }
 
+/// <p>Details about an AWS Secrets Manager secret.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsSecretsManagerSecretDetails {
+    /// <p>Whether the secret is deleted.</p>
+    #[serde(rename = "Deleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deleted: Option<bool>,
+    /// <p>The user-provided description of the secret.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN, Key ID, or alias of the AWS KMS customer master key (CMK) used to encrypt the <code>SecretString</code> or <code>SecretBinary</code> values for versions of this secret.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The name of the secret.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Whether rotation is enabled.</p>
+    #[serde(rename = "RotationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rotation_enabled: Option<bool>,
+    /// <p>The ARN of the Lambda function that rotates the secret.</p>
+    #[serde(rename = "RotationLambdaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rotation_lambda_arn: Option<String>,
+    /// <p>Whether the rotation occurred within the specified rotation frequency.</p>
+    #[serde(rename = "RotationOccurredWithinFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rotation_occurred_within_frequency: Option<bool>,
+    /// <p>Defines the rotation schedule for the secret.</p>
+    #[serde(rename = "RotationRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rotation_rules: Option<AwsSecretsManagerSecretRotationRules>,
+}
+
+/// <p>Defines the rotation schedule for the secret.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsSecretsManagerSecretRotationRules {
+    /// <p>The number of days after the previous rotation to rotate the secret.</p>
+    #[serde(rename = "AutomaticallyAfterDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automatically_after_days: Option<i64>,
+}
+
 /// <p><p>Provides consistent format for the contents of the Security Hub-aggregated findings. <code>AwsSecurityFinding</code> format enables you to share findings between AWS security services and third-party solutions, and security standards checks.</p> <note> <p>A finding is a potential security issue generated either by AWS services (Amazon GuardDuty, Amazon Inspector, and Amazon Macie) or by the integrated third-party solutions and standards checks.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsSecurityFinding {
@@ -1230,7 +4169,7 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<i64>,
-    /// <p>An ISO8601-formatted timestamp that indicates when the security-findings provider created the potential security issue that a finding captured.</p>
+    /// <p>Indicates when the security-findings provider created the potential security issue that a finding captured.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "CreatedAt")]
     pub created_at: String,
     /// <p>The level of importance assigned to the resources associated with the finding.</p> <p>A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>
@@ -1240,7 +4179,7 @@ pub struct AwsSecurityFinding {
     /// <p><p>A finding&#39;s description.</p> <note> <p>In this release, <code>Description</code> is a required property.</p> </note></p>
     #[serde(rename = "Description")]
     pub description: String,
-    /// <p>An ISO8601-formatted timestamp that indicates when the security-findings provider first observed the potential security issue that a finding captured.</p>
+    /// <p>Indicates when the security-findings provider first observed the potential security issue that a finding captured.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "FirstObservedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_observed_at: Option<String>,
@@ -1250,7 +4189,7 @@ pub struct AwsSecurityFinding {
     /// <p>The security findings provider-specific identifier for a finding.</p>
     #[serde(rename = "Id")]
     pub id: String,
-    /// <p>An ISO8601-formatted timestamp that indicates when the security-findings provider most recently observed the potential security issue that a finding captured.</p>
+    /// <p>Indicates when the security-findings provider most recently observed the potential security issue that a finding captured.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LastObservedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_observed_at: Option<String>,
@@ -1270,6 +4209,10 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "Note")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub note: Option<Note>,
+    /// <p>Provides an overview of the patch compliance status for an instance against a selected compliance standard.</p>
+    #[serde(rename = "PatchSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub patch_summary: Option<PatchSummary>,
     /// <p>The details of process-related information about a finding.</p>
     #[serde(rename = "Process")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1316,7 +4259,7 @@ pub struct AwsSecurityFinding {
     /// <p>One or more finding types in the format of <code>namespace/category/classifier</code> that classify a finding.</p> <p>Valid namespace values are: Software and Configuration Checks | TTPs | Effects | Unusual Behaviors | Sensitive Data Identifications</p>
     #[serde(rename = "Types")]
     pub types: Vec<String>,
-    /// <p>An ISO8601-formatted timestamp that indicates when the security-findings provider last updated the finding record. </p>
+    /// <p>Indicates when the security-findings provider last updated the finding record.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: String,
     /// <p>A list of name/value string pairs associated with the finding. These are custom, user-defined fields added to a finding. </p>
@@ -1341,7 +4284,7 @@ pub struct AwsSecurityFinding {
     pub workflow_state: Option<String>,
 }
 
-/// <p>A collection of attributes that are applied to all active Security Hub-aggregated findings and that result in a subset of findings that are included in this insight.</p>
+/// <p>A collection of attributes that are applied to all active Security Hub-aggregated findings and that result in a subset of findings that are included in this insight.</p> <p>You can filter by up to 10 finding attributes. For each attribute, you can provide up to 20 filter values.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsSecurityFindingFilters {
     /// <p>The AWS account ID that a finding is generated in.</p>
@@ -1672,7 +4615,7 @@ pub struct AwsSecurityFindingFilters {
     #[serde(rename = "VerificationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verification_state: Option<Vec<StringFilter>>,
-    /// <p>The workflow state of a finding.</p>
+    /// <p>The workflow state of a finding.</p> <p>Note that this field is deprecated. To search for a finding based on its workflow status, use <code>WorkflowStatus</code>.</p>
     #[serde(rename = "WorkflowState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workflow_state: Option<Vec<StringFilter>>,
@@ -1969,7 +4912,7 @@ pub struct ContainerDetails {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p>The date and time when the container started.</p>
+    /// <p>Indicates when the container started.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LaunchedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launched_at: Option<String>,
@@ -2213,6 +5156,10 @@ pub struct DescribeHubRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHubResponse {
+    /// <p>Whether to automatically enable new controls when they are added to standards that are enabled.</p> <p>If set to <code>true</code>, then new controls for enabled standards are enabled automatically. If set to <code>false</code>, then new controls are not enabled.</p>
+    #[serde(rename = "AutoEnableControls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_enable_controls: Option<bool>,
     /// <p>The ARN of the Hub resource that was retrieved.</p>
     #[serde(rename = "HubArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2411,7 +5358,7 @@ pub struct GetEnabledStandardsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
-    /// <p>The finding attributes used to define a condition to filter the returned findings.</p>
+    /// <p>The finding attributes used to define a condition to filter the returned findings.</p> <p>You can filter by up to 10 finding attributes. For each attribute, you can provide up to 20 filter values.</p> <p>Note that in the available filter fields, <code>WorkflowState</code> is deprecated. To search for a finding based on its workflow status, use <code>WorkflowStatus</code>.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<AwsSecurityFindingFilters>,
@@ -2800,18 +5747,18 @@ pub struct Malware {
     pub type_: Option<String>,
 }
 
-/// <p>The map filter for querying findings.</p>
+/// <p>A map filter for querying findings. Each map filter provides the field to check, the value to look for, and the comparison operator.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MapFilter {
-    /// <p>The condition to apply to a key value when querying for findings with a map filter.</p>
+    /// <p>The condition to apply to the key value when querying for findings with a map filter.</p> <p>To search for values that exactly match the filter value, use <code>EQUALS</code>. For example, for the <code>ResourceTags</code> field, the filter <code>Department EQUALS Security</code> matches findings that have the value <code>Security</code> for the tag <code>Department</code>.</p> <p>To search for values other than the filter value, use <code>NOT_EQUALS</code>. For example, for the <code>ResourceTags</code> field, the filter <code>Department NOT_EQUALS Finance</code> matches findings that do not have the value <code>Finance</code> for the tag <code>Department</code>.</p> <p> <code>EQUALS</code> filters on the same field are joined by <code>OR</code>. A finding matches if it matches any one of those filters.</p> <p> <code>NOT_EQUALS</code> filters on the same field are joined by <code>AND</code>. A finding matches only if it matches all of those filters.</p> <p>You cannot have both an <code>EQUALS</code> filter and a <code>NOT_EQUALS</code> filter on the same field.</p>
     #[serde(rename = "Comparison")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comparison: Option<String>,
-    /// <p>The key of the map filter.</p>
+    /// <p>The key of the map filter. For example, for <code>ResourceTags</code>, <code>Key</code> identifies the name of the tag. For <code>UserDefinedFields</code>, <code>Key</code> is the name of the field.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The value for the key in the map filter.</p>
+    /// <p>The value for the key in the map filter. Filter values are case sensitive. For example, one of the values for a tag called <code>Department</code> might be <code>Security</code>. If you provide <code>security</code> as the filter value, then there is no match.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -2837,7 +5784,7 @@ pub struct Member {
     #[serde(rename = "MasterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_id: Option<String>,
-    /// <p>The status of the relationship between the member account and its master account. </p>
+    /// <p><p>The status of the relationship between the member account and its master account. </p> <p>The status can have one of the following values:</p> <ul> <li> <p> <code>CREATED</code> - Indicates that the master account added the member account, but has not yet invited the member account.</p> </li> <li> <p> <code>INVITED</code> - Indicates that the master account invited the member account. The member account has not yet responded to the invitation.</p> </li> <li> <p> <code>ASSOCIATED</code> - Indicates that the member account accepted the invitation.</p> </li> <li> <p> <code>REMOVED</code> - Indicates that the master account disassociated the member account.</p> </li> <li> <p> <code>RESIGNED</code> - Indicates that the member account disassociated themselves from the master account.</p> </li> <li> <p> <code>DELETED</code> - Indicates that the master account deleted the member account.</p> </li> </ul></p>
     #[serde(rename = "MemberStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_status: Option<String>,
@@ -2957,7 +5904,7 @@ pub struct Note {
     /// <p>The text of a note.</p>
     #[serde(rename = "Text")]
     pub text: String,
-    /// <p>The timestamp of when the note was updated.</p>
+    /// <p>The timestamp of when the note was updated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: String,
     /// <p>The principal that created a note.</p>
@@ -2994,6 +5941,54 @@ pub struct NumberFilter {
     pub lte: Option<f64>,
 }
 
+/// <p>Provides an overview of the patch compliance status for an instance against a selected compliance standard.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PatchSummary {
+    /// <p>The number of patches from the compliance standard that failed to install.</p>
+    #[serde(rename = "FailedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_count: Option<i64>,
+    /// <p>The identifier of the compliance standard that was used to determine the patch compliance status.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The number of patches from the compliance standard that were installed successfully.</p>
+    #[serde(rename = "InstalledCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub installed_count: Option<i64>,
+    /// <p>The number of installed patches that are not part of the compliance standard.</p>
+    #[serde(rename = "InstalledOtherCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub installed_other_count: Option<i64>,
+    /// <p>The number of patches that were applied, but that require the instance to be rebooted in order to be marked as installed.</p>
+    #[serde(rename = "InstalledPendingReboot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub installed_pending_reboot: Option<i64>,
+    /// <p>The number of patches that are installed but are also on a list of patches that the customer rejected.</p>
+    #[serde(rename = "InstalledRejectedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub installed_rejected_count: Option<i64>,
+    /// <p>The number of patches that are part of the compliance standard but are not installed. The count includes patches that failed to install.</p>
+    #[serde(rename = "MissingCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub missing_count: Option<i64>,
+    /// <p>The type of patch operation performed. For Patch Manager, the values are <code>SCAN</code> and <code>INSTALL</code>. </p>
+    #[serde(rename = "Operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<String>,
+    /// <p>Indicates when the operation completed.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "OperationEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_end_time: Option<String>,
+    /// <p>Indicates when the operation started.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
+    #[serde(rename = "OperationStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_start_time: Option<String>,
+    /// <p>The reboot option specified for the instance.</p>
+    #[serde(rename = "RebootOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reboot_option: Option<String>,
+}
+
 /// <p>A range of ports.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PortRange {
@@ -3010,7 +6005,7 @@ pub struct PortRange {
 /// <p>The details of process-related information about a finding.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessDetails {
-    /// <p>The date/time that the process was launched.</p>
+    /// <p>Indicates when the process was launched.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LaunchedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launched_at: Option<String>,
@@ -3030,7 +6025,7 @@ pub struct ProcessDetails {
     #[serde(rename = "Pid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pid: Option<i64>,
-    /// <p>The date and time when the process was terminated.</p>
+    /// <p>Indicates when the process was terminated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "TerminatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub terminated_at: Option<String>,
@@ -3128,6 +6123,10 @@ pub struct Resource {
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "ResourceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_role: Option<String>,
     /// <p>A list of AWS tags associated with a resource at the time the finding was processed.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3140,18 +6139,50 @@ pub struct Resource {
 /// <p>Additional details about a resource related to a finding.</p> <p>To provide the details, use the object that corresponds to the resource type. For example, if the resource type is <code>AwsEc2Instance</code>, then you use the <code>AwsEc2Instance</code> object to provide the details.</p> <p>If the type-specific object does not contain all of the fields you want to populate, then you use the <code>Other</code> object to populate those additional fields.</p> <p>You also use the <code>Other</code> object to populate the details when the selected type does not have a corresponding object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceDetails {
+    /// <p><p/></p>
+    #[serde(rename = "AwsApiGatewayRestApi")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_api_gateway_rest_api: Option<AwsApiGatewayRestApiDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsApiGatewayStage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_api_gateway_stage: Option<AwsApiGatewayStageDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsApiGatewayV2Api")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_api_gateway_v2_api: Option<AwsApiGatewayV2ApiDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsApiGatewayV2Stage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_api_gateway_v2_stage: Option<AwsApiGatewayV2StageDetails>,
     /// <p>Details for an autoscaling group.</p>
     #[serde(rename = "AwsAutoScalingAutoScalingGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_auto_scaling_auto_scaling_group: Option<AwsAutoScalingAutoScalingGroupDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsCertificateManagerCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_certificate_manager_certificate: Option<AwsCertificateManagerCertificateDetails>,
     /// <p>Details about a CloudFront distribution.</p>
     #[serde(rename = "AwsCloudFrontDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_cloud_front_distribution: Option<AwsCloudFrontDistributionDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsCloudTrailTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_cloud_trail_trail: Option<AwsCloudTrailTrailDetails>,
     /// <p>Details for an AWS CodeBuild project.</p>
     #[serde(rename = "AwsCodeBuildProject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_code_build_project: Option<AwsCodeBuildProjectDetails>,
+    /// <p>Details about a DynamoDB table.</p>
+    #[serde(rename = "AwsDynamoDbTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_dynamo_db_table: Option<AwsDynamoDbTableDetails>,
+    /// <p>Details about an Elastic IP address.</p>
+    #[serde(rename = "AwsEc2Eip")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_eip: Option<AwsEc2EipDetails>,
     /// <p>Details about an Amazon EC2 instance related to a finding.</p>
     #[serde(rename = "AwsEc2Instance")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3176,6 +6207,10 @@ pub struct ResourceDetails {
     #[serde(rename = "AwsElasticsearchDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_elasticsearch_domain: Option<AwsElasticsearchDomainDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsElbLoadBalancer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_elb_load_balancer: Option<AwsElbLoadBalancerDetails>,
     /// <p>Details about a load balancer.</p>
     #[serde(rename = "AwsElbv2LoadBalancer")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3184,10 +6219,22 @@ pub struct ResourceDetails {
     #[serde(rename = "AwsIamAccessKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_iam_access_key: Option<AwsIamAccessKeyDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsIamGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iam_group: Option<AwsIamGroupDetails>,
+    /// <p>Details about an IAM permissions policy.</p>
+    #[serde(rename = "AwsIamPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iam_policy: Option<AwsIamPolicyDetails>,
     /// <p>Details about an IAM role.</p>
     #[serde(rename = "AwsIamRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_iam_role: Option<AwsIamRoleDetails>,
+    /// <p>Details about an IAM user.</p>
+    #[serde(rename = "AwsIamUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iam_user: Option<AwsIamUserDetails>,
     /// <p>Details about a KMS key.</p>
     #[serde(rename = "AwsKmsKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3200,10 +6247,26 @@ pub struct ResourceDetails {
     #[serde(rename = "AwsLambdaLayerVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_lambda_layer_version: Option<AwsLambdaLayerVersionDetails>,
-    /// <p>Details for an Amazon RDS database instance.</p>
+    /// <p>Details about an Amazon RDS database cluster.</p>
+    #[serde(rename = "AwsRdsDbCluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_rds_db_cluster: Option<AwsRdsDbClusterDetails>,
+    /// <p>Details about an Amazon RDS database cluster snapshot.</p>
+    #[serde(rename = "AwsRdsDbClusterSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_rds_db_cluster_snapshot: Option<AwsRdsDbClusterSnapshotDetails>,
+    /// <p>Details about an Amazon RDS database instance.</p>
     #[serde(rename = "AwsRdsDbInstance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_rds_db_instance: Option<AwsRdsDbInstanceDetails>,
+    /// <p>Details about an Amazon RDS database snapshot.</p>
+    #[serde(rename = "AwsRdsDbSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_rds_db_snapshot: Option<AwsRdsDbSnapshotDetails>,
+    /// <p><p/></p>
+    #[serde(rename = "AwsRedshiftCluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_redshift_cluster: Option<AwsRedshiftClusterDetails>,
     /// <p>Details about an Amazon S3 bucket related to a finding.</p>
     #[serde(rename = "AwsS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3212,6 +6275,10 @@ pub struct ResourceDetails {
     #[serde(rename = "AwsS3Object")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_s3_object: Option<AwsS3ObjectDetails>,
+    /// <p>Details about a Secrets Manager secret.</p>
+    #[serde(rename = "AwsSecretsManagerSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_secrets_manager_secret: Option<AwsSecretsManagerSecretDetails>,
     /// <p>Details about an SNS topic.</p>
     #[serde(rename = "AwsSnsTopic")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3248,14 +6315,14 @@ pub struct SecurityHubResult {
     pub processing_result: Option<String>,
 }
 
-/// <p>The severity of the finding.</p>
+/// <p>The severity of the finding.</p> <p>The finding provider can provide the initial severity, but cannot update it after that. The severity can only be updated by a master account. It cannot be updated by a member account.</p> <p>The finding must have either <code>Label</code> or <code>Normalized</code> populated. If only one of these attributes is populated, then Security Hub automatically populates the other one. If neither attribute is populated, then the finding is invalid. <code>Label</code> is the preferred attribute.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Severity {
-    /// <p><p>The severity value of the finding. The allowed values are the following.</p> <ul> <li> <p> <code>INFORMATIONAL</code> - No issue was found.</p> </li> <li> <p> <code>LOW</code> - The issue does not require action on its own.</p> </li> <li> <p> <code>MEDIUM</code> - The issue must be addressed but not urgently.</p> </li> <li> <p> <code>HIGH</code> - The issue must be addressed as a priority.</p> </li> <li> <p> <code>CRITICAL</code> - The issue must be remediated immediately to avoid it escalating.</p> </li> </ul></p>
+    /// <p><p>The severity value of the finding. The allowed values are the following.</p> <ul> <li> <p> <code>INFORMATIONAL</code> - No issue was found.</p> </li> <li> <p> <code>LOW</code> - The issue does not require action on its own.</p> </li> <li> <p> <code>MEDIUM</code> - The issue must be addressed but not urgently.</p> </li> <li> <p> <code>HIGH</code> - The issue must be addressed as a priority.</p> </li> <li> <p> <code>CRITICAL</code> - The issue must be remediated immediately to avoid it escalating.</p> </li> </ul> <p>If you provide <code>Normalized</code> and do not provide <code>Label</code>, then <code>Label</code> is set automatically as follows. </p> <ul> <li> <p>0 - <code>INFORMATIONAL</code> </p> </li> <li> <p>1–39 - <code>LOW</code> </p> </li> <li> <p>40–69 - <code>MEDIUM</code> </p> </li> <li> <p>70–89 - <code>HIGH</code> </p> </li> <li> <p>90–100 - <code>CRITICAL</code> </p> </li> </ul></p>
     #[serde(rename = "Label")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
-    /// <p><p>Deprecated. This attribute is being deprecated. Instead of providing <code>Normalized</code>, provide <code>Label</code>.</p> <p>If you provide <code>Normalized</code> and do not provide <code>Label</code>, <code>Label</code> is set automatically as follows. </p> <ul> <li> <p>0 - <code>INFORMATIONAL</code> </p> </li> <li> <p>1–39 - <code>LOW</code> </p> </li> <li> <p>40–69 - <code>MEDIUM</code> </p> </li> <li> <p>70–89 - <code>HIGH</code> </p> </li> <li> <p>90–100 - <code>CRITICAL</code> </p> </li> </ul></p>
+    /// <p><p>Deprecated. The normalized severity of a finding. This attribute is being deprecated. Instead of providing <code>Normalized</code>, provide <code>Label</code>.</p> <p>If you provide <code>Label</code> and do not provide <code>Normalized</code>, then <code>Normalized</code> is set automatically as follows.</p> <ul> <li> <p> <code>INFORMATIONAL</code> - 0</p> </li> <li> <p> <code>LOW</code> - 1</p> </li> <li> <p> <code>MEDIUM</code> - 40</p> </li> <li> <p> <code>HIGH</code> - 70</p> </li> <li> <p> <code>CRITICAL</code> - 90</p> </li> </ul></p>
     #[serde(rename = "Normalized")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub normalized: Option<i64>,
@@ -3440,11 +6507,11 @@ pub struct StatusReason {
 /// <p>A string filter for querying findings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StringFilter {
-    /// <p>The condition to be applied to a string value when querying for findings. </p>
+    /// <p><p>The condition to apply to a string value when querying for findings. To search for values that contain the filter criteria value, use one of the following comparison operators:</p> <ul> <li> <p>To search for values that exactly match the filter value, use <code>EQUALS</code>.</p> <p>For example, the filter <code>ResourceType EQUALS AwsEc2SecurityGroup</code> only matches findings that have a resource type of <code>AwsEc2SecurityGroup</code>.</p> </li> <li> <p>To search for values that start with the filter value, use <code>PREFIX</code>.</p> <p>For example, the filter <code>ResourceType PREFIX AwsIam</code> matches findings that have a resource type that starts with <code>AwsIam</code>. Findings with a resource type of <code>AwsIamPolicy</code>, <code>AwsIamRole</code>, or <code>AwsIamUser</code> would all match.</p> </li> </ul> <p> <code>EQUALS</code> and <code>PREFIX</code> filters on the same field are joined by <code>OR</code>. A finding matches if it matches any one of those filters.</p> <p>To search for values that do not contain the filter criteria value, use one of the following comparison operators:</p> <ul> <li> <p>To search for values that do not exactly match the filter value, use <code>NOT<em>EQUALS</code>.</p> <p>For example, the filter <code>ResourceType NOT</em>EQUALS AwsIamPolicy</code> matches findings that have a resource type other than <code>AwsIamPolicy</code>.</p> </li> <li> <p>To search for values that do not start with the filter value, use <code>PREFIX<em>NOT</em>EQUALS</code>.</p> <p>For example, the filter <code>ResourceType PREFIX<em>NOT</em>EQUALS AwsIam</code> matches findings that have a resource type that does not start with <code>AwsIam</code>. Findings with a resource type of <code>AwsIamPolicy</code>, <code>AwsIamRole</code>, or <code>AwsIamUser</code> would all be excluded from the results.</p> </li> </ul> <p> <code>NOT<em>EQUALS</code> and <code>PREFIX</em>NOT<em>EQUALS</code> filters on the same field are joined by <code>AND</code>. A finding matches only if it matches all of those filters.</p> <p>For filters on the same field, you cannot provide both an <code>EQUALS</code> filter and a <code>NOT</em>EQUALS</code> or <code>PREFIX<em>NOT</em>EQUALS</code> filter. Combining filters in this way always returns an error, even if the provided filter values would return valid results.</p> <p>You can combine <code>PREFIX</code> filters with <code>NOT<em>EQUALS</code> or <code>PREFIX</em>NOT<em>EQUALS</code> filters for the same field. Security Hub first processes the <code>PREFIX</code> filters, then the <code>NOT</em>EQUALS</code> or <code>PREFIX<em>NOT</em>EQUALS</code> filters.</p> <p> For example, for the following filter, Security Hub first identifies findings that have resource types that start with either <code>AwsIAM</code> or <code>AwsEc2</code>. It then excludes findings that have a resource type of <code>AwsIamPolicy</code> and findings that have a resource type of <code>AwsEc2NetworkInterface</code>.</p> <ul> <li> <p> <code>ResourceType PREFIX AwsIam</code> </p> </li> <li> <p> <code>ResourceType PREFIX AwsEc2</code> </p> </li> <li> <p> <code>ResourceType NOT<em>EQUALS AwsIamPolicy</code> </p> </li> <li> <p> <code>ResourceType NOT</em>EQUALS AwsEc2NetworkInterface</code> </p> </li> </ul></p>
     #[serde(rename = "Comparison")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comparison: Option<String>,
-    /// <p>The string filter value.</p>
+    /// <p>The string filter value. Filter values are case sensitive. For example, the product name for control-based findings is <code>Security Hub</code>. If you provide <code>security hub</code> as the filter text, then there is no match.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -3472,7 +6539,7 @@ pub struct ThreatIntelIndicator {
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub category: Option<String>,
-    /// <p>The date and time when the most recent instance of a threat intelligence indicator was observed.</p>
+    /// <p>Indicates when the most recent instance of a threat intelligence indicator was observed.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "LastObservedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_observed_at: Option<String>,
@@ -3575,6 +6642,19 @@ pub struct UpdateInsightResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateSecurityHubConfigurationRequest {
+    /// <p>Whether to automatically enable new controls when they are added to standards that are enabled.</p> <p>By default, this is set to <code>true</code>, and new controls are enabled automatically. To not automatically enable new controls, set this to <code>false</code>. </p>
+    #[serde(rename = "AutoEnableControls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_enable_controls: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateSecurityHubConfigurationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStandardsControlRequest {
     /// <p>The updated status of the security standard control.</p>
     #[serde(rename = "ControlStatus")]
@@ -3631,7 +6711,7 @@ pub struct VulnerabilityVendor {
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-    /// <p>The datetime when the vulnerability advisory was created.</p>
+    /// <p>Indicates when the vulnerability advisory was created.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "VendorCreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor_created_at: Option<String>,
@@ -3639,7 +6719,7 @@ pub struct VulnerabilityVendor {
     #[serde(rename = "VendorSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor_severity: Option<String>,
-    /// <p>The datetime when the vulnerability advisory was last updated.</p>
+    /// <p>Indicates when the vulnerability advisory was last updated.</p> <p>Uses the <code>date-time</code> format specified in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339 section 5.6, Internet Date/Time Format</a>. The value cannot contain spaces. For example, <code>2020-03-22T13:22:13.933Z</code>.</p>
     #[serde(rename = "VendorUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor_updated_at: Option<String>,
@@ -5815,6 +8895,74 @@ impl fmt::Display for UpdateInsightError {
     }
 }
 impl Error for UpdateInsightError {}
+/// Errors returned by UpdateSecurityHubConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateSecurityHubConfigurationError {
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>AWS Security Hub isn't enabled for the account used to make this request.</p>
+    InvalidAccess(String),
+    /// <p>The request was rejected because you supplied an invalid or out-of-range value for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The request was rejected because we can't find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateSecurityHubConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateSecurityHubConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(UpdateSecurityHubConfigurationError::Internal(
+                        err.msg,
+                    ))
+                }
+                "InvalidAccessException" => {
+                    return RusotoError::Service(
+                        UpdateSecurityHubConfigurationError::InvalidAccess(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateSecurityHubConfigurationError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateSecurityHubConfigurationError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateSecurityHubConfigurationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateSecurityHubConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateSecurityHubConfigurationError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityHubConfigurationError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityHubConfigurationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityHubConfigurationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityHubConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateSecurityHubConfigurationError {}
 /// Errors returned by UpdateStandardsControl
 #[derive(Debug, PartialEq)]
 pub enum UpdateStandardsControlError {
@@ -5894,7 +9042,7 @@ pub trait SecurityHub {
         input: BatchImportFindingsRequest,
     ) -> Result<BatchImportFindingsResponse, RusotoError<BatchImportFindingsError>>;
 
-    /// <p>Used by Security Hub customers to update information about their investigation into a finding. Requested by master accounts or member accounts. Master accounts can update findings for their account and their member accounts. Member accounts can update findings for their account.</p> <p>Updates from <code>BatchUpdateFindings</code> do not affect the value of <code>UpdatedAt</code> for a finding.</p> <p>Master accounts can use <code>BatchUpdateFindings</code> to update the following finding fields and objects.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul> <p>Member accounts can only use <code>BatchUpdateFindings</code> to update the Note object.</p>
+    /// <p>Used by Security Hub customers to update information about their investigation into a finding. Requested by master accounts or member accounts. Master accounts can update findings for their account and their member accounts. Member accounts can update findings for their account.</p> <p>Updates from <code>BatchUpdateFindings</code> do not affect the value of <code>UpdatedAt</code> for a finding.</p> <p>Master and member accounts can use <code>BatchUpdateFindings</code> to update the following finding fields and objects.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul> <p>You can configure IAM policies to restrict access to fields and field values. For example, you might not want member accounts to be able to suppress findings or change the finding severity. See <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/finding-update-batchupdatefindings.html#batchupdatefindings-configure-access">Configuring access to BatchUpdateFindings</a> in the <i>AWS Security Hub User Guide</i>.</p>
     async fn batch_update_findings(
         &self,
         input: BatchUpdateFindingsRequest,
@@ -6121,6 +9269,15 @@ pub trait SecurityHub {
         input: UpdateInsightRequest,
     ) -> Result<UpdateInsightResponse, RusotoError<UpdateInsightError>>;
 
+    /// <p>Updates configuration options for Security Hub.</p>
+    async fn update_security_hub_configuration(
+        &self,
+        input: UpdateSecurityHubConfigurationRequest,
+    ) -> Result<
+        UpdateSecurityHubConfigurationResponse,
+        RusotoError<UpdateSecurityHubConfigurationError>,
+    >;
+
     /// <p>Used to control whether an individual security standard control is enabled or disabled.</p>
     async fn update_standards_control(
         &self,
@@ -6291,7 +9448,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Used by Security Hub customers to update information about their investigation into a finding. Requested by master accounts or member accounts. Master accounts can update findings for their account and their member accounts. Member accounts can update findings for their account.</p> <p>Updates from <code>BatchUpdateFindings</code> do not affect the value of <code>UpdatedAt</code> for a finding.</p> <p>Master accounts can use <code>BatchUpdateFindings</code> to update the following finding fields and objects.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul> <p>Member accounts can only use <code>BatchUpdateFindings</code> to update the Note object.</p>
+    /// <p>Used by Security Hub customers to update information about their investigation into a finding. Requested by master accounts or member accounts. Master accounts can update findings for their account and their member accounts. Member accounts can update findings for their account.</p> <p>Updates from <code>BatchUpdateFindings</code> do not affect the value of <code>UpdatedAt</code> for a finding.</p> <p>Master and member accounts can use <code>BatchUpdateFindings</code> to update the following finding fields and objects.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul> <p>You can configure IAM policies to restrict access to fields and field values. For example, you might not want member accounts to be able to suppress findings or change the finding severity. See <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/finding-update-batchupdatefindings.html#batchupdatefindings-configure-access">Configuring access to BatchUpdateFindings</a> in the <i>AWS Security Hub User Guide</i>.</p>
     #[allow(unused_mut)]
     async fn batch_update_findings(
         &self,
@@ -7477,6 +10634,40 @@ impl SecurityHub for SecurityHubClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateInsightError::from_response(response))
+        }
+    }
+
+    /// <p>Updates configuration options for Security Hub.</p>
+    #[allow(unused_mut)]
+    async fn update_security_hub_configuration(
+        &self,
+        input: UpdateSecurityHubConfigurationRequest,
+    ) -> Result<
+        UpdateSecurityHubConfigurationResponse,
+        RusotoError<UpdateSecurityHubConfigurationError>,
+    > {
+        let request_uri = "/accounts";
+
+        let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSecurityHubConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSecurityHubConfigurationError::from_response(response))
         }
     }
 

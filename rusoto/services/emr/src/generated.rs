@@ -425,6 +425,10 @@ pub struct Cluster {
     #[serde(rename = "OutpostArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outpost_arn: Option<String>,
+    /// <p>Placement group configured for an Amazon EMR cluster.</p>
+    #[serde(rename = "PlacementGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_groups: Option<Vec<PlacementGroupConfig>>,
     /// <p>The Amazon EMR release label, which determines the version of open-source application packages installed on the cluster. Release labels are in the form <code>emr-x.x.x</code>, where x.x.x is an Amazon EMR release version such as <code>emr-5.14.0</code>. For more information about Amazon EMR release versions and included application versions and features, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/">https://docs.aws.amazon.com/emr/latest/ReleaseGuide/</a>. The release label applies only to Amazon EMR releases version 4.0 and later. Earlier versions use <code>AmiVersion</code>.</p>
     #[serde(rename = "ReleaseLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -699,6 +703,23 @@ pub struct DescribeJobFlowsOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeNotebookExecutionInput {
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    pub notebook_execution_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeNotebookExecutionOutput {
+    /// <p>Properties of the notebook execution.</p>
+    #[serde(rename = "NotebookExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution: Option<NotebookExecution>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityConfigurationInput {
     /// <p>The name of the security configuration.</p>
     #[serde(rename = "Name")]
@@ -847,6 +868,22 @@ pub struct Ec2InstanceAttributes {
     #[serde(rename = "ServiceAccessSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_security_group: Option<String>,
+}
+
+/// <p>Specifies the execution engine (cluster) to run the notebook and perform the notebook execution, for example, an EMR cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ExecutionEngineConfig {
+    /// <p>The unique identifier of the execution engine. For an EMR cluster, this is the cluster ID.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>An optional unique ID of an EC2 security group to associate with the master instance of the EMR cluster for this notebook execution. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html">Specifying EC2 Security Groups for EMR Notebooks</a> in the <i>EMR Management Guide</i>.</p>
+    #[serde(rename = "MasterInstanceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_instance_security_group_id: Option<String>,
+    /// <p>The type of execution engine. A value of <code>EMR</code> specifies an EMR cluster.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>The details of the step failure. The service attempts to detect the root cause for many common failures.</p>
@@ -1942,6 +1979,44 @@ pub struct ListInstancesOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListNotebookExecutionsInput {
+    /// <p>The unique ID of the editor associated with the notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub editor_id: Option<String>,
+    /// <p>The beginning of time range filter for listing notebook executions. The default is the timestamp of 30 days ago.</p>
+    #[serde(rename = "From")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from: Option<f64>,
+    /// <p>The pagination token, returned by a previous <code>ListNotebookExecutions</code> call, that indicates the start of the list for this <code>ListNotebookExecutions</code> call.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p><p>The status filter for listing notebook executions.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The end of time range filter for listing notebook executions. The default is the current timestamp.</p>
+    #[serde(rename = "To")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub to: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListNotebookExecutionsOutput {
+    /// <p>A pagination token that a subsequent <code>ListNotebookExecutions</code> can use to determine the next set of results to retrieve.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>A list of notebook executions.</p>
+    #[serde(rename = "NotebookExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_executions: Option<Vec<NotebookExecutionSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityConfigurationsInput {
     /// <p>The pagination token that indicates the set of results to retrieve.</p>
     #[serde(rename = "Marker")]
@@ -2000,7 +2075,7 @@ pub struct ListStepsOutput {
 /// <p> Managed scaling policy for an Amazon EMR cluster. The policy specifies the limits for resources that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ManagedScalingPolicy {
-    /// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster is not allowed to go above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p>The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster is not allowed to go above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration.</p>
     #[serde(rename = "ComputeLimits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_limits: Option<ComputeLimits>,
@@ -2065,12 +2140,112 @@ pub struct ModifyInstanceGroupsInput {
     pub instance_groups: Option<Vec<InstanceGroupModifyConfig>>,
 }
 
+/// <p>A notebook execution. An execution is a specific instance that an EMR Notebook is run using the <code>StartNotebookExecution</code> action.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NotebookExecution {
+    /// <p>The Amazon Resource Name (ARN) of the notebook execution.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The unique identifier of the EMR Notebook that is used for the notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub editor_id: Option<String>,
+    /// <p>The timestamp when notebook execution ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The execution engine, such as an EMR cluster, used to run the EMR notebook and perform the notebook execution.</p>
+    #[serde(rename = "ExecutionEngine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_engine: Option<ExecutionEngineConfig>,
+    /// <p>The reason for the latest status change of the notebook execution.</p>
+    #[serde(rename = "LastStateChangeReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_state_change_reason: Option<String>,
+    /// <p>The unique identifier of a notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_id: Option<String>,
+    /// <p>A name for the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_name: Option<String>,
+    /// <p>The unique identifier of the EC2 security group associated with the EMR Notebook instance. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html">Specifying EC2 Security Groups for EMR Notebooks</a> in the <i>EMR Management Guide</i>.</p>
+    #[serde(rename = "NotebookInstanceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_instance_security_group_id: Option<String>,
+    /// <p>Input parameters in JSON format passed to the EMR Notebook at runtime for execution.</p>
+    #[serde(rename = "NotebookParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_params: Option<String>,
+    /// <p>The location of the notebook execution's output file in Amazon S3.</p>
+    #[serde(rename = "OutputNotebookURI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_notebook_uri: Option<String>,
+    /// <p>The timestamp when notebook execution started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>The status of the notebook execution.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A list of tags associated with a notebook execution. Tags are user-defined key value pairs that consist of a required key string with a maximum of 128 characters and an optional value string with a maximum of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NotebookExecutionSummary {
+    /// <p>The unique identifier of the editor associated with the notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub editor_id: Option<String>,
+    /// <p>The timestamp when notebook execution started.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_id: Option<String>,
+    /// <p>The name of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_name: Option<String>,
+    /// <p>The timestamp when notebook execution started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>The status of the notebook execution.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p><p> The launch specification for On-Demand instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnDemandProvisioningSpecification {
     /// <p> Specifies the strategy to use in launching On-Demand instance fleets. Currently, the only option is lowest-price (the default), which launches the lowest price first. </p>
     #[serde(rename = "AllocationStrategy")]
     pub allocation_strategy: String,
+}
+
+/// <p>Placement group configuration for an Amazon EMR cluster. The configuration specifies the placement strategy that can be applied to instance roles during cluster creation.</p> <p>To use this configuration, consider attaching managed policy AmazonElasticMapReducePlacementGroupPolicy to the EMR role.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PlacementGroupConfig {
+    /// <p>Role of the instance in the cluster.</p> <p>Starting with Amazon EMR version 5.23.0, the only supported instance role is <code>MASTER</code>.</p>
+    #[serde(rename = "InstanceRole")]
+    pub instance_role: String,
+    /// <p>EC2 Placement Group strategy associated with instance role.</p> <p>Starting with Amazon EMR version 5.23.0, the only supported placement strategy is <code>SPREAD</code> for the <code>MASTER</code> instance role.</p>
+    #[serde(rename = "PlacementStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_strategy: Option<String>,
 }
 
 /// <p>The Amazon EC2 Availability Zone configuration of the cluster (job flow).</p>
@@ -2270,6 +2445,10 @@ pub struct RunJobFlowInput {
     #[serde(rename = "NewSupportedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_supported_products: Option<Vec<SupportedProductConfig>>,
+    /// <p>The specified placement group configuration for an Amazon EMR cluster.</p>
+    #[serde(rename = "PlacementGroupConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_group_configs: Option<Vec<PlacementGroupConfig>>,
     /// <p>The Amazon EMR release label, which determines the version of open-source application packages installed on the cluster. Release labels are in the form <code>emr-x.x.x</code>, where x.x.x is an Amazon EMR release version such as <code>emr-5.14.0</code>. For more information about Amazon EMR release versions and included application versions and features, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/">https://docs.aws.amazon.com/emr/latest/ReleaseGuide/</a>. The release label applies only to Amazon EMR releases version 4.0 and later. Earlier versions use <code>AmiVersion</code>.</p>
     #[serde(rename = "ReleaseLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2473,6 +2652,48 @@ pub struct SpotProvisioningSpecification {
     pub timeout_duration_minutes: i64,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartNotebookExecutionInput {
+    /// <p>The unique identifier of the EMR Notebook to use for notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    pub editor_id: String,
+    /// <p>Specifies the execution engine (cluster) that runs the notebook execution.</p>
+    #[serde(rename = "ExecutionEngine")]
+    pub execution_engine: ExecutionEngineConfig,
+    /// <p>An optional name for the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_name: Option<String>,
+    /// <p>The unique identifier of the Amazon EC2 security group to associate with the EMR Notebook for this notebook execution.</p>
+    #[serde(rename = "NotebookInstanceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_instance_security_group_id: Option<String>,
+    /// <p>Input parameters in JSON format passed to the EMR Notebook at runtime for execution.</p>
+    #[serde(rename = "NotebookParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_params: Option<String>,
+    /// <p>The path and file name of the notebook file for this execution, relative to the path specified for the EMR Notebook. For example, if you specify a path of <code>s3://MyBucket/MyNotebooks</code> when you create an EMR Notebook for a notebook with an ID of <code>e-ABCDEFGHIJK1234567890ABCD</code> (the <code>EditorID</code> of this request), and you specify a <code>RelativePath</code> of <code>my_notebook_executions/notebook_execution.ipynb</code>, the location of the file for the notebook execution is <code>s3://MyBucket/MyNotebooks/e-ABCDEFGHIJK1234567890ABCD/my_notebook_executions/notebook_execution.ipynb</code>.</p>
+    #[serde(rename = "RelativePath")]
+    pub relative_path: String,
+    /// <p>The name or ARN of the IAM role that is used as the service role for Amazon EMR (the EMR role) for the notebook execution.</p>
+    #[serde(rename = "ServiceRole")]
+    pub service_role: String,
+    /// <p>A list of tags associated with a notebook execution. Tags are user-defined key value pairs that consist of a required key string with a maximum of 128 characters and an optional value string with a maximum of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartNotebookExecutionOutput {
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_id: Option<String>,
+}
+
 /// <p>This represents a step in a cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2628,6 +2849,14 @@ pub struct StepTimeline {
     #[serde(rename = "StartDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopNotebookExecutionInput {
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    pub notebook_execution_id: String,
 }
 
 /// <p>The list of supported product configurations which allow user-supplied arguments. EMR accepts these arguments and forwards them to the corresponding installation script as bootstrap action arguments.</p>
@@ -3003,6 +3232,48 @@ impl fmt::Display for DescribeJobFlowsError {
     }
 }
 impl Error for DescribeJobFlowsError {}
+/// Errors returned by DescribeNotebookExecution
+#[derive(Debug, PartialEq)]
+pub enum DescribeNotebookExecutionError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl DescribeNotebookExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNotebookExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeNotebookExecutionError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeNotebookExecutionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeNotebookExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeNotebookExecutionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotebookExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeNotebookExecutionError {}
 /// Errors returned by DescribeSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeSecurityConfigurationError {
@@ -3329,6 +3600,46 @@ impl fmt::Display for ListInstancesError {
     }
 }
 impl Error for ListInstancesError {}
+/// Errors returned by ListNotebookExecutions
+#[derive(Debug, PartialEq)]
+pub enum ListNotebookExecutionsError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl ListNotebookExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNotebookExecutionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListNotebookExecutionsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListNotebookExecutionsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListNotebookExecutionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListNotebookExecutionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListNotebookExecutionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListNotebookExecutionsError {}
 /// Errors returned by ListSecurityConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityConfigurationsError {
@@ -3777,6 +4088,86 @@ impl fmt::Display for SetVisibleToAllUsersError {
     }
 }
 impl Error for SetVisibleToAllUsersError {}
+/// Errors returned by StartNotebookExecution
+#[derive(Debug, PartialEq)]
+pub enum StartNotebookExecutionError {
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
+    InternalServer(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl StartNotebookExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartNotebookExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StartNotebookExecutionError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartNotebookExecutionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartNotebookExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartNotebookExecutionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartNotebookExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartNotebookExecutionError {}
+/// Errors returned by StopNotebookExecution
+#[derive(Debug, PartialEq)]
+pub enum StopNotebookExecutionError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl StopNotebookExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopNotebookExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(StopNotebookExecutionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StopNotebookExecutionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopNotebookExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopNotebookExecutionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StopNotebookExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopNotebookExecutionError {}
 /// Errors returned by TerminateJobFlows
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobFlowsError {
@@ -3866,6 +4257,12 @@ pub trait Emr {
         input: DescribeJobFlowsInput,
     ) -> Result<DescribeJobFlowsOutput, RusotoError<DescribeJobFlowsError>>;
 
+    /// <p>Provides details of a notebook execution.</p>
+    async fn describe_notebook_execution(
+        &self,
+        input: DescribeNotebookExecutionInput,
+    ) -> Result<DescribeNotebookExecutionOutput, RusotoError<DescribeNotebookExecutionError>>;
+
     /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
     async fn describe_security_configuration(
         &self,
@@ -3921,6 +4318,12 @@ pub trait Emr {
         &self,
         input: ListInstancesInput,
     ) -> Result<ListInstancesOutput, RusotoError<ListInstancesError>>;
+
+    /// <p>Provides summaries of all notebook executions. You can filter the list based on multiple criteria such as status, time range, and editor id. Returns a maximum of 50 notebook executions and a marker to track the paging of a longer notebook execution list across multiple <code>ListNotebookExecution</code> calls.</p>
+    async fn list_notebook_executions(
+        &self,
+        input: ListNotebookExecutionsInput,
+    ) -> Result<ListNotebookExecutionsOutput, RusotoError<ListNotebookExecutionsError>>;
 
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
     async fn list_security_configurations(
@@ -4008,6 +4411,18 @@ pub trait Emr {
         &self,
         input: SetVisibleToAllUsersInput,
     ) -> Result<(), RusotoError<SetVisibleToAllUsersError>>;
+
+    /// <p>Starts a notebook execution.</p>
+    async fn start_notebook_execution(
+        &self,
+        input: StartNotebookExecutionInput,
+    ) -> Result<StartNotebookExecutionOutput, RusotoError<StartNotebookExecutionError>>;
+
+    /// <p>Stops a notebook execution.</p>
+    async fn stop_notebook_execution(
+        &self,
+        input: StopNotebookExecutionInput,
+    ) -> Result<(), RusotoError<StopNotebookExecutionError>>;
 
     /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
     async fn terminate_job_flows(
@@ -4227,6 +4642,25 @@ impl Emr for EmrClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeJobFlowsOutput, _>()
     }
 
+    /// <p>Provides details of a notebook execution.</p>
+    async fn describe_notebook_execution(
+        &self,
+        input: DescribeNotebookExecutionInput,
+    ) -> Result<DescribeNotebookExecutionOutput, RusotoError<DescribeNotebookExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.DescribeNotebookExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeNotebookExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeNotebookExecutionOutput, _>()
+    }
+
     /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
     async fn describe_security_configuration(
         &self,
@@ -4401,6 +4835,25 @@ impl Emr for EmrClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesOutput, _>()
+    }
+
+    /// <p>Provides summaries of all notebook executions. You can filter the list based on multiple criteria such as status, time range, and editor id. Returns a maximum of 50 notebook executions and a marker to track the paging of a longer notebook execution list across multiple <code>ListNotebookExecution</code> calls.</p>
+    async fn list_notebook_executions(
+        &self,
+        input: ListNotebookExecutionsInput,
+    ) -> Result<ListNotebookExecutionsOutput, RusotoError<ListNotebookExecutionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.ListNotebookExecutions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListNotebookExecutionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListNotebookExecutionsOutput, _>()
     }
 
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
@@ -4668,6 +5121,42 @@ impl Emr for EmrClient {
 
         let response = self
             .sign_and_dispatch(request, SetVisibleToAllUsersError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Starts a notebook execution.</p>
+    async fn start_notebook_execution(
+        &self,
+        input: StartNotebookExecutionInput,
+    ) -> Result<StartNotebookExecutionOutput, RusotoError<StartNotebookExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.StartNotebookExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartNotebookExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartNotebookExecutionOutput, _>()
+    }
+
+    /// <p>Stops a notebook execution.</p>
+    async fn stop_notebook_execution(
+        &self,
+        input: StopNotebookExecutionInput,
+    ) -> Result<(), RusotoError<StopNotebookExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.StopNotebookExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopNotebookExecutionError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
