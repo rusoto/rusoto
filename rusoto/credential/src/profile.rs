@@ -17,20 +17,34 @@ const AWS_CONFIG_FILE: &str = "AWS_CONFIG_FILE";
 const AWS_PROFILE: &str = "AWS_PROFILE";
 const AWS_SHARED_CREDENTIALS_FILE: &str = "AWS_SHARED_CREDENTIALS_FILE";
 const DEFAULT: &str = "default";
+/// AWS Region to use when creating clients.
 const REGION: &str = "region";
 
+/// Property name for specifying the Amazon AWS Access Key
 pub const AWS_ACCESS_KEY_ID: &str = "aws_access_key_id";
+/// Property name for specifying the Amazon AWS Secret Access Key
 pub const AWS_SECRET_ACCESS_KEY: &str = "aws_secret_access_key";
+/// Property name for specifying the Amazon AWS Session Token
 pub const AWS_SESSION_TOKEN: &str = "aws_session_token";
+/// Backward compatibility for SESSION Token
 pub const AWS_SECURITY_TOKEN: &str = "aws_security_token";
+/// Property name for specifying the IAM role to assume
 pub const ROLE_ARN: &str = "role_arn";
+/// Property name for specifying the IAM role session name
 pub const ROLE_SESSION_NAME: &str = "role_session_name";
+/// Property name for specifying the IAM role external id
 pub const EXTERNAL_ID: &str = "external_id";
+/// Property name for specifying the profile credentials to use when assuming a role
 pub const SOURCE_PROFILE: &str = "source_profile";
+/// Property name for specifying the credential source to use when assuming a role
 pub const CREDENTIAL_SOURCE: &str = "credential_source";
+/// Property name for specifying the identification number of the MFA device
 pub const MFA_SERIAL: &str = "mfa_serial";
+/// Property name for specifying whether or not endpoint discovery is enabled.
 pub const ENDPOINT_DISCOVERY_ENABLED: &str = "aws_endpoint_discovery_enabled";
+/// An external process that should be invoked to load credentials.
 pub const CREDENTIAL_PROCESS: &str = "credential_process";
+///
 pub const WEB_IDENTITY_TOKEN_FILE: &str = "web_identity_token_file";
 
 /// Provides AWS credentials from a profile in a credentials file, or from a credential process.
