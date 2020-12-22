@@ -18,10 +18,6 @@ homepage = "https://www.rusoto.org/"
 exclude = ["test_resources/*"]
 edition = "2018"
 
-[badges]
-appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
-azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
-
 [build-dependencies]
 rustc_version = "0.2"
 
@@ -32,14 +28,14 @@ crc32fast = "1.2"
 futures = "0.3"
 http = "0.2"
 hyper = "0.13.1"
-hyper-rustls = { version = "0.20", optional = true }
+hyper-rustls = { version = "0.21", optional = true }
 hyper-tls = { version = "0.4", optional = true }
 lazy_static = "1.4"
 log = "0.4"
 md5 = "0.7"
 percent-encoding = "2.1"
-pin-project = "0.4"
-base64 = "0.12"
+pin-project = "1.0"
+base64 = "0.13"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "0.2", features = ["tcp", "time", "rt-core", "fs"] }

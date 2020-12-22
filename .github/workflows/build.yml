@@ -16,6 +16,7 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, beta, nightly]
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.rust == 'nightly' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -42,6 +43,7 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, beta, nightly]
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.rust == 'nightly' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -68,6 +70,7 @@ jobs:
         os: [ubuntu-latest]
         rust: [stable, beta, nightly]
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.rust == 'nightly' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -94,6 +97,7 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, beta, nightly]
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.rust == 'nightly' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -177,4 +181,4 @@ jobs:
           target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Test S3 like services and check generated files
-      run: ./.semaphoreci/run.sh
+      run: ci/run.sh

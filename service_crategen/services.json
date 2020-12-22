@@ -250,7 +250,7 @@
     "coreVersion": "0.45.0",
     "protocolVersion": "2014-06-30",
     "customDependencies": {
-      "chrono": "0.4.0"
+      "chrono": { "version": "0.4.0", "default-features": false }
     },
     "baseTypeName": "CognitoIdentity"
   },
@@ -1210,7 +1210,7 @@
     "coreVersion": "0.45.0",
     "protocolVersion": "2011-06-15",
     "customDependencies": {
-      "chrono": "0.4.0",
+      "chrono": { "version": "0.4.0", "default-features": false },
       "tempfile": "^3.1.0"
     },
     "baseTypeName": "Sts"

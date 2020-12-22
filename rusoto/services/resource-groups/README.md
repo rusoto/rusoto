@@ -2,6 +2,11 @@
 # Rusoto ResourceGroups
 Rust SDK for AWS Resource Groups
 
+<a href="https://docs.rs/rusoto_resource_groups/0.45.0" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+<a href="https://crates.io/crates/rusoto_resource_groups/0.45.0" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
+<a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
+<a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
+
 You may be looking for:
 
 * [An overview of Rusoto][rusoto-overview]
@@ -15,7 +20,7 @@ Rust stable or beta are required to use Rusoto. Nightly is tested, but not guara
 versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project
 [`travis.yml`](https://github.com/rusoto/rusoto/blob/master/.travis.yml).
 
-On Linux, OpenSSL is required.
+On Linux, OpenSSL is required if using the `native-tls` feature.
 
 ## Installation
 
