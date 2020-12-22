@@ -18,10 +18,6 @@ homepage = "https://www.rusoto.org/"
 exclude = ["test_resources/*"]
 edition = "2018"
 
-[badges]
-appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
-azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
-
 [build-dependencies]
 rustc_version = "0.2"
 
