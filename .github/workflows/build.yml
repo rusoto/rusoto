@@ -181,4 +181,4 @@ jobs:
           target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Test S3 like services and check generated files
-      run: ./.semaphoreci/run.sh
+      run: ci/run.sh
