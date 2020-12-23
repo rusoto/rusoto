@@ -213,7 +213,8 @@ impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
     inner: HyperClient<C, Body>,
-    local_agent: Option<String>,
+    local_agent_prepend: Option<String>,
+    local_agent_append: Option<String>,
 }
 
 impl HttpClient {
@@ -239,10 +240,21 @@ impl HttpClient {
         Ok(Self::from_connector_with_config(connector, config))
     }
 
+    /// An alias for [`local_agent_prepend`] for backwards compatibility
+    pub fn local_agent(&mut self, local_agent: String) {
+        self.local_agent_prepend(local_agent)
+    }
+
     /// Sets a local agent that is prepended to the default HTTP
     /// `User-Agent` used by Rusoto.
-    pub fn local_agent(&mut self, local_agent: String) {
-        self.local_agent = Some(local_agent)
+    pub fn local_agent_prepend(&mut self, local_agent: String) {
+        self.local_agent_prepend = Some(local_agent)
+    }
+
+    /// Sets a local agent that is appended to the default HTTP
+    /// `User-Agent` used by Rusoto.
+    pub fn local_agent_append(&mut self, local_agent: String) {
+        self.local_agent_append = Some(local_agent)
     }
 }
 
@@ -255,7 +267,8 @@ where
         let inner = HyperClient::builder().build(connector);
         HttpClient {
             inner,
-            local_agent: None,
+            local_agent_prepend: None,
+            local_agent_append: None,
         }
     }
 
@@ -273,7 +286,8 @@ where
 
         HttpClient {
             inner,
-            local_agent: None,
+            local_agent_prepend: None,
+            local_agent_append: None,
         }
     }
 
@@ -282,7 +296,8 @@ where
         let inner = builder.build(connector);
         HttpClient {
             inner,
-            local_agent: None,
+            local_agent_prepend: None,
+            local_agent_append: None,
         }
     }
 }
@@ -440,15 +455,23 @@ where
         request: SignedRequest,
         timeout: Option<Duration>,
     ) -> DispatchSignedRequestFuture {
-        let user_agent = self
-            .local_agent
-            .as_ref()
-            .map(|agent| format!("{} {}", agent, *DEFAULT_USER_AGENT).parse())
-            .unwrap_or_else(|| DEFAULT_USER_AGENT.parse())
-            .expect("failed to parse user-agent string");
-
+        let user_agent = build_user_agent(&self.local_agent_prepend, &self.local_agent_append);
         http_client_dispatch::<C>(self.inner.clone(), request, timeout, user_agent).boxed()
     }
+}
+
+/// Builds a [`HeaderValue`] using [`DEFAULT_USER_AGENT`] as a base string and,
+/// optionally, prepending/appending additional strings, taking care to trim
+/// whitespace.
+fn build_user_agent(prepend: &Option<String>, append: &Option<String>) -> HeaderValue {
+    let (pre, post) = (
+        prepend.as_deref().unwrap_or(""),
+        append.as_deref().unwrap_or(""),
+    );
+    let agent = format!("{} {} {}", pre, *DEFAULT_USER_AGENT, post)
+        .trim()
+        .parse();
+    agent.unwrap_or_else(|_| DEFAULT_USER_AGENT.parse().unwrap())
 }
 
 #[derive(Debug, PartialEq)]
@@ -527,5 +550,22 @@ mod tests {
         let io_error = ::std::io::Error::new(::std::io::ErrorKind::Other, "my error message");
         let error = HttpDispatchError::from(io_error);
         assert_eq!(error.to_string(), "my error message")
+    }
+
+    #[test]
+    fn building_user_agents() {
+        let base = format!("{}", *DEFAULT_USER_AGENT);
+        assert_eq!(
+            base.parse::<HeaderValue>().unwrap(),
+            build_user_agent(&None, &None)
+        );
+        assert_eq!(
+            format!("before {}", base).parse::<HeaderValue>().unwrap(),
+            build_user_agent(&Some("before".to_string()), &None)
+        );
+        assert_eq!(
+            format!("{} after", base).parse::<HeaderValue>().unwrap(),
+            build_user_agent(&None, &Some("after".to_string()))
+        );
     }
 }

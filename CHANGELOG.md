@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disable `chrono`'s `oldtime` feature
 - Remove dependency on `regex`
 - Update to botocore 1.19.42
-
+- Add ability to set local agent appended to the default User-Agent
 
 ## [0.45.0] - 2020-07-22
 
