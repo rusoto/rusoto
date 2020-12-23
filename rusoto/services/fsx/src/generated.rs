@@ -64,7 +64,7 @@ pub struct ActiveDirectoryBackupAttributes {
     pub domain_name: Option<String>,
 }
 
-/// <p>Describes a specific Amazon FSx Administrative Action for the current Windows file system.</p>
+/// <p>Describes a specific Amazon FSx administrative action for the current Windows or Lustre file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdministrativeAction {
@@ -74,7 +74,7 @@ pub struct AdministrativeAction {
     #[serde(rename = "FailureDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_details: Option<AdministrativeActionFailureDetails>,
-    /// <p>Provides the percent complete of a <code>STORAGE_OPTIMIZATION</code> administrative action.</p>
+    /// <p>Provides the percent complete of a <code>STORAGE_OPTIMIZATION</code> administrative action. Does not apply to any other administrative action type.</p>
     #[serde(rename = "ProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
@@ -82,11 +82,11 @@ pub struct AdministrativeAction {
     #[serde(rename = "RequestTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_time: Option<f64>,
-    /// <p><p>Describes the status of the administrative action, as follows:</p> <ul> <li> <p> <code>FAILED</code> - Amazon FSx failed to process the administrative action successfully.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon FSx is processing the administrative action.</p> </li> <li> <p> <code>PENDING</code> - Amazon FSx is waiting to process the administrative action.</p> </li> <li> <p> <code>COMPLETED</code> - Amazon FSx has finished processing the administrative task.</p> </li> <li> <p> <code>UPDATED</em>OPTIMIZING</code> - For a storage capacity increase update, Amazon FSx has updated the file system with the new storage capacity, and is now performing the storage optimization process. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html">Managing Storage Capacity</a>.</p> </li> </ul></p>
+    /// <p><p>Describes the status of the administrative action, as follows:</p> <ul> <li> <p> <code>FAILED</code> - Amazon FSx failed to process the administrative action successfully.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon FSx is processing the administrative action.</p> </li> <li> <p> <code>PENDING</code> - Amazon FSx is waiting to process the administrative action.</p> </li> <li> <p> <code>COMPLETED</code> - Amazon FSx has finished processing the administrative task.</p> </li> <li> <p> <code>UPDATED</em>OPTIMIZING</code> - For a storage capacity increase update, Amazon FSx has updated the file system with the new storage capacity, and is now performing the storage optimization process. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html">Managing storage capacity</a> in the <i>Amazon FSx for Windows File Server User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/managing-storage-capacity.html">Managing storage and throughput capacity</a> in the <i>Amazon FSx for Lustre User Guide</i>.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Describes the target <code>StorageCapacity</code> or <code>ThroughputCapacity</code> value provided in the <code>UpdateFileSystem</code> operation. Returned for <code>FILE_SYSTEM_UPDATE</code> administrative actions. </p>
+    /// <p>Describes the target value for the administration action, provided in the <code>UpdateFileSystem</code> operation. Returned for <code>FILE_SYSTEM_UPDATE</code> administrative actions. </p>
     #[serde(rename = "TargetFileSystemValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_file_system_values: Option<FileSystem>,
@@ -96,13 +96,52 @@ pub struct AdministrativeAction {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdministrativeActionFailureDetails {
-    /// <p>Error message providing details about the failure.</p>
+    /// <p>Error message providing details about the failed administrative action.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 
-/// <p>A backup of an Amazon FSx for file system.</p>
+/// <p>A DNS alias that is associated with the file system. You can use a DNS alias to access a file system using user-defined DNS names, in addition to the default DNS name that Amazon FSx assigns to the file system. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">DNS aliases</a> in the <i>FSx for Windows File Server User Guide</i>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Alias {
+    /// <p><p>Describes the state of the DNS alias.</p> <ul> <li> <p>AVAILABLE - The DNS alias is associated with an Amazon FSx file system.</p> </li> <li> <p>CREATING - Amazon FSx is creating the DNS alias and associating it with the file system.</p> </li> <li> <p>CREATE<em>FAILED - Amazon FSx was unable to associate the DNS alias with the file system.</p> </li> <li> <p>DELETING - Amazon FSx is disassociating the DNS alias from the file system and deleting it.</p> </li> <li> <p>DELETE</em>FAILED - Amazon FSx was unable to disassocate the DNS alias from the file system.</p> </li> </ul></p>
+    #[serde(rename = "Lifecycle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle: Option<String>,
+    /// <p>The name of the DNS alias. The alias name has to meet the following requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <code>hostname.domain</code>, for example, <code>accounting.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>The request object specifying one or more DNS alias names to associate with an Amazon FSx for Windows File Server file system.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateFileSystemAliasesRequest {
+    /// <p>An array of one or more DNS alias names to associate with the file system. The alias name has to comply with the following formatting requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <i> <code>hostname.domain</code> </i>, for example, <code>accounting.corp.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS alias names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
+    #[serde(rename = "Aliases")]
+    pub aliases: Vec<String>,
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>Specifies the file system with which you want to associate one or more DNS aliases.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+}
+
+/// <p>The system generated response showing the DNS aliases that Amazon FSx is attempting to associate with the file system. Use the API operation to monitor the status of the aliases Amazon FSx is associating with the file system. It can take up to 2.5 minutes for the alias status to change from <code>CREATING</code> to <code>AVAILABLE</code>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateFileSystemAliasesResponse {
+    /// <p>An array of the DNS aliases that Amazon FSx is associating with the file system.</p>
+    #[serde(rename = "Aliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aliases: Option<Vec<Alias>>,
+}
+
+/// <p><p>A backup of an Amazon FSx file system. For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html">Working with backups for Windows file systems</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with backups for Lustre file systems</a> </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Backup {
@@ -123,11 +162,11 @@ pub struct Backup {
     /// <p>Metadata of the file system associated with the backup. This metadata is persisted even if the file system is deleted.</p>
     #[serde(rename = "FileSystem")]
     pub file_system: FileSystem,
-    /// <p>The ID of the AWS Key Management Service (AWS KMS) key used to encrypt this backup of the Amazon FSx for Windows file system's data at rest. Amazon FSx for Lustre does not support KMS encryption.</p>
+    /// <p>The ID of the AWS Key Management Service (AWS KMS) key used to encrypt the backup of the Amazon FSx file system's data at rest. </p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>The lifecycle status of the backup.</p>
+    /// <p><p>The lifecycle status of the backup.</p> <ul> <li> <p> <code>AVAILABLE</code> - The backup is fully available.</p> </li> <li> <p> <code>PENDING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx has not started creating the backup.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the backup.</p> </li> <li> <p> <code>TRANSFERRING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx is transferring the backup to S3.</p> </li> <li> <p> <code>DELETED</code> - Amazon FSx deleted the backup and it is no longer available.</p> </li> <li> <p> <code>FAILED</code> - Amazon FSx could not complete the backup.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     pub lifecycle: String,
     #[serde(rename = "ProgressPercent")]
@@ -141,7 +180,7 @@ pub struct Backup {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The type of the backup.</p>
+    /// <p>The type of the file system backup.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -202,14 +241,14 @@ pub struct CompletionReport {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupRequest {
-    /// <p>A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent creation. This string is automatically filled on your behalf when you use the AWS Command Line Interface (AWS CLI) or an AWS SDK.</p>
+    /// <p>(Optional) A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent creation. This string is automatically filled on your behalf when you use the AWS Command Line Interface (AWS CLI) or an AWS SDK.</p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
     /// <p>The ID of the file system to back up.</p>
     #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    /// <p>The tags to apply to the backup at backup creation. The key value of the <code>Name</code> tag appears in the console as the backup name. If you have set <code>CopyTagsToBackups</code> to true, and you specify one or more tags using the <code>CreateBackup</code> action, no existing tags on the file system are copied from the file system to the backup.</p>
+    /// <p>(Optional) The tags to apply to the backup at backup creation. The key value of the <code>Name</code> tag appears in the console as the backup name. If you have set <code>CopyTagsToBackups</code> to true, and you specify one or more tags using the <code>CreateBackup</code> action, no existing file system tags are copied from the file system to the backup.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -305,20 +344,28 @@ pub struct CreateFileSystemFromBackupResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemLustreConfiguration {
+    /// <p> (Optional) When you create your file system, your existing S3 objects appear as file and directory listings. Use this property to choose how Amazon FSx keeps your file and directory listings up to date as you add or modify objects in your linked S3 bucket. <code>AutoImportPolicy</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - (Default) AutoImport is off. Amazon FSx only updates file and directory listings from the linked S3 bucket when the file system is created. FSx does not update file and directory listings for any new or changed objects after choosing this option.</p> </li> <li> <p> <code>NEW</code> - AutoImport is on. Amazon FSx automatically imports directory listings of any new objects added to the linked S3 bucket that do not currently exist in the FSx file system. </p> </li> <li> <p> <code>NEW_CHANGED</code> - AutoImport is on. Amazon FSx automatically imports file and directory listings of any new objects added to the S3 bucket and any existing objects that are changed in the S3 bucket after you choose this option. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/autoimport-data-repo.html">Automatically import updates from your S3 bucket</a>.</p>
+    #[serde(rename = "AutoImportPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_import_policy: Option<String>,
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
-    /// <p>A boolean flag indicating whether tags for the file system should be copied to backups. This value defaults to false. If it's set to true, all tags for the file system are copied to all automatic and user-initiated backups where the user doesn't specify tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value.</p>
+    /// <p>(Optional) Not available to use with file systems that are linked to a data repository. A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false. If it's set to true, all file system tags are copied to all automatic and user-initiated backups when the user doesn't specify any backup-specific tags. If this value is true, and you specify one or more backup tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with backups</a>.</p>
     #[serde(rename = "CopyTagsToBackups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_tags_to_backups: Option<bool>,
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
-    /// <p> Choose <code>SCRATCH_1</code> and <code>SCRATCH_2</code> deployment types when you need temporary storage and shorter-term processing of data. The <code>SCRATCH_2</code> deployment type provides in-transit encryption of data and higher burst throughput capacity than <code>SCRATCH_1</code>.</p> <note> <p>This option can only be set for for PERSISTENT_1 deployments types.</p> </note> <p>Choose <code>PERSISTENT_1</code> deployment type for longer-term storage and workloads and encryption of data in transit. To learn more about deployment types, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-deployment-types.html"> FSx for Lustre Deployment Options</a>.</p> <p>Encryption of data in-transit is automatically enabled when you access a <code>SCRATCH_2</code> or <code>PERSISTENT_1</code> file system from Amazon EC2 instances that <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/data- protection.html">support this feature</a>. (Default = <code>SCRATCH_1</code>) </p> <p>Encryption of data in-transit for <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types is supported when accessed from supported instance types in supported AWS Regions. To learn more, <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html">Encrypting Data in Transit</a>.</p>
+    /// <p> Choose <code>SCRATCH_1</code> and <code>SCRATCH_2</code> deployment types when you need temporary storage and shorter-term processing of data. The <code>SCRATCH_2</code> deployment type provides in-transit encryption of data and higher burst throughput capacity than <code>SCRATCH_1</code>.</p> <p>Choose <code>PERSISTENT_1</code> deployment type for longer-term storage and workloads and encryption of data in transit. To learn more about deployment types, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-deployment-types.html"> FSx for Lustre Deployment Options</a>.</p> <p>Encryption of data in-transit is automatically enabled when you access a <code>SCRATCH_2</code> or <code>PERSISTENT_1</code> file system from Amazon EC2 instances that <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/data- protection.html">support this feature</a>. (Default = <code>SCRATCH_1</code>) </p> <p>Encryption of data in-transit for <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types is supported when accessed from supported instance types in supported AWS Regions. To learn more, <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html">Encrypting Data in Transit</a>.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
+    /// <p>The type of drive cache used by PERSISTENT_1 file systems that are provisioned with HDD storage devices. This parameter is required when storage type is HDD. Set to <code>READ</code>, improve the performance for frequently accessed files and allows 20% of the total storage capacity of the file system to be cached. </p> <p>This parameter is required when <code>StorageType</code> is set to HDD.</p>
+    #[serde(rename = "DriveCacheType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub drive_cache_type: Option<String>,
     /// <p>(Optional) The path in Amazon S3 where the root of your Amazon FSx file system is exported. The path must use the same Amazon S3 bucket as specified in ImportPath. You can provide an optional prefix to which new and changed data is to be exported from your Amazon FSx for Lustre file system. If an <code>ExportPath</code> value is not provided, Amazon FSx sets a default export path, <code>s3://import-bucket/FSxLustre[creation-timestamp]</code>. The timestamp is in UTC format, for example <code>s3://import-bucket/FSxLustre20181105T222312Z</code>.</p> <p>The Amazon S3 export bucket must be the same as the import bucket specified by <code>ImportPath</code>. If you only specify a bucket name, such as <code>s3://import-bucket</code>, you get a 1:1 mapping of file system objects to S3 bucket objects. This mapping means that the input data in S3 is overwritten on export. If you provide a custom prefix in the export path, such as <code>s3://import-bucket/[custom-optional-prefix]</code>, Amazon FSx exports the contents of your file system to that export prefix in the Amazon S3 bucket.</p>
     #[serde(rename = "ExportPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -331,11 +378,11 @@ pub struct CreateFileSystemLustreConfiguration {
     #[serde(rename = "ImportedFileChunkSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub imported_file_chunk_size: Option<i64>,
-    /// <p> Required for the <code>PERSISTENT_1</code> deployment type, describes the amount of read and write throughput for each 1 tebibyte of storage, in MB/s/TiB. File system throughput capacity is calculated by multiplying ﬁle system storage capacity (TiB) by the PerUnitStorageThroughput (MB/s/TiB). For a 2.4 TiB ﬁle system, provisioning 50 MB/s/TiB of PerUnitStorageThroughput yields 117 MB/s of ﬁle system throughput. You pay for the amount of throughput that you provision. </p> <p>Valid values are 50, 100, 200.</p>
+    /// <p> Required for the <code>PERSISTENT_1</code> deployment type, describes the amount of read and write throughput for each 1 tebibyte of storage, in MB/s/TiB. File system throughput capacity is calculated by multiplying ﬁle system storage capacity (TiB) by the PerUnitStorageThroughput (MB/s/TiB). For a 2.4 TiB ﬁle system, provisioning 50 MB/s/TiB of PerUnitStorageThroughput yields 120 MB/s of ﬁle system throughput. You pay for the amount of throughput that you provision. </p> <p>Valid values for SSD storage: 50, 100, 200. Valid values for HDD storage: 12, 40.</p>
     #[serde(rename = "PerUnitStorageThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub per_unit_storage_throughput: Option<i64>,
-    /// <p>The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone, where d is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday.</p>
+    /// <p>(Optional) The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone, where d is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weekly_maintenance_start_time: Option<String>,
@@ -362,10 +409,10 @@ pub struct CreateFileSystemRequest {
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p><p>Sets the storage capacity of the file system that you&#39;re creating.</p> <p>For Lustre file systems:</p> <ul> <li> <p>For <code>SCRATCH<em>2</code> and <code>PERSISTENT</em>1</code> deployment types, valid values are 1.2, 2.4, and increments of 2.4 TiB.</p> </li> <li> <p>For <code>SCRATCH_1</code> deployment type, valid values are 1.2, 2.4, and increments of 3.6 TiB.</p> </li> </ul> <p>For Windows file systems:</p> <ul> <li> <p>If <code>StorageType=SSD</code>, valid values are 32 GiB - 65,536 GiB (64 TiB).</p> </li> <li> <p>If <code>StorageType=HDD</code>, valid values are 2000 GiB - 65,536 GiB (64 TiB).</p> </li> </ul></p>
+    /// <p><p>Sets the storage capacity of the file system that you&#39;re creating.</p> <p>For Lustre file systems:</p> <ul> <li> <p>For <code>SCRATCH<em>2</code> and <code>PERSISTENT</em>1 SSD</code> deployment types, valid values are 1200 GiB, 2400 GiB, and increments of 2400 GiB.</p> </li> <li> <p>For <code>PERSISTENT HDD</code> file systems, valid values are increments of 6000 GiB for 12 MB/s/TiB file systems and increments of 1800 GiB for 40 MB/s/TiB file systems.</p> </li> <li> <p>For <code>SCRATCH_1</code> deployment type, valid values are 1200 GiB, 2400 GiB, and increments of 3600 GiB.</p> </li> </ul> <p>For Windows file systems:</p> <ul> <li> <p>If <code>StorageType=SSD</code>, valid values are 32 GiB - 65,536 GiB (64 TiB).</p> </li> <li> <p>If <code>StorageType=HDD</code>, valid values are 2000 GiB - 65,536 GiB (64 TiB).</p> </li> </ul></p>
     #[serde(rename = "StorageCapacity")]
     pub storage_capacity: i64,
-    /// <p>Sets the storage type for the Amazon FSx for Windows file system you're creating. Valid values are <code>SSD</code> and <code>HDD</code>.</p> <ul> <li> <p>Set to <code>SSD</code> to use solid state drive storage. SSD is supported on all Windows deployment types.</p> </li> <li> <p>Set to <code>HDD</code> to use hard disk drive storage. HDD is supported on <code>SINGLE_AZ_2</code> and <code>MULTI_AZ_1</code> Windows file system deployment types. </p> </li> </ul> <p> Default value is <code>SSD</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/optimize-fsx-costs.html#storage-type-options"> Storage Type Options</a> in the <i>Amazon FSx for Windows User Guide</i>. </p>
+    /// <p>Sets the storage type for the file system you're creating. Valid values are <code>SSD</code> and <code>HDD</code>.</p> <ul> <li> <p>Set to <code>SSD</code> to use solid state drive storage. SSD is supported on all Windows and Lustre deployment types.</p> </li> <li> <p>Set to <code>HDD</code> to use hard disk drive storage. HDD is supported on <code>SINGLE_AZ_2</code> and <code>MULTI_AZ_1</code> Windows file system deployment types, and on <code>PERSISTENT</code> Lustre file system deployment types. </p> </li> </ul> <p> Default value is <code>SSD</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/optimize-fsx-costs.html#storage-type-options"> Storage Type Options</a> in the <i>Amazon FSx for Windows User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html#storage-options">Multiple Storage Options</a> in the <i>Amazon FSx for Lustre User Guide</i>. </p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_type: Option<String>,
@@ -400,7 +447,11 @@ pub struct CreateFileSystemWindowsConfiguration {
     #[serde(rename = "ActiveDirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_directory_id: Option<String>,
-    /// <p>The number of days to retain automatic backups. The default is to retain backups for 7 days. Setting this value to 0 disables the creation of automatic backups. The maximum retention period for backups is 35 days.</p>
+    /// <p>An array of one or more DNS alias names that you want to associate with the Amazon FSx file system. Aliases allow you to use existing DNS names to access the data in your Amazon FSx file system. You can associate up to 50 aliases with a file system at any time. You can associate additional DNS aliases after you create the file system using the AssociateFileSystemAliases operation. You can remove DNS aliases from the file system after it is created using the DisassociateFileSystemAliases operation. You only need to specify the alias name in the request payload.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a> and <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/walkthrough05-file-system-custom-CNAME.html">Walkthrough 5: Using DNS aliases to access your file system</a>, including additional steps you must take to be able to access your file system using a DNS alias.</p> <p>An alias name has to meet the following requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <code>hostname.domain</code>, for example, <code>accounting.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS alias names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
+    #[serde(rename = "Aliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aliases: Option<Vec<String>>,
+    /// <p>The number of days to retain automatic backups. The default is to retain backups for 7 days. Setting this value to 0 disables the creation of automatic backups. The maximum retention period for backups is 90 days.</p>
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
@@ -437,10 +488,17 @@ pub struct CreateFileSystemWindowsConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataRepositoryConfiguration {
+    /// <p>Describes the file system's linked S3 data repository's <code>AutoImportPolicy</code>. The AutoImportPolicy configures how Amazon FSx keeps your file and directory listings up to date as you add or modify objects in your linked S3 bucket. <code>AutoImportPolicy</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - (Default) AutoImport is off. Amazon FSx only updates file and directory listings from the linked S3 bucket when the file system is created. FSx does not update file and directory listings for any new or changed objects after choosing this option.</p> </li> <li> <p> <code>NEW</code> - AutoImport is on. Amazon FSx automatically imports directory listings of any new objects added to the linked S3 bucket that do not currently exist in the FSx file system. </p> </li> <li> <p> <code>NEW_CHANGED</code> - AutoImport is on. Amazon FSx automatically imports file and directory listings of any new objects added to the S3 bucket and any existing objects that are changed in the S3 bucket after you choose this option. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/autoimport-data-repo.html">Automatically import updates from your S3 bucket</a>.</p>
+    #[serde(rename = "AutoImportPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_import_policy: Option<String>,
     /// <p>The export path to the Amazon S3 bucket (and prefix) that you are using to store new and changed Lustre file system files in S3.</p>
     #[serde(rename = "ExportPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_path: Option<String>,
+    #[serde(rename = "FailureDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_details: Option<DataRepositoryFailureDetails>,
     /// <p>The import path to the Amazon S3 bucket (and optional prefix) that you're using as the data repository for your FSx for Lustre file system, for example <code>s3://import-bucket/optional-prefix</code>. If a prefix is specified after the Amazon S3 bucket name, only object keys with that prefix are loaded into the file system.</p>
     #[serde(rename = "ImportPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -449,6 +507,19 @@ pub struct DataRepositoryConfiguration {
     #[serde(rename = "ImportedFileChunkSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub imported_file_chunk_size: Option<i64>,
+    /// <p><p>Describes the state of the file system&#39;s S3 durable data repository, if it is configured with an S3 repository. The lifecycle can have the following values:</p> <ul> <li> <p> <code>CREATING</code> - The data repository configuration between the FSx file system and the linked S3 data repository is being created. The data repository is unavailable.</p> </li> <li> <p> <code>AVAILABLE</code> - The data repository is available for use.</p> </li> <li> <p> <code>MISCONFIGURED</code> - Amazon FSx cannot automatically import updates from the S3 bucket until the data repository configuration is corrected. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/troubleshooting.html#troubleshooting-misconfigured-data-repository">Troubleshooting a Misconfigured linked S3 bucket</a>. </p> </li> <li> <p> <code>UPDATING</code> - The data repository is undergoing a customer initiated update and availability may be impacted.</p> </li> </ul></p>
+    #[serde(rename = "Lifecycle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle: Option<String>,
+}
+
+/// <p>Provides detailed information about the data respository if its <code>Lifecycle</code> is set to <code>MISCONFIGURED</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DataRepositoryFailureDetails {
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
 }
 
 /// <p>A description of the data repository task. You use data repository tasks to perform bulk transfer operations between your Amazon FSx file system and its linked data repository.</p>
@@ -733,6 +804,40 @@ pub struct DescribeDataRepositoryTasksResponse {
     pub next_token: Option<String>,
 }
 
+/// <p>The request object for <code>DescribeFileSystemAliases</code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFileSystemAliasesRequest {
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The ID of the file system to return the associated DNS aliases for (String).</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+    /// <p>Maximum number of DNS aliases to return in the response (integer). This parameter value must be greater than 0. The number of items that Amazon FSx returns is the minimum of the <code>MaxResults</code> parameter specified in the request and the service's internal maximum number of items per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Opaque pagination token returned from a previous <code>DescribeFileSystemAliases</code> operation (String). If a token is included in the request, the action continues the list from where the previous returning call left off.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>The response object for <code>DescribeFileSystemAliases</code> operation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFileSystemAliasesResponse {
+    /// <p>An array of one or more DNS aliases currently associated with the specified file system.</p>
+    #[serde(rename = "Aliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aliases: Option<Vec<Alias>>,
+    /// <p>Present if there are more DNS aliases than returned in the response (String). You can use the <code>NextToken</code> value in a later request to fetch additional descriptions. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>The request object for <code>DescribeFileSystems</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -763,6 +868,31 @@ pub struct DescribeFileSystemsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+/// <p>The request object of DNS aliases to disassociate from an Amazon FSx for Windows File Server file system.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateFileSystemAliasesRequest {
+    /// <p>An array of one or more DNS alias names to disassociate, or remove, from the file system.</p>
+    #[serde(rename = "Aliases")]
+    pub aliases: Vec<String>,
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>Specifies the file system from which to disassociate the DNS aliases.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+}
+
+/// <p>The system generated response showing the DNS aliases that Amazon FSx is attempting to disassociate from the file system. Use the API operation to monitor the status of the aliases Amazon FSx is removing from the file system.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateFileSystemAliasesResponse {
+    /// <p>An array of one or more DNS aliases that Amazon FSx is attempting to disassociate from the file system.</p>
+    #[serde(rename = "Aliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aliases: Option<Vec<Alias>>,
 }
 
 /// <p>A description of a specific Amazon FSx file system.</p>
@@ -815,7 +945,7 @@ pub struct FileSystem {
     #[serde(rename = "ResourceARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The storage capacity of the file system in gigabytes (GB).</p>
+    /// <p>The storage capacity of the file system in gibibytes (GiB).</p>
     #[serde(rename = "StorageCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_capacity: Option<i64>,
@@ -917,11 +1047,15 @@ pub struct LustreFileSystemConfiguration {
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
+    /// <p>The type of drive cache used by PERSISTENT_1 file systems that are provisioned with HDD storage devices. This parameter is required when storage type is HDD. Set to <code>READ</code>, improve the performance for frequently accessed files and allows 20% of the total storage capacity of the file system to be cached. </p> <p>This parameter is required when <code>StorageType</code> is set to HDD.</p>
+    #[serde(rename = "DriveCacheType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub drive_cache_type: Option<String>,
     /// <p>You use the <code>MountName</code> value when mounting the file system.</p> <p>For the <code>SCRATCH_1</code> deployment type, this value is always "<code>fsx</code>". For <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types, this value is a string that is unique within an AWS Region. </p>
     #[serde(rename = "MountName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mount_name: Option<String>,
-    /// <p> Per unit storage throughput represents the megabytes per second of read or write throughput per 1 tebibyte of storage provisioned. File system throughput capacity is equal to Storage capacity (TiB) * PerUnitStorageThroughput (MB/s/TiB). This option is only valid for <code>PERSISTENT_1</code> deployment types. Valid values are 50, 100, 200. </p>
+    /// <p> Per unit storage throughput represents the megabytes per second of read or write throughput per 1 tebibyte of storage provisioned. File system throughput capacity is equal to Storage capacity (TiB) * PerUnitStorageThroughput (MB/s/TiB). This option is only valid for <code>PERSISTENT_1</code> deployment types. </p> <p>Valid values for SSD storage: 50, 100, 200. Valid values for HDD storage: 12, 40. </p>
     #[serde(rename = "PerUnitStorageThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub per_unit_storage_throughput: Option<i64>,
@@ -1006,12 +1140,10 @@ pub struct SelfManagedActiveDirectoryConfigurationUpdates {
 pub struct Tag {
     /// <p>A value that specifies the <code>TagKey</code>, the name of the tag. Tag keys must be unique for the resource to which they are attached.</p>
     #[serde(rename = "Key")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: String,
     /// <p>A value that specifies the <code>TagValue</code>, the value assigned to the corresponding tag key. Tag values can be null and don't have to be unique in a tag set. For example, you can have a key-value pair in a tag set of <code>finances : April</code> and also of <code>payroll : April</code>.</p>
     #[serde(rename = "Value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
+    pub value: String,
 }
 
 /// <p>The request object for the <code>TagResource</code> operation.</p>
@@ -1052,13 +1184,17 @@ pub struct UntagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemLustreConfiguration {
+    /// <p> (Optional) When you create your file system, your existing S3 objects appear as file and directory listings. Use this property to choose how Amazon FSx keeps your file and directory listing up to date as you add or modify objects in your linked S3 bucket. <code>AutoImportPolicy</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - (Default) AutoImport is off. Amazon FSx only updates file and directory listings from the linked S3 bucket when the file system is created. FSx does not update the file and directory listing for any new or changed objects after choosing this option.</p> </li> <li> <p> <code>NEW</code> - AutoImport is on. Amazon FSx automatically imports directory listings of any new objects added to the linked S3 bucket that do not currently exist in the FSx file system. </p> </li> <li> <p> <code>NEW_CHANGED</code> - AutoImport is on. Amazon FSx automatically imports file and directory listings of any new objects added to the S3 bucket and any existing objects that are changed in the S3 bucket after you choose this option. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/autoimport-data-repo.html">Automatically import updates from your S3 bucket</a>.</p>
+    #[serde(rename = "AutoImportPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_import_policy: Option<String>,
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
-    /// <p>The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone. d is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday.</p>
+    /// <p>(Optional) The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone. d is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weekly_maintenance_start_time: Option<String>,
@@ -1078,7 +1214,7 @@ pub struct UpdateFileSystemRequest {
     #[serde(rename = "LustreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lustre_configuration: Option<UpdateFileSystemLustreConfiguration>,
-    /// <p>Use this parameter to increase the storage capacity of an Amazon FSx for Windows File Server file system. Specifies the storage capacity target value, GiB, for the file system you're updating. The storage capacity target value must be at least 10 percent (%) greater than the current storage capacity value. In order to increase storage capacity, the file system needs to have at least 16 MB/s of throughput capacity. You cannot make a storage capacity increase request if there is an existing storage capacity increase request in progress. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html">Managing Storage Capacity</a>.</p>
+    /// <p>Use this parameter to increase the storage capacity of an Amazon FSx file system. Specifies the storage capacity target value, GiB, to increase the storage capacity for the file system that you're updating. You cannot make a storage capacity increase request if there is an existing storage capacity increase request in progress.</p> <p>For Windows file systems, the storage capacity target value must be at least 10 percent (%) greater than the current storage capacity value. In order to increase storage capacity, the file system must have at least 16 MB/s of throughput capacity.</p> <p>For Lustre file systems, the storage capacity target value can be the following:</p> <ul> <li> <p>For <code>SCRATCH_2</code> and <code>PERSISTENT_1 SSD</code> deployment types, valid values are in multiples of 2400 GiB. The value must be greater than the current storage capacity.</p> </li> <li> <p>For <code>PERSISTENT HDD</code> file systems, valid values are multiples of 6000 GiB for 12 MB/s/TiB file systems and multiples of 1800 GiB for 40 MB/s/TiB file systems. The values must be greater than the current storage capacity.</p> </li> <li> <p>For <code>SCRATCH_1</code> file systems, you cannot increase the storage capacity.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html">Managing storage capacity</a> in the <i>Amazon FSx for Windows File Server User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/managing-storage-capacity.html">Managing storage and throughput capacity</a> in the <i>Amazon FSx for Lustre User Guide</i>.</p>
     #[serde(rename = "StorageCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_capacity: Option<i64>,
@@ -1102,7 +1238,7 @@ pub struct UpdateFileSystemResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemWindowsConfiguration {
-    /// <p>The number of days to retain automatic daily backups. Setting this to zero (0) disables automatic daily backups. You can retain automatic daily backups for a maximum of 35 days. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html#automatic-backups">Working with Automatic Daily Backups</a>.</p>
+    /// <p>The number of days to retain automatic daily backups. Setting this to zero (0) disables automatic daily backups. You can retain automatic daily backups for a maximum of 90 days. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html#automatic-backups">Working with Automatic Daily Backups</a>.</p>
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
@@ -1133,7 +1269,10 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "ActiveDirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_directory_id: Option<String>,
-    /// <p>The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 35 days.</p>
+    #[serde(rename = "Aliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aliases: Option<Vec<Alias>>,
+    /// <p>The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.</p>
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
@@ -1178,6 +1317,60 @@ pub struct WindowsFileSystemConfiguration {
     pub weekly_maintenance_start_time: Option<String>,
 }
 
+/// Errors returned by AssociateFileSystemAliases
+#[derive(Debug, PartialEq)]
+pub enum AssociateFileSystemAliasesError {
+    /// <p>A generic error indicating a failure with a client request.</p>
+    BadRequest(String),
+    /// <p>No Amazon FSx file systems were found based upon supplied parameters.</p>
+    FileSystemNotFound(String),
+    /// <p>A generic error indicating a server-side failure.</p>
+    InternalServerError(String),
+}
+
+impl AssociateFileSystemAliasesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateFileSystemAliasesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequest" => {
+                    return RusotoError::Service(AssociateFileSystemAliasesError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(
+                        AssociateFileSystemAliasesError::FileSystemNotFound(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        AssociateFileSystemAliasesError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateFileSystemAliasesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateFileSystemAliasesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AssociateFileSystemAliasesError::FileSystemNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateFileSystemAliasesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AssociateFileSystemAliasesError {}
 /// Errors returned by CancelDataRepositoryTask
 #[derive(Debug, PartialEq)]
 pub enum CancelDataRepositoryTaskError {
@@ -1848,6 +2041,56 @@ impl fmt::Display for DescribeDataRepositoryTasksError {
     }
 }
 impl Error for DescribeDataRepositoryTasksError {}
+/// Errors returned by DescribeFileSystemAliases
+#[derive(Debug, PartialEq)]
+pub enum DescribeFileSystemAliasesError {
+    /// <p>A generic error indicating a failure with a client request.</p>
+    BadRequest(String),
+    /// <p>No Amazon FSx file systems were found based upon supplied parameters.</p>
+    FileSystemNotFound(String),
+    /// <p>A generic error indicating a server-side failure.</p>
+    InternalServerError(String),
+}
+
+impl DescribeFileSystemAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemAliasesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequest" => {
+                    return RusotoError::Service(DescribeFileSystemAliasesError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(
+                        DescribeFileSystemAliasesError::FileSystemNotFound(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeFileSystemAliasesError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFileSystemAliasesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFileSystemAliasesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemAliasesError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemAliasesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeFileSystemAliasesError {}
 /// Errors returned by DescribeFileSystems
 #[derive(Debug, PartialEq)]
 pub enum DescribeFileSystemsError {
@@ -1894,6 +2137,60 @@ impl fmt::Display for DescribeFileSystemsError {
     }
 }
 impl Error for DescribeFileSystemsError {}
+/// Errors returned by DisassociateFileSystemAliases
+#[derive(Debug, PartialEq)]
+pub enum DisassociateFileSystemAliasesError {
+    /// <p>A generic error indicating a failure with a client request.</p>
+    BadRequest(String),
+    /// <p>No Amazon FSx file systems were found based upon supplied parameters.</p>
+    FileSystemNotFound(String),
+    /// <p>A generic error indicating a server-side failure.</p>
+    InternalServerError(String),
+}
+
+impl DisassociateFileSystemAliasesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateFileSystemAliasesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequest" => {
+                    return RusotoError::Service(DisassociateFileSystemAliasesError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(
+                        DisassociateFileSystemAliasesError::FileSystemNotFound(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DisassociateFileSystemAliasesError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateFileSystemAliasesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateFileSystemAliasesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DisassociateFileSystemAliasesError::FileSystemNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateFileSystemAliasesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisassociateFileSystemAliasesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2151,19 +2448,25 @@ impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the Amazon FSx API. Amazon FSx clients implement this trait.
 #[async_trait]
 pub trait Fsx {
+    /// <p>Use this action to associate one or more Domain Name Server (DNS) aliases with an existing Amazon FSx for Windows File Server file system. A file systen can have a maximum of 50 DNS aliases associated with it at any one time. If you try to associate a DNS alias that is already associated with the file system, FSx takes no action on that alias in the request. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a> and <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/walkthrough05-file-system-custom-CNAME.html">Walkthrough 5: Using DNS aliases to access your file system</a>, including additional steps you must take to be able to access your file system using a DNS alias.</p> <p>The system response shows the DNS aliases that Amazon FSx is attempting to associate with the file system. Use the API operation to monitor the status of the aliases Amazon FSx is associating with the file system.</p>
+    async fn associate_file_system_aliases(
+        &self,
+        input: AssociateFileSystemAliasesRequest,
+    ) -> Result<AssociateFileSystemAliasesResponse, RusotoError<AssociateFileSystemAliasesError>>;
+
     /// <p><p>Cancels an existing Amazon FSx for Lustre data repository task if that task is in either the <code>PENDING</code> or <code>EXECUTING</code> state. When you cancel a task, Amazon FSx does the following.</p> <ul> <li> <p>Any files that FSx has already exported are not reverted.</p> </li> <li> <p>FSx continues to export any files that are &quot;in-flight&quot; when the cancel operation is received.</p> </li> <li> <p>FSx does not export any files that have not yet been exported.</p> </li> </ul></p>
     async fn cancel_data_repository_task(
         &self,
         input: CancelDataRepositoryTaskRequest,
     ) -> Result<CancelDataRepositoryTaskResponse, RusotoError<CancelDataRepositoryTaskError>>;
 
-    /// <p>Creates a backup of an existing Amazon FSx file system. Creating regular backups for your file system is a best practice, enabling you to restore a file system from a backup if an issue arises with the original file system.</p> <p>For Amazon FSx for Lustre file systems, you can create a backup only for file systems with the following configuration:</p> <ul> <li> <p>a Persistent deployment type</p> </li> <li> <p>is <i>not</i> linked to an Amazon S3 data respository.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-backups.html">https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-backups.html</a>.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don't match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn't exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateBackup</code> operation returns while the backup's lifecycle state is still <code>CREATING</code>. You can check the backup creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p>
+    /// <p>Creates a backup of an existing Amazon FSx file system. Creating regular backups for your file system is a best practice, enabling you to restore a file system from a backup if an issue arises with the original file system.</p> <p>For Amazon FSx for Lustre file systems, you can create a backup only for file systems with the following configuration:</p> <ul> <li> <p>a Persistent deployment type</p> </li> <li> <p>is <i>not</i> linked to a data respository.</p> </li> </ul> <p>For more information about backing up Amazon FSx for Lustre file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with FSx for Lustre backups</a>.</p> <p>For more information about backing up Amazon FSx for Windows file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html">Working with FSx for Windows backups</a>.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don't match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn't exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateBackup</code> operation returns while the backup's lifecycle state is still <code>CREATING</code>. You can check the backup creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p>
     async fn create_backup(
         &self,
         input: CreateBackupRequest,
     ) -> Result<CreateBackupResponse, RusotoError<CreateBackupError>>;
 
-    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Using Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/export-data-repository.html#export-prefix">Setting the Export Prefix</a>.</p>
+    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/create-fs-linked-data-repo.html">Linking your file system to an S3 bucket</a>.</p>
     async fn create_data_repository_task(
         &self,
         input: CreateDataRepositoryTaskRequest,
@@ -2205,11 +2508,26 @@ pub trait Fsx {
         input: DescribeDataRepositoryTasksRequest,
     ) -> Result<DescribeDataRepositoryTasksResponse, RusotoError<DescribeDataRepositoryTasksError>>;
 
+    /// <p>Returns the DNS aliases that are associated with the specified Amazon FSx for Windows File Server file system. A history of all DNS aliases that have been associated with and disassociated from the file system is available in the list of <a>AdministrativeAction</a> provided in the <a>DescribeFileSystems</a> operation response.</p>
+    async fn describe_file_system_aliases(
+        &self,
+        input: DescribeFileSystemAliasesRequest,
+    ) -> Result<DescribeFileSystemAliasesResponse, RusotoError<DescribeFileSystemAliasesError>>;
+
     /// <p><p>Returns the description of specific Amazon FSx file systems, if a <code>FileSystemIds</code> value is provided for that file system. Otherwise, it returns descriptions of all file systems owned by your AWS account in the AWS Region of the endpoint that you&#39;re calling.</p> <p>When retrieving all file system descriptions, you can optionally specify the <code>MaxResults</code> parameter to limit the number of descriptions in a response. If more file system descriptions remain, Amazon FSx returns a <code>NextToken</code> value in the response. In this case, send a later request with the <code>NextToken</code> request parameter set to the value of <code>NextToken</code> from the last response.</p> <p>This action is used in an iterative process to retrieve a list of your file system descriptions. <code>DescribeFileSystems</code> is called first without a <code>NextToken</code>value. Then the action continues to be called with the <code>NextToken</code> parameter set to the value of the last <code>NextToken</code> value until a response has no <code>NextToken</code>.</p> <p>When using this action, keep the following in mind:</p> <ul> <li> <p>The implementation might return fewer than <code>MaxResults</code> file system descriptions while still including a <code>NextToken</code> value.</p> </li> <li> <p>The order of file systems returned in the response of one <code>DescribeFileSystems</code> call and the order of file systems returned across the responses of a multicall iteration is unspecified.</p> </li> </ul></p>
     async fn describe_file_systems(
         &self,
         input: DescribeFileSystemsRequest,
     ) -> Result<DescribeFileSystemsResponse, RusotoError<DescribeFileSystemsError>>;
+
+    /// <p>Use this action to disassociate, or remove, one or more Domain Name Service (DNS) aliases from an Amazon FSx for Windows File Server file system. If you attempt to disassociate a DNS alias that is not associated with the file system, Amazon FSx responds with a 400 Bad Request. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a>.</p> <p>The system generated response showing the DNS aliases that Amazon FSx is attempting to disassociate from the file system. Use the API operation to monitor the status of the aliases Amazon FSx is disassociating with the file system.</p>
+    async fn disassociate_file_system_aliases(
+        &self,
+        input: DisassociateFileSystemAliasesRequest,
+    ) -> Result<
+        DisassociateFileSystemAliasesResponse,
+        RusotoError<DisassociateFileSystemAliasesError>,
+    >;
 
     /// <p><p>Lists tags for an Amazon FSx file systems and backups in the case of Amazon FSx for Windows File Server.</p> <p>When retrieving all tags, you can optionally specify the <code>MaxResults</code> parameter to limit the number of tags in a response. If more tags remain, Amazon FSx returns a <code>NextToken</code> value in the response. In this case, send a later request with the <code>NextToken</code> request parameter set to the value of <code>NextToken</code> from the last response.</p> <p>This action is used in an iterative process to retrieve a list of your tags. <code>ListTagsForResource</code> is called first without a <code>NextToken</code>value. Then the action continues to be called with the <code>NextToken</code> parameter set to the value of the last <code>NextToken</code> value until a response has no <code>NextToken</code>.</p> <p>When using this action, keep the following in mind:</p> <ul> <li> <p>The implementation might return fewer than <code>MaxResults</code> file system descriptions while still including a <code>NextToken</code> value.</p> </li> <li> <p>The order of tags returned in the response of one <code>ListTagsForResource</code> call and the order of tags returned across the responses of a multi-call iteration is unspecified.</p> </li> </ul></p>
     async fn list_tags_for_resource(
@@ -2229,7 +2547,7 @@ pub trait Fsx {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p>Use this operation to update the configuration of an existing Amazon FSx file system. For an Amazon FSx for Lustre file system, you can update only the WeeklyMaintenanceStartTime. For an Amazon for Windows File Server file system, you can update the following properties:</p> <ul> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>You can update multiple properties in a single request.</p>
+    /// <p><p>Use this operation to update the configuration of an existing Amazon FSx file system. You can update multiple properties in a single request.</p> <p>For Amazon FSx for Windows File Server file systems, you can update the following properties:</p> <ul> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>For Amazon FSx for Lustre file systems, you can update the following properties:</p> <ul> <li> <p>AutoImportPolicy</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul></p>
     async fn update_file_system(
         &self,
         input: UpdateFileSystemRequest,
@@ -2275,6 +2593,29 @@ impl FsxClient {
 
 #[async_trait]
 impl Fsx for FsxClient {
+    /// <p>Use this action to associate one or more Domain Name Server (DNS) aliases with an existing Amazon FSx for Windows File Server file system. A file systen can have a maximum of 50 DNS aliases associated with it at any one time. If you try to associate a DNS alias that is already associated with the file system, FSx takes no action on that alias in the request. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a> and <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/walkthrough05-file-system-custom-CNAME.html">Walkthrough 5: Using DNS aliases to access your file system</a>, including additional steps you must take to be able to access your file system using a DNS alias.</p> <p>The system response shows the DNS aliases that Amazon FSx is attempting to associate with the file system. Use the API operation to monitor the status of the aliases Amazon FSx is associating with the file system.</p>
+    async fn associate_file_system_aliases(
+        &self,
+        input: AssociateFileSystemAliasesRequest,
+    ) -> Result<AssociateFileSystemAliasesResponse, RusotoError<AssociateFileSystemAliasesError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSSimbaAPIService_v20180301.AssociateFileSystemAliases",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AssociateFileSystemAliasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateFileSystemAliasesResponse, _>()
+    }
+
     /// <p><p>Cancels an existing Amazon FSx for Lustre data repository task if that task is in either the <code>PENDING</code> or <code>EXECUTING</code> state. When you cancel a task, Amazon FSx does the following.</p> <ul> <li> <p>Any files that FSx has already exported are not reverted.</p> </li> <li> <p>FSx continues to export any files that are &quot;in-flight&quot; when the cancel operation is received.</p> </li> <li> <p>FSx does not export any files that have not yet been exported.</p> </li> </ul></p>
     async fn cancel_data_repository_task(
         &self,
@@ -2297,7 +2638,7 @@ impl Fsx for FsxClient {
             .deserialize::<CancelDataRepositoryTaskResponse, _>()
     }
 
-    /// <p>Creates a backup of an existing Amazon FSx file system. Creating regular backups for your file system is a best practice, enabling you to restore a file system from a backup if an issue arises with the original file system.</p> <p>For Amazon FSx for Lustre file systems, you can create a backup only for file systems with the following configuration:</p> <ul> <li> <p>a Persistent deployment type</p> </li> <li> <p>is <i>not</i> linked to an Amazon S3 data respository.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-backups.html">https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-backups.html</a>.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don't match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn't exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateBackup</code> operation returns while the backup's lifecycle state is still <code>CREATING</code>. You can check the backup creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p>
+    /// <p>Creates a backup of an existing Amazon FSx file system. Creating regular backups for your file system is a best practice, enabling you to restore a file system from a backup if an issue arises with the original file system.</p> <p>For Amazon FSx for Lustre file systems, you can create a backup only for file systems with the following configuration:</p> <ul> <li> <p>a Persistent deployment type</p> </li> <li> <p>is <i>not</i> linked to a data respository.</p> </li> </ul> <p>For more information about backing up Amazon FSx for Lustre file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with FSx for Lustre backups</a>.</p> <p>For more information about backing up Amazon FSx for Windows file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html">Working with FSx for Windows backups</a>.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don't match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn't exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateBackup</code> operation returns while the backup's lifecycle state is still <code>CREATING</code>. You can check the backup creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p>
     async fn create_backup(
         &self,
         input: CreateBackupRequest,
@@ -2315,7 +2656,7 @@ impl Fsx for FsxClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateBackupResponse, _>()
     }
 
-    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Using Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/export-data-repository.html#export-prefix">Setting the Export Prefix</a>.</p>
+    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/create-fs-linked-data-repo.html">Linking your file system to an S3 bucket</a>.</p>
     async fn create_data_repository_task(
         &self,
         input: CreateDataRepositoryTaskRequest,
@@ -2464,6 +2805,29 @@ impl Fsx for FsxClient {
             .deserialize::<DescribeDataRepositoryTasksResponse, _>()
     }
 
+    /// <p>Returns the DNS aliases that are associated with the specified Amazon FSx for Windows File Server file system. A history of all DNS aliases that have been associated with and disassociated from the file system is available in the list of <a>AdministrativeAction</a> provided in the <a>DescribeFileSystems</a> operation response.</p>
+    async fn describe_file_system_aliases(
+        &self,
+        input: DescribeFileSystemAliasesRequest,
+    ) -> Result<DescribeFileSystemAliasesResponse, RusotoError<DescribeFileSystemAliasesError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSSimbaAPIService_v20180301.DescribeFileSystemAliases",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeFileSystemAliasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeFileSystemAliasesResponse, _>()
+    }
+
     /// <p><p>Returns the description of specific Amazon FSx file systems, if a <code>FileSystemIds</code> value is provided for that file system. Otherwise, it returns descriptions of all file systems owned by your AWS account in the AWS Region of the endpoint that you&#39;re calling.</p> <p>When retrieving all file system descriptions, you can optionally specify the <code>MaxResults</code> parameter to limit the number of descriptions in a response. If more file system descriptions remain, Amazon FSx returns a <code>NextToken</code> value in the response. In this case, send a later request with the <code>NextToken</code> request parameter set to the value of <code>NextToken</code> from the last response.</p> <p>This action is used in an iterative process to retrieve a list of your file system descriptions. <code>DescribeFileSystems</code> is called first without a <code>NextToken</code>value. Then the action continues to be called with the <code>NextToken</code> parameter set to the value of the last <code>NextToken</code> value until a response has no <code>NextToken</code>.</p> <p>When using this action, keep the following in mind:</p> <ul> <li> <p>The implementation might return fewer than <code>MaxResults</code> file system descriptions while still including a <code>NextToken</code> value.</p> </li> <li> <p>The order of file systems returned in the response of one <code>DescribeFileSystems</code> call and the order of file systems returned across the responses of a multicall iteration is unspecified.</p> </li> </ul></p>
     async fn describe_file_systems(
         &self,
@@ -2483,6 +2847,31 @@ impl Fsx for FsxClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeFileSystemsResponse, _>()
+    }
+
+    /// <p>Use this action to disassociate, or remove, one or more Domain Name Service (DNS) aliases from an Amazon FSx for Windows File Server file system. If you attempt to disassociate a DNS alias that is not associated with the file system, Amazon FSx responds with a 400 Bad Request. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a>.</p> <p>The system generated response showing the DNS aliases that Amazon FSx is attempting to disassociate from the file system. Use the API operation to monitor the status of the aliases Amazon FSx is disassociating with the file system.</p>
+    async fn disassociate_file_system_aliases(
+        &self,
+        input: DisassociateFileSystemAliasesRequest,
+    ) -> Result<
+        DisassociateFileSystemAliasesResponse,
+        RusotoError<DisassociateFileSystemAliasesError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSSimbaAPIService_v20180301.DisassociateFileSystemAliases",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DisassociateFileSystemAliasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateFileSystemAliasesResponse, _>()
     }
 
     /// <p><p>Lists tags for an Amazon FSx file systems and backups in the case of Amazon FSx for Windows File Server.</p> <p>When retrieving all tags, you can optionally specify the <code>MaxResults</code> parameter to limit the number of tags in a response. If more tags remain, Amazon FSx returns a <code>NextToken</code> value in the response. In this case, send a later request with the <code>NextToken</code> request parameter set to the value of <code>NextToken</code> from the last response.</p> <p>This action is used in an iterative process to retrieve a list of your tags. <code>ListTagsForResource</code> is called first without a <code>NextToken</code>value. Then the action continues to be called with the <code>NextToken</code> parameter set to the value of the last <code>NextToken</code> value until a response has no <code>NextToken</code>.</p> <p>When using this action, keep the following in mind:</p> <ul> <li> <p>The implementation might return fewer than <code>MaxResults</code> file system descriptions while still including a <code>NextToken</code> value.</p> </li> <li> <p>The order of tags returned in the response of one <code>ListTagsForResource</code> call and the order of tags returned across the responses of a multi-call iteration is unspecified.</p> </li> </ul></p>
@@ -2542,7 +2931,7 @@ impl Fsx for FsxClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
-    /// <p>Use this operation to update the configuration of an existing Amazon FSx file system. For an Amazon FSx for Lustre file system, you can update only the WeeklyMaintenanceStartTime. For an Amazon for Windows File Server file system, you can update the following properties:</p> <ul> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>You can update multiple properties in a single request.</p>
+    /// <p><p>Use this operation to update the configuration of an existing Amazon FSx file system. You can update multiple properties in a single request.</p> <p>For Amazon FSx for Windows File Server file systems, you can update the following properties:</p> <ul> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>For Amazon FSx for Lustre file systems, you can update the following properties:</p> <ul> <li> <p>AutoImportPolicy</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul></p>
     async fn update_file_system(
         &self,
         input: UpdateFileSystemRequest,

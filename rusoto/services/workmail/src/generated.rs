@@ -155,6 +155,24 @@ pub struct BookingOptions {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelMailboxExportJobRequest {
+    /// <p>The idempotency token for the client request.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>The job ID.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelMailboxExportJobResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
     /// <p>The alias to add to the member set.</p>
     #[serde(rename = "Alias")]
@@ -193,6 +211,43 @@ pub struct CreateGroupResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateOrganizationRequest {
+    /// <p>The organization alias.</p>
+    #[serde(rename = "Alias")]
+    pub alias: String,
+    /// <p>The idempotency token associated with the request.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The AWS Directory Service directory ID.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_id: Option<String>,
+    /// <p>The email domains to associate with the organization.</p>
+    #[serde(rename = "Domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domains: Option<Vec<Domain>>,
+    /// <p>When <code>true</code>, allows organization interoperability between Amazon WorkMail and Microsoft Exchange. Can only be set to <code>true</code> if an AD Connector directory ID is included in the request.</p>
+    #[serde(rename = "EnableInteroperability")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_interoperability: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of a customer managed master key from AWS KMS.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateOrganizationResponse {
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceRequest {
     /// <p>The name of the new resource.</p>
     #[serde(rename = "Name")]
@@ -220,7 +275,7 @@ pub struct CreateUserRequest {
     /// <p>The display name for the new user.</p>
     #[serde(rename = "DisplayName")]
     pub display_name: String,
-    /// <p>The name for the new user. Simple AD or AD Connector user names have a maximum length of 20. All others have a maximum length of 64.</p>
+    /// <p>The name for the new user. WorkMail directory user names have a maximum length of 64. All others have a maximum length of 20.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The identifier of the organization for which the user is created.</p>
@@ -303,7 +358,7 @@ pub struct DeleteGroupResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMailboxPermissionsRequest {
-    /// <p>The identifier of the member (user or group)that owns the mailbox.</p>
+    /// <p>The identifier of the member (user or group) that owns the mailbox.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
     /// <p>The identifier of the member (user or group) for which to delete granted permissions.</p>
@@ -317,6 +372,34 @@ pub struct DeleteMailboxPermissionsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMailboxPermissionsResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteOrganizationRequest {
+    /// <p>The idempotency token associated with the request.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>If true, deletes the AWS Directory Service directory associated with the organization.</p>
+    #[serde(rename = "DeleteDirectory")]
+    pub delete_directory: bool,
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteOrganizationResponse {
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_id: Option<String>,
+    /// <p>The state of the organization.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -413,6 +496,70 @@ pub struct DescribeGroupResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// <p>The state of the user: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to WorkMail).</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeMailboxExportJobRequest {
+    /// <p>The mailbox export job ID.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeMailboxExportJobResponse {
+    /// <p>The mailbox export job description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The mailbox export job end timestamp.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The identifier of the user or resource associated with the mailbox.</p>
+    #[serde(rename = "EntityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_id: Option<String>,
+    /// <p>Error information for failed mailbox export jobs.</p>
+    #[serde(rename = "ErrorInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_info: Option<String>,
+    /// <p>The estimated progress of the mailbox export job, in percentage points.</p>
+    #[serde(rename = "EstimatedProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_progress: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the symmetric AWS Key Management Service (AWS KMS) key that encrypts the exported mailbox content.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The ARN of the AWS Identity and Access Management (IAM) role that grants write permission to the Amazon Simple Storage Service (Amazon S3) bucket.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The name of the S3 bucket.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The path to the S3 bucket and file that the mailbox export job is exporting to.</p>
+    #[serde(rename = "S3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_path: Option<String>,
+    /// <p>The S3 bucket prefix.</p>
+    #[serde(rename = "S3Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_prefix: Option<String>,
+    /// <p>The mailbox export job start timestamp.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The state of the mailbox export job.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -598,6 +745,20 @@ pub struct DisassociateMemberFromGroupRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMemberFromGroupResponse {}
+
+/// <p>The domain to associate with an Amazon WorkMail organization.</p> <p>When you configure a domain hosted in Amazon Route 53 (Route 53), all recommended DNS records are added to the organization when you create it. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_domain.html">Adding a domain</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct Domain {
+    /// <p>The fully qualified domain name.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The hosted zone ID for a domain hosted in Route 53. Required when configuring a domain hosted in Route 53.</p>
+    #[serde(rename = "HostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hosted_zone_id: Option<String>,
+}
 
 /// <p>The configuration applied to an organization's folders by its retention policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -839,6 +1000,35 @@ pub struct ListGroupsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListMailboxExportJobsRequest {
+    /// <p>The maximum number of results to return in a single call.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListMailboxExportJobsResponse {
+    /// <p>The mailbox export job details.</p>
+    #[serde(rename = "Jobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jobs: Option<Vec<MailboxExportJob>>,
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMailboxPermissionsRequest {
     /// <p>The identifier of the user, group, or resource for which to list mailbox permissions.</p>
     #[serde(rename = "EntityId")]
@@ -1002,6 +1192,48 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
+/// <p>The details of a mailbox export job, including the user or resource ID associated with the mailbox and the S3 bucket that the mailbox contents are exported to.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MailboxExportJob {
+    /// <p>The mailbox export job description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The mailbox export job end timestamp.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The identifier of the user or resource associated with the mailbox.</p>
+    #[serde(rename = "EntityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_id: Option<String>,
+    /// <p>The estimated progress of the mailbox export job, in percentage points.</p>
+    #[serde(rename = "EstimatedProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_progress: Option<i64>,
+    /// <p>The identifier of the mailbox export job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The name of the S3 bucket.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The path to the S3 bucket and file that the mailbox export job exports to.</p>
+    #[serde(rename = "S3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_path: Option<String>,
+    /// <p>The mailbox export job start timestamp.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The state of the mailbox export job.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
 /// <p>The representation of a user or group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1040,6 +1272,10 @@ pub struct OrganizationSummary {
     #[serde(rename = "Alias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<String>,
+    /// <p>The default email domain associated with the organization.</p>
+    #[serde(rename = "DefaultMailDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_mail_domain: Option<String>,
     /// <p>The error message associated with the organization. It is only present if unexpected behavior has occurred with regards to the organization. It provides insight or solutions regarding unexpected behavior.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1231,6 +1467,45 @@ pub struct Resource {
     pub type_: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartMailboxExportJobRequest {
+    /// <p>The idempotency token for the client request.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>The mailbox export job description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the user or resource associated with the mailbox.</p>
+    #[serde(rename = "EntityId")]
+    pub entity_id: String,
+    /// <p>The Amazon Resource Name (ARN) of the symmetric AWS Key Management Service (AWS KMS) key that encrypts the exported mailbox content.</p>
+    #[serde(rename = "KmsKeyArn")]
+    pub kms_key_arn: String,
+    /// <p>The identifier associated with the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+    /// <p>The ARN of the AWS Identity and Access Management (IAM) role that grants write permission to the S3 bucket.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>The name of the S3 bucket.</p>
+    #[serde(rename = "S3BucketName")]
+    pub s3_bucket_name: String,
+    /// <p>The S3 bucket prefix.</p>
+    #[serde(rename = "S3Prefix")]
+    pub s3_prefix: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartMailboxExportJobResponse {
+    /// <p>The job ID.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
 /// <p>Describes a tag applied to a resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
@@ -1380,7 +1655,7 @@ pub enum AssociateDelegateToResourceError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1444,7 +1719,7 @@ impl Error for AssociateDelegateToResourceError {}
 pub enum AssociateMemberToGroupError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
@@ -1454,7 +1729,7 @@ pub enum AssociateMemberToGroupError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -1527,6 +1802,62 @@ impl fmt::Display for AssociateMemberToGroupError {
     }
 }
 impl Error for AssociateMemberToGroupError {}
+/// Errors returned by CancelMailboxExportJob
+#[derive(Debug, PartialEq)]
+pub enum CancelMailboxExportJobError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl CancelMailboxExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelMailboxExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(CancelMailboxExportJobError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CancelMailboxExportJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(CancelMailboxExportJobError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(CancelMailboxExportJobError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelMailboxExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelMailboxExportJobError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CancelMailboxExportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CancelMailboxExportJobError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            CancelMailboxExportJobError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CancelMailboxExportJobError {}
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
@@ -1546,7 +1877,7 @@ pub enum CreateAliasError {
     MailDomainState(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1610,7 +1941,7 @@ impl Error for CreateAliasError {}
 pub enum CreateGroupError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
@@ -1618,7 +1949,7 @@ pub enum CreateGroupError {
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>This user, group, or resource name is not allowed in Amazon WorkMail.</p>
     ReservedName(String),
@@ -1681,12 +2012,68 @@ impl fmt::Display for CreateGroupError {
     }
 }
 impl Error for CreateGroupError {}
+/// Errors returned by CreateOrganization
+#[derive(Debug, PartialEq)]
+pub enum CreateOrganizationError {
+    /// <p>The directory is already in use by another WorkMail organization in the same account and Region.</p>
+    DirectoryInUse(String),
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
+    DirectoryUnavailable(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>The request exceeds the limit of the resource.</p>
+    LimitExceeded(String),
+    /// <p>The user, group, or resource name isn't unique in Amazon WorkMail.</p>
+    NameAvailability(String),
+}
+
+impl CreateOrganizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DirectoryInUseException" => {
+                    return RusotoError::Service(CreateOrganizationError::DirectoryInUse(err.msg))
+                }
+                "DirectoryUnavailableException" => {
+                    return RusotoError::Service(CreateOrganizationError::DirectoryUnavailable(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateOrganizationError::InvalidParameter(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateOrganizationError::LimitExceeded(err.msg))
+                }
+                "NameAvailabilityException" => {
+                    return RusotoError::Service(CreateOrganizationError::NameAvailability(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateOrganizationError::DirectoryInUse(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::NameAvailability(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateOrganizationError {}
 /// Errors returned by CreateResource
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
@@ -1694,7 +2081,7 @@ pub enum CreateResourceError {
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>This user, group, or resource name is not allowed in Amazon WorkMail.</p>
     ReservedName(String),
@@ -1756,7 +2143,7 @@ impl Error for CreateResourceError {}
 pub enum CreateUserError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
@@ -1766,7 +2153,7 @@ pub enum CreateUserError {
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>This user, group, or resource name is not allowed in Amazon WorkMail.</p>
     ReservedName(String),
@@ -1838,7 +2225,7 @@ impl Error for CreateUserError {}
 pub enum DeleteAccessControlRuleError {
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1884,7 +2271,7 @@ pub enum DeleteAliasError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1932,7 +2319,7 @@ impl Error for DeleteAliasError {}
 pub enum DeleteGroupError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
@@ -1940,7 +2327,7 @@ pub enum DeleteGroupError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -2008,7 +2395,7 @@ pub enum DeleteMailboxPermissionsError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2063,6 +2450,52 @@ impl fmt::Display for DeleteMailboxPermissionsError {
     }
 }
 impl Error for DeleteMailboxPermissionsError {}
+/// Errors returned by DeleteOrganization
+#[derive(Debug, PartialEq)]
+pub enum DeleteOrganizationError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl DeleteOrganizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteOrganizationError::InvalidParameter(err.msg))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(DeleteOrganizationError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(DeleteOrganizationError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteOrganizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteOrganizationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteOrganizationError {}
 /// Errors returned by DeleteResource
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceError {
@@ -2072,7 +2505,7 @@ pub enum DeleteResourceError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2118,7 +2551,7 @@ pub enum DeleteRetentionPolicyError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2164,7 +2597,7 @@ impl Error for DeleteRetentionPolicyError {}
 pub enum DeleteUserError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
@@ -2172,7 +2605,7 @@ pub enum DeleteUserError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -2240,7 +2673,7 @@ pub enum DeregisterFromWorkMailError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2300,7 +2733,7 @@ pub enum DescribeGroupError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2339,6 +2772,64 @@ impl fmt::Display for DescribeGroupError {
     }
 }
 impl Error for DescribeGroupError {}
+/// Errors returned by DescribeMailboxExportJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeMailboxExportJobError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl DescribeMailboxExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMailboxExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(DescribeMailboxExportJobError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeMailboxExportJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeMailboxExportJobError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(DescribeMailboxExportJobError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeMailboxExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeMailboxExportJobError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMailboxExportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeMailboxExportJobError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMailboxExportJobError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeMailboxExportJobError {}
 /// Errors returned by DescribeOrganization
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationError {
@@ -2388,7 +2879,7 @@ pub enum DescribeResourceError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2438,7 +2929,7 @@ pub enum DescribeUserError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2488,7 +2979,7 @@ pub enum DisassociateDelegateFromResourceError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2556,7 +3047,7 @@ impl Error for DisassociateDelegateFromResourceError {}
 pub enum DisassociateMemberFromGroupError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
@@ -2566,7 +3057,7 @@ pub enum DisassociateMemberFromGroupError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -2662,7 +3153,7 @@ pub enum GetAccessControlEffectError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2718,7 +3209,7 @@ pub enum GetDefaultRetentionPolicyError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2774,7 +3265,7 @@ pub enum GetMailboxDetailsError {
     EntityNotFound(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2816,7 +3307,7 @@ impl Error for GetMailboxDetailsError {}
 pub enum ListAccessControlRulesError {
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2862,7 +3353,7 @@ pub enum ListAliasesError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2916,7 +3407,7 @@ pub enum ListGroupMembersError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2970,7 +3461,7 @@ pub enum ListGroupsError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3009,6 +3500,54 @@ impl fmt::Display for ListGroupsError {
     }
 }
 impl Error for ListGroupsError {}
+/// Errors returned by ListMailboxExportJobs
+#[derive(Debug, PartialEq)]
+pub enum ListMailboxExportJobsError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl ListMailboxExportJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMailboxExportJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListMailboxExportJobsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(ListMailboxExportJobsError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(ListMailboxExportJobsError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListMailboxExportJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListMailboxExportJobsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListMailboxExportJobsError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListMailboxExportJobsError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListMailboxExportJobsError {}
 /// Errors returned by ListMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum ListMailboxPermissionsError {
@@ -3018,7 +3557,7 @@ pub enum ListMailboxPermissionsError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3106,7 +3645,7 @@ pub enum ListResourceDelegatesError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3164,7 +3703,7 @@ pub enum ListResourcesError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3238,7 +3777,7 @@ pub enum ListUsersError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3284,7 +3823,7 @@ pub enum PutAccessControlRuleError {
     LimitExceeded(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3344,7 +3883,7 @@ pub enum PutMailboxPermissionsError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3404,7 +3943,7 @@ pub enum PutRetentionPolicyError {
     LimitExceeded(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3452,7 +3991,7 @@ impl Error for PutRetentionPolicyError {}
 pub enum RegisterToWorkMailError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>The email address that you're trying to assign is already created for a different user, group, or resource.</p>
     EmailAddressInUse(String),
@@ -3470,7 +4009,7 @@ pub enum RegisterToWorkMailError {
     MailDomainState(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3558,7 +4097,7 @@ impl Error for RegisterToWorkMailError {}
 pub enum ResetPasswordError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
@@ -3570,7 +4109,7 @@ pub enum ResetPasswordError {
     InvalidPassword(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -3635,10 +4174,72 @@ impl fmt::Display for ResetPasswordError {
     }
 }
 impl Error for ResetPasswordError {}
+/// Errors returned by StartMailboxExportJob
+#[derive(Debug, PartialEq)]
+pub enum StartMailboxExportJobError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>The request exceeds the limit of the resource.</p>
+    LimitExceeded(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl StartMailboxExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMailboxExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StartMailboxExportJobError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartMailboxExportJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartMailboxExportJobError::LimitExceeded(err.msg))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(StartMailboxExportJobError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(StartMailboxExportJobError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartMailboxExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartMailboxExportJobError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartMailboxExportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartMailboxExportJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartMailboxExportJobError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            StartMailboxExportJobError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartMailboxExportJobError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>The resource cannot be found.</p>
     ResourceNotFound(String),
@@ -3718,7 +4319,7 @@ pub enum UpdateMailboxQuotaError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3770,7 +4371,7 @@ impl Error for UpdateMailboxQuotaError {}
 pub enum UpdatePrimaryEmailAddressError {
     /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>The email address that you're trying to assign is already created for a different user, group, or resource.</p>
     EmailAddressInUse(String),
@@ -3786,7 +4387,7 @@ pub enum UpdatePrimaryEmailAddressError {
     MailDomainState(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -3890,7 +4491,7 @@ impl Error for UpdatePrimaryEmailAddressError {}
 /// Errors returned by UpdateResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceError {
-    /// <p>The directory on which you are trying to perform operations isn't available.</p>
+    /// <p>The directory is unavailable. It might be located in another Region or deleted.</p>
     DirectoryUnavailable(String),
     /// <p>The email address that you're trying to assign is already created for a different user, group, or resource.</p>
     EmailAddressInUse(String),
@@ -3908,7 +4509,7 @@ pub enum UpdateResourceError {
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3986,6 +4587,12 @@ pub trait Workmail {
         input: AssociateMemberToGroupRequest,
     ) -> Result<AssociateMemberToGroupResponse, RusotoError<AssociateMemberToGroupError>>;
 
+    /// <p><p>Cancels a mailbox export job.</p> <note> <p>If the mailbox export job is near completion, it might not be possible to cancel it.</p> </note></p>
+    async fn cancel_mailbox_export_job(
+        &self,
+        input: CancelMailboxExportJobRequest,
+    ) -> Result<CancelMailboxExportJobResponse, RusotoError<CancelMailboxExportJobError>>;
+
     /// <p>Adds an alias to the set of a given member (user or group) of Amazon WorkMail.</p>
     async fn create_alias(
         &self,
@@ -3997,6 +4604,12 @@ pub trait Workmail {
         &self,
         input: CreateGroupRequest,
     ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>>;
+
+    /// <p>Creates a new Amazon WorkMail organization. Optionally, you can choose to associate an existing AWS Directory Service directory with your organization. If an AWS Directory Service directory ID is specified, the organization alias must match the directory alias. If you choose not to associate an existing directory with your organization, then we create a new Amazon WorkMail directory for you. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_new_organization.html">Adding an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>You can associate multiple email domains with an organization, then set your default email domain from the Amazon WorkMail console. You can also associate a domain that is managed in an Amazon Route 53 public hosted zone. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_domain.html">Adding a domain</a> and <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/default_domain.html">Choosing the default domain</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>Optionally, you can use a customer managed master key from AWS Key Management Service (AWS KMS) to encrypt email for your organization. If you don't associate an AWS KMS key, Amazon WorkMail creates a default AWS managed master key for you.</p>
+    async fn create_organization(
+        &self,
+        input: CreateOrganizationRequest,
+    ) -> Result<CreateOrganizationResponse, RusotoError<CreateOrganizationError>>;
 
     /// <p>Creates a new Amazon WorkMail resource. </p>
     async fn create_resource(
@@ -4034,6 +4647,12 @@ pub trait Workmail {
         input: DeleteMailboxPermissionsRequest,
     ) -> Result<DeleteMailboxPermissionsResponse, RusotoError<DeleteMailboxPermissionsError>>;
 
+    /// <p>Deletes an Amazon WorkMail organization and all underlying AWS resources managed by Amazon WorkMail as part of the organization. You can choose whether to delete the associated directory. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/remove_organization.html">Removing an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p>
+    async fn delete_organization(
+        &self,
+        input: DeleteOrganizationRequest,
+    ) -> Result<DeleteOrganizationResponse, RusotoError<DeleteOrganizationError>>;
+
     /// <p>Deletes the specified resource. </p>
     async fn delete_resource(
         &self,
@@ -4063,6 +4682,12 @@ pub trait Workmail {
         &self,
         input: DescribeGroupRequest,
     ) -> Result<DescribeGroupResponse, RusotoError<DescribeGroupError>>;
+
+    /// <p>Describes the current status of a mailbox export job.</p>
+    async fn describe_mailbox_export_job(
+        &self,
+        input: DescribeMailboxExportJobRequest,
+    ) -> Result<DescribeMailboxExportJobResponse, RusotoError<DescribeMailboxExportJobError>>;
 
     /// <p>Provides more information regarding a given organization based on its identifier.</p>
     async fn describe_organization(
@@ -4139,6 +4764,12 @@ pub trait Workmail {
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
+    /// <p>Lists the mailbox export jobs started for the specified organization within the last seven days.</p>
+    async fn list_mailbox_export_jobs(
+        &self,
+        input: ListMailboxExportJobsRequest,
+    ) -> Result<ListMailboxExportJobsResponse, RusotoError<ListMailboxExportJobsError>>;
+
     /// <p>Lists the mailbox permissions associated with a user, group, or resource mailbox.</p>
     async fn list_mailbox_permissions(
         &self,
@@ -4204,6 +4835,12 @@ pub trait Workmail {
         &self,
         input: ResetPasswordRequest,
     ) -> Result<ResetPasswordResponse, RusotoError<ResetPasswordError>>;
+
+    /// <p>Starts a mailbox export job to export MIME-format email messages and calendar items from the specified mailbox to the specified Amazon Simple Storage Service (Amazon S3) bucket. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/mail-export.html">Exporting mailbox content</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p>
+    async fn start_mailbox_export_job(
+        &self,
+        input: StartMailboxExportJobRequest,
+    ) -> Result<StartMailboxExportJobResponse, RusotoError<StartMailboxExportJobError>>;
 
     /// <p>Applies the specified tags to the specified Amazon WorkMail organization resource.</p>
     async fn tag_resource(
@@ -4317,6 +4954,25 @@ impl Workmail for WorkmailClient {
             .deserialize::<AssociateMemberToGroupResponse, _>()
     }
 
+    /// <p><p>Cancels a mailbox export job.</p> <note> <p>If the mailbox export job is near completion, it might not be possible to cancel it.</p> </note></p>
+    async fn cancel_mailbox_export_job(
+        &self,
+        input: CancelMailboxExportJobRequest,
+    ) -> Result<CancelMailboxExportJobResponse, RusotoError<CancelMailboxExportJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkMailService.CancelMailboxExportJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CancelMailboxExportJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CancelMailboxExportJobResponse, _>()
+    }
+
     /// <p>Adds an alias to the set of a given member (user or group) of Amazon WorkMail.</p>
     async fn create_alias(
         &self,
@@ -4351,6 +5007,24 @@ impl Workmail for WorkmailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateGroupResponse, _>()
+    }
+
+    /// <p>Creates a new Amazon WorkMail organization. Optionally, you can choose to associate an existing AWS Directory Service directory with your organization. If an AWS Directory Service directory ID is specified, the organization alias must match the directory alias. If you choose not to associate an existing directory with your organization, then we create a new Amazon WorkMail directory for you. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_new_organization.html">Adding an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>You can associate multiple email domains with an organization, then set your default email domain from the Amazon WorkMail console. You can also associate a domain that is managed in an Amazon Route 53 public hosted zone. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_domain.html">Adding a domain</a> and <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/default_domain.html">Choosing the default domain</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>Optionally, you can use a customer managed master key from AWS Key Management Service (AWS KMS) to encrypt email for your organization. If you don't associate an AWS KMS key, Amazon WorkMail creates a default AWS managed master key for you.</p>
+    async fn create_organization(
+        &self,
+        input: CreateOrganizationRequest,
+    ) -> Result<CreateOrganizationResponse, RusotoError<CreateOrganizationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkMailService.CreateOrganization");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateOrganizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateOrganizationResponse, _>()
     }
 
     /// <p>Creates a new Amazon WorkMail resource. </p>
@@ -4463,6 +5137,24 @@ impl Workmail for WorkmailClient {
             .deserialize::<DeleteMailboxPermissionsResponse, _>()
     }
 
+    /// <p>Deletes an Amazon WorkMail organization and all underlying AWS resources managed by Amazon WorkMail as part of the organization. You can choose whether to delete the associated directory. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/remove_organization.html">Removing an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p>
+    async fn delete_organization(
+        &self,
+        input: DeleteOrganizationRequest,
+    ) -> Result<DeleteOrganizationResponse, RusotoError<DeleteOrganizationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkMailService.DeleteOrganization");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteOrganizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteOrganizationResponse, _>()
+    }
+
     /// <p>Deletes the specified resource. </p>
     async fn delete_resource(
         &self,
@@ -4553,6 +5245,25 @@ impl Workmail for WorkmailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeGroupResponse, _>()
+    }
+
+    /// <p>Describes the current status of a mailbox export job.</p>
+    async fn describe_mailbox_export_job(
+        &self,
+        input: DescribeMailboxExportJobRequest,
+    ) -> Result<DescribeMailboxExportJobResponse, RusotoError<DescribeMailboxExportJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkMailService.DescribeMailboxExportJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeMailboxExportJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMailboxExportJobResponse, _>()
     }
 
     /// <p>Provides more information regarding a given organization based on its identifier.</p>
@@ -4791,6 +5502,25 @@ impl Workmail for WorkmailClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListGroupsResponse, _>()
     }
 
+    /// <p>Lists the mailbox export jobs started for the specified organization within the last seven days.</p>
+    async fn list_mailbox_export_jobs(
+        &self,
+        input: ListMailboxExportJobsRequest,
+    ) -> Result<ListMailboxExportJobsResponse, RusotoError<ListMailboxExportJobsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkMailService.ListMailboxExportJobs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListMailboxExportJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListMailboxExportJobsResponse, _>()
+    }
+
     /// <p>Lists the mailbox permissions associated with a user, group, or resource mailbox.</p>
     async fn list_mailbox_permissions(
         &self,
@@ -4991,6 +5721,25 @@ impl Workmail for WorkmailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ResetPasswordResponse, _>()
+    }
+
+    /// <p>Starts a mailbox export job to export MIME-format email messages and calendar items from the specified mailbox to the specified Amazon Simple Storage Service (Amazon S3) bucket. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/mail-export.html">Exporting mailbox content</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p>
+    async fn start_mailbox_export_job(
+        &self,
+        input: StartMailboxExportJobRequest,
+    ) -> Result<StartMailboxExportJobResponse, RusotoError<StartMailboxExportJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkMailService.StartMailboxExportJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartMailboxExportJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartMailboxExportJobResponse, _>()
     }
 
     /// <p>Applies the specified tags to the specified Amazon WorkMail organization resource.</p>

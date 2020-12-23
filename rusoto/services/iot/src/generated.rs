@@ -110,6 +110,10 @@ pub struct Action {
     #[serde(rename = "iotSiteWise")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_site_wise: Option<IotSiteWiseAction>,
+    /// <p>Send messages to an Amazon Managed Streaming for Apache Kafka (Amazon MSK) or self-managed Apache Kafka cluster.</p>
+    #[serde(rename = "kafka")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka: Option<KafkaAction>,
     /// <p>Write data to an Amazon Kinesis stream.</p>
     #[serde(rename = "kinesis")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -142,13 +146,17 @@ pub struct Action {
     #[serde(rename = "stepFunctions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_functions: Option<StepFunctionsAction>,
+    /// <p>The Timestream rule action writes attributes (measures) from an MQTT message into an Amazon Timestream table. For more information, see the <a href="https://docs.aws.amazon.com/iot/latest/developerguide/timestream-rule-action.html">Timestream</a> topic rule action documentation.</p>
+    #[serde(rename = "timestream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestream: Option<TimestreamAction>,
 }
 
 /// <p>Information about an active Device Defender security profile behavior violation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActiveViolation {
-    /// <p>The behavior which is being violated.</p>
+    /// <p>The behavior that is being violated.</p>
     #[serde(rename = "behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub behavior: Option<Behavior>,
@@ -156,11 +164,11 @@ pub struct ActiveViolation {
     #[serde(rename = "lastViolationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_violation_time: Option<f64>,
-    /// <p>The value of the metric (the measurement) which caused the most recent violation.</p>
+    /// <p>The value of the metric (the measurement) that caused the most recent violation.</p>
     #[serde(rename = "lastViolationValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_violation_value: Option<MetricValue>,
-    /// <p>The security profile whose behavior is in violation.</p>
+    /// <p>The security profile with the behavior is in violation.</p>
     #[serde(rename = "securityProfileName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_profile_name: Option<String>,
@@ -168,6 +176,10 @@ pub struct ActiveViolation {
     #[serde(rename = "thingName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_name: Option<String>,
+    /// <p> The details of a violation event. </p>
+    #[serde(rename = "violationEventAdditionalInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_event_additional_info: Option<ViolationEventAdditionalInfo>,
     /// <p>The ID of the active violation.</p>
     #[serde(rename = "violationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -235,11 +247,11 @@ pub struct AddThingToThingGroupResponse {}
 /// <p>Parameters used when defining a mitigation action that move a set of things to a thing group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AddThingsToThingGroupParams {
-    /// <p>Specifies if this mitigation action can move the things that triggered the mitigation action even if they are part of one or more dynamic things groups.</p>
+    /// <p>Specifies if this mitigation action can move the things that triggered the mitigation action even if they are part of one or more dynamic thing groups.</p>
     #[serde(rename = "overrideDynamicGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub override_dynamic_groups: Option<bool>,
-    /// <p>The list of groups to which you want to add the things that triggered the mitigation action. You can add a thing to a maximum of 10 groups, but you cannot add a thing to more than one group in the same hierarchy.</p>
+    /// <p>The list of groups to which you want to add the things that triggered the mitigation action. You can add a thing to a maximum of 10 groups, but you can't add a thing to more than one group in the same hierarchy.</p>
     #[serde(rename = "thingGroupNames")]
     pub thing_group_names: Vec<String>,
 }
@@ -247,7 +259,7 @@ pub struct AddThingsToThingGroupParams {
 /// <p>A structure containing the alert target ARN and the role ARN.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AlertTarget {
-    /// <p>The ARN of the notification target to which alerts are sent.</p>
+    /// <p>The Amazon Resource Name (ARN) of the notification target to which alerts are sent.</p>
     #[serde(rename = "alertTargetArn")]
     pub alert_target_arn: String,
     /// <p>The ARN of the role that grants permission to send alerts to the notification target.</p>
@@ -323,6 +335,10 @@ pub struct AssociateTargetsWithJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>A list of thing group ARNs that define the targets of the job.</p>
     #[serde(rename = "targets")]
     pub targets: Vec<String>,
@@ -446,6 +462,10 @@ pub struct AuditCheckDetails {
     #[serde(rename = "nonCompliantResourcesCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_resources_count: Option<i64>,
+    /// <p> Describes how many of the non-compliant resources created during the evaluation of an audit check were marked as suppressed. </p>
+    #[serde(rename = "suppressedNonCompliantResourcesCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppressed_non_compliant_resources_count: Option<i64>,
     /// <p>The number of resources on which the check was performed.</p>
     #[serde(rename = "totalResourcesCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -468,6 +488,10 @@ pub struct AuditFinding {
     #[serde(rename = "findingTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_time: Option<f64>,
+    /// <p> Indicates whether the audit finding was suppressed or not during reporting. </p>
+    #[serde(rename = "isSuppressed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_suppressed: Option<bool>,
     /// <p>The resource that was found to be noncompliant with the audit check.</p>
     #[serde(rename = "nonCompliantResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -590,6 +614,28 @@ pub struct AuditNotificationTarget {
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
+}
+
+/// <p> Filters out specific findings of a Device Defender audit. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AuditSuppression {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The expiration date (epoch timestamp in seconds) that you want the suppression to adhere to. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
 }
 
 /// <p>The audits that were performed.</p>
@@ -814,19 +860,23 @@ pub struct Behavior {
     #[serde(rename = "metric")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric: Option<String>,
-    /// <p>The dimension for a metric in your behavior. For example, using a <code>TOPIC_FILTER</code> dimension, you can narrow down the scope of the metric only to MQTT topics whose name match the pattern specified in the dimension.</p>
+    /// <p>The dimension for a metric in your behavior. For example, using a <code>TOPIC_FILTER</code> dimension, you can narrow down the scope of the metric to only MQTT topics where the name matches the pattern specified in the dimension. This can't be used with custom metrics.</p>
     #[serde(rename = "metricDimension")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_dimension: Option<MetricDimension>,
-    /// <p>The name you have given to the behavior.</p>
+    /// <p>The name you've given to the behavior.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p> Suppresses alerts. </p>
+    #[serde(rename = "suppressAlerts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_alerts: Option<bool>,
 }
 
 /// <p>The criteria by which the behavior is determined to be normal.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BehaviorCriteria {
-    /// <p>The operator that relates the thing measured (<code>metric</code>) to the criteria (containing a <code>value</code> or <code>statisticalThreshold</code>).</p>
+    /// <p><p>The operator that relates the thing measured (<code>metric</code>) to the criteria (containing a <code>value</code> or <code>statisticalThreshold</code>). Valid operators include:</p> <ul> <li> <p> <code>string-list</code>: <code>in-set</code> and <code>not-in-set</code> </p> </li> <li> <p> <code>number-list</code>: <code>in-set</code> and <code>not-in-set</code> </p> </li> <li> <p> <code>ip-address-list</code>: <code>in-cidr-set</code> and <code>not-in-cidr-set</code> </p> </li> <li> <p> <code>number</code>: <code>less-than</code>, <code>less-than-equals</code>, <code>greater-than</code>, and <code>greater-than-equals</code> </p> </li> </ul></p>
     #[serde(rename = "comparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comparison_operator: Option<String>,
@@ -838,11 +888,15 @@ pub struct BehaviorCriteria {
     #[serde(rename = "consecutiveDatapointsToClear")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub consecutive_datapoints_to_clear: Option<i64>,
-    /// <p>Use this to specify the time duration over which the behavior is evaluated, for those criteria which have a time dimension (for example, <code>NUM_MESSAGES_SENT</code>). For a <code>statisticalThreshhold</code> metric comparison, measurements from all devices are accumulated over this time duration before being used to calculate percentiles, and later, measurements from an individual device are also accumulated over this time duration before being given a percentile rank.</p>
+    /// <p>Use this to specify the time duration over which the behavior is evaluated, for those criteria that have a time dimension (for example, <code>NUM_MESSAGES_SENT</code>). For a <code>statisticalThreshhold</code> metric comparison, measurements from all devices are accumulated over this time duration before being used to calculate percentiles, and later, measurements from an individual device are also accumulated over this time duration before being given a percentile rank. Cannot be used with list-based metric datatypes.</p>
     #[serde(rename = "durationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_seconds: Option<i64>,
-    /// <p>A statistical ranking (percentile) which indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.</p>
+    /// <p> The configuration of an ML Detect </p>
+    #[serde(rename = "mlDetectionConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ml_detection_config: Option<MachineLearningDetectionConfig>,
+    /// <p>A statistical ranking (percentile)that indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.</p>
     #[serde(rename = "statisticalThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistical_threshold: Option<StatisticalThreshold>,
@@ -850,6 +904,36 @@ pub struct BehaviorCriteria {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<MetricValue>,
+}
+
+/// <p> The summary of an ML Detect behavior model. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BehaviorModelTrainingSummary {
+    /// <p> The name of the behavior. </p>
+    #[serde(rename = "behaviorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior_name: Option<String>,
+    /// <p> The percentage of datapoints collected. </p>
+    #[serde(rename = "datapointsCollectionPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datapoints_collection_percentage: Option<f64>,
+    /// <p> The date the model was last refreshed. </p>
+    #[serde(rename = "lastModelRefreshDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_model_refresh_date: Option<f64>,
+    /// <p> The status of the behavior model. </p>
+    #[serde(rename = "modelStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_status: Option<String>,
+    /// <p> The name of the security profile. </p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p> The date a training model started collecting data. </p>
+    #[serde(rename = "trainingDataCollectionStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_data_collection_start_date: Option<f64>,
 }
 
 /// <p>Additional information about the billing group.</p>
@@ -975,6 +1059,18 @@ pub struct CancelCertificateTransferRequest {
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelDetectMitigationActionsTaskRequest {
+    /// <p> The unique identifier of the task. </p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelDetectMitigationActionsTaskResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1265,6 +1361,34 @@ pub struct ConfirmTopicRuleDestinationResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    /// <p> The epoch timestamp in seconds at which this suppression expires. </p>
+    #[serde(rename = "clientRequestToken")]
+    pub client_request_token: String,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The epoch timestamp in seconds at which this suppression expires. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAuditSuppressionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -1373,6 +1497,41 @@ pub struct CreateCertificateFromCsrResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCustomMetricRequest {
+    /// <p>Each custom metric must have a unique client request token. If you try to create a new custom metric that already exists with a different token, an exception occurs. If you omit this value, AWS SDKs will automatically generate a unique client request. </p>
+    #[serde(rename = "clientRequestToken")]
+    pub client_request_token: String,
+    /// <p> Field represents a friendly name in the console for the custom metric; it doesn't have to be unique. Don't use this name as the metric identifier in the device metric report. Can be updated once defined.</p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p> The name of the custom metric. This will be used in the metric report submitted from the device/thing. Shouldn't begin with <code>aws:</code>. Cannot be updated once defined.</p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+    /// <p> The type of the custom metric. Types include <code>string-list</code>, <code>ip-address-list</code>, <code>number-list</code>, and <code>number</code>. </p>
+    #[serde(rename = "metricType")]
+    pub metric_type: String,
+    /// <p> Metadata that can be used to manage the custom metric. </p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCustomMetricResponse {
+    /// <p> The Amazon Resource Number (ARN) of the custom metric, e.g. <code>arn:<i>aws-partition</i>:iot:<i>region</i>:<i>accountId</i>:custommetric/<i>metricName</i> </code> </p>
+    #[serde(rename = "metricArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_arn: Option<String>,
+    /// <p> The name of the custom metric to be used in the metric report. </p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDimensionRequest {
     /// <p>Each dimension must have a unique client request token. If you try to create a new dimension with the same token as a dimension that already exists, an exception occurs. If you omit this value, AWS SDKs will automatically generate a unique client request.</p>
     #[serde(rename = "clientRequestToken")]
@@ -1395,7 +1554,7 @@ pub struct CreateDimensionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDimensionResponse {
-    /// <p>The ARN (Amazon resource name) of the created dimension.</p>
+    /// <p>The Amazon Resource Name (ARN) of the created dimension.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -1532,6 +1691,10 @@ pub struct CreateJobRequest {
     /// <p>A job identifier which must be unique for your AWS account. We recommend using a UUID. Alpha-numeric characters, "-" and "_" are valid for use here.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>Configuration information for pre-signed S3 URLs.</p>
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1934,15 +2097,15 @@ pub struct CreateRoleAliasResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScheduledAuditRequest {
-    /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
+    /// <p>The day of the month on which the scheduled audit takes place. This can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to <code>MONTHLY</code>. If days 29 to 31 are specified, and the month doesn't have that many days, the audit takes place on the <code>LAST</code> day of the month.</p>
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    /// <p>The day of the week on which the scheduled audit takes place, either <code>SUN</code>, <code>MON</code>, <code>TUE</code>, <code>WED</code>, <code>THU</code>, <code>FRI</code>, or <code>SAT</code>. This field is required if the <code>frequency</code> parameter is set to <code>WEEKLY</code> or <code>BIWEEKLY</code>.</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place, either <code>DAILY</code>, <code>WEEKLY</code>, <code>BIWEEKLY</code> or <code>MONTHLY</code>. The start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     pub frequency: String,
     /// <p>The name you want to give to the scheduled audit. (Max. 128 chars)</p>
@@ -1969,7 +2132,7 @@ pub struct CreateScheduledAuditResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityProfileRequest {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here. Can be used with custom metrics; cannot be used with dimensions.</p>
     #[serde(rename = "additionalMetricsToRetainV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain_v2: Option<Vec<MetricToRetain>>,
@@ -2230,6 +2393,19 @@ pub struct DeleteAccountAuditConfigurationResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAuditSuppressionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>The name of the authorizer to delete.</p>
     #[serde(rename = "authorizerName")]
@@ -2285,6 +2461,18 @@ pub struct DeleteCertificateRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCustomMetricRequest {
+    /// <p> The name of the custom metric. </p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteCustomMetricResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDimensionRequest {
     /// <p>The unique identifier for the dimension that you want to delete.</p>
     #[serde(rename = "name")]
@@ -2336,6 +2524,10 @@ pub struct DeleteJobExecutionRequest {
     /// <p>The ID of the job whose execution on a particular device will be deleted.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>The name of the thing whose job execution will be deleted.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -2351,6 +2543,10 @@ pub struct DeleteJobRequest {
     /// <p>The ID of the job to be deleted.</p> <p>After a job deletion is completed, you may reuse this jobId when you create a new job. However, this is not recommended, and you must ensure that your devices are not using the jobId to refer to the deleted job.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2689,6 +2885,38 @@ pub struct DescribeAuditMitigationActionsTaskResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAuditSuppressionResponse {
+    #[serde(rename = "checkName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_name: Option<String>,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The epoch timestamp in seconds at which this suppression expires. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<ResourceIdentifier>,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditTaskRequest {
     /// <p>The ID of the audit whose information you want to get.</p>
     #[serde(rename = "taskId")]
@@ -2822,6 +3050,43 @@ pub struct DescribeCertificateResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeCustomMetricRequest {
+    /// <p> The name of the custom metric. </p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCustomMetricResponse {
+    /// <p> The creation date of the custom metric in milliseconds since epoch. </p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p> Field represents a friendly name in the console for the custom metric; doesn't have to be unique. Don't use this name as the metric identifier in the device metric report. Can be updated. </p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p> The time the custom metric was last modified in milliseconds since epoch. </p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p> The Amazon Resource Number (ARN) of the custom metric. </p>
+    #[serde(rename = "metricArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_arn: Option<String>,
+    /// <p> The name of the custom metric. </p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+    /// <p> The type of the custom metric. Types include <code>string-list</code>, <code>ip-address-list</code>, <code>number-list</code>, and <code>number</code>. </p>
+    #[serde(rename = "metricType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultAuthorizerRequest {}
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2835,6 +3100,23 @@ pub struct DescribeDefaultAuthorizerResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDetectMitigationActionsTaskRequest {
+    /// <p> The unique identifier of the task. </p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDetectMitigationActionsTaskResponse {
+    /// <p> The description of a task. </p>
+    #[serde(rename = "taskSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_summary: Option<DetectMitigationActionsTaskSummary>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDimensionRequest {
     /// <p>The unique identifier for the dimension.</p>
     #[serde(rename = "name")]
@@ -2844,7 +3126,7 @@ pub struct DescribeDimensionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDimensionResponse {
-    /// <p>The ARN (Amazon resource name) for the dimension.</p>
+    /// <p>The Amazon Resource Name (ARN) for the dimension.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -2905,6 +3187,10 @@ pub struct DescribeDomainConfigurationResponse {
     #[serde(rename = "domainType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_type: Option<String>,
+    /// <p>The date and time the domain configuration's status was last changed.</p>
+    #[serde(rename = "lastStatusChangeDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_status_change_date: Option<f64>,
     /// <p>A list containing summary information about the server certificate included in the domain configuration.</p>
     #[serde(rename = "serverCertificates")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3184,15 +3470,15 @@ pub struct DescribeScheduledAuditRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScheduledAuditResponse {
-    /// <p>The day of the month on which the scheduled audit takes place. Will be "1" through "31" or "LAST". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
+    /// <p>The day of the month on which the scheduled audit takes place. This is will be <code>1</code> through <code>31</code> or <code>LAST</code>. If days <code>29</code>-<code>31</code> are specified, and the month does not have that many days, the audit takes place on the <code>LAST</code> day of the month.</p>
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. One of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT".</p>
+    /// <p>The day of the week on which the scheduled audit takes place, either one of <code>SUN</code>, <code>MON</code>, <code>TUE</code>, <code>WED</code>, <code>THU</code>, <code>FRI</code>, or <code>SAT</code>.</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. One of "DAILY", "WEEKLY", "BIWEEKLY", or "MONTHLY". The start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place, either one of <code>DAILY</code>, <code>WEEKLY</code>, <code>BIWEEKLY</code>, or <code>MONTHLY</code>. The start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
@@ -3499,7 +3785,7 @@ pub struct DetachPrincipalPolicyRequest {
     /// <p>The name of the policy to detach.</p>
     #[serde(rename = "policyName")]
     pub policy_name: String,
-    /// <p>The principal.</p> <p>If the principal is a certificate, specify the certificate ARN. If the principal is an Amazon Cognito identity, specify the identity ID.</p>
+    /// <p>The principal.</p> <p>Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     pub principal: String,
 }
@@ -3535,6 +3821,129 @@ pub struct DetachThingPrincipalRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachThingPrincipalResponse {}
+
+/// <p> Describes which mitigation actions should be executed. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetectMitigationActionExecution {
+    /// <p> The friendly name that uniquely identifies the mitigation action. </p>
+    #[serde(rename = "actionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p> The error code of a mitigation action. </p>
+    #[serde(rename = "errorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p> The date a mitigation action ended. </p>
+    #[serde(rename = "executionEndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_end_date: Option<f64>,
+    /// <p> The date a mitigation action was started. </p>
+    #[serde(rename = "executionStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_start_date: Option<f64>,
+    /// <p> The message of a mitigation action. </p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p> The status of a mitigation action. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p> The unique identifier of the task. </p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p> The name of the thing. </p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+    /// <p> The unique identifier of the violation. </p>
+    #[serde(rename = "violationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_id: Option<String>,
+}
+
+/// <p> The statistics of a mitigation action task. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetectMitigationActionsTaskStatistics {
+    /// <p> The actions that were performed. </p>
+    #[serde(rename = "actionsExecuted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_executed: Option<i64>,
+    /// <p> The actions that failed. </p>
+    #[serde(rename = "actionsFailed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_failed: Option<i64>,
+    /// <p> The actions that were skipped. </p>
+    #[serde(rename = "actionsSkipped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_skipped: Option<i64>,
+}
+
+/// <p> The summary of the mitigation action tasks. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetectMitigationActionsTaskSummary {
+    /// <p> The definition of the actions. </p>
+    #[serde(rename = "actionsDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_definition: Option<Vec<MitigationAction>>,
+    /// <p> Includes only active violations. </p>
+    #[serde(rename = "onlyActiveViolationsIncluded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub only_active_violations_included: Option<bool>,
+    /// <p> Includes suppressed alerts. </p>
+    #[serde(rename = "suppressedAlertsIncluded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppressed_alerts_included: Option<bool>,
+    /// <p> Specifies the ML Detect findings to which the mitigation actions are applied. </p>
+    #[serde(rename = "target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<DetectMitigationActionsTaskTarget>,
+    /// <p> The date the task ended. </p>
+    #[serde(rename = "taskEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_end_time: Option<f64>,
+    /// <p> The unique identifier of the task. </p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p> The date the task started. </p>
+    #[serde(rename = "taskStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_start_time: Option<f64>,
+    /// <p> The statistics of a mitigation action task. </p>
+    #[serde(rename = "taskStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_statistics: Option<DetectMitigationActionsTaskStatistics>,
+    /// <p> The status of the task. </p>
+    #[serde(rename = "taskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
+    /// <p> Specifies the time period of which violation events occurred between. </p>
+    #[serde(rename = "violationEventOccurrenceRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_event_occurrence_range: Option<ViolationEventOccurrenceRange>,
+}
+
+/// <p> The target of a mitigation action task. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DetectMitigationActionsTaskTarget {
+    /// <p> The name of the behavior. </p>
+    #[serde(rename = "behaviorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior_name: Option<String>,
+    /// <p> The name of the security profile. </p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p> The unique identifiers of the violations. </p>
+    #[serde(rename = "violationIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_ids: Option<Vec<String>>,
+}
 
 /// <p>The input for the DisableTopicRuleRequest operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3656,10 +4065,10 @@ pub struct ElasticsearchAction {
 /// <p>Parameters used when defining a mitigation action that enable AWS IoT logging.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EnableIoTLoggingParams {
-    /// <p>Specifies the types of information to be logged.</p>
+    /// <p>Specifies the type of information to be logged.</p>
     #[serde(rename = "logLevel")]
     pub log_level: String,
-    /// <p>The ARN of the IAM role used for logging.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role used for logging.</p>
     #[serde(rename = "roleArnForLogging")]
     pub role_arn_for_logging: String,
 }
@@ -3703,10 +4112,10 @@ pub struct ExponentialRolloutRate {
     /// <p>The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.</p>
     #[serde(rename = "baseRatePerMinute")]
     pub base_rate_per_minute: i64,
-    /// <p>The exponential factor to increase the rate of rollout for a job.</p>
+    /// <p>The exponential factor to increase the rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>
     #[serde(rename = "incrementFactor")]
     pub increment_factor: f64,
-    /// <p>The criteria to initiate the increase in rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>
+    /// <p>The criteria to initiate the increase in rate of rollout for a job.</p>
     #[serde(rename = "rateIncreaseCriteria")]
     pub rate_increase_criteria: RateIncreaseCriteria,
 }
@@ -3740,6 +4149,10 @@ pub struct FileLocation {
 /// <p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FirehoseAction {
+    /// <p>Whether to deliver the Kinesis Data Firehose stream as a batch by using <a href="https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html"> <code>PutRecordBatch</code> </a>. The default value is <code>false</code>.</p> <p>When <code>batchMode</code> is <code>true</code> and the rule's SQL statement evaluates to an Array, each Array element forms one record in the <a href="https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html"> <code>PutRecordBatch</code> </a> request. The resulting array can't have more than 500 records.</p>
+    #[serde(rename = "batchMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_mode: Option<bool>,
     /// <p>The delivery stream name.</p>
     #[serde(rename = "deliveryStreamName")]
     pub delivery_stream_name: String,
@@ -3750,6 +4163,36 @@ pub struct FirehoseAction {
     #[serde(rename = "separator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub separator: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetBehaviorModelTrainingSummariesRequest {
+    /// <p> The maximum number of results to return at one time. The default is 25. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> The token for the next set of results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The name of the security profile. </p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetBehaviorModelTrainingSummariesResponse {
+    /// <p> A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> A list of all ML Detect behaviors and their model status for a given Security Profile. </p>
+    #[serde(rename = "summaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summaries: Option<Vec<BehaviorModelTrainingSummary>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3788,7 +4231,7 @@ pub struct GetEffectivePoliciesRequest {
     #[serde(rename = "cognitoIdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_identity_pool_id: Option<String>,
-    /// <p>The principal.</p>
+    /// <p>The principal. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal: Option<String>,
@@ -4218,6 +4661,10 @@ pub struct ImplicitDeny {
 /// <p>Sends message data to an AWS IoT Analytics channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotAnalyticsAction {
+    /// <p>Whether to process the action as a batch. The default value is <code>false</code>.</p> <p>When <code>batchMode</code> is <code>true</code> and the rule SQL statement evaluates to an Array, each Array element is delivered as a separate message when passed by <a href="https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_BatchPutMessage.html"> <code>BatchPutMessage</code> </a> to the AWS IoT Analytics channel. The resulting array can't have more than 100 messages.</p>
+    #[serde(rename = "batchMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_mode: Option<bool>,
     /// <p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>
     #[serde(rename = "channelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4235,10 +4682,14 @@ pub struct IotAnalyticsAction {
 /// <p>Sends an input to an AWS IoT Events detector.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotEventsAction {
+    /// <p>Whether to process the event actions as a batch. The default value is <code>false</code>.</p> <p>When <code>batchMode</code> is <code>true</code>, you can't specify a <code>messageId</code>. </p> <p>When <code>batchMode</code> is <code>true</code> and the rule SQL statement evaluates to an Array, each Array element is treated as a separate message when it's sent to AWS IoT Events by calling <a href="https://docs.aws.amazon.com/iotevents/latest/apireference/API_iotevents-data_BatchPutMessage.html"> <code>BatchPutMessage</code> </a>. The resulting array can't have more than 10 messages.</p>
+    #[serde(rename = "batchMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_mode: Option<bool>,
     /// <p>The name of the AWS IoT Events input.</p>
     #[serde(rename = "inputName")]
     pub input_name: String,
-    /// <p>[Optional] Use this to ensure that only one input (message) with a given messageId will be processed by an AWS IoT Events detector.</p>
+    /// <p>The ID of the message. The default <code>messageId</code> is a new UUID value.</p> <p>When <code>batchMode</code> is <code>true</code>, you can't specify a <code>messageId</code>--a new UUID value will be assigned.</p> <p>Assign a value to this property to ensure that only one input (message) with a given <code>messageId</code> will be processed by an AWS IoT Events detector.</p>
     #[serde(rename = "messageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<String>,
@@ -4306,6 +4757,10 @@ pub struct Job {
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>Configuration for pre-signed S3 URLs.</p>
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4539,6 +4994,28 @@ pub struct JobSummary {
     pub thing_group_id: Option<String>,
 }
 
+/// <p>Send messages to an Amazon Managed Streaming for Apache Kafka (Amazon MSK) or self-managed Apache Kafka cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct KafkaAction {
+    /// <p>Properties of the Apache Kafka producer client.</p>
+    #[serde(rename = "clientProperties")]
+    pub client_properties: ::std::collections::HashMap<String, String>,
+    /// <p>The ARN of Kafka action's VPC <code>TopicRuleDestination</code>.</p>
+    #[serde(rename = "destinationArn")]
+    pub destination_arn: String,
+    /// <p>The Kafka message key.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The Kafka message partition.</p>
+    #[serde(rename = "partition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition: Option<String>,
+    /// <p>The Kafka topic for messages to be sent to the Kafka broker.</p>
+    #[serde(rename = "topic")]
+    pub topic: String,
+}
+
 /// <p>Describes a key pair.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4579,6 +5056,14 @@ pub struct LambdaAction {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActiveViolationsRequest {
+    /// <p> The criteria for a behavior. </p>
+    #[serde(rename = "behaviorCriteriaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior_criteria_type: Option<String>,
+    /// <p> A list of all suppressed alerts. </p>
+    #[serde(rename = "listSuppressedAlerts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_suppressed_alerts: Option<bool>,
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4625,7 +5110,7 @@ pub struct ListAttachedPoliciesRequest {
     #[serde(rename = "recursive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
-    /// <p>The group or principal for which the policies will be listed.</p>
+    /// <p>The group or principal for which the policies will be listed. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "target")]
     pub target: String,
 }
@@ -4654,6 +5139,10 @@ pub struct ListAuditFindingsRequest {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    /// <p> Boolean flag indicating whether only the suppressed findings or the unsuppressed findings should be listed. If this parameter isn't provided, the response will list both suppressed and unsuppressed findings. </p>
+    #[serde(rename = "listSuppressedFindings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_suppressed_findings: Option<bool>,
     /// <p>The maximum number of results to return at one time. The default is 25.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4771,6 +5260,42 @@ pub struct ListAuditMitigationActionsTasksResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAuditSuppressionsRequest {
+    /// <p> Determines whether suppressions are listed in ascending order by expiration date or not. If parameter isn't provided, <code>ascendingOrder=true</code>. </p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ascending_order: Option<bool>,
+    #[serde(rename = "checkName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_name: Option<String>,
+    /// <p> The maximum number of results to return at one time. The default is 25. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> The token for the next set of results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "resourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<ResourceIdentifier>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAuditSuppressionsResponse {
+    /// <p> A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> List of audit suppressions. </p>
+    #[serde(rename = "suppressions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppressions: Option<Vec<AuditSuppression>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditTasksRequest {
     /// <p>The end of the time period.</p>
     #[serde(rename = "endTime")]
@@ -4783,7 +5308,7 @@ pub struct ListAuditTasksRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The beginning of the time period. Audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
+    /// <p>The beginning of the time period. Audit information is retained for a limited time (90 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
     /// <p>A filter to limit the output to audits with the specified completion status: can be one of "IN_PROGRESS", "COMPLETED", "FAILED", or "CANCELED".</p>
@@ -4854,7 +5379,7 @@ pub struct ListBillingGroupsRequest {
     #[serde(rename = "namePrefixFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_prefix_filter: Option<String>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4867,7 +5392,7 @@ pub struct ListBillingGroupsResponse {
     #[serde(rename = "billingGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_groups: Option<Vec<GroupNameAndArn>>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4970,6 +5495,110 @@ pub struct ListCertificatesResponse {
     #[serde(rename = "nextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCustomMetricsRequest {
+    /// <p> The maximum number of results to return at one time. The default is 25. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> The token for the next set of results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCustomMetricsResponse {
+    /// <p> The name of the custom metric. </p>
+    #[serde(rename = "metricNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_names: Option<Vec<String>>,
+    /// <p> A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDetectMitigationActionsExecutionsRequest {
+    /// <p> The end of the time period for which ML Detect mitigation actions executions are returned. </p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p> The maximum number of results to return at one time. The default is 25. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> The token for the next set of results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> A filter to limit results to those found after the specified time. You must specify either the startTime and endTime or the taskId, but not both. </p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p> The unique identifier of the task. </p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p> The name of the thing whose mitigation actions are listed. </p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+    /// <p> The unique identifier of the violation. </p>
+    #[serde(rename = "violationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDetectMitigationActionsExecutionsResponse {
+    /// <p> List of actions executions. </p>
+    #[serde(rename = "actionsExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_executions: Option<Vec<DetectMitigationActionExecution>>,
+    /// <p> A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDetectMitigationActionsTasksRequest {
+    /// <p> The end of the time period for which ML Detect mitigation actions tasks are returned. </p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p>The maximum number of results to return at one time. The default is 25.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> The token for the next set of results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> A filter to limit results to those found after the specified time. You must specify either the startTime and endTime or the taskId, but not both. </p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDetectMitigationActionsTasksResponse {
+    /// <p> A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The collection of ML Detect mitigation tasks that matched the filter criteria. </p>
+    #[serde(rename = "tasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tasks: Option<Vec<DetectMitigationActionsTaskSummary>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5094,6 +5723,10 @@ pub struct ListJobExecutionsForThingRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5127,6 +5760,10 @@ pub struct ListJobsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5356,7 +5993,7 @@ pub struct ListPrincipalPoliciesRequest {
     #[serde(rename = "pageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The principal.</p>
+    /// <p>The principal. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     pub principal: String,
 }
@@ -5383,7 +6020,7 @@ pub struct ListPrincipalThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5396,7 +6033,7 @@ pub struct ListPrincipalThingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalThingsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5553,7 +6190,7 @@ pub struct ListSecurityProfilesForTargetResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
-    /// <p>A filter to limit results to the security profiles that use the defined dimension.</p>
+    /// <p>A filter to limit results to the security profiles that use the defined dimension. Cannot be used with <code>metricName</code> </p>
     #[serde(rename = "dimensionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dimension_name: Option<String>,
@@ -5561,6 +6198,10 @@ pub struct ListSecurityProfilesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p> The name of the custom metric. Cannot be used with <code>dimensionName</code>. </p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
     /// <p>The token for the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5613,7 +6254,7 @@ pub struct ListStreamsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5625,7 +6266,7 @@ pub struct ListTagsForResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5700,7 +6341,7 @@ pub struct ListThingGroupsForThingRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5712,7 +6353,7 @@ pub struct ListThingGroupsForThingRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsForThingResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5733,7 +6374,7 @@ pub struct ListThingGroupsRequest {
     #[serde(rename = "namePrefixFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_prefix_filter: Option<String>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5750,7 +6391,7 @@ pub struct ListThingGroupsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5764,6 +6405,14 @@ pub struct ListThingGroupsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingPrincipalsRequest {
+    /// <p>The maximum number of results to return in this operation.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -5773,6 +6422,10 @@ pub struct ListThingPrincipalsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingPrincipalsResponse {
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The principals associated with the thing.</p>
     #[serde(rename = "principals")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5786,7 +6439,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5801,7 +6454,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTaskReportsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5822,7 +6475,7 @@ pub struct ListThingRegistrationTasksRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5835,7 +6488,7 @@ pub struct ListThingRegistrationTasksRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTasksResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5853,7 +6506,7 @@ pub struct ListThingTypesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5867,7 +6520,7 @@ pub struct ListThingTypesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingTypesResponse {
-    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token for the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5887,7 +6540,7 @@ pub struct ListThingsInBillingGroupRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5896,7 +6549,7 @@ pub struct ListThingsInBillingGroupRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInBillingGroupResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5913,7 +6566,7 @@ pub struct ListThingsInThingGroupRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5929,7 +6582,7 @@ pub struct ListThingsInThingGroupRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInThingGroupResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5955,7 +6608,7 @@ pub struct ListThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5969,7 +6622,7 @@ pub struct ListThingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5986,7 +6639,7 @@ pub struct ListTopicRuleDestinationsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5999,7 +6652,7 @@ pub struct ListTopicRuleDestinationsResponse {
     #[serde(rename = "destinationSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_summaries: Option<Vec<TopicRuleDestinationSummary>>,
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6013,7 +6666,7 @@ pub struct ListTopicRulesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token used to retrieve the next value.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6031,7 +6684,7 @@ pub struct ListTopicRulesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicRulesResponse {
-    /// <p>A token used to retrieve the next value.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6048,7 +6701,7 @@ pub struct ListV2LoggingLevelsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6065,7 +6718,7 @@ pub struct ListV2LoggingLevelsResponse {
     #[serde(rename = "logTargetConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_target_configurations: Option<Vec<LogTargetConfiguration>>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6074,9 +6727,17 @@ pub struct ListV2LoggingLevelsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListViolationEventsRequest {
+    /// <p> The criteria for a behavior. </p>
+    #[serde(rename = "behaviorCriteriaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior_criteria_type: Option<String>,
     /// <p>The end time for the alerts to be listed.</p>
     #[serde(rename = "endTime")]
     pub end_time: f64,
+    /// <p> A list of all suppressed alerts. </p>
+    #[serde(rename = "listSuppressedAlerts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_suppressed_alerts: Option<bool>,
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6150,6 +6811,14 @@ pub struct LoggingOptionsPayload {
     pub role_arn: String,
 }
 
+/// <p> The configuration of an ML Detect Security Profile. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MachineLearningDetectionConfig {
+    /// <p> The sensitivity of anomalous behavior evaluation. Can be <code>Low</code>, <code>Medium</code>, or <code>High</code>. </p>
+    #[serde(rename = "confidenceLevel")]
+    pub confidence_level: String,
+}
+
 /// <p>The dimension of a metric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricDimension {
@@ -6168,7 +6837,7 @@ pub struct MetricToRetain {
     /// <p>What is measured by the behavior.</p>
     #[serde(rename = "metric")]
     pub metric: String,
-    /// <p>The dimension of a metric.</p>
+    /// <p>The dimension of a metric. This can't be used with custom metrics.</p>
     #[serde(rename = "metricDimension")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_dimension: Option<MetricDimension>,
@@ -6185,10 +6854,22 @@ pub struct MetricValue {
     #[serde(rename = "count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
+    /// <p> The numeral value of a metric. </p>
+    #[serde(rename = "number")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number: Option<f64>,
+    /// <p> The numeral values of a metric. </p>
+    #[serde(rename = "numbers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub numbers: Option<Vec<f64>>,
     /// <p>If the <code>comparisonOperator</code> calls for a set of ports, use this to specify that set to be compared with the <code>metric</code>.</p>
     #[serde(rename = "ports")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ports: Option<Vec<i64>>,
+    /// <p> The string values of a metric. </p>
+    #[serde(rename = "strings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub strings: Option<Vec<String>>,
 }
 
 /// <p>Describes which changes should be applied as part of a mitigation action.</p>
@@ -6242,7 +6923,7 @@ pub struct MitigationActionParams {
     #[serde(rename = "enableIoTLoggingParams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_io_t_logging_params: Option<EnableIoTLoggingParams>,
-    /// <p>Parameters to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
+    /// <p>Parameters to define a mitigation action that publishes findings to Amazon Simple Notification Service (Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
     #[serde(rename = "publishFindingToSnsParams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publish_finding_to_sns_params: Option<PublishFindingToSnsParams>,
@@ -6320,6 +7001,10 @@ pub struct OTAUpdateFile {
     #[serde(rename = "fileName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
+    /// <p>An integer value you can include in the job document to allow your devices to identify the type of file received from the cloud.</p>
+    #[serde(rename = "fileType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_type: Option<i64>,
     /// <p>The file version.</p>
     #[serde(rename = "fileVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6962,7 +7647,7 @@ pub struct S3Action {
     #[serde(rename = "cannedAcl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub canned_acl: Option<String>,
-    /// <p>The object key.</p>
+    /// <p>The object key. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/list_amazons3.html">Actions, resources, and condition keys for Amazon S3</a>.</p>
     #[serde(rename = "key")]
     pub key: String,
     /// <p>The ARN of the IAM role that grants access.</p>
@@ -7085,7 +7770,7 @@ pub struct SecurityProfileIdentifier {
     /// <p>The ARN of the security profile.</p>
     #[serde(rename = "arn")]
     pub arn: String,
-    /// <p>The name you have given to the security profile.</p>
+    /// <p>The name you've given to the security profile.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -7201,7 +7886,7 @@ pub struct SetV2LoggingOptionsRequest {
     pub role_arn: Option<String>,
 }
 
-/// <p>Use Sig V4 authorization.</p>
+/// <p>For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 signing process</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigV4Authorization {
     /// <p>The ARN of the signing role.</p>
@@ -7271,7 +7956,7 @@ pub struct StartAuditMitigationActionsTaskRequest {
     /// <p>Each audit mitigation task must have a unique client request token. If you try to start a new task with the same token as a task that already exists, an exception occurs. If you omit this value, a unique client request token is generated automatically.</p>
     #[serde(rename = "clientRequestToken")]
     pub client_request_token: String,
-    /// <p>Specifies the audit findings to which the mitigation actions are applied. You can apply them to a type of audit check, to all findings from an audit, or to a speecific set of findings.</p>
+    /// <p>Specifies the audit findings to which the mitigation actions are applied. You can apply them to a type of audit check, to all findings from an audit, or to a specific set of findings.</p>
     #[serde(rename = "target")]
     pub target: AuditMitigationActionsTaskTarget,
     /// <p>A unique identifier for the task. You can use this identifier to check the status of the task or to cancel it.</p>
@@ -7283,6 +7968,44 @@ pub struct StartAuditMitigationActionsTaskRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAuditMitigationActionsTaskResponse {
     /// <p>The unique identifier for the audit mitigation task. This matches the <code>taskId</code> that you specified in the request.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartDetectMitigationActionsTaskRequest {
+    /// <p> The actions to be performed when a device has unexpected behavior. </p>
+    #[serde(rename = "actions")]
+    pub actions: Vec<String>,
+    /// <p> Each mitigation action task must have a unique client request token. If you try to create a new task with the same token as a task that already exists, an exception occurs. If you omit this value, AWS SDKs will automatically generate a unique client request. </p>
+    #[serde(rename = "clientRequestToken")]
+    pub client_request_token: String,
+    /// <p> Specifies to list only active violations. </p>
+    #[serde(rename = "includeOnlyActiveViolations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_only_active_violations: Option<bool>,
+    /// <p> Specifies to include suppressed alerts. </p>
+    #[serde(rename = "includeSuppressedAlerts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_suppressed_alerts: Option<bool>,
+    /// <p> Specifies the ML Detect findings to which the mitigation actions are applied. </p>
+    #[serde(rename = "target")]
+    pub target: DetectMitigationActionsTaskTarget,
+    /// <p> The unique identifier of the task. </p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+    /// <p> Specifies the time period of which violation events occurred between. </p>
+    #[serde(rename = "violationEventOccurrenceRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_event_occurrence_range: Option<ViolationEventOccurrenceRange>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartDetectMitigationActionsTaskResponse {
+    /// <p> The unique identifier of the task. </p>
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
@@ -7348,10 +8071,10 @@ pub struct StartThingRegistrationTaskResponse {
     pub task_id: Option<String>,
 }
 
-/// <p>A statistical ranking (percentile) which indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.</p>
+/// <p>A statistical ranking (percentile) that indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StatisticalThreshold {
-    /// <p>The percentile which resolves to a threshold value by which compliance with a behavior is determined. Metrics are collected over the specified period (<code>durationSeconds</code>) from all reporting devices in your account and statistical ranks are calculated. Then, the measurements from a device are collected over the same period. If the accumulated measurements from the device fall above or below (<code>comparisonOperator</code>) the value associated with the percentile specified, then the device is considered to be in compliance with the behavior, otherwise a violation occurs.</p>
+    /// <p>The percentile that resolves to a threshold value by which compliance with a behavior is determined. Metrics are collected over the specified period (<code>durationSeconds</code>) from all reporting devices in your account and statistical ranks are calculated. Then, the measurements from a device are collected over the same period. If the accumulated measurements from the device fall above or below (<code>comparisonOperator</code>) the value associated with the percentile specified, then the device is considered to be in compliance with the behavior, otherwise a violation occurs.</p>
     #[serde(rename = "statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistic: Option<String>,
@@ -7617,7 +8340,7 @@ pub struct TestAuthorizationRequest {
     #[serde(rename = "policyNamesToSkip")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_names_to_skip: Option<Vec<String>>,
-    /// <p>The principal.</p>
+    /// <p>The principal. Valid principals are CertificateArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:cert/<i>certificateId</i>), thingGroupArn (arn:aws:iot:<i>region</i>:<i>accountId</i>:thinggroup/<i>groupName</i>) and CognitoId (<i>region</i>:<i>id</i>).</p>
     #[serde(rename = "principal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal: Option<String>,
@@ -7914,6 +8637,49 @@ pub struct TimeoutConfig {
     pub in_progress_timeout_in_minutes: Option<i64>,
 }
 
+/// <p>The Timestream rule action writes attributes (measures) from an MQTT message into an Amazon Timestream table. For more information, see the <a href="https://docs.aws.amazon.com/iot/latest/developerguide/timestream-rule-action.html">Timestream</a> topic rule action documentation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TimestreamAction {
+    /// <p>The name of an Amazon Timestream database.</p>
+    #[serde(rename = "databaseName")]
+    pub database_name: String,
+    /// <p>Metadata attributes of the time series that are written in each measure record.</p>
+    #[serde(rename = "dimensions")]
+    pub dimensions: Vec<TimestreamDimension>,
+    /// <p>The ARN of the role that grants permission to write to the Amazon Timestream database table.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>The name of the database table into which to write the measure records.</p>
+    #[serde(rename = "tableName")]
+    pub table_name: String,
+    /// <p>Specifies an application-defined value to replace the default value assigned to the Timestream record's timestamp in the <code>time</code> column.</p> <p>You can use this property to specify the value and the precision of the Timestream record's timestamp. You can specify a value from the message payload or a value computed by a substitution template.</p> <p>If omitted, the topic rule action assigns the timestamp, in milliseconds, at the time it processed the rule. </p>
+    #[serde(rename = "timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<TimestreamTimestamp>,
+}
+
+/// <p>Metadata attributes of the time series that are written in each measure record.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TimestreamDimension {
+    /// <p>The metadata dimension name. This is the name of the column in the Amazon Timestream database table record.</p> <p>Dimensions cannot be named: <code>measure_name</code>, <code>measure_value</code>, or <code>time</code>. These names are reserved. Dimension names cannot start with <code>ts_</code> or <code>measure_value</code> and they cannot contain the colon (<code>:</code>) character.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The value to write in this column of the database record.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
+/// <p>Describes how to interpret an application-defined timestamp value from an MQTT message payload and the precision of that value.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TimestreamTimestamp {
+    /// <p>The precision of the timestamp value that results from the expression described in <code>value</code>.</p> <p>Valid values: <code>SECONDS</code> | <code>MILLISECONDS</code> | <code>MICROSECONDS</code> | <code>NANOSECONDS</code>. The default is <code>MILLISECONDS</code>.</p>
+    #[serde(rename = "unit")]
+    pub unit: String,
+    /// <p>An expression that returns a long epoch time value.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
 /// <p>Specifies the TLS context to use for the test authorizer request.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7970,10 +8736,18 @@ pub struct TopicRuleDestination {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The date and time when the topic rule destination was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
     /// <p>Properties of the HTTP URL.</p>
     #[serde(rename = "httpUrlProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_url_properties: Option<HttpUrlDestinationProperties>,
+    /// <p>The date and time when the topic rule destination was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
     /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7982,6 +8756,10 @@ pub struct TopicRuleDestination {
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
+    /// <p>Properties of the virtual private cloud (VPC) connection.</p>
+    #[serde(rename = "vpcProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_properties: Option<VpcDestinationProperties>,
 }
 
 /// <p>Configuration of the topic rule destination.</p>
@@ -7992,6 +8770,10 @@ pub struct TopicRuleDestinationConfiguration {
     #[serde(rename = "httpUrlConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_url_configuration: Option<HttpUrlDestinationConfiguration>,
+    /// <p>Configuration of the virtual private cloud (VPC) connection.</p>
+    #[serde(rename = "vpcConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_configuration: Option<VpcDestinationConfiguration>,
 }
 
 /// <p>Information about the topic rule destination.</p>
@@ -8002,10 +8784,18 @@ pub struct TopicRuleDestinationSummary {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The date and time when the topic rule destination was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
     /// <p>Information about the HTTP URL.</p>
     #[serde(rename = "httpUrlSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_url_summary: Option<HttpUrlDestinationSummary>,
+    /// <p>The date and time when the topic rule destination was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
     /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8014,6 +8804,10 @@ pub struct TopicRuleDestinationSummary {
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
+    /// <p>Information about the virtual private cloud (VPC) connection.</p>
+    #[serde(rename = "vpcDestinationSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_destination_summary: Option<VpcDestinationSummary>,
 }
 
 /// <p>Describes a rule.</p>
@@ -8065,7 +8859,7 @@ pub struct TopicRulePayload {
     #[serde(rename = "ruleDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_disabled: Option<bool>,
-    /// <p>The SQL statement used to query the topic. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html#aws-iot-sql-reference">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    /// <p>The SQL statement used to query the topic. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-sql-reference.html">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>
     #[serde(rename = "sql")]
     pub sql: String,
 }
@@ -8140,7 +8934,7 @@ pub struct UntagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountAuditConfigurationRequest {
-    /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are currently enabled.</p> <p>Some data collection might start immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required and must specify at least one enabled check.</p>
+    /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are currently enabled.</p> <p>Some data collection might start immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it's used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required and must specify at least one enabled check.</p>
     #[serde(rename = "auditCheckConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_check_configurations:
@@ -8150,7 +8944,7 @@ pub struct UpdateAccountAuditConfigurationRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_notification_target_configurations:
         Option<::std::collections::HashMap<String, AuditNotificationTarget>>,
-    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as required when performing an audit.</p>
+    /// <p>The Amazon Resource Name (ARN) of the role that grants permission to AWS IoT to access information about your devices, policies, certificates, and other items as required when performing an audit.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
@@ -8159,6 +8953,31 @@ pub struct UpdateAccountAuditConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountAuditConfigurationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAuditSuppressionRequest {
+    #[serde(rename = "checkName")]
+    pub check_name: String,
+    /// <p> The description of the audit suppression. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> The expiration date (epoch timestamp in seconds) that you want the suppression to adhere to. </p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    #[serde(rename = "resourceIdentifier")]
+    pub resource_identifier: ResourceIdentifier,
+    /// <p> Indicates whether a suppression should exist indefinitely or not. </p>
+    #[serde(rename = "suppressIndefinitely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress_indefinitely: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAuditSuppressionResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8224,7 +9043,7 @@ pub struct UpdateBillingGroupResponse {
 /// <p>Parameters to define a mitigation action that changes the state of the CA certificate to inactive.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateCACertificateParams {
-    /// <p>The action that you want to apply to the CA cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
+    /// <p>The action that you want to apply to the CA certificate. The only supported value is <code>DEACTIVATE</code>.</p>
     #[serde(rename = "action")]
     pub action: String,
 }
@@ -8266,10 +9085,50 @@ pub struct UpdateCertificateRequest {
     pub new_status: String,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateCustomMetricRequest {
+    /// <p> Field represents a friendly name in the console for the custom metric, it doesn't have to be unique. Don't use this name as the metric identifier in the device metric report. Can be updated. </p>
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// <p> The name of the custom metric. Cannot be updated. </p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateCustomMetricResponse {
+    /// <p> The creation date of the custom metric in milliseconds since epoch. </p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p> A friendly name in the console for the custom metric </p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p> The time the custom metric was last modified in milliseconds since epoch. </p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p> The Amazon Resource Number (ARN) of the custom metric. </p>
+    #[serde(rename = "metricArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_arn: Option<String>,
+    /// <p> The name of the custom metric. </p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+    /// <p> The type of the custom metric. Types include <code>string-list</code>, <code>ip-address-list</code>, <code>number-list</code>, and <code>number</code>. </p>
+    #[serde(rename = "metricType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_type: Option<String>,
+}
+
 /// <p>Parameters to define a mitigation action that changes the state of the device certificate to inactive.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateDeviceCertificateParams {
-    /// <p>The action that you want to apply to the device cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
+    /// <p>The action that you want to apply to the device certificate. The only supported value is <code>DEACTIVATE</code>.</p>
     #[serde(rename = "action")]
     pub action: String,
 }
@@ -8288,7 +9147,7 @@ pub struct UpdateDimensionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDimensionResponse {
-    /// <p>The ARN (Amazon resource name) of the created dimension.</p>
+    /// <p>The Amazon Resource Name (ARN)of the created dimension.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -8431,6 +9290,10 @@ pub struct UpdateJobRequest {
     /// <p>The ID of the job to be updated.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
+    #[serde(rename = "namespaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
     /// <p>Configuration information for pre-signed S3 URLs.</p>
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8444,7 +9307,7 @@ pub struct UpdateJobRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMitigationActionRequest {
-    /// <p>The friendly name for the mitigation action. You can't change the name by using <code>UpdateMitigationAction</code>. Instead, you must delete and re-create the mitigation action with the new name.</p>
+    /// <p>The friendly name for the mitigation action. You cannot change the name by using <code>UpdateMitigationAction</code>. Instead, you must delete and recreate the mitigation action with the new name.</p>
     #[serde(rename = "actionName")]
     pub action_name: String,
     /// <p>Defines the type of action and the parameters for that action.</p>
@@ -8538,15 +9401,15 @@ pub struct UpdateRoleAliasResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScheduledAuditRequest {
-    /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
+    /// <p>The day of the month on which the scheduled audit takes place. This can be <code>1</code> through <code>31</code> or <code>LAST</code>. This field is required if the <code>frequency</code> parameter is set to <code>MONTHLY</code>. If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    /// <p>The day of the week on which the scheduled audit takes place. This can be one of <code>SUN</code>, <code>MON</code>, <code>TUE</code>, <code>WED</code>, <code>THU</code>, <code>FRI</code>, or <code>SAT</code>. This field is required if the "frequency" parameter is set to <code>WEEKLY</code> or <code>BIWEEKLY</code>.</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY", or "MONTHLY". The start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place, either <code>DAILY</code>, <code>WEEKLY</code>, <code>BIWEEKLY</code>, or <code>MONTHLY</code>. The start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
@@ -8571,7 +9434,7 @@ pub struct UpdateScheduledAuditResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityProfileRequest {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here. Can be used with custom metrics; cannot be used with dimensions.</p>
     #[serde(rename = "additionalMetricsToRetainV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain_v2: Option<Vec<MetricToRetain>>,
@@ -8611,7 +9474,7 @@ pub struct UpdateSecurityProfileRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecurityProfileResponse {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here. Can be used with custom metrics; cannot be used with dimensions.</p>
     #[serde(rename = "additionalMetricsToRetainV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain_v2: Option<Vec<MetricToRetain>>,
@@ -8819,7 +9682,7 @@ pub struct ValidationError {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ViolationEvent {
-    /// <p>The behavior which was violated.</p>
+    /// <p>The behavior that was violated.</p>
     #[serde(rename = "behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub behavior: Option<Behavior>,
@@ -8835,6 +9698,10 @@ pub struct ViolationEvent {
     #[serde(rename = "thingName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_name: Option<String>,
+    /// <p> The details of a violation event. </p>
+    #[serde(rename = "violationEventAdditionalInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_event_additional_info: Option<ViolationEventAdditionalInfo>,
     /// <p>The time the violation event occurred.</p>
     #[serde(rename = "violationEventTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8847,6 +9714,90 @@ pub struct ViolationEvent {
     #[serde(rename = "violationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub violation_id: Option<String>,
+}
+
+/// <p> The details of a violation event. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ViolationEventAdditionalInfo {
+    /// <p> The sensitivity of anomalous behavior evaluation. Can be <code>Low</code>, <code>Medium</code>, or <code>High</code>. </p>
+    #[serde(rename = "confidenceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence_level: Option<String>,
+}
+
+/// <p> Specifies the time period of which violation events occurred between. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ViolationEventOccurrenceRange {
+    /// <p> The end date and time of a time period in which violation events occurred. </p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p> The start date and time of a time period in which violation events occurred. </p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+}
+
+/// <p>The configuration information for a virtual private cloud (VPC) destination.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct VpcDestinationConfiguration {
+    /// <p>The ARN of a role that has permission to create and attach to elastic network interfaces (ENIs).</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>The security groups of the VPC destination.</p>
+    #[serde(rename = "securityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
+    /// <p>The subnet IDs of the VPC destination.</p>
+    #[serde(rename = "subnetIds")]
+    pub subnet_ids: Vec<String>,
+    /// <p>The ID of the VPC.</p>
+    #[serde(rename = "vpcId")]
+    pub vpc_id: String,
+}
+
+/// <p>The properties of a virtual private cloud (VPC) destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VpcDestinationProperties {
+    /// <p>The ARN of a role that has permission to create and attach to elastic network interfaces (ENIs).</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The security groups of the VPC destination.</p>
+    #[serde(rename = "securityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
+    /// <p>The subnet IDs of the VPC destination.</p>
+    #[serde(rename = "subnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>The ID of the VPC.</p>
+    #[serde(rename = "vpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>The summary of a virtual private cloud (VPC) destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VpcDestinationSummary {
+    /// <p>The ARN of a role that has permission to create and attach to elastic network interfaces (ENIs).</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The security groups of the VPC destination.</p>
+    #[serde(rename = "securityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
+    /// <p>The subnet IDs of the VPC destination.</p>
+    #[serde(rename = "subnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>The ID of the VPC.</p>
+    #[serde(rename = "vpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
 }
 
 /// Errors returned by AcceptCertificateTransfer
@@ -9567,6 +10518,70 @@ impl fmt::Display for CancelCertificateTransferError {
     }
 }
 impl Error for CancelCertificateTransferError {}
+/// Errors returned by CancelDetectMitigationActionsTask
+#[derive(Debug, PartialEq)]
+pub enum CancelDetectMitigationActionsTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CancelDetectMitigationActionsTaskError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CancelDetectMitigationActionsTaskError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        CancelDetectMitigationActionsTaskError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        CancelDetectMitigationActionsTaskError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CancelDetectMitigationActionsTaskError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        CancelDetectMitigationActionsTaskError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelDetectMitigationActionsTaskError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelDetectMitigationActionsTaskError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelDetectMitigationActionsTaskError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelDetectMitigationActionsTaskError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelDetectMitigationActionsTaskError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CancelDetectMitigationActionsTaskError {}
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
@@ -9817,6 +10832,68 @@ impl fmt::Display for ConfirmTopicRuleDestinationError {
     }
 }
 impl Error for ConfirmTopicRuleDestinationError {}
+/// Errors returned by CreateAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum CreateAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CreateAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateAuditSuppressionError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAuditSuppressionError {}
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
@@ -9997,6 +11074,62 @@ impl fmt::Display for CreateCertificateFromCsrError {
     }
 }
 impl Error for CreateCertificateFromCsrError {}
+/// Errors returned by CreateCustomMetric
+#[derive(Debug, PartialEq)]
+pub enum CreateCustomMetricError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CreateCustomMetricError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomMetricError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateCustomMetricError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateCustomMetricError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateCustomMetricError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateCustomMetricError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateCustomMetricError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateCustomMetricError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCustomMetricError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetricError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetricError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetricError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateCustomMetricError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateCustomMetricError {}
 /// Errors returned by CreateDimension
 #[derive(Debug, PartialEq)]
 pub enum CreateDimensionError {
@@ -11495,6 +12628,52 @@ impl fmt::Display for DeleteAccountAuditConfigurationError {
     }
 }
 impl Error for DeleteAccountAuditConfigurationError {}
+/// Errors returned by DeleteAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum DeleteAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DeleteAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAuditSuppressionError {}
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
@@ -11755,6 +12934,48 @@ impl fmt::Display for DeleteCertificateError {
     }
 }
 impl Error for DeleteCertificateError {}
+/// Errors returned by DeleteCustomMetric
+#[derive(Debug, PartialEq)]
+pub enum DeleteCustomMetricError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DeleteCustomMetricError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomMetricError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteCustomMetricError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteCustomMetricError::InvalidRequest(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteCustomMetricError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCustomMetricError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCustomMetricError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteCustomMetricError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteCustomMetricError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteCustomMetricError {}
 /// Errors returned by DeleteDimension
 #[derive(Debug, PartialEq)]
 pub enum DeleteDimensionError {
@@ -12292,6 +13513,8 @@ impl Error for DeletePolicyVersionError {}
 /// Errors returned by DeleteProvisioningTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisioningTemplateError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
     /// <p>An unexpected error has occurred.</p>
@@ -12312,6 +13535,11 @@ impl DeleteProvisioningTemplateError {
     ) -> RusotoError<DeleteProvisioningTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
                 "DeleteConflictException" => {
                     return RusotoError::Service(DeleteProvisioningTemplateError::DeleteConflict(
                         err.msg,
@@ -12353,6 +13581,9 @@ impl fmt::Display for DeleteProvisioningTemplateError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteProvisioningTemplateError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteProvisioningTemplateError::DeleteConflict(ref cause) => write!(f, "{}", cause),
             DeleteProvisioningTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
             DeleteProvisioningTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
@@ -12366,6 +13597,8 @@ impl Error for DeleteProvisioningTemplateError {}
 /// Errors returned by DeleteProvisioningTemplateVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisioningTemplateVersionError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
     /// <p>An unexpected error has occurred.</p>
@@ -12386,6 +13619,11 @@ impl DeleteProvisioningTemplateVersionError {
     ) -> RusotoError<DeleteProvisioningTemplateVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
                 "DeleteConflictException" => {
                     return RusotoError::Service(
                         DeleteProvisioningTemplateVersionError::DeleteConflict(err.msg),
@@ -12427,6 +13665,9 @@ impl fmt::Display for DeleteProvisioningTemplateVersionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteProvisioningTemplateVersionError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteProvisioningTemplateVersionError::DeleteConflict(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -13311,6 +14552,60 @@ impl fmt::Display for DescribeAuditMitigationActionsTaskError {
     }
 }
 impl Error for DescribeAuditMitigationActionsTaskError {}
+/// Errors returned by DescribeAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum DescribeAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAuditSuppressionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAuditSuppressionError {}
 /// Errors returned by DescribeAuditTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuditTaskError {
@@ -13605,6 +14900,58 @@ impl fmt::Display for DescribeCertificateError {
     }
 }
 impl Error for DescribeCertificateError {}
+/// Errors returned by DescribeCustomMetric
+#[derive(Debug, PartialEq)]
+pub enum DescribeCustomMetricError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeCustomMetricError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCustomMetricError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeCustomMetricError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeCustomMetricError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeCustomMetricError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeCustomMetricError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeCustomMetricError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeCustomMetricError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeCustomMetricError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeCustomMetricError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeCustomMetricError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeCustomMetricError {}
 /// Errors returned by DescribeDefaultAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DescribeDefaultAuthorizerError {
@@ -13677,6 +15024,72 @@ impl fmt::Display for DescribeDefaultAuthorizerError {
     }
 }
 impl Error for DescribeDefaultAuthorizerError {}
+/// Errors returned by DescribeDetectMitigationActionsTask
+#[derive(Debug, PartialEq)]
+pub enum DescribeDetectMitigationActionsTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeDetectMitigationActionsTaskError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDetectMitigationActionsTaskError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        DescribeDetectMitigationActionsTaskError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DescribeDetectMitigationActionsTaskError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeDetectMitigationActionsTaskError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        DescribeDetectMitigationActionsTaskError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeDetectMitigationActionsTaskError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDetectMitigationActionsTaskError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDetectMitigationActionsTaskError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDetectMitigationActionsTaskError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDetectMitigationActionsTaskError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeDetectMitigationActionsTaskError {}
 /// Errors returned by DescribeDimension
 #[derive(Debug, PartialEq)]
 pub enum DescribeDimensionError {
@@ -15079,6 +16492,70 @@ impl fmt::Display for EnableTopicRuleError {
     }
 }
 impl Error for EnableTopicRuleError {}
+/// Errors returned by GetBehaviorModelTrainingSummaries
+#[derive(Debug, PartialEq)]
+pub enum GetBehaviorModelTrainingSummariesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl GetBehaviorModelTrainingSummariesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetBehaviorModelTrainingSummariesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        GetBehaviorModelTrainingSummariesError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        GetBehaviorModelTrainingSummariesError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetBehaviorModelTrainingSummariesError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        GetBehaviorModelTrainingSummariesError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetBehaviorModelTrainingSummariesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetBehaviorModelTrainingSummariesError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetBehaviorModelTrainingSummariesError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetBehaviorModelTrainingSummariesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetBehaviorModelTrainingSummariesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetBehaviorModelTrainingSummariesError {}
 /// Errors returned by GetCardinality
 #[derive(Debug, PartialEq)]
 pub enum GetCardinalityError {
@@ -16197,6 +17674,52 @@ impl fmt::Display for ListAuditMitigationActionsTasksError {
     }
 }
 impl Error for ListAuditMitigationActionsTasksError {}
+/// Errors returned by ListAuditSuppressions
+#[derive(Debug, PartialEq)]
+pub enum ListAuditSuppressionsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListAuditSuppressionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAuditSuppressionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListAuditSuppressionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListAuditSuppressionsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListAuditSuppressionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAuditSuppressionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAuditSuppressionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAuditSuppressionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAuditSuppressionsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAuditSuppressionsError {}
 /// Errors returned by ListAuditTasks
 #[derive(Debug, PartialEq)]
 pub enum ListAuditTasksError {
@@ -16509,6 +18032,158 @@ impl fmt::Display for ListCertificatesByCAError {
     }
 }
 impl Error for ListCertificatesByCAError {}
+/// Errors returned by ListCustomMetrics
+#[derive(Debug, PartialEq)]
+pub enum ListCustomMetricsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListCustomMetricsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCustomMetricsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListCustomMetricsError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListCustomMetricsError::InvalidRequest(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListCustomMetricsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCustomMetricsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCustomMetricsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListCustomMetricsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListCustomMetricsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListCustomMetricsError {}
+/// Errors returned by ListDetectMitigationActionsExecutions
+#[derive(Debug, PartialEq)]
+pub enum ListDetectMitigationActionsExecutionsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListDetectMitigationActionsExecutionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDetectMitigationActionsExecutionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        ListDetectMitigationActionsExecutionsError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        ListDetectMitigationActionsExecutionsError::InvalidRequest(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        ListDetectMitigationActionsExecutionsError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDetectMitigationActionsExecutionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDetectMitigationActionsExecutionsError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDetectMitigationActionsExecutionsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDetectMitigationActionsExecutionsError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListDetectMitigationActionsExecutionsError {}
+/// Errors returned by ListDetectMitigationActionsTasks
+#[derive(Debug, PartialEq)]
+pub enum ListDetectMitigationActionsTasksError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListDetectMitigationActionsTasksError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDetectMitigationActionsTasksError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        ListDetectMitigationActionsTasksError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        ListDetectMitigationActionsTasksError::InvalidRequest(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListDetectMitigationActionsTasksError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDetectMitigationActionsTasksError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDetectMitigationActionsTasksError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDetectMitigationActionsTasksError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDetectMitigationActionsTasksError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDetectMitigationActionsTasksError {}
 /// Errors returned by ListDimensions
 #[derive(Debug, PartialEq)]
 pub enum ListDimensionsError {
@@ -17888,6 +19563,8 @@ pub enum ListThingGroupsError {
     InvalidRequest(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
 }
 
 impl ListThingGroupsError {
@@ -17903,6 +19580,9 @@ impl ListThingGroupsError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListThingGroupsError::ResourceNotFound(err.msg))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThingGroupsError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -17917,6 +19597,7 @@ impl fmt::Display for ListThingGroupsError {
             ListThingGroupsError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListThingGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListThingGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -17930,6 +19611,8 @@ pub enum ListThingGroupsForThingError {
     InvalidRequest(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
 }
 
 impl ListThingGroupsForThingError {
@@ -17951,6 +19634,9 @@ impl ListThingGroupsForThingError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThingGroupsForThingError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -17965,6 +19651,7 @@ impl fmt::Display for ListThingGroupsForThingError {
             ListThingGroupsForThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListThingGroupsForThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListThingGroupsForThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsForThingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -18326,6 +20013,8 @@ pub enum ListThingsInThingGroupError {
     InvalidRequest(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
 }
 
 impl ListThingsInThingGroupError {
@@ -18347,6 +20036,9 @@ impl ListThingsInThingGroupError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThingsInThingGroupError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -18361,6 +20053,7 @@ impl fmt::Display for ListThingsInThingGroupError {
             ListThingsInThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListThingsInThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListThingsInThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingsInThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -19426,6 +21119,8 @@ pub enum SetV2LoggingLevelError {
     Internal(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
     /// <p>The resource is not configured.</p>
     NotConfigured(String),
     /// <p>The service is temporarily unavailable.</p>
@@ -19441,6 +21136,9 @@ impl SetV2LoggingLevelError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(SetV2LoggingLevelError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(SetV2LoggingLevelError::LimitExceeded(err.msg))
                 }
                 "NotConfiguredException" => {
                     return RusotoError::Service(SetV2LoggingLevelError::NotConfigured(err.msg))
@@ -19463,6 +21161,7 @@ impl fmt::Display for SetV2LoggingLevelError {
         match *self {
             SetV2LoggingLevelError::Internal(ref cause) => write!(f, "{}", cause),
             SetV2LoggingLevelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetV2LoggingLevelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             SetV2LoggingLevelError::NotConfigured(ref cause) => write!(f, "{}", cause),
             SetV2LoggingLevelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
@@ -19522,7 +21221,7 @@ pub enum StartAuditMitigationActionsTaskError {
     InvalidRequest(String),
     /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
-    /// <p>This exception occurs if you attempt to start a task with the same task-id as an existing task but with a different clientRequestToken.</p>
+    /// <p> This exception occurs if you attempt to start a task with the same task-id as an existing task but with a different clientRequestToken. </p>
     TaskAlreadyExists(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
@@ -19587,6 +21286,80 @@ impl fmt::Display for StartAuditMitigationActionsTaskError {
     }
 }
 impl Error for StartAuditMitigationActionsTaskError {}
+/// Errors returned by StartDetectMitigationActionsTask
+#[derive(Debug, PartialEq)]
+pub enum StartDetectMitigationActionsTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p> This exception occurs if you attempt to start a task with the same task-id as an existing task but with a different clientRequestToken. </p>
+    TaskAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl StartDetectMitigationActionsTaskError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartDetectMitigationActionsTaskError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        StartDetectMitigationActionsTaskError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        StartDetectMitigationActionsTaskError::InvalidRequest(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        StartDetectMitigationActionsTaskError::LimitExceeded(err.msg),
+                    )
+                }
+                "TaskAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        StartDetectMitigationActionsTaskError::TaskAlreadyExists(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StartDetectMitigationActionsTaskError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartDetectMitigationActionsTaskError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartDetectMitigationActionsTaskError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDetectMitigationActionsTaskError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDetectMitigationActionsTaskError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDetectMitigationActionsTaskError::TaskAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDetectMitigationActionsTaskError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartDetectMitigationActionsTaskError {}
 /// Errors returned by StartOnDemandAuditTask
 #[derive(Debug, PartialEq)]
 pub enum StartOnDemandAuditTaskError {
@@ -20141,6 +21914,60 @@ impl fmt::Display for UpdateAccountAuditConfigurationError {
     }
 }
 impl Error for UpdateAccountAuditConfigurationError {}
+/// Errors returned by UpdateAuditSuppression
+#[derive(Debug, PartialEq)]
+pub enum UpdateAuditSuppressionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl UpdateAuditSuppressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuditSuppressionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateAuditSuppressionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAuditSuppressionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAuditSuppressionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAuditSuppressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAuditSuppressionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAuditSuppressionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAuditSuppressionError {}
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
@@ -20393,6 +22220,54 @@ impl fmt::Display for UpdateCertificateError {
     }
 }
 impl Error for UpdateCertificateError {}
+/// Errors returned by UpdateCustomMetric
+#[derive(Debug, PartialEq)]
+pub enum UpdateCustomMetricError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl UpdateCustomMetricError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCustomMetricError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateCustomMetricError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateCustomMetricError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateCustomMetricError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateCustomMetricError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateCustomMetricError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateCustomMetricError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateCustomMetricError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateCustomMetricError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCustomMetricError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateCustomMetricError {}
 /// Errors returned by UpdateDimension
 #[derive(Debug, PartialEq)]
 pub enum UpdateDimensionError {
@@ -21471,7 +23346,7 @@ pub trait Iot {
         RusotoError<CancelAuditMitigationActionsTaskError>,
     >;
 
-    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
+    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on demand. If the audit isn't in progress, an "InvalidRequestException" occurs.</p>
     async fn cancel_audit_task(
         &self,
         input: CancelAuditTaskRequest,
@@ -21482,6 +23357,15 @@ pub trait Iot {
         &self,
         input: CancelCertificateTransferRequest,
     ) -> Result<(), RusotoError<CancelCertificateTransferError>>;
+
+    /// <p> Cancels a Device Defender ML Detect mitigation action. </p>
+    async fn cancel_detect_mitigation_actions_task(
+        &self,
+        input: CancelDetectMitigationActionsTaskRequest,
+    ) -> Result<
+        CancelDetectMitigationActionsTaskResponse,
+        RusotoError<CancelDetectMitigationActionsTaskError>,
+    >;
 
     /// <p>Cancels a job.</p>
     async fn cancel_job(
@@ -21506,6 +23390,12 @@ pub trait Iot {
         input: ConfirmTopicRuleDestinationRequest,
     ) -> Result<ConfirmTopicRuleDestinationResponse, RusotoError<ConfirmTopicRuleDestinationError>>;
 
+    /// <p> Creates a Device Defender audit suppression. </p>
+    async fn create_audit_suppression(
+        &self,
+        input: CreateAuditSuppressionRequest,
+    ) -> Result<CreateAuditSuppressionResponse, RusotoError<CreateAuditSuppressionError>>;
+
     /// <p>Creates an authorizer.</p>
     async fn create_authorizer(
         &self,
@@ -21523,6 +23413,12 @@ pub trait Iot {
         &self,
         input: CreateCertificateFromCsrRequest,
     ) -> Result<CreateCertificateFromCsrResponse, RusotoError<CreateCertificateFromCsrError>>;
+
+    /// <p> Use this API to define a Custom Metric published by your devices to Device Defender. </p>
+    async fn create_custom_metric(
+        &self,
+        input: CreateCustomMetricRequest,
+    ) -> Result<CreateCustomMetricResponse, RusotoError<CreateCustomMetricError>>;
 
     /// <p>Create a dimension that you can use to limit the scope of a metric used in a security profile for AWS IoT Device Defender. For example, using a <code>TOPIC_FILTER</code> dimension, you can narrow down the scope of the metric only to MQTT topics whose name match the pattern specified in the dimension.</p>
     async fn create_dimension(
@@ -21554,7 +23450,7 @@ pub trait Iot {
         input: CreateKeysAndCertificateRequest,
     ) -> Result<CreateKeysAndCertificateResponse, RusotoError<CreateKeysAndCertificateError>>;
 
-    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
+    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Only certain types of mitigation actions can be applied to specific check names. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-defender-mitigation-actions.html">Mitigation actions</a>. Each mitigation action can apply only one type of change.</p>
     async fn create_mitigation_action(
         &self,
         input: CreateMitigationActionRequest,
@@ -21662,6 +23558,12 @@ pub trait Iot {
         RusotoError<DeleteAccountAuditConfigurationError>,
     >;
 
+    /// <p> Deletes a Device Defender audit suppression. </p>
+    async fn delete_audit_suppression(
+        &self,
+        input: DeleteAuditSuppressionRequest,
+    ) -> Result<DeleteAuditSuppressionResponse, RusotoError<DeleteAuditSuppressionError>>;
+
     /// <p>Deletes an authorizer.</p>
     async fn delete_authorizer(
         &self,
@@ -21685,6 +23587,12 @@ pub trait Iot {
         &self,
         input: DeleteCertificateRequest,
     ) -> Result<(), RusotoError<DeleteCertificateError>>;
+
+    /// <p><note> <p>Before you can delete a custom metric, you must first remove the custom metric from all security profiles it&#39;s a part of. The security profile associated with the custom metric can be found using the <a href="https://docs.aws.amazon.com/iot/latest/apireference/API_ListSecurityProfiles.html">ListSecurityProfiles</a> API with <code>metricName</code> set to your custom metric name.</p> </note> <p> Deletes a Device Defender detect custom metric. </p></p>
+    async fn delete_custom_metric(
+        &self,
+        input: DeleteCustomMetricRequest,
+    ) -> Result<DeleteCustomMetricResponse, RusotoError<DeleteCustomMetricError>>;
 
     /// <p>Removes the specified dimension from your AWS account.</p>
     async fn delete_dimension(
@@ -21831,7 +23739,7 @@ pub trait Iot {
         RusotoError<DescribeAccountAuditConfigurationError>,
     >;
 
-    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
+    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and the start time when the audit that returned the finding.</p>
     async fn describe_audit_finding(
         &self,
         input: DescribeAuditFindingRequest,
@@ -21845,6 +23753,12 @@ pub trait Iot {
         DescribeAuditMitigationActionsTaskResponse,
         RusotoError<DescribeAuditMitigationActionsTaskError>,
     >;
+
+    /// <p> Gets information about a Device Defender audit suppression. </p>
+    async fn describe_audit_suppression(
+        &self,
+        input: DescribeAuditSuppressionRequest,
+    ) -> Result<DescribeAuditSuppressionResponse, RusotoError<DescribeAuditSuppressionError>>;
 
     /// <p>Gets information about a Device Defender audit.</p>
     async fn describe_audit_task(
@@ -21876,10 +23790,25 @@ pub trait Iot {
         input: DescribeCertificateRequest,
     ) -> Result<DescribeCertificateResponse, RusotoError<DescribeCertificateError>>;
 
+    /// <p> Gets information about a Device Defender detect custom metric. </p>
+    async fn describe_custom_metric(
+        &self,
+        input: DescribeCustomMetricRequest,
+    ) -> Result<DescribeCustomMetricResponse, RusotoError<DescribeCustomMetricError>>;
+
     /// <p>Describes the default authorizer.</p>
     async fn describe_default_authorizer(
         &self,
     ) -> Result<DescribeDefaultAuthorizerResponse, RusotoError<DescribeDefaultAuthorizerError>>;
+
+    /// <p> Gets information about a Device Defender ML Detect mitigation action. </p>
+    async fn describe_detect_mitigation_actions_task(
+        &self,
+        input: DescribeDetectMitigationActionsTaskRequest,
+    ) -> Result<
+        DescribeDetectMitigationActionsTaskResponse,
+        RusotoError<DescribeDetectMitigationActionsTaskError>,
+    >;
 
     /// <p>Provides details about a dimension that is defined in your AWS account.</p>
     async fn describe_dimension(
@@ -22030,6 +23959,15 @@ pub trait Iot {
         input: EnableTopicRuleRequest,
     ) -> Result<(), RusotoError<EnableTopicRuleError>>;
 
+    /// <p> Returns a Device Defender's ML Detect Security Profile training model's status. </p>
+    async fn get_behavior_model_training_summaries(
+        &self,
+        input: GetBehaviorModelTrainingSummariesRequest,
+    ) -> Result<
+        GetBehaviorModelTrainingSummariesResponse,
+        RusotoError<GetBehaviorModelTrainingSummariesError>,
+    >;
+
     /// <p>Returns the approximate count of unique values that match the query.</p>
     async fn get_cardinality(
         &self,
@@ -22122,7 +24060,7 @@ pub trait Iot {
         input: ListAttachedPoliciesRequest,
     ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>>;
 
-    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 90 days.)</p>
     async fn list_audit_findings(
         &self,
         input: ListAuditFindingsRequest,
@@ -22145,6 +24083,12 @@ pub trait Iot {
         ListAuditMitigationActionsTasksResponse,
         RusotoError<ListAuditMitigationActionsTasksError>,
     >;
+
+    /// <p> Lists your Device Defender audit listings. </p>
+    async fn list_audit_suppressions(
+        &self,
+        input: ListAuditSuppressionsRequest,
+    ) -> Result<ListAuditSuppressionsResponse, RusotoError<ListAuditSuppressionsError>>;
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
     async fn list_audit_tasks(
@@ -22181,6 +24125,30 @@ pub trait Iot {
         &self,
         input: ListCertificatesByCARequest,
     ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>>;
+
+    /// <p> Lists your Device Defender detect custom metrics. </p>
+    async fn list_custom_metrics(
+        &self,
+        input: ListCustomMetricsRequest,
+    ) -> Result<ListCustomMetricsResponse, RusotoError<ListCustomMetricsError>>;
+
+    /// <p> Lists mitigation actions executions for a Device Defender ML Detect Security Profile. </p>
+    async fn list_detect_mitigation_actions_executions(
+        &self,
+        input: ListDetectMitigationActionsExecutionsRequest,
+    ) -> Result<
+        ListDetectMitigationActionsExecutionsResponse,
+        RusotoError<ListDetectMitigationActionsExecutionsError>,
+    >;
+
+    /// <p> List of Device Defender ML Detect mitigation actions tasks. </p>
+    async fn list_detect_mitigation_actions_tasks(
+        &self,
+        input: ListDetectMitigationActionsTasksRequest,
+    ) -> Result<
+        ListDetectMitigationActionsTasksResponse,
+        RusotoError<ListDetectMitigationActionsTasksError>,
+    >;
 
     /// <p>List the set of dimensions that are defined for your AWS account.</p>
     async fn list_dimensions(
@@ -22293,7 +24261,7 @@ pub trait Iot {
         input: ListScheduledAuditsRequest,
     ) -> Result<ListScheduledAuditsResponse, RusotoError<ListScheduledAuditsError>>;
 
-    /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
+    /// <p><p>Lists the Device Defender security profiles you&#39;ve created. You can filter security profiles by dimension or custom metric.</p> <note> <p> <code>dimensionName</code> and <code>metricName</code> cannot be used in the same request.</p> </note></p>
     async fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
@@ -22374,7 +24342,7 @@ pub trait Iot {
         input: ListThingTypesRequest,
     ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>>;
 
-    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
+    /// <p><p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p> <note> <p>You will not be charged for calling this API if an <code>Access denied</code> error is returned. You will also not be charged if no attributes or pagination token was provided in request and no pagination token and no results were returned.</p> </note></p>
     async fn list_things(
         &self,
         input: ListThingsRequest,
@@ -22509,6 +24477,15 @@ pub trait Iot {
         RusotoError<StartAuditMitigationActionsTaskError>,
     >;
 
+    /// <p> Starts a Device Defender ML Detect mitigation actions task. </p>
+    async fn start_detect_mitigation_actions_task(
+        &self,
+        input: StartDetectMitigationActionsTaskRequest,
+    ) -> Result<
+        StartDetectMitigationActionsTaskResponse,
+        RusotoError<StartDetectMitigationActionsTaskError>,
+    >;
+
     /// <p>Starts an on-demand Device Defender audit.</p>
     async fn start_on_demand_audit_task(
         &self,
@@ -22566,6 +24543,12 @@ pub trait Iot {
         RusotoError<UpdateAccountAuditConfigurationError>,
     >;
 
+    /// <p> Updates a Device Defender audit suppression. </p>
+    async fn update_audit_suppression(
+        &self,
+        input: UpdateAuditSuppressionRequest,
+    ) -> Result<UpdateAuditSuppressionResponse, RusotoError<UpdateAuditSuppressionError>>;
+
     /// <p>Updates an authorizer.</p>
     async fn update_authorizer(
         &self,
@@ -22584,13 +24567,19 @@ pub trait Iot {
         input: UpdateCACertificateRequest,
     ) -> Result<(), RusotoError<UpdateCACertificateError>>;
 
-    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Certificates must be in the ACTIVE state to authenticate devices that use a certificate to connect to AWS IoT.</p> <p>Within a few minutes of updating a certificate from the ACTIVE state to any other state, AWS IoT disconnects all devices that used that certificate to connect. Devices cannot use a certificate that is not in the ACTIVE state to reconnect.</p>
     async fn update_certificate(
         &self,
         input: UpdateCertificateRequest,
     ) -> Result<(), RusotoError<UpdateCertificateError>>;
 
-    /// <p>Updates the definition for a dimension. You cannot change the type of a dimension after it is created (you can delete it and re-create it).</p>
+    /// <p>Updates a Device Defender detect custom metric. </p>
+    async fn update_custom_metric(
+        &self,
+        input: UpdateCustomMetricRequest,
+    ) -> Result<UpdateCustomMetricResponse, RusotoError<UpdateCustomMetricError>>;
+
+    /// <p>Updates the definition for a dimension. You cannot change the type of a dimension after it is created (you can delete it and recreate it).</p>
     async fn update_dimension(
         &self,
         input: UpdateDimensionRequest,
@@ -22849,6 +24838,12 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -23047,7 +25042,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
+    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on demand. If the audit isn't in progress, an "InvalidRequestException" occurs.</p>
     #[allow(unused_mut)]
     async fn cancel_audit_task(
         &self,
@@ -23106,6 +25101,44 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelCertificateTransferError::from_response(response))
+        }
+    }
+
+    /// <p> Cancels a Device Defender ML Detect mitigation action. </p>
+    #[allow(unused_mut)]
+    async fn cancel_detect_mitigation_actions_task(
+        &self,
+        input: CancelDetectMitigationActionsTaskRequest,
+    ) -> Result<
+        CancelDetectMitigationActionsTaskResponse,
+        RusotoError<CancelDetectMitigationActionsTaskError>,
+    > {
+        let request_uri = format!(
+            "/detect/mitigationactions/tasks/{task_id}/cancel",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelDetectMitigationActionsTaskResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelDetectMitigationActionsTaskError::from_response(
+                response,
+            ))
         }
     }
 
@@ -23251,6 +25284,38 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Creates a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn create_audit_suppression(
+        &self,
+        input: CreateAuditSuppressionRequest,
+    ) -> Result<CreateAuditSuppressionResponse, RusotoError<CreateAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/create";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAuditSuppressionError::from_response(response))
+        }
+    }
+
     /// <p>Creates an authorizer.</p>
     #[allow(unused_mut)]
     async fn create_authorizer(
@@ -23356,6 +25421,41 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateCertificateFromCsrError::from_response(response))
+        }
+    }
+
+    /// <p> Use this API to define a Custom Metric published by your devices to Device Defender. </p>
+    #[allow(unused_mut)]
+    async fn create_custom_metric(
+        &self,
+        input: CreateCustomMetricRequest,
+    ) -> Result<CreateCustomMetricResponse, RusotoError<CreateCustomMetricError>> {
+        let request_uri = format!(
+            "/custom-metric/{metric_name}",
+            metric_name = input.metric_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCustomMetricResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCustomMetricError::from_response(response))
         }
     }
 
@@ -23530,7 +25630,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
+    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Only certain types of mitigation actions can be applied to specific check names. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-defender-mitigation-actions.html">Mitigation actions</a>. Each mitigation action can apply only one type of change.</p>
     #[allow(unused_mut)]
     async fn create_mitigation_action(
         &self,
@@ -24127,6 +26227,38 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Deletes a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn delete_audit_suppression(
+        &self,
+        input: DeleteAuditSuppressionRequest,
+    ) -> Result<DeleteAuditSuppressionResponse, RusotoError<DeleteAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/delete";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAuditSuppressionError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an authorizer.</p>
     #[allow(unused_mut)]
     async fn delete_authorizer(
@@ -24270,6 +26402,39 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p><note> <p>Before you can delete a custom metric, you must first remove the custom metric from all security profiles it&#39;s a part of. The security profile associated with the custom metric can be found using the <a href="https://docs.aws.amazon.com/iot/latest/apireference/API_ListSecurityProfiles.html">ListSecurityProfiles</a> API with <code>metricName</code> set to your custom metric name.</p> </note> <p> Deletes a Device Defender detect custom metric. </p></p>
+    #[allow(unused_mut)]
+    async fn delete_custom_metric(
+        &self,
+        input: DeleteCustomMetricRequest,
+    ) -> Result<DeleteCustomMetricResponse, RusotoError<DeleteCustomMetricError>> {
+        let request_uri = format!(
+            "/custom-metric/{metric_name}",
+            metric_name = input.metric_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCustomMetricResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCustomMetricError::from_response(response))
+        }
+    }
+
     /// <p>Removes the specified dimension from your AWS account.</p>
     #[allow(unused_mut)]
     async fn delete_dimension(
@@ -24387,6 +26552,9 @@ impl Iot for IotClient {
         if let Some(ref x) = input.force {
             params.put("force", x);
         }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
         request.set_params(params);
 
         let mut response = self
@@ -24426,6 +26594,9 @@ impl Iot for IotClient {
         let mut params = Params::new();
         if let Some(ref x) = input.force {
             params.put("force", x);
+        }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
         }
         request.set_params(params);
 
@@ -25087,7 +27258,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
+    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and the start time when the audit that returned the finding.</p>
     #[allow(unused_mut)]
     async fn describe_audit_finding(
         &self,
@@ -25155,6 +27326,38 @@ impl Iot for IotClient {
             Err(DescribeAuditMitigationActionsTaskError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p> Gets information about a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn describe_audit_suppression(
+        &self,
+        input: DescribeAuditSuppressionRequest,
+    ) -> Result<DescribeAuditSuppressionResponse, RusotoError<DescribeAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/describe";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAuditSuppressionError::from_response(response))
         }
     }
 
@@ -25320,6 +27523,39 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Gets information about a Device Defender detect custom metric. </p>
+    #[allow(unused_mut)]
+    async fn describe_custom_metric(
+        &self,
+        input: DescribeCustomMetricRequest,
+    ) -> Result<DescribeCustomMetricResponse, RusotoError<DescribeCustomMetricError>> {
+        let request_uri = format!(
+            "/custom-metric/{metric_name}",
+            metric_name = input.metric_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCustomMetricResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCustomMetricError::from_response(response))
+        }
+    }
+
     /// <p>Describes the default authorizer.</p>
     #[allow(unused_mut)]
     async fn describe_default_authorizer(
@@ -25347,6 +27583,44 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeDefaultAuthorizerError::from_response(response))
+        }
+    }
+
+    /// <p> Gets information about a Device Defender ML Detect mitigation action. </p>
+    #[allow(unused_mut)]
+    async fn describe_detect_mitigation_actions_task(
+        &self,
+        input: DescribeDetectMitigationActionsTaskRequest,
+    ) -> Result<
+        DescribeDetectMitigationActionsTaskResponse,
+        RusotoError<DescribeDetectMitigationActionsTaskError>,
+    > {
+        let request_uri = format!(
+            "/detect/mitigationactions/tasks/{task_id}",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDetectMitigationActionsTaskResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDetectMitigationActionsTaskError::from_response(
+                response,
+            ))
         }
     }
 
@@ -26145,6 +28419,53 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Returns a Device Defender's ML Detect Security Profile training model's status. </p>
+    #[allow(unused_mut)]
+    async fn get_behavior_model_training_summaries(
+        &self,
+        input: GetBehaviorModelTrainingSummariesRequest,
+    ) -> Result<
+        GetBehaviorModelTrainingSummariesResponse,
+        RusotoError<GetBehaviorModelTrainingSummariesError>,
+    > {
+        let request_uri = "/behavior-model-training/summaries";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.security_profile_name {
+            params.put("securityProfileName", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetBehaviorModelTrainingSummariesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetBehaviorModelTrainingSummariesError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Returns the approximate count of unique values that match the query.</p>
     #[allow(unused_mut)]
     async fn get_cardinality(
@@ -26596,6 +28917,12 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.behavior_criteria_type {
+            params.put("behaviorCriteriaType", x);
+        }
+        if let Some(ref x) = input.list_suppressed_alerts {
+            params.put("listSuppressedAlerts", x);
+        }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
@@ -26669,7 +28996,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 90 days.)</p>
     #[allow(unused_mut)]
     async fn list_audit_findings(
         &self,
@@ -26802,6 +29129,38 @@ impl Iot for IotClient {
             Err(ListAuditMitigationActionsTasksError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p> Lists your Device Defender audit listings. </p>
+    #[allow(unused_mut)]
+    async fn list_audit_suppressions(
+        &self,
+        input: ListAuditSuppressionsRequest,
+    ) -> Result<ListAuditSuppressionsResponse, RusotoError<ListAuditSuppressionsError>> {
+        let request_uri = "/audit/suppressions/list";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAuditSuppressionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAuditSuppressionsError::from_response(response))
         }
     }
 
@@ -27068,6 +29427,150 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Lists your Device Defender detect custom metrics. </p>
+    #[allow(unused_mut)]
+    async fn list_custom_metrics(
+        &self,
+        input: ListCustomMetricsRequest,
+    ) -> Result<ListCustomMetricsResponse, RusotoError<ListCustomMetricsError>> {
+        let request_uri = "/custom-metrics";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCustomMetricsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCustomMetricsError::from_response(response))
+        }
+    }
+
+    /// <p> Lists mitigation actions executions for a Device Defender ML Detect Security Profile. </p>
+    #[allow(unused_mut)]
+    async fn list_detect_mitigation_actions_executions(
+        &self,
+        input: ListDetectMitigationActionsExecutionsRequest,
+    ) -> Result<
+        ListDetectMitigationActionsExecutionsResponse,
+        RusotoError<ListDetectMitigationActionsExecutionsError>,
+    > {
+        let request_uri = "/detect/mitigationactions/executions";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.end_time {
+            params.put("endTime", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.start_time {
+            params.put("startTime", x);
+        }
+        if let Some(ref x) = input.task_id {
+            params.put("taskId", x);
+        }
+        if let Some(ref x) = input.thing_name {
+            params.put("thingName", x);
+        }
+        if let Some(ref x) = input.violation_id {
+            params.put("violationId", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDetectMitigationActionsExecutionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDetectMitigationActionsExecutionsError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p> List of Device Defender ML Detect mitigation actions tasks. </p>
+    #[allow(unused_mut)]
+    async fn list_detect_mitigation_actions_tasks(
+        &self,
+        input: ListDetectMitigationActionsTasksRequest,
+    ) -> Result<
+        ListDetectMitigationActionsTasksResponse,
+        RusotoError<ListDetectMitigationActionsTasksError>,
+    > {
+        let request_uri = "/detect/mitigationactions/tasks";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        params.put("endTime", &input.end_time);
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        params.put("startTime", &input.start_time);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDetectMitigationActionsTasksResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDetectMitigationActionsTasksError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>List the set of dimensions that are defined for your AWS account.</p>
     #[allow(unused_mut)]
     async fn list_dimensions(
@@ -27248,6 +29751,9 @@ impl Iot for IotClient {
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
         }
@@ -27289,6 +29795,9 @@ impl Iot for IotClient {
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
@@ -27819,7 +30328,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
+    /// <p><p>Lists the Device Defender security profiles you&#39;ve created. You can filter security profiles by dimension or custom metric.</p> <note> <p> <code>dimensionName</code> and <code>metricName</code> cannot be used in the same request.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_security_profiles(
         &self,
@@ -27838,6 +30347,9 @@ impl Iot for IotClient {
         }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.metric_name {
+            params.put("metricName", x);
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
@@ -28182,6 +30694,15 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -28332,7 +30853,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
+    /// <p><p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p> <note> <p>You will not be charged for calling this API if an <code>Access denied</code> error is returned. You will also not be charged if no attributes or pagination token was provided in request and no pagination token and no results were returned.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_things(
         &self,
@@ -28608,7 +31129,13 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.behavior_criteria_type {
+            params.put("behaviorCriteriaType", x);
+        }
         params.put("endTime", &input.end_time);
+        if let Some(ref x) = input.list_suppressed_alerts {
+            params.put("listSuppressedAlerts", x);
+        }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
@@ -29140,6 +31667,46 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Starts a Device Defender ML Detect mitigation actions task. </p>
+    #[allow(unused_mut)]
+    async fn start_detect_mitigation_actions_task(
+        &self,
+        input: StartDetectMitigationActionsTaskRequest,
+    ) -> Result<
+        StartDetectMitigationActionsTaskResponse,
+        RusotoError<StartDetectMitigationActionsTaskError>,
+    > {
+        let request_uri = format!(
+            "/detect/mitigationactions/tasks/{task_id}",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartDetectMitigationActionsTaskResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartDetectMitigationActionsTaskError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Starts an on-demand Device Defender audit.</p>
     #[allow(unused_mut)]
     async fn start_on_demand_audit_task(
@@ -29452,6 +32019,38 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p> Updates a Device Defender audit suppression. </p>
+    #[allow(unused_mut)]
+    async fn update_audit_suppression(
+        &self,
+        input: UpdateAuditSuppressionRequest,
+    ) -> Result<UpdateAuditSuppressionResponse, RusotoError<UpdateAuditSuppressionError>> {
+        let request_uri = "/audit/suppressions/update";
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAuditSuppressionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAuditSuppressionError::from_response(response))
+        }
+    }
+
     /// <p>Updates an authorizer.</p>
     #[allow(unused_mut)]
     async fn update_authorizer(
@@ -29565,7 +32164,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Certificates must be in the ACTIVE state to authenticate devices that use a certificate to connect to AWS IoT.</p> <p>Within a few minutes of updating a certificate from the ACTIVE state to any other state, AWS IoT disconnects all devices that used that certificate to connect. Devices cannot use a certificate that is not in the ACTIVE state to reconnect.</p>
     #[allow(unused_mut)]
     async fn update_certificate(
         &self,
@@ -29601,7 +32200,42 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Updates the definition for a dimension. You cannot change the type of a dimension after it is created (you can delete it and re-create it).</p>
+    /// <p>Updates a Device Defender detect custom metric. </p>
+    #[allow(unused_mut)]
+    async fn update_custom_metric(
+        &self,
+        input: UpdateCustomMetricRequest,
+    ) -> Result<UpdateCustomMetricResponse, RusotoError<UpdateCustomMetricError>> {
+        let request_uri = format!(
+            "/custom-metric/{metric_name}",
+            metric_name = input.metric_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateCustomMetricResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCustomMetricError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the definition for a dimension. You cannot change the type of a dimension after it is created (you can delete it and recreate it).</p>
     #[allow(unused_mut)]
     async fn update_dimension(
         &self,
@@ -29781,6 +32415,12 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.namespace_id {
+            params.put("namespaceId", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client

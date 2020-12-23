@@ -495,6 +495,12 @@ pub struct ChangeSetSummary {
     pub description: Option<String>,
     /// <p>If the change set execution status is <code>AVAILABLE</code>, you can execute the change set. If you can’t execute the change set, the status indicates why. For example, a change set might be in an <code>UNAVAILABLE</code> state because AWS CloudFormation is still creating it or in an <code>OBSOLETE</code> state because the stack was already updated.</p>
     pub execution_status: Option<String>,
+    /// <p>Specifies the current setting of <code>IncludeNestedStacks</code> for the change set.</p>
+    pub include_nested_stacks: Option<bool>,
+    /// <p>The parent change set ID.</p>
+    pub parent_change_set_id: Option<String>,
+    /// <p>The root change set ID.</p>
+    pub root_change_set_id: Option<String>,
     /// <p>The ID of the stack with which the change set is associated.</p>
     pub stack_id: Option<String>,
     /// <p>The name of the stack with which the change set is associated.</p>
@@ -538,6 +544,24 @@ impl ChangeSetSummaryDeserializer {
                 "ExecutionStatus" => {
                     obj.execution_status = Some(ExecutionStatusDeserializer::deserialize(
                         "ExecutionStatus",
+                        stack,
+                    )?);
+                }
+                "IncludeNestedStacks" => {
+                    obj.include_nested_stacks = Some(IncludeNestedStacksDeserializer::deserialize(
+                        "IncludeNestedStacks",
+                        stack,
+                    )?);
+                }
+                "ParentChangeSetId" => {
+                    obj.parent_change_set_id = Some(ChangeSetIdDeserializer::deserialize(
+                        "ParentChangeSetId",
+                        stack,
+                    )?);
+                }
+                "RootChangeSetId" => {
+                    obj.root_change_set_id = Some(ChangeSetIdDeserializer::deserialize(
+                        "RootChangeSetId",
                         stack,
                     )?);
                 }
@@ -670,7 +694,7 @@ impl ContinueUpdateRollbackOutputDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChangeSetInput {
-    /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <note> <p>This capacity does not apply to creating change sets, and specifying it when creating change sets has no effect.</p> <p>Also, change sets do not currently support nested stacks. If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create or update the stack directly from the template using the <a>CreateStack</a> or <a>UpdateStack</a> action, and specifying this capability.</p> </note> <p>For more information on macros, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
+    /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <note> <p>This capacity does not apply to creating change sets, and specifying it when creating change sets has no effect.</p> <p>If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create or update the stack directly from the template using the <a>CreateStack</a> or <a>UpdateStack</a> action, and specifying this capability.</p> </note> <p>For more information on macros, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
     pub capabilities: Option<Vec<String>>,
     /// <p>The name of the change set. The name must be unique among all change sets that are associated with the specified stack.</p> <p>A change set name can contain only alphanumeric, case sensitive characters and hyphens. It must start with an alphabetic character and cannot exceed 128 characters.</p>
     pub change_set_name: String,
@@ -680,6 +704,8 @@ pub struct CreateChangeSetInput {
     pub client_token: Option<String>,
     /// <p>A description to help you identify this change set.</p>
     pub description: Option<String>,
+    /// <p>Creates a change set for the all nested stacks specified in the template. The default behavior of this action is set to <code>False</code>. To include nested sets in a change set, specify <code>True</code>.</p>
+    pub include_nested_stacks: Option<bool>,
     /// <p>The Amazon Resource Names (ARNs) of Amazon Simple Notification Service (Amazon SNS) topics that AWS CloudFormation associates with the stack. To remove all associated notification topics, specify an empty list.</p>
     pub notification_ar_ns: Option<Vec<String>>,
     /// <p>A list of <code>Parameter</code> structures that specify input parameters for the change set. For more information, see the <a>Parameter</a> data type.</p>
@@ -732,6 +758,12 @@ impl CreateChangeSetInputSerializer {
         }
         if let Some(ref field_value) = obj.description {
             params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.include_nested_stacks {
+            params.put(
+                &format!("{}{}", prefix, "IncludeNestedStacks"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.notification_ar_ns {
             NotificationARNsSerializer::serialize(
@@ -826,7 +858,7 @@ impl CreateChangeSetOutputDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackInput {
-    /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>Change sets do not currently support nested stacks. If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create the stack directly from the template using this capability.</p> <important> <p>You should only create stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
+    /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create the stack directly from the template using this capability.</p> <important> <p>You should only create stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
     pub capabilities: Option<Vec<String>>,
     /// <p>A unique identifier for this <code>CreateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create a stack with the same name. You might retry <code>CreateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
@@ -1438,7 +1470,7 @@ impl DeletionTimeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p>[<code>Service-managed</code> permissions] The AWS Organizations accounts to which StackSets deploys. StackSets does not deploy stack instances to the organization master account, even if the master account is in your organization or in an OU in your organization.</p> <p>For update operations, you can specify either <code>Accounts</code> or <code>OrganizationalUnitIds</code>. For create and delete operations, specify <code>OrganizationalUnitIds</code>.</p>
+/// <p>[<code>Service-managed</code> permissions] The AWS Organizations accounts to which StackSets deploys. StackSets does not deploy stack instances to the organization management account, even if the organization management account is in your organization or in an OU in your organization.</p> <p>For update operations, you can specify either <code>Accounts</code> or <code>OrganizationalUnitIds</code>. For create and delete operations, specify <code>OrganizationalUnitIds</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1685,14 +1717,20 @@ pub struct DescribeChangeSetOutput {
     pub description: Option<String>,
     /// <p>If the change set execution status is <code>AVAILABLE</code>, you can execute the change set. If you can’t execute the change set, the status indicates why. For example, a change set might be in an <code>UNAVAILABLE</code> state because AWS CloudFormation is still creating it or in an <code>OBSOLETE</code> state because the stack was already updated.</p>
     pub execution_status: Option<String>,
+    /// <p>Verifies if <code>IncludeNestedStacks</code> is set to <code>True</code>.</p>
+    pub include_nested_stacks: Option<bool>,
     /// <p>If the output exceeds 1 MB, a string that identifies the next page of changes. If there is no additional page, this value is null.</p>
     pub next_token: Option<String>,
     /// <p>The ARNs of the Amazon Simple Notification Service (Amazon SNS) topics that will be associated with the stack if you execute the change set.</p>
     pub notification_ar_ns: Option<Vec<String>>,
     /// <p>A list of <code>Parameter</code> structures that describes the input parameters and their values used to create the change set. For more information, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html">Parameter</a> data type.</p>
     pub parameters: Option<Vec<Parameter>>,
+    /// <p>Specifies the change set ID of the parent change set in the current nested change set hierarchy.</p>
+    pub parent_change_set_id: Option<String>,
     /// <p>The rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p>
     pub rollback_configuration: Option<RollbackConfiguration>,
+    /// <p>Specifies the change set ID of the root change set in the current nested change set hierarchy.</p>
+    pub root_change_set_id: Option<String>,
     /// <p>The ARN of the stack that is associated with the change set.</p>
     pub stack_id: Option<String>,
     /// <p>The name of the stack that is associated with the change set.</p>
@@ -1754,6 +1792,13 @@ impl DescribeChangeSetOutputDeserializer {
                             stack,
                         )?);
                     }
+                    "IncludeNestedStacks" => {
+                        obj.include_nested_stacks =
+                            Some(IncludeNestedStacksDeserializer::deserialize(
+                                "IncludeNestedStacks",
+                                stack,
+                            )?);
+                    }
                     "NextToken" => {
                         obj.next_token =
                             Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
@@ -1768,12 +1813,24 @@ impl DescribeChangeSetOutputDeserializer {
                             .get_or_insert(vec![])
                             .extend(ParametersDeserializer::deserialize("Parameters", stack)?);
                     }
+                    "ParentChangeSetId" => {
+                        obj.parent_change_set_id = Some(ChangeSetIdDeserializer::deserialize(
+                            "ParentChangeSetId",
+                            stack,
+                        )?);
+                    }
                     "RollbackConfiguration" => {
                         obj.rollback_configuration =
                             Some(RollbackConfigurationDeserializer::deserialize(
                                 "RollbackConfiguration",
                                 stack,
                             )?);
+                    }
+                    "RootChangeSetId" => {
+                        obj.root_change_set_id = Some(ChangeSetIdDeserializer::deserialize(
+                            "RootChangeSetId",
+                            stack,
+                        )?);
                     }
                     "StackId" => {
                         obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
@@ -3413,6 +3470,14 @@ impl InSyncStackInstancesCountDeserializer {
     }
 }
 #[allow(dead_code)]
+struct IncludeNestedStacksDeserializer;
+impl IncludeNestedStacksDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+    }
+}
+#[allow(dead_code)]
 struct IsDefaultVersionDeserializer;
 impl IsDefaultVersionDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -4256,6 +4321,8 @@ pub struct ListTypesInput {
     pub next_token: Option<String>,
     /// <p><p>The provisioning behavior of the type. AWS CloudFormation determines the provisioning type during registration, based on the types of handlers in the schema handler package submitted.</p> <p>Valid values include:</p> <ul> <li> <p> <code>FULLY<em>MUTABLE</code>: The type includes an update handler to process updates to the type during stack update operations.</p> </li> <li> <p> <code>IMMUTABLE</code>: The type does not include an update handler, so the type cannot be updated and must instead be replaced during stack update operations.</p> </li> <li> <p> <code>NON</em>PROVISIONABLE</code>: The type does not include create, read, and delete handlers, and therefore cannot actually be provisioned.</p> </li> </ul></p>
     pub provisioning_type: Option<String>,
+    /// <p>The type of extension.</p>
+    pub type_: Option<String>,
     /// <p>The scope at which the type is visible and usable in CloudFormation operations.</p> <p>Valid values include:</p> <ul> <li> <p> <code>PRIVATE</code>: The type is only visible and usable within the account in which it is registered. Currently, AWS CloudFormation marks any types you create as <code>PRIVATE</code>.</p> </li> <li> <p> <code>PUBLIC</code>: The type is publically visible and usable within any Amazon account.</p> </li> </ul> <p>The default is <code>PRIVATE</code>.</p>
     pub visibility: Option<String>,
 }
@@ -4280,6 +4347,9 @@ impl ListTypesInputSerializer {
         }
         if let Some(ref field_value) = obj.provisioning_type {
             params.put(&format!("{}{}", prefix, "ProvisioningType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.type_ {
+            params.put(&format!("{}{}", prefix, "Type"), &field_value);
         }
         if let Some(ref field_value) = obj.visibility {
             params.put(&format!("{}{}", prefix, "Visibility"), &field_value);
@@ -4381,6 +4451,14 @@ impl LoggingConfigSerializer {
 }
 
 #[allow(dead_code)]
+struct LogicalIdHierarchyDeserializer;
+impl LogicalIdHierarchyDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
 struct LogicalResourceIdDeserializer;
 impl LogicalResourceIdDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -4440,6 +4518,44 @@ impl MetadataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+/// <p>Contains information about the module from which the resource was created, if the resource was created from a module included in the stack template.</p> <p>For more information on modules, see <a href="AWSCloudFormation/latest/UserGuide/modules.html">Using modules to encapsulate and reuse resource configurations</a> in the <i>CloudFormation User Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ModuleInfo {
+    /// <p>A concantenated list of the logical IDs of the module or modules containing the resource. Modules are listed starting with the inner-most nested module, and separated by <code>/</code>.</p> <p>In the following example, the resource was created from a module, <code>moduleA</code>, that is nested inside a parent module, <code>moduleB</code>.</p> <p> <code>moduleA/moduleB</code> </p> <p>For more information, see <a href="AWSCloudFormation/latest/UserGuide/modules.html#module-ref-resources">Referencing resources in a module</a> in the <i>CloudFormation User Guide</i>.</p>
+    pub logical_id_hierarchy: Option<String>,
+    /// <p>A concantenated list of the the module type or types containing the resource. Module types are listed starting with the inner-most nested module, and separated by <code>/</code>.</p> <p>In the following example, the resource was created from a module of type <code>AWS::First::Example::MODULE</code>, that is nested inside a parent module of type <code>AWS::Second::Example::MODULE</code>.</p> <p> <code>AWS::First::Example::MODULE/AWS::Second::Example::MODULE</code> </p>
+    pub type_hierarchy: Option<String>,
+}
+
+#[allow(dead_code)]
+struct ModuleInfoDeserializer;
+impl ModuleInfoDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModuleInfo, XmlParseError> {
+        deserialize_elements::<_, ModuleInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "LogicalIdHierarchy" => {
+                    obj.logical_id_hierarchy = Some(LogicalIdHierarchyDeserializer::deserialize(
+                        "LogicalIdHierarchy",
+                        stack,
+                    )?);
+                }
+                "TypeHierarchy" => {
+                    obj.type_hierarchy = Some(TypeHierarchyDeserializer::deserialize(
+                        "TypeHierarchy",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 #[allow(dead_code)]
@@ -5187,7 +5303,7 @@ pub struct RegisterTypeInput {
     pub execution_role_arn: Option<String>,
     /// <p>Specifies logging configuration information for a type.</p>
     pub logging_config: Option<LoggingConfig>,
-    /// <p><p>A url to the S3 bucket containing the schema handler package that contains the schema, event handlers, and associated files for the type you want to register.</p> <p>For information on generating a schema handler package for the type you want to register, see <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-cli-submit.html">submit</a> in the <i>CloudFormation CLI User Guide</i>.</p> <note> <p>As part of registering a resource provider type, CloudFormation must be able to access the S3 bucket which contains the schema handler package for that resource provider. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html#registry-register-permissions">IAM Permissions for Registering a Resource Provider</a> in the <i>AWS CloudFormation User Guide</i>.</p> </note></p>
+    /// <p><p>A url to the S3 bucket containing the schema handler package that contains the schema, event handlers, and associated files for the type you want to register.</p> <p>For information on generating a schema handler package for the type you want to register, see <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-cli-submit.html">submit</a> in the <i>CloudFormation CLI User Guide</i>.</p> <note> <p>The user registering the resource provider type must be able to access the the schema handler package in the S3 bucket. That is, the user needs to have <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> permissions for the schema handler package. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazons3.html">Actions, Resources, and Condition Keys for Amazon S3</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> </note></p>
     pub schema_handler_package: String,
     /// <p>The kind of type.</p> <p>Currently, the only valid value is <code>RESOURCE</code>.</p>
     pub type_: Option<String>,
@@ -5327,12 +5443,16 @@ impl ResourceAttributeDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceChange {
-    /// <p>The action that AWS CloudFormation takes on the resource, such as <code>Add</code> (adds a new resource), <code>Modify</code> (changes a resource), or <code>Remove</code> (deletes a resource).</p>
+    /// <p>The action that AWS CloudFormation takes on the resource, such as <code>Add</code> (adds a new resource), <code>Modify</code> (changes a resource), <code>Remove</code> (deletes a resource), <code>Import</code> (imports a resource), or <code>Dynamic</code> (exact action for the resource cannot be determined).</p>
     pub action: Option<String>,
+    /// <p>The change set ID of the nested change set.</p>
+    pub change_set_id: Option<String>,
     /// <p>For the <code>Modify</code> action, a list of <code>ResourceChangeDetail</code> structures that describes the changes that AWS CloudFormation will make to the resource. </p>
     pub details: Option<Vec<ResourceChangeDetail>>,
     /// <p>The resource's logical ID, which is defined in the stack's template.</p>
     pub logical_resource_id: Option<String>,
+    /// <p>Contains information about the module from which the resource was created, if the resource was created from a module included in the stack template.</p>
+    pub module_info: Option<ModuleInfo>,
     /// <p>The resource's physical ID (resource name). Resources that you are adding don't have physical IDs because they haven't been created.</p>
     pub physical_resource_id: Option<String>,
     /// <p>For the <code>Modify</code> action, indicates whether AWS CloudFormation will replace the resource by creating a new one and deleting the old one. This value depends on the value of the <code>RequiresRecreation</code> property in the <code>ResourceTargetDefinition</code> structure. For example, if the <code>RequiresRecreation</code> field is <code>Always</code> and the <code>Evaluation</code> field is <code>Static</code>, <code>Replacement</code> is <code>True</code>. If the <code>RequiresRecreation</code> field is <code>Always</code> and the <code>Evaluation</code> field is <code>Dynamic</code>, <code>Replacement</code> is <code>Conditionally</code>.</p> <p>If you have multiple changes with different <code>RequiresRecreation</code> values, the <code>Replacement</code> value depends on the change with the most impact. A <code>RequiresRecreation</code> value of <code>Always</code> has the most impact, followed by <code>Conditionally</code>, and then <code>Never</code>.</p>
@@ -5356,6 +5476,10 @@ impl ResourceChangeDeserializer {
                 "Action" => {
                     obj.action = Some(ChangeActionDeserializer::deserialize("Action", stack)?);
                 }
+                "ChangeSetId" => {
+                    obj.change_set_id =
+                        Some(ChangeSetIdDeserializer::deserialize("ChangeSetId", stack)?);
+                }
                 "Details" => {
                     obj.details.get_or_insert(vec![]).extend(
                         ResourceChangeDetailsDeserializer::deserialize("Details", stack)?,
@@ -5366,6 +5490,10 @@ impl ResourceChangeDeserializer {
                         "LogicalResourceId",
                         stack,
                     )?);
+                }
+                "ModuleInfo" => {
+                    obj.module_info =
+                        Some(ModuleInfoDeserializer::deserialize("ModuleInfo", stack)?);
                 }
                 "PhysicalResourceId" => {
                     obj.physical_resource_id = Some(PhysicalResourceIdDeserializer::deserialize(
@@ -6802,6 +6930,8 @@ pub struct StackResource {
     pub drift_information: Option<StackResourceDriftInformation>,
     /// <p>The logical name of the resource specified in the template.</p>
     pub logical_resource_id: String,
+    /// <p>Contains information about the module from which the resource was created, if the resource was created from a module included in the stack template.</p>
+    pub module_info: Option<ModuleInfo>,
     /// <p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation.</p>
     pub physical_resource_id: Option<String>,
     /// <p>Current status of the resource.</p>
@@ -6842,6 +6972,10 @@ impl StackResourceDeserializer {
                 "LogicalResourceId" => {
                     obj.logical_resource_id =
                         LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)?;
+                }
+                "ModuleInfo" => {
+                    obj.module_info =
+                        Some(ModuleInfoDeserializer::deserialize("ModuleInfo", stack)?);
                 }
                 "PhysicalResourceId" => {
                     obj.physical_resource_id = Some(PhysicalResourceIdDeserializer::deserialize(
@@ -6893,6 +7027,8 @@ pub struct StackResourceDetail {
     pub logical_resource_id: String,
     /// <p>The content of the <code>Metadata</code> attribute declared for the resource. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-metadata.html">Metadata Attribute</a> in the AWS CloudFormation User Guide.</p>
     pub metadata: Option<String>,
+    /// <p>Contains information about the module from which the resource was created, if the resource was created from a module included in the stack template.</p>
+    pub module_info: Option<ModuleInfo>,
     /// <p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation.</p>
     pub physical_resource_id: Option<String>,
     /// <p>Current status of the resource.</p>
@@ -6939,6 +7075,10 @@ impl StackResourceDetailDeserializer {
                 "Metadata" => {
                     obj.metadata = Some(MetadataDeserializer::deserialize("Metadata", stack)?);
                 }
+                "ModuleInfo" => {
+                    obj.module_info =
+                        Some(ModuleInfoDeserializer::deserialize("ModuleInfo", stack)?);
+                }
                 "PhysicalResourceId" => {
                     obj.physical_resource_id = Some(PhysicalResourceIdDeserializer::deserialize(
                         "PhysicalResourceId",
@@ -6982,6 +7122,8 @@ pub struct StackResourceDrift {
     pub expected_properties: Option<String>,
     /// <p>The logical name of the resource specified in the template.</p>
     pub logical_resource_id: String,
+    /// <p>Contains information about the module from which the resource was created, if the resource was created from a module included in the stack template.</p>
+    pub module_info: Option<ModuleInfo>,
     /// <p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation. </p>
     pub physical_resource_id: Option<String>,
     /// <p>Context information that enables AWS CloudFormation to uniquely identify a resource. AWS CloudFormation uses context key-value pairs in cases where a resource's logical and physical IDs are not enough to uniquely identify that resource. Each context key-value pair specifies a unique resource that contains the targeted resource.</p>
@@ -7023,6 +7165,10 @@ impl StackResourceDriftDeserializer {
                 "LogicalResourceId" => {
                     obj.logical_resource_id =
                         LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)?;
+                }
+                "ModuleInfo" => {
+                    obj.module_info =
+                        Some(ModuleInfoDeserializer::deserialize("ModuleInfo", stack)?);
                 }
                 "PhysicalResourceId" => {
                     obj.physical_resource_id = Some(PhysicalResourceIdDeserializer::deserialize(
@@ -7222,6 +7368,8 @@ pub struct StackResourceSummary {
     pub last_updated_timestamp: String,
     /// <p>The logical name of the resource specified in the template.</p>
     pub logical_resource_id: String,
+    /// <p>Contains information about the module from which the resource was created, if the resource was created from a module included in the stack template.</p>
+    pub module_info: Option<ModuleInfo>,
     /// <p>The name or unique identifier that corresponds to a physical instance ID of the resource.</p>
     pub physical_resource_id: Option<String>,
     /// <p>Current status of the resource.</p>
@@ -7257,6 +7405,10 @@ impl StackResourceSummaryDeserializer {
                 "LogicalResourceId" => {
                     obj.logical_resource_id =
                         LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)?;
+                }
+                "ModuleInfo" => {
+                    obj.module_info =
+                        Some(ModuleInfoDeserializer::deserialize("ModuleInfo", stack)?);
                 }
                 "PhysicalResourceId" => {
                     obj.physical_resource_id = Some(PhysicalResourceIdDeserializer::deserialize(
@@ -8566,6 +8718,14 @@ impl TypeArnDeserializer {
     }
 }
 #[allow(dead_code)]
+struct TypeHierarchyDeserializer;
+impl TypeHierarchyDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
 struct TypeNameDeserializer;
 impl TypeNameDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -8751,7 +8911,7 @@ impl TypeVersionSummaryDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackInput {
-    /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to update the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually updating the stack. If your stack template contains one or more macros, and you choose to update a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>Change sets do not currently support nested stacks. If you want to update a stack from a stack template that contains macros <i>and</i> nested stacks, you must update the stack directly from the template using this capability.</p> <important> <p>You should only update stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
+    /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to update the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually updating the stack. If your stack template contains one or more macros, and you choose to update a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>If you want to update a stack from a stack template that contains macros <i>and</i> nested stacks, you must update the stack directly from the template using this capability.</p> <important> <p>You should only update stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
     pub capabilities: Option<Vec<String>>,
     /// <p>A unique identifier for this <code>UpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to update a stack with the same name. You might retry <code>UpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
@@ -11941,7 +12101,7 @@ pub trait CloudFormation {
         input: ContinueUpdateRollbackInput,
     ) -> Result<ContinueUpdateRollbackOutput, RusotoError<ContinueUpdateRollbackError>>;
 
-    /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. To create a change set for an import operation, specify <code>IMPORT</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
+    /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. To create a change set for an import operation, specify <code>IMPORT</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p> <p>To create a change set for the entire stack hierachy, set <code>IncludeNestedStacks</code> to <code>True</code>.</p>
     async fn create_change_set(
         &self,
         input: CreateChangeSetInput,
@@ -11965,7 +12125,7 @@ pub trait CloudFormation {
         input: CreateStackSetInput,
     ) -> Result<CreateStackSetOutput, RusotoError<CreateStackSetError>>;
 
-    /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
+    /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p> <p>If <code>IncludeNestedStacks</code> specifies <code>True</code> during the creation of the nested change set, then <code>DeleteChangeSet</code> will delete all change sets that belong to the stacks hierarchy and will also delete all change sets for nested stacks with the status of <code>REVIEW_IN_PROGRESS</code>.</p>
     async fn delete_change_set(
         &self,
         input: DeleteChangeSetInput,
@@ -12100,7 +12260,7 @@ pub trait CloudFormation {
         input: EstimateTemplateCostInput,
     ) -> Result<EstimateTemplateCostOutput, RusotoError<EstimateTemplateCostError>>;
 
-    /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
+    /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p> <p>To create a change set for the entire stack hierachy, <code>IncludeNestedStacks</code> must have been set to <code>True</code>.</p>
     async fn execute_change_set(
         &self,
         input: ExecuteChangeSetInput,
@@ -12344,7 +12504,7 @@ impl CloudFormation for CloudFormationClient {
         Ok(result)
     }
 
-    /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. To create a change set for an import operation, specify <code>IMPORT</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
+    /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. To create a change set for an import operation, specify <code>IMPORT</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p> <p>To create a change set for the entire stack hierachy, set <code>IncludeNestedStacks</code> to <code>True</code>.</p>
     async fn create_change_set(
         &self,
         input: CreateChangeSetInput,
@@ -12469,7 +12629,7 @@ impl CloudFormation for CloudFormationClient {
         Ok(result)
     }
 
-    /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
+    /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p> <p>If <code>IncludeNestedStacks</code> specifies <code>True</code> during the creation of the nested change set, then <code>DeleteChangeSet</code> will delete all change sets that belong to the stacks hierarchy and will also delete all change sets for nested stacks with the status of <code>REVIEW_IN_PROGRESS</code>.</p>
     async fn delete_change_set(
         &self,
         input: DeleteChangeSetInput,
@@ -13145,7 +13305,7 @@ impl CloudFormation for CloudFormationClient {
         Ok(result)
     }
 
-    /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
+    /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p> <p>To create a change set for the entire stack hierachy, <code>IncludeNestedStacks</code> must have been set to <code>True</code>.</p>
     async fn execute_change_set(
         &self,
         input: ExecuteChangeSetInput,

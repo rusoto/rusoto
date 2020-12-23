@@ -93,7 +93,7 @@ impl AccountAttributesMessageDeserializer {
         )
     }
 }
-/// <p>Describes a quota for an AWS account.</p> <p>The following are account quotas:</p> <ul> <li> <p> <code>AllocatedStorage</code> - The total allocated storage per account, in GiB. The used value is the total allocated storage in the account, in GiB.</p> </li> <li> <p> <code>AuthorizationsPerDBSecurityGroup</code> - The number of ingress rules per DB security group. The used value is the highest number of ingress rules in a DB security group in the account. Other DB security groups in the account might have a lower number of ingress rules.</p> </li> <li> <p> <code>CustomEndpointsPerDBCluster</code> - The number of custom endpoints per DB cluster. The used value is the highest number of custom endpoints in a DB clusters in the account. Other DB clusters in the account might have a lower number of custom endpoints.</p> </li> <li> <p> <code>DBClusterParameterGroups</code> - The number of DB cluster parameter groups per account, excluding default parameter groups. The used value is the count of nondefault DB cluster parameter groups in the account.</p> </li> <li> <p> <code>DBClusterRoles</code> - The number of associated AWS Identity and Access Management (IAM) roles per DB cluster. The used value is the highest number of associated IAM roles for a DB cluster in the account. Other DB clusters in the account might have a lower number of associated IAM roles.</p> </li> <li> <p> <code>DBClusters</code> - The number of DB clusters per account. The used value is the count of DB clusters in the account.</p> </li> <li> <p> <code>DBInstanceRoles</code> - The number of associated IAM roles per DB instance. The used value is the highest number of associated IAM roles for a DB instance in the account. Other DB instances in the account might have a lower number of associated IAM roles.</p> </li> <li> <p> <code>DBInstances</code> - The number of DB instances per account. The used value is the count of the DB instances in the account.</p> <p>Amazon RDS DB instances, Amazon Aurora DB instances, Amazon Neptune instances, and Amazon DocumentDB instances apply to this quota.</p> </li> <li> <p> <code>DBParameterGroups</code> - The number of DB parameter groups per account, excluding default parameter groups. The used value is the count of nondefault DB parameter groups in the account.</p> </li> <li> <p> <code>DBSecurityGroups</code> - The number of DB security groups (not VPC security groups) per account, excluding the default security group. The used value is the count of nondefault DB security groups in the account.</p> </li> <li> <p> <code>DBSubnetGroups</code> - The number of DB subnet groups per account. The used value is the count of the DB subnet groups in the account.</p> </li> <li> <p> <code>EventSubscriptions</code> - The number of event subscriptions per account. The used value is the count of the event subscriptions in the account.</p> </li> <li> <p> <code>ManualSnapshots</code> - The number of manual DB snapshots per account. The used value is the count of the manual DB snapshots in the account.</p> </li> <li> <p> <code>OptionGroups</code> - The number of DB option groups per account, excluding default option groups. The used value is the count of nondefault DB option groups in the account.</p> </li> <li> <p> <code>ReadReplicasPerMaster</code> - The number of read replicas per DB instance. The used value is the highest number of read replicas for a DB instance in the account. Other DB instances in the account might have a lower number of read replicas.</p> </li> <li> <p> <code>ReservedDBInstances</code> - The number of reserved DB instances per account. The used value is the count of the active reserved DB instances in the account.</p> </li> <li> <p> <code>SubnetsPerDBSubnetGroup</code> - The number of subnets per DB subnet group. The used value is highest number of subnets for a DB subnet group in the account. Other DB subnet groups in the account might have a lower number of subnets.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html">Quotas for Amazon RDS</a> in the <i>Amazon RDS User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_Limits.html">Quotas for Amazon Aurora</a> in the <i>Amazon Aurora User Guide</i>.</p>
+/// <p>Describes a quota for an AWS account.</p> <p>The following are account quotas:</p> <ul> <li> <p> <code>AllocatedStorage</code> - The total allocated storage per account, in GiB. The used value is the total allocated storage in the account, in GiB.</p> </li> <li> <p> <code>AuthorizationsPerDBSecurityGroup</code> - The number of ingress rules per DB security group. The used value is the highest number of ingress rules in a DB security group in the account. Other DB security groups in the account might have a lower number of ingress rules.</p> </li> <li> <p> <code>CustomEndpointsPerDBCluster</code> - The number of custom endpoints per DB cluster. The used value is the highest number of custom endpoints in a DB clusters in the account. Other DB clusters in the account might have a lower number of custom endpoints.</p> </li> <li> <p> <code>DBClusterParameterGroups</code> - The number of DB cluster parameter groups per account, excluding default parameter groups. The used value is the count of nondefault DB cluster parameter groups in the account.</p> </li> <li> <p> <code>DBClusterRoles</code> - The number of associated AWS Identity and Access Management (IAM) roles per DB cluster. The used value is the highest number of associated IAM roles for a DB cluster in the account. Other DB clusters in the account might have a lower number of associated IAM roles.</p> </li> <li> <p> <code>DBClusters</code> - The number of DB clusters per account. The used value is the count of DB clusters in the account.</p> </li> <li> <p> <code>DBInstanceRoles</code> - The number of associated IAM roles per DB instance. The used value is the highest number of associated IAM roles for a DB instance in the account. Other DB instances in the account might have a lower number of associated IAM roles.</p> </li> <li> <p> <code>DBInstances</code> - The number of DB instances per account. The used value is the count of the DB instances in the account.</p> <p>Amazon RDS DB instances, Amazon Aurora DB instances, Amazon Neptune instances, and Amazon DocumentDB instances apply to this quota.</p> </li> <li> <p> <code>DBParameterGroups</code> - The number of DB parameter groups per account, excluding default parameter groups. The used value is the count of nondefault DB parameter groups in the account.</p> </li> <li> <p> <code>DBSecurityGroups</code> - The number of DB security groups (not VPC security groups) per account, excluding the default security group. The used value is the count of nondefault DB security groups in the account.</p> </li> <li> <p> <code>DBSubnetGroups</code> - The number of DB subnet groups per account. The used value is the count of the DB subnet groups in the account.</p> </li> <li> <p> <code>EventSubscriptions</code> - The number of event subscriptions per account. The used value is the count of the event subscriptions in the account.</p> </li> <li> <p> <code>ManualClusterSnapshots</code> - The number of manual DB cluster snapshots per account. The used value is the count of the manual DB cluster snapshots in the account.</p> </li> <li> <p> <code>ManualSnapshots</code> - The number of manual DB instance snapshots per account. The used value is the count of the manual DB instance snapshots in the account.</p> </li> <li> <p> <code>OptionGroups</code> - The number of DB option groups per account, excluding default option groups. The used value is the count of nondefault DB option groups in the account.</p> </li> <li> <p> <code>ReadReplicasPerMaster</code> - The number of read replicas per DB instance. The used value is the highest number of read replicas for a DB instance in the account. Other DB instances in the account might have a lower number of read replicas.</p> </li> <li> <p> <code>ReservedDBInstances</code> - The number of reserved DB instances per account. The used value is the count of the active reserved DB instances in the account.</p> </li> <li> <p> <code>SubnetsPerDBSubnetGroup</code> - The number of subnets per DB subnet group. The used value is highest number of subnets for a DB subnet group in the account. Other DB subnet groups in the account might have a lower number of subnets.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html">Quotas for Amazon RDS</a> in the <i>Amazon RDS User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_Limits.html">Quotas for Amazon Aurora</a> in the <i>Amazon Aurora User Guide</i>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountQuota {
@@ -175,7 +175,7 @@ pub struct AddRoleToDBClusterMessage {
     pub db_cluster_identifier: String,
     /// <p>The name of the feature for the DB cluster that the IAM role is to be associated with. For the list of supported feature names, see <a>DBEngineVersion</a>.</p>
     pub feature_name: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with the Aurora DB cluster, for example <code>arn:aws:iam::123456789012:role/AuroraAccessRole</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with the Aurora DB cluster, for example, <code>arn:aws:iam::123456789012:role/AuroraAccessRole</code>.</p>
     pub role_arn: String,
 }
 
@@ -232,7 +232,7 @@ impl AddRoleToDBInstanceMessageSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddSourceIdentifierToSubscriptionMessage {
-    /// <p><p>The identifier of the event source to be added.</p> <p>Constraints:</p> <ul> <li> <p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> </ul></p>
+    /// <p><p>The identifier of the event source to be added.</p> <p>Constraints:</p> <ul> <li> <p>If the source type is a DB instance, a <code>DBInstanceIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB cluster, a <code>DBClusterIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB cluster snapshot, a <code>DBClusterSnapshotIdentifier</code> value must be supplied.</p> </li> </ul></p>
     pub source_identifier: String,
     /// <p>The name of the RDS event notification subscription you want to add a source identifier to.</p>
     pub subscription_name: String,
@@ -887,7 +887,7 @@ impl CharacterSetDeserializer {
         })
     }
 }
-/// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB instance or DB cluster.</p> <p>The <code>EnableLogTypes</code> and <code>DisableLogTypes</code> arrays determine which logs will be exported (or not exported) to CloudWatch Logs. The values within these arrays depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs </a> in the <i>Amazon RDS User Guide</i>.</p>
+/// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB instance or DB cluster.</p> <p>The <code>EnableLogTypes</code> and <code>DisableLogTypes</code> arrays determine which logs will be exported (or not exported) to CloudWatch Logs. The values within these arrays depend on the DB engine being used.</p> <p>For more information about exporting CloudWatch Logs for Amazon RDS DB instances, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs </a> in the <i>Amazon RDS User Guide</i>.</p> <p>For more information about exporting CloudWatch Logs for Amazon Aurora DB clusters, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudwatchLogsExportConfiguration {
@@ -923,6 +923,71 @@ impl CloudwatchLogsExportConfigurationSerializer {
     }
 }
 
+/// <p>This data type is used as a response element in the <code>ModifyDBCluster</code> operation and contains changes that will be applied during the next maintenance window.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ClusterPendingModifiedValues {
+    /// <p>The DBClusterIdentifier for the DB cluster.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The database engine version.</p>
+    pub engine_version: Option<String>,
+    /// <p>Whether mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled.</p>
+    pub iam_database_authentication_enabled: Option<bool>,
+    /// <p>The master credentials for the DB cluster.</p>
+    pub master_user_password: Option<String>,
+    pub pending_cloudwatch_logs_exports: Option<PendingCloudwatchLogsExports>,
+}
+
+#[allow(dead_code)]
+struct ClusterPendingModifiedValuesDeserializer;
+impl ClusterPendingModifiedValuesDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ClusterPendingModifiedValues, XmlParseError> {
+        deserialize_elements::<_, ClusterPendingModifiedValues, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "EngineVersion" => {
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
+                    }
+                    "IAMDatabaseAuthenticationEnabled" => {
+                        obj.iam_database_authentication_enabled =
+                            Some(BooleanOptionalDeserializer::deserialize(
+                                "IAMDatabaseAuthenticationEnabled",
+                                stack,
+                            )?);
+                    }
+                    "MasterUserPassword" => {
+                        obj.master_user_password = Some(StringDeserializer::deserialize(
+                            "MasterUserPassword",
+                            stack,
+                        )?);
+                    }
+                    "PendingCloudwatchLogsExports" => {
+                        obj.pending_cloudwatch_logs_exports =
+                            Some(PendingCloudwatchLogsExportsDeserializer::deserialize(
+                                "PendingCloudwatchLogsExports",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Specifies the settings that control the size and behavior of the connection pool associated with a <code>DBProxyTargetGroup</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1119,9 +1184,9 @@ impl CopyDBClusterParameterGroupResultDeserializer {
 pub struct CopyDBClusterSnapshotMessage {
     /// <p>A value that indicates whether to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot. By default, tags are not copied.</p>
     pub copy_tags: Option<bool>,
-    /// <p>The AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an encrypted DB cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the DB cluster snapshot is encrypted with the same KMS key as the source DB cluster snapshot. </p> <p>If you copy an encrypted DB cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>. </p> <p>To copy an encrypted DB cluster snapshot to another AWS Region, you must set <code>KmsKeyId</code> to the KMS key ID you want to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region.</p> <p>If you copy an unencrypted DB cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, an error is returned.</p>
+    /// <p>The AWS KMS key identifier for an encrypted DB cluster snapshot. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p> <p>If you copy an encrypted DB cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new AWS KMS CMK. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the DB cluster snapshot is encrypted with the same AWS KMS key as the source DB cluster snapshot. </p> <p>If you copy an encrypted DB cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>. </p> <p>To copy an encrypted DB cluster snapshot to another AWS Region, you must set <code>KmsKeyId</code> to the AWS KMS key identifier you want to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. AWS KMS CMKs are specific to the AWS Region that they are created in, and you can't use CMKs from one AWS Region in another AWS Region.</p> <p>If you copy an unencrypted DB cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, an error is returned.</p>
     pub kms_key_id: Option<String>,
-    /// <p><p>The URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> API action in the AWS Region that contains the source DB cluster snapshot to copy. The <code>PreSignedUrl</code> parameter must be used when copying an encrypted DB cluster snapshot from another AWS Region. Don&#39;t specify <code>PreSignedUrl</code> when you are copying an encrypted DB cluster snapshot in the same AWS Region.</p> <p>The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied. The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot is to be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note></p>
+    /// <p><p>The URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> API action in the AWS Region that contains the source DB cluster snapshot to copy. The <code>PreSignedUrl</code> parameter must be used when copying an encrypted DB cluster snapshot from another AWS Region. Don&#39;t specify <code>PreSignedUrl</code> when you are copying an encrypted DB cluster snapshot in the same AWS Region.</p> <p>The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied. The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the customer master key (CMK) to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot is to be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note></p>
     pub pre_signed_url: Option<String>,
     /// <p>The identifier of the DB cluster snapshot to copy. This parameter isn't case-sensitive.</p> <p>You can't copy an encrypted, shared DB cluster snapshot from one AWS Region to another.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid system snapshot in the "available" state.</p> </li> <li> <p>If the source snapshot is in the same AWS Region as the copy, specify a valid DB snapshot identifier.</p> </li> <li> <p>If the source snapshot is in a different AWS Region than the copy, specify a valid DB cluster snapshot ARN. For more information, go to <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html#USER_CopySnapshot.AcrossRegions"> Copying Snapshots Across AWS Regions</a> in the <i>Amazon Aurora User Guide.</i> </p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>
     pub source_db_cluster_snapshot_identifier: String,
@@ -1272,15 +1337,17 @@ impl CopyDBParameterGroupResultDeserializer {
 pub struct CopyDBSnapshotMessage {
     /// <p>A value that indicates whether to copy all tags from the source DB snapshot to the target DB snapshot. By default, tags are not copied.</p>
     pub copy_tags: Option<bool>,
-    /// <p>The AWS KMS key ID for an encrypted DB snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an encrypted DB snapshot from your AWS account, you can specify a value for this parameter to encrypt the copy with a new KMS encryption key. If you don't specify a value for this parameter, then the copy of the DB snapshot is encrypted with the same KMS key as the source DB snapshot. </p> <p>If you copy an encrypted DB snapshot that is shared from another AWS account, then you must specify a value for this parameter. </p> <p>If you specify this parameter when you copy an unencrypted snapshot, the copy is encrypted. </p> <p>If you copy an encrypted snapshot to a different AWS Region, then you must specify a KMS key for the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region. </p>
+    /// <p>The AWS KMS key identifier for an encrypted DB snapshot. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). </p> <p>If you copy an encrypted DB snapshot from your AWS account, you can specify a value for this parameter to encrypt the copy with a new AWS KMS CMK. If you don't specify a value for this parameter, then the copy of the DB snapshot is encrypted with the same AWS KMS key as the source DB snapshot. </p> <p>If you copy an encrypted DB snapshot that is shared from another AWS account, then you must specify a value for this parameter. </p> <p>If you specify this parameter when you copy an unencrypted snapshot, the copy is encrypted. </p> <p>If you copy an encrypted snapshot to a different AWS Region, then you must specify a AWS KMS key identifier for the destination AWS Region. AWS KMS CMKs are specific to the AWS Region that they are created in, and you can't use CMKs from one AWS Region in another AWS Region. </p>
     pub kms_key_id: Option<String>,
-    /// <p>The name of an option group to associate with the copy of the snapshot.</p> <p>Specify this option if you are copying a snapshot from one AWS Region to another, and your DB instance uses a nondefault option group. If your source DB instance uses Transparent Data Encryption for Oracle or Microsoft SQL Server, you must specify this option when copying across AWS Regions. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Options">Option Group Considerations</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>The name of an option group to associate with the copy of the snapshot.</p> <p>Specify this option if you are copying a snapshot from one AWS Region to another, and your DB instance uses a nondefault option group. If your source DB instance uses Transparent Data Encryption for Oracle or Microsoft SQL Server, you must specify this option when copying across AWS Regions. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Options">Option group considerations</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub option_group_name: Option<String>,
-    /// <p><p>The URL that contains a Signature Version 4 signed request for the <code>CopyDBSnapshot</code> API action in the source AWS Region that contains the source DB snapshot to copy. </p> <p>You must specify this parameter when you copy an encrypted DB snapshot from another AWS Region by using the Amazon RDS API. Don&#39;t specify <code>PreSignedUrl</code> when you are copying an encrypted DB snapshot in the same AWS Region.</p> <p>The presigned URL must be a valid request for the <code>CopyDBSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB snapshot to be copied. The presigned URL request must contain the following parameter values: </p> <ul> <li> <p> <code>DestinationRegion</code> - The AWS Region that the encrypted DB snapshot is copied to. This AWS Region is the same one where the <code>CopyDBSnapshot</code> action is called that contains this presigned URL. </p> <p>For example, if you copy an encrypted DB snapshot from the us-west-2 AWS Region to the us-east-1 AWS Region, then you call the <code>CopyDBSnapshot</code> action in the us-east-1 AWS Region and provide a presigned URL that contains a call to the <code>CopyDBSnapshot</code> action in the us-west-2 AWS Region. For this example, the <code>DestinationRegion</code> in the presigned URL must be set to the us-east-1 AWS Region. </p> </li> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the copy of the DB snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBSnapshot</code> action that is called in the destination AWS Region, and the action contained in the presigned URL. </p> </li> <li> <p> <code>SourceDBSnapshotIdentifier</code> - The DB snapshot identifier for the encrypted snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB snapshot from the us-west-2 AWS Region, then your <code>SourceDBSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20161115</code>. </p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 Signing Process</a>. </p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note></p>
+    /// <p><p>The URL that contains a Signature Version 4 signed request for the <code>CopyDBSnapshot</code> API action in the source AWS Region that contains the source DB snapshot to copy. </p> <p>You must specify this parameter when you copy an encrypted DB snapshot from another AWS Region by using the Amazon RDS API. Don&#39;t specify <code>PreSignedUrl</code> when you are copying an encrypted DB snapshot in the same AWS Region.</p> <p>The presigned URL must be a valid request for the <code>CopyDBSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB snapshot to be copied. The presigned URL request must contain the following parameter values: </p> <ul> <li> <p> <code>DestinationRegion</code> - The AWS Region that the encrypted DB snapshot is copied to. This AWS Region is the same one where the <code>CopyDBSnapshot</code> action is called that contains this presigned URL. </p> <p>For example, if you copy an encrypted DB snapshot from the us-west-2 AWS Region to the us-east-1 AWS Region, then you call the <code>CopyDBSnapshot</code> action in the us-east-1 AWS Region and provide a presigned URL that contains a call to the <code>CopyDBSnapshot</code> action in the us-west-2 AWS Region. For this example, the <code>DestinationRegion</code> in the presigned URL must be set to the us-east-1 AWS Region. </p> </li> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the customer master key (CMK) to use to encrypt the copy of the DB snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBSnapshot</code> action that is called in the destination AWS Region, and the action contained in the presigned URL. </p> </li> <li> <p> <code>SourceDBSnapshotIdentifier</code> - The DB snapshot identifier for the encrypted snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB snapshot from the us-west-2 AWS Region, then your <code>SourceDBSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20161115</code>. </p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 Signing Process</a>. </p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note></p>
     pub pre_signed_url: Option<String>,
     /// <p>The identifier for the source DB snapshot.</p> <p>If the source snapshot is in the same AWS Region as the copy, specify a valid DB snapshot identifier. For example, you might specify <code>rds:mysql-instance1-snapshot-20130805</code>. </p> <p>If the source snapshot is in a different AWS Region than the copy, specify a valid DB snapshot ARN. For example, you might specify <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20130805</code>. </p> <p>If you are copying from a shared manual DB snapshot, this parameter must be the Amazon Resource Name (ARN) of the shared DB snapshot. </p> <p>If you are copying an encrypted snapshot this parameter must be in the ARN format for the source AWS Region, and must match the <code>SourceDBSnapshotIdentifier</code> in the <code>PreSignedUrl</code> parameter. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid system snapshot in the "available" state.</p> </li> </ul> <p>Example: <code>rds:mydb-2012-04-02-00-01</code> </p> <p>Example: <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20130805</code> </p>
     pub source_db_snapshot_identifier: String,
     pub tags: Option<Vec<Tag>>,
+    /// <p>The external custom Availability Zone (CAZ) identifier for the target CAZ.</p> <p>Example: <code>rds-caz-aiqhTgQv</code>.</p>
+    pub target_custom_availability_zone: Option<String>,
     /// <p>The identifier for the copy of the snapshot. </p> <p>Constraints:</p> <ul> <li> <p>Can't be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 letters, numbers, or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-db-snapshot</code> </p>
     pub target_db_snapshot_identifier: String,
 }
@@ -1312,6 +1379,12 @@ impl CopyDBSnapshotMessageSerializer {
         );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+        if let Some(ref field_value) = obj.target_custom_availability_zone {
+            params.put(
+                &format!("{}{}", prefix, "TargetCustomAvailabilityZone"),
+                &field_value,
+            );
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBSnapshotIdentifier"),
@@ -1350,7 +1423,7 @@ impl CopyDBSnapshotResultDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyOptionGroupMessage {
-    /// <p><p>The identifier or ARN for the source option group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid option group.</p> </li> <li> <p>If the source option group is in the same AWS Region as the copy, specify a valid option group identifier, for example <code>my-option-group</code>, or a valid ARN.</p> </li> <li> <p>If the source option group is in a different AWS Region than the copy, specify a valid option group ARN, for example <code>arn:aws:rds:us-west-2:123456789012:og:special-options</code>.</p> </li> </ul></p>
+    /// <p><p>The identifier for the source option group. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid option group.</p> </li> </ul></p>
     pub source_option_group_identifier: String,
     pub tags: Option<Vec<Tag>>,
     /// <p>The description for the copied option group.</p>
@@ -1570,7 +1643,7 @@ pub struct CreateDBClusterMessage {
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
-    /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>
+    /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p> <p> <b>Aurora MySQL</b> </p> <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, and <code>slowquery</code>. </p> <p> <b>Aurora PostgreSQL</b> </p> <p>Possible values are <code>postgresql</code> and <code>upgrade</code>. </p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>A value that indicates whether to enable write operations to be forwarded from this cluster to the primary cluster in an Aurora global database. The resulting changes are replicated back to this cluster. This parameter only applies to DB clusters that are secondary clusters in an Aurora global database. By default, Aurora disallows write operations for secondary clusters.</p>
     pub enable_global_write_forwarding: Option<bool>,
@@ -1580,13 +1653,13 @@ pub struct CreateDBClusterMessage {
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>The name of the database engine to be used for this DB cluster.</p> <p>Valid Values: <code>aurora</code> (for MySQL 5.6-compatible Aurora), <code>aurora-mysql</code> (for MySQL 5.7-compatible Aurora), and <code>aurora-postgresql</code> </p>
     pub engine: String,
-    /// <p><p>The DB engine mode of the DB cluster, either <code>provisioned</code>, <code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p> <note> <p> <code>global</code> engine mode only applies for global database clusters created with Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters in a global database use <code>provisioned</code> engine mode. </p> </note> <p>Limitations and requirements apply to some DB engine modes. For more information, see the following sections in the <i>Amazon Aurora User Guide</i>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html#aurora-serverless.limitations"> Limitations of Aurora Serverless</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-mysql-parallel-query.html#aurora-mysql-parallel-query-limitations"> Limitations of Parallel Query</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html#aurora-global-database.limitations"> Requirements for Aurora Global Databases</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-multi-master.html#aurora-multi-master-limitations"> Limitations of Multi-Master Clusters</a> </p> </li> </ul></p>
+    /// <p><p>The DB engine mode of the DB cluster, either <code>provisioned</code> <code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p> <p>The <code>parallelquery</code> engine mode isn&#39;t required for Aurora MySQL version 1.23 and higher 1.x versions, and version 2.09 and higher 2.x versions.</p> <p>The <code>global</code> engine mode isn&#39;t required for Aurora MySQL version 1.22 and higher 1.x versions, and <code>global</code> engine mode isn&#39;t required for any 2.x versions.</p> <p>The <code>multimaster</code> engine mode only applies for DB clusters created with Aurora MySQL version 5.6.10a.</p> <p>For Aurora PostgreSQL, the <code>global</code> engine mode isn&#39;t required, and both the <code>parallelquery</code> and the <code>multimaster</code> engine modes currently aren&#39;t supported.</p> <p>Limitations and requirements apply to some DB engine modes. For more information, see the following sections in the <i>Amazon Aurora User Guide</i>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html#aurora-serverless.limitations"> Limitations of Aurora Serverless</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-mysql-parallel-query.html#aurora-mysql-parallel-query-limitations"> Limitations of Parallel Query</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html#aurora-global-database.limitations"> Limitations of Aurora Global Databases</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-multi-master.html#aurora-multi-master-limitations"> Limitations of Multi-Master Clusters</a> </p> </li> </ul></p>
     pub engine_mode: Option<String>,
     /// <p>The version number of the database engine to use.</p> <p>To list all of the available engine versions for <code>aurora</code> (for MySQL 5.6-compatible Aurora), use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora --query "DBEngineVersions[].EngineVersion"</code> </p> <p>To list all of the available engine versions for <code>aurora-mysql</code> (for MySQL 5.7-compatible Aurora), use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora-mysql --query "DBEngineVersions[].EngineVersion"</code> </p> <p>To list all of the available engine versions for <code>aurora-postgresql</code>, use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora-postgresql --query "DBEngineVersions[].EngineVersion"</code> </p> <p> <b>Aurora MySQL</b> </p> <p>Example: <code>5.6.10a</code>, <code>5.6.mysql_aurora.1.19.2</code>, <code>5.7.12</code>, <code>5.7.mysql_aurora.2.04.5</code> </p> <p> <b>Aurora PostgreSQL</b> </p> <p>Example: <code>9.6.3</code>, <code>10.7</code> </p>
     pub engine_version: Option<String>,
     /// <p> The global cluster ID of an Aurora cluster that becomes the primary cluster in the new global database cluster. </p>
     pub global_cluster_identifier: Option<String>,
-    /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>If an encryption key isn't specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon RDS will use the encryption key used to encrypt the source. Otherwise, Amazon RDS will use your default encryption key. </p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is enabled and <code>ReplicationSourceIdentifier</code> isn't specified, then Amazon RDS will use your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a read replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the read replica in that AWS Region.</p>
+    /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). To use a CMK in a different AWS account, specify the key ARN or alias ARN.</p> <p>When a CMK isn't specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon RDS will use the CMK used to encrypt the source. Otherwise, Amazon RDS will use your default CMK. </p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is enabled and <code>ReplicationSourceIdentifier</code> isn't specified, then Amazon RDS will use your default CMK.</p> </li> </ul> <p>There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region.</p> <p>If you create a read replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a AWS KMS key identifier that is valid in the destination AWS Region. This CMK is used to encrypt the read replica in that AWS Region.</p>
     pub kms_key_id: Option<String>,
     /// <p>The password for the master database user. This password can contain any printable ASCII character except "/", """, or "@".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
     pub master_user_password: Option<String>,
@@ -1596,7 +1669,7 @@ pub struct CreateDBClusterMessage {
     pub option_group_name: Option<String>,
     /// <p>The port number on which the instances in the DB cluster accept connections.</p> <p> Default: <code>3306</code> if engine is set as aurora or <code>5432</code> if set to aurora-postgresql. </p>
     pub port: Option<i64>,
-    /// <p><p>A URL that contains a Signature Version 4 signed request for the <code>CreateDBCluster</code> action to be called in the source AWS Region where the DB cluster is replicated from. You only need to specify <code>PreSignedUrl</code> when you are performing cross-region replication from an encrypted DB cluster.</p> <p>The pre-signed URL must be a valid request for the <code>CreateDBCluster</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the copy of the DB cluster in the destination AWS Region. This should refer to the same KMS key for both the <code>CreateDBCluster</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that Aurora read replica will be created in.</p> </li> <li> <p> <code>ReplicationSourceIdentifier</code> - The DB cluster identifier for the encrypted DB cluster to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster from the us-west-2 AWS Region, then your <code>ReplicationSourceIdentifier</code> would look like Example: <code>arn:aws:rds:us-west-2:123456789012:cluster:aurora-cluster1</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note></p>
+    /// <p><p>A URL that contains a Signature Version 4 signed request for the <code>CreateDBCluster</code> action to be called in the source AWS Region where the DB cluster is replicated from. You only need to specify <code>PreSignedUrl</code> when you are performing cross-region replication from an encrypted DB cluster.</p> <p>The pre-signed URL must be a valid request for the <code>CreateDBCluster</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the copy of the DB cluster in the destination AWS Region. This should refer to the same AWS KMS CMK for both the <code>CreateDBCluster</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that Aurora read replica will be created in.</p> </li> <li> <p> <code>ReplicationSourceIdentifier</code> - The DB cluster identifier for the encrypted DB cluster to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster from the us-west-2 AWS Region, then your <code>ReplicationSourceIdentifier</code> would look like Example: <code>arn:aws:rds:us-west-2:123456789012:cluster:aurora-cluster1</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note></p>
     pub pre_signed_url: Option<String>,
     /// <p><p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. To see the time blocks available, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora"> Adjusting the Preferred DB Cluster Maintenance Window</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
     pub preferred_backup_window: Option<String>,
@@ -1935,7 +2008,7 @@ pub struct CreateDBInstanceMessage {
     pub allocated_storage: Option<i64>,
     /// <p>A value that indicates whether minor engine upgrades are applied automatically to the DB instance during the maintenance window. By default, minor engine upgrades are applied automatically.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p><p> The Availability Zone (AZ) where the database will be created. For information on AWS Regions and Availability Zones, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html">Regions and Availability Zones</a>. </p> <p>Default: A random, system-chosen Availability Zone in the endpoint&#39;s AWS Region.</p> <p> Example: <code>us-east-1d</code> </p> <p> Constraint: The <code>AvailabilityZone</code> parameter can&#39;t be specified if the DB instance is a Multi-AZ deployment. The specified Availability Zone must be in the same AWS Region as the current endpoint. </p> <note> <p>If you&#39;re creating a DB instance in an RDS on VMware environment, specify the identifier of the custom Availability Zone to create the DB instance in.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p> </note></p>
+    /// <p><p> The Availability Zone (AZ) where the database will be created. For information on AWS Regions and Availability Zones, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html">Regions and Availability Zones</a>. </p> <p>Default: A random, system-chosen Availability Zone in the endpoint&#39;s AWS Region.</p> <p> Example: <code>us-east-1d</code> </p> <p> Constraint: The <code>AvailabilityZone</code> parameter can&#39;t be specified if the DB instance is a Multi-AZ deployment. The specified Availability Zone must be in the same AWS Region as the current endpoint. </p> <note> <p>If you&#39;re creating a DB instance in an RDS on VMware environment, specify the identifier of the custom Availability Zone to create the DB instance in.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p> </note></p>
     pub availability_zone: Option<String>,
     /// <p><p>The number of days for which automated backups are retained. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. The retention period for automated backups is managed by the DB cluster.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 0 to 35</p> </li> <li> <p>Can&#39;t be set to 0 if the DB instance is a source to read replicas</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
@@ -1949,7 +2022,7 @@ pub struct CreateDBInstanceMessage {
     pub db_instance_class: String,
     /// <p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>
     pub db_instance_identifier: String,
-    /// <p><p>The meaning of this parameter differs according to the database engine you use.</p> <p> <b>MySQL</b> </p> <p>The name of the database to create when the DB instance is created. If this parameter isn&#39;t specified, no database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 letters or numbers.</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul> <p> <b>MariaDB</b> </p> <p>The name of the database to create when the DB instance is created. If this parameter isn&#39;t specified, no database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 letters or numbers.</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <p>The name of the database to create when the DB instance is created. If this parameter isn&#39;t specified, the default &quot;postgres&quot; database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 63 letters, numbers, or underscores.</p> </li> <li> <p>Must begin with a letter or an underscore. Subsequent characters can be letters, underscores, or digits (0-9).</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul> <p> <b>Oracle</b> </p> <p>The Oracle System ID (SID) of the created DB instance. If you specify <code>null</code>, the default value <code>ORCL</code> is used. You can&#39;t specify the string NULL, or any other reserved word, for <code>DBName</code>. </p> <p>Default: <code>ORCL</code> </p> <p>Constraints:</p> <ul> <li> <p>Can&#39;t be longer than 8 characters</p> </li> </ul> <p> <b>SQL Server</b> </p> <p>Not applicable. Must be null.</p> <p> <b>Amazon Aurora</b> </p> <p>The name of the database to create when the primary instance of the DB cluster is created. If this parameter isn&#39;t specified, no database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 letters or numbers.</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul></p>
+    /// <p><p>The meaning of this parameter differs according to the database engine you use.</p> <p> <b>MySQL</b> </p> <p>The name of the database to create when the DB instance is created. If this parameter isn&#39;t specified, no database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 letters or numbers.</p> </li> <li> <p>Must begin with a letter. Subsequent characters can be letters, underscores, or digits (0-9).</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul> <p> <b>MariaDB</b> </p> <p>The name of the database to create when the DB instance is created. If this parameter isn&#39;t specified, no database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 letters or numbers.</p> </li> <li> <p>Must begin with a letter. Subsequent characters can be letters, underscores, or digits (0-9).</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <p>The name of the database to create when the DB instance is created. If this parameter isn&#39;t specified, no database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 63 letters, numbers, or underscores.</p> </li> <li> <p>Must begin with a letter. Subsequent characters can be letters, underscores, or digits (0-9).</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul> <p> <b>Oracle</b> </p> <p>The Oracle System ID (SID) of the created DB instance. If you specify <code>null</code>, the default value <code>ORCL</code> is used. You can&#39;t specify the string NULL, or any other reserved word, for <code>DBName</code>. </p> <p>Default: <code>ORCL</code> </p> <p>Constraints:</p> <ul> <li> <p>Can&#39;t be longer than 8 characters</p> </li> </ul> <p> <b>SQL Server</b> </p> <p>Not applicable. Must be null.</p> <p> <b>Amazon Aurora</b> </p> <p>The name of the database to create when the primary instance of the DB cluster is created. If this parameter isn&#39;t specified, no database is created in the DB instance.</p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 letters or numbers.</p> </li> <li> <p>Can&#39;t be a word reserved by the specified database engine</p> </li> </ul></p>
     pub db_name: Option<String>,
     /// <p><p>The name of the DB parameter group to associate with this DB instance. If you do not specify a value, then the default DB parameter group for the specified DB engine and version is used.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub db_parameter_group_name: Option<String>,
@@ -1959,23 +2032,25 @@ pub struct CreateDBInstanceMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. You can enable or disable deletion protection for the DB cluster. For more information, see <code>CreateDBCluster</code>. DB instances in a DB cluster can be deleted even when deletion protection is enabled for the DB cluster. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>The Active Directory directory ID to create the DB instance in. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain.</p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>The Active Directory directory ID to create the DB instance in. Currently, only MySQL, Microsoft SQL Server, Oracle, and PostgreSQL DB instances can be created in an Active Directory Domain.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/kerberos-authentication.html"> Kerberos Authentication</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
-    /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs </a> in the <i>Amazon Relational Database Service User Guide</i>.</p>
+    /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs </a> in the <i>Amazon Relational Database Service User Guide</i>.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. CloudWatch Logs exports are managed by the DB cluster. </p> <p> <b>MariaDB</b> </p> <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, and <code>slowquery</code>. </p> <p> <b>Microsoft SQL Server</b> </p> <p>Possible values are <code>agent</code> and <code>error</code>. </p> <p> <b>MySQL</b> </p> <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, and <code>slowquery</code>. </p> <p> <b>Oracle</b> </p> <p>Possible values are <code>alert</code>, <code>audit</code>, <code>listener</code>, and <code>trace</code>. </p> <p> <b>PostgreSQL</b> </p> <p>Possible values are <code>postgresql</code> and <code>upgrade</code>. </p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>You can enable IAM database authentication for the following database engines:</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. Mapping AWS IAM accounts to database accounts is managed by the DB cluster.</p> <p> <b>MySQL</b> </p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>For MySQL 8.0, minor version 8.0.16 or higher</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <ul> <li> <p>For PostgreSQL 9.5, minor version 9.5.15 or higher</p> </li> <li> <p>For PostgreSQL 9.6, minor version 9.6.11 or higher</p> </li> <li> <p>PostgreSQL 10.6, 10.7, and 10.9</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>A value that indicates whether to enable a customer-owned IP address (CoIP) for an RDS on Outposts DB instance.</p> <p>A <i>CoIP</i> provides local or external connectivity to resources in your Outpost subnets through your on-premises network. For some use cases, a CoIP can provide lower latency for connections to the DB instance from outside of its virtual private cloud (VPC) on your local network.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Working with Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For more information about CoIPs, see <a href="https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing">Customer-owned IP addresses</a> in the <i>AWS Outposts User Guide</i>.</p>
+    pub enable_customer_owned_ip: Option<bool>,
+    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>This setting doesn't apply to Amazon Aurora. Mapping AWS IAM accounts to database accounts is managed by the DB cluster.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>A value that indicates whether to enable Performance Insights for the DB instance. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html">Using Amazon Performance Insights</a> in the <i>Amazon Relational Database Service User Guide</i>. </p>
     pub enable_performance_insights: Option<bool>,
     /// <p><p>The name of the database engine to be used for this instance. </p> <p>Not every database engine is available for every AWS Region. </p> <p>Valid Values: </p> <ul> <li> <p> <code>aurora</code> (for MySQL 5.6-compatible Aurora)</p> </li> <li> <p> <code>aurora-mysql</code> (for MySQL 5.7-compatible Aurora)</p> </li> <li> <p> <code>aurora-postgresql</code> </p> </li> <li> <p> <code>mariadb</code> </p> </li> <li> <p> <code>mysql</code> </p> </li> <li> <p> <code>oracle-ee</code> </p> </li> <li> <p> <code>oracle-se2</code> </p> </li> <li> <p> <code>oracle-se1</code> </p> </li> <li> <p> <code>oracle-se</code> </p> </li> <li> <p> <code>postgres</code> </p> </li> <li> <p> <code>sqlserver-ee</code> </p> </li> <li> <p> <code>sqlserver-se</code> </p> </li> <li> <p> <code>sqlserver-ex</code> </p> </li> <li> <p> <code>sqlserver-web</code> </p> </li> </ul></p>
     pub engine: String,
-    /// <p>The version number of the database engine to use.</p> <p>For a list of valid engine versions, use the <code>DescribeDBEngineVersions</code> action.</p> <p>The following are the database engines and links to information about the major and minor versions that are available with Amazon RDS. Not every database engine is available for every AWS Region.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. The version number of the database engine to be used by the DB instance is managed by the DB cluster.</p> <p> <b>MariaDB</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MariaDB.html#MariaDB.Concepts.VersionMgmt">MariaDB on Amazon RDS Versions</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>Microsoft SQL Server</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.FeatureSupport">Version and Feature Support on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>MySQL</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt">MySQL on Amazon RDS Versions</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>Oracle</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.Oracle.PatchComposition.html">Oracle Database Engine Release Notes</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>PostgreSQL</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts.General.DBVersions">Supported PostgreSQL Database Versions</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>The version number of the database engine to use.</p> <p>For a list of valid engine versions, use the <code>DescribeDBEngineVersions</code> action.</p> <p>The following are the database engines and links to information about the major and minor versions that are available with Amazon RDS. Not every database engine is available for every AWS Region.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. The version number of the database engine to be used by the DB instance is managed by the DB cluster.</p> <p> <b>MariaDB</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MariaDB.html#MariaDB.Concepts.VersionMgmt">MariaDB on Amazon RDS Versions</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>Microsoft SQL Server</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.VersionSupport">Microsoft SQL Server Versions on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>MySQL</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt">MySQL on Amazon RDS Versions</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>Oracle</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.Oracle.PatchComposition.html">Oracle Database Engine Release Notes</a> in the <i>Amazon RDS User Guide.</i> </p> <p> <b>PostgreSQL</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts.General.DBVersions">Supported PostgreSQL Database Versions</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub engine_version: Option<String>,
     /// <p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance. For information about valid Iops values, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS">Amazon RDS Provisioned IOPS Storage to Improve Performance</a> in the <i>Amazon RDS User Guide</i>. </p> <p>Constraints: For MariaDB, MySQL, Oracle, and PostgreSQL DB instances, must be a multiple between .5 and 50 of the storage amount for the DB instance. For SQL Server DB instances, must be a multiple between 1 and 50 of the storage amount for the DB instance. </p>
     pub iops: Option<i64>,
-    /// <p>The AWS KMS key identifier for an encrypted DB instance.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB instance with the same AWS account that owns the KMS encryption key used to encrypt the new DB instance, then you can use the KMS key alias instead of the ARN for the KM encryption key.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. The KMS key identifier is managed by the DB cluster. For more information, see <code>CreateDBCluster</code>.</p> <p>If <code>StorageEncrypted</code> is enabled, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon RDS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier for an encrypted DB instance.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). To use a CMK in a different AWS account, specify the key ARN or alias ARN.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. The AWS KMS key identifier is managed by the DB cluster. For more information, see <code>CreateDBCluster</code>.</p> <p>If <code>StorageEncrypted</code> is enabled, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon RDS uses your default CMK. There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region.</p>
     pub kms_key_id: Option<String>,
     /// <p>License model information for this DB instance.</p> <p> Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>
     pub license_model: Option<String>,
@@ -1991,9 +2066,11 @@ pub struct CreateDBInstanceMessage {
     pub monitoring_role_arn: Option<String>,
     /// <p>A value that indicates whether the DB instance is a Multi-AZ deployment. You can't set the <code>AvailabilityZone</code> parameter if the DB instance is a Multi-AZ deployment.</p>
     pub multi_az: Option<bool>,
+    /// <p>The name of the NCHAR character set for the Oracle DB instance.</p>
+    pub nchar_character_set_name: Option<String>,
     /// <p>Indicates that the DB instance should be associated with the specified option group.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, can't be removed from an option group. Also, that option group can't be removed from a DB instance once it is associated with a DB instance</p>
     pub option_group_name: Option<String>,
-    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier for encryption of Performance Insights data.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default CMK. There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region.</p>
     pub performance_insights_kms_key_id: Option<String>,
     /// <p>The amount of time, in days, to retain Performance Insights data. Valid values are 7 or 731 (2 years). </p>
     pub performance_insights_retention_period: Option<i64>,
@@ -2107,6 +2184,12 @@ impl CreateDBInstanceMessageSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.enable_customer_owned_ip {
+            params.put(
+                &format!("{}{}", prefix, "EnableCustomerOwnedIp"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.enable_iam_database_authentication {
             params.put(
                 &format!("{}{}", prefix, "EnableIAMDatabaseAuthentication"),
@@ -2152,6 +2235,12 @@ impl CreateDBInstanceMessageSerializer {
         }
         if let Some(ref field_value) = obj.multi_az {
             params.put(&format!("{}{}", prefix, "MultiAZ"), &field_value);
+        }
+        if let Some(ref field_value) = obj.nchar_character_set_name {
+            params.put(
+                &format!("{}{}", prefix, "NcharCharacterSetName"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.option_group_name {
             params.put(&format!("{}{}", prefix, "OptionGroupName"), &field_value);
@@ -2246,20 +2335,22 @@ pub struct CreateDBInstanceReadReplicaMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>The Active Directory directory ID to create the DB instance in.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>The Active Directory directory ID to create the DB instance in. Currently, only MySQL, Microsoft SQL Server, Oracle, and PostgreSQL DB instances can be created in an Active Directory Domain.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/kerberos-authentication.html"> Kerberos Authentication</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
     /// <p>The list of logs that the new DB instance is to export to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs </a> in the <i>Amazon RDS User Guide</i>.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled. For information about the supported DB engines, see <a>CreateDBInstance</a>.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>A value that indicates whether to enable Performance Insights for the read replica. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html">Using Amazon Performance Insights</a> in the <i>Amazon RDS User Guide</i>. </p>
     pub enable_performance_insights: Option<bool>,
     /// <p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.</p>
     pub iops: Option<i64>,
-    /// <p>The AWS KMS key ID for an encrypted read replica. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p> <p>If you create an encrypted read replica in the same AWS Region as the source DB instance, then you do not have to specify a value for this parameter. The read replica is encrypted with the same KMS key as the source DB instance.</p> <p>If you create an encrypted read replica in a different AWS Region, then you must specify a KMS key for the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region.</p> <p>You can't create an encrypted read replica from an unencrypted DB instance.</p>
+    /// <p>The AWS KMS key identifier for an encrypted read replica.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS CMK.</p> <p>If you create an encrypted read replica in the same AWS Region as the source DB instance, then do not specify a value for this parameter. A read replica in the same Region is always encrypted with the same AWS KMS CMK as the source DB instance.</p> <p>If you create an encrypted read replica in a different AWS Region, then you must specify a AWS KMS key identifier for the destination AWS Region. AWS KMS CMKs are specific to the AWS Region that they are created in, and you can't use CMKs from one AWS Region in another AWS Region.</p> <p>You can't create an encrypted read replica from an unencrypted DB instance.</p>
     pub kms_key_id: Option<String>,
+    /// <p>The upper limit to which Amazon RDS can automatically scale the storage of the DB instance.</p>
+    pub max_allocated_storage: Option<i64>,
     /// <p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the read replica. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0.</p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0.</p> <p>Valid Values: <code>0, 1, 5, 10, 15, 30, 60</code> </p>
     pub monitoring_interval: Option<i64>,
     /// <p>The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to Amazon CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. For information on creating a monitoring role, go to <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole">To create an IAM role for Amazon RDS Enhanced Monitoring</a> in the <i>Amazon RDS User Guide</i>.</p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>
@@ -2268,7 +2359,7 @@ pub struct CreateDBInstanceReadReplicaMessage {
     pub multi_az: Option<bool>,
     /// <p><p>The option group the DB instance is associated with. If omitted, the option group associated with the source instance is used.</p> <note> <p>For SQL Server, you must use the option group associated with the source instance.</p> </note></p>
     pub option_group_name: Option<String>,
-    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier for encryption of Performance Insights data.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default CMK. There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region.</p>
     pub performance_insights_kms_key_id: Option<String>,
     /// <p>The amount of time, in days, to retain Performance Insights data. Valid values are 7 or 731 (2 years). </p>
     pub performance_insights_retention_period: Option<i64>,
@@ -2280,6 +2371,8 @@ pub struct CreateDBInstanceReadReplicaMessage {
     pub processor_features: Option<Vec<ProcessorFeature>>,
     /// <p>A value that indicates whether the DB instance is publicly accessible.</p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p>For more information, see <a>CreateDBInstance</a>.</p>
     pub publicly_accessible: Option<bool>,
+    /// <p>The open mode of the replica database: mounted or read-only.</p> <note> <p>This parameter is only supported for Oracle DB instances.</p> </note> <p>Mounted DB replicas are included in Oracle Enterprise Edition. The main use case for mounted replicas is cross-Region disaster recovery. The primary database doesn't use Active Data Guard to transmit information to the mounted replica. Because it doesn't accept user connections, a mounted replica can't serve a read-only workload.</p> <p>You can create a combination of mounted and read-only DB replicas for the same primary DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-read-replicas.html">Working with Oracle Read Replicas for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>.</p>
+    pub replica_mode: Option<String>,
     /// <p><p>The identifier of the DB instance that will act as the source for the read replica. Each DB instance can have up to five read replicas.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier of an existing MySQL, MariaDB, Oracle, PostgreSQL, or SQL Server DB instance.</p> </li> <li> <p>Can specify a DB instance that is a MySQL read replica only if the source is running MySQL 5.6 or later.</p> </li> <li> <p>For the limitations of Oracle read replicas, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-read-replicas.html">Read Replica Limitations with Oracle</a> in the <i>Amazon RDS User Guide</i>.</p> </li> <li> <p>For the limitations of SQL Server read replicas, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/SQLServer.ReadReplicas.Limitations.html">Read Replica Limitations with Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> </li> <li> <p>Can specify a PostgreSQL DB instance only if the source is running PostgreSQL 9.3.5 or later (9.4.7 and higher for cross-region replication).</p> </li> <li> <p>The specified DB instance must have automatic backups enabled, that is, its backup retention period must be greater than 0.</p> </li> <li> <p>If the source DB instance is in the same AWS Region as the read replica, specify a valid DB instance identifier.</p> </li> <li> <p>If the source DB instance is in a different AWS Region from the read replica, specify a valid DB instance ARN. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing">Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>. This doesn&#39;t apply to SQL Server, which doesn&#39;t support cross-region replicas.</p> </li> </ul></p>
     pub source_db_instance_identifier: String,
     /// <p>Specifies the storage type to be associated with the read replica.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise <code>gp2</code> </p>
@@ -2362,6 +2455,12 @@ impl CreateDBInstanceReadReplicaMessageSerializer {
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
+        if let Some(ref field_value) = obj.max_allocated_storage {
+            params.put(
+                &format!("{}{}", prefix, "MaxAllocatedStorage"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.monitoring_interval {
             params.put(&format!("{}{}", prefix, "MonitoringInterval"), &field_value);
         }
@@ -2401,6 +2500,9 @@ impl CreateDBInstanceReadReplicaMessageSerializer {
         }
         if let Some(ref field_value) = obj.publicly_accessible {
             params.put(&format!("{}{}", prefix, "PubliclyAccessible"), &field_value);
+        }
+        if let Some(ref field_value) = obj.replica_mode {
+            params.put(&format!("{}{}", prefix, "ReplicaMode"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "SourceDBInstanceIdentifier"),
@@ -2856,13 +2958,13 @@ impl CreateDBSubnetGroupResultDeserializer {
 pub struct CreateEventSubscriptionMessage {
     /// <p> A value that indicates whether to activate the subscription. If the event notification subscription isn't activated, the subscription is created but not active. </p>
     pub enabled: Option<bool>,
-    /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action. </p>
+    /// <p> A list of event categories for a particular source type (<code>SourceType</code>) that you want to subscribe to. You can see a list of the categories for a given source type in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> in the <i>Amazon RDS User Guide</i> or by using the <code>DescribeEventCategories</code> operation. </p>
     pub event_categories: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>
     pub sns_topic_arn: String,
-    /// <p><p>The list of identifiers of the event sources for which events are returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It can&#39;t end with a hyphen or contain two consecutive hyphens.</p> <p>Constraints:</p> <ul> <li> <p>If SourceIds are supplied, SourceType must also be provided.</p> </li> <li> <p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> </ul></p>
+    /// <p><p>The list of identifiers of the event sources for which events are returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It can&#39;t end with a hyphen or contain two consecutive hyphens.</p> <p>Constraints:</p> <ul> <li> <p>If a <code>SourceIds</code> value is supplied, <code>SourceType</code> must also be provided.</p> </li> <li> <p>If the source type is a DB instance, a <code>DBInstanceIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB cluster, a <code>DBClusterIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB cluster snapshot, a <code>DBClusterSnapshotIdentifier</code> value must be supplied.</p> </li> </ul></p>
     pub source_ids: Option<Vec<String>>,
-    /// <p>The type of source that is generating the events. For example, if you want to be notified of events generated by a DB instance, you would set this parameter to db-instance. if this value isn't specified, all events are returned.</p> <p>Valid values: <code>db-instance</code> | <code>db-cluster</code> | <code>db-parameter-group</code> | <code>db-security-group</code> | <code>db-snapshot</code> | <code>db-cluster-snapshot</code> </p>
+    /// <p>The type of source that is generating the events. For example, if you want to be notified of events generated by a DB instance, you set this parameter to <code>db-instance</code>. If this value isn't specified, all events are returned.</p> <p>Valid values: <code>db-instance</code> | <code>db-cluster</code> | <code>db-parameter-group</code> | <code>db-security-group</code> | <code>db-snapshot</code> | <code>db-cluster-snapshot</code> </p>
     pub source_type: Option<String>,
     /// <p>The name of the subscription.</p> <p>Constraints: The name must be less than 255 characters.</p>
     pub subscription_name: String,
@@ -2948,7 +3050,7 @@ pub struct CreateGlobalClusterMessage {
     pub database_name: Option<String>,
     /// <p> The deletion protection setting for the new global database. The global database can't be deleted when deletion protection is enabled. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>Provides the name of the database engine to be used for this DB cluster.</p>
+    /// <p>The name of the database engine to be used for this DB cluster.</p>
     pub engine: Option<String>,
     /// <p>The engine version of the Aurora global database.</p>
     pub engine_version: Option<String>,
@@ -3105,7 +3207,7 @@ impl CreateOptionGroupResultDeserializer {
         )
     }
 }
-/// <p>A custom Availability Zone (AZ) is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+/// <p>A custom Availability Zone (AZ) is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CustomAvailabilityZone {
@@ -3224,7 +3326,7 @@ impl CustomAvailabilityZoneMessageDeserializer {
 pub struct DBCluster {
     /// <p>The name of the Amazon Kinesis data stream used for the database activity stream.</p>
     pub activity_stream_kinesis_stream_name: Option<String>,
-    /// <p>The AWS KMS key identifier used for encrypting messages in the database activity stream.</p>
+    /// <p>The AWS KMS key identifier used for encrypting messages in the database activity stream.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub activity_stream_kms_key_id: Option<String>,
     /// <p>The mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. </p>
     pub activity_stream_mode: Option<String>,
@@ -3270,7 +3372,7 @@ pub struct DBCluster {
     pub db_subnet_group: Option<String>,
     /// <p>Contains the name of the initial database of this DB cluster that was provided at create time, if one was specified when the DB cluster was created. This same name is returned for the life of the DB cluster.</p>
     pub database_name: Option<String>,
-    /// <p>The AWS Region-unique, immutable identifier for the DB cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed.</p>
+    /// <p>The AWS Region-unique, immutable identifier for the DB cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS CMK for the DB cluster is accessed.</p>
     pub db_cluster_resource_id: Option<String>,
     /// <p>Indicates if the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. </p>
     pub deletion_protection: Option<bool>,
@@ -3284,9 +3386,9 @@ pub struct DBCluster {
     pub enabled_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>Specifies the connection endpoint for the primary instance of the DB cluster.</p>
     pub endpoint: Option<String>,
-    /// <p>Provides the name of the database engine to be used for this DB cluster.</p>
+    /// <p>The name of the database engine to be used for this DB cluster.</p>
     pub engine: Option<String>,
-    /// <p><p>The DB engine mode of the DB cluster, either <code>provisioned</code>, <code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p> <note> <p> <code>global</code> engine mode only applies for global database clusters created with Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters in a global database use <code>provisioned</code> engine mode. To check if a DB cluster is part of a global database, use <code>DescribeGlobalClusters</code> instead of checking the <code>EngineMode</code> return value from <code>DescribeDBClusters</code>. </p> </note></p>
+    /// <p>The DB engine mode of the DB cluster, either <code>provisioned</code>, <code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBCluster.html"> CreateDBCluster</a>.</p>
     pub engine_mode: Option<String>,
     /// <p>Indicates the database engine version.</p>
     pub engine_version: Option<String>,
@@ -3300,7 +3402,7 @@ pub struct DBCluster {
     pub http_endpoint_enabled: Option<bool>,
     /// <p>A value that indicates whether the mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled.</p>
     pub iam_database_authentication_enabled: Option<bool>,
-    /// <p>If <code>StorageEncrypted</code> is enabled, the AWS KMS key identifier for the encrypted DB cluster.</p>
+    /// <p>If <code>StorageEncrypted</code> is enabled, the AWS KMS key identifier for the encrypted DB cluster.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub kms_key_id: Option<String>,
     /// <p>Specifies the latest time to which a database can be restored with point-in-time restore.</p>
     pub latest_restorable_time: Option<String>,
@@ -3308,6 +3410,8 @@ pub struct DBCluster {
     pub master_username: Option<String>,
     /// <p>Specifies whether the DB cluster has instances in multiple Availability Zones.</p>
     pub multi_az: Option<bool>,
+    /// <p>Specifies that changes to the DB cluster are pending. This element is only included when changes are pending. Specific changes are identified by subelements.</p>
+    pub pending_modified_values: Option<ClusterPendingModifiedValues>,
     /// <p>Specifies the progress of the operation as a percentage.</p>
     pub percent_progress: Option<String>,
     /// <p>Specifies the port that the database engine is listening on.</p>
@@ -3327,6 +3431,7 @@ pub struct DBCluster {
     pub status: Option<String>,
     /// <p>Specifies whether the DB cluster is encrypted.</p>
     pub storage_encrypted: Option<bool>,
+    pub tag_list: Option<Vec<Tag>>,
     /// <p>Provides a list of VPC security groups that the DB cluster belongs to.</p>
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
@@ -3568,6 +3673,13 @@ impl DBClusterDeserializer {
                     obj.multi_az =
                         Some(BooleanOptionalDeserializer::deserialize("MultiAZ", stack)?);
                 }
+                "PendingModifiedValues" => {
+                    obj.pending_modified_values =
+                        Some(ClusterPendingModifiedValuesDeserializer::deserialize(
+                            "PendingModifiedValues",
+                            stack,
+                        )?);
+                }
                 "PercentProgress" => {
                     obj.percent_progress =
                         Some(StringDeserializer::deserialize("PercentProgress", stack)?);
@@ -3618,6 +3730,11 @@ impl DBClusterDeserializer {
                 "StorageEncrypted" => {
                     obj.storage_encrypted =
                         Some(BooleanDeserializer::deserialize("StorageEncrypted", stack)?);
+                }
+                "TagList" => {
+                    obj.tag_list
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("TagList", stack)?);
                 }
                 "VpcSecurityGroups" => {
                     obj.vpc_security_groups.get_or_insert(vec![]).extend(
@@ -3838,7 +3955,7 @@ pub struct DBClusterEndpoint {
     pub excluded_members: Option<Vec<String>>,
     /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
     pub static_members: Option<Vec<String>>,
-    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>modifying</code>.</p>
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>inactive</code>, <code>modifying</code>. The <code>inactive</code> state applies to an endpoint that can't be used for a certain kind of cluster, such as a <code>writer</code> endpoint for a read-only secondary cluster in a global database.</p>
     pub status: Option<String>,
 }
 
@@ -4161,9 +4278,9 @@ impl DBClusterOptionGroupStatusDeserializer {
 pub struct DBClusterParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB cluster parameter group.</p>
     pub db_cluster_parameter_group_arn: Option<String>,
-    /// <p>Provides the name of the DB cluster parameter group.</p>
+    /// <p>The name of the DB cluster parameter group.</p>
     pub db_cluster_parameter_group_name: Option<String>,
-    /// <p>Provides the name of the DB parameter group family that this DB cluster parameter group is compatible with.</p>
+    /// <p>The name of the DB parameter group family that this DB cluster parameter group is compatible with.</p>
     pub db_parameter_group_family: Option<String>,
     /// <p>Provides the customer-specified description for this DB cluster parameter group.</p>
     pub description: Option<String>,
@@ -4423,7 +4540,7 @@ pub struct DBClusterSnapshot {
     pub engine_version: Option<String>,
     /// <p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.</p>
     pub iam_database_authentication_enabled: Option<bool>,
-    /// <p>If <code>StorageEncrypted</code> is true, the AWS KMS key identifier for the encrypted DB cluster snapshot.</p>
+    /// <p>If <code>StorageEncrypted</code> is true, the AWS KMS key identifier for the encrypted DB cluster snapshot.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub kms_key_id: Option<String>,
     /// <p>Provides the license model information for this DB cluster snapshot.</p>
     pub license_model: Option<String>,
@@ -4443,6 +4560,7 @@ pub struct DBClusterSnapshot {
     pub status: Option<String>,
     /// <p>Specifies whether the DB cluster snapshot is encrypted.</p>
     pub storage_encrypted: Option<bool>,
+    pub tag_list: Option<Vec<Tag>>,
     /// <p>Provides the VPC ID associated with the DB cluster snapshot.</p>
     pub vpc_id: Option<String>,
 }
@@ -4542,6 +4660,11 @@ impl DBClusterSnapshotDeserializer {
                 "StorageEncrypted" => {
                     obj.storage_encrypted =
                         Some(BooleanDeserializer::deserialize("StorageEncrypted", stack)?);
+                }
+                "TagList" => {
+                    obj.tag_list
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("TagList", stack)?);
                 }
                 "VpcId" => {
                     obj.vpc_id = Some(StringDeserializer::deserialize("VpcId", stack)?);
@@ -4738,16 +4861,22 @@ pub struct DBEngineVersion {
     pub exportable_log_types: Option<Vec<String>>,
     /// <p>The status of the DB engine version, either <code>available</code> or <code>deprecated</code>.</p>
     pub status: Option<String>,
-    /// <p> A list of the character sets supported by this engine for the <code>CharacterSetName</code> parameter of the <code>CreateDBInstance</code> action. </p>
+    /// <p>A list of the character sets supported by this engine for the <code>CharacterSetName</code> parameter of the <code>CreateDBInstance</code> operation. </p>
     pub supported_character_sets: Option<Vec<CharacterSet>>,
-    /// <p><p>A list of the supported DB engine modes.</p> <note> <p> <code>global</code> engine mode only applies for global database clusters created with Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters in a global database use <code>provisioned</code> engine mode. </p> </note></p>
+    /// <p>A list of the supported DB engine modes.</p>
     pub supported_engine_modes: Option<Vec<String>>,
     /// <p><p> A list of features supported by the DB engine. Supported feature names include the following. </p> <ul> <li> <p>s3Import</p> </li> </ul></p>
     pub supported_feature_names: Option<Vec<String>>,
+    /// <p>A list of the character sets supported by the Oracle DB engine for the <code>NcharCharacterSetName</code> parameter of the <code>CreateDBInstance</code> operation. </p>
+    pub supported_nchar_character_sets: Option<Vec<CharacterSet>>,
     /// <p>A list of the time zones supported by this engine for the <code>Timezone</code> parameter of the <code>CreateDBInstance</code> action. </p>
     pub supported_timezones: Option<Vec<Timezone>>,
+    /// <p>A value that indicates whether you can use Aurora global databases with a specific DB engine version.</p>
+    pub supports_global_databases: Option<bool>,
     /// <p>A value that indicates whether the engine version supports exporting the log types specified by ExportableLogTypes to CloudWatch Logs.</p>
     pub supports_log_exports_to_cloudwatch_logs: Option<bool>,
+    /// <p>A value that indicates whether you can use Aurora parallel query with a specific DB engine version.</p>
+    pub supports_parallel_query: Option<bool>,
     /// <p>Indicates whether the database engine version supports read replicas.</p>
     pub supports_read_replica: Option<bool>,
     /// <p>A list of engine versions that this database engine version can be upgraded to.</p>
@@ -4821,6 +4950,14 @@ impl DBEngineVersionDeserializer {
                         FeatureNameListDeserializer::deserialize("SupportedFeatureNames", stack)?,
                     );
                 }
+                "SupportedNcharCharacterSets" => {
+                    obj.supported_nchar_character_sets
+                        .get_or_insert(vec![])
+                        .extend(SupportedCharacterSetsListDeserializer::deserialize(
+                            "SupportedNcharCharacterSets",
+                            stack,
+                        )?);
+                }
                 "SupportedTimezones" => {
                     obj.supported_timezones.get_or_insert(vec![]).extend(
                         SupportedTimezonesListDeserializer::deserialize(
@@ -4829,12 +4966,24 @@ impl DBEngineVersionDeserializer {
                         )?,
                     );
                 }
+                "SupportsGlobalDatabases" => {
+                    obj.supports_global_databases = Some(BooleanDeserializer::deserialize(
+                        "SupportsGlobalDatabases",
+                        stack,
+                    )?);
+                }
                 "SupportsLogExportsToCloudwatchLogs" => {
                     obj.supports_log_exports_to_cloudwatch_logs =
                         Some(BooleanDeserializer::deserialize(
                             "SupportsLogExportsToCloudwatchLogs",
                             stack,
                         )?);
+                }
+                "SupportsParallelQuery" => {
+                    obj.supports_parallel_query = Some(BooleanDeserializer::deserialize(
+                        "SupportsParallelQuery",
+                        stack,
+                    )?);
                 }
                 "SupportsReadReplica" => {
                     obj.supports_read_replica = Some(BooleanDeserializer::deserialize(
@@ -4931,10 +5080,15 @@ pub struct DBInstance {
     pub character_set_name: Option<String>,
     /// <p>Specifies whether tags are copied from the DB instance to snapshots of the DB instance.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. Copying tags to snapshots is managed by the DB cluster. Setting this value for an Aurora DB instance has no effect on the DB cluster setting. For more information, see <code>DBCluster</code>.</p>
     pub copy_tags_to_snapshot: Option<bool>,
+    /// <p>Specifies whether a customer-owned IP address (CoIP) is enabled for an RDS on Outposts DB instance.</p> <p>A <i>CoIP </i>provides local or external connectivity to resources in your Outpost subnets through your on-premises network. For some use cases, a CoIP can provide lower latency for connections to the DB instance from outside of its virtual private cloud (VPC) on your local network.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Working with Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For more information about CoIPs, see <a href="https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing">Customer-owned IP addresses</a> in the <i>AWS Outposts User Guide</i>.</p>
+    pub customer_owned_ip_enabled: Option<bool>,
     /// <p>If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.</p>
     pub db_cluster_identifier: Option<String>,
     /// <p>The Amazon Resource Name (ARN) for the DB instance.</p>
     pub db_instance_arn: Option<String>,
+    /// <p>The list of replicated automated backups associated with the DB instance.</p>
+    pub db_instance_automated_backups_replications:
+        Option<Vec<DBInstanceAutomatedBackupsReplication>>,
     /// <p>Contains the name of the compute and memory capacity class of the DB instance.</p>
     pub db_instance_class: Option<String>,
     /// <p>Contains a user-supplied database identifier. This identifier is the unique key that identifies a DB instance.</p>
@@ -4951,7 +5105,7 @@ pub struct DBInstance {
     pub db_subnet_group: Option<DBSubnetGroup>,
     /// <p>Specifies the port that the DB instance listens on. If the DB instance is part of a DB cluster, this can be a different port than the DB cluster port.</p>
     pub db_instance_port: Option<i64>,
-    /// <p>The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed.</p>
+    /// <p>The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS customer master key (CMK) for the DB instance is accessed.</p>
     pub dbi_resource_id: Option<String>,
     /// <p>Indicates if the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
@@ -4961,7 +5115,7 @@ pub struct DBInstance {
     pub enabled_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>Specifies the connection endpoint.</p>
     pub endpoint: Option<Endpoint>,
-    /// <p>Provides the name of the database engine to be used for this DB instance.</p>
+    /// <p>The name of the database engine to be used for this DB instance.</p>
     pub engine: Option<String>,
     /// <p>Indicates the database engine version.</p>
     pub engine_version: Option<String>,
@@ -4973,7 +5127,7 @@ pub struct DBInstance {
     pub instance_create_time: Option<String>,
     /// <p>Specifies the Provisioned IOPS (I/O operations per second) value.</p>
     pub iops: Option<i64>,
-    /// <p> If <code>StorageEncrypted</code> is true, the AWS KMS key identifier for the encrypted DB instance. </p>
+    /// <p> If <code>StorageEncrypted</code> is true, the AWS KMS key identifier for the encrypted DB instance. </p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub kms_key_id: Option<String>,
     /// <p>Specifies the latest time to which a database can be restored with point-in-time restore.</p>
     pub latest_restorable_time: Option<String>,
@@ -4991,13 +5145,15 @@ pub struct DBInstance {
     pub monitoring_role_arn: Option<String>,
     /// <p>Specifies if the DB instance is a Multi-AZ deployment.</p>
     pub multi_az: Option<bool>,
+    /// <p>The name of the NCHAR character set for the Oracle DB instance. This character set specifies the Unicode encoding for data stored in table columns of type NCHAR, NCLOB, or NVARCHAR2. </p>
+    pub nchar_character_set_name: Option<String>,
     /// <p>Provides the list of option group memberships for this DB instance.</p>
     pub option_group_memberships: Option<Vec<OptionGroupMembership>>,
     /// <p>Specifies that changes to the DB instance are pending. This element is only included when changes are pending. Specific changes are identified by subelements.</p>
     pub pending_modified_values: Option<PendingModifiedValues>,
     /// <p>True if Performance Insights is enabled for the DB instance, and otherwise false.</p>
     pub performance_insights_enabled: Option<bool>,
-    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p>
+    /// <p>The AWS KMS key identifier for encryption of Performance Insights data.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub performance_insights_kms_key_id: Option<String>,
     /// <p>The amount of time, in days, to retain Performance Insights data. Valid values are 7 or 731 (2 years). </p>
     pub performance_insights_retention_period: Option<i64>,
@@ -5017,6 +5173,8 @@ pub struct DBInstance {
     pub read_replica_db_instance_identifiers: Option<Vec<String>>,
     /// <p>Contains the identifier of the source DB instance if this DB instance is a read replica.</p>
     pub read_replica_source_db_instance_identifier: Option<String>,
+    /// <p><p>The open mode of an Oracle read replica. The default is <code>open-read-only</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-read-replicas.html">Working with Oracle Read Replicas for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>.</p> <note> <p>This attribute is only supported in RDS for Oracle.</p> </note></p>
+    pub replica_mode: Option<String>,
     /// <p>If present, specifies the name of the secondary Availability Zone for a DB instance with multi-AZ support.</p>
     pub secondary_availability_zone: Option<String>,
     /// <p>The status of a read replica. If the instance isn't a read replica, this is blank.</p>
@@ -5025,6 +5183,7 @@ pub struct DBInstance {
     pub storage_encrypted: Option<bool>,
     /// <p>Specifies the storage type associated with DB instance.</p>
     pub storage_type: Option<String>,
+    pub tag_list: Option<Vec<Tag>>,
     /// <p>The ARN from the key store with which the instance is associated for TDE encryption.</p>
     pub tde_credential_arn: Option<String>,
     /// <p>The time zone of the DB instance. In most cases, the <code>Timezone</code> element is empty. <code>Timezone</code> content appears only for Microsoft SQL Server DB instances that were created with a time zone specified. </p>
@@ -5084,6 +5243,12 @@ impl DBInstanceDeserializer {
                         stack,
                     )?);
                 }
+                "CustomerOwnedIpEnabled" => {
+                    obj.customer_owned_ip_enabled = Some(BooleanOptionalDeserializer::deserialize(
+                        "CustomerOwnedIpEnabled",
+                        stack,
+                    )?);
+                }
                 "DBClusterIdentifier" => {
                     obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
                         "DBClusterIdentifier",
@@ -5093,6 +5258,16 @@ impl DBInstanceDeserializer {
                 "DBInstanceArn" => {
                     obj.db_instance_arn =
                         Some(StringDeserializer::deserialize("DBInstanceArn", stack)?);
+                }
+                "DBInstanceAutomatedBackupsReplications" => {
+                    obj.db_instance_automated_backups_replications
+                        .get_or_insert(vec![])
+                        .extend(
+                            DBInstanceAutomatedBackupsReplicationListDeserializer::deserialize(
+                                "DBInstanceAutomatedBackupsReplications",
+                                stack,
+                            )?,
+                        );
                 }
                 "DBInstanceClass" => {
                     obj.db_instance_class =
@@ -5234,6 +5409,12 @@ impl DBInstanceDeserializer {
                 "MultiAZ" => {
                     obj.multi_az = Some(BooleanDeserializer::deserialize("MultiAZ", stack)?);
                 }
+                "NcharCharacterSetName" => {
+                    obj.nchar_character_set_name = Some(StringDeserializer::deserialize(
+                        "NcharCharacterSetName",
+                        stack,
+                    )?);
+                }
                 "OptionGroupMemberships" => {
                     obj.option_group_memberships.get_or_insert(vec![]).extend(
                         OptionGroupMembershipListDeserializer::deserialize(
@@ -5323,6 +5504,10 @@ impl DBInstanceDeserializer {
                             stack,
                         )?);
                 }
+                "ReplicaMode" => {
+                    obj.replica_mode =
+                        Some(ReplicaModeDeserializer::deserialize("ReplicaMode", stack)?);
+                }
                 "SecondaryAvailabilityZone" => {
                     obj.secondary_availability_zone = Some(StringDeserializer::deserialize(
                         "SecondaryAvailabilityZone",
@@ -5340,6 +5525,11 @@ impl DBInstanceDeserializer {
                 }
                 "StorageType" => {
                     obj.storage_type = Some(StringDeserializer::deserialize("StorageType", stack)?);
+                }
+                "TagList" => {
+                    obj.tag_list
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("TagList", stack)?);
                 }
                 "TdeCredentialArn" => {
                     obj.tde_credential_arn =
@@ -5362,7 +5552,7 @@ impl DBInstanceDeserializer {
         })
     }
 }
-/// <p>An automated backup of a DB instance. It it consists of system backups, transaction logs, and the database instance properties that existed at the time you deleted the source instance. </p>
+/// <p>An automated backup of a DB instance. It consists of system backups, transaction logs, and the database instance properties that existed at the time you deleted the source instance.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceAutomatedBackup {
@@ -5370,8 +5560,15 @@ pub struct DBInstanceAutomatedBackup {
     pub allocated_storage: Option<i64>,
     /// <p>The Availability Zone that the automated backup was created in. For information on AWS Regions and Availability Zones, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html">Regions and Availability Zones</a>.</p>
     pub availability_zone: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) for the automated backup.</p>
+    /// <p>The retention period for the automated backups.</p>
+    pub backup_retention_period: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) for the automated backups.</p>
     pub db_instance_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the replicated automated backups.</p>
+    pub db_instance_automated_backups_arn: Option<String>,
+    /// <p>The list of replications to different AWS Regions associated with the automated backup.</p>
+    pub db_instance_automated_backups_replications:
+        Option<Vec<DBInstanceAutomatedBackupsReplication>>,
     /// <p>The customer id of the instance that is/was associated with the automated backup. </p>
     pub db_instance_identifier: Option<String>,
     /// <p>The identifier for the source DB instance, which can't be changed and which is unique to an AWS Region.</p>
@@ -5388,7 +5585,7 @@ pub struct DBInstanceAutomatedBackup {
     pub instance_create_time: Option<String>,
     /// <p>The IOPS (I/O operations per second) value for the automated backup. </p>
     pub iops: Option<i64>,
-    /// <p>The AWS KMS key ID for an automated backup. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p>
+    /// <p>The AWS KMS key ID for an automated backup.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub kms_key_id: Option<String>,
     /// <p>License model information for the automated backup.</p>
     pub license_model: Option<String>,
@@ -5435,9 +5632,33 @@ impl DBInstanceAutomatedBackupDeserializer {
                         obj.availability_zone =
                             Some(StringDeserializer::deserialize("AvailabilityZone", stack)?);
                     }
+                    "BackupRetentionPeriod" => {
+                        obj.backup_retention_period =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "BackupRetentionPeriod",
+                                stack,
+                            )?);
+                    }
                     "DBInstanceArn" => {
                         obj.db_instance_arn =
                             Some(StringDeserializer::deserialize("DBInstanceArn", stack)?);
+                    }
+                    "DBInstanceAutomatedBackupsArn" => {
+                        obj.db_instance_automated_backups_arn =
+                            Some(StringDeserializer::deserialize(
+                                "DBInstanceAutomatedBackupsArn",
+                                stack,
+                            )?);
+                    }
+                    "DBInstanceAutomatedBackupsReplications" => {
+                        obj.db_instance_automated_backups_replications
+                            .get_or_insert(vec![])
+                            .extend(
+                                DBInstanceAutomatedBackupsReplicationListDeserializer::deserialize(
+                                    "DBInstanceAutomatedBackupsReplications",
+                                    stack,
+                                )?,
+                            );
                     }
                     "DBInstanceIdentifier" => {
                         obj.db_instance_identifier = Some(StringDeserializer::deserialize(
@@ -5586,6 +5807,64 @@ impl DBInstanceAutomatedBackupMessageDeserializer {
                 Ok(())
             },
         )
+    }
+}
+/// <p>Automated backups of a DB instance replicated to another AWS Region. They consist of system backups, transaction logs, and database instance properties.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DBInstanceAutomatedBackupsReplication {
+    /// <p>The Amazon Resource Name (ARN) of the replicated automated backups.</p>
+    pub db_instance_automated_backups_arn: Option<String>,
+}
+
+#[allow(dead_code)]
+struct DBInstanceAutomatedBackupsReplicationDeserializer;
+impl DBInstanceAutomatedBackupsReplicationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DBInstanceAutomatedBackupsReplication, XmlParseError> {
+        deserialize_elements::<_, DBInstanceAutomatedBackupsReplication, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstanceAutomatedBackupsArn" => {
+                        obj.db_instance_automated_backups_arn =
+                            Some(StringDeserializer::deserialize(
+                                "DBInstanceAutomatedBackupsArn",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct DBInstanceAutomatedBackupsReplicationListDeserializer;
+impl DBInstanceAutomatedBackupsReplicationListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DBInstanceAutomatedBackupsReplication>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "DBInstanceAutomatedBackupsReplication" {
+                obj.push(
+                    DBInstanceAutomatedBackupsReplicationDeserializer::deserialize(
+                        "DBInstanceAutomatedBackupsReplication",
+                        stack,
+                    )?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
     }
 }
 #[allow(dead_code)]
@@ -5767,9 +6046,9 @@ impl DBInstanceStatusInfoListDeserializer {
 pub struct DBParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB parameter group.</p>
     pub db_parameter_group_arn: Option<String>,
-    /// <p>Provides the name of the DB parameter group family that this DB parameter group is compatible with.</p>
+    /// <p>The name of the DB parameter group family that this DB parameter group is compatible with.</p>
     pub db_parameter_group_family: Option<String>,
-    /// <p>Provides the name of the DB parameter group.</p>
+    /// <p>The name of the DB parameter group.</p>
     pub db_parameter_group_name: Option<String>,
     /// <p>Provides the customer-specified description for this DB parameter group.</p>
     pub description: Option<String>,
@@ -5875,7 +6154,7 @@ impl DBParameterGroupListDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupNameMessage {
-    /// <p>Provides the name of the DB parameter group.</p>
+    /// <p>The name of the DB parameter group.</p>
     pub db_parameter_group_name: Option<String>,
 }
 
@@ -6491,7 +6770,7 @@ pub struct DBSnapshot {
     pub instance_create_time: Option<String>,
     /// <p>Specifies the Provisioned IOPS (I/O operations per second) value of the DB instance at the time of the snapshot.</p>
     pub iops: Option<i64>,
-    /// <p> If <code>Encrypted</code> is true, the AWS KMS key identifier for the encrypted DB snapshot. </p>
+    /// <p> If <code>Encrypted</code> is true, the AWS KMS key identifier for the encrypted DB snapshot. </p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub kms_key_id: Option<String>,
     /// <p>License model information for the restored DB instance.</p>
     pub license_model: Option<String>,
@@ -6505,7 +6784,7 @@ pub struct DBSnapshot {
     pub port: Option<i64>,
     /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance when the DB snapshot was created.</p>
     pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>Specifies when the snapshot was taken in Coodinated Universal Time (UTC).</p>
+    /// <p>Specifies when the snapshot was taken in Coordinated Universal Time (UTC).</p>
     pub snapshot_create_time: Option<String>,
     /// <p>Provides the type of the DB snapshot.</p>
     pub snapshot_type: Option<String>,
@@ -6517,6 +6796,7 @@ pub struct DBSnapshot {
     pub status: Option<String>,
     /// <p>Specifies the storage type associated with DB snapshot.</p>
     pub storage_type: Option<String>,
+    pub tag_list: Option<Vec<Tag>>,
     /// <p>The ARN from the key store with which to associate the instance for TDE encryption.</p>
     pub tde_credential_arn: Option<String>,
     /// <p>The time zone of the DB snapshot. In most cases, the <code>Timezone</code> element is empty. <code>Timezone</code> content appears only for snapshots taken from Microsoft SQL Server DB instances that were created with a time zone specified. </p>
@@ -6641,6 +6921,11 @@ impl DBSnapshotDeserializer {
                 }
                 "StorageType" => {
                     obj.storage_type = Some(StringDeserializer::deserialize("StorageType", stack)?);
+                }
+                "TagList" => {
+                    obj.tag_list
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("TagList", stack)?);
                 }
                 "TdeCredentialArn" => {
                     obj.tde_credential_arn =
@@ -7146,12 +7431,14 @@ impl DeleteDBClusterSnapshotResultDeserializer {
         )
     }
 }
-/// <p>Parameter input for the <code>DeleteDBInstanceAutomatedBackup</code> operation. </p>
+/// <p>Parameter input for the <code>DeleteDBInstanceAutomatedBackup</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBInstanceAutomatedBackupMessage {
+    /// <p>The Amazon Resource Name (ARN) of the automated backups to delete, for example, <code>arn:aws:rds:us-east-1:123456789012:auto-backup:ab-L2IJCEXJP7XQ7HOJ4SIEXAMPLE</code>.</p>
+    pub db_instance_automated_backups_arn: Option<String>,
     /// <p>The identifier for the source DB instance, which can't be changed and which is unique to an AWS Region.</p>
-    pub dbi_resource_id: String,
+    pub dbi_resource_id: Option<String>,
 }
 
 /// Serialize `DeleteDBInstanceAutomatedBackupMessage` contents to a `SignedRequest`.
@@ -7163,10 +7450,15 @@ impl DeleteDBInstanceAutomatedBackupMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DbiResourceId"),
-            &obj.dbi_resource_id,
-        );
+        if let Some(ref field_value) = obj.db_instance_automated_backups_arn {
+            params.put(
+                &format!("{}{}", prefix, "DBInstanceAutomatedBackupsArn"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.dbi_resource_id {
+            params.put(&format!("{}{}", prefix, "DbiResourceId"), &field_value);
+        }
     }
 }
 
@@ -7827,7 +8119,7 @@ pub struct DescribeDBClusterEndpointsMessage {
     pub db_cluster_endpoint_identifier: Option<String>,
     /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
     pub db_cluster_identifier: Option<String>,
-    /// <p>A set of name-value pairs that define which endpoints to include in the output. The filters are specified as name-value pairs, in the format <code>Name=<i>endpoint_type</i>,Values=<i>endpoint_type1</i>,<i>endpoint_type2</i>,...</code>. <code>Name</code> can be one of: <code>db-cluster-endpoint-type</code>, <code>db-cluster-endpoint-custom-type</code>, <code>db-cluster-endpoint-id</code>, <code>db-cluster-endpoint-status</code>. <code>Values</code> for the <code> db-cluster-endpoint-type</code> filter can be one or more of: <code>reader</code>, <code>writer</code>, <code>custom</code>. <code>Values</code> for the <code>db-cluster-endpoint-custom-type</code> filter can be one or more of: <code>reader</code>, <code>any</code>. <code>Values</code> for the <code>db-cluster-endpoint-status</code> filter can be one or more of: <code>available</code>, <code>creating</code>, <code>deleting</code>, <code>modifying</code>. </p>
+    /// <p>A set of name-value pairs that define which endpoints to include in the output. The filters are specified as name-value pairs, in the format <code>Name=<i>endpoint_type</i>,Values=<i>endpoint_type1</i>,<i>endpoint_type2</i>,...</code>. <code>Name</code> can be one of: <code>db-cluster-endpoint-type</code>, <code>db-cluster-endpoint-custom-type</code>, <code>db-cluster-endpoint-id</code>, <code>db-cluster-endpoint-status</code>. <code>Values</code> for the <code> db-cluster-endpoint-type</code> filter can be one or more of: <code>reader</code>, <code>writer</code>, <code>custom</code>. <code>Values</code> for the <code>db-cluster-endpoint-custom-type</code> filter can be one or more of: <code>reader</code>, <code>any</code>. <code>Values</code> for the <code>db-cluster-endpoint-status</code> filter can be one or more of: <code>available</code>, <code>creating</code>, <code>deleting</code>, <code>inactive</code>, <code>modifying</code>. </p>
     pub filters: Option<Vec<Filter>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterEndpoints</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
@@ -8228,11 +8520,13 @@ impl DescribeDBEngineVersionsMessageSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBInstanceAutomatedBackupsMessage {
+    /// <p>The Amazon Resource Name (ARN) of the replicated automated backups, for example, <code>arn:aws:rds:us-east-1:123456789012:auto-backup:ab-L2IJCEXJP7XQ7HOJ4SIEXAMPLE</code>.</p>
+    pub db_instance_automated_backups_arn: Option<String>,
     /// <p>(Optional) The user-supplied instance identifier. If this parameter is specified, it must match the identifier of an existing DB instance. It returns information from the specific DB instance' automated backup. This parameter isn't case-sensitive. </p>
     pub db_instance_identifier: Option<String>,
     /// <p>The resource ID of the DB instance that is the source of the automated backup. This parameter isn't case-sensitive. </p>
     pub dbi_resource_id: Option<String>,
-    /// <p>A filter that specifies which resources to return based on status.</p> <p>Supported filters are the following:</p> <ul> <li> <p> <code>status</code> </p> <ul> <li> <p> <code>active</code> - automated backups for current instances</p> </li> <li> <p> <code>retained</code> - automated backups for deleted instances</p> </li> <li> <p> <code>creating</code> - automated backups that are waiting for the first automated snapshot to be available</p> </li> </ul> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and Amazon Resource Names (ARNs) for DB instances. The results list includes only information about the DB instance automated backupss identified by these ARNs.</p> </li> <li> <p> <code>dbi-resource-id</code> - Accepts DB instance resource identifiers and DB Amazon Resource Names (ARNs) for DB instances. The results list includes only information about the DB instance resources identified by these ARNs.</p> </li> </ul> <p>Returns all resources by default. The status for each resource is specified in the response.</p>
+    /// <p>A filter that specifies which resources to return based on status.</p> <p>Supported filters are the following:</p> <ul> <li> <p> <code>status</code> </p> <ul> <li> <p> <code>active</code> - automated backups for current instances</p> </li> <li> <p> <code>retained</code> - automated backups for deleted instances and after backup replication is stopped</p> </li> <li> <p> <code>creating</code> - automated backups that are waiting for the first automated snapshot to be available</p> </li> </ul> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and Amazon Resource Names (ARNs). The results list includes only information about the DB instance automated backups identified by these ARNs.</p> </li> <li> <p> <code>dbi-resource-id</code> - Accepts DB resource identifiers and Amazon Resource Names (ARNs). The results list includes only information about the DB instance resources identified by these ARNs.</p> </li> </ul> <p>Returns all resources by default. The status for each resource is specified in the response.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The pagination token provided in the previous request. If this parameter is specified the response includes only records beyond the marker, up to <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -8249,6 +8543,12 @@ impl DescribeDBInstanceAutomatedBackupsMessageSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.db_instance_automated_backups_arn {
+            params.put(
+                &format!("{}{}", prefix, "DBInstanceAutomatedBackupsArn"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.db_instance_identifier {
             params.put(
                 &format!("{}{}", prefix, "DBInstanceIdentifier"),
@@ -9191,7 +9491,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
 pub struct DescribeEventCategoriesMessage {
     /// <p>This parameter isn't currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The type of source that is generating the events.</p> <p>Valid values: db-instance | db-parameter-group | db-security-group | db-snapshot</p>
+    /// <p>The type of source that is generating the events.</p> <p>Valid values: <code>db-instance</code> | <code>db-cluster</code> | <code>db-parameter-group</code> | <code>db-security-group</code> | <code>db-snapshot</code> | <code>db-cluster-snapshot</code> </p>
     pub source_type: Option<String>,
 }
 
@@ -9275,7 +9575,7 @@ pub struct DescribeEventsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
-    /// <p><p>The identifier of the event source for which events are returned. If not specified, then all sources are included in the response.</p> <p>Constraints:</p> <ul> <li> <p>If SourceIdentifier is supplied, SourceType must also be provided.</p> </li> <li> <p>If the source type is <code>DBInstance</code>, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBSecurityGroup</code>, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBParameterGroup</code>, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBSnapshot</code>, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>The identifier of the event source for which events are returned. If not specified, then all sources are included in the response.</p> <p>Constraints:</p> <ul> <li> <p>If <code>SourceIdentifier</code> is supplied, <code>SourceType</code> must also be provided.</p> </li> <li> <p>If the source type is a DB instance, a <code>DBInstanceIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB cluster, a <code>DBClusterIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> value must be supplied.</p> </li> <li> <p>If the source type is a DB cluster snapshot, a <code>DBClusterSnapshotIdentifier</code> value must be supplied.</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub source_identifier: Option<String>,
     /// <p>The event source to retrieve events for. If no value is specified, all events are returned.</p>
     pub source_type: Option<String>,
@@ -9335,7 +9635,7 @@ impl DescribeEventsMessageSerializer {
 pub struct DescribeExportTasksMessage {
     /// <p>The identifier of the snapshot export task to be described.</p>
     pub export_task_identifier: Option<String>,
-    /// <p><p>Filters specify one or more snapshot exports to describe. The filters are specified as name-value pairs that define what to include in the output.</p> <p>Supported filters include the following: </p> <ul> <li> <p> <code>export-task-identifier</code> - An identifier for the snapshot export task.</p> </li> <li> <p> <code>s3-bucket</code> - The Amazon S3 bucket the snapshot is exported to.</p> </li> <li> <p> <code>source-arn</code> - The Amazon Resource Name (ARN) of the snapshot exported to Amazon S3</p> </li> <li> <p> <code>status</code> - The status of the export task.</p> </li> </ul></p>
+    /// <p><p>Filters specify one or more snapshot exports to describe. The filters are specified as name-value pairs that define what to include in the output. Filter names and values are case-sensitive.</p> <p>Supported filters include the following: </p> <ul> <li> <p> <code>export-task-identifier</code> - An identifier for the snapshot export task.</p> </li> <li> <p> <code>s3-bucket</code> - The Amazon S3 bucket the snapshot is exported to.</p> </li> <li> <p> <code>source-arn</code> - The Amazon Resource Name (ARN) of the snapshot exported to Amazon S3</p> </li> <li> <p> <code>status</code> - The status of the export task. Must be lowercase, for example, <code>complete</code>.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeExportTasks</code> request. If you specify this parameter, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter. </p>
     pub marker: Option<String>,
@@ -10412,7 +10712,7 @@ impl EventCategoriesListSerializer {
     }
 }
 
-/// <p>Contains the results of a successful invocation of the <code>DescribeEventCategories</code> action.</p>
+/// <p>Contains the results of a successful invocation of the <code>DescribeEventCategories</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMap {
@@ -10467,7 +10767,7 @@ impl EventCategoriesMapListDeserializer {
         })
     }
 }
-/// <p>Data returned from the <b>DescribeEventCategories</b> action.</p>
+/// <p>Data returned from the <code>DescribeEventCategories</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
@@ -10712,7 +11012,7 @@ pub struct ExportTask {
     pub failure_cause: Option<String>,
     /// <p>The name of the IAM role that is used to write to Amazon S3 when exporting a snapshot. </p>
     pub iam_role_arn: Option<String>,
-    /// <p>The ID of the AWS KMS key that is used to encrypt the snapshot when it's exported to Amazon S3. The KMS key ID is the Amazon Resource Name (ARN), the KMS key identifier, or the KMS key alias for the KMS encryption key. The IAM role used for the snapshot export must have encryption and decryption permissions to use this KMS key. </p>
+    /// <p>The key identifier of the AWS KMS customer master key (CMK) that is used to encrypt the snapshot when it's exported to Amazon S3. The AWS KMS CMK identifier is its key ARN, key ID, alias ARN, or alias name. The IAM role used for the snapshot export must have encryption and decryption permissions to use this AWS KMS CMK. </p>
     pub kms_key_id: Option<String>,
     /// <p>The progress of the snapshot export task as a percentage.</p>
     pub percent_progress: Option<i64>,
@@ -11010,7 +11310,7 @@ pub struct GlobalCluster {
     pub global_cluster_identifier: Option<String>,
     /// <p> The list of cluster IDs for secondary clusters within the global database cluster. Currently limited to 1 item. </p>
     pub global_cluster_members: Option<Vec<GlobalClusterMember>>,
-    /// <p> The AWS Region-unique, immutable identifier for the global database cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed. </p>
+    /// <p> The AWS Region-unique, immutable identifier for the global database cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS customer master key (CMK) for the DB cluster is accessed. </p>
     pub global_cluster_resource_id: Option<String>,
     /// <p>Specifies the current state of this global database cluster.</p>
     pub status: Option<String>,
@@ -11275,7 +11575,7 @@ pub struct ImportInstallationMediaMessage {
     pub engine: String,
     /// <p>The path to the installation medium for the specified DB engine.</p> <p>Example: <code>SQLServerISO/en_sql_server_2016_enterprise_x64_dvd_8701793.iso</code> </p>
     pub engine_installation_media_path: String,
-    /// <p>The version number of the database engine to use.</p> <p>For a list of valid engine versions, call <a>DescribeDBEngineVersions</a>.</p> <p>The following are the database engines and links to information about the major and minor versions. The list only includes DB engines that require an on-premises customer provided license.</p> <p> <b>Microsoft SQL Server</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.FeatureSupport">Version and Feature Support on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>The version number of the database engine to use.</p> <p>For a list of valid engine versions, call <a>DescribeDBEngineVersions</a>.</p> <p>The following are the database engines and links to information about the major and minor versions. The list only includes DB engines that require an on-premises customer provided license.</p> <p> <b>Microsoft SQL Server</b> </p> <p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.VersionSupport"> Microsoft SQL Server Versions on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub engine_version: String,
     /// <p>The path to the installation medium for the operating system associated with the specified DB engine.</p> <p>Example: <code>WindowsISO/en_windows_server_2016_x64_dvd_9327751.iso</code> </p>
     pub os_installation_media_path: String,
@@ -11822,7 +12122,7 @@ pub struct ModifyDBClusterMessage {
     pub db_instance_parameter_group_name: Option<String>,
     /// <p>A value that indicates whether the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>The Active Directory directory ID to move the DB cluster to. Specify <code>none</code> to remove the cluster from its current domain. The domain must be created prior to this operation. </p>
+    /// <p>The Active Directory directory ID to move the DB cluster to. Specify <code>none</code> to remove the cluster from its current domain. The domain must be created prior to this operation. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/kerberos-authentication.html">Kerberos Authentication</a> in the <i>Amazon Aurora User Guide</i>. </p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
@@ -12145,19 +12445,21 @@ pub struct ModifyDBInstanceMessage {
     pub db_port_number: Option<i64>,
     /// <p><p>A list of DB security groups to authorize on this DB instance. Changing this setting doesn&#39;t result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match existing DBSecurityGroups.</p> </li> </ul></p>
     pub db_security_groups: Option<Vec<String>>,
-    /// <p>The new DB subnet group for the DB instance. You can use this parameter to move your DB instance to a different VPC. If your DB instance isn't in a VPC, you can also use this parameter to move your DB instance into a VPC. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Non-VPC2VPC">Updating the VPC for a DB Instance</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Changing the subnet group causes an outage during the change. The change is applied during the next maintenance window, unless you enable <code>ApplyImmediately</code>. </p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetGroup</code> </p>
+    /// <p>The new DB subnet group for the DB instance. You can use this parameter to move your DB instance to a different VPC. If your DB instance isn't in a VPC, you can also use this parameter to move your DB instance into a VPC. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Non-VPC2VPC">Working with a DB instance in a VPC</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Changing the subnet group causes an outage during the change. The change is applied during the next maintenance window, unless you enable <code>ApplyImmediately</code>. </p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetGroup</code> </p>
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>The Active Directory directory ID to move the DB instance to. Specify <code>none</code> to remove the instance from its current domain. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>The Active Directory directory ID to move the DB instance to. Specify <code>none</code> to remove the instance from its current domain. The domain must be created prior to this operation. Currently, only MySQL, Microsoft SQL Server, Oracle, and PostgreSQL DB instances can be created in an Active Directory Domain.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/kerberos-authentication.html"> Kerberos Authentication</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>The name of the IAM role to use when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
-    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled. For information about the supported DB engines, see <a>CreateDBInstance</a>.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>A value that indicates whether to enable a customer-owned IP address (CoIP) for an RDS on Outposts DB instance.</p> <p>A <i>CoIP</i> provides local or external connectivity to resources in your Outpost subnets through your on-premises network. For some use cases, a CoIP can provide lower latency for connections to the DB instance from outside of its virtual private cloud (VPC) on your local network.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Working with Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For more information about CoIPs, see <a href="https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing">Customer-owned IP addresses</a> in the <i>AWS Outposts User Guide</i>.</p>
+    pub enable_customer_owned_ip: Option<bool>,
+    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>This setting doesn't apply to Amazon Aurora. Mapping AWS IAM accounts to database accounts is managed by the DB cluster.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>A value that indicates whether to enable Performance Insights for the DB instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html">Using Amazon Performance Insights</a> in the <i>Amazon Relational Database Service User Guide</i>. </p>
     pub enable_performance_insights: Option<bool>,
-    /// <p> The version number of the database engine to upgrade to. Changing this parameter results in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is eanbled for this request. </p> <p>For major version upgrades, if a nondefault DB parameter group is currently in use, a new DB parameter group in the DB parameter group family for the new engine version must be specified. The new DB parameter group can be the default for that DB parameter group family.</p> <p>For information about valid engine versions, see <code>CreateDBInstance</code>, or call <code>DescribeDBEngineVersions</code>.</p>
+    /// <p> The version number of the database engine to upgrade to. Changing this parameter results in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is enabled for this request. </p> <p>For major version upgrades, if a nondefault DB parameter group is currently in use, a new DB parameter group in the DB parameter group family for the new engine version must be specified. The new DB parameter group can be the default for that DB parameter group family.</p> <p>For information about valid engine versions, see <code>CreateDBInstance</code>, or call <code>DescribeDBEngineVersions</code>.</p>
     pub engine_version: Option<String>,
     /// <p>The new Provisioned IOPS (I/O operations per second) value for the RDS instance. </p> <p>Changing this setting doesn't result in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is enabled for this request. If you are migrating from Provisioned IOPS to standard storage, set this value to 0. The DB instance will require a reboot for the change in storage type to take effect. </p> <p>If you choose to migrate your DB instance from using standard storage to using Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process can take time. The duration of the migration depends on several factors such as database load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS provisioned (if any), and the number of prior scale storage operations. Typical migration times are under 24 hours, but the process can take up to several days in some cases. During the migration, the DB instance is available for use, but might experience performance degradation. While the migration takes place, nightly backups for the instance are suspended. No other Amazon RDS operations can take place for the instance, including modifying the instance, rebooting the instance, deleting the instance, creating a read replica for the instance, and creating a DB snapshot of the instance. </p> <p>Constraints: For MariaDB, MySQL, Oracle, and PostgreSQL, the value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value. </p> <p>Default: Uses existing setting</p>
     pub iops: Option<i64>,
@@ -12177,7 +12479,7 @@ pub struct ModifyDBInstanceMessage {
     pub new_db_instance_identifier: Option<String>,
     /// <p> Indicates that the DB instance should be associated with the specified option group. Changing this parameter doesn't result in an outage except in the following case and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is enabled for this request. If the parameter change results in an option group that enables OEM, this change can cause a brief (sub-second) period during which new connections are rejected but existing connections are not interrupted. </p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, can't be removed from an option group, and that option group can't be removed from a DB instance once it is associated with a DB instance</p>
     pub option_group_name: Option<String>,
-    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier for encryption of Performance Insights data.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default CMK. There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region.</p>
     pub performance_insights_kms_key_id: Option<String>,
     /// <p>The amount of time, in days, to retain Performance Insights data. Valid values are 7 or 731 (2 years). </p>
     pub performance_insights_retention_period: Option<i64>,
@@ -12191,6 +12493,8 @@ pub struct ModifyDBInstanceMessage {
     pub promotion_tier: Option<i64>,
     /// <p>A value that indicates whether the DB instance is publicly accessible. </p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p> <code>PubliclyAccessible</code> only applies to DB instances in a VPC. The DB instance must be part of a public subnet and <code>PubliclyAccessible</code> must be enabled for it to be publicly accessible. </p> <p>Changes to the <code>PubliclyAccessible</code> parameter are applied immediately regardless of the value of the <code>ApplyImmediately</code> parameter.</p>
     pub publicly_accessible: Option<bool>,
+    /// <p>A value that sets the open mode of a replica database to either mounted or read-only.</p> <note> <p>Currently, this parameter is only supported for Oracle DB instances.</p> </note> <p>Mounted DB replicas are included in Oracle Enterprise Edition. The main use case for mounted replicas is cross-Region disaster recovery. The primary database doesn't use Active Data Guard to transmit information to the mounted replica. Because it doesn't accept user connections, a mounted replica can't serve a read-only workload. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-read-replicas.html">Working with Oracle Read Replicas for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>.</p>
+    pub replica_mode: Option<String>,
     /// <p>Specifies the storage type to be associated with the DB instance. </p> <p>If you specify Provisioned IOPS (<code>io1</code>), you must also include a value for the <code>Iops</code> parameter. </p> <p>If you choose to migrate your DB instance from using standard storage to using Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process can take time. The duration of the migration depends on several factors such as database load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS provisioned (if any), and the number of prior scale storage operations. Typical migration times are under 24 hours, but the process can take up to several days in some cases. During the migration, the DB instance is available for use, but might experience performance degradation. While the migration takes place, nightly backups for the instance are suspended. No other Amazon RDS operations can take place for the instance, including modifying the instance, rebooting the instance, deleting the instance, creating a read replica for the instance, and creating a DB snapshot of the instance. </p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p>Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise <code>gp2</code> </p>
     pub storage_type: Option<String>,
     /// <p>The ARN from the key store with which to associate the instance for TDE encryption.</p>
@@ -12293,6 +12597,12 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.domain_iam_role_name {
             params.put(&format!("{}{}", prefix, "DomainIAMRoleName"), &field_value);
         }
+        if let Some(ref field_value) = obj.enable_customer_owned_ip {
+            params.put(
+                &format!("{}{}", prefix, "EnableCustomerOwnedIp"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.enable_iam_database_authentication {
             params.put(
                 &format!("{}{}", prefix, "EnableIAMDatabaseAuthentication"),
@@ -12377,6 +12687,9 @@ impl ModifyDBInstanceMessageSerializer {
         }
         if let Some(ref field_value) = obj.publicly_accessible {
             params.put(&format!("{}{}", prefix, "PubliclyAccessible"), &field_value);
+        }
+        if let Some(ref field_value) = obj.replica_mode {
+            params.put(&format!("{}{}", prefix, "ReplicaMode"), &field_value);
         }
         if let Some(ref field_value) = obj.storage_type {
             params.put(&format!("{}{}", prefix, "StorageType"), &field_value);
@@ -12714,7 +13027,7 @@ pub struct ModifyDBSnapshotMessage {
     pub db_snapshot_identifier: String,
     /// <p>The engine version to upgrade the DB snapshot to. </p> <p>The following are the database engines and engine versions that are available when you upgrade a DB snapshot. </p> <p> <b>MySQL</b> </p> <ul> <li> <p> <code>5.5.46</code> (supported for 5.1 DB snapshots)</p> </li> </ul> <p> <b>Oracle</b> </p> <ul> <li> <p> <code>12.1.0.2.v8</code> (supported for 12.1.0.1 DB snapshots)</p> </li> <li> <p> <code>11.2.0.4.v12</code> (supported for 11.2.0.2 DB snapshots)</p> </li> <li> <p> <code>11.2.0.4.v11</code> (supported for 11.2.0.3 DB snapshots)</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <p>For the list of engine versions that are available for upgrading a DB snapshot, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html#USER_UpgradeDBInstance.PostgreSQL.MajorVersion"> Upgrading the PostgreSQL DB Engine for Amazon RDS</a>. </p>
     pub engine_version: Option<String>,
-    /// <p>The option group to identify with the upgraded DB snapshot. </p> <p>You can specify this parameter when you upgrade an Oracle DB snapshot. The same option group considerations apply when upgrading a DB snapshot as when upgrading a DB instance. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Oracle.html#USER_UpgradeDBInstance.Oracle.OGPG.OG">Option Group Considerations</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>The option group to identify with the upgraded DB snapshot. </p> <p>You can specify this parameter when you upgrade an Oracle DB snapshot. The same option group considerations apply when upgrading a DB snapshot as when upgrading a DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Oracle.html#USER_UpgradeDBInstance.Oracle.OGPG.OG">Option group considerations</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub option_group_name: Option<String>,
 }
 
@@ -12843,11 +13156,11 @@ impl ModifyDBSubnetGroupResultDeserializer {
 pub struct ModifyEventSubscriptionMessage {
     /// <p> A value that indicates whether to activate the subscription. </p>
     pub enabled: Option<bool>,
-    /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action. </p>
+    /// <p> A list of event categories for a source type (<code>SourceType</code>) that you want to subscribe to. You can see a list of the categories for a given source type in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> in the <i>Amazon RDS User Guide</i> or by using the <code>DescribeEventCategories</code> operation. </p>
     pub event_categories: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>
     pub sns_topic_arn: Option<String>,
-    /// <p>The type of source that is generating the events. For example, if you want to be notified of events generated by a DB instance, you would set this parameter to db-instance. If this value isn't specified, all events are returned.</p> <p>Valid values: db-instance | db-parameter-group | db-security-group | db-snapshot</p>
+    /// <p>The type of source that is generating the events. For example, if you want to be notified of events generated by a DB instance, you would set this parameter to db-instance. If this value isn't specified, all events are returned.</p> <p>Valid values: <code>db-instance</code> | <code>db-cluster</code> | <code>db-parameter-group</code> | <code>db-security-group</code> | <code>db-snapshot</code> | <code>db-cluster-snapshot</code> </p>
     pub source_type: Option<String>,
     /// <p>The name of the RDS event notification subscription.</p>
     pub subscription_name: String,
@@ -14005,10 +14318,12 @@ pub struct OrderableDBInstanceOption {
     pub read_replica_capable: Option<bool>,
     /// <p>Indicates the storage type for a DB instance.</p>
     pub storage_type: Option<String>,
-    /// <p><p>A list of the supported DB engine modes.</p> <note> <p> <code>global</code> engine mode only applies for global database clusters created with Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters in a global database use <code>provisioned</code> engine mode. </p> </note></p>
+    /// <p>A list of the supported DB engine modes.</p>
     pub supported_engine_modes: Option<Vec<String>>,
     /// <p>Indicates whether a DB instance supports Enhanced Monitoring at intervals from 1 to 60 seconds.</p>
     pub supports_enhanced_monitoring: Option<bool>,
+    /// <p>A value that indicates whether you can use Aurora global databases with a specific combination of other DB engine attributes.</p>
+    pub supports_global_databases: Option<bool>,
     /// <p>Indicates whether a DB instance supports IAM database authentication.</p>
     pub supports_iam_database_authentication: Option<bool>,
     /// <p>Indicates whether a DB instance supports provisioned IOPS.</p>
@@ -14139,6 +14454,12 @@ impl OrderableDBInstanceOptionDeserializer {
                     "SupportsEnhancedMonitoring" => {
                         obj.supports_enhanced_monitoring = Some(BooleanDeserializer::deserialize(
                             "SupportsEnhancedMonitoring",
+                            stack,
+                        )?);
+                    }
+                    "SupportsGlobalDatabases" => {
+                        obj.supports_global_databases = Some(BooleanDeserializer::deserialize(
+                            "SupportsGlobalDatabases",
                             stack,
                         )?);
                     }
@@ -14501,7 +14822,7 @@ pub struct PendingMaintenanceAction {
     pub current_apply_date: Option<String>,
     /// <p>A description providing more detail about the maintenance action.</p>
     pub description: Option<String>,
-    /// <p>The date when the maintenance action is automatically applied. The maintenance action is applied to the resource on this date regardless of the maintenance window for the resource.</p>
+    /// <p>The date when the maintenance action is automatically applied.</p> <p>On this date, the maintenance action is applied to the resource as soon as possible, regardless of the maintenance window for the resource. There might be a delay of one or more days from this date before the maintenance action is applied.</p>
     pub forced_apply_date: Option<String>,
     /// <p>Indicates the type of opt-in request that has been received for the resource.</p>
     pub opt_in_status: Option<String>,
@@ -14635,38 +14956,40 @@ impl PendingMaintenanceActionsMessageDeserializer {
         )
     }
 }
-/// <p> This data type is used as a response element in the <code>ModifyDBInstance</code> action. </p>
+/// <p> This data type is used as a response element in the <code>ModifyDBInstance</code> action and contains changes that will be applied during the next maintenance window. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingModifiedValues {
-    /// <p> Contains the new <code>AllocatedStorage</code> size for the DB instance that will be applied or is currently being applied. </p>
+    /// <p>The allocated storage size for the DB instance specified in gibibytes .</p>
     pub allocated_storage: Option<i64>,
-    /// <p>Specifies the pending number of days for which automated backups are retained.</p>
+    /// <p>The number of days for which automated backups are retained.</p>
     pub backup_retention_period: Option<i64>,
-    /// <p>Specifies the identifier of the CA certificate for the DB instance.</p>
+    /// <p>The identifier of the CA certificate for the DB instance.</p>
     pub ca_certificate_identifier: Option<String>,
-    /// <p> Contains the new <code>DBInstanceClass</code> for the DB instance that will be applied or is currently being applied. </p>
+    /// <p>The name of the compute and memory capacity class for the DB instance.</p>
     pub db_instance_class: Option<String>,
-    /// <p> Contains the new <code>DBInstanceIdentifier</code> for the DB instance that will be applied or is currently being applied. </p>
+    /// <p>The database identifier for the DB instance.</p>
     pub db_instance_identifier: Option<String>,
-    /// <p>The new DB subnet group for the DB instance. </p>
+    /// <p>The DB subnet group for the DB instance.</p>
     pub db_subnet_group_name: Option<String>,
-    /// <p>Indicates the database engine version.</p>
+    /// <p>The database engine version.</p>
     pub engine_version: Option<String>,
-    /// <p>Specifies the new Provisioned IOPS value for the DB instance that will be applied or is currently being applied.</p>
+    /// <p>Whether mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled.</p>
+    pub iam_database_authentication_enabled: Option<bool>,
+    /// <p>The Provisioned IOPS value for the DB instance.</p>
     pub iops: Option<i64>,
     /// <p>The license model for the DB instance.</p> <p>Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>
     pub license_model: Option<String>,
-    /// <p>Contains the pending or currently-in-progress change of the master credentials for the DB instance.</p>
+    /// <p>The master credentials for the DB instance.</p>
     pub master_user_password: Option<String>,
-    /// <p>Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.</p>
+    /// <p>Indicates that the Single-AZ DB instance will change to a Multi-AZ deployment.</p>
     pub multi_az: Option<bool>,
     pub pending_cloudwatch_logs_exports: Option<PendingCloudwatchLogsExports>,
-    /// <p>Specifies the pending port for the DB instance.</p>
+    /// <p>The port for the DB instance.</p>
     pub port: Option<i64>,
     /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
     pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>Specifies the storage type to be associated with the DB instance.</p>
+    /// <p>The storage type of the DB instance.</p>
     pub storage_type: Option<String>,
 }
 
@@ -14716,6 +15039,13 @@ impl PendingModifiedValuesDeserializer {
                     obj.engine_version =
                         Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                 }
+                "IAMDatabaseAuthenticationEnabled" => {
+                    obj.iam_database_authentication_enabled =
+                        Some(BooleanOptionalDeserializer::deserialize(
+                            "IAMDatabaseAuthenticationEnabled",
+                            stack,
+                        )?);
+                }
                 "Iops" => {
                     obj.iops = Some(IntegerOptionalDeserializer::deserialize("Iops", stack)?);
                 }
@@ -14757,7 +15087,7 @@ impl PendingModifiedValuesDeserializer {
         })
     }
 }
-/// <p>Contains the processor features of a DB instance class.</p> <p>To specify the number of CPU cores, use the <code>coreCount</code> feature name for the <code>Name</code> parameter. To specify the number of threads per core, use the <code>threadsPerCore</code> feature name for the <code>Name</code> parameter.</p> <p>You can set the processor features of the DB instance class for a DB instance when you call one of the following actions:</p> <ul> <li> <p> <code>CreateDBInstance</code> </p> </li> <li> <p> <code>ModifyDBInstance</code> </p> </li> <li> <p> <code>RestoreDBInstanceFromDBSnapshot</code> </p> </li> <li> <p> <code>RestoreDBInstanceFromS3</code> </p> </li> <li> <p> <code>RestoreDBInstanceToPointInTime</code> </p> </li> </ul> <p>You can view the valid processor values for a particular instance class by calling the <code>DescribeOrderableDBInstanceOptions</code> action and specifying the instance class for the <code>DBInstanceClass</code> parameter.</p> <p>In addition, you can use the following actions for DB instance class processor information:</p> <ul> <li> <p> <code>DescribeDBInstances</code> </p> </li> <li> <p> <code>DescribeDBSnapshots</code> </p> </li> <li> <p> <code>DescribeValidDBInstanceModifications</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#USER_ConfigureProcessor">Configuring the Processor of the DB Instance Class</a> in the <i>Amazon RDS User Guide. </i> </p>
+/// <p>Contains the processor features of a DB instance class.</p> <p>To specify the number of CPU cores, use the <code>coreCount</code> feature name for the <code>Name</code> parameter. To specify the number of threads per core, use the <code>threadsPerCore</code> feature name for the <code>Name</code> parameter.</p> <p>You can set the processor features of the DB instance class for a DB instance when you call one of the following actions:</p> <ul> <li> <p> <code>CreateDBInstance</code> </p> </li> <li> <p> <code>ModifyDBInstance</code> </p> </li> <li> <p> <code>RestoreDBInstanceFromDBSnapshot</code> </p> </li> <li> <p> <code>RestoreDBInstanceFromS3</code> </p> </li> <li> <p> <code>RestoreDBInstanceToPointInTime</code> </p> </li> </ul> <p>You can view the valid processor values for a particular instance class by calling the <code>DescribeOrderableDBInstanceOptions</code> action and specifying the instance class for the <code>DBInstanceClass</code> parameter.</p> <p>In addition, you can use the following actions for DB instance class processor information:</p> <ul> <li> <p> <code>DescribeDBInstances</code> </p> </li> <li> <p> <code>DescribeDBSnapshots</code> </p> </li> <li> <p> <code>DescribeValidDBInstanceModifications</code> </p> </li> </ul> <p>If you call <code>DescribeDBInstances</code>, <code>ProcessorFeature</code> returns non-null values only if the following conditions are met:</p> <ul> <li> <p>You are accessing an Oracle DB instance.</p> </li> <li> <p>Your Oracle DB instance class supports configuring the number of CPU cores and threads per core.</p> </li> <li> <p>The current number CPU cores and threads is set to a non-default value.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#USER_ConfigureProcessor">Configuring the Processor of the DB Instance Class</a> in the <i>Amazon RDS User Guide. </i> </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -15469,7 +15799,7 @@ pub struct RemoveRoleFromDBInstanceMessage {
     pub db_instance_identifier: String,
     /// <p>The name of the feature for the DB instance that the IAM role is to be disassociated from. For the list of supported feature names, see <code>DBEngineVersion</code>. </p>
     pub feature_name: String,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to disassociate from the DB instance, for example <code>arn:aws:iam::123456789012:role/AccessRole</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to disassociate from the DB instance, for example, <code>arn:aws:iam::123456789012:role/AccessRole</code>.</p>
     pub role_arn: String,
 }
 
@@ -15581,6 +15911,14 @@ impl RemoveTagsFromResourceMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
+struct ReplicaModeDeserializer;
+impl ReplicaModeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p> This data type is used as a response element in the <code>DescribeReservedDBInstances</code> and <code>PurchaseReservedDBInstancesOffering</code> actions. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -16069,11 +16407,11 @@ pub struct RestoreDBClusterFromS3Message {
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication</a> in the <i>Amazon Aurora User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
-    /// <p>The name of the database engine to be used for the restored DB cluster.</p> <p>Valid Values: <code>aurora</code>, <code>aurora-postgresql</code> </p>
+    /// <p>The name of the database engine to be used for this DB cluster.</p> <p>Valid Values: <code>aurora</code> (for MySQL 5.6-compatible Aurora), <code>aurora-mysql</code> (for MySQL 5.7-compatible Aurora), and <code>aurora-postgresql</code> </p>
     pub engine: String,
     /// <p>The version number of the database engine to use.</p> <p>To list all of the available engine versions for <code>aurora</code> (for MySQL 5.6-compatible Aurora), use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora --query "DBEngineVersions[].EngineVersion"</code> </p> <p>To list all of the available engine versions for <code>aurora-mysql</code> (for MySQL 5.7-compatible Aurora), use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora-mysql --query "DBEngineVersions[].EngineVersion"</code> </p> <p>To list all of the available engine versions for <code>aurora-postgresql</code>, use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora-postgresql --query "DBEngineVersions[].EngineVersion"</code> </p> <p> <b>Aurora MySQL</b> </p> <p>Example: <code>5.6.10a</code>, <code>5.6.mysql_aurora.1.19.2</code>, <code>5.7.12</code>, <code>5.7.mysql_aurora.2.04.5</code> </p> <p> <b>Aurora PostgreSQL</b> </p> <p>Example: <code>9.6.3</code>, <code>10.7</code> </p>
     pub engine_version: Option<String>,
-    /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KM encryption key.</p> <p>If the StorageEncrypted parameter is enabled, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon RDS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). To use a CMK in a different AWS account, specify the key ARN or alias ARN.</p> <p>If the StorageEncrypted parameter is enabled, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon RDS will use your default CMK. There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region.</p>
     pub kms_key_id: Option<String>,
     /// <p>The password for the master database user. This password can contain any printable ASCII character except "/", """, or "@".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
     pub master_user_password: String,
@@ -16095,7 +16433,7 @@ pub struct RestoreDBClusterFromS3Message {
     pub s3_prefix: Option<String>,
     /// <p>The identifier for the database engine that was backed up to create the files stored in the Amazon S3 bucket. </p> <p>Valid values: <code>mysql</code> </p>
     pub source_engine: String,
-    /// <p>The version of the database that the backup files were created from.</p> <p>MySQL versions 5.5, 5.6, and 5.7 are supported. </p> <p>Example: <code>5.6.40</code> </p>
+    /// <p>The version of the database that the backup files were created from.</p> <p>MySQL versions 5.5, 5.6, and 5.7 are supported. </p> <p>Example: <code>5.6.40</code>, <code>5.7.28</code> </p>
     pub source_engine_version: String,
     /// <p>A value that indicates whether the restored DB cluster is encrypted.</p>
     pub storage_encrypted: Option<bool>,
@@ -16288,7 +16626,7 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     pub database_name: Option<String>,
     /// <p>A value that indicates whether the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>Specify the Active Directory directory ID to restore the DB cluster in. The domain must be created prior to this operation. </p>
+    /// <p>Specify the Active Directory directory ID to restore the DB cluster in. The domain must be created prior to this operation. Currently, only MySQL, Microsoft SQL Server, Oracle, and PostgreSQL DB instances can be created in an Active Directory Domain.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/kerberos-authentication.html"> Kerberos Authentication</a> in the <i>Amazon RDS User Guide</i>. </p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
@@ -16298,11 +16636,11 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>The database engine to use for the new DB cluster.</p> <p>Default: The same as source</p> <p>Constraint: Must be compatible with the engine of the source</p>
     pub engine: String,
-    /// <p>The DB engine mode of the DB cluster, either <code>provisioned</code>, <code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p>
+    /// <p>The DB engine mode of the DB cluster, either <code>provisioned</code>, <code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBCluster.html"> CreateDBCluster</a>.</p>
     pub engine_mode: Option<String>,
     /// <p>The version of the database engine to use for the new DB cluster.</p> <p>To list all of the available engine versions for <code>aurora</code> (for MySQL 5.6-compatible Aurora), use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora --query "DBEngineVersions[].EngineVersion"</code> </p> <p>To list all of the available engine versions for <code>aurora-mysql</code> (for MySQL 5.7-compatible Aurora), use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora-mysql --query "DBEngineVersions[].EngineVersion"</code> </p> <p>To list all of the available engine versions for <code>aurora-postgresql</code>, use the following command:</p> <p> <code>aws rds describe-db-engine-versions --engine aurora-postgresql --query "DBEngineVersions[].EngineVersion"</code> </p> <note> <p>If you aren't using the default engine version, then you must specify the engine version.</p> </note> <p> <b>Aurora MySQL</b> </p> <p>Example: <code>5.6.10a</code>, <code>5.6.mysql_aurora.1.19.2</code>, <code>5.7.12</code>, <code>5.7.mysql_aurora.2.04.5</code> </p> <p> <b>Aurora PostgreSQL</b> </p> <p>Example: <code>9.6.3</code>, <code>10.7</code> </p>
     pub engine_version: Option<String>,
-    /// <p><p>The AWS KMS key identifier to use when restoring an encrypted DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are restoring a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>If you don&#39;t specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the DB snapshot or DB cluster snapshot in <code>SnapshotIdentifier</code> is encrypted, then the restored DB cluster is encrypted using the KMS key that was used to encrypt the DB snapshot or DB cluster snapshot.</p> </li> <li> <p>If the DB snapshot or DB cluster snapshot in <code>SnapshotIdentifier</code> isn&#39;t encrypted, then the restored DB cluster isn&#39;t encrypted.</p> </li> </ul></p>
+    /// <p><p>The AWS KMS key identifier to use when restoring an encrypted DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). To use a CMK in a different AWS account, specify the key ARN or alias ARN.</p> <p>When you don&#39;t specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the DB snapshot or DB cluster snapshot in <code>SnapshotIdentifier</code> is encrypted, then the restored DB cluster is encrypted using the AWS KMS CMK that was used to encrypt the DB snapshot or DB cluster snapshot.</p> </li> <li> <p>If the DB snapshot or DB cluster snapshot in <code>SnapshotIdentifier</code> isn&#39;t encrypted, then the restored DB cluster isn&#39;t encrypted.</p> </li> </ul></p>
     pub kms_key_id: Option<String>,
     /// <p>The name of the option group to use for the restored DB cluster.</p>
     pub option_group_name: Option<String>,
@@ -16472,7 +16810,7 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication</a> in the <i>Amazon Aurora User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
-    /// <p>The AWS KMS key identifier to use when restoring an encrypted DB cluster from an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are restoring a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>You can restore to a new DB cluster and encrypt the new DB cluster with a KMS key that is different than the KMS key used to encrypt the source DB cluster. The new DB cluster is encrypted with the KMS key identified by the <code>KmsKeyId</code> parameter.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the DB cluster is encrypted, then the restored DB cluster is encrypted using the KMS key that was used to encrypt the source DB cluster.</p> </li> <li> <p>If the DB cluster isn't encrypted, then the restored DB cluster isn't encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a DB cluster that isn't encrypted, then the restore request is rejected.</p>
+    /// <p>The AWS KMS key identifier to use when restoring an encrypted DB cluster from an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). To use a CMK in a different AWS account, specify the key ARN or alias ARN.</p> <p>You can restore to a new DB cluster and encrypt the new DB cluster with a AWS KMS CMK that is different than the AWS KMS key used to encrypt the source DB cluster. The new DB cluster is encrypted with the AWS KMS CMK identified by the <code>KmsKeyId</code> parameter.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the DB cluster is encrypted, then the restored DB cluster is encrypted using the AWS KMS CMK that was used to encrypt the source DB cluster.</p> </li> <li> <p>If the DB cluster isn't encrypted, then the restored DB cluster isn't encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a DB cluster that isn't encrypted, then the restore request is rejected.</p>
     pub kms_key_id: Option<String>,
     /// <p>The name of the option group for the new DB cluster.</p>
     pub option_group_name: Option<String>,
@@ -16633,13 +16971,15 @@ pub struct RestoreDBInstanceFromDBSnapshotMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only MySQL, Microsoft SQL Server, Oracle, and PostgreSQL DB instances can be created in an Active Directory Domain.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/kerberos-authentication.html"> Kerberos Authentication</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
-    /// <p>The list of logs that the restored DB instance is to export to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>
+    /// <p>The list of logs that the restored DB instance is to export to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled. For information about the supported DB engines, see <a>CreateDBInstance</a>.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>A value that indicates whether to enable a customer-owned IP address (CoIP) for an RDS on Outposts DB instance.</p> <p>A <i>CoIP</i> provides local or external connectivity to resources in your Outpost subnets through your on-premises network. For some use cases, a CoIP can provide lower latency for connections to the DB instance from outside of its virtual private cloud (VPC) on your local network.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Working with Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For more information about CoIPs, see <a href="https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing">Customer-owned IP addresses</a> in the <i>AWS Outposts User Guide</i>.</p>
+    pub enable_customer_owned_ip: Option<bool>,
+    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p><p>The database engine to use for the new instance.</p> <p>Default: The same as source</p> <p>Constraint: Must be compatible with the engine of the source. For example, you can restore a MariaDB 10.1 DB instance from a MySQL 5.6 snapshot.</p> <p>Valid Values:</p> <ul> <li> <p> <code>mariadb</code> </p> </li> <li> <p> <code>mysql</code> </p> </li> <li> <p> <code>oracle-ee</code> </p> </li> <li> <p> <code>oracle-se2</code> </p> </li> <li> <p> <code>oracle-se1</code> </p> </li> <li> <p> <code>oracle-se</code> </p> </li> <li> <p> <code>postgres</code> </p> </li> <li> <p> <code>sqlserver-ee</code> </p> </li> <li> <p> <code>sqlserver-se</code> </p> </li> <li> <p> <code>sqlserver-ex</code> </p> </li> <li> <p> <code>sqlserver-web</code> </p> </li> </ul></p>
     pub engine: Option<String>,
@@ -16728,6 +17068,12 @@ impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
                 params,
                 &format!("{}{}", prefix, "EnableCloudwatchLogsExports"),
                 field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.enable_customer_owned_ip {
+            params.put(
+                &format!("{}{}", prefix, "EnableCustomerOwnedIp"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.enable_iam_database_authentication {
@@ -16854,7 +17200,7 @@ pub struct RestoreDBInstanceFromS3Message {
     pub deletion_protection: Option<bool>,
     /// <p>The list of logs that the restored DB instance is to export to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled. For information about the supported DB engines, see <a>CreateDBInstance</a>.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>A value that indicates whether to enable Performance Insights for the DB instance. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html">Using Amazon Performance Insights</a> in the <i>Amazon Relational Database Service User Guide</i>. </p>
     pub enable_performance_insights: Option<bool>,
@@ -16864,7 +17210,7 @@ pub struct RestoreDBInstanceFromS3Message {
     pub engine_version: Option<String>,
     /// <p>The amount of Provisioned IOPS (input/output operations per second) to allocate initially for the DB instance. For information about valid Iops values, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS">Amazon RDS Provisioned IOPS Storage to Improve Performance</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub iops: Option<i64>,
-    /// <p>The AWS KMS key identifier for an encrypted DB instance. </p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB instance with the same AWS account that owns the KMS encryption key used to encrypt the new DB instance, then you can use the KMS key alias instead of the ARN for the KM encryption key. </p> <p>If the <code>StorageEncrypted</code> parameter is enabled, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon RDS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region. </p>
+    /// <p>The AWS KMS key identifier for an encrypted DB instance. </p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). To use a CMK in a different AWS account, specify the key ARN or alias ARN.</p> <p>If the <code>StorageEncrypted</code> parameter is enabled, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon RDS will use your default CMK. There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region. </p>
     pub kms_key_id: Option<String>,
     /// <p>The license model for this DB instance. Use <code>general-public-license</code>. </p>
     pub license_model: Option<String>,
@@ -16872,6 +17218,8 @@ pub struct RestoreDBInstanceFromS3Message {
     pub master_user_password: Option<String>,
     /// <p><p>The name for the master user. </p> <p>Constraints: </p> <ul> <li> <p>Must be 1 to 16 letters or numbers.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can&#39;t be a reserved word for the chosen database engine.</p> </li> </ul></p>
     pub master_username: Option<String>,
+    /// <p>The upper limit to which Amazon RDS can automatically scale the storage of the DB instance.</p>
+    pub max_allocated_storage: Option<i64>,
     /// <p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. </p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0. </p> <p>Valid Values: 0, 1, 5, 10, 15, 30, 60 </p> <p>Default: <code>0</code> </p>
     pub monitoring_interval: Option<i64>,
     /// <p>The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to Amazon CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. For information on creating a monitoring role, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.OS.html#USER_Monitoring.OS.Enabling">Setting Up and Enabling Enhanced Monitoring</a> in the <i>Amazon RDS User Guide.</i> </p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value. </p>
@@ -16880,7 +17228,7 @@ pub struct RestoreDBInstanceFromS3Message {
     pub multi_az: Option<bool>,
     /// <p>The name of the option group to associate with this DB instance. If this argument is omitted, the default option group for the specified engine is used. </p>
     pub option_group_name: Option<String>,
-    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), the KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier for encryption of Performance Insights data.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default CMK. There is a default CMK for your AWS account. Your AWS account has a different default CMK for each AWS Region.</p>
     pub performance_insights_kms_key_id: Option<String>,
     /// <p>The amount of time, in days, to retain Performance Insights data. Valid values are 7 or 731 (2 years). </p>
     pub performance_insights_retention_period: Option<i64>,
@@ -17013,6 +17361,12 @@ impl RestoreDBInstanceFromS3MessageSerializer {
         }
         if let Some(ref field_value) = obj.master_username {
             params.put(&format!("{}{}", prefix, "MasterUsername"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_allocated_storage {
+            params.put(
+                &format!("{}{}", prefix, "MaxAllocatedStorage"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.monitoring_interval {
             params.put(&format!("{}{}", prefix, "MonitoringInterval"), &field_value);
@@ -17154,13 +17508,15 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only MySQL, Microsoft SQL Server, Oracle, and PostgreSQL DB instances can be created in an Active Directory Domain.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/kerberos-authentication.html"> Kerberos Authentication</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
     /// <p>The list of logs that the restored DB instance is to export to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled. For information about the supported DB engines, see <a>CreateDBInstance</a>.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>A value that indicates whether to enable a customer-owned IP address (CoIP) for an RDS on Outposts DB instance.</p> <p>A <i>CoIP</i> provides local or external connectivity to resources in your Outpost subnets through your on-premises network. For some use cases, a CoIP can provide lower latency for connections to the DB instance from outside of its virtual private cloud (VPC) on your local network.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Working with Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For more information about CoIPs, see <a href="https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing">Customer-owned IP addresses</a> in the <i>AWS Outposts User Guide</i>.</p>
+    pub enable_customer_owned_ip: Option<bool>,
+    /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information about IAM database authentication, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication for MySQL and PostgreSQL</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p><p>The database engine to use for the new instance.</p> <p>Default: The same as source</p> <p>Constraint: Must be compatible with the engine of the source</p> <p>Valid Values:</p> <ul> <li> <p> <code>mariadb</code> </p> </li> <li> <p> <code>mysql</code> </p> </li> <li> <p> <code>oracle-ee</code> </p> </li> <li> <p> <code>oracle-se2</code> </p> </li> <li> <p> <code>oracle-se1</code> </p> </li> <li> <p> <code>oracle-se</code> </p> </li> <li> <p> <code>postgres</code> </p> </li> <li> <p> <code>sqlserver-ee</code> </p> </li> <li> <p> <code>sqlserver-se</code> </p> </li> <li> <p> <code>sqlserver-ex</code> </p> </li> <li> <p> <code>sqlserver-web</code> </p> </li> </ul></p>
     pub engine: Option<String>,
@@ -17168,6 +17524,8 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     pub iops: Option<i64>,
     /// <p>License model information for the restored DB instance.</p> <p>Default: Same as source.</p> <p> Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>
     pub license_model: Option<String>,
+    /// <p>The upper limit to which Amazon RDS can automatically scale the storage of the DB instance.</p>
+    pub max_allocated_storage: Option<i64>,
     /// <p>A value that indicates whether the DB instance is a Multi-AZ deployment.</p> <p>Constraint: You can't specify the <code>AvailabilityZone</code> parameter if the DB instance is a Multi-AZ deployment.</p>
     pub multi_az: Option<bool>,
     /// <p>The name of the option group to be used for the restored DB instance.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, can't be removed from an option group, and that option group can't be removed from a DB instance once it is associated with a DB instance</p>
@@ -17180,6 +17538,8 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     pub publicly_accessible: Option<bool>,
     /// <p>The date and time to restore from.</p> <p>Valid Values: Value must be a time in Universal Coordinated Time (UTC) format</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the DB instance</p> </li> <li> <p>Can't be specified if the <code>UseLatestRestorableTime</code> parameter is enabled</p> </li> </ul> <p>Example: <code>2009-09-07T23:45:00Z</code> </p>
     pub restore_time: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the replicated automated backups from which to restore, for example, <code>arn:aws:rds:useast-1:123456789012:auto-backup:ab-L2IJCEXJP7XQ7HOJ4SIEXAMPLE</code>.</p>
+    pub source_db_instance_automated_backups_arn: Option<String>,
     /// <p><p>The identifier of the source DB instance from which to restore.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DB instance.</p> </li> </ul></p>
     pub source_db_instance_identifier: Option<String>,
     /// <p>The resource ID of the source DB instance from which to restore.</p>
@@ -17253,6 +17613,12 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.enable_customer_owned_ip {
+            params.put(
+                &format!("{}{}", prefix, "EnableCustomerOwnedIp"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.enable_iam_database_authentication {
             params.put(
                 &format!("{}{}", prefix, "EnableIAMDatabaseAuthentication"),
@@ -17267,6 +17633,12 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
         }
         if let Some(ref field_value) = obj.license_model {
             params.put(&format!("{}{}", prefix, "LicenseModel"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_allocated_storage {
+            params.put(
+                &format!("{}{}", prefix, "MaxAllocatedStorage"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.multi_az {
             params.put(&format!("{}{}", prefix, "MultiAZ"), &field_value);
@@ -17289,6 +17661,12 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
         }
         if let Some(ref field_value) = obj.restore_time {
             params.put(&format!("{}{}", prefix, "RestoreTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.source_db_instance_automated_backups_arn {
+            params.put(
+                &format!("{}{}", prefix, "SourceDBInstanceAutomatedBackupsArn"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.source_db_instance_identifier {
             params.put(
@@ -17639,6 +18017,8 @@ pub struct SourceRegion {
     pub region_name: Option<String>,
     /// <p>The status of the source AWS Region.</p>
     pub status: Option<String>,
+    /// <p>Whether the source AWS Region supports replicating automated backups to the current AWS Region.</p>
+    pub supports_db_instance_automated_backups_replication: Option<bool>,
 }
 
 #[allow(dead_code)]
@@ -17659,6 +18039,13 @@ impl SourceRegionDeserializer {
                 }
                 "Status" => {
                     obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                "SupportsDBInstanceAutomatedBackupsReplication" => {
+                    obj.supports_db_instance_automated_backups_replication =
+                        Some(BooleanDeserializer::deserialize(
+                            "SupportsDBInstanceAutomatedBackupsReplication",
+                            stack,
+                        )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -17734,11 +18121,11 @@ impl SourceTypeDeserializer {
 pub struct StartActivityStreamRequest {
     /// <p>Specifies whether or not the database activity stream is to start as soon as possible, regardless of the maintenance window for the database.</p>
     pub apply_immediately: Option<bool>,
-    /// <p>The AWS KMS key identifier for encrypting messages in the database activity stream. The key identifier can be either a key ID, a key ARN, or a key alias.</p>
+    /// <p>The AWS KMS key identifier for encrypting messages in the database activity stream. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub kms_key_id: String,
     /// <p>Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. </p>
     pub mode: String,
-    /// <p>The Amazon Resource Name (ARN) of the DB cluster, for example <code>arn:aws:rds:us-east-1:12345667890:cluster:das-cluster</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the DB cluster, for example, <code>arn:aws:rds:us-east-1:12345667890:cluster:das-cluster</code>.</p>
     pub resource_arn: String,
 }
 
@@ -17865,6 +18252,84 @@ impl StartDBClusterResultDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartDBInstanceAutomatedBackupsReplicationMessage {
+    /// <p>The retention period for the replicated automated backups.</p>
+    pub backup_retention_period: Option<i64>,
+    /// <p>The AWS KMS key identifier for encryption of the replicated automated backups. The KMS key ID is the Amazon Resource Name (ARN) for the KMS encryption key in the destination AWS Region, for example, <code>arn:aws:kms:us-east-1:123456789012:key/AKIAIOSFODNN7EXAMPLE</code>.</p>
+    pub kms_key_id: Option<String>,
+    /// <p>A URL that contains a Signature Version 4 signed request for the StartDBInstanceAutomatedBackupsReplication action to be called in the AWS Region of the source DB instance. The presigned URL must be a valid request for the StartDBInstanceAutomatedBackupsReplication API action that can be executed in the AWS Region that contains the source DB instance.</p>
+    pub pre_signed_url: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the source DB instance for the replicated automated backups, for example, <code>arn:aws:rds:us-west-2:123456789012:db:mydatabase</code>.</p>
+    pub source_db_instance_arn: String,
+}
+
+/// Serialize `StartDBInstanceAutomatedBackupsReplicationMessage` contents to a `SignedRequest`.
+struct StartDBInstanceAutomatedBackupsReplicationMessageSerializer;
+impl StartDBInstanceAutomatedBackupsReplicationMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &StartDBInstanceAutomatedBackupsReplicationMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.backup_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "BackupRetentionPeriod"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.pre_signed_url {
+            params.put(&format!("{}{}", prefix, "PreSignedUrl"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "SourceDBInstanceArn"),
+            &obj.source_db_instance_arn,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StartDBInstanceAutomatedBackupsReplicationResult {
+    pub db_instance_automated_backup: Option<DBInstanceAutomatedBackup>,
+}
+
+#[allow(dead_code)]
+struct StartDBInstanceAutomatedBackupsReplicationResultDeserializer;
+impl StartDBInstanceAutomatedBackupsReplicationResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StartDBInstanceAutomatedBackupsReplicationResult, XmlParseError> {
+        deserialize_elements::<_, StartDBInstanceAutomatedBackupsReplicationResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstanceAutomatedBackup" => {
+                        obj.db_instance_automated_backup =
+                            Some(DBInstanceAutomatedBackupDeserializer::deserialize(
+                                "DBInstanceAutomatedBackup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDBInstanceMessage {
     /// <p> The user-supplied instance identifier. </p>
     pub db_instance_identifier: String,
@@ -17921,7 +18386,7 @@ pub struct StartExportTaskMessage {
     pub export_task_identifier: String,
     /// <p>The name of the IAM role to use for writing to the Amazon S3 bucket when exporting a snapshot. </p>
     pub iam_role_arn: String,
-    /// <p>The ID of the AWS KMS key to use to encrypt the snapshot exported to Amazon S3. The KMS key ID is the Amazon Resource Name (ARN), the KMS key identifier, or the KMS key alias for the KMS encryption key. The IAM role used for the snapshot export must have encryption and decryption permissions to use this KMS key. </p>
+    /// <p><p>The ID of the AWS KMS customer master key (CMK) to use to encrypt the snapshot exported to Amazon S3. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK). The caller of this operation must be authorized to execute the following operations. These can be set in the AWS KMS key policy: </p> <ul> <li> <p>GrantOperation.Encrypt</p> </li> <li> <p>GrantOperation.Decrypt</p> </li> <li> <p>GrantOperation.GenerateDataKey</p> </li> <li> <p>GrantOperation.GenerateDataKeyWithoutPlaintext</p> </li> <li> <p>GrantOperation.ReEncryptFrom</p> </li> <li> <p>GrantOperation.ReEncryptTo</p> </li> <li> <p>GrantOperation.CreateGrant</p> </li> <li> <p>GrantOperation.DescribeKey</p> </li> <li> <p>GrantOperation.RetireGrant</p> </li> </ul></p>
     pub kms_key_id: String,
     /// <p>The name of the Amazon S3 bucket to export the snapshot to.</p>
     pub s3_bucket_name: String,
@@ -17994,7 +18459,7 @@ impl StopActivityStreamRequestSerializer {
 pub struct StopActivityStreamResponse {
     /// <p>The name of the Amazon Kinesis data stream used for the database activity stream.</p>
     pub kinesis_stream_name: Option<String>,
-    /// <p>The AWS KMS key identifier used for encrypting messages in the database activity stream.</p>
+    /// <p>The AWS KMS key identifier used for encrypting messages in the database activity stream.</p> <p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS customer master key (CMK).</p>
     pub kms_key_id: Option<String>,
     /// <p>The status of the database activity stream.</p>
     pub status: Option<String>,
@@ -18078,6 +18543,66 @@ impl StopDBClusterResultDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopDBInstanceAutomatedBackupsReplicationMessage {
+    /// <p>The Amazon Resource Name (ARN) of the source DB instance for which to stop replicating automated backups, for example, <code>arn:aws:rds:us-west-2:123456789012:db:mydatabase</code>.</p>
+    pub source_db_instance_arn: String,
+}
+
+/// Serialize `StopDBInstanceAutomatedBackupsReplicationMessage` contents to a `SignedRequest`.
+struct StopDBInstanceAutomatedBackupsReplicationMessageSerializer;
+impl StopDBInstanceAutomatedBackupsReplicationMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &StopDBInstanceAutomatedBackupsReplicationMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "SourceDBInstanceArn"),
+            &obj.source_db_instance_arn,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StopDBInstanceAutomatedBackupsReplicationResult {
+    pub db_instance_automated_backup: Option<DBInstanceAutomatedBackup>,
+}
+
+#[allow(dead_code)]
+struct StopDBInstanceAutomatedBackupsReplicationResultDeserializer;
+impl StopDBInstanceAutomatedBackupsReplicationResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StopDBInstanceAutomatedBackupsReplicationResult, XmlParseError> {
+        deserialize_elements::<_, StopDBInstanceAutomatedBackupsReplicationResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstanceAutomatedBackup" => {
+                        obj.db_instance_automated_backup =
+                            Some(DBInstanceAutomatedBackupDeserializer::deserialize(
+                                "DBInstanceAutomatedBackup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -18309,9 +18834,9 @@ impl TStampDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
-    /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', ':', '/', '=', '+', '-', '@' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$").</p>
     pub key: Option<String>,
-    /// <p>A value is the optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    /// <p>A value is the optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', ':', '/', '=', '+', '-', '@' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$").</p>
     pub value: Option<String>,
 }
 
@@ -18929,7 +19454,7 @@ impl VpcSecurityGroupMembershipListDeserializer {
         })
     }
 }
-/// <p>Information about the virtual private network (VPN) between the VMware vSphere cluster and the AWS website.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+/// <p>Information about the virtual private network (VPN) between the VMware vSphere cluster and the AWS website.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpnDetails {
@@ -19222,7 +19747,7 @@ pub enum AddTagsToResourceError {
     DBClusterNotFoundFault(String),
     /// <p> <code>DBInstanceIdentifier</code> doesn't refer to an existing DB instance. </p>
     DBInstanceNotFoundFault(String),
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
@@ -19822,6 +20347,8 @@ impl Error for CopyDBParameterGroupError {}
 /// Errors returned by CopyDBSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopyDBSnapshotError {
+    /// <p> <code>CustomAvailabilityZoneId</code> doesn't refer to an existing custom Availability Zone identifier.</p>
+    CustomAvailabilityZoneNotFoundFault(String),
     /// <p> <code>DBSnapshotIdentifier</code> is already used by an existing snapshot. </p>
     DBSnapshotAlreadyExistsFault(String),
     /// <p> <code>DBSnapshotIdentifier</code> doesn't refer to an existing DB snapshot. </p>
@@ -19842,6 +20369,13 @@ impl CopyDBSnapshotError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "CustomAvailabilityZoneNotFound" => {
+                        return RusotoError::Service(
+                            CopyDBSnapshotError::CustomAvailabilityZoneNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
                     "DBSnapshotAlreadyExists" => {
                         return RusotoError::Service(
                             CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(parsed_error.message),
@@ -19886,6 +20420,9 @@ impl fmt::Display for CopyDBSnapshotError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            CopyDBSnapshotError::CustomAvailabilityZoneNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
             CopyDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
             CopyDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => write!(f, "{}", cause),
@@ -20052,7 +20589,7 @@ pub enum CreateDBClusterError {
     DBSubnetGroupNotFoundFault(String),
     /// <p> <code>Domain</code> doesn't refer to an existing Active Directory domain. </p>
     DomainNotFoundFault(String),
-    /// <p><p/></p>
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global database cluster. </p>
     GlobalClusterNotFoundFault(String),
     /// <p>There is insufficient storage available for the current action. You might be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
     InsufficientStorageClusterCapacityFault(String),
@@ -20062,7 +20599,7 @@ pub enum CreateDBClusterError {
     InvalidDBInstanceStateFault(String),
     /// <p>The DB subnet group cannot be deleted because it's in use.</p>
     InvalidDBSubnetGroupStateFault(String),
-    /// <p><p/></p>
+    /// <p>The global cluster is in an invalid state and can't perform the requested operation. </p>
     InvalidGlobalClusterStateFault(String),
     /// <p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
     InvalidSubnet(String),
@@ -21456,9 +21993,9 @@ impl Error for CreateEventSubscriptionError {}
 pub enum CreateGlobalClusterError {
     /// <p> <code>DBClusterIdentifier</code> doesn't refer to an existing DB cluster. </p>
     DBClusterNotFoundFault(String),
-    /// <p><p/></p>
+    /// <p>The <code>GlobalClusterIdentifier</code> already exists. Choose a new global database identifier (unique name) to create a new global database cluster.</p>
     GlobalClusterAlreadyExistsFault(String),
-    /// <p><p/></p>
+    /// <p>The number of global database clusters for this account is already at the maximum allowed.</p>
     GlobalClusterQuotaExceededFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
@@ -22136,7 +22673,7 @@ impl Error for DeleteDBParameterGroupError {}
 /// Errors returned by DeleteDBProxy
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBProxyError {
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The requested operation can't be performed while the proxy is in this state.</p>
     InvalidDBProxyStateFault(String),
@@ -22434,9 +22971,9 @@ impl Error for DeleteEventSubscriptionError {}
 /// Errors returned by DeleteGlobalCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteGlobalClusterError {
-    /// <p><p/></p>
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global database cluster. </p>
     GlobalClusterNotFoundFault(String),
-    /// <p><p/></p>
+    /// <p>The global cluster is in an invalid state and can't perform the requested operation. </p>
     InvalidGlobalClusterStateFault(String),
 }
 
@@ -22598,7 +23135,7 @@ impl Error for DeleteOptionGroupError {}
 /// Errors returned by DeregisterDBProxyTargets
 #[derive(Debug, PartialEq)]
 pub enum DeregisterDBProxyTargetsError {
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
@@ -23427,7 +23964,7 @@ impl Error for DescribeDBParametersError {}
 /// Errors returned by DescribeDBProxies
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBProxiesError {
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
 }
 
@@ -23471,7 +24008,7 @@ impl Error for DescribeDBProxiesError {}
 /// Errors returned by DescribeDBProxyTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBProxyTargetGroupsError {
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
@@ -23545,7 +24082,7 @@ impl Error for DescribeDBProxyTargetGroupsError {}
 /// Errors returned by DescribeDBProxyTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBProxyTargetsError {
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
@@ -24049,7 +24586,7 @@ impl Error for DescribeExportTasksError {}
 /// Errors returned by DescribeGlobalClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeGlobalClustersError {
-    /// <p><p/></p>
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global database cluster. </p>
     GlobalClusterNotFoundFault(String),
 }
 
@@ -24694,7 +25231,7 @@ pub enum ListTagsForResourceError {
     DBClusterNotFoundFault(String),
     /// <p> <code>DBInstanceIdentifier</code> doesn't refer to an existing DB instance. </p>
     DBInstanceNotFoundFault(String),
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
@@ -25548,7 +26085,7 @@ impl Error for ModifyDBParameterGroupError {}
 pub enum ModifyDBProxyError {
     /// <p>The specified proxy name must be unique for all proxies owned by your AWS account in the specified AWS Region.</p>
     DBProxyAlreadyExistsFault(String),
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The requested operation can't be performed while the proxy is in this state.</p>
     InvalidDBProxyStateFault(String),
@@ -25606,7 +26143,7 @@ impl Error for ModifyDBProxyError {}
 /// Errors returned by ModifyDBProxyTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBProxyTargetGroupError {
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
@@ -25988,9 +26525,9 @@ impl Error for ModifyEventSubscriptionError {}
 /// Errors returned by ModifyGlobalCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyGlobalClusterError {
-    /// <p><p/></p>
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global database cluster. </p>
     GlobalClusterNotFoundFault(String),
-    /// <p><p/></p>
+    /// <p>The global cluster is in an invalid state and can't perform the requested operation. </p>
     InvalidGlobalClusterStateFault(String),
 }
 
@@ -26333,12 +26870,14 @@ pub enum RegisterDBProxyTargetsError {
     DBClusterNotFoundFault(String),
     /// <p> <code>DBInstanceIdentifier</code> doesn't refer to an existing DB instance. </p>
     DBInstanceNotFoundFault(String),
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The proxy is already associated with the specified RDS DB instance or Aurora DB cluster.</p>
     DBProxyTargetAlreadyRegisteredFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
+    /// <p>The requested operation can't be performed because there aren't enough available IP addresses in the proxy's subnets. Add more CIDR blocks to the VPC or remove IP address that aren't required from the subnets.</p>
+    InsufficientAvailableIPsInSubnetFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
@@ -26384,6 +26923,13 @@ impl RegisterDBProxyTargetsError {
                     "DBProxyTargetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RegisterDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InsufficientAvailableIPsInSubnetFault" => {
+                        return RusotoError::Service(
+                            RegisterDBProxyTargetsError::InsufficientAvailableIPsInSubnetFault(
                                 parsed_error.message,
                             ),
                         )
@@ -26441,6 +26987,9 @@ impl fmt::Display for RegisterDBProxyTargetsError {
             RegisterDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(ref cause) => {
                 write!(f, "{}", cause)
             }
+            RegisterDBProxyTargetsError::InsufficientAvailableIPsInSubnetFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RegisterDBProxyTargetsError::InvalidDBClusterStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -26459,9 +27008,9 @@ impl Error for RegisterDBProxyTargetsError {}
 pub enum RemoveFromGlobalClusterError {
     /// <p> <code>DBClusterIdentifier</code> doesn't refer to an existing DB cluster. </p>
     DBClusterNotFoundFault(String),
-    /// <p><p/></p>
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global database cluster. </p>
     GlobalClusterNotFoundFault(String),
-    /// <p><p/></p>
+    /// <p>The global cluster is in an invalid state and can't perform the requested operation. </p>
     InvalidGlobalClusterStateFault(String),
 }
 
@@ -26739,7 +27288,7 @@ pub enum RemoveTagsFromResourceError {
     DBClusterNotFoundFault(String),
     /// <p> <code>DBInstanceIdentifier</code> doesn't refer to an existing DB instance. </p>
     DBInstanceNotFoundFault(String),
-    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS accoutn in the specified AWS Region.</p>
+    /// <p>The specified proxy name doesn't correspond to a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyNotFoundFault(String),
     /// <p>The specified target group isn't available for a proxy owned by your AWS account in the specified AWS Region.</p>
     DBProxyTargetGroupNotFoundFault(String),
@@ -28780,6 +29329,59 @@ impl fmt::Display for StartDBInstanceError {
     }
 }
 impl Error for StartDBInstanceError {}
+/// Errors returned by StartDBInstanceAutomatedBackupsReplication
+#[derive(Debug, PartialEq)]
+pub enum StartDBInstanceAutomatedBackupsReplicationError {
+    /// <p>The quota for retained automated backups was exceeded. This prevents you from retaining any additional automated backups. The retained automated backups quota is the same as your DB Instance quota.</p>
+    DBInstanceAutomatedBackupQuotaExceededFault(String),
+    /// <p> <code>DBInstanceIdentifier</code> doesn't refer to an existing DB instance. </p>
+    DBInstanceNotFoundFault(String),
+    /// <p>The DB instance isn't in a valid state.</p>
+    InvalidDBInstanceStateFault(String),
+    /// <p>An error occurred accessing an AWS KMS key.</p>
+    KMSKeyNotAccessibleFault(String),
+    /// <p>Storage of the <code>StorageType</code> specified can't be associated with the DB instance. </p>
+    StorageTypeNotSupportedFault(String),
+}
+
+impl StartDBInstanceAutomatedBackupsReplicationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartDBInstanceAutomatedBackupsReplicationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "DBInstanceAutomatedBackupQuotaExceeded" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::DBInstanceAutomatedBackupQuotaExceededFault(parsed_error.message)),"DBInstanceNotFound" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(parsed_error.message)),"InvalidDBInstanceState" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::KMSKeyNotAccessibleFault(parsed_error.message)),"StorageTypeNotSupported" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::StorageTypeNotSupportedFault(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StartDBInstanceAutomatedBackupsReplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+                            StartDBInstanceAutomatedBackupsReplicationError::DBInstanceAutomatedBackupQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+StartDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+StartDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+StartDBInstanceAutomatedBackupsReplicationError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+StartDBInstanceAutomatedBackupsReplicationError::StorageTypeNotSupportedFault(ref cause) => write!(f, "{}", cause)
+                        }
+    }
+}
+impl Error for StartDBInstanceAutomatedBackupsReplicationError {}
 /// Errors returned by StartExportTask
 #[derive(Debug, PartialEq)]
 pub enum StartExportTaskError {
@@ -29122,6 +29724,66 @@ impl fmt::Display for StopDBInstanceError {
     }
 }
 impl Error for StopDBInstanceError {}
+/// Errors returned by StopDBInstanceAutomatedBackupsReplication
+#[derive(Debug, PartialEq)]
+pub enum StopDBInstanceAutomatedBackupsReplicationError {
+    /// <p> <code>DBInstanceIdentifier</code> doesn't refer to an existing DB instance. </p>
+    DBInstanceNotFoundFault(String),
+    /// <p>The DB instance isn't in a valid state.</p>
+    InvalidDBInstanceStateFault(String),
+}
+
+impl StopDBInstanceAutomatedBackupsReplicationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopDBInstanceAutomatedBackupsReplicationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            StopDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBInstanceState" => return RusotoError::Service(
+                        StopDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(
+                            parsed_error.message,
+                        ),
+                    ),
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StopDBInstanceAutomatedBackupsReplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopDBInstanceAutomatedBackupsReplicationError {}
 /// Trait representing the capabilities of the Amazon RDS API. Amazon RDS clients implement this trait.
 #[async_trait]
 pub trait Rds {
@@ -29185,7 +29847,7 @@ pub trait Rds {
         input: CopyDBClusterParameterGroupMessage,
     ) -> Result<CopyDBClusterParameterGroupResult, RusotoError<CopyDBClusterParameterGroupError>>;
 
-    /// <p><p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot is to be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in &quot;copying&quot; status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html"> Copying a Snapshot</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the customer master key (CMK) to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot is to be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in &quot;copying&quot; status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html"> Copying a Snapshot</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -29197,7 +29859,7 @@ pub trait Rds {
         input: CopyDBParameterGroupMessage,
     ) -> Result<CopyDBParameterGroupResult, RusotoError<CopyDBParameterGroupError>>;
 
-    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBSnapshot">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the <code>available</code> state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBSnapshot">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
     async fn copy_db_snapshot(
         &self,
         input: CopyDBSnapshotMessage,
@@ -29209,7 +29871,7 @@ pub trait Rds {
         input: CopyOptionGroupMessage,
     ) -> Result<CopyOptionGroupResult, RusotoError<CopyOptionGroupError>>;
 
-    /// <p>Creates a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+    /// <p>Creates a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
     async fn create_custom_availability_zone(
         &self,
         input: CreateCustomAvailabilityZoneMessage,
@@ -29269,7 +29931,7 @@ pub trait Rds {
         input: CreateDBSecurityGroupMessage,
     ) -> Result<CreateDBSecurityGroupResult, RusotoError<CreateDBSecurityGroupError>>;
 
-    /// <p>Creates a DBSnapshot. The source DBInstance must be in "available" state.</p>
+    /// <p>Creates a snapshot of a DB instance. The source DB instance must be in the <code>available</code> or <code>storage-optimization</code> state.</p>
     async fn create_db_snapshot(
         &self,
         input: CreateDBSnapshotMessage,
@@ -29281,13 +29943,13 @@ pub trait Rds {
         input: CreateDBSubnetGroupMessage,
     ) -> Result<CreateDBSubnetGroupResult, RusotoError<CreateDBSubnetGroupError>>;
 
-    /// <p><p>Creates an RDS event notification subscription. This action requires a topic Amazon Resource Name (ARN) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you are notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you receive notice of the events for that source type for all your RDS sources. If you don&#39;t specify either the SourceType or the SourceIdentifier, you are notified of events generated from all RDS sources belonging to your customer account.</p> <note> <p>RDS event notification is only available for unencrypted SNS topics. If you specify an encrypted SNS topic, event notifications aren&#39;t sent for the topic.</p> </note></p>
+    /// <p><p>Creates an RDS event notification subscription. This action requires a topic Amazon Resource Name (ARN) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (<code>SourceType</code>) that you want to be notified of and provide a list of RDS sources (<code>SourceIds</code>) that triggers the events. You can also provide a list of event categories (<code>EventCategories</code>) for events that you want to be notified of. For example, you can specify <code>SourceType</code> = <code>db-instance</code>, <code>SourceIds</code> = <code>mydbinstance1</code>, <code>mydbinstance2</code> and <code>EventCategories</code> = <code>Availability</code>, <code>Backup</code>.</p> <p>If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType</code> = <code>db-instance</code> and <code>SourceIdentifier</code> = <code>myDBInstance1</code>, you are notified of all the <code>db-instance</code> events for the specified source. If you specify a <code>SourceType</code> but do not specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your RDS sources. If you don&#39;t specify either the SourceType or the <code>SourceIdentifier</code>, you are notified of events generated from all RDS sources belonging to your customer account.</p> <note> <p>RDS event notification is only available for unencrypted SNS topics. If you specify an encrypted SNS topic, event notifications aren&#39;t sent for the topic.</p> </note></p>
     async fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
     ) -> Result<CreateEventSubscriptionResult, RusotoError<CreateEventSubscriptionError>>;
 
-    /// <p><p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p> Creates an Aurora global database spread across multiple AWS Regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn create_global_cluster(
         &self,
         input: CreateGlobalClusterMessage,
@@ -29299,7 +29961,7 @@ pub trait Rds {
         input: CreateOptionGroupMessage,
     ) -> Result<CreateOptionGroupResult, RusotoError<CreateOptionGroupError>>;
 
-    /// <p>Deletes a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+    /// <p>Deletes a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
     async fn delete_custom_availability_zone(
         &self,
         input: DeleteCustomAvailabilityZoneMessage,
@@ -29335,7 +29997,7 @@ pub trait Rds {
         input: DeleteDBInstanceMessage,
     ) -> Result<DeleteDBInstanceResult, RusotoError<DeleteDBInstanceError>>;
 
-    /// <p>Deletes automated backups based on the source instance's <code>DbiResourceId</code> value or the restorable instance's resource ID.</p>
+    /// <p>Deletes automated backups using the <code>DbiResourceId</code> value of the source DB instance or the Amazon Resource Name (ARN) of the automated backups.</p>
     async fn delete_db_instance_automated_backup(
         &self,
         input: DeleteDBInstanceAutomatedBackupMessage,
@@ -29416,7 +30078,7 @@ pub trait Rds {
         input: DescribeCertificatesMessage,
     ) -> Result<CertificateMessage, RusotoError<DescribeCertificatesError>>;
 
-    /// <p>Returns information about custom Availability Zones (AZs).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+    /// <p>Returns information about custom Availability Zones (AZs).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
     async fn describe_custom_availability_zones(
         &self,
         input: DescribeCustomAvailabilityZonesMessage,
@@ -29566,19 +30228,19 @@ pub trait Rds {
         RusotoError<DescribeEngineDefaultParametersError>,
     >;
 
-    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> in the <i>Amazon RDS User Guide.</i> </p>
     async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
     ) -> Result<EventCategoriesMessage, RusotoError<DescribeEventCategoriesError>>;
 
-    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>
+    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>.</p> <p>If you specify a <code>SubscriptionName</code>, lists the description for that subscription.</p>
     async fn describe_event_subscriptions(
         &self,
         input: DescribeEventSubscriptionsMessage,
     ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>>;
 
-    /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
+    /// <p><p>Returns events related to DB instances, DB clusters, DB parameter groups, DB security groups, DB snapshots, and DB cluster snapshots for the past 14 days. Events specific to a particular DB instances, DB clusters, DB parameter groups, DB security groups, DB snapshots, and DB cluster snapshots group can be obtained by providing the name as a parameter.</p> <note> <p>By default, the past hour of events are returned.</p> </note></p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
@@ -29644,7 +30306,7 @@ pub trait Rds {
         RusotoError<DescribeReservedDBInstancesOfferingsError>,
     >;
 
-    /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a read replica or copy a DB snapshot from. This API action supports pagination.</p>
+    /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a read replica, copy a DB snapshot from, or replicate automated backups from. This API action supports pagination.</p>
     async fn describe_source_regions(
         &self,
         input: DescribeSourceRegionsMessage,
@@ -29764,7 +30426,7 @@ pub trait Rds {
         input: ModifyDBSubnetGroupMessage,
     ) -> Result<ModifyDBSubnetGroupResult, RusotoError<ModifyDBSubnetGroupError>>;
 
-    /// <p>Modifies an existing RDS event notification subscription. You can't modify the source identifiers using this call. To change source identifiers for a subscription, use the <code>AddSourceIdentifierToSubscription</code> and <code>RemoveSourceIdentifierFromSubscription</code> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action.</p>
+    /// <p>Modifies an existing RDS event notification subscription. You can't modify the source identifiers using this call. To change source identifiers for a subscription, use the <code>AddSourceIdentifierToSubscription</code> and <code>RemoveSourceIdentifierFromSubscription</code> calls.</p> <p>You can see a list of the event categories for a given source type (<code>SourceType</code>) in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> in the <i>Amazon RDS User Guide</i> or by using the <code>DescribeEventCategories</code> operation.</p>
     async fn modify_event_subscription(
         &self,
         input: ModifyEventSubscriptionMessage,
@@ -29860,7 +30522,7 @@ pub trait Rds {
         input: ResetDBParameterGroupMessage,
     ) -> Result<DBParameterGroupNameMessage, RusotoError<ResetDBParameterGroupError>>;
 
-    /// <p><p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.html"> Migrating Data to an Amazon Aurora MySQL DB Cluster</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterFromS3</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Creates an Amazon Aurora DB cluster from MySQL data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.ExtMySQL.html#AuroraMySQL.Migrating.ExtMySQL.S3"> Migrating Data from MySQL by Using an Amazon S3 Bucket</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterFromS3</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters. The source DB engine must be MySQL.</p> </note></p>
     async fn restore_db_cluster_from_s3(
         &self,
         input: RestoreDBClusterFromS3Message,
@@ -29878,7 +30540,7 @@ pub trait Rds {
         input: RestoreDBClusterToPointInTimeMessage,
     ) -> Result<RestoreDBClusterToPointInTimeResult, RusotoError<RestoreDBClusterToPointInTimeError>>;
 
-    /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterFromSnapshot</code>.</p> </note></p>
+    /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with most of the source&#39;s original configuration, including the default security group and DB parameter group. By default, the new DB instance is created as a Single-AZ deployment, except when the instance is a SQL Server instance that has an option group associated with mirroring. In this case, the instance becomes a Multi-AZ deployment, not a Single-AZ deployment.</p> <p>If you want to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. After you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterFromSnapshot</code>.</p> </note></p>
     async fn restore_db_instance_from_db_snapshot(
         &self,
         input: RestoreDBInstanceFromDBSnapshotMessage,
@@ -29926,6 +30588,15 @@ pub trait Rds {
         input: StartDBInstanceMessage,
     ) -> Result<StartDBInstanceResult, RusotoError<StartDBInstanceError>>;
 
+    /// <p>Enables replication of automated backups to a different AWS Region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReplicateBackups.html"> Replicating Automated Backups to Another AWS Region</a> in the <i>Amazon RDS User Guide.</i> </p>
+    async fn start_db_instance_automated_backups_replication(
+        &self,
+        input: StartDBInstanceAutomatedBackupsReplicationMessage,
+    ) -> Result<
+        StartDBInstanceAutomatedBackupsReplicationResult,
+        RusotoError<StartDBInstanceAutomatedBackupsReplicationError>,
+    >;
+
     /// <p>Starts an export of a snapshot to Amazon S3. The provided IAM role must have access to the S3 bucket. </p>
     async fn start_export_task(
         &self,
@@ -29949,6 +30620,15 @@ pub trait Rds {
         &self,
         input: StopDBInstanceMessage,
     ) -> Result<StopDBInstanceResult, RusotoError<StopDBInstanceError>>;
+
+    /// <p>Stops automated backup replication for a DB instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReplicateBackups.html"> Replicating Automated Backups to Another AWS Region</a> in the <i>Amazon RDS User Guide.</i> </p>
+    async fn stop_db_instance_automated_backups_replication(
+        &self,
+        input: StopDBInstanceAutomatedBackupsReplicationMessage,
+    ) -> Result<
+        StopDBInstanceAutomatedBackupsReplicationResult,
+        RusotoError<StopDBInstanceAutomatedBackupsReplicationError>,
+    >;
 }
 /// A client for the Amazon RDS API.
 #[derive(Clone)]
@@ -30254,7 +30934,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot is to be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in &quot;copying&quot; status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html"> Copying a Snapshot</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the customer master key (CMK) to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot is to be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> <note> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> </note> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in &quot;copying&quot; status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html"> Copying a Snapshot</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -30320,7 +31000,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBSnapshot">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the <code>available</code> state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBSnapshot">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
     async fn copy_db_snapshot(
         &self,
         input: CopyDBSnapshotMessage,
@@ -30382,7 +31062,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Creates a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+    /// <p>Creates a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
     async fn create_custom_availability_zone(
         &self,
         input: CreateCustomAvailabilityZoneMessage,
@@ -30707,7 +31387,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Creates a DBSnapshot. The source DBInstance must be in "available" state.</p>
+    /// <p>Creates a snapshot of a DB instance. The source DB instance must be in the <code>available</code> or <code>storage-optimization</code> state.</p>
     async fn create_db_snapshot(
         &self,
         input: CreateDBSnapshotMessage,
@@ -30771,7 +31451,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p>Creates an RDS event notification subscription. This action requires a topic Amazon Resource Name (ARN) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you are notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you receive notice of the events for that source type for all your RDS sources. If you don&#39;t specify either the SourceType or the SourceIdentifier, you are notified of events generated from all RDS sources belonging to your customer account.</p> <note> <p>RDS event notification is only available for unencrypted SNS topics. If you specify an encrypted SNS topic, event notifications aren&#39;t sent for the topic.</p> </note></p>
+    /// <p><p>Creates an RDS event notification subscription. This action requires a topic Amazon Resource Name (ARN) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (<code>SourceType</code>) that you want to be notified of and provide a list of RDS sources (<code>SourceIds</code>) that triggers the events. You can also provide a list of event categories (<code>EventCategories</code>) for events that you want to be notified of. For example, you can specify <code>SourceType</code> = <code>db-instance</code>, <code>SourceIds</code> = <code>mydbinstance1</code>, <code>mydbinstance2</code> and <code>EventCategories</code> = <code>Availability</code>, <code>Backup</code>.</p> <p>If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType</code> = <code>db-instance</code> and <code>SourceIdentifier</code> = <code>myDBInstance1</code>, you are notified of all the <code>db-instance</code> events for the specified source. If you specify a <code>SourceType</code> but do not specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your RDS sources. If you don&#39;t specify either the SourceType or the <code>SourceIdentifier</code>, you are notified of events generated from all RDS sources belonging to your customer account.</p> <note> <p>RDS event notification is only available for unencrypted SNS topics. If you specify an encrypted SNS topic, event notifications aren&#39;t sent for the topic.</p> </note></p>
     async fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
@@ -30804,7 +31484,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p> Creates an Aurora global database spread across multiple AWS Regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn create_global_cluster(
         &self,
         input: CreateGlobalClusterMessage,
@@ -30868,7 +31548,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Deletes a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+    /// <p>Deletes a custom Availability Zone (AZ).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
     async fn delete_custom_availability_zone(
         &self,
         input: DeleteCustomAvailabilityZoneMessage,
@@ -31048,7 +31728,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Deletes automated backups based on the source instance's <code>DbiResourceId</code> value or the restorable instance's resource ID.</p>
+    /// <p>Deletes automated backups using the <code>DbiResourceId</code> value of the source DB instance or the Amazon Resource Name (ARN) of the automated backups.</p>
     async fn delete_db_instance_automated_backup(
         &self,
         input: DeleteDBInstanceAutomatedBackupMessage,
@@ -31409,7 +32089,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Returns information about custom Availability Zones (AZs).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> <i>RDS on VMware User Guide.</i> </a> </p>
+    /// <p>Returns information about custom Availability Zones (AZs).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
     async fn describe_custom_availability_zones(
         &self,
         input: DescribeCustomAvailabilityZonesMessage,
@@ -32190,7 +32870,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> in the <i>Amazon RDS User Guide.</i> </p>
     async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
@@ -32223,7 +32903,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>
+    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>.</p> <p>If you specify a <code>SubscriptionName</code>, lists the description for that subscription.</p>
     async fn describe_event_subscriptions(
         &self,
         input: DescribeEventSubscriptionsMessage,
@@ -32256,7 +32936,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
+    /// <p><p>Returns events related to DB instances, DB clusters, DB parameter groups, DB security groups, DB snapshots, and DB cluster snapshots for the past 14 days. Events specific to a particular DB instances, DB clusters, DB parameter groups, DB security groups, DB snapshots, and DB cluster snapshots group can be obtained by providing the name as a parameter.</p> <note> <p>By default, the past hour of events are returned.</p> </note></p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
@@ -32595,7 +33275,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a read replica or copy a DB snapshot from. This API action supports pagination.</p>
+    /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a read replica, copy a DB snapshot from, or replicate automated backups from. This API action supports pagination.</p>
     async fn describe_source_regions(
         &self,
         input: DescribeSourceRegionsMessage,
@@ -33217,7 +33897,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Modifies an existing RDS event notification subscription. You can't modify the source identifiers using this call. To change source identifiers for a subscription, use the <code>AddSourceIdentifierToSubscription</code> and <code>RemoveSourceIdentifierFromSubscription</code> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action.</p>
+    /// <p>Modifies an existing RDS event notification subscription. You can't modify the source identifiers using this call. To change source identifiers for a subscription, use the <code>AddSourceIdentifierToSubscription</code> and <code>RemoveSourceIdentifierFromSubscription</code> calls.</p> <p>You can see a list of the event categories for a given source type (<code>SourceType</code>) in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> in the <i>Amazon RDS User Guide</i> or by using the <code>DescribeEventCategories</code> operation.</p>
     async fn modify_event_subscription(
         &self,
         input: ModifyEventSubscriptionMessage,
@@ -33683,7 +34363,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.html"> Migrating Data to an Amazon Aurora MySQL DB Cluster</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterFromS3</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Creates an Amazon Aurora DB cluster from MySQL data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.ExtMySQL.html#AuroraMySQL.Migrating.ExtMySQL.S3"> Migrating Data from MySQL by Using an Amazon S3 Bucket</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterFromS3</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters. The source DB engine must be MySQL.</p> </note></p>
     async fn restore_db_cluster_from_s3(
         &self,
         input: RestoreDBClusterFromS3Message,
@@ -33784,7 +34464,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterFromSnapshot</code>.</p> </note></p>
+    /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with most of the source&#39;s original configuration, including the default security group and DB parameter group. By default, the new DB instance is created as a Single-AZ deployment, except when the instance is a SQL Server instance that has an option group associated with mirroring. In this case, the instance becomes a Multi-AZ deployment, not a Single-AZ deployment.</p> <p>If you want to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. After you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterFromSnapshot</code>.</p> </note></p>
     async fn restore_db_instance_from_db_snapshot(
         &self,
         input: RestoreDBInstanceFromDBSnapshotMessage,
@@ -34018,6 +34698,49 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
+    /// <p>Enables replication of automated backups to a different AWS Region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReplicateBackups.html"> Replicating Automated Backups to Another AWS Region</a> in the <i>Amazon RDS User Guide.</i> </p>
+    async fn start_db_instance_automated_backups_replication(
+        &self,
+        input: StartDBInstanceAutomatedBackupsReplicationMessage,
+    ) -> Result<
+        StartDBInstanceAutomatedBackupsReplicationResult,
+        RusotoError<StartDBInstanceAutomatedBackupsReplicationError>,
+    > {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("StartDBInstanceAutomatedBackupsReplication");
+        let mut params = params;
+        StartDBInstanceAutomatedBackupsReplicationMessageSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                StartDBInstanceAutomatedBackupsReplicationError::from_response,
+            )
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = StartDBInstanceAutomatedBackupsReplicationResultDeserializer::deserialize(
+                "StartDBInstanceAutomatedBackupsReplicationResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Starts an export of a snapshot to Amazon S3. The provided IAM role must have access to the S3 bucket. </p>
     async fn start_export_task(
         &self,
@@ -34133,6 +34856,49 @@ impl Rds for RdsClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result =
                 StopDBInstanceResultDeserializer::deserialize("StopDBInstanceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Stops automated backup replication for a DB instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReplicateBackups.html"> Replicating Automated Backups to Another AWS Region</a> in the <i>Amazon RDS User Guide.</i> </p>
+    async fn stop_db_instance_automated_backups_replication(
+        &self,
+        input: StopDBInstanceAutomatedBackupsReplicationMessage,
+    ) -> Result<
+        StopDBInstanceAutomatedBackupsReplicationResult,
+        RusotoError<StopDBInstanceAutomatedBackupsReplicationError>,
+    > {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("StopDBInstanceAutomatedBackupsReplication");
+        let mut params = params;
+        StopDBInstanceAutomatedBackupsReplicationMessageSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                StopDBInstanceAutomatedBackupsReplicationError::from_response,
+            )
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = StopDBInstanceAutomatedBackupsReplicationResultDeserializer::deserialize(
+                "StopDBInstanceAutomatedBackupsReplicationResult",
+                stack,
+            )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
             Ok(result)

@@ -63,14 +63,56 @@ pub struct ContentRedaction {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct CreateMedicalVocabularyRequest {
-    /// <p>The language code used for the entries within your custom vocabulary. The language code of your custom vocabulary must match the language code of your transcription job. US English (en-US) is the only language code available for Amazon Transcribe Medical.</p>
+pub struct CreateLanguageModelRequest {
+    /// <p>The Amazon Transcribe standard language model, or base model used to create your custom language model.</p> <p>If you want to use your custom language model to transcribe audio with a sample rate of 16 kHz or greater, choose <code>Wideband</code>.</p> <p>If you want to use your custom language model to transcribe audio with a sample rate that is less than 16 kHz, choose <code>Narrowband</code>.</p>
+    #[serde(rename = "BaseModelName")]
+    pub base_model_name: String,
+    /// <p>Contains the data access role and the Amazon S3 prefixes to read the required input files to create a custom language model.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: InputDataConfig,
+    /// <p>The language of the input text you're using to train your custom language model.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
-    /// <p>The Amazon S3 location of the text file you use to define your custom vocabulary. The URI must be in the same AWS region as the API endpoint you're calling. Enter information about your <code>VocabularyFileUri</code> in the following format:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>This is an example of a vocabulary file uri location in Amazon S3:</p> <p> <code>https://s3.us-east-1.amazonaws.com/AWSDOC-EXAMPLE-BUCKET/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary-med">Medical Custom Vocabularies</a>.</p>
+    /// <p>The name you choose for your custom language model when you create it.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateLanguageModelResponse {
+    /// <p>The Amazon Transcribe standard language model, or base model you've used to create a custom language model.</p>
+    #[serde(rename = "BaseModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_model_name: Option<String>,
+    /// <p>The data access role and Amazon S3 prefixes you've chosen to create your custom language model.</p>
+    #[serde(rename = "InputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_data_config: Option<InputDataConfig>,
+    /// <p>The language code of the text you've used to create a custom language model.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>The name you've chosen for your custom language model.</p>
+    #[serde(rename = "ModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_name: Option<String>,
+    /// <p>The status of the custom language model. When the status is <code>COMPLETED</code> the model is ready to use.</p>
+    #[serde(rename = "ModelStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMedicalVocabularyRequest {
+    /// <p>The language code for the language used for the entries in your custom vocabulary. The language code of your custom vocabulary must match the language code of your transcription job. US English (en-US) is the only language code available for Amazon Transcribe Medical.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>The location in Amazon S3 of the text file you use to define your custom vocabulary. The URI must be in the same AWS Region as the resource that you're calling. Enter information about your <code>VocabularyFileUri</code> in the following format:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>The following is an example URI for a vocabulary file that is stored in Amazon S3:</p> <p> <code>https://s3.us-east-1.amazonaws.com/AWSDOC-EXAMPLE-BUCKET/vocab.txt</code> </p> <p>For more information about Amazon S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary-med">Medical Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     pub vocabulary_file_uri: String,
-    /// <p>The name of the custom vocabulary. This case-sensitive name must be unique within an AWS account. If you try to create a vocabulary with the same name as a previous vocabulary you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The name of the custom vocabulary. This case-sensitive name must be unique within an AWS account. If you try to create a vocabulary with the same name as a previous vocabulary, you get a <code>ConflictException</code> error.</p>
     #[serde(rename = "VocabularyName")]
     pub vocabulary_name: String,
 }
@@ -82,19 +124,19 @@ pub struct CreateMedicalVocabularyResponse {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    /// <p>The language code you chose to describe the entries in your custom vocabulary. US English (en-US) is the only valid language code for Amazon Transcribe Medical.</p>
+    /// <p>The language code for the entries in your custom vocabulary. US English (en-US) is the only valid language code for Amazon Transcribe Medical.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    /// <p>The date and time you created the vocabulary.</p>
+    /// <p>The date and time that you created the vocabulary.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
-    /// <p>The name of the vocabulary. The name must be unique within an AWS account. It is also case-sensitive.</p>
+    /// <p>The name of the vocabulary. The name must be unique within an AWS account and is case sensitive.</p>
     #[serde(rename = "VocabularyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_name: Option<String>,
-    /// <p>The processing state of your custom vocabulary in Amazon Transcribe Medical. If the state is <code>READY</code> you can use the vocabulary in a <code>StartMedicalTranscriptionJob</code> request.</p>
+    /// <p>The processing state of your custom vocabulary in Amazon Transcribe Medical. If the state is <code>READY</code>, you can use the vocabulary in a <code>StartMedicalTranscriptionJob</code> request.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_state: Option<String>,
@@ -110,7 +152,7 @@ pub struct CreateVocabularyFilterRequest {
     #[serde(rename = "VocabularyFilterFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_filter_file_uri: Option<String>,
-    /// <p>The vocabulary filter name. The name must be unique within the account that contains it.If you try to create a vocabulary filter with the same name as a previous vocabulary filter you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The vocabulary filter name. The name must be unique within the account that contains it. If you try to create a vocabulary filter with the same name as another vocabulary filter, you get a <code>ConflictException</code> error.</p>
     #[serde(rename = "VocabularyFilterName")]
     pub vocabulary_filter_name: String,
     /// <p>The words to use in the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>If you provide a list of words in the <code>Words</code> parameter, you can't use the <code>VocabularyFilterFileUri</code> parameter.</p>
@@ -150,7 +192,7 @@ pub struct CreateVocabularyRequest {
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
-    /// <p>The name of the vocabulary. The name must be unique within an AWS account. The name is case-sensitive. If you try to create a vocabulary with the same name as a previous vocabulary you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The name of the vocabulary. The name must be unique within an AWS account. The name is case sensitive. If you try to create a vocabulary with the same name as a previous vocabulary you will receive a <code>ConflictException</code> error.</p>
     #[serde(rename = "VocabularyName")]
     pub vocabulary_name: String,
 }
@@ -182,6 +224,14 @@ pub struct CreateVocabularyResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteLanguageModelRequest {
+    /// <p>The name of the model you're choosing to delete.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMedicalTranscriptionJobRequest {
     /// <p>The name you provide to the <code>DeleteMedicalTranscriptionJob</code> object to delete a transcription job.</p>
     #[serde(rename = "MedicalTranscriptionJobName")]
@@ -191,7 +241,7 @@ pub struct DeleteMedicalTranscriptionJobRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMedicalVocabularyRequest {
-    /// <p>The name of the vocabulary you are choosing to delete.</p>
+    /// <p>The name of the vocabulary that you want to delete.</p>
     #[serde(rename = "VocabularyName")]
     pub vocabulary_name: String,
 }
@@ -222,6 +272,23 @@ pub struct DeleteVocabularyRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeLanguageModelRequest {
+    /// <p>The name of the custom language model you submit to get more information.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeLanguageModelResponse {
+    /// <p>The name of the custom language model you requested more information about.</p>
+    #[serde(rename = "LanguageModel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_model: Option<LanguageModel>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMedicalTranscriptionJobRequest {
     /// <p>The name of the medical transcription job.</p>
     #[serde(rename = "MedicalTranscriptionJobName")]
@@ -240,7 +307,7 @@ pub struct GetMedicalTranscriptionJobResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMedicalVocabularyRequest {
-    /// <p>The name of the vocabulary you are trying to get information about. The value you enter for this request is case-sensitive. </p>
+    /// <p>The name of the vocabulary that you want information about. The value is case sensitive. </p>
     #[serde(rename = "VocabularyName")]
     pub vocabulary_name: String,
 }
@@ -248,7 +315,7 @@ pub struct GetMedicalVocabularyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMedicalVocabularyResponse {
-    /// <p>The Amazon S3 location where the vocabulary is stored. Use this URI to get the contents of the vocabulary. You can download your vocabulary from the URI for a limited time.</p>
+    /// <p>The location in Amazon S3 where the vocabulary is stored. Use this URI to get the contents of the vocabulary. You can download your vocabulary from the URI for a limited time.</p>
     #[serde(rename = "DownloadUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub download_uri: Option<String>,
@@ -256,19 +323,19 @@ pub struct GetMedicalVocabularyResponse {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    /// <p>The valid language code returned for your vocabulary entries.</p>
+    /// <p>The valid language code for your vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    /// <p>The date and time the vocabulary was last modified with a text file different from what was previously used.</p>
+    /// <p>The date and time that the vocabulary was last modified with a text file different from the one that was previously used.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
-    /// <p>The valid name that Amazon Transcribe Medical returns.</p>
+    /// <p>The name of the vocabulary returned by Amazon Transcribe Medical.</p>
     #[serde(rename = "VocabularyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_name: Option<String>,
-    /// <p>The processing state of the vocabulary.</p>
+    /// <p>The processing state of the vocabulary. If the <code>VocabularyState</code> is <code>READY</code> then you can use it in the <code>StartMedicalTranscriptionJob</code> operation. </p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_state: Option<String>,
@@ -323,7 +390,7 @@ pub struct GetVocabularyFilterResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVocabularyRequest {
-    /// <p>The name of the vocabulary to return information about. The name is case-sensitive.</p>
+    /// <p>The name of the vocabulary to return information about. The name is case sensitive.</p>
     #[serde(rename = "VocabularyName")]
     pub vocabulary_name: String,
 }
@@ -357,6 +424,21 @@ pub struct GetVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
+/// <p>The object that contains the Amazon S3 object location and access role required to train and tune your custom language model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct InputDataConfig {
+    /// <p>The Amazon Resource Name (ARN) that uniquely identifies the permissions you've given Amazon Transcribe to access your Amazon S3 buckets containing your media files or text data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>The Amazon S3 prefix you specify to access the plain text files that you use to train your custom language model.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+    /// <p>The Amazon S3 prefix you specify to access the plain text files that you use to tune your custom language model.</p>
+    #[serde(rename = "TuningDataS3Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tuning_data_s3_uri: Option<String>,
+}
+
 /// <p>Provides information about when a transcription job should be executed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobExecutionSettings {
@@ -368,6 +450,82 @@ pub struct JobExecutionSettings {
     #[serde(rename = "DataAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_access_role_arn: Option<String>,
+}
+
+/// <p>The structure used to describe a custom language model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LanguageModel {
+    /// <p>The Amazon Transcribe standard language model, or base model used to create the custom language model.</p>
+    #[serde(rename = "BaseModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_model_name: Option<String>,
+    /// <p>The time the custom language model was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>The reason why the custom language model couldn't be created.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The data access role and Amazon S3 prefixes for the input files used to train the custom language model.</p>
+    #[serde(rename = "InputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_data_config: Option<InputDataConfig>,
+    /// <p>The language code you used to create your custom language model.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>The most recent time the custom language model was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the custom language model.</p>
+    #[serde(rename = "ModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_name: Option<String>,
+    /// <p>The creation status of a custom language model. When the status is <code>COMPLETED</code> the model is ready for use.</p>
+    #[serde(rename = "ModelStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_status: Option<String>,
+    /// <p>Whether the base model used for the custom language model is up to date. If this field is <code>true</code> then you are running the most up-to-date version of the base model in your custom language model.</p>
+    #[serde(rename = "UpgradeAvailability")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upgrade_availability: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListLanguageModelsRequest {
+    /// <p>The maximum number of language models to return in the response. If there are fewer results in the list, the response contains only the actual results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>When specified, the custom language model names returned contain the substring you've specified.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>When included, fetches the next set of jobs if the result of the previous request was truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>When specified, returns only custom language models with the specified status. Language models are ordered by creation date, with the newest models first. If you don't specify a status, Amazon Transcribe returns all custom language models ordered by date.</p>
+    #[serde(rename = "StatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_equals: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListLanguageModelsResponse {
+    /// <p>A list of objects containing information about custom language models.</p>
+    #[serde(rename = "Models")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub models: Option<Vec<LanguageModel>>,
+    /// <p>The operation returns a page of jobs at a time. The maximum size of the list is set by the MaxResults parameter. If there are more language models in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the operation to return the next page of language models.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -415,15 +573,15 @@ pub struct ListMedicalVocabulariesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Returns vocabularies in the list whose name contains the specified string. The search is case-insensitive, <code>ListMedicalVocabularies</code> returns both "vocabularyname" and "VocabularyName" in the response list.</p>
+    /// <p>Returns vocabularies whose names contain the specified string. The search is not case sensitive. <code>ListMedicalVocabularies</code> returns both "<code>vocabularyname</code>" and "<code>VocabularyName</code>".</p>
     #[serde(rename = "NameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
-    /// <p>If the result of your previous request to <code>ListMedicalVocabularies</code> was truncated, include the <code>NextToken</code> to fetch the next set of jobs.</p>
+    /// <p>If the result of your previous request to <code>ListMedicalVocabularies</code> was truncated, include the <code>NextToken</code> to fetch the next set of vocabularies.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>When specified, only returns vocabularies with the <code>VocabularyState</code> equal to the specified vocabulary state.</p>
+    /// <p>When specified, returns only vocabularies with the <code>VocabularyState</code> equal to the specified vocabulary state. Use this field to see which vocabularies are ready for your medical transcription jobs.</p>
     #[serde(rename = "StateEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_equals: Option<String>,
@@ -432,7 +590,7 @@ pub struct ListMedicalVocabulariesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMedicalVocabulariesResponse {
-    /// <p>The <code>ListMedicalVocabularies</code> operation returns a page of vocabularies at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe Medical returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListMedicalVocabularies</code> operation to return the next page of jobs.</p>
+    /// <p>The <code>ListMedicalVocabularies</code> operation returns a page of vocabularies at a time. You set the maximum number of vocabularies to return on a page with the <code>MaxResults</code> parameter. If there are more jobs in the list will fit on a page, Amazon Transcribe Medical returns the <code>NextPage</code> token. To return the next page of vocabularies, include the token in the next request to the <code>ListMedicalVocabularies</code> operation .</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -440,7 +598,7 @@ pub struct ListMedicalVocabulariesResponse {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A list of objects that describe the vocabularies that match the search criteria in the request.</p>
+    /// <p>A list of objects that describe the vocabularies that match your search criteria.</p>
     #[serde(rename = "Vocabularies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabularies: Option<Vec<VocabularyInfo>>,
@@ -491,7 +649,7 @@ pub struct ListVocabulariesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>When specified, the vocabularies returned in the list are limited to vocabularies whose name contains the specified string. The search is case-insensitive, <code>ListVocabularies</code> returns both "vocabularyname" and "VocabularyName" in the response list.</p>
+    /// <p>When specified, the vocabularies returned in the list are limited to vocabularies whose name contains the specified string. The search is not case sensitive, <code>ListVocabularies</code> returns both "vocabularyname" and "VocabularyName" in the response list.</p>
     #[serde(rename = "NameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
@@ -508,7 +666,7 @@ pub struct ListVocabulariesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVocabulariesResponse {
-    /// <p>The <code>ListVocabularies</code> operation returns a page of vocabularies at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListVocabularies</code> operation to return in the next page of jobs.</p>
+    /// <p>The <code>ListVocabularies</code> operation returns a page of vocabularies at a time. The maximum size of the page is set in the <code>MaxResults</code> parameter. If there are more jobs in the list than will fit on the page, Amazon Transcribe returns the <code>NextPage</code> token. To return in the next page of jobs, include the token in the next request to the <code>ListVocabularies</code> operation.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -571,7 +729,7 @@ pub struct MedicalTranscript {
     pub transcript_file_uri: Option<String>,
 }
 
-/// <p>The data structure that containts the information for a medical transcription job.</p>
+/// <p>The data structure that contains the information for a medical transcription job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MedicalTranscriptionJob {
@@ -583,7 +741,7 @@ pub struct MedicalTranscriptionJob {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p><p>If the <code>TranscriptionJobStatus</code> field is <code>FAILED</code>, this field contains information about why the job failed.</p> <p>The <code>FailureReason</code> field contains one of the following values:</p> <ul> <li> <p> <code>Unsupported media format</code>- The media format specified in the <code>MediaFormat</code> field of the request isn&#39;t valid. See the description of the <code>MediaFormat</code> field for a list of valid values.</p> </li> <li> <p> <code>The media format provided does not match the detected media format</code>- The media format of the audio file doesn&#39;t match the format specified in the <code>MediaFormat</code> field in the request. Check the media format of your media file and make sure the two values match.</p> </li> <li> <p> <code>Invalid sample rate for audio file</code>- The sample rate specified in the <code>MediaSampleRateHertz</code> of the request isn&#39;t valid. The sample rate must be between 8000 and 48000 Hertz.</p> </li> <li> <p> <code>The sample rate provided does not match the detected sample rate</code>- The sample rate in the audio file doesn&#39;t match the sample rate specified in the <code>MediaSampleRateHertz</code> field in the request. Check the sample rate of your media file and make sure that the two values match.</p> </li> <li> <p> <code>Invalid file size: file size too large</code>- The size of your audio file is larger than what Amazon Transcribe Medical can process. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/limits-guidelines.html#limits">Guidlines and Quotas</a> in the <i>Amazon Transcribe Medical Guide</i> </p> </li> <li> <p> <code>Invalid number of channels: number of channels too large</code>- Your audio contains more channels than Amazon Transcribe Medical is configured to process. To request additional channels, see <a href="https://docs.aws.amazon.com/general/latest/gr/transcribe-medical.html">Amazon Transcribe Medical Endpoints and Quotas</a> in the <i>Amazon Web Services General Reference</i> </p> </li> </ul></p>
+    /// <p><p>If the <code>TranscriptionJobStatus</code> field is <code>FAILED</code>, this field contains information about why the job failed.</p> <p>The <code>FailureReason</code> field contains one of the following values:</p> <ul> <li> <p> <code>Unsupported media format</code>- The media format specified in the <code>MediaFormat</code> field of the request isn&#39;t valid. See the description of the <code>MediaFormat</code> field for a list of valid values.</p> </li> <li> <p> <code>The media format provided does not match the detected media format</code>- The media format of the audio file doesn&#39;t match the format specified in the <code>MediaFormat</code> field in the request. Check the media format of your media file and make sure the two values match.</p> </li> <li> <p> <code>Invalid sample rate for audio file</code>- The sample rate specified in the <code>MediaSampleRateHertz</code> of the request isn&#39;t valid. The sample rate must be between 8000 and 48000 Hertz.</p> </li> <li> <p> <code>The sample rate provided does not match the detected sample rate</code>- The sample rate in the audio file doesn&#39;t match the sample rate specified in the <code>MediaSampleRateHertz</code> field in the request. Check the sample rate of your media file and make sure that the two values match.</p> </li> <li> <p> <code>Invalid file size: file size too large</code>- The size of your audio file is larger than what Amazon Transcribe Medical can process. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/limits-guidelines.html#limits">Guidelines and Quotas</a> in the <i>Amazon Transcribe Medical Guide</i> </p> </li> <li> <p> <code>Invalid number of channels: number of channels too large</code>- Your audio contains more channels than Amazon Transcribe Medical is configured to process. To request additional channels, see <a href="https://docs.aws.amazon.com/general/latest/gr/transcribe-medical.html">Amazon Transcribe Medical Endpoints and Quotas</a> in the <i>Amazon Web Services General Reference</i> </p> </li> </ul></p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
@@ -697,7 +855,7 @@ pub struct MedicalTranscriptionSetting {
     #[serde(rename = "ShowAlternatives")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub show_alternatives: Option<bool>,
-    /// <p>Determines whether the transcription job uses speaker recognition to identify different speakers in the input audio. Speaker recongition labels individual speakers in the audio file. If you set the <code>ShowSpeakerLabels</code> field to true, you must also set the maximum number of speaker labels in the <code>MaxSpeakerLabels</code> field.</p> <p>You can't set both <code>ShowSpeakerLabels</code> and <code>ChannelIdentification</code> in the same request. If you set both, your request returns a <code>BadRequestException</code>.</p>
+    /// <p>Determines whether the transcription job uses speaker recognition to identify different speakers in the input audio. Speaker recognition labels individual speakers in the audio file. If you set the <code>ShowSpeakerLabels</code> field to true, you must also set the maximum number of speaker labels in the <code>MaxSpeakerLabels</code> field.</p> <p>You can't set both <code>ShowSpeakerLabels</code> and <code>ChannelIdentification</code> in the same request. If you set both, your request returns a <code>BadRequestException</code>.</p>
     #[serde(rename = "ShowSpeakerLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub show_speaker_labels: Option<bool>,
@@ -705,6 +863,15 @@ pub struct MedicalTranscriptionSetting {
     #[serde(rename = "VocabularyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_name: Option<String>,
+}
+
+/// <p>The object used to call your custom language model to your transcription job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelSettings {
+    /// <p>The name of your custom language model.</p>
+    #[serde(rename = "LanguageModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_model_name: Option<String>,
 }
 
 /// <p>Provides optional settings for the <code>StartTranscriptionJob</code> operation.</p>
@@ -760,7 +927,7 @@ pub struct StartMedicalTranscriptionJobRequest {
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_sample_rate_hertz: Option<i64>,
-    /// <p>The name of the medical transcription job. You can't use the strings "." or ".." by themselves as the job name. The name must also be unique within an AWS account. If you try to create a medical transcription job with the same name as a previous medical transcription job you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The name of the medical transcription job. You can't use the strings "<code>.</code>" or "<code>..</code>" by themselves as the job name. The name must also be unique within an AWS account. If you try to create a medical transcription job with the same name as a previous medical transcription job, you get a <code>ConflictException</code> error.</p>
     #[serde(rename = "MedicalTranscriptionJobName")]
     pub medical_transcription_job_name: String,
     /// <p>The Amazon S3 location where the transcription is stored.</p> <p>You must set <code>OutputBucketName</code> for Amazon Transcribe Medical to store the transcription results. Your transcript appears in the S3 location you specify. When you call the <a>GetMedicalTranscriptionJob</a>, the operation returns this location in the <code>TranscriptFileUri</code> field. The S3 bucket must have permissions that allow Amazon Transcribe Medical to put files in the bucket. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/security_iam_id-based-policy-examples.html#auth-role-iam-user">Permissions Required for IAM User Roles</a>.</p> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the output of your transcription using the <code>OutputEncryptionKMSKeyId</code> parameter. If you don't specify a KMS key, Amazon Transcribe Medical uses the default Amazon S3 key for server-side encryption of transcripts that are placed in your S3 bucket.</p>
@@ -770,6 +937,10 @@ pub struct StartMedicalTranscriptionJobRequest {
     #[serde(rename = "OutputEncryptionKMSKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_encryption_kms_key_id: Option<String>,
+    /// <p>You can specify a location in an Amazon S3 bucket to store the output of your medical transcription job.</p> <p>If you don't specify an output key, Amazon Transcribe Medical stores the output of your transcription job in the Amazon S3 bucket you specified. By default, the object key is "your-transcription-job-name.json".</p> <p>You can use output keys to specify the Amazon S3 prefix and file name of the transcription output. For example, specifying the Amazon S3 prefix, "folder1/folder2/", as an output key would lead to the output being stored as "folder1/folder2/your-transcription-job-name.json". If you specify "my-other-job-name.json" as the output key, the object key is changed to "my-other-job-name.json". You can use an output key to change both the prefix and the file name, for example "folder/my-other-job-name.json".</p> <p>If you specify an output key, you must also specify an S3 bucket in the <code>OutputBucketName</code> parameter.</p>
+    #[serde(rename = "OutputKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_key: Option<String>,
     /// <p>Optional settings for the medical transcription job.</p>
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -798,13 +969,22 @@ pub struct StartTranscriptionJobRequest {
     #[serde(rename = "ContentRedaction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_redaction: Option<ContentRedaction>,
+    /// <p>Set this field to <code>true</code> to enable automatic language identification. Automatic language identification is disabled by default. You receive a <code>BadRequestException</code> error if you enter a value for a <code>LanguageCode</code>.</p>
+    #[serde(rename = "IdentifyLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identify_language: Option<bool>,
     /// <p>Provides information about how a transcription job is executed. Use this field to indicate that the job can be queued for deferred execution if the concurrency limit is reached and there are no slots available to immediately run the job.</p>
     #[serde(rename = "JobExecutionSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_execution_settings: Option<JobExecutionSettings>,
     /// <p>The language code for the language used in the input media file.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>An object containing a list of languages that might be present in your collection of audio files. Automatic language identification chooses a language that best matches the source audio from that list.</p>
+    #[serde(rename = "LanguageOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_options: Option<Vec<String>>,
     /// <p>An object that describes the input media for a transcription job.</p>
     #[serde(rename = "Media")]
     pub media: Media,
@@ -816,6 +996,10 @@ pub struct StartTranscriptionJobRequest {
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_sample_rate_hertz: Option<i64>,
+    /// <p>Choose the custom language model you use for your transcription job in this parameter.</p>
+    #[serde(rename = "ModelSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_settings: Option<ModelSettings>,
     /// <p>The location where the transcription is stored.</p> <p>If you set the <code>OutputBucketName</code>, Amazon Transcribe puts the transcript in the specified S3 bucket. When you call the <a>GetTranscriptionJob</a> operation, the operation returns this location in the <code>TranscriptFileUri</code> field. If you enable content redaction, the redacted transcript appears in <code>RedactedTranscriptFileUri</code>. If you enable content redaction and choose to output an unredacted transcript, that transcript's location still appears in the <code>TranscriptFileUri</code>. The S3 bucket must have permissions that allow Amazon Transcribe to put files in the bucket. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/security_iam_id-based-policy-examples.html#auth-role-iam-user">Permissions Required for IAM User Roles</a>.</p> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the output of your transcription using the <code>OutputEncryptionKMSKeyId</code> parameter. If you don't specify a KMS key, Amazon Transcribe uses the default Amazon S3 key for server-side encryption of transcripts that are placed in your S3 bucket.</p> <p>If you don't set the <code>OutputBucketName</code>, Amazon Transcribe generates a pre-signed URL, a shareable URL that provides secure access to your transcription, and returns it in the <code>TranscriptFileUri</code> field. Use this URL to download the transcription.</p>
     #[serde(rename = "OutputBucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -824,11 +1008,15 @@ pub struct StartTranscriptionJobRequest {
     #[serde(rename = "OutputEncryptionKMSKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_encryption_kms_key_id: Option<String>,
+    /// <p>You can specify a location in an Amazon S3 bucket to store the output of your transcription job.</p> <p>If you don't specify an output key, Amazon Transcribe stores the output of your transcription job in the Amazon S3 bucket you specified. By default, the object key is "your-transcription-job-name.json".</p> <p>You can use output keys to specify the Amazon S3 prefix and file name of the transcription output. For example, specifying the Amazon S3 prefix, "folder1/folder2/", as an output key would lead to the output being stored as "folder1/folder2/your-transcription-job-name.json". If you specify "my-other-job-name.json" as the output key, the object key is changed to "my-other-job-name.json". You can use an output key to change both the prefix and the file name, for example "folder/my-other-job-name.json".</p> <p>If you specify an output key, you must also specify an S3 bucket in the <code>OutputBucketName</code> parameter.</p>
+    #[serde(rename = "OutputKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_key: Option<String>,
     /// <p>A <code>Settings</code> object that provides optional settings for a transcription job.</p>
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settings: Option<Settings>,
-    /// <p>The name of the job. Note that you can't use the strings "." or ".." by themselves as the job name. The name must also be unique within an AWS account. If you try to create a transcription job with the same name as a previous transcription job you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The name of the job. You can't use the strings "<code>.</code>" or "<code>..</code>" by themselves as the job name. The name must also be unique within an AWS account. If you try to create a transcription job with the same name as a previous transcription job, you get a <code>ConflictException</code> error.</p>
     #[serde(rename = "TranscriptionJobName")]
     pub transcription_job_name: String,
 }
@@ -846,11 +1034,11 @@ pub struct StartTranscriptionJobResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Transcript {
-    /// <p>The S3 object location of the redacted transcript.</p> <p>Use this URI to access the redacated transcript. If you specified an S3 bucket in the <code>OutputBucketName</code> field when you created the job, this is the URI of that bucket. If you chose to store the transcript in Amazon Transcribe, this is a shareable URL that provides secure access to that location.</p>
+    /// <p>The S3 object location of the redacted transcript.</p> <p>Use this URI to access the redacted transcript. If you specified an S3 bucket in the <code>OutputBucketName</code> field when you created the job, this is the URI of that bucket. If you chose to store the transcript in Amazon Transcribe, this is a shareable URL that provides secure access to that location.</p>
     #[serde(rename = "RedactedTranscriptFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redacted_transcript_file_uri: Option<String>,
-    /// <p>The S3 object location of the the transcript.</p> <p>Use this URI to access the transcript. If you specified an S3 bucket in the <code>OutputBucketName</code> field when you created the job, this is the URI of that bucket. If you chose to store the transcript in Amazon Transcribe, this is a shareable URL that provides secure access to that location.</p>
+    /// <p>The S3 object location of the transcript.</p> <p>Use this URI to access the transcript. If you specified an S3 bucket in the <code>OutputBucketName</code> field when you created the job, this is the URI of that bucket. If you chose to store the transcript in Amazon Transcribe, this is a shareable URL that provides secure access to that location.</p>
     #[serde(rename = "TranscriptFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transcript_file_uri: Option<String>,
@@ -876,6 +1064,14 @@ pub struct TranscriptionJob {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>A value between zero and one that Amazon Transcribe assigned to the language that it identified in the source audio. Larger values indicate that Amazon Transcribe has higher confidence in the language it identified.</p>
+    #[serde(rename = "IdentifiedLanguageScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identified_language_score: Option<f32>,
+    /// <p>A value that shows if automatic language identification was enabled for a transcription job.</p>
+    #[serde(rename = "IdentifyLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identify_language: Option<bool>,
     /// <p>Provides information about how a transcription job is executed.</p>
     #[serde(rename = "JobExecutionSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -884,6 +1080,10 @@ pub struct TranscriptionJob {
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
+    /// <p>An object that shows the optional array of languages inputted for transcription jobs with automatic language identification enabled.</p>
+    #[serde(rename = "LanguageOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_options: Option<Vec<String>>,
     /// <p>An object that describes the input media for the transcription job.</p>
     #[serde(rename = "Media")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -896,6 +1096,10 @@ pub struct TranscriptionJob {
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_sample_rate_hertz: Option<i64>,
+    /// <p>An object containing the details of your custom language model.</p>
+    #[serde(rename = "ModelSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_settings: Option<ModelSettings>,
     /// <p>Optional settings for the transcription job. Use these settings to turn on speaker recognition, to set the maximum number of speakers that should be identified and to specify a custom vocabulary to use when processing the transcription job.</p>
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -938,10 +1142,21 @@ pub struct TranscriptionJobSummary {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>A value between zero and one that Amazon Transcribe assigned to the language it identified in the source audio. A higher score indicates that Amazon Transcribe is more confident in the language it identified.</p>
+    #[serde(rename = "IdentifiedLanguageScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identified_language_score: Option<f32>,
+    /// <p>Whether automatic language identification was enabled for a transcription job.</p>
+    #[serde(rename = "IdentifyLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identify_language: Option<bool>,
     /// <p>The language code for the input speech.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
+    #[serde(rename = "ModelSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_settings: Option<ModelSettings>,
     /// <p>Indicates the location of the output of the transcription job.</p> <p>If the value is <code>CUSTOMER_BUCKET</code> then the location is the S3 bucket specified in the <code>outputBucketName</code> field when the transcription job was started with the <code>StartTranscriptionJob</code> operation.</p> <p>If the value is <code>SERVICE_BUCKET</code> then the output is stored by Amazon Transcribe and can be retrieved using the URI in the <code>GetTranscriptionJob</code> response's <code>TranscriptFileUri</code> field.</p>
     #[serde(rename = "OutputLocationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -963,14 +1178,14 @@ pub struct TranscriptionJobSummary {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMedicalVocabularyRequest {
-    /// <p>The language code of the entries in the updated vocabulary. US English (en-US) is the only valid language code in Amazon Transcribe Medical.</p>
+    /// <p>The language code of the language used for the entries in the updated vocabulary. US English (en-US) is the only valid language code in Amazon Transcribe Medical.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
-    /// <p>The Amazon S3 location of the text file containing the definition of the custom vocabulary. The URI must be in the same AWS region as the API endpoint you are calling. You can see the fields you need to enter for you Amazon S3 location in the example URI here:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/AWSDOC-EXAMPLE-BUCKET/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies in Amazon Transcribe Medical, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Medical Custom Vocabularies</a>.</p>
+    /// <p>The location in Amazon S3 of the text file that contains the you use for your custom vocabulary. The URI must be in the same AWS Region as the resource that you are calling. The following is the format for a URI:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/AWSDOC-EXAMPLE-BUCKET/vocab.txt</code> </p> <p>For more information about Amazon S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies in Amazon Transcribe Medical, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Medical Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
-    /// <p>The name of the vocabulary to update. The name is case-sensitive. If you try to update a vocabulary with the same name as a previous vocabulary you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The name of the vocabulary to update. The name is case sensitive. If you try to update a vocabulary with the same name as a vocabulary you've already made, you get a <code>ConflictException</code> error.</p>
     #[serde(rename = "VocabularyName")]
     pub vocabulary_name: String,
 }
@@ -978,11 +1193,11 @@ pub struct UpdateMedicalVocabularyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMedicalVocabularyResponse {
-    /// <p>The language code for the text file used to update the custom vocabulary. US English (en-US) is the only language supported in Amazon Transcribe Medical.</p>
+    /// <p>The language code for the language of the text file used to update the custom vocabulary. US English (en-US) is the only language supported in Amazon Transcribe Medical.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    /// <p>The date and time the vocabulary was updated.</p>
+    /// <p>The date and time that the vocabulary was updated.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
@@ -990,7 +1205,7 @@ pub struct UpdateMedicalVocabularyResponse {
     #[serde(rename = "VocabularyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_name: Option<String>,
-    /// <p>The processing state of the update to the vocabulary. When the <code>VocabularyState</code> field is <code>READY</code> the vocabulary is ready to be used in a <code>StartMedicalTranscriptionJob</code> request.</p>
+    /// <p>The processing state of the update to the vocabulary. When the <code>VocabularyState</code> field is <code>READY</code>, the vocabulary is ready to be used in a <code>StartMedicalTranscriptionJob</code> request.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_state: Option<String>,
@@ -1003,7 +1218,7 @@ pub struct UpdateVocabularyFilterRequest {
     #[serde(rename = "VocabularyFilterFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_filter_file_uri: Option<String>,
-    /// <p>The name of the vocabulary filter to update. If you try to update a vocabulary filter with the same name as a previous vocabulary filter you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The name of the vocabulary filter to update. If you try to update a vocabulary filter with the same name as another vocabulary filter, you get a <code>ConflictException</code> error.</p>
     #[serde(rename = "VocabularyFilterName")]
     pub vocabulary_filter_name: String,
     /// <p>The words to use in the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>If you provide a list of words in the <code>Words</code> parameter, you can't use the <code>VocabularyFilterFileUri</code> parameter.</p>
@@ -1043,7 +1258,7 @@ pub struct UpdateVocabularyRequest {
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
-    /// <p>The name of the vocabulary to update. The name is case-sensitive. If you try to update a vocabulary with the same name as a previous vocabulary you will receive a <code>ConflictException</code> error.</p>
+    /// <p>The name of the vocabulary to update. The name is case sensitive. If you try to update a vocabulary with the same name as a previous vocabulary you will receive a <code>ConflictException</code> error.</p>
     #[serde(rename = "VocabularyName")]
     pub vocabulary_name: String,
 }
@@ -1109,12 +1324,60 @@ pub struct VocabularyInfo {
     pub vocabulary_state: Option<String>,
 }
 
+/// Errors returned by CreateLanguageModel
+#[derive(Debug, PartialEq)]
+pub enum CreateLanguageModelError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There is already a resource with that name.</p>
+    Conflict(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+}
+
+impl CreateLanguageModelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLanguageModelError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateLanguageModelError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateLanguageModelError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateLanguageModelError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateLanguageModelError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateLanguageModelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateLanguageModelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateLanguageModelError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateLanguageModelError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateLanguageModelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateLanguageModelError {}
 /// Errors returned by CreateMedicalVocabulary
 #[derive(Debug, PartialEq)]
 pub enum CreateMedicalVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>The resource name already exists.</p>
+    /// <p>There is already a resource with that name.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1164,9 +1427,9 @@ impl Error for CreateMedicalVocabularyError {}
 /// Errors returned by CreateVocabulary
 #[derive(Debug, PartialEq)]
 pub enum CreateVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>The resource name already exists.</p>
+    /// <p>There is already a resource with that name.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1212,9 +1475,9 @@ impl Error for CreateVocabularyError {}
 /// Errors returned by CreateVocabularyFilter
 #[derive(Debug, PartialEq)]
 pub enum CreateVocabularyFilterError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>The resource name already exists.</p>
+    /// <p>There is already a resource with that name.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1261,10 +1524,52 @@ impl fmt::Display for CreateVocabularyFilterError {
     }
 }
 impl Error for CreateVocabularyFilterError {}
+/// Errors returned by DeleteLanguageModel
+#[derive(Debug, PartialEq)]
+pub enum DeleteLanguageModelError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+}
+
+impl DeleteLanguageModelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLanguageModelError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteLanguageModelError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteLanguageModelError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeleteLanguageModelError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteLanguageModelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteLanguageModelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteLanguageModelError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteLanguageModelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteLanguageModelError {}
 /// Errors returned by DeleteMedicalTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteMedicalTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1316,7 +1621,7 @@ impl Error for DeleteMedicalTranscriptionJobError {}
 /// Errors returned by DeleteMedicalVocabulary
 #[derive(Debug, PartialEq)]
 pub enum DeleteMedicalVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1368,7 +1673,7 @@ impl Error for DeleteMedicalVocabularyError {}
 /// Errors returned by DeleteTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1414,7 +1719,7 @@ impl Error for DeleteTranscriptionJobError {}
 /// Errors returned by DeleteVocabulary
 #[derive(Debug, PartialEq)]
 pub enum DeleteVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1462,7 +1767,7 @@ impl Error for DeleteVocabularyError {}
 /// Errors returned by DeleteVocabularyFilter
 #[derive(Debug, PartialEq)]
 pub enum DeleteVocabularyFilterError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1511,10 +1816,60 @@ impl fmt::Display for DeleteVocabularyFilterError {
     }
 }
 impl Error for DeleteVocabularyFilterError {}
+/// Errors returned by DescribeLanguageModel
+#[derive(Debug, PartialEq)]
+pub enum DescribeLanguageModelError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+    /// <p>We can't find the requested resource. Check the name and try your request again.</p>
+    NotFound(String),
+}
+
+impl DescribeLanguageModelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLanguageModelError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeLanguageModelError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeLanguageModelError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DescribeLanguageModelError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeLanguageModelError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeLanguageModelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeLanguageModelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeLanguageModelError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeLanguageModelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeLanguageModelError::NotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeLanguageModelError {}
 /// Errors returned by GetMedicalTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum GetMedicalTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1570,7 +1925,7 @@ impl Error for GetMedicalTranscriptionJobError {}
 /// Errors returned by GetMedicalVocabulary
 #[derive(Debug, PartialEq)]
 pub enum GetMedicalVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1620,7 +1975,7 @@ impl Error for GetMedicalVocabularyError {}
 /// Errors returned by GetTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum GetTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1668,7 +2023,7 @@ impl Error for GetTranscriptionJobError {}
 /// Errors returned by GetVocabulary
 #[derive(Debug, PartialEq)]
 pub enum GetVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1716,7 +2071,7 @@ impl Error for GetVocabularyError {}
 /// Errors returned by GetVocabularyFilter
 #[derive(Debug, PartialEq)]
 pub enum GetVocabularyFilterError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1761,10 +2116,52 @@ impl fmt::Display for GetVocabularyFilterError {
     }
 }
 impl Error for GetVocabularyFilterError {}
+/// Errors returned by ListLanguageModels
+#[derive(Debug, PartialEq)]
+pub enum ListLanguageModelsError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+}
+
+impl ListLanguageModelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLanguageModelsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListLanguageModelsError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListLanguageModelsError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListLanguageModelsError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListLanguageModelsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListLanguageModelsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListLanguageModelsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListLanguageModelsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListLanguageModelsError {}
 /// Errors returned by ListMedicalTranscriptionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListMedicalTranscriptionJobsError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1814,7 +2211,7 @@ impl Error for ListMedicalTranscriptionJobsError {}
 /// Errors returned by ListMedicalVocabularies
 #[derive(Debug, PartialEq)]
 pub enum ListMedicalVocabulariesError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1860,7 +2257,7 @@ impl Error for ListMedicalVocabulariesError {}
 /// Errors returned by ListTranscriptionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTranscriptionJobsError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1904,7 +2301,7 @@ impl Error for ListTranscriptionJobsError {}
 /// Errors returned by ListVocabularies
 #[derive(Debug, PartialEq)]
 pub enum ListVocabulariesError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1946,7 +2343,7 @@ impl Error for ListVocabulariesError {}
 /// Errors returned by ListVocabularyFilters
 #[derive(Debug, PartialEq)]
 pub enum ListVocabularyFiltersError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -1990,9 +2387,9 @@ impl Error for ListVocabularyFiltersError {}
 /// Errors returned by StartMedicalTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum StartMedicalTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>The resource name already exists.</p>
+    /// <p>There is already a resource with that name.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -2048,9 +2445,9 @@ impl Error for StartMedicalTranscriptionJobError {}
 /// Errors returned by StartTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum StartTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>The resource name already exists.</p>
+    /// <p>There is already a resource with that name.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -2098,9 +2495,9 @@ impl Error for StartTranscriptionJobError {}
 /// Errors returned by UpdateMedicalVocabulary
 #[derive(Debug, PartialEq)]
 pub enum UpdateMedicalVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>The resource name already exists.</p>
+    /// <p>There is already a resource with that name.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -2156,9 +2553,9 @@ impl Error for UpdateMedicalVocabularyError {}
 /// Errors returned by UpdateVocabulary
 #[derive(Debug, PartialEq)]
 pub enum UpdateVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>The resource name already exists.</p>
+    /// <p>There is already a resource with that name.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -2210,7 +2607,7 @@ impl Error for UpdateVocabularyError {}
 /// Errors returned by UpdateVocabularyFilter
 #[derive(Debug, PartialEq)]
 pub enum UpdateVocabularyFilterError {
-    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the entity that you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -2262,6 +2659,12 @@ impl Error for UpdateVocabularyFilterError {}
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
 #[async_trait]
 pub trait Transcribe {
+    /// <p>Creates a new custom language model. Use Amazon S3 prefixes to provide the location of your input files. The time it takes to create your model depends on the size of your training data.</p>
+    async fn create_language_model(
+        &self,
+        input: CreateLanguageModelRequest,
+    ) -> Result<CreateLanguageModelResponse, RusotoError<CreateLanguageModelError>>;
+
     /// <p>Creates a new custom vocabulary that you can use to change how Amazon Transcribe Medical transcribes your audio file.</p>
     async fn create_medical_vocabulary(
         &self,
@@ -2279,6 +2682,12 @@ pub trait Transcribe {
         &self,
         input: CreateVocabularyFilterRequest,
     ) -> Result<CreateVocabularyFilterResponse, RusotoError<CreateVocabularyFilterError>>;
+
+    /// <p>Deletes a custom language model using its name.</p>
+    async fn delete_language_model(
+        &self,
+        input: DeleteLanguageModelRequest,
+    ) -> Result<(), RusotoError<DeleteLanguageModelError>>;
 
     /// <p>Deletes a transcription job generated by Amazon Transcribe Medical and any related information.</p>
     async fn delete_medical_transcription_job(
@@ -2310,13 +2719,19 @@ pub trait Transcribe {
         input: DeleteVocabularyFilterRequest,
     ) -> Result<(), RusotoError<DeleteVocabularyFilterError>>;
 
+    /// <p>Gets information about a single custom language model. Use this information to see details about the language model in your AWS account. You can also see whether the base language model used to create your custom language model has been updated. If Amazon Transcribe has updated the base model, you can create a new custom language model using the updated base model. If the language model wasn't created, you can use this operation to understand why Amazon Transcribe couldn't create it. </p>
+    async fn describe_language_model(
+        &self,
+        input: DescribeLanguageModelRequest,
+    ) -> Result<DescribeLanguageModelResponse, RusotoError<DescribeLanguageModelError>>;
+
     /// <p>Returns information about a transcription job from Amazon Transcribe Medical. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished. You find the results of the completed job in the <code>TranscriptFileUri</code> field.</p>
     async fn get_medical_transcription_job(
         &self,
         input: GetMedicalTranscriptionJobRequest,
     ) -> Result<GetMedicalTranscriptionJobResponse, RusotoError<GetMedicalTranscriptionJobError>>;
 
-    /// <p>Retrieve information about a medical vocabulary.</p>
+    /// <p>Retrieves information about a medical vocabulary.</p>
     async fn get_medical_vocabulary(
         &self,
         input: GetMedicalVocabularyRequest,
@@ -2340,13 +2755,19 @@ pub trait Transcribe {
         input: GetVocabularyFilterRequest,
     ) -> Result<GetVocabularyFilterResponse, RusotoError<GetVocabularyFilterError>>;
 
+    /// <p>Provides more information about the custom language models you've created. You can use the information in this list to find a specific custom language model. You can then use the operation to get more information about it.</p>
+    async fn list_language_models(
+        &self,
+        input: ListLanguageModelsRequest,
+    ) -> Result<ListLanguageModelsResponse, RusotoError<ListLanguageModelsError>>;
+
     /// <p>Lists medical transcription jobs with a specified status or substring that matches their names.</p>
     async fn list_medical_transcription_jobs(
         &self,
         input: ListMedicalTranscriptionJobsRequest,
     ) -> Result<ListMedicalTranscriptionJobsResponse, RusotoError<ListMedicalTranscriptionJobsError>>;
 
-    /// <p>Returns a list of vocabularies that match the specified criteria. You get the entire list of vocabularies if you don't enter a value in any of the request parameters.</p>
+    /// <p>Returns a list of vocabularies that match the specified criteria. If you don't enter a value in any of the request parameters, returns the entire list of vocabularies.</p>
     async fn list_medical_vocabularies(
         &self,
         input: ListMedicalVocabulariesRequest,
@@ -2370,7 +2791,7 @@ pub trait Transcribe {
         input: ListVocabularyFiltersRequest,
     ) -> Result<ListVocabularyFiltersResponse, RusotoError<ListVocabularyFiltersError>>;
 
-    /// <p>Start a batch job to transcribe medical speech to text.</p>
+    /// <p>Starts a batch job to transcribe medical speech to text.</p>
     async fn start_medical_transcription_job(
         &self,
         input: StartMedicalTranscriptionJobRequest,
@@ -2382,7 +2803,7 @@ pub trait Transcribe {
         input: StartTranscriptionJobRequest,
     ) -> Result<StartTranscriptionJobResponse, RusotoError<StartTranscriptionJobError>>;
 
-    /// <p>Updates an existing vocabulary with new values in a different text file. The <code>UpdateMedicalVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
+    /// <p>Updates a vocabulary with new values that you provide in a different text file from the one you used to create the vocabulary. The <code>UpdateMedicalVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
     async fn update_medical_vocabulary(
         &self,
         input: UpdateMedicalVocabularyRequest,
@@ -2440,6 +2861,24 @@ impl TranscribeClient {
 
 #[async_trait]
 impl Transcribe for TranscribeClient {
+    /// <p>Creates a new custom language model. Use Amazon S3 prefixes to provide the location of your input files. The time it takes to create your model depends on the size of your training data.</p>
+    async fn create_language_model(
+        &self,
+        input: CreateLanguageModelRequest,
+    ) -> Result<CreateLanguageModelResponse, RusotoError<CreateLanguageModelError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Transcribe.CreateLanguageModel");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateLanguageModelError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateLanguageModelResponse, _>()
+    }
+
     /// <p>Creates a new custom vocabulary that you can use to change how Amazon Transcribe Medical transcribes your audio file.</p>
     async fn create_medical_vocabulary(
         &self,
@@ -2494,6 +2933,23 @@ impl Transcribe for TranscribeClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<CreateVocabularyFilterResponse, _>()
+    }
+
+    /// <p>Deletes a custom language model using its name.</p>
+    async fn delete_language_model(
+        &self,
+        input: DeleteLanguageModelRequest,
+    ) -> Result<(), RusotoError<DeleteLanguageModelError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Transcribe.DeleteLanguageModel");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteLanguageModelError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a transcription job generated by Amazon Transcribe Medical and any related information.</p>
@@ -2581,6 +3037,25 @@ impl Transcribe for TranscribeClient {
         Ok(())
     }
 
+    /// <p>Gets information about a single custom language model. Use this information to see details about the language model in your AWS account. You can also see whether the base language model used to create your custom language model has been updated. If Amazon Transcribe has updated the base model, you can create a new custom language model using the updated base model. If the language model wasn't created, you can use this operation to understand why Amazon Transcribe couldn't create it. </p>
+    async fn describe_language_model(
+        &self,
+        input: DescribeLanguageModelRequest,
+    ) -> Result<DescribeLanguageModelResponse, RusotoError<DescribeLanguageModelError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Transcribe.DescribeLanguageModel");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeLanguageModelError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeLanguageModelResponse, _>()
+    }
+
     /// <p>Returns information about a transcription job from Amazon Transcribe Medical. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished. You find the results of the completed job in the <code>TranscriptFileUri</code> field.</p>
     async fn get_medical_transcription_job(
         &self,
@@ -2601,7 +3076,7 @@ impl Transcribe for TranscribeClient {
             .deserialize::<GetMedicalTranscriptionJobResponse, _>()
     }
 
-    /// <p>Retrieve information about a medical vocabulary.</p>
+    /// <p>Retrieves information about a medical vocabulary.</p>
     async fn get_medical_vocabulary(
         &self,
         input: GetMedicalVocabularyRequest,
@@ -2674,6 +3149,24 @@ impl Transcribe for TranscribeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetVocabularyFilterResponse, _>()
     }
 
+    /// <p>Provides more information about the custom language models you've created. You can use the information in this list to find a specific custom language model. You can then use the operation to get more information about it.</p>
+    async fn list_language_models(
+        &self,
+        input: ListLanguageModelsRequest,
+    ) -> Result<ListLanguageModelsResponse, RusotoError<ListLanguageModelsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Transcribe.ListLanguageModels");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListLanguageModelsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListLanguageModelsResponse, _>()
+    }
+
     /// <p>Lists medical transcription jobs with a specified status or substring that matches their names.</p>
     async fn list_medical_transcription_jobs(
         &self,
@@ -2694,7 +3187,7 @@ impl Transcribe for TranscribeClient {
             .deserialize::<ListMedicalTranscriptionJobsResponse, _>()
     }
 
-    /// <p>Returns a list of vocabularies that match the specified criteria. You get the entire list of vocabularies if you don't enter a value in any of the request parameters.</p>
+    /// <p>Returns a list of vocabularies that match the specified criteria. If you don't enter a value in any of the request parameters, returns the entire list of vocabularies.</p>
     async fn list_medical_vocabularies(
         &self,
         input: ListMedicalVocabulariesRequest,
@@ -2769,7 +3262,7 @@ impl Transcribe for TranscribeClient {
             .deserialize::<ListVocabularyFiltersResponse, _>()
     }
 
-    /// <p>Start a batch job to transcribe medical speech to text.</p>
+    /// <p>Starts a batch job to transcribe medical speech to text.</p>
     async fn start_medical_transcription_job(
         &self,
         input: StartMedicalTranscriptionJobRequest,
@@ -2808,7 +3301,7 @@ impl Transcribe for TranscribeClient {
             .deserialize::<StartTranscriptionJobResponse, _>()
     }
 
-    /// <p>Updates an existing vocabulary with new values in a different text file. The <code>UpdateMedicalVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
+    /// <p>Updates a vocabulary with new values that you provide in a different text file from the one you used to create the vocabulary. The <code>UpdateMedicalVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
     async fn update_medical_vocabulary(
         &self,
         input: UpdateMedicalVocabularyRequest,

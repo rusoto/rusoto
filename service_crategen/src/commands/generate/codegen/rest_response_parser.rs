@@ -110,23 +110,27 @@ fn parse_single_header(
                  result.{field_name} = {primitive_parser};",
             location_name = member.location_name.as_ref().unwrap(),
             field_name = member_name.to_snake_case(),
-            primitive_parser = generate_header_primitive_parser(member_shape).unwrap_or("value")
+            primitive_parser = generate_header_primitive_parser(service, member_shape).unwrap_or("value")
         )
     } else {
         format!(
             "result.{field_name} = response.headers.remove(\"{location_name}\"){primitive_parser};",
             location_name = member.location_name.as_ref().unwrap(),
             field_name = member_name.to_snake_case(),
-            primitive_parser = generate_header_primitive_parser(member_shape)
+            primitive_parser = generate_header_primitive_parser(service, member_shape)
                 .map(|s| format!(".map(|value| {})", s))
                 .unwrap_or_default()
         )
     }
 }
 
-fn generate_header_primitive_parser(shape: &Shape) -> Option<&str> {
+fn generate_header_primitive_parser(service: &Service<'_>, shape: &Shape) -> Option<&'static str> {
     let statement = match shape.shape_type {
-        ShapeType::String | ShapeType::Timestamp => return None,
+        ShapeType::String => return None,
+        ShapeType::Timestamp => match service.protocol() {
+            "rest-json" => "value.parse::<f64>().unwrap()",
+            _ => return None,
+        },
         ShapeType::Double => "value.parse::<f64>().unwrap()",
         ShapeType::Integer | ShapeType::Long => "value.parse::<i64>().unwrap()",
         ShapeType::Float => "value.parse::<f32>().unwrap()",

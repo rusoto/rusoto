@@ -34,6 +34,10 @@ pub struct CreateSavingsPlanRequest {
     /// <p>The hourly commitment, in USD. This is a value between 0.001 and 1 million. You cannot specify more than three digits after the decimal point.</p>
     #[serde(rename = "commitment")]
     pub commitment: String,
+    /// <p>The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ).</p>
+    #[serde(rename = "purchaseTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub purchase_time: Option<f64>,
     /// <p>The ID of the offering.</p>
     #[serde(rename = "savingsPlanOfferingId")]
     pub savings_plan_offering_id: String,
@@ -55,6 +59,18 @@ pub struct CreateSavingsPlanResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub savings_plan_id: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteQueuedSavingsPlanRequest {
+    /// <p>The ID of the Savings Plan.</p>
+    #[serde(rename = "savingsPlanId")]
+    pub savings_plan_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteQueuedSavingsPlanResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -686,6 +702,54 @@ impl fmt::Display for CreateSavingsPlanError {
     }
 }
 impl Error for CreateSavingsPlanError {}
+/// Errors returned by DeleteQueuedSavingsPlan
+#[derive(Debug, PartialEq)]
+pub enum DeleteQueuedSavingsPlanError {
+    /// <p>An unexpected error occurred.</p>
+    InternalServer(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>A service quota has been exceeded.</p>
+    ServiceQuotaExceeded(String),
+}
+
+impl DeleteQueuedSavingsPlanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueuedSavingsPlanError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteQueuedSavingsPlanError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteQueuedSavingsPlanError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        DeleteQueuedSavingsPlanError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteQueuedSavingsPlanError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteQueuedSavingsPlanError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteQueuedSavingsPlanError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteQueuedSavingsPlanError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteQueuedSavingsPlanError {}
 /// Errors returned by DescribeSavingsPlanRates
 #[derive(Debug, PartialEq)]
 pub enum DescribeSavingsPlanRatesError {
@@ -943,6 +1007,12 @@ pub trait SavingsPlans {
         input: CreateSavingsPlanRequest,
     ) -> Result<CreateSavingsPlanResponse, RusotoError<CreateSavingsPlanError>>;
 
+    /// <p>Deletes the queued purchase for the specified Savings Plan.</p>
+    async fn delete_queued_savings_plan(
+        &self,
+        input: DeleteQueuedSavingsPlanRequest,
+    ) -> Result<DeleteQueuedSavingsPlanResponse, RusotoError<DeleteQueuedSavingsPlanError>>;
+
     /// <p>Describes the specified Savings Plans rates.</p>
     async fn describe_savings_plan_rates(
         &self,
@@ -1059,6 +1129,37 @@ impl SavingsPlans for SavingsPlansClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateSavingsPlanError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the queued purchase for the specified Savings Plan.</p>
+    #[allow(unused_mut)]
+    async fn delete_queued_savings_plan(
+        &self,
+        input: DeleteQueuedSavingsPlanRequest,
+    ) -> Result<DeleteQueuedSavingsPlanResponse, RusotoError<DeleteQueuedSavingsPlanError>> {
+        let request_uri = "/DeleteQueuedSavingsPlan";
+
+        let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteQueuedSavingsPlanResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteQueuedSavingsPlanError::from_response(response))
         }
     }
 

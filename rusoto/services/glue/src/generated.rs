@@ -79,6 +79,20 @@ pub struct Action {
     pub timeout: Option<i64>,
 }
 
+/// <p><p>A list of errors that can occur when registering partition indexes for an existing table.</p> <p>These errors give the details about why an index registration failed and provide a limited number of partitions in the response, so that you can fix the partitions at fault and try registering the index again. The most common set of errors that can occur are categorized as follows:</p> <ul> <li> <p>EncryptedPartitionError: The partitions are encrypted.</p> </li> <li> <p>InvalidPartitionTypeDataError: The partition value doesn&#39;t match the data type for that partition column.</p> </li> <li> <p>MissingPartitionValueError: The partitions are encrypted.</p> </li> <li> <p>UnsupportedPartitionCharacterError: Characters inside the partition value are not supported. For example: U+0000 , U+0001, U+0002.</p> </li> <li> <p>InternalError: Any error which does not belong to other error codes.</p> </li> </ul></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BackfillError {
+    /// <p>The error code for an error that occurred when registering partition indexes for an existing table.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>A list of a limited number of partitions in the response.</p>
+    #[serde(rename = "Partitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partitions: Option<Vec<PartitionValueList>>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreatePartitionRequest {
@@ -405,30 +419,83 @@ pub struct BatchStopJobRunSuccessfulSubmission {
     pub job_run_id: Option<String>,
 }
 
-/// <p>Defines a binary column statistics data.</p>
+/// <p>Contains information about a batch update partition error.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchUpdatePartitionFailureEntry {
+    /// <p>The details about the batch update partition error.</p>
+    #[serde(rename = "ErrorDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_detail: Option<ErrorDetail>,
+    /// <p>A list of values defining the partitions.</p>
+    #[serde(rename = "PartitionValueList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_value_list: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchUpdatePartitionRequest {
+    /// <p>The ID of the catalog in which the partition is to be updated. Currently, this should be the AWS account ID.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The name of the metadata database in which the partition is to be updated.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A list of up to 100 <code>BatchUpdatePartitionRequestEntry</code> objects to update.</p>
+    #[serde(rename = "Entries")]
+    pub entries: Vec<BatchUpdatePartitionRequestEntry>,
+    /// <p>The name of the metadata table in which the partition is to be updated.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+/// <p>A structure that contains the values and structure used to update a partition.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchUpdatePartitionRequestEntry {
+    /// <p>The structure used to update a partition.</p>
+    #[serde(rename = "PartitionInput")]
+    pub partition_input: PartitionInput,
+    /// <p>A list of values defining the partitions.</p>
+    #[serde(rename = "PartitionValueList")]
+    pub partition_value_list: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchUpdatePartitionResponse {
+    /// <p>The errors encountered when trying to update the requested partitions. A list of <code>BatchUpdatePartitionFailureEntry</code> objects.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<BatchUpdatePartitionFailureEntry>>,
+}
+
+/// <p>Defines column statistics supported for bit sequence data values.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BinaryColumnStatisticsData {
-    /// <p>Average length of the column.</p>
+    /// <p>The average bit sequence length in the column.</p>
     #[serde(rename = "AverageLength")]
     pub average_length: f64,
-    /// <p>Maximum length of the column.</p>
+    /// <p>The size of the longest bit sequence in the column.</p>
     #[serde(rename = "MaximumLength")]
     pub maximum_length: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
 
-/// <p>Defines a boolean column statistics.</p>
+/// <p>Defines column statistics supported for Boolean data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BooleanColumnStatisticsData {
-    /// <p>Number of false value.</p>
+    /// <p>The number of false values in the column.</p>
     #[serde(rename = "NumberOfFalses")]
     pub number_of_falses: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
-    /// <p>Number of true value.</p>
+    /// <p>The number of true values in the column.</p>
     #[serde(rename = "NumberOfTrues")]
     pub number_of_trues: i64,
 }
@@ -500,6 +567,30 @@ pub struct CatalogTarget {
     /// <p>A list of the tables to be synchronized.</p>
     #[serde(rename = "Tables")]
     pub tables: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CheckSchemaVersionValidityInput {
+    /// <p>The data format of the schema definition. Currently only <code>AVRO</code> is supported.</p>
+    #[serde(rename = "DataFormat")]
+    pub data_format: String,
+    /// <p>The definition of the schema that has to be validated.</p>
+    #[serde(rename = "SchemaDefinition")]
+    pub schema_definition: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CheckSchemaVersionValidityResponse {
+    /// <p>A validation failure error message.</p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// <p>Return true, if the schema is valid and false otherwise.</p>
+    #[serde(rename = "Valid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid: Option<bool>,
 }
 
 /// <p>Classifiers are triggered during a crawl task. A classifier checks whether a given file is in a format it can handle. If it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>You can use the standard classifiers that AWS Glue provides, or you can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier can be a <code>grok</code> classifier, an <code>XML</code> classifier, a <code>JSON</code> classifier, or a custom <code>CSV</code> classifier, as specified in one of the fields in the <code>Classifier</code> object.</p>
@@ -605,82 +696,96 @@ pub struct Column {
     pub type_: Option<String>,
 }
 
-/// <p>Defines a column containing error.</p>
+/// <p>Encapsulates a column name that failed and the reason for failure.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnError {
-    /// <p>The name of the column.</p>
+    /// <p>The name of the column that failed.</p>
     #[serde(rename = "ColumnName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub column_name: Option<String>,
-    /// <p>The error message occurred during operation.</p>
+    /// <p>An error message with the reason for the failure of an operation.</p>
     #[serde(rename = "Error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<ErrorDetail>,
 }
 
-/// <p>Defines a column statistics.</p>
+/// <p>A structure containing the column name and column importance score for a column. </p> <p>Column importance helps you understand how columns contribute to your model, by identifying which columns in your records are more important than others.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ColumnImportance {
+    /// <p>The name of a column.</p>
+    #[serde(rename = "ColumnName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub column_name: Option<String>,
+    /// <p>The column importance score for the column, as a decimal.</p>
+    #[serde(rename = "Importance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub importance: Option<f64>,
+}
+
+/// <p>Represents the generated column-level statistics for a table or partition.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnStatistics {
-    /// <p>The analyzed time of the column statistics.</p>
+    /// <p>The timestamp of when column statistics were generated.</p>
     #[serde(rename = "AnalyzedTime")]
     pub analyzed_time: f64,
-    /// <p>The name of the column.</p>
+    /// <p>Name of column which statistics belong to.</p>
     #[serde(rename = "ColumnName")]
     pub column_name: String,
-    /// <p>The type of the column.</p>
+    /// <p>The data type of the column.</p>
     #[serde(rename = "ColumnType")]
     pub column_type: String,
-    /// <p>The statistics of the column.</p>
+    /// <p>A <code>ColumnStatisticData</code> object that contains the statistics data values.</p>
     #[serde(rename = "StatisticsData")]
     pub statistics_data: ColumnStatisticsData,
 }
 
-/// <p>Defines a column statistics data.</p>
+/// <p>Contains the individual types of column statistics data. Only one data object should be set and indicated by the <code>Type</code> attribute.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnStatisticsData {
-    /// <p>Binary Column Statistics Data.</p>
+    /// <p>Binary column statistics data.</p>
     #[serde(rename = "BinaryColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub binary_column_statistics_data: Option<BinaryColumnStatisticsData>,
-    /// <p>Boolean Column Statistics Data.</p>
+    /// <p>Boolean column statistics data.</p>
     #[serde(rename = "BooleanColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub boolean_column_statistics_data: Option<BooleanColumnStatisticsData>,
-    /// <p>Date Column Statistics Data.</p>
+    /// <p>Date column statistics data.</p>
     #[serde(rename = "DateColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub date_column_statistics_data: Option<DateColumnStatisticsData>,
-    /// <p>Decimal Column Statistics Data.</p>
+    /// <p>Decimal column statistics data.</p>
     #[serde(rename = "DecimalColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub decimal_column_statistics_data: Option<DecimalColumnStatisticsData>,
-    /// <p>Double Column Statistics Data.</p>
+    /// <p>Double column statistics data.</p>
     #[serde(rename = "DoubleColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub double_column_statistics_data: Option<DoubleColumnStatisticsData>,
-    /// <p>Long Column Statistics Data.</p>
+    /// <p>Long column statistics data.</p>
     #[serde(rename = "LongColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub long_column_statistics_data: Option<LongColumnStatisticsData>,
-    /// <p>String Column Statistics Data.</p>
+    /// <p>String column statistics data.</p>
     #[serde(rename = "StringColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub string_column_statistics_data: Option<StringColumnStatisticsData>,
-    /// <p>The name of the column.</p>
+    /// <p>The type of column statistics data.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
 
-/// <p>Defines a column containing error.</p>
+/// <p>Encapsulates a <code>ColumnStatistics</code> object that failed and the reason for failure.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnStatisticsError {
-    /// <p>The ColumnStatistics of the column.</p>
+    /// <p>The <code>ColumnStatistics</code> of the column.</p>
     #[serde(rename = "ColumnStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub column_statistics: Option<ColumnStatistics>,
-    /// <p>The error message occurred during operation.</p>
+    /// <p>An error message with the reason for the failure of an operation.</p>
     #[serde(rename = "Error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<ErrorDetail>,
@@ -737,7 +842,7 @@ pub struct ConfusionMatrix {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
-    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for connecting to a JDBC data source.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> <li> <p> <code>CONNECTION<em>URL</code> - The URL for connecting to a general (non-JDBC) data source.</p> </li> <li> <p> <code>KAFKA</em>BOOTSTRAP_SERVERS</code> - A comma-separated list of host and port pairs that are the addresses of the Apache Kafka brokers in a Kafka cluster to which a Kafka client will connect to and bootstrap itself.</p> </li> </ul></p>
+    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for connecting to a JDBC data source.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> <li> <p> <code>CONNECTION<em>URL</code> - The URL for connecting to a general (non-JDBC) data source.</p> </li> <li> <p> <code>KAFKA</em>BOOTSTRAP<em>SERVERS</code> - A comma-separated list of host and port pairs that are the addresses of the Apache Kafka brokers in a Kafka cluster to which a Kafka client will connect to and bootstrap itself.</p> </li> <li> <p> <code>KAFKA</em>SSL<em>ENABLED</code> - Whether to enable or disable SSL on an Apache Kafka connection. Default value is &quot;true&quot;.</p> </li> <li> <p> <code>KAFKA</em>CUSTOM<em>CERT</code> - The Amazon S3 URL for the private CA cert file (.pem format). The default is an empty string.</p> </li> <li> <p> <code>KAFKA</em>SKIP<em>CUSTOM</em>CERT<em>VALIDATION</code> - Whether to skip the validation of the CA cert file or not. AWS Glue validates for three algorithms: SHA256withRSA, SHA384withRSA and SHA512withRSA. Default value is &quot;false&quot;.</p> </li> <li> <p> <code>SECRET</em>ID</code> - The secret ID used for the secret manager of credentials.</p> </li> <li> <p> <code>CONNECTOR<em>URL</code> - The connector URL for a MARKETPLACE or CUSTOM connection.</p> </li> <li> <p> <code>CONNECTOR</em>TYPE</code> - The connector type for a MARKETPLACE or CUSTOM connection.</p> </li> <li> <p> <code>CONNECTOR<em>CLASS</em>NAME</code> - The connector class name for a MARKETPLACE or CUSTOM connection.</p> </li> </ul></p>
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
@@ -782,7 +887,7 @@ pub struct ConnectionInput {
     /// <p>These key-value pairs define parameters for the connection.</p>
     #[serde(rename = "ConnectionProperties")]
     pub connection_properties: ::std::collections::HashMap<String, String>,
-    /// <p>The type of the connection. Currently, these types are supported:</p> <ul> <li> <p> <code>JDBC</code> - Designates a connection to a database through Java Database Connectivity (JDBC).</p> </li> <li> <p> <code>KAFKA</code> - Designates a connection to an Apache Kafka streaming platform.</p> </li> <li> <p> <code>MONGODB</code> - Designates a connection to a MongoDB document database.</p> </li> </ul> <p>SFTP is not supported.</p>
+    /// <p>The type of the connection. Currently, these types are supported:</p> <ul> <li> <p> <code>JDBC</code> - Designates a connection to a database through Java Database Connectivity (JDBC).</p> </li> <li> <p> <code>KAFKA</code> - Designates a connection to an Apache Kafka streaming platform.</p> </li> <li> <p> <code>MONGODB</code> - Designates a connection to a MongoDB document database.</p> </li> <li> <p> <code>NETWORK</code> - Designates a network connection to a data source within an Amazon Virtual Private Cloud environment (Amazon VPC).</p> </li> <li> <p> <code>MARKETPLACE</code> - Uses configuration settings contained in a connector purchased from AWS Marketplace to read from and write to data stores that are not natively supported by AWS Glue.</p> </li> <li> <p> <code>CUSTOM</code> - Uses configuration settings contained in a custom connector to read from and write to data stores that are not natively supported by AWS Glue.</p> </li> </ul> <p>SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     pub connection_type: String,
     /// <p>The description of the connection.</p>
@@ -893,10 +998,18 @@ pub struct Crawler {
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
+    /// <p>A configuration that specifies whether data lineage is enabled for the crawler.</p>
+    #[serde(rename = "LineageConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lineage_configuration: Option<LineageConfiguration>,
     /// <p>The name of the crawler.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>A policy that specifies whether to crawl the entire dataset again, or to crawl only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_policy: Option<RecrawlPolicy>,
     /// <p>The Amazon Resource Name (ARN) of an IAM role that's used to access customer resources, such as Amazon Simple Storage Service (Amazon S3) data.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -990,6 +1103,10 @@ pub struct CrawlerTargets {
     #[serde(rename = "JdbcTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc_targets: Option<Vec<JdbcTarget>>,
+    /// <p>Specifies Amazon DocumentDB or MongoDB targets.</p>
+    #[serde(rename = "MongoDBTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mongo_db_targets: Option<Vec<MongoDBTarget>>,
     /// <p>Specifies Amazon Simple Storage Service (Amazon S3) targets.</p>
     #[serde(rename = "S3Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1060,9 +1177,17 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies data lineage configuration settings for the crawler.</p>
+    #[serde(rename = "LineageConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lineage_configuration: Option<LineageConfiguration>,
     /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>A policy that specifies whether to crawl the entire dataset again, or to crawl only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_policy: Option<RecrawlPolicy>,
     /// <p>The IAM role or Amazon Resource Name (ARN) of an IAM role used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     pub role: String,
@@ -1333,7 +1458,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;) or Apache Spark streaming ETL job (<code>JobCommand.Name</code>=&quot;gluestreaming&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -1441,6 +1566,10 @@ pub struct CreateMLTransformRequest {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
+    #[serde(rename = "TransformEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_encryption: Option<TransformEncryption>,
     /// <p><p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul> <p> <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p> <ul> <li> <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p> </li> <li> <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p> </li> <li> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p> </li> <li> <p> <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p> </li> </ul></p>
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1455,6 +1584,28 @@ pub struct CreateMLTransformResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transform_id: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreatePartitionIndexRequest {
+    /// <p>The catalog ID where the table resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>Specifies the name of a database in which you want to create a partition index.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>Specifies a <code>PartitionIndex</code> structure to create a partition index in an existing table.</p>
+    #[serde(rename = "PartitionIndex")]
+    pub partition_index: PartitionIndex,
+    /// <p>Specifies the name of a table in which you want to create a partition index.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreatePartitionIndexResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1477,6 +1628,135 @@ pub struct CreatePartitionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePartitionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateRegistryInput {
+    /// <p>A description of the registry. If description is not provided, there will not be any default value for this.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Name of the registry to be created of max length of 255, and may only contain letters, numbers, hyphen, underscore, dollar sign, or hash mark. No whitespace.</p>
+    #[serde(rename = "RegistryName")]
+    pub registry_name: String,
+    /// <p>AWS tags that contain a key value pair and may be searched by console, command line, or API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateRegistryResponse {
+    /// <p>A description of the registry.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the newly created registry.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The tags for the registry.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateSchemaInput {
+    /// <p><p>The compatibility mode of the schema. The possible values are:</p> <ul> <li> <p> <i>NONE</i>: No compatibility mode applies. You can use this choice in development scenarios or if you do not know the compatibility mode that you want to apply to schemas. Any new version added will be accepted without undergoing a compatibility check.</p> </li> <li> <p> <i>DISABLED</i>: This compatibility choice prevents versioning for a particular schema. You can use this choice to prevent future versioning of a schema.</p> </li> <li> <p> <i>BACKWARD</i>: This compatibility choice is recommended as it allows data receivers to read both the current and one previous schema version. This means that for instance, a new schema version cannot drop data fields or change the type of these fields, so they can&#39;t be read by readers using the previous version.</p> </li> <li> <p> <i>BACKWARD<em>ALL</i>: This compatibility choice allows data receivers to read both the current and all previous schema versions. You can use this choice when you need to delete fields or add optional fields, and check compatibility against all previous schema versions. </p> </li> <li> <p> <i>FORWARD</i>: This compatibility choice allows data receivers to read both the current and one next schema version, but not necessarily later versions. You can use this choice when you need to add fields or delete optional fields, but only check compatibility against the last schema version.</p> </li> <li> <p> <i>FORWARD</em>ALL</i>: This compatibility choice allows data receivers to read written by producers of any new registered schema. You can use this choice when you need to add fields or delete optional fields, and check compatibility against all previous schema versions.</p> </li> <li> <p> <i>FULL</i>: This compatibility choice allows data receivers to read data written by producers using the previous or next version of the schema, but not necessarily earlier or later versions. You can use this choice when you need to add or remove optional fields, but only check compatibility against the last schema version.</p> </li> <li> <p> <i>FULL_ALL</i>: This compatibility choice allows data receivers to read data written by producers using all previous schema versions. You can use this choice when you need to add or remove optional fields, and check compatibility against all previous schema versions.</p> </li> </ul></p>
+    #[serde(rename = "Compatibility")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatibility: Option<String>,
+    /// <p>The data format of the schema definition. Currently only <code>AVRO</code> is supported.</p>
+    #[serde(rename = "DataFormat")]
+    pub data_format: String,
+    /// <p>An optional description of the schema. If description is not provided, there will not be any automatic default value for this.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> This is a wrapper shape to contain the registry identity fields. If this is not provided, the default registry will be used. The ARN format for the same will be: <code>arn:aws:glue:us-east-2:&lt;customer id&gt;:registry/default-registry:random-5-letter-id</code>.</p>
+    #[serde(rename = "RegistryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<RegistryId>,
+    /// <p>The schema definition using the <code>DataFormat</code> setting for <code>SchemaName</code>.</p>
+    #[serde(rename = "SchemaDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_definition: Option<String>,
+    /// <p>Name of the schema to be created of max length of 255, and may only contain letters, numbers, hyphen, underscore, dollar sign, or hash mark. No whitespace.</p>
+    #[serde(rename = "SchemaName")]
+    pub schema_name: String,
+    /// <p>AWS tags that contain a key value pair and may be searched by console, command line, or API. If specified, follows the AWS tags-on-create pattern.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateSchemaResponse {
+    /// <p>The schema compatibility mode.</p>
+    #[serde(rename = "Compatibility")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatibility: Option<String>,
+    /// <p>The data format of the schema definition. Currently only <code>AVRO</code> is supported.</p>
+    #[serde(rename = "DataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_format: Option<String>,
+    /// <p>A description of the schema if specified when created.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The latest version of the schema associated with the returned schema definition.</p>
+    #[serde(rename = "LatestSchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_schema_version: Option<i64>,
+    /// <p>The next version of the schema associated with the returned schema definition.</p>
+    #[serde(rename = "NextSchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_schema_version: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the registry.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The version number of the checkpoint (the last time the compatibility mode was changed).</p>
+    #[serde(rename = "SchemaCheckpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_checkpoint: Option<i64>,
+    /// <p>The name of the schema.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+    /// <p>The status of the schema. </p>
+    #[serde(rename = "SchemaStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_status: Option<String>,
+    /// <p>The unique identifier of the first schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The status of the first schema version created.</p>
+    #[serde(rename = "SchemaVersionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_status: Option<String>,
+    /// <p>The tags for the schema.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1542,6 +1822,10 @@ pub struct CreateTableRequest {
     /// <p>The catalog database in which to create the new table. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
+    /// <p>A list of partition indexes, <code>PartitionIndex</code> structures, to create in the table.</p>
+    #[serde(rename = "PartitionIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_indexes: Option<Vec<PartitionIndex>>,
     /// <p>The <code>TableInput</code> object that defines the metadata table to create in the catalog.</p>
     #[serde(rename = "TableInput")]
     pub table_input: TableInput,
@@ -1628,6 +1912,10 @@ pub struct CreateWorkflowRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>You can use this parameter to prevent unwanted multiple updates to data, to control costs, or in some cases, to prevent exceeding the maximum number of concurrent runs of any of the component jobs. If you leave this parameter blank, there is no limit to the number of concurrent workflow runs.</p>
+    #[serde(rename = "MaxConcurrentRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrent_runs: Option<i64>,
     /// <p>The name to be assigned to the workflow. It should be unique within your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1808,40 +2096,40 @@ pub struct DatabaseInput {
     pub target_database: Option<DatabaseIdentifier>,
 }
 
-/// <p>Defines a date column statistics data.</p>
+/// <p>Defines column statistics supported for timestamp data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DateColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<f64>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<f64>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
 
-/// <p>Defines a decimal column statistics data.</p>
+/// <p>Defines column statistics supported for fixed-point number data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DecimalColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<DecimalNumber>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<DecimalNumber>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -2013,6 +2301,28 @@ pub struct DeleteMLTransformResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeletePartitionIndexRequest {
+    /// <p>The catalog ID where the table resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>Specifies the name of a database from which you want to delete a partition index.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the partition index to be deleted.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p>Specifies the name of a table from which you want to delete a partition index.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeletePartitionIndexResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2035,6 +2345,31 @@ pub struct DeletePartitionResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteRegistryInput {
+    /// <p>This is a wrapper structure that may contain the registry name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "RegistryId")]
+    pub registry_id: RegistryId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteRegistryResponse {
+    /// <p>The Amazon Resource Name (ARN) of the registry being deleted.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>The name of the registry being deleted.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The status of the registry. A successful operation will return the <code>Deleting</code> status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
     /// <p>The hash value returned when this policy was set.</p>
     #[serde(rename = "PolicyHashCondition")]
@@ -2049,6 +2384,51 @@ pub struct DeleteResourcePolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcePolicyResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteSchemaInput {
+    /// <p>This is a wrapper structure that may contain the schema name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteSchemaResponse {
+    /// <p>The Amazon Resource Name (ARN) of the schema being deleted.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The name of the schema being deleted.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+    /// <p>The status of the schema.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteSchemaVersionsInput {
+    /// <p>This is a wrapper structure that may contain the schema name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+    /// <p><p>A version range may be supplied which may be of the format:</p> <ul> <li> <p>a single version number, 5</p> </li> <li> <p>a range, 5-8 : deletes versions 5, 6, 7, 8</p> </li> </ul></p>
+    #[serde(rename = "Versions")]
+    pub versions: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteSchemaVersionsResponse {
+    /// <p>A list of <code>SchemaVersionErrorItem</code> objects, each containing an error and schema version.</p>
+    #[serde(rename = "SchemaVersionErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_errors: Option<Vec<SchemaVersionErrorItem>>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2276,21 +2656,21 @@ pub struct DevEndpointCustomLibraries {
     pub extra_python_libs_s3_path: Option<String>,
 }
 
-/// <p>Defines a double column statistics data.</p>
+/// <p>Defines column statistics supported for floating-point number data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DoubleColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<f64>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<f64>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -2312,7 +2692,7 @@ pub struct DynamoDBTarget {
     pub scan_rate: Option<f64>,
 }
 
-/// <p>An edge represents a directed connection between two AWS Glue components which are part of the workflow the edge belongs to.</p>
+/// <p>An edge represents a directed connection between two AWS Glue components that are part of the workflow the edge belongs to.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Edge {
@@ -2369,6 +2749,20 @@ pub struct ErrorDetail {
     pub error_message: Option<String>,
 }
 
+/// <p>An object containing error details.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ErrorDetails {
+    /// <p>The error code for an error.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The error message for an error.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+}
+
 /// <p>Evaluation metrics provide an estimate of the quality of your machine learning transform.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2409,6 +2803,10 @@ pub struct FindMatchesMetrics {
     #[serde(rename = "AreaUnderPRCurve")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub area_under_pr_curve: Option<f64>,
+    /// <p>A list of <code>ColumnImportance</code> structures containing column importance metrics, sorted in order of descending importance.</p>
+    #[serde(rename = "ColumnImportances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub column_importances: Option<Vec<ColumnImportance>>,
     /// <p>The confusion matrix shows you what your transform is predicting accurately and what types of errors it is making.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Confusion matrix</a> in Wikipedia.</p>
     #[serde(rename = "ConfusionMatrix")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3164,6 +3562,10 @@ pub struct GetMLTransformResponse {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
+    #[serde(rename = "TransformEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_encryption: Option<TransformEncryption>,
     /// <p>The unique identifier of the transform, generated at the time that the transform was created.</p>
     #[serde(rename = "TransformId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3229,6 +3631,38 @@ pub struct GetMappingResponse {
     /// <p>A list of mappings to the specified targets.</p>
     #[serde(rename = "Mapping")]
     pub mapping: Vec<MappingEntry>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPartitionIndexesRequest {
+    /// <p>The catalog ID where the table resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>Specifies the name of a database from which you want to retrieve partition indexes.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A continuation token, included if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies the name of a table for which you want to retrieve the partition indexes.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetPartitionIndexesResponse {
+    /// <p>A continuation token, present if the current list segment is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of index descriptors.</p>
+    #[serde(rename = "PartitionIndexDescriptorList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_index_descriptor_list: Option<Vec<PartitionIndexDescriptor>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3305,6 +3739,10 @@ pub struct GetPartitionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlanRequest {
+    /// <p><p>A map to hold additional optional key-value parameters.</p> <p>Currently, these key-value pairs are supported:</p> <ul> <li> <p> <code>inferSchema</code>  —  Specifies whether to set <code>inferSchema</code> to true or false for the default script generated by an AWS Glue job. For example, to set <code>inferSchema</code> to true, pass the following key value pair:</p> <p> <code>--additional-plan-options-map &#39;{&quot;inferSchema&quot;:&quot;true&quot;}&#39;</code> </p> </li> </ul></p>
+    #[serde(rename = "AdditionalPlanOptionsMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_plan_options_map: Option<::std::collections::HashMap<String, String>>,
     /// <p>The programming language of the code to perform the mapping.</p>
     #[serde(rename = "Language")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3336,6 +3774,43 @@ pub struct GetPlanResponse {
     #[serde(rename = "ScalaCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scala_code: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetRegistryInput {
+    /// <p>This is a wrapper structure that may contain the registry name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "RegistryId")]
+    pub registry_id: RegistryId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetRegistryResponse {
+    /// <p>The date and time the registry was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>A description of the registry.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the registry.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The status of the registry.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The date and time the registry was updated.</p>
+    #[serde(rename = "UpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_time: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3392,6 +3867,183 @@ pub struct GetResourcePolicyResponse {
     #[serde(rename = "UpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSchemaByDefinitionInput {
+    /// <p>The definition of the schema for which schema details are required.</p>
+    #[serde(rename = "SchemaDefinition")]
+    pub schema_definition: String,
+    /// <p><p>This is a wrapper structure to contain schema identity fields. The structure contains:</p> <ul> <li> <p>SchemaId$SchemaArn: The Amazon Resource Name (ARN) of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p> </li> <li> <p>SchemaId$SchemaName: The name of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p> </li> </ul></p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSchemaByDefinitionResponse {
+    /// <p>The date and time the schema was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The data format of the schema definition. Currently only <code>AVRO</code> is supported.</p>
+    #[serde(rename = "DataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_format: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The schema ID of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The status of the schema version.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSchemaInput {
+    /// <p><p>This is a wrapper structure to contain schema identity fields. The structure contains:</p> <ul> <li> <p>SchemaId$SchemaArn: The Amazon Resource Name (ARN) of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> <li> <p>SchemaId$SchemaName: The name of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> </ul></p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSchemaResponse {
+    /// <p>The compatibility mode of the schema.</p>
+    #[serde(rename = "Compatibility")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatibility: Option<String>,
+    /// <p>The date and time the schema was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The data format of the schema definition. Currently only <code>AVRO</code> is supported.</p>
+    #[serde(rename = "DataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_format: Option<String>,
+    /// <p>A description of schema if specified when created</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The latest version of the schema associated with the returned schema definition.</p>
+    #[serde(rename = "LatestSchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_schema_version: Option<i64>,
+    /// <p>The next version of the schema associated with the returned schema definition.</p>
+    #[serde(rename = "NextSchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_schema_version: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the registry.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The version number of the checkpoint (the last time the compatibility mode was changed).</p>
+    #[serde(rename = "SchemaCheckpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_checkpoint: Option<i64>,
+    /// <p>The name of the schema.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+    /// <p>The status of the schema.</p>
+    #[serde(rename = "SchemaStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_status: Option<String>,
+    /// <p>The date and time the schema was updated.</p>
+    #[serde(rename = "UpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_time: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSchemaVersionInput {
+    /// <p><p>This is a wrapper structure to contain schema identity fields. The structure contains:</p> <ul> <li> <p>SchemaId$SchemaArn: The Amazon Resource Name (ARN) of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> <li> <p>SchemaId$SchemaName: The name of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> </ul></p>
+    #[serde(rename = "SchemaId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_id: Option<SchemaId>,
+    /// <p>The <code>SchemaVersionId</code> of the schema version. This field is required for fetching by schema ID. Either this or the <code>SchemaId</code> wrapper has to be provided.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "SchemaVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_number: Option<SchemaVersionNumber>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSchemaVersionResponse {
+    /// <p>The date and time the schema version was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The data format of the schema definition. Currently only <code>AVRO</code> is supported.</p>
+    #[serde(rename = "DataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_format: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The schema definition for the schema ID.</p>
+    #[serde(rename = "SchemaDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_definition: Option<String>,
+    /// <p>The <code>SchemaVersionId</code> of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The status of the schema version. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSchemaVersionsDiffInput {
+    /// <p>The first of the two schema versions to be compared.</p>
+    #[serde(rename = "FirstSchemaVersionNumber")]
+    pub first_schema_version_number: SchemaVersionNumber,
+    /// <p>Refers to <code>SYNTAX_DIFF</code>, which is the currently supported diff type.</p>
+    #[serde(rename = "SchemaDiffType")]
+    pub schema_diff_type: String,
+    /// <p><p>This is a wrapper structure to contain schema identity fields. The structure contains:</p> <ul> <li> <p>SchemaId$SchemaArn: The Amazon Resource Name (ARN) of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p> </li> <li> <p>SchemaId$SchemaName: The name of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p> </li> </ul></p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+    /// <p>The second of the two schema versions to be compared.</p>
+    #[serde(rename = "SecondSchemaVersionNumber")]
+    pub second_schema_version_number: SchemaVersionNumber,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSchemaVersionsDiffResponse {
+    /// <p>The difference between schemas as a string in JsonPatch format.</p>
+    #[serde(rename = "Diff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub diff: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3941,7 +4593,7 @@ pub struct Job {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job, an Apache Spark ETL job, or an Apache Spark streaming ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;) or Apache Spark streaming ETL job (<code>JobCommand.Name</code>=&quot;gluestreaming&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -4033,7 +4685,7 @@ pub struct JobBookmarksEncryption {
 /// <p>Specifies code executed when a job is run.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobCommand {
-    /// <p>The name of the job command. For an Apache Spark ETL job, this must be <code>glueetl</code>. For a Python shell job, it must be <code>pythonshell</code>.</p>
+    /// <p>The name of the job command. For an Apache Spark ETL job, this must be <code>glueetl</code>. For a Python shell job, it must be <code>pythonshell</code>. For an Apache Spark streaming ETL job, this must be <code>gluestreaming</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -4179,7 +4831,7 @@ pub struct JobUpdate {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;) or Apache Spark streaming ETL job (<code>JobCommand.Name</code>=&quot;gluestreaming&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -4241,6 +4893,18 @@ pub struct JsonClassifier {
     pub version: Option<i64>,
 }
 
+/// <p>A partition key pair consisting of a name and a type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct KeySchemaElement {
+    /// <p>The name of a partition key.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The type of a partition key.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
 /// <p>Specifies configuration properties for a labeling set generation task run.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4279,6 +4943,15 @@ pub struct LastCrawlInfo {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>Specifies data lineage configuration settings for the crawler.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LineageConfiguration {
+    /// <p><p>Specifies whether data lineage is enabled for the crawler. Valid values are:</p> <ul> <li> <p>ENABLE: enables data lineage for the crawler</p> </li> <li> <p>DISABLE: disables data lineage for the crawler</p> </li> </ul></p>
+    #[serde(rename = "CrawlerLineageSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_lineage_settings: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4410,6 +5083,91 @@ pub struct ListMLTransformsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListRegistriesInput {
+    /// <p>Maximum number of results required per page. If the value is not supplied, this will be defaulted to 25 per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListRegistriesResponse {
+    /// <p>A continuation token for paginating the returned list of tokens, returned if the current segment of the list is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of <code>RegistryDetailedListItem</code> objects containing minimal details of each registry.</p>
+    #[serde(rename = "Registries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registries: Option<Vec<RegistryListItem>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSchemaVersionsInput {
+    /// <p>Maximum number of results required per page. If the value is not supplied, this will be defaulted to 25 per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p>This is a wrapper structure to contain schema identity fields. The structure contains:</p> <ul> <li> <p>SchemaId$SchemaArn: The Amazon Resource Name (ARN) of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> <li> <p>SchemaId$SchemaName: The name of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> </ul></p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSchemaVersionsResponse {
+    /// <p>A continuation token for paginating the returned list of tokens, returned if the current segment of the list is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of <code>SchemaVersionList</code> objects containing details of each schema version.</p>
+    #[serde(rename = "Schemas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schemas: Option<Vec<SchemaVersionListItem>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSchemasInput {
+    /// <p>Maximum number of results required per page. If the value is not supplied, this will be defaulted to 25 per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A wrapper structure that may contain the registry name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "RegistryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<RegistryId>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSchemasResponse {
+    /// <p>A continuation token for paginating the returned list of tokens, returned if the current segment of the list is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of <code>SchemaListItem</code> objects containing details of each schema.</p>
+    #[serde(rename = "Schemas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schemas: Option<Vec<SchemaListItem>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTriggersRequest {
     /// <p> The name of the job for which to retrieve triggers. The trigger that can start this job is returned. If there is no such trigger, all triggers are returned.</p>
     #[serde(rename = "DependentJobName")]
@@ -4486,21 +5244,21 @@ pub struct Location {
     pub s3: Option<Vec<CodeGenNodeArg>>,
 }
 
-/// <p>Defines a long column statistics data.</p>
+/// <p>Defines column statistics supported for integer data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LongColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<i64>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<i64>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -4573,6 +5331,10 @@ pub struct MLTransform {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
+    #[serde(rename = "TransformEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_encryption: Option<TransformEncryption>,
     /// <p>The unique transform ID that is generated for the machine learning transform. The ID is guaranteed to be unique and does not change.</p>
     #[serde(rename = "TransformId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4581,6 +5343,18 @@ pub struct MLTransform {
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_type: Option<String>,
+}
+
+/// <p>The encryption-at-rest settings of the transform that apply to accessing user data.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MLUserDataEncryption {
+    /// <p>The ID for the customer-provided KMS key.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p><p>The encryption mode applied to user data. Valid values are:</p> <ul> <li> <p>DISABLED: encryption is disabled</p> </li> <li> <p>SSEKMS: use of server-side encryption with AWS Key Management Service (SSE-KMS) for user data stored in Amazon S3.</p> </li> </ul></p>
+    #[serde(rename = "MlUserDataEncryptionMode")]
+    pub ml_user_data_encryption_mode: String,
 }
 
 /// <p>Defines a mapping.</p>
@@ -4612,7 +5386,52 @@ pub struct MappingEntry {
     pub target_type: Option<String>,
 }
 
-/// <p>A node represents an AWS Glue component like Trigger, Job etc. which is part of a workflow.</p>
+/// <p>A structure containing metadata information for a schema version.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MetadataInfo {
+    /// <p>The time at which the entry was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The metadata key’s corresponding value.</p>
+    #[serde(rename = "MetadataValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_value: Option<String>,
+}
+
+/// <p>A structure containing a key value pair for metadata.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MetadataKeyValuePair {
+    /// <p>A metadata key.</p>
+    #[serde(rename = "MetadataKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_key: Option<String>,
+    /// <p>A metadata key’s corresponding value.</p>
+    #[serde(rename = "MetadataValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_value: Option<String>,
+}
+
+/// <p>Specifies an Amazon DocumentDB or MongoDB data store to crawl.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MongoDBTarget {
+    /// <p>The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.</p>
+    #[serde(rename = "ConnectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_name: Option<String>,
+    /// <p>The path of the Amazon DocumentDB or MongoDB target (database/collection).</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>Indicates whether to scan all the records, or to sample rows from the table. Scanning all the records can take a long time when the table is not a high throughput table.</p> <p>A value of <code>true</code> means to scan all records, while a value of <code>false</code> means to sample the records. If no value is specified, the value defaults to <code>true</code>.</p>
+    #[serde(rename = "ScanAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_all: Option<bool>,
+}
+
+/// <p>A node represents an AWS Glue component such as a trigger, or job, etc., that is part of a workflow.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Node {
@@ -4716,6 +5535,37 @@ pub struct PartitionError {
     #[serde(rename = "PartitionValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_values: Option<Vec<String>>,
+}
+
+/// <p>A structure for a partition index.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PartitionIndex {
+    /// <p>The name of the partition index.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p>The keys for the partition index.</p>
+    #[serde(rename = "Keys")]
+    pub keys: Vec<String>,
+}
+
+/// <p>A descriptor for a partition index in a table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PartitionIndexDescriptor {
+    /// <p>A list of errors that can occur when registering partition indexes for an existing table.</p>
+    #[serde(rename = "BackfillErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backfill_errors: Option<Vec<BackfillError>>,
+    /// <p>The name of the partition index.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p><p>The status of the partition index. </p> <p>The possible statuses are:</p> <ul> <li> <p>CREATING: The index is being created. When an index is in a CREATING state, the index or its table cannot be deleted.</p> </li> <li> <p>ACTIVE: The index creation succeeds.</p> </li> <li> <p>FAILED: The index creation fails. </p> </li> <li> <p>DELETING: The index is deleted from the list of indexes.</p> </li> </ul></p>
+    #[serde(rename = "IndexStatus")]
+    pub index_status: String,
+    /// <p>A list of one or more keys, as <code>KeySchemaElement</code> structures, for the partition index.</p>
+    #[serde(rename = "Keys")]
+    pub keys: Vec<KeySchemaElement>,
 }
 
 /// <p>The structure used to create and update a partition.</p>
@@ -4878,6 +5728,63 @@ pub struct PutResourcePolicyResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutSchemaVersionMetadataInput {
+    /// <p>The metadata key's corresponding value.</p>
+    #[serde(rename = "MetadataKeyValue")]
+    pub metadata_key_value: MetadataKeyValuePair,
+    /// <p>The unique ID for the schema.</p>
+    #[serde(rename = "SchemaId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_id: Option<SchemaId>,
+    /// <p>The unique version ID of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "SchemaVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_number: Option<SchemaVersionNumber>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutSchemaVersionMetadataResponse {
+    /// <p>The latest version of the schema.</p>
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version: Option<bool>,
+    /// <p>The metadata key.</p>
+    #[serde(rename = "MetadataKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_key: Option<String>,
+    /// <p>The value of the metadata key.</p>
+    #[serde(rename = "MetadataValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_value: Option<String>,
+    /// <p>The name for the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The name for the schema.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+    /// <p>The unique version ID of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutWorkflowRunPropertiesRequest {
     /// <p>Name of the workflow which was run.</p>
     #[serde(rename = "Name")]
@@ -4893,6 +5800,190 @@ pub struct PutWorkflowRunPropertiesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutWorkflowRunPropertiesResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct QuerySchemaVersionMetadataInput {
+    /// <p>Maximum number of results required per page. If the value is not supplied, this will be defaulted to 25 per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Search key-value pairs for metadata, if they are not provided all the metadata information will be fetched.</p>
+    #[serde(rename = "MetadataList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_list: Option<Vec<MetadataKeyValuePair>>,
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A wrapper structure that may contain the schema name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "SchemaId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_id: Option<SchemaId>,
+    /// <p>The unique version ID of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "SchemaVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_number: Option<SchemaVersionNumber>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct QuerySchemaVersionMetadataResponse {
+    /// <p>A map of a metadata key and associated values.</p>
+    #[serde(rename = "MetadataInfoMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_info_map: Option<::std::collections::HashMap<String, MetadataInfo>>,
+    /// <p>A continuation token for paginating the returned list of tokens, returned if the current segment of the list is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The unique version ID of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+}
+
+/// <p>When crawling an Amazon S3 data source after the first crawl is complete, specifies whether to crawl the entire dataset again or to crawl only folders that were added since the last crawler run. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/incremental-crawls.html">Incremental Crawls in AWS Glue</a> in the developer guide.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RecrawlPolicy {
+    /// <p>Specifies whether to crawl the entire dataset again or to crawl only folders that were added since the last crawler run.</p> <p>A value of <code>CRAWL_EVERYTHING</code> specifies crawling the entire dataset again.</p> <p>A value of <code>CRAWL_NEW_FOLDERS_ONLY</code> specifies crawling only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_behavior: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RegisterSchemaVersionInput {
+    /// <p>The schema definition using the <code>DataFormat</code> setting for the <code>SchemaName</code>.</p>
+    #[serde(rename = "SchemaDefinition")]
+    pub schema_definition: String,
+    /// <p><p>This is a wrapper structure to contain schema identity fields. The structure contains:</p> <ul> <li> <p>SchemaId$SchemaArn: The Amazon Resource Name (ARN) of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> <li> <p>SchemaId$SchemaName: The name of the schema. Either <code>SchemaArn</code> or <code>SchemaName</code> and <code>RegistryName</code> has to be provided.</p> </li> </ul></p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RegisterSchemaVersionResponse {
+    /// <p>The unique ID that represents the version of this schema.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The status of the schema version.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The version of this schema (for sync flow only, in case this is the first version).</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+/// <p>A wrapper structure that may contain the registry name and Amazon Resource Name (ARN).</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RegistryId {
+    /// <p>Arn of the registry to be updated. One of <code>RegistryArn</code> or <code>RegistryName</code> has to be provided.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>Name of the registry. Used only for lookup. One of <code>RegistryArn</code> or <code>RegistryName</code> has to be provided. </p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+}
+
+/// <p>A structure containing the details for a registry.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RegistryListItem {
+    /// <p>The data the registry was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>A description of the registry.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the registry.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The status of the registry.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The date the registry was updated.</p>
+    #[serde(rename = "UpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_time: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveSchemaVersionMetadataInput {
+    /// <p>The value of the metadata key.</p>
+    #[serde(rename = "MetadataKeyValue")]
+    pub metadata_key_value: MetadataKeyValuePair,
+    /// <p>A wrapper structure that may contain the schema name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "SchemaId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_id: Option<SchemaId>,
+    /// <p>The unique version ID of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "SchemaVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_number: Option<SchemaVersionNumber>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemoveSchemaVersionMetadataResponse {
+    /// <p>The latest version of the schema.</p>
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version: Option<bool>,
+    /// <p>The metadata key.</p>
+    #[serde(rename = "MetadataKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_key: Option<String>,
+    /// <p>The value of the metadata key.</p>
+    #[serde(rename = "MetadataValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_value: Option<String>,
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The name of the schema.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+    /// <p>The version ID for the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4928,6 +6019,33 @@ pub struct ResourceUri {
     pub uri: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResumeWorkflowRunRequest {
+    /// <p>The name of the workflow to resume.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A list of the node IDs for the nodes you want to restart. The nodes that are to be restarted must have a run attempt in the original run.</p>
+    #[serde(rename = "NodeIds")]
+    pub node_ids: Vec<String>,
+    /// <p>The ID of the workflow run to resume.</p>
+    #[serde(rename = "RunId")]
+    pub run_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResumeWorkflowRunResponse {
+    /// <p>A list of the node IDs for the nodes that were actually restarted.</p>
+    #[serde(rename = "NodeIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_ids: Option<Vec<String>>,
+    /// <p>The new ID assigned to the resumed workflow run. Each resume of a workflow run will have a new run ID.</p>
+    #[serde(rename = "RunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_id: Option<String>,
+}
+
 /// <p>Specifies how Amazon Simple Storage Service (Amazon S3) data should be encrypted.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Encryption {
@@ -4944,6 +6062,10 @@ pub struct S3Encryption {
 /// <p>Specifies a data store in Amazon Simple Storage Service (Amazon S3).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Target {
+    /// <p>The name of a connection which allows a job or crawler to access data in Amazon S3 within an Amazon Virtual Private Cloud environment (Amazon VPC).</p>
+    #[serde(rename = "ConnectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_name: Option<String>,
     /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
     #[serde(rename = "Exclusions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4994,14 +6116,136 @@ pub struct SchemaColumn {
     pub name: Option<String>,
 }
 
+/// <p>The unique ID of the schema in the AWS Glue schema registry.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SchemaId {
+    /// <p>The name of the schema registry that contains the schema.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The name of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+}
+
+/// <p>An object that contains minimal details for a schema.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SchemaListItem {
+    /// <p>The date and time that a schema was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>A description for the schema.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>the name of the registry where the schema resides.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The name of the schema.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+    /// <p>The status of the schema.</p>
+    #[serde(rename = "SchemaStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_status: Option<String>,
+    /// <p>The date and time that a schema was updated.</p>
+    #[serde(rename = "UpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_time: Option<String>,
+}
+
+/// <p>An object that references a schema stored in the AWS Glue Schema Registry.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SchemaReference {
+    /// <p>A structure that contains schema identity fields. Either this or the <code>SchemaVersionId</code> has to be provided.</p>
+    #[serde(rename = "SchemaId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_id: Option<SchemaId>,
+    /// <p>The unique ID assigned to a version of the schema. Either this or the <code>SchemaId</code> has to be provided.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "SchemaVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_number: Option<i64>,
+}
+
+/// <p>An object that contains the error details for an operation on a schema version.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SchemaVersionErrorItem {
+    /// <p>The details of the error for the schema version.</p>
+    #[serde(rename = "ErrorDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_details: Option<ErrorDetails>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+/// <p>An object containing the details about a schema version.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SchemaVersionListItem {
+    /// <p>The date and time the schema version was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The unique identifier of the schema version.</p>
+    #[serde(rename = "SchemaVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_id: Option<String>,
+    /// <p>The status of the schema version.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+/// <p>A structure containing the schema version information.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SchemaVersionNumber {
+    /// <p>The latest version available for the schema.</p>
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version: Option<bool>,
+    /// <p>The version number of the schema.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchTablesRequest {
-    /// <p>A unique identifier, consisting of <code> <i>account_id</i>/datalake</code>.</p>
+    /// <p>A unique identifier, consisting of <code> <i>account_id</i> </code>.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>A list of key-value pairs, and a comparator used to filter the search results. Returns all entities matching the predicate.</p>
+    /// <p>A list of key-value pairs, and a comparator used to filter the search results. Returns all entities matching the predicate.</p> <p>The <code>Comparator</code> member of the <code>PropertyPredicate</code> struct is used only for time fields, and can be omitted for other field types. Also, when comparing string values, such as when <code>Key=Name</code>, a fuzzy match algorithm is used. The <code>Key</code> field (for example, the value of the <code>Name</code> field) is split on certain punctuation characters, for example, -, :, #, etc. into tokens. Then each token is exact-match compared with the <code>Value</code> member of <code>PropertyPredicate</code>. For example, if <code>Key=Name</code> and <code>Value=link</code>, tables named <code>customer-link</code> and <code>xx-link-yy</code> are returned, but <code>xxlinkyy</code> is not returned.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PropertyPredicate>>,
@@ -5397,6 +6641,10 @@ pub struct StorageDescriptor {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>An object that references a schema stored in the AWS Glue Schema Registry.</p> <p>When creating a table, you can pass an empty list of columns for the schema, and instead use a schema reference.</p>
+    #[serde(rename = "SchemaReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_reference: Option<SchemaReference>,
     /// <p>The serialization/deserialization (SerDe) information.</p>
     #[serde(rename = "SerdeInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5415,19 +6663,19 @@ pub struct StorageDescriptor {
     pub stored_as_sub_directories: Option<bool>,
 }
 
-/// <p>Defines a string column statistics data.</p>
+/// <p>Defines column statistics supported for character sequence data values.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StringColumnStatisticsData {
-    /// <p>Average value of the column.</p>
+    /// <p>The average string length in the column.</p>
     #[serde(rename = "AverageLength")]
     pub average_length: f64,
-    /// <p>Maximum value of the column.</p>
+    /// <p>The size of the longest string in the column.</p>
     #[serde(rename = "MaximumLength")]
     pub maximum_length: i64,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -5754,6 +7002,19 @@ pub struct TaskRunSortCriteria {
     pub sort_direction: String,
 }
 
+/// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p> <p>Additionally, imported labels and trained transforms can now be encrypted using a customer provided KMS key.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TransformEncryption {
+    /// <p>An <code>MLUserDataEncryption</code> object containing the encryption mode and customer-provided KMS key ID.</p>
+    #[serde(rename = "MlUserDataEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ml_user_data_encryption: Option<MLUserDataEncryption>,
+    /// <p>The name of the security configuration.</p>
+    #[serde(rename = "TaskRunSecurityConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_security_configuration_name: Option<String>,
+}
+
 /// <p>The criteria used to filter the machine learning transforms.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5803,7 +7064,7 @@ pub struct TransformParameters {
     #[serde(rename = "FindMatchesParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub find_matches_parameters: Option<FindMatchesParameters>,
-    /// <p>The type of machine learning transform.</p> <p>For information about the types of machine learning transforms, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-job-machine-learning-transform.html">Creating Machine Learning Transforms</a>.</p>
+    /// <p>The type of machine learning transform.</p> <p>For information about the types of machine learning transforms, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job-machine-learning-transform.html">Creating Machine Learning Transforms</a>.</p>
     #[serde(rename = "TransformType")]
     pub transform_type: String,
 }
@@ -6037,9 +7298,17 @@ pub struct UpdateCrawlerRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies data lineage configuration settings for the crawler.</p>
+    #[serde(rename = "LineageConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lineage_configuration: Option<LineageConfiguration>,
     /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>A policy that specifies whether to crawl the entire dataset again, or to crawl only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_policy: Option<RecrawlPolicy>,
     /// <p>The IAM role or Amazon Resource Name (ARN) of an IAM role that is used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6295,10 +7564,10 @@ pub struct UpdatePartitionRequest {
     /// <p>The name of the catalog database in which the table in question resides.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>The new partition object to update the partition to.</p>
+    /// <p>The new partition object to update the partition to.</p> <p>The <code>Values</code> property can't be changed. If you want to change the partition key values for a partition, delete and recreate the partition.</p>
     #[serde(rename = "PartitionInput")]
     pub partition_input: PartitionInput,
-    /// <p>A list of the values defining the partition.</p>
+    /// <p>List of partition key values that define the partition to update.</p>
     #[serde(rename = "PartitionValueList")]
     pub partition_value_list: Vec<String>,
     /// <p>The name of the table in which the partition to be updated is located.</p>
@@ -6309,6 +7578,67 @@ pub struct UpdatePartitionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePartitionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateRegistryInput {
+    /// <p>A description of the registry. If description is not provided, this field will not be updated.</p>
+    #[serde(rename = "Description")]
+    pub description: String,
+    /// <p>This is a wrapper structure that may contain the registry name and Amazon Resource Name (ARN).</p>
+    #[serde(rename = "RegistryId")]
+    pub registry_id: RegistryId,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateRegistryResponse {
+    /// <p>The Amazon Resource name (ARN) of the updated registry.</p>
+    #[serde(rename = "RegistryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_arn: Option<String>,
+    /// <p>The name of the updated registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateSchemaInput {
+    /// <p>The new compatibility setting for the schema.</p>
+    #[serde(rename = "Compatibility")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatibility: Option<String>,
+    /// <p>The new description for the schema.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p><p>This is a wrapper structure to contain schema identity fields. The structure contains:</p> <ul> <li> <p>SchemaId$SchemaArn: The Amazon Resource Name (ARN) of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p> </li> <li> <p>SchemaId$SchemaName: The name of the schema. One of <code>SchemaArn</code> or <code>SchemaName</code> has to be provided.</p> </li> </ul></p>
+    #[serde(rename = "SchemaId")]
+    pub schema_id: SchemaId,
+    /// <p>Version number required for check pointing. One of <code>VersionNumber</code> or <code>Compatibility</code> has to be provided.</p>
+    #[serde(rename = "SchemaVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version_number: Option<SchemaVersionNumber>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateSchemaResponse {
+    /// <p>The name of the registry that contains the schema.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the schema.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    /// <p>The name of the schema.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -6386,6 +7716,10 @@ pub struct UpdateWorkflowRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>You can use this parameter to prevent unwanted multiple updates to data, to control costs, or in some cases, to prevent exceeding the maximum number of concurrent runs of any of the component jobs. If you leave this parameter blank, there is no limit to the number of concurrent workflow runs.</p>
+    #[serde(rename = "MaxConcurrentRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrent_runs: Option<i64>,
     /// <p>Name of the workflow to be updated.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -6509,6 +7843,10 @@ pub struct Workflow {
     #[serde(rename = "LastRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_run: Option<WorkflowRun>,
+    /// <p>You can use this parameter to prevent unwanted multiple updates to data, to control costs, or in some cases, to prevent exceeding the maximum number of concurrent runs of any of the component jobs. If you leave this parameter blank, there is no limit to the number of concurrent workflow runs.</p>
+    #[serde(rename = "MaxConcurrentRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrent_runs: Option<i64>,
     /// <p>The name of the workflow representing the flow.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6537,14 +7875,22 @@ pub struct WorkflowRun {
     #[serde(rename = "CompletedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_on: Option<f64>,
+    /// <p>This error message describes any error that may have occurred in starting the workflow run. Currently the only error message is "Concurrent runs exceeded for workflow: <code>foo</code>."</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
     /// <p>The graph representing all the AWS Glue components that belong to the workflow as nodes and directed connections between them as edges.</p>
     #[serde(rename = "Graph")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub graph: Option<WorkflowGraph>,
-    /// <p>Name of the workflow which was executed.</p>
+    /// <p>Name of the workflow that was executed.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The ID of the previous workflow run.</p>
+    #[serde(rename = "PreviousRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previous_run_id: Option<String>,
     /// <p>The date and time when the workflow run was started.</p>
     #[serde(rename = "StartedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6571,7 +7917,7 @@ pub struct WorkflowRun {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowRunStatistics {
-    /// <p>Total number of Actions which have failed.</p>
+    /// <p>Total number of Actions that have failed.</p>
     #[serde(rename = "FailedActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_actions: Option<i64>,
@@ -6579,15 +7925,15 @@ pub struct WorkflowRunStatistics {
     #[serde(rename = "RunningActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_actions: Option<i64>,
-    /// <p>Total number of Actions which have stopped.</p>
+    /// <p>Total number of Actions that have stopped.</p>
     #[serde(rename = "StoppedActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped_actions: Option<i64>,
-    /// <p>Total number of Actions which have succeeded.</p>
+    /// <p>Total number of Actions that have succeeded.</p>
     #[serde(rename = "SucceededActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub succeeded_actions: Option<i64>,
-    /// <p>Total number of Actions which timed out.</p>
+    /// <p>Total number of Actions that timed out.</p>
     #[serde(rename = "TimeoutActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_actions: Option<i64>,
@@ -7207,6 +8553,64 @@ impl fmt::Display for GlueBatchStopJobRunError {
     }
 }
 impl Error for GlueBatchStopJobRunError {}
+/// Errors returned by BatchUpdatePartition
+#[derive(Debug, PartialEq)]
+pub enum BatchUpdatePartitionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl BatchUpdatePartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdatePartitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::EntityNotFound(err.msg))
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::GlueEncryption(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchUpdatePartitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchUpdatePartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchUpdatePartitionError {}
 /// Errors returned by CancelMLTaskRun
 #[derive(Debug, PartialEq)]
 pub enum CancelMLTaskRunError {
@@ -7255,6 +8659,56 @@ impl fmt::Display for CancelMLTaskRunError {
     }
 }
 impl Error for CancelMLTaskRunError {}
+/// Errors returned by CheckSchemaVersionValidity
+#[derive(Debug, PartialEq)]
+pub enum CheckSchemaVersionValidityError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl CheckSchemaVersionValidityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CheckSchemaVersionValidityError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CheckSchemaVersionValidityError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CheckSchemaVersionValidityError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CheckSchemaVersionValidityError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CheckSchemaVersionValidityError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CheckSchemaVersionValidityError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CheckSchemaVersionValidityError::InternalService(ref cause) => write!(f, "{}", cause),
+            CheckSchemaVersionValidityError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CheckSchemaVersionValidityError {}
 /// Errors returned by CreateClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateClassifierError {
@@ -7751,6 +9205,198 @@ impl fmt::Display for CreatePartitionError {
     }
 }
 impl Error for CreatePartitionError {}
+/// Errors returned by CreatePartitionIndex
+#[derive(Debug, PartialEq)]
+pub enum CreatePartitionIndexError {
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl CreatePartitionIndexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePartitionIndexError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreatePartitionIndexError::AlreadyExists(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(CreatePartitionIndexError::EntityNotFound(err.msg))
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(CreatePartitionIndexError::GlueEncryption(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreatePartitionIndexError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreatePartitionIndexError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(CreatePartitionIndexError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreatePartitionIndexError::ResourceNumberLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreatePartitionIndexError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreatePartitionIndexError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePartitionIndexError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CreatePartitionIndexError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            CreatePartitionIndexError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreatePartitionIndexError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePartitionIndexError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreatePartitionIndexError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreatePartitionIndexError {}
+/// Errors returned by CreateRegistry
+#[derive(Debug, PartialEq)]
+pub enum CreateRegistryError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl CreateRegistryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegistryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateRegistryError::AccessDenied(err.msg))
+                }
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateRegistryError::AlreadyExists(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreateRegistryError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateRegistryError::InvalidInput(err.msg))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(CreateRegistryError::ResourceNumberLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateRegistryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateRegistryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateRegistryError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateRegistryError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateRegistryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateRegistryError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateRegistryError {}
+/// Errors returned by CreateSchema
+#[derive(Debug, PartialEq)]
+pub enum CreateSchemaError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl CreateSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSchemaError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateSchemaError::AccessDenied(err.msg))
+                }
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateSchemaError::AlreadyExists(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(CreateSchemaError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreateSchemaError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateSchemaError::InvalidInput(err.msg))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(CreateSchemaError::ResourceNumberLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateSchemaError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateSchemaError {}
 /// Errors returned by CreateScript
 #[derive(Debug, PartialEq)]
 pub enum CreateScriptError {
@@ -8659,6 +10305,120 @@ impl fmt::Display for DeletePartitionError {
     }
 }
 impl Error for DeletePartitionError {}
+/// Errors returned by DeletePartitionIndex
+#[derive(Debug, PartialEq)]
+pub enum DeletePartitionIndexError {
+    /// <p>The <code>CreatePartitions</code> API was called on a table that has indexes enabled. </p>
+    Conflict(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl DeletePartitionIndexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePartitionIndexError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeletePartitionIndexError::Conflict(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(DeletePartitionIndexError::EntityNotFound(err.msg))
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(DeletePartitionIndexError::GlueEncryption(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(DeletePartitionIndexError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeletePartitionIndexError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(DeletePartitionIndexError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeletePartitionIndexError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeletePartitionIndexError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeletePartitionIndexError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeletePartitionIndexError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            DeletePartitionIndexError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeletePartitionIndexError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeletePartitionIndexError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeletePartitionIndexError {}
+/// Errors returned by DeleteRegistry
+#[derive(Debug, PartialEq)]
+pub enum DeleteRegistryError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl DeleteRegistryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegistryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteRegistryError::AccessDenied(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteRegistryError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(DeleteRegistryError::EntityNotFound(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteRegistryError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteRegistryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteRegistryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteRegistryError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteRegistryError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRegistryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteRegistryError {}
 /// Errors returned by DeleteResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourcePolicyError {
@@ -8719,6 +10479,104 @@ impl fmt::Display for DeleteResourcePolicyError {
     }
 }
 impl Error for DeleteResourcePolicyError {}
+/// Errors returned by DeleteSchema
+#[derive(Debug, PartialEq)]
+pub enum DeleteSchemaError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl DeleteSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteSchemaError::AccessDenied(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteSchemaError::ConcurrentModification(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(DeleteSchemaError::EntityNotFound(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteSchemaError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteSchemaError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteSchemaError {}
+/// Errors returned by DeleteSchemaVersions
+#[derive(Debug, PartialEq)]
+pub enum DeleteSchemaVersionsError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl DeleteSchemaVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaVersionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteSchemaVersionsError::AccessDenied(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteSchemaVersionsError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(DeleteSchemaVersionsError::EntityNotFound(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteSchemaVersionsError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteSchemaVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteSchemaVersionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaVersionsError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaVersionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaVersionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteSchemaVersionsError {}
 /// Errors returned by DeleteSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteSecurityConfigurationError {
@@ -10297,6 +12155,62 @@ impl fmt::Display for GetPartitionError {
     }
 }
 impl Error for GetPartitionError {}
+/// Errors returned by GetPartitionIndexes
+#[derive(Debug, PartialEq)]
+pub enum GetPartitionIndexesError {
+    /// <p>The <code>CreatePartitions</code> API was called on a table that has indexes enabled. </p>
+    Conflict(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetPartitionIndexesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionIndexesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::Conflict(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetPartitionIndexesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPartitionIndexesError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetPartitionIndexesError {}
 /// Errors returned by GetPartitions
 #[derive(Debug, PartialEq)]
 pub enum GetPartitionsError {
@@ -10393,6 +12307,54 @@ impl fmt::Display for GetPlanError {
     }
 }
 impl Error for GetPlanError {}
+/// Errors returned by GetRegistry
+#[derive(Debug, PartialEq)]
+pub enum GetRegistryError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl GetRegistryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegistryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetRegistryError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetRegistryError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetRegistryError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetRegistryError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetRegistryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetRegistryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRegistryError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetRegistryError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetRegistryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetRegistryError {}
 /// Errors returned by GetResourcePolicies
 #[derive(Debug, PartialEq)]
 pub enum GetResourcePoliciesError {
@@ -10491,6 +12453,206 @@ impl fmt::Display for GetResourcePolicyError {
     }
 }
 impl Error for GetResourcePolicyError {}
+/// Errors returned by GetSchema
+#[derive(Debug, PartialEq)]
+pub enum GetSchemaError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl GetSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetSchemaError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetSchemaError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetSchemaError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetSchemaError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSchemaError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSchemaError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetSchemaError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSchemaError {}
+/// Errors returned by GetSchemaByDefinition
+#[derive(Debug, PartialEq)]
+pub enum GetSchemaByDefinitionError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl GetSchemaByDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaByDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetSchemaByDefinitionError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetSchemaByDefinitionError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetSchemaByDefinitionError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetSchemaByDefinitionError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSchemaByDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSchemaByDefinitionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSchemaByDefinitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetSchemaByDefinitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetSchemaByDefinitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSchemaByDefinitionError {}
+/// Errors returned by GetSchemaVersion
+#[derive(Debug, PartialEq)]
+pub enum GetSchemaVersionError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl GetSchemaVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetSchemaVersionError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetSchemaVersionError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetSchemaVersionError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetSchemaVersionError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSchemaVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSchemaVersionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSchemaVersionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetSchemaVersionError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetSchemaVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSchemaVersionError {}
+/// Errors returned by GetSchemaVersionsDiff
+#[derive(Debug, PartialEq)]
+pub enum GetSchemaVersionsDiffError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl GetSchemaVersionsDiffError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaVersionsDiffError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetSchemaVersionsDiffError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetSchemaVersionsDiffError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetSchemaVersionsDiffError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetSchemaVersionsDiffError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSchemaVersionsDiffError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSchemaVersionsDiffError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSchemaVersionsDiffError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetSchemaVersionsDiffError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetSchemaVersionsDiffError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSchemaVersionsDiffError {}
 /// Errors returned by GetSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetSecurityConfigurationError {
@@ -11501,6 +13663,144 @@ impl fmt::Display for ListMLTransformsError {
     }
 }
 impl Error for ListMLTransformsError {}
+/// Errors returned by ListRegistries
+#[derive(Debug, PartialEq)]
+pub enum ListRegistriesError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl ListRegistriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegistriesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListRegistriesError::AccessDenied(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListRegistriesError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListRegistriesError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListRegistriesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListRegistriesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListRegistriesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListRegistriesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListRegistriesError {}
+/// Errors returned by ListSchemaVersions
+#[derive(Debug, PartialEq)]
+pub enum ListSchemaVersionsError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl ListSchemaVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemaVersionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListSchemaVersionsError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ListSchemaVersionsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListSchemaVersionsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListSchemaVersionsError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListSchemaVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSchemaVersionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListSchemaVersionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListSchemaVersionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListSchemaVersionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSchemaVersionsError {}
+/// Errors returned by ListSchemas
+#[derive(Debug, PartialEq)]
+pub enum ListSchemasError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl ListSchemasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemasError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListSchemasError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ListSchemasError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListSchemasError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListSchemasError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListSchemasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSchemasError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListSchemasError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListSchemasError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListSchemasError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSchemasError {}
 /// Errors returned by ListTriggers
 #[derive(Debug, PartialEq)]
 pub enum ListTriggersError {
@@ -11703,6 +14003,72 @@ impl fmt::Display for PutResourcePolicyError {
     }
 }
 impl Error for PutResourcePolicyError {}
+/// Errors returned by PutSchemaVersionMetadata
+#[derive(Debug, PartialEq)]
+pub enum PutSchemaVersionMetadataError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl PutSchemaVersionMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSchemaVersionMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(PutSchemaVersionMetadataError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(PutSchemaVersionMetadataError::AlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(PutSchemaVersionMetadataError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(PutSchemaVersionMetadataError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        PutSchemaVersionMetadataError::ResourceNumberLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutSchemaVersionMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutSchemaVersionMetadataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutSchemaVersionMetadataError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            PutSchemaVersionMetadataError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            PutSchemaVersionMetadataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutSchemaVersionMetadataError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutSchemaVersionMetadataError {}
 /// Errors returned by PutWorkflowRunProperties
 #[derive(Debug, PartialEq)]
 pub enum PutWorkflowRunPropertiesError {
@@ -11787,6 +14153,176 @@ impl fmt::Display for PutWorkflowRunPropertiesError {
     }
 }
 impl Error for PutWorkflowRunPropertiesError {}
+/// Errors returned by QuerySchemaVersionMetadata
+#[derive(Debug, PartialEq)]
+pub enum QuerySchemaVersionMetadataError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl QuerySchemaVersionMetadataError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<QuerySchemaVersionMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(QuerySchemaVersionMetadataError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(QuerySchemaVersionMetadataError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(QuerySchemaVersionMetadataError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for QuerySchemaVersionMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            QuerySchemaVersionMetadataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            QuerySchemaVersionMetadataError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            QuerySchemaVersionMetadataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for QuerySchemaVersionMetadataError {}
+/// Errors returned by RegisterSchemaVersion
+#[derive(Debug, PartialEq)]
+pub enum RegisterSchemaVersionError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl RegisterSchemaVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterSchemaVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(RegisterSchemaVersionError::AccessDenied(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        RegisterSchemaVersionError::ConcurrentModification(err.msg),
+                    )
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(RegisterSchemaVersionError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(RegisterSchemaVersionError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(RegisterSchemaVersionError::InvalidInput(err.msg))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        RegisterSchemaVersionError::ResourceNumberLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RegisterSchemaVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RegisterSchemaVersionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RegisterSchemaVersionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            RegisterSchemaVersionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterSchemaVersionError::InternalService(ref cause) => write!(f, "{}", cause),
+            RegisterSchemaVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RegisterSchemaVersionError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for RegisterSchemaVersionError {}
+/// Errors returned by RemoveSchemaVersionMetadata
+#[derive(Debug, PartialEq)]
+pub enum RemoveSchemaVersionMetadataError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl RemoveSchemaVersionMetadataError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveSchemaVersionMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(RemoveSchemaVersionMetadataError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(RemoveSchemaVersionMetadataError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(RemoveSchemaVersionMetadataError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemoveSchemaVersionMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveSchemaVersionMetadataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RemoveSchemaVersionMetadataError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveSchemaVersionMetadataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RemoveSchemaVersionMetadataError {}
 /// Errors returned by ResetJobBookmark
 #[derive(Debug, PartialEq)]
 pub enum ResetJobBookmarkError {
@@ -11835,6 +14371,70 @@ impl fmt::Display for ResetJobBookmarkError {
     }
 }
 impl Error for ResetJobBookmarkError {}
+/// Errors returned by ResumeWorkflowRun
+#[derive(Debug, PartialEq)]
+pub enum ResumeWorkflowRunError {
+    /// <p>Too many jobs are being run concurrently.</p>
+    ConcurrentRunsExceeded(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The workflow is in an invalid state to perform a requested operation.</p>
+    IllegalWorkflowState(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ResumeWorkflowRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeWorkflowRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentRunsExceededException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::ConcurrentRunsExceeded(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::EntityNotFound(err.msg))
+                }
+                "IllegalWorkflowStateException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::IllegalWorkflowState(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ResumeWorkflowRunError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ResumeWorkflowRunError::ConcurrentRunsExceeded(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::IllegalWorkflowState(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ResumeWorkflowRunError {}
 /// Errors returned by SearchTables
 #[derive(Debug, PartialEq)]
 pub enum SearchTablesError {
@@ -13373,6 +15973,116 @@ impl fmt::Display for UpdatePartitionError {
     }
 }
 impl Error for UpdatePartitionError {}
+/// Errors returned by UpdateRegistry
+#[derive(Debug, PartialEq)]
+pub enum UpdateRegistryError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl UpdateRegistryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegistryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateRegistryError::AccessDenied(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateRegistryError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UpdateRegistryError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateRegistryError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateRegistryError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateRegistryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateRegistryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateRegistryError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateRegistryError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRegistryError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateRegistryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateRegistryError {}
+/// Errors returned by UpdateSchema
+#[derive(Debug, PartialEq)]
+pub enum UpdateSchemaError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+}
+
+impl UpdateSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSchemaError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateSchemaError::AccessDenied(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateSchemaError::ConcurrentModification(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UpdateSchemaError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateSchemaError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateSchemaError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateSchemaError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateSchemaError {}
 /// Errors returned by UpdateTable
 #[derive(Debug, PartialEq)]
 pub enum UpdateTableError {
@@ -13692,11 +16402,23 @@ pub trait Glue {
         input: BatchStopJobRunRequest,
     ) -> Result<BatchStopJobRunResponse, RusotoError<GlueBatchStopJobRunError>>;
 
+    /// <p>Updates one or more partitions in a batch operation.</p>
+    async fn batch_update_partition(
+        &self,
+        input: BatchUpdatePartitionRequest,
+    ) -> Result<BatchUpdatePartitionResponse, RusotoError<BatchUpdatePartitionError>>;
+
     /// <p>Cancels (stops) a task run. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can cancel a machine learning task run at any time by calling <code>CancelMLTaskRun</code> with a task run's parent transform's <code>TransformID</code> and the task run's <code>TaskRunId</code>. </p>
     async fn cancel_ml_task_run(
         &self,
         input: CancelMLTaskRunRequest,
     ) -> Result<CancelMLTaskRunResponse, RusotoError<CancelMLTaskRunError>>;
+
+    /// <p>Validates the supplied schema. This call has no side effects, it simply validates using the supplied schema using <code>DataFormat</code> as the format. Since it does not take a schema set name, no compatibility checks are performed.</p>
+    async fn check_schema_version_validity(
+        &self,
+        input: CheckSchemaVersionValidityInput,
+    ) -> Result<CheckSchemaVersionValidityResponse, RusotoError<CheckSchemaVersionValidityError>>;
 
     /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
     async fn create_classifier(
@@ -13746,6 +16468,24 @@ pub trait Glue {
         input: CreatePartitionRequest,
     ) -> Result<CreatePartitionResponse, RusotoError<CreatePartitionError>>;
 
+    /// <p>Creates a specified partition index in an existing table.</p>
+    async fn create_partition_index(
+        &self,
+        input: CreatePartitionIndexRequest,
+    ) -> Result<CreatePartitionIndexResponse, RusotoError<CreatePartitionIndexError>>;
+
+    /// <p>Creates a new registry which may be used to hold a collection of schemas.</p>
+    async fn create_registry(
+        &self,
+        input: CreateRegistryInput,
+    ) -> Result<CreateRegistryResponse, RusotoError<CreateRegistryError>>;
+
+    /// <p>Creates a new schema set and registers the schema definition. Returns an error if the schema set already exists without actually registering the version.</p> <p>When the schema set is created, a version checkpoint will be set to the first version. Compatibility mode "DISABLED" restricts any additional schema versions from being added after the first schema version. For all other compatibility modes, validation of compatibility settings will be applied only from the second version onwards when the <code>RegisterSchemaVersion</code> API is used.</p> <p>When this API is called without a <code>RegistryId</code>, this will create an entry for a "default-registry" in the registry database tables, if it is not already present.</p>
+    async fn create_schema(
+        &self,
+        input: CreateSchemaInput,
+    ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>>;
+
     /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
     async fn create_script(
         &self,
@@ -13788,7 +16528,7 @@ pub trait Glue {
         input: DeleteClassifierRequest,
     ) -> Result<DeleteClassifierResponse, RusotoError<DeleteClassifierError>>;
 
-    /// <p>Delete the partition column statistics of a column.</p>
+    /// <p>Delete the partition column statistics of a column.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeletePartition</code>.</p>
     async fn delete_column_statistics_for_partition(
         &self,
         input: DeleteColumnStatisticsForPartitionRequest,
@@ -13797,7 +16537,7 @@ pub trait Glue {
         RusotoError<DeleteColumnStatisticsForPartitionError>,
     >;
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeleteTable</code>.</p>
     async fn delete_column_statistics_for_table(
         &self,
         input: DeleteColumnStatisticsForTableRequest,
@@ -13848,11 +16588,35 @@ pub trait Glue {
         input: DeletePartitionRequest,
     ) -> Result<DeletePartitionResponse, RusotoError<DeletePartitionError>>;
 
+    /// <p>Deletes a specified partition index from an existing table.</p>
+    async fn delete_partition_index(
+        &self,
+        input: DeletePartitionIndexRequest,
+    ) -> Result<DeletePartitionIndexResponse, RusotoError<DeletePartitionIndexError>>;
+
+    /// <p>Delete the entire registry including schema and all of its versions. To get the status of the delete operation, you can call the <code>GetRegistry</code> API after the asynchronous call. Deleting a registry will disable all online operations for the registry such as the <code>UpdateRegistry</code>, <code>CreateSchema</code>, <code>UpdateSchema</code>, and <code>RegisterSchemaVersion</code> APIs. </p>
+    async fn delete_registry(
+        &self,
+        input: DeleteRegistryInput,
+    ) -> Result<DeleteRegistryResponse, RusotoError<DeleteRegistryError>>;
+
     /// <p>Deletes a specified policy.</p>
     async fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyRequest,
     ) -> Result<DeleteResourcePolicyResponse, RusotoError<DeleteResourcePolicyError>>;
+
+    /// <p>Deletes the entire schema set, including the schema set and all of its versions. To get the status of the delete operation, you can call <code>GetSchema</code> API after the asynchronous call. Deleting a registry will disable all online operations for the schema, such as the <code>GetSchemaByDefinition</code>, and <code>RegisterSchemaVersion</code> APIs.</p>
+    async fn delete_schema(
+        &self,
+        input: DeleteSchemaInput,
+    ) -> Result<DeleteSchemaResponse, RusotoError<DeleteSchemaError>>;
+
+    /// <p>Remove versions from the specified schema. A version number or range may be supplied. If the compatibility mode forbids deleting of a version that is necessary, such as BACKWARDS_FULL, an error is returned. Calling the <code>GetSchemaVersions</code> API after this call will list the status of the deleted versions.</p> <p>When the range of version numbers contain check pointed version, the API will return a 409 conflict and will not proceed with the deletion. You have to remove the checkpoint first using the <code>DeleteSchemaCheckpoint</code> API before using this API.</p> <p>You cannot use the <code>DeleteSchemaVersions</code> API to delete the first schema version in the schema set. The first schema version can only be deleted by the <code>DeleteSchema</code> API. This operation will also delete the attached <code>SchemaVersionMetadata</code> under the schema versions. Hard deletes will be enforced on the database.</p> <p>If the compatibility mode forbids deleting of a version that is necessary, such as BACKWARDS_FULL, an error is returned.</p>
+    async fn delete_schema_versions(
+        &self,
+        input: DeleteSchemaVersionsInput,
+    ) -> Result<DeleteSchemaVersionsResponse, RusotoError<DeleteSchemaVersionsError>>;
 
     /// <p>Deletes a specified security configuration.</p>
     async fn delete_security_configuration(
@@ -13908,7 +16672,7 @@ pub trait Glue {
         input: GetClassifiersRequest,
     ) -> Result<GetClassifiersResponse, RusotoError<GetClassifiersError>>;
 
-    /// <p>Retrieves partition statistics of columns.</p>
+    /// <p>Retrieves partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetPartition</code>.</p>
     async fn get_column_statistics_for_partition(
         &self,
         input: GetColumnStatisticsForPartitionRequest,
@@ -13917,7 +16681,7 @@ pub trait Glue {
         RusotoError<GetColumnStatisticsForPartitionError>,
     >;
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetTable</code>.</p>
     async fn get_column_statistics_for_table(
         &self,
         input: GetColumnStatisticsForTableRequest,
@@ -14058,6 +16822,12 @@ pub trait Glue {
         input: GetPartitionRequest,
     ) -> Result<GetPartitionResponse, RusotoError<GetPartitionError>>;
 
+    /// <p>Retrieves the partition indexes associated with a table.</p>
+    async fn get_partition_indexes(
+        &self,
+        input: GetPartitionIndexesRequest,
+    ) -> Result<GetPartitionIndexesResponse, RusotoError<GetPartitionIndexesError>>;
+
     /// <p>Retrieves information about the partitions in a table.</p>
     async fn get_partitions(
         &self,
@@ -14070,7 +16840,13 @@ pub trait Glue {
         input: GetPlanRequest,
     ) -> Result<GetPlanResponse, RusotoError<GetPlanError>>;
 
-    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p>
+    /// <p>Describes the specified registry in detail.</p>
+    async fn get_registry(
+        &self,
+        input: GetRegistryInput,
+    ) -> Result<GetRegistryResponse, RusotoError<GetRegistryError>>;
+
+    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p> <p>This operation also returns the Data Catalog resource policy. However, if you enabled metadata encryption in Data Catalog settings, and you do not have permission on the AWS KMS key, the operation can't return the Data Catalog resource policy.</p>
     async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
@@ -14081,6 +16857,30 @@ pub trait Glue {
         &self,
         input: GetResourcePolicyRequest,
     ) -> Result<GetResourcePolicyResponse, RusotoError<GetResourcePolicyError>>;
+
+    /// <p>Describes the specified schema in detail.</p>
+    async fn get_schema(
+        &self,
+        input: GetSchemaInput,
+    ) -> Result<GetSchemaResponse, RusotoError<GetSchemaError>>;
+
+    /// <p>Retrieves a schema by the <code>SchemaDefinition</code>. The schema definition is sent to the Schema Registry, canonicalized, and hashed. If the hash is matched within the scope of the <code>SchemaName</code> or ARN (or the default registry, if none is supplied), that schema’s metadata is returned. Otherwise, a 404 or NotFound error is returned. Schema versions in <code>Deleted</code> statuses will not be included in the results.</p>
+    async fn get_schema_by_definition(
+        &self,
+        input: GetSchemaByDefinitionInput,
+    ) -> Result<GetSchemaByDefinitionResponse, RusotoError<GetSchemaByDefinitionError>>;
+
+    /// <p>Get the specified schema by its unique ID assigned when a version of the schema is created or registered. Schema versions in Deleted status will not be included in the results.</p>
+    async fn get_schema_version(
+        &self,
+        input: GetSchemaVersionInput,
+    ) -> Result<GetSchemaVersionResponse, RusotoError<GetSchemaVersionError>>;
+
+    /// <p>Fetches the schema version difference in the specified difference type between two stored schema versions in the Schema Registry.</p> <p>This API allows you to compare two schema versions between two schema definitions under the same schema.</p>
+    async fn get_schema_versions_diff(
+        &self,
+        input: GetSchemaVersionsDiffInput,
+    ) -> Result<GetSchemaVersionsDiffResponse, RusotoError<GetSchemaVersionsDiffError>>;
 
     /// <p>Retrieves a specified security configuration.</p>
     async fn get_security_configuration(
@@ -14202,6 +17002,24 @@ pub trait Glue {
         input: ListMLTransformsRequest,
     ) -> Result<ListMLTransformsResponse, RusotoError<ListMLTransformsError>>;
 
+    /// <p>Returns a list of registries that you have created, with minimal registry information. Registries in the <code>Deleting</code> status will not be included in the results. Empty results will be returned if there are no registries available.</p>
+    async fn list_registries(
+        &self,
+        input: ListRegistriesInput,
+    ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>>;
+
+    /// <p>Returns a list of schema versions that you have created, with minimal information. Schema versions in Deleted status will not be included in the results. Empty results will be returned if there are no schema versions available.</p>
+    async fn list_schema_versions(
+        &self,
+        input: ListSchemaVersionsInput,
+    ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>>;
+
+    /// <p>Returns a list of schemas with minimal details. Schemas in Deleting status will not be included in the results. Empty results will be returned if there are no schemas available.</p> <p>When the <code>RegistryId</code> is not provided, all the schemas across registries will be part of the API response.</p>
+    async fn list_schemas(
+        &self,
+        input: ListSchemasInput,
+    ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>>;
+
     /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     async fn list_triggers(
         &self,
@@ -14229,17 +17047,47 @@ pub trait Glue {
         input: PutResourcePolicyRequest,
     ) -> Result<PutResourcePolicyResponse, RusotoError<PutResourcePolicyError>>;
 
+    /// <p>Puts the metadata key value pair for a specified schema version ID. A maximum of 10 key value pairs will be allowed per schema version. They can be added over one or more calls.</p>
+    async fn put_schema_version_metadata(
+        &self,
+        input: PutSchemaVersionMetadataInput,
+    ) -> Result<PutSchemaVersionMetadataResponse, RusotoError<PutSchemaVersionMetadataError>>;
+
     /// <p>Puts the specified workflow run properties for the given workflow run. If a property already exists for the specified run, then it overrides the value otherwise adds the property to existing properties.</p>
     async fn put_workflow_run_properties(
         &self,
         input: PutWorkflowRunPropertiesRequest,
     ) -> Result<PutWorkflowRunPropertiesResponse, RusotoError<PutWorkflowRunPropertiesError>>;
 
+    /// <p>Queries for the schema version metadata information. </p>
+    async fn query_schema_version_metadata(
+        &self,
+        input: QuerySchemaVersionMetadataInput,
+    ) -> Result<QuerySchemaVersionMetadataResponse, RusotoError<QuerySchemaVersionMetadataError>>;
+
+    /// <p>Adds a new version to the existing schema. Returns an error if new version of schema does not meet the compatibility requirements of the schema set. This API will not create a new schema set and will return a 404 error if the schema set is not already present in the Schema Registry.</p> <p>If this is the first schema definition to be registered in the Schema Registry, this API will store the schema version and return immediately. Otherwise, this call has the potential to run longer than other operations due to compatibility modes. You can call the <code>GetSchemaVersion</code> API with the <code>SchemaVersionId</code> to check compatibility modes.</p> <p>If the same schema definition is already stored in Schema Registry as a version, the schema ID of the existing schema is returned to the caller.</p>
+    async fn register_schema_version(
+        &self,
+        input: RegisterSchemaVersionInput,
+    ) -> Result<RegisterSchemaVersionResponse, RusotoError<RegisterSchemaVersionError>>;
+
+    /// <p>Removes a key value pair from the schema version metadata for the specified schema version ID.</p>
+    async fn remove_schema_version_metadata(
+        &self,
+        input: RemoveSchemaVersionMetadataInput,
+    ) -> Result<RemoveSchemaVersionMetadataResponse, RusotoError<RemoveSchemaVersionMetadataError>>;
+
     /// <p>Resets a bookmark entry.</p>
     async fn reset_job_bookmark(
         &self,
         input: ResetJobBookmarkRequest,
     ) -> Result<ResetJobBookmarkResponse, RusotoError<ResetJobBookmarkError>>;
+
+    /// <p>Restarts selected nodes of a previous partially completed workflow run and resumes the workflow run. The selected nodes and all nodes that are downstream from the selected nodes are run.</p>
+    async fn resume_workflow_run(
+        &self,
+        input: ResumeWorkflowRunRequest,
+    ) -> Result<ResumeWorkflowRunResponse, RusotoError<ResumeWorkflowRunError>>;
 
     /// <p>Searches a set of tables based on properties in the table metadata as well as on the parent database. You can search against text or filter conditions. </p> <p>You can only get tables that you have access to based on the security policies defined in Lake Formation. You need at least a read-only access to the table for it to be returned. If you do not have access to all the columns in the table, these columns will not be searched against when returning the list of tables back to you. If you have access to the columns but not the data in the columns, those columns and the associated metadata for those columns will be included in the search. </p>
     async fn search_tables(
@@ -14346,7 +17194,7 @@ pub trait Glue {
         input: UpdateClassifierRequest,
     ) -> Result<UpdateClassifierResponse, RusotoError<UpdateClassifierError>>;
 
-    /// <p>Creates or updates partition statistics of columns.</p>
+    /// <p>Creates or updates partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdatePartition</code>.</p>
     async fn update_column_statistics_for_partition(
         &self,
         input: UpdateColumnStatisticsForPartitionRequest,
@@ -14355,7 +17203,7 @@ pub trait Glue {
         RusotoError<UpdateColumnStatisticsForPartitionError>,
     >;
 
-    /// <p>Creates or updates table statistics of columns.</p>
+    /// <p>Creates or updates table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdateTable</code>.</p>
     async fn update_column_statistics_for_table(
         &self,
         input: UpdateColumnStatisticsForTableRequest,
@@ -14411,6 +17259,18 @@ pub trait Glue {
         &self,
         input: UpdatePartitionRequest,
     ) -> Result<UpdatePartitionResponse, RusotoError<UpdatePartitionError>>;
+
+    /// <p>Updates an existing registry which is used to hold a collection of schemas. The updated properties relate to the registry, and do not modify any of the schemas within the registry. </p>
+    async fn update_registry(
+        &self,
+        input: UpdateRegistryInput,
+    ) -> Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>>;
+
+    /// <p>Updates the description, compatibility setting, or version checkpoint for a schema set.</p> <p>For updating the compatibility setting, the call will not validate compatibility for the entire set of schema versions with the new compatibility setting. If the value for <code>Compatibility</code> is provided, the <code>VersionNumber</code> (a checkpoint) is also required. The API will validate the checkpoint version number for consistency.</p> <p>If the value for the <code>VersionNumber</code> (checkpoint) is provided, <code>Compatibility</code> is optional and this can be used to set/reset a checkpoint for the schema.</p> <p>This update will happen only if the schema is in the AVAILABLE state.</p>
+    async fn update_schema(
+        &self,
+        input: UpdateSchemaInput,
+    ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>>;
 
     /// <p>Updates a metadata table in the Data Catalog.</p>
     async fn update_table(
@@ -14697,6 +17557,25 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<BatchStopJobRunResponse, _>()
     }
 
+    /// <p>Updates one or more partitions in a batch operation.</p>
+    async fn batch_update_partition(
+        &self,
+        input: BatchUpdatePartitionRequest,
+    ) -> Result<BatchUpdatePartitionResponse, RusotoError<BatchUpdatePartitionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.BatchUpdatePartition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, BatchUpdatePartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchUpdatePartitionResponse, _>()
+    }
+
     /// <p>Cancels (stops) a task run. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can cancel a machine learning task run at any time by calling <code>CancelMLTaskRun</code> with a task run's parent transform's <code>TransformID</code> and the task run's <code>TaskRunId</code>. </p>
     async fn cancel_ml_task_run(
         &self,
@@ -14713,6 +17592,26 @@ impl Glue for GlueClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CancelMLTaskRunResponse, _>()
+    }
+
+    /// <p>Validates the supplied schema. This call has no side effects, it simply validates using the supplied schema using <code>DataFormat</code> as the format. Since it does not take a schema set name, no compatibility checks are performed.</p>
+    async fn check_schema_version_validity(
+        &self,
+        input: CheckSchemaVersionValidityInput,
+    ) -> Result<CheckSchemaVersionValidityResponse, RusotoError<CheckSchemaVersionValidityError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.CheckSchemaVersionValidity");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CheckSchemaVersionValidityError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CheckSchemaVersionValidityResponse, _>()
     }
 
     /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
@@ -14859,6 +17758,61 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreatePartitionResponse, _>()
     }
 
+    /// <p>Creates a specified partition index in an existing table.</p>
+    async fn create_partition_index(
+        &self,
+        input: CreatePartitionIndexRequest,
+    ) -> Result<CreatePartitionIndexResponse, RusotoError<CreatePartitionIndexError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.CreatePartitionIndex");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreatePartitionIndexError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreatePartitionIndexResponse, _>()
+    }
+
+    /// <p>Creates a new registry which may be used to hold a collection of schemas.</p>
+    async fn create_registry(
+        &self,
+        input: CreateRegistryInput,
+    ) -> Result<CreateRegistryResponse, RusotoError<CreateRegistryError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.CreateRegistry");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateRegistryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateRegistryResponse, _>()
+    }
+
+    /// <p>Creates a new schema set and registers the schema definition. Returns an error if the schema set already exists without actually registering the version.</p> <p>When the schema set is created, a version checkpoint will be set to the first version. Compatibility mode "DISABLED" restricts any additional schema versions from being added after the first schema version. For all other compatibility modes, validation of compatibility settings will be applied only from the second version onwards when the <code>RegisterSchemaVersion</code> API is used.</p> <p>When this API is called without a <code>RegistryId</code>, this will create an entry for a "default-registry" in the registry database tables, if it is not already present.</p>
+    async fn create_schema(
+        &self,
+        input: CreateSchemaInput,
+    ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.CreateSchema");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateSchemaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateSchemaResponse, _>()
+    }
+
     /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
     async fn create_script(
         &self,
@@ -14989,7 +17943,7 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteClassifierResponse, _>()
     }
 
-    /// <p>Delete the partition column statistics of a column.</p>
+    /// <p>Delete the partition column statistics of a column.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeletePartition</code>.</p>
     async fn delete_column_statistics_for_partition(
         &self,
         input: DeleteColumnStatisticsForPartitionRequest,
@@ -15014,7 +17968,7 @@ impl Glue for GlueClient {
             .deserialize::<DeleteColumnStatisticsForPartitionResponse, _>()
     }
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeleteTable</code>.</p>
     async fn delete_column_statistics_for_table(
         &self,
         input: DeleteColumnStatisticsForTableRequest,
@@ -15162,6 +18116,43 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeletePartitionResponse, _>()
     }
 
+    /// <p>Deletes a specified partition index from an existing table.</p>
+    async fn delete_partition_index(
+        &self,
+        input: DeletePartitionIndexRequest,
+    ) -> Result<DeletePartitionIndexResponse, RusotoError<DeletePartitionIndexError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.DeletePartitionIndex");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeletePartitionIndexError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeletePartitionIndexResponse, _>()
+    }
+
+    /// <p>Delete the entire registry including schema and all of its versions. To get the status of the delete operation, you can call the <code>GetRegistry</code> API after the asynchronous call. Deleting a registry will disable all online operations for the registry such as the <code>UpdateRegistry</code>, <code>CreateSchema</code>, <code>UpdateSchema</code>, and <code>RegisterSchemaVersion</code> APIs. </p>
+    async fn delete_registry(
+        &self,
+        input: DeleteRegistryInput,
+    ) -> Result<DeleteRegistryResponse, RusotoError<DeleteRegistryError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.DeleteRegistry");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteRegistryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteRegistryResponse, _>()
+    }
+
     /// <p>Deletes a specified policy.</p>
     async fn delete_resource_policy(
         &self,
@@ -15179,6 +18170,43 @@ impl Glue for GlueClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DeleteResourcePolicyResponse, _>()
+    }
+
+    /// <p>Deletes the entire schema set, including the schema set and all of its versions. To get the status of the delete operation, you can call <code>GetSchema</code> API after the asynchronous call. Deleting a registry will disable all online operations for the schema, such as the <code>GetSchemaByDefinition</code>, and <code>RegisterSchemaVersion</code> APIs.</p>
+    async fn delete_schema(
+        &self,
+        input: DeleteSchemaInput,
+    ) -> Result<DeleteSchemaResponse, RusotoError<DeleteSchemaError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.DeleteSchema");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteSchemaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteSchemaResponse, _>()
+    }
+
+    /// <p>Remove versions from the specified schema. A version number or range may be supplied. If the compatibility mode forbids deleting of a version that is necessary, such as BACKWARDS_FULL, an error is returned. Calling the <code>GetSchemaVersions</code> API after this call will list the status of the deleted versions.</p> <p>When the range of version numbers contain check pointed version, the API will return a 409 conflict and will not proceed with the deletion. You have to remove the checkpoint first using the <code>DeleteSchemaCheckpoint</code> API before using this API.</p> <p>You cannot use the <code>DeleteSchemaVersions</code> API to delete the first schema version in the schema set. The first schema version can only be deleted by the <code>DeleteSchema</code> API. This operation will also delete the attached <code>SchemaVersionMetadata</code> under the schema versions. Hard deletes will be enforced on the database.</p> <p>If the compatibility mode forbids deleting of a version that is necessary, such as BACKWARDS_FULL, an error is returned.</p>
+    async fn delete_schema_versions(
+        &self,
+        input: DeleteSchemaVersionsInput,
+    ) -> Result<DeleteSchemaVersionsResponse, RusotoError<DeleteSchemaVersionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.DeleteSchemaVersions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteSchemaVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteSchemaVersionsResponse, _>()
     }
 
     /// <p>Deletes a specified security configuration.</p>
@@ -15348,7 +18376,7 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetClassifiersResponse, _>()
     }
 
-    /// <p>Retrieves partition statistics of columns.</p>
+    /// <p>Retrieves partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetPartition</code>.</p>
     async fn get_column_statistics_for_partition(
         &self,
         input: GetColumnStatisticsForPartitionRequest,
@@ -15370,7 +18398,7 @@ impl Glue for GlueClient {
             .deserialize::<GetColumnStatisticsForPartitionResponse, _>()
     }
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetTable</code>.</p>
     async fn get_column_statistics_for_table(
         &self,
         input: GetColumnStatisticsForTableRequest,
@@ -15793,6 +18821,24 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionResponse, _>()
     }
 
+    /// <p>Retrieves the partition indexes associated with a table.</p>
+    async fn get_partition_indexes(
+        &self,
+        input: GetPartitionIndexesRequest,
+    ) -> Result<GetPartitionIndexesResponse, RusotoError<GetPartitionIndexesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.GetPartitionIndexes");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetPartitionIndexesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionIndexesResponse, _>()
+    }
+
     /// <p>Retrieves information about the partitions in a table.</p>
     async fn get_partitions(
         &self,
@@ -15829,7 +18875,25 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetPlanResponse, _>()
     }
 
-    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p>
+    /// <p>Describes the specified registry in detail.</p>
+    async fn get_registry(
+        &self,
+        input: GetRegistryInput,
+    ) -> Result<GetRegistryResponse, RusotoError<GetRegistryError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.GetRegistry");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetRegistryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRegistryResponse, _>()
+    }
+
+    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p> <p>This operation also returns the Data Catalog resource policy. However, if you enabled metadata encryption in Data Catalog settings, and you do not have permission on the AWS KMS key, the operation can't return the Data Catalog resource policy.</p>
     async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
@@ -15863,6 +18927,80 @@ impl Glue for GlueClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetResourcePolicyResponse, _>()
+    }
+
+    /// <p>Describes the specified schema in detail.</p>
+    async fn get_schema(
+        &self,
+        input: GetSchemaInput,
+    ) -> Result<GetSchemaResponse, RusotoError<GetSchemaError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.GetSchema");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetSchemaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetSchemaResponse, _>()
+    }
+
+    /// <p>Retrieves a schema by the <code>SchemaDefinition</code>. The schema definition is sent to the Schema Registry, canonicalized, and hashed. If the hash is matched within the scope of the <code>SchemaName</code> or ARN (or the default registry, if none is supplied), that schema’s metadata is returned. Otherwise, a 404 or NotFound error is returned. Schema versions in <code>Deleted</code> statuses will not be included in the results.</p>
+    async fn get_schema_by_definition(
+        &self,
+        input: GetSchemaByDefinitionInput,
+    ) -> Result<GetSchemaByDefinitionResponse, RusotoError<GetSchemaByDefinitionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.GetSchemaByDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetSchemaByDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSchemaByDefinitionResponse, _>()
+    }
+
+    /// <p>Get the specified schema by its unique ID assigned when a version of the schema is created or registered. Schema versions in Deleted status will not be included in the results.</p>
+    async fn get_schema_version(
+        &self,
+        input: GetSchemaVersionInput,
+    ) -> Result<GetSchemaVersionResponse, RusotoError<GetSchemaVersionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.GetSchemaVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetSchemaVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetSchemaVersionResponse, _>()
+    }
+
+    /// <p>Fetches the schema version difference in the specified difference type between two stored schema versions in the Schema Registry.</p> <p>This API allows you to compare two schema versions between two schema definitions under the same schema.</p>
+    async fn get_schema_versions_diff(
+        &self,
+        input: GetSchemaVersionsDiffInput,
+    ) -> Result<GetSchemaVersionsDiffResponse, RusotoError<GetSchemaVersionsDiffError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.GetSchemaVersionsDiff");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetSchemaVersionsDiffError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSchemaVersionsDiffResponse, _>()
     }
 
     /// <p>Retrieves a specified security configuration.</p>
@@ -16231,6 +19369,60 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListMLTransformsResponse, _>()
     }
 
+    /// <p>Returns a list of registries that you have created, with minimal registry information. Registries in the <code>Deleting</code> status will not be included in the results. Empty results will be returned if there are no registries available.</p>
+    async fn list_registries(
+        &self,
+        input: ListRegistriesInput,
+    ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.ListRegistries");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListRegistriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListRegistriesResponse, _>()
+    }
+
+    /// <p>Returns a list of schema versions that you have created, with minimal information. Schema versions in Deleted status will not be included in the results. Empty results will be returned if there are no schema versions available.</p>
+    async fn list_schema_versions(
+        &self,
+        input: ListSchemaVersionsInput,
+    ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.ListSchemaVersions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListSchemaVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListSchemaVersionsResponse, _>()
+    }
+
+    /// <p>Returns a list of schemas with minimal details. Schemas in Deleting status will not be included in the results. Empty results will be returned if there are no schemas available.</p> <p>When the <code>RegistryId</code> is not provided, all the schemas across registries will be part of the API response.</p>
+    async fn list_schemas(
+        &self,
+        input: ListSchemasInput,
+    ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.ListSchemas");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListSchemasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListSchemasResponse, _>()
+    }
+
     /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     async fn list_triggers(
         &self,
@@ -16310,6 +19502,25 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutResourcePolicyResponse, _>()
     }
 
+    /// <p>Puts the metadata key value pair for a specified schema version ID. A maximum of 10 key value pairs will be allowed per schema version. They can be added over one or more calls.</p>
+    async fn put_schema_version_metadata(
+        &self,
+        input: PutSchemaVersionMetadataInput,
+    ) -> Result<PutSchemaVersionMetadataResponse, RusotoError<PutSchemaVersionMetadataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.PutSchemaVersionMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutSchemaVersionMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutSchemaVersionMetadataResponse, _>()
+    }
+
     /// <p>Puts the specified workflow run properties for the given workflow run. If a property already exists for the specified run, then it overrides the value otherwise adds the property to existing properties.</p>
     async fn put_workflow_run_properties(
         &self,
@@ -16329,6 +19540,65 @@ impl Glue for GlueClient {
             .deserialize::<PutWorkflowRunPropertiesResponse, _>()
     }
 
+    /// <p>Queries for the schema version metadata information. </p>
+    async fn query_schema_version_metadata(
+        &self,
+        input: QuerySchemaVersionMetadataInput,
+    ) -> Result<QuerySchemaVersionMetadataResponse, RusotoError<QuerySchemaVersionMetadataError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.QuerySchemaVersionMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, QuerySchemaVersionMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<QuerySchemaVersionMetadataResponse, _>()
+    }
+
+    /// <p>Adds a new version to the existing schema. Returns an error if new version of schema does not meet the compatibility requirements of the schema set. This API will not create a new schema set and will return a 404 error if the schema set is not already present in the Schema Registry.</p> <p>If this is the first schema definition to be registered in the Schema Registry, this API will store the schema version and return immediately. Otherwise, this call has the potential to run longer than other operations due to compatibility modes. You can call the <code>GetSchemaVersion</code> API with the <code>SchemaVersionId</code> to check compatibility modes.</p> <p>If the same schema definition is already stored in Schema Registry as a version, the schema ID of the existing schema is returned to the caller.</p>
+    async fn register_schema_version(
+        &self,
+        input: RegisterSchemaVersionInput,
+    ) -> Result<RegisterSchemaVersionResponse, RusotoError<RegisterSchemaVersionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.RegisterSchemaVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RegisterSchemaVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RegisterSchemaVersionResponse, _>()
+    }
+
+    /// <p>Removes a key value pair from the schema version metadata for the specified schema version ID.</p>
+    async fn remove_schema_version_metadata(
+        &self,
+        input: RemoveSchemaVersionMetadataInput,
+    ) -> Result<RemoveSchemaVersionMetadataResponse, RusotoError<RemoveSchemaVersionMetadataError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.RemoveSchemaVersionMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RemoveSchemaVersionMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RemoveSchemaVersionMetadataResponse, _>()
+    }
+
     /// <p>Resets a bookmark entry.</p>
     async fn reset_job_bookmark(
         &self,
@@ -16345,6 +19615,24 @@ impl Glue for GlueClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ResetJobBookmarkResponse, _>()
+    }
+
+    /// <p>Restarts selected nodes of a previous partially completed workflow run and resumes the workflow run. The selected nodes and all nodes that are downstream from the selected nodes are run.</p>
+    async fn resume_workflow_run(
+        &self,
+        input: ResumeWorkflowRunRequest,
+    ) -> Result<ResumeWorkflowRunResponse, RusotoError<ResumeWorkflowRunError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.ResumeWorkflowRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ResumeWorkflowRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ResumeWorkflowRunResponse, _>()
     }
 
     /// <p>Searches a set of tables based on properties in the table metadata as well as on the parent database. You can search against text or filter conditions. </p> <p>You can only get tables that you have access to based on the security policies defined in Lake Formation. You need at least a read-only access to the table for it to be returned. If you do not have access to all the columns in the table, these columns will not be searched against when returning the list of tables back to you. If you have access to the columns but not the data in the columns, those columns and the associated metadata for those columns will be included in the search. </p>
@@ -16667,7 +19955,7 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateClassifierResponse, _>()
     }
 
-    /// <p>Creates or updates partition statistics of columns.</p>
+    /// <p>Creates or updates partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdatePartition</code>.</p>
     async fn update_column_statistics_for_partition(
         &self,
         input: UpdateColumnStatisticsForPartitionRequest,
@@ -16692,7 +19980,7 @@ impl Glue for GlueClient {
             .deserialize::<UpdateColumnStatisticsForPartitionResponse, _>()
     }
 
-    /// <p>Creates or updates table statistics of columns.</p>
+    /// <p>Creates or updates table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdateTable</code>.</p>
     async fn update_column_statistics_for_table(
         &self,
         input: UpdateColumnStatisticsForTableRequest,
@@ -16857,6 +20145,42 @@ impl Glue for GlueClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdatePartitionResponse, _>()
+    }
+
+    /// <p>Updates an existing registry which is used to hold a collection of schemas. The updated properties relate to the registry, and do not modify any of the schemas within the registry. </p>
+    async fn update_registry(
+        &self,
+        input: UpdateRegistryInput,
+    ) -> Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.UpdateRegistry");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateRegistryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateRegistryResponse, _>()
+    }
+
+    /// <p>Updates the description, compatibility setting, or version checkpoint for a schema set.</p> <p>For updating the compatibility setting, the call will not validate compatibility for the entire set of schema versions with the new compatibility setting. If the value for <code>Compatibility</code> is provided, the <code>VersionNumber</code> (a checkpoint) is also required. The API will validate the checkpoint version number for consistency.</p> <p>If the value for the <code>VersionNumber</code> (checkpoint) is provided, <code>Compatibility</code> is optional and this can be used to set/reset a checkpoint for the schema.</p> <p>This update will happen only if the schema is in the AVAILABLE state.</p>
+    async fn update_schema(
+        &self,
+        input: UpdateSchemaInput,
+    ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.UpdateSchema");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateSchemaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateSchemaResponse, _>()
     }
 
     /// <p>Updates a metadata table in the Data Catalog.</p>

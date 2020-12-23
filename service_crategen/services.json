@@ -152,7 +152,7 @@
   "cloudfront": {
     "version": "0.45.0",
     "coreVersion": "0.45.0",
-    "protocolVersion": "2019-03-26",
+    "protocolVersion": "2020-05-31",
     "baseTypeName": "CloudFront"
   },
   "cloudhsm": {

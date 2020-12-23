@@ -235,6 +235,38 @@ pub struct DescribeFlowResponse {
     pub messages: Option<Messages>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeOfferingRequest {
+    /// <p>The Amazon Resource Name (ARN) of the offering.</p>
+    #[serde(rename = "OfferingArn")]
+    pub offering_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOfferingResponse {
+    #[serde(rename = "Offering")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offering: Option<Offering>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeReservationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the reservation.</p>
+    #[serde(rename = "ReservationArn")]
+    pub reservation_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeReservationResponse {
+    #[serde(rename = "Reservation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservation: Option<Reservation>,
+}
+
 /// <p>Information about the encryption of the flow.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Encryption {
@@ -293,6 +325,10 @@ pub struct Entitlement {
     /// <p>The ARN of the entitlement.</p>
     #[serde(rename = "EntitlementArn")]
     pub entitlement_arn: String,
+    /// <p>An indication of whether the entitlement is enabled.</p>
+    #[serde(rename = "EntitlementStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entitlement_status: Option<String>,
     /// <p>The name of the entitlement.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -373,6 +409,10 @@ pub struct GrantEntitlementRequest {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<Encryption>,
+    /// <p>An indication of whether the new entitlement should be enabled or disabled as soon as it is created. If you don’t specify the entitlementStatus field in your request, MediaConnect sets it to ENABLED.</p>
+    #[serde(rename = "EntitlementStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entitlement_status: Option<String>,
     /// <p>The name of the entitlement. This value must be unique within the current flow.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -461,6 +501,58 @@ pub struct ListFlowsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListOfferingsRequest {
+    /// <p>The maximum number of results to return per API request. For example, you submit a ListOfferings request with MaxResults set at 5. Although 20 items match your request, the service returns no more than the first 5 items. (The service also returns a NextToken value that you can use to fetch the next batch of results.) The service might return fewer results than the MaxResults value. If MaxResults is not included in the request, the service defaults to pagination with a maximum of 10 results per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that identifies which batch of results that you want to see. For example, you submit a ListOfferings request with MaxResults set at 5. The service returns the first batch of results (up to 5) and a NextToken value. To see the next batch of results, you can submit the ListOfferings request a second time and specify the NextToken value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListOfferingsResponse {
+    /// <p>The token that identifies which batch of results that you want to see. For example, you submit a ListOfferings request with MaxResults set at 5. The service returns the first batch of results (up to 5) and a NextToken value. To see the next batch of results, you can submit the ListOfferings request a second time and specify the NextToken value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of offerings that are available to this account in the current AWS Region.</p>
+    #[serde(rename = "Offerings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offerings: Option<Vec<Offering>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListReservationsRequest {
+    /// <p>The maximum number of results to return per API request. For example, you submit a ListReservations request with MaxResults set at 5. Although 20 items match your request, the service returns no more than the first 5 items. (The service also returns a NextToken value that you can use to fetch the next batch of results.) The service might return fewer results than the MaxResults value. If MaxResults is not included in the request, the service defaults to pagination with a maximum of 10 results per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that identifies which batch of results that you want to see. For example, you submit a ListReservations request with MaxResults set at 5. The service returns the first batch of results (up to 5) and a NextToken value. To see the next batch of results, you can submit the ListOfferings request a second time and specify the NextToken value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListReservationsResponse {
+    /// <p>The token that identifies which batch of results that you want to see. For example, you submit a ListReservations request with MaxResults set at 5. The service returns the first batch of results (up to 5) and a NextToken value. To see the next batch of results, you can submit the ListReservations request a second time and specify the NextToken value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of all reservations that have been purchased by this account in the current AWS Region.</p>
+    #[serde(rename = "Reservations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservations: Option<Vec<Reservation>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the AWS Elemental MediaConnect resource for which to list the tags.</p>
     #[serde(rename = "ResourceArn")]
@@ -525,6 +617,36 @@ pub struct Messages {
     pub errors: Vec<String>,
 }
 
+/// <p>A savings plan that reserves a certain amount of outbound bandwidth usage at a discounted rate each month over a period of time.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Offering {
+    /// <p>The type of currency that is used for billing. The currencyCode used for all reservations is US dollars.</p>
+    #[serde(rename = "CurrencyCode")]
+    pub currency_code: String,
+    /// <p>The length of time that your reservation would be active.</p>
+    #[serde(rename = "Duration")]
+    pub duration: i64,
+    /// <p>The unit of measurement for the duration of the offering.</p>
+    #[serde(rename = "DurationUnits")]
+    pub duration_units: String,
+    /// <p>The Amazon Resource Name (ARN) that MediaConnect assigns to the offering.</p>
+    #[serde(rename = "OfferingArn")]
+    pub offering_arn: String,
+    /// <p>A description of the offering.</p>
+    #[serde(rename = "OfferingDescription")]
+    pub offering_description: String,
+    /// <p>The cost of a single unit. This value, in combination with priceUnits, makes up the rate.</p>
+    #[serde(rename = "PricePerUnit")]
+    pub price_per_unit: String,
+    /// <p>The unit of measurement that is used for billing. This value, in combination with pricePerUnit, makes up the rate.</p>
+    #[serde(rename = "PriceUnits")]
+    pub price_units: String,
+    /// <p>A definition of the amount of outbound bandwidth that you would be reserving if you purchase the offering.</p>
+    #[serde(rename = "ResourceSpecification")]
+    pub resource_specification: ResourceSpecification,
+}
+
 /// <p>The settings for an output.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -571,6 +693,29 @@ pub struct Output {
     #[serde(rename = "VpcInterfaceAttachment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
+}
+
+/// <p>A request to purchase a offering.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PurchaseOfferingRequest {
+    /// <p>The Amazon Resource Name (ARN) of the offering.</p>
+    #[serde(rename = "OfferingArn")]
+    pub offering_arn: String,
+    /// <p>The name that you want to use for the reservation.</p>
+    #[serde(rename = "ReservationName")]
+    pub reservation_name: String,
+    /// <p>The date and time that you want the reservation to begin, in Coordinated Universal Time (UTC). You can specify any date and time between 12:00am on the first day of the current month to the current time on today&#39;s date, inclusive. Specify the start in a 24-hour notation. Use the following format: YYYY-MM-DDTHH:mm:SSZ, where T and Z are literal characters. For example, to specify 11:30pm on March 5, 2020, enter 2020-03-05T23:30:00Z.</p>
+    #[serde(rename = "Start")]
+    pub start: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PurchaseOfferingResponse {
+    #[serde(rename = "Reservation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservation: Option<Reservation>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -647,6 +792,64 @@ pub struct RemoveFlowVpcInterfaceResponse {
     #[serde(rename = "VpcInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_interface_name: Option<String>,
+}
+
+/// <p>A pricing agreement for a discounted rate for a specific outbound bandwidth that your MediaConnect account will use each month over a specific time period. The discounted rate in the reservation applies to outbound bandwidth for all flows from your account until your account reaches the amount of bandwidth in your reservation. If you use more outbound bandwidth than the agreed upon amount in a single month, the overage is charged at the on-demand rate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Reservation {
+    /// <p>The type of currency that is used for billing. The currencyCode used for your reservation is US dollars.</p>
+    #[serde(rename = "CurrencyCode")]
+    pub currency_code: String,
+    /// <p>The length of time that this reservation is active. MediaConnect defines this value in the offering.</p>
+    #[serde(rename = "Duration")]
+    pub duration: i64,
+    /// <p>The unit of measurement for the duration of the reservation. MediaConnect defines this value in the offering.</p>
+    #[serde(rename = "DurationUnits")]
+    pub duration_units: String,
+    /// <p>The day and time that this reservation expires. This value is calculated based on the start date and time that you set and the offering&#39;s duration.</p>
+    #[serde(rename = "End")]
+    pub end: String,
+    /// <p>The Amazon Resource Name (ARN) that MediaConnect assigns to the offering.</p>
+    #[serde(rename = "OfferingArn")]
+    pub offering_arn: String,
+    /// <p>A description of the offering. MediaConnect defines this value in the offering.</p>
+    #[serde(rename = "OfferingDescription")]
+    pub offering_description: String,
+    /// <p>The cost of a single unit. This value, in combination with priceUnits, makes up the rate. MediaConnect defines this value in the offering.</p>
+    #[serde(rename = "PricePerUnit")]
+    pub price_per_unit: String,
+    /// <p>The unit of measurement that is used for billing. This value, in combination with pricePerUnit, makes up the rate. MediaConnect defines this value in the offering.</p>
+    #[serde(rename = "PriceUnits")]
+    pub price_units: String,
+    /// <p>The Amazon Resource Name (ARN) that MediaConnect assigns to the reservation when you purchase an offering.</p>
+    #[serde(rename = "ReservationArn")]
+    pub reservation_arn: String,
+    /// <p>The name that you assigned to the reservation when you purchased the offering.</p>
+    #[serde(rename = "ReservationName")]
+    pub reservation_name: String,
+    /// <p>The status of your reservation.</p>
+    #[serde(rename = "ReservationState")]
+    pub reservation_state: String,
+    /// <p>A definition of the amount of outbound bandwidth that you would be reserving if you purchase the offering. MediaConnect defines the values that make up the resourceSpecification in the offering.</p>
+    #[serde(rename = "ResourceSpecification")]
+    pub resource_specification: ResourceSpecification,
+    /// <p>The day and time that the reservation becomes active. You set this value when you purchase the offering.</p>
+    #[serde(rename = "Start")]
+    pub start: String,
+}
+
+/// <p>A definition of what is being billed for, including the type and amount.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResourceSpecification {
+    /// <p>The amount of outbound bandwidth that is discounted in the offering.</p>
+    #[serde(rename = "ReservedBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reserved_bitrate: Option<i64>,
+    /// <p>The type of resource and the unit that is being billed for.</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -939,6 +1142,10 @@ pub struct UpdateFlowEntitlementRequest {
     /// <p>The ARN of the entitlement that you want to update.</p>
     #[serde(rename = "EntitlementArn")]
     pub entitlement_arn: String,
+    /// <p>An indication of whether you want to enable the entitlement to allow access, or disable it to stop streaming content to the subscriber’s flow temporarily. If you don’t specify the entitlementStatus field in your request, MediaConnect leaves the value unchanged.</p>
+    #[serde(rename = "EntitlementStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entitlement_status: Option<String>,
     /// <p>The flow that is associated with the entitlement that you want to update.</p>
     #[serde(rename = "FlowArn")]
     pub flow_arn: String,
@@ -951,6 +1158,7 @@ pub struct UpdateFlowEntitlementRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowEntitlementResponse {
+    /// <p>The new configuration of the entitlement that you updated.</p>
     #[serde(rename = "Entitlement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entitlement: Option<Entitlement>,
@@ -1023,6 +1231,7 @@ pub struct UpdateFlowOutputResponse {
     #[serde(rename = "FlowArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_arn: Option<String>,
+    /// <p>The new settings of the output that you updated.</p>
     #[serde(rename = "Output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<Output>,
@@ -1533,6 +1742,120 @@ impl fmt::Display for DescribeFlowError {
     }
 }
 impl Error for DescribeFlowError {}
+/// Errors returned by DescribeOffering
+#[derive(Debug, PartialEq)]
+pub enum DescribeOfferingError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl DescribeOfferingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOfferingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeOfferingError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeOfferingError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeOfferingError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeOfferingError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeOfferingError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeOfferingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeOfferingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeOfferingError {}
+/// Errors returned by DescribeReservation
+#[derive(Debug, PartialEq)]
+pub enum DescribeReservationError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl DescribeReservationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReservationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeReservationError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeReservationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeReservationError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeReservationError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeReservationError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeReservationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeReservationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeReservationError {}
 /// Errors returned by GrantFlowEntitlements
 #[derive(Debug, PartialEq)]
 pub enum GrantFlowEntitlementsError {
@@ -1707,6 +2030,104 @@ impl fmt::Display for ListFlowsError {
     }
 }
 impl Error for ListFlowsError {}
+/// Errors returned by ListOfferings
+#[derive(Debug, PartialEq)]
+pub enum ListOfferingsError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl ListOfferingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListOfferingsError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListOfferingsError::InternalServerError(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListOfferingsError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListOfferingsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListOfferingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListOfferingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListOfferingsError {}
+/// Errors returned by ListReservations
+#[derive(Debug, PartialEq)]
+pub enum ListReservationsError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl ListReservationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReservationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListReservationsError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListReservationsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListReservationsError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListReservationsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListReservationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListReservationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListReservationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1751,6 +2172,68 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by PurchaseOffering
+#[derive(Debug, PartialEq)]
+pub enum PurchaseOfferingError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl PurchaseOfferingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseOfferingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(PurchaseOfferingError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(PurchaseOfferingError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(PurchaseOfferingError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PurchaseOfferingError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PurchaseOfferingError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(PurchaseOfferingError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PurchaseOfferingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PurchaseOfferingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::NotFound(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PurchaseOfferingError {}
 /// Errors returned by RemoveFlowOutput
 #[derive(Debug, PartialEq)]
 pub enum RemoveFlowOutputError {
@@ -2500,6 +2983,18 @@ pub trait MediaConnect {
         input: DescribeFlowRequest,
     ) -> Result<DescribeFlowResponse, RusotoError<DescribeFlowError>>;
 
+    /// <p>Displays the details of an offering. The response includes the offering description, duration, outbound bandwidth, price, and Amazon Resource Name (ARN).</p>
+    async fn describe_offering(
+        &self,
+        input: DescribeOfferingRequest,
+    ) -> Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>>;
+
+    /// <p>Displays the details of a reservation. The response includes the reservation name, state, start date and time, and the details of the offering that make up the rest of the reservation (such as price, duration, and outbound bandwidth).</p>
+    async fn describe_reservation(
+        &self,
+        input: DescribeReservationRequest,
+    ) -> Result<DescribeReservationResponse, RusotoError<DescribeReservationError>>;
+
     /// <p>Grants entitlements to an existing flow.</p>
     async fn grant_flow_entitlements(
         &self,
@@ -2518,11 +3013,29 @@ pub trait MediaConnect {
         input: ListFlowsRequest,
     ) -> Result<ListFlowsResponse, RusotoError<ListFlowsError>>;
 
+    /// <p>Displays a list of all offerings that are available to this account in the current AWS Region. If you have an active reservation (which means you&#39;ve purchased an offering that has already started and hasn&#39;t expired yet), your account isn&#39;t eligible for other offerings.</p>
+    async fn list_offerings(
+        &self,
+        input: ListOfferingsRequest,
+    ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>>;
+
+    /// <p>Displays a list of all reservations that have been purchased by this account in the current AWS Region. This list includes all reservations in all states (such as active and expired).</p>
+    async fn list_reservations(
+        &self,
+        input: ListReservationsRequest,
+    ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>>;
+
     /// <p>List all tags on an AWS Elemental MediaConnect resource</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Submits a request to purchase an offering. If you already have an active reservation, you can&#39;t purchase another offering.</p>
+    async fn purchase_offering(
+        &self,
+        input: PurchaseOfferingRequest,
+    ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>>;
 
     /// <p>Removes an output from an existing flow. This request can be made only on an output that does not have an entitlement associated with it. If the output has an entitlement, you must revoke the entitlement instead. When an entitlement is revoked from a flow, the service automatically removes the associated output.</p>
     async fn remove_flow_output(
@@ -2819,6 +3332,68 @@ impl MediaConnect for MediaConnectClient {
         }
     }
 
+    /// <p>Displays the details of an offering. The response includes the offering description, duration, outbound bandwidth, price, and Amazon Resource Name (ARN).</p>
+    #[allow(unused_mut)]
+    async fn describe_offering(
+        &self,
+        input: DescribeOfferingRequest,
+    ) -> Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>> {
+        let request_uri = format!(
+            "/v1/offerings/{offering_arn}",
+            offering_arn = input.offering_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOfferingResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOfferingError::from_response(response))
+        }
+    }
+
+    /// <p>Displays the details of a reservation. The response includes the reservation name, state, start date and time, and the details of the offering that make up the rest of the reservation (such as price, duration, and outbound bandwidth).</p>
+    #[allow(unused_mut)]
+    async fn describe_reservation(
+        &self,
+        input: DescribeReservationRequest,
+    ) -> Result<DescribeReservationResponse, RusotoError<DescribeReservationError>> {
+        let request_uri = format!(
+            "/v1/reservations/{reservation_arn}",
+            reservation_arn = input.reservation_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReservationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReservationError::from_response(response))
+        }
+    }
+
     /// <p>Grants entitlements to an existing flow.</p>
     #[allow(unused_mut)]
     async fn grant_flow_entitlements(
@@ -2927,6 +3502,80 @@ impl MediaConnect for MediaConnectClient {
         }
     }
 
+    /// <p>Displays a list of all offerings that are available to this account in the current AWS Region. If you have an active reservation (which means you&#39;ve purchased an offering that has already started and hasn&#39;t expired yet), your account isn&#39;t eligible for other offerings.</p>
+    #[allow(unused_mut)]
+    async fn list_offerings(
+        &self,
+        input: ListOfferingsRequest,
+    ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>> {
+        let request_uri = "/v1/offerings";
+
+        let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOfferingsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOfferingsError::from_response(response))
+        }
+    }
+
+    /// <p>Displays a list of all reservations that have been purchased by this account in the current AWS Region. This list includes all reservations in all states (such as active and expired).</p>
+    #[allow(unused_mut)]
+    async fn list_reservations(
+        &self,
+        input: ListReservationsRequest,
+    ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>> {
+        let request_uri = "/v1/reservations";
+
+        let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListReservationsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListReservationsError::from_response(response))
+        }
+    }
+
     /// <p>List all tags on an AWS Elemental MediaConnect resource</p>
     #[allow(unused_mut)]
     async fn list_tags_for_resource(
@@ -2952,6 +3601,40 @@ impl MediaConnect for MediaConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Submits a request to purchase an offering. If you already have an active reservation, you can&#39;t purchase another offering.</p>
+    #[allow(unused_mut)]
+    async fn purchase_offering(
+        &self,
+        input: PurchaseOfferingRequest,
+    ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>> {
+        let request_uri = format!(
+            "/v1/offerings/{offering_arn}",
+            offering_arn = input.offering_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PurchaseOfferingResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PurchaseOfferingError::from_response(response))
         }
     }
 

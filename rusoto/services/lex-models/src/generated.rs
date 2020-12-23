@@ -225,7 +225,7 @@ pub struct CreateBotVersionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBotVersionResponse {
-    /// <p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>
+    /// <p>The message that Amazon Lex uses to cancel a conversation. For more information, see <a>PutBot</a>.</p>
     #[serde(rename = "abortStatement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
@@ -253,6 +253,10 @@ pub struct CreateBotVersionResponse {
     #[serde(rename = "detectSentiment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detect_sentiment: Option<bool>,
+    /// <p>Indicates whether the bot uses accuracy improvements. <code>true</code> indicates that the bot is using the improvements, otherwise, <code>false</code>.</p>
+    #[serde(rename = "enableModelImprovements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_model_improvements: Option<bool>,
     /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -338,7 +342,11 @@ pub struct CreateIntentVersionResponse {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
-    /// <p>Configuration information, if any, for connectin an Amazon Kendra index with the <code>AMAZON.KendraSearchIntent</code> intent.</p>
+    /// <p>An array of <code>InputContext</code> objects that lists the contexts that must be active for Amazon Lex to choose the intent in a conversation with the user.</p>
+    #[serde(rename = "inputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_contexts: Option<Vec<InputContext>>,
+    /// <p>Configuration information, if any, for connecting an Amazon Kendra index with the <code>AMAZON.KendraSearchIntent</code> intent.</p>
     #[serde(rename = "kendraConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kendra_configuration: Option<KendraConfiguration>,
@@ -350,6 +358,10 @@ pub struct CreateIntentVersionResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>An array of <code>OutputContext</code> objects that lists the contexts that the intent activates when the intent is fulfilled.</p>
+    #[serde(rename = "outputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_contexts: Option<Vec<OutputContext>>,
     /// <p>A unique identifier for a built-in intent.</p>
     #[serde(rename = "parentIntentSignature")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -771,6 +783,10 @@ pub struct GetBotResponse {
     #[serde(rename = "detectSentiment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detect_sentiment: Option<bool>,
+    /// <p>Indicates whether the bot uses accuracy improvements. <code>true</code> indicates that the bot is using the improvements, otherwise, <code>false</code>.</p>
+    #[serde(rename = "enableModelImprovements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_model_improvements: Option<bool>,
     /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex explains why it failed to build the bot.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -795,6 +811,10 @@ pub struct GetBotResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The score that determines where Amazon Lex inserts the <code>AMAZON.FallbackIntent</code>, <code>AMAZON.KendraSearchIntent</code>, or both when returning alternative intents in a <a href="https://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostContent.html">PostContent</a> or <a href="https://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostText.html">PostText</a> response. <code>AMAZON.FallbackIntent</code> is inserted if the confidence score for all intents is below this value. <code>AMAZON.KendraSearchIntent</code> is only inserted if it is configured for the bot.</p>
+    #[serde(rename = "nluIntentConfidenceThreshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nlu_intent_confidence_threshold: Option<f64>,
     /// <p>The status of the bot. </p> <p>When the status is <code>BUILDING</code> Amazon Lex is building the bot for testing and use.</p> <p>If the status of the bot is <code>READY_BASIC_TESTING</code>, you can test the bot using the exact utterances specified in the bot's intents. When the bot is ready for full testing or to run, the status is <code>READY</code>.</p> <p>If there was a problem with building the bot, the status is <code>FAILED</code> and the <code>failureReason</code> field explains why the bot did not build.</p> <p>If the bot was saved but not built, the status is <code>NOT_BUILT</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1098,6 +1118,10 @@ pub struct GetIntentResponse {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
+    /// <p>An array of <code>InputContext</code> objects that lists the contexts that must be active for Amazon Lex to choose the intent in a conversation with the user.</p>
+    #[serde(rename = "inputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_contexts: Option<Vec<InputContext>>,
     /// <p>Configuration information, if any, to connect to an Amazon Kendra index with the <code>AMAZON.KendraSearchIntent</code> intent.</p>
     #[serde(rename = "kendraConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1110,6 +1134,10 @@ pub struct GetIntentResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>An array of <code>OutputContext</code> objects that lists the contexts that the intent activates when the intent is fulfilled.</p>
+    #[serde(rename = "outputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_contexts: Option<Vec<OutputContext>>,
     /// <p>A unique identifier for a built-in intent.</p>
     #[serde(rename = "parentIntentSignature")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1333,6 +1361,14 @@ pub struct GetUtterancesViewResponse {
     pub utterances: Option<Vec<UtteranceList>>,
 }
 
+/// <p>The name of a context that must be active for an intent to be selected by Amazon Lex.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct InputContext {
+    /// <p>The name of the context.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
 /// <p>Identifies the specific version of an intent.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Intent {
@@ -1462,6 +1498,20 @@ pub struct Message {
     pub group_number: Option<i64>,
 }
 
+/// <p>The specification of an output context that is set when an intent is fulfilled.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OutputContext {
+    /// <p>The name of the context.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The number of seconds that the context should be active after it is first sent in a <code>PostContent</code> or <code>PostText</code> response. You can set the value between 5 and 86,400 seconds (24 hours).</p>
+    #[serde(rename = "timeToLiveInSeconds")]
+    pub time_to_live_in_seconds: i64,
+    /// <p>The number of conversation turns that the context should be active. A conversation turn is one <code>PostContent</code> or <code>PostText</code> request and the corresponding response from Amazon Lex.</p>
+    #[serde(rename = "turnsToLive")]
+    pub turns_to_live: i64,
+}
+
 /// <p>Obtains information from the user. To define a prompt, provide one or more messages and specify the number of attempts to get information from the user. If you provide more than one message, Amazon Lex chooses one of the messages to use to prompt the user. For more information, see <a>how-it-works</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Prompt {
@@ -1551,7 +1601,7 @@ pub struct PutBotAliasResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBotRequest {
-    /// <p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then aborts the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user "What type of crust would you like?" If the user's response is not one of the expected responses (for example, "thin crust, "deep dish," etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p> <p>If you have defined a fallback intent the abort statement will not be sent to the user, the fallback intent is used instead. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/built-in-intent-fallback.html"> AMAZON.FallbackIntent</a>.</p>
+    /// <p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then cancels the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user "What type of crust would you like?" If the user's response is not one of the expected responses (for example, "thin crust, "deep dish," etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p> <p>If you have defined a fallback intent the cancel statement will not be sent to the user, the fallback intent is used instead. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/built-in-intent-fallback.html"> AMAZON.FallbackIntent</a>.</p>
     #[serde(rename = "abortStatement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
@@ -1578,6 +1628,10 @@ pub struct PutBotRequest {
     #[serde(rename = "detectSentiment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detect_sentiment: Option<bool>,
+    /// <p>Set to <code>true</code> to enable access to natural language understanding improvements. </p> <p>When you set the <code>enableModelImprovements</code> parameter to <code>true</code> you can use the <code>nluIntentConfidenceThreshold</code> parameter to configure confidence scores. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/confidence-scores.html">Confidence Scores</a>.</p> <p>You can only set the <code>enableModelImprovements</code> parameter in certain Regions. If you set the parameter to <code>true</code>, your bot has access to accuracy improvements.</p> <p>The Regions where you can set the <code>enableModelImprovements</code> parameter to <code>true</code> are:</p> <ul> <li> <p>US East (N. Virginia) (us-east-1)</p> </li> <li> <p>US West (Oregon) (us-west-2)</p> </li> <li> <p>Asia Pacific (Sydney) (ap-southeast-2)</p> </li> <li> <p>EU (Ireland) (eu-west-1)</p> </li> </ul> <p>In other Regions, the <code>enableModelImprovements</code> parameter is set to <code>true</code> by default. In these Regions setting the parameter to <code>false</code> throws a <code>ValidationException</code> exception.</p>
+    #[serde(rename = "enableModelImprovements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_model_improvements: Option<bool>,
     /// <p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation.</p> <p>A user interaction session remains active for the amount of time specified. If no conversation occurs during this time, the session expires and Amazon Lex deletes any data provided before the timeout.</p> <p>For example, suppose that a user chooses the OrderPizza intent, but gets sidetracked halfway through placing an order. If the user doesn't complete the order within the specified time, Amazon Lex discards the slot information that it gathered, and the user must start over.</p> <p>If you don't include the <code>idleSessionTTLInSeconds</code> element in a <code>PutBot</code> operation request, Amazon Lex uses the default value. This is also true if the request replaces an existing bot.</p> <p>The default is 300 seconds (5 minutes).</p>
     #[serde(rename = "idleSessionTTLInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1592,6 +1646,10 @@ pub struct PutBotRequest {
     /// <p>The name of the bot. The name is <i>not</i> case sensitive. </p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p><p>Determines the threshold where Amazon Lex will insert the <code>AMAZON.FallbackIntent</code>, <code>AMAZON.KendraSearchIntent</code>, or both when returning alternative intents in a <a href="https://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostContent.html">PostContent</a> or <a href="https://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostText.html">PostText</a> response. <code>AMAZON.FallbackIntent</code> and <code>AMAZON.KendraSearchIntent</code> are only inserted if they are configured for the bot.</p> <p>You must set the <code>enableModelImprovements</code> parameter to <code>true</code> to use confidence scores in the following regions.</p> <ul> <li> <p>US East (N. Virginia) (us-east-1)</p> </li> <li> <p>US West (Oregon) (us-west-2)</p> </li> <li> <p>Asia Pacific (Sydney) (ap-southeast-2)</p> </li> <li> <p>EU (Ireland) (eu-west-1)</p> </li> </ul> <p>In other Regions, the <code>enableModelImprovements</code> parameter is set to <code>true</code> by default.</p> <p>For example, suppose a bot is configured with the confidence threshold of 0.80 and the <code>AMAZON.FallbackIntent</code>. Amazon Lex returns three alternative intents with the following confidence scores: IntentA (0.70), IntentB (0.60), IntentC (0.50). The response from the <code>PostText</code> operation would be:</p> <ul> <li> <p>AMAZON.FallbackIntent</p> </li> <li> <p>IntentA</p> </li> <li> <p>IntentB</p> </li> <li> <p>IntentC</p> </li> </ul></p>
+    #[serde(rename = "nluIntentConfidenceThreshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nlu_intent_confidence_threshold: Option<f64>,
     /// <p>If you set the <code>processBehavior</code> element to <code>BUILD</code>, Amazon Lex builds the bot so that it can be run. If you set the element to <code>SAVE</code> Amazon Lex saves the bot, but doesn't build it. </p> <p>If you don't specify this value, the default value is <code>BUILD</code>.</p>
     #[serde(rename = "processBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1609,7 +1667,7 @@ pub struct PutBotRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBotResponse {
-    /// <p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>
+    /// <p>The message that Amazon Lex uses to cancel a conversation. For more information, see <a>PutBot</a>.</p>
     #[serde(rename = "abortStatement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
@@ -1641,6 +1699,10 @@ pub struct PutBotResponse {
     #[serde(rename = "detectSentiment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detect_sentiment: Option<bool>,
+    /// <p>Indicates whether the bot uses accuracy improvements. <code>true</code> indicates that the bot is using the improvements, otherwise, <code>false</code>.</p>
+    #[serde(rename = "enableModelImprovements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_model_improvements: Option<bool>,
     /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1665,6 +1727,10 @@ pub struct PutBotResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The score that determines where Amazon Lex inserts the <code>AMAZON.FallbackIntent</code>, <code>AMAZON.KendraSearchIntent</code>, or both when returning alternative intents in a <a href="https://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostContent.html">PostContent</a> or <a href="https://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostText.html">PostText</a> response. <code>AMAZON.FallbackIntent</code> is inserted if the confidence score for all intents is below this value. <code>AMAZON.KendraSearchIntent</code> is only inserted if it is configured for the bot.</p>
+    #[serde(rename = "nluIntentConfidenceThreshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nlu_intent_confidence_threshold: Option<f64>,
     /// <p> When you send a request to create a bot with <code>processBehavior</code> set to <code>BUILD</code>, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>.</p> <p>In the <code>READY_BASIC_TESTING</code> state you can test the bot with user inputs that exactly match the utterances configured for the bot's intents and values in the slot types.</p> <p>If Amazon Lex can't build the bot, Amazon Lex sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p> <p>When you set <code>processBehavior</code> to <code>SAVE</code>, Amazon Lex sets the status code to <code>NOT BUILT</code>.</p> <p>When the bot is in the <code>READY</code> state you can test and publish the bot.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1718,6 +1784,10 @@ pub struct PutIntentRequest {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
+    /// <p>An array of <code>InputContext</code> objects that lists the contexts that must be active for Amazon Lex to choose the intent in a conversation with the user.</p>
+    #[serde(rename = "inputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_contexts: Option<Vec<InputContext>>,
     /// <p>Configuration information required to use the <code>AMAZON.KendraSearchIntent</code> intent to connect to an Amazon Kendra index. For more information, see <a href="http://docs.aws.amazon.com/lex/latest/dg/built-in-intent-kendra-search.html"> AMAZON.KendraSearchIntent</a>.</p>
     #[serde(rename = "kendraConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1725,6 +1795,10 @@ pub struct PutIntentRequest {
     /// <p>The name of the intent. The name is <i>not</i> case sensitive. </p> <p>The name can't match a built-in intent name, or a built-in intent name with "AMAZON." removed. For example, because there is a built-in intent called <code>AMAZON.HelpIntent</code>, you can't create a custom intent called <code>HelpIntent</code>.</p> <p>For a list of built-in intents, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>An array of <code>OutputContext</code> objects that lists the contexts that the intent activates when the intent is fulfilled.</p>
+    #[serde(rename = "outputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_contexts: Option<Vec<OutputContext>>,
     /// <p>A unique identifier for the built-in intent to base this intent on. To find the signature for an intent, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
     #[serde(rename = "parentIntentSignature")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1782,6 +1856,10 @@ pub struct PutIntentResponse {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
+    /// <p>An array of <code>InputContext</code> objects that lists the contexts that must be active for Amazon Lex to choose the intent in a conversation with the user.</p>
+    #[serde(rename = "inputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_contexts: Option<Vec<InputContext>>,
     /// <p>Configuration information, if any, required to connect to an Amazon Kendra index and use the <code>AMAZON.KendraSearchIntent</code> intent.</p>
     #[serde(rename = "kendraConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1794,6 +1872,10 @@ pub struct PutIntentResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>An array of <code>OutputContext</code> objects that lists the contexts that the intent activates when the intent is fulfilled.</p>
+    #[serde(rename = "outputContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_contexts: Option<Vec<OutputContext>>,
     /// <p>A unique identifier for the built-in intent that this intent is based on.</p>
     #[serde(rename = "parentIntentSignature")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1831,7 +1913,7 @@ pub struct PutSlotTypeRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take. Each value can have a list of <code>synonyms</code>, which are additional values that help train the machine learning model about the values that it resolves for a slot. </p> <p>When Amazon Lex resolves a slot value, it generates a resolution list that contains up to five possible values for the slot. If you are using a Lambda function, this resolution list is passed to the function. If you are not using a Lambda function you can choose to return the value that the user entered or the first value in the resolution list as the slot value. The <code>valueSelectionStrategy</code> field indicates the option to use. </p>
+    /// <p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take. Each value can have a list of <code>synonyms</code>, which are additional values that help train the machine learning model about the values that it resolves for a slot. </p> <p>A regular expression slot type doesn't require enumeration values. All other slot types require a list of enumeration values.</p> <p>When Amazon Lex resolves a slot value, it generates a resolution list that contains up to five possible values for the slot. If you are using a Lambda function, this resolution list is passed to the function. If you are not using a Lambda function you can choose to return the value that the user entered or the first value in the resolution list as the slot value. The <code>valueSelectionStrategy</code> field indicates the option to use. </p>
     #[serde(rename = "enumerationValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enumeration_values: Option<Vec<EnumerationValue>>,
@@ -1913,6 +1995,10 @@ pub struct ResourceReference {
 /// <p>Identifies the version of a specific slot.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Slot {
+    /// <p>A list of default values for the slot. Default values are used when Amazon Lex hasn't determined a value for a slot. You can specify default values from context variables, session attributes, and defined values.</p>
+    #[serde(rename = "defaultValueSpec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_value_spec: Option<SlotDefaultValueSpec>,
     /// <p>A description of the slot.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1951,6 +2037,22 @@ pub struct Slot {
     #[serde(rename = "valueElicitationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value_elicitation_prompt: Option<Prompt>,
+}
+
+/// <p>A default value for a slot.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SlotDefaultValue {
+    /// <p><p>The default value for the slot. You can specify one of the following:</p> <ul> <li> <p> <code>#context-name.slot-name</code> - The slot value &quot;slot-name&quot; in the context &quot;context-name.&quot;</p> </li> <li> <p> <code>{attribute}</code> - The slot value of the session attribute &quot;attribute.&quot;</p> </li> <li> <p> <code>&#39;value&#39;</code> - The discrete value &quot;value.&quot;</p> </li> </ul></p>
+    #[serde(rename = "defaultValue")]
+    pub default_value: String,
+}
+
+/// <p>Contains the default values for a slot. Default values are used when Amazon Lex hasn't determined a value for a slot.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SlotDefaultValueSpec {
+    /// <p>The default values for a slot. You can specify more than one default. For example, you can specify a default value to use from a matching context variable, a session attribute, or a fixed value.</p> <p>The default value chosen is selected based on the order that you specify them in the list. For example, if you specify a context variable and a fixed value in that order, Amazon Lex uses the context variable if it is available, else it uses the fixed value.</p>
+    #[serde(rename = "defaultValueList")]
+    pub default_value_list: Vec<SlotDefaultValue>,
 }
 
 /// <p>Provides configuration information for a slot type.</p>

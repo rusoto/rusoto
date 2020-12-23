@@ -79,7 +79,7 @@ pub struct Connection {
     #[serde(rename = "OwnerAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account_id: Option<String>,
-    /// <p>The name of the external provider where your third-party code repository is configured. The valid provider type is Bitbucket.</p>
+    /// <p>The name of the external provider where your third-party code repository is configured.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
@@ -95,7 +95,7 @@ pub struct CreateConnectionInput {
     #[serde(rename = "HostArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_arn: Option<String>,
-    /// <p>The name of the external provider where your third-party code repository is configured. The valid provider type is Bitbucket.</p>
+    /// <p>The name of the external provider where your third-party code repository is configured.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
@@ -370,6 +370,26 @@ pub struct UntagResourceInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateHostInput {
+    /// <p>The Amazon Resource Name (ARN) of the host to be updated.</p>
+    #[serde(rename = "HostArn")]
+    pub host_arn: String,
+    /// <p>The URL or endpoint of the host to be updated.</p>
+    #[serde(rename = "ProviderEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_endpoint: Option<String>,
+    /// <p>The VPC configuration of the host to be updated. A VPC must be configured and the infrastructure to be represented by the host must already be connected to the VPC.</p>
+    #[serde(rename = "VpcConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_configuration: Option<VpcConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateHostOutput {}
+
 /// <p>The VPC configuration provisioned for the host.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VpcConfiguration {
@@ -569,6 +589,8 @@ impl Error for GetConnectionError {}
 pub enum GetHostError {
     /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
     ResourceNotFound(String),
+    /// <p>Resource not found. Verify the ARN for the host resource and try again.</p>
+    ResourceUnavailable(String),
 }
 
 impl GetHostError {
@@ -577,6 +599,9 @@ impl GetHostError {
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetHostError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(GetHostError::ResourceUnavailable(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -590,6 +615,7 @@ impl fmt::Display for GetHostError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetHostError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetHostError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -736,6 +762,54 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateHost
+#[derive(Debug, PartialEq)]
+pub enum UpdateHostError {
+    /// <p>Two conflicting operations have been made on the same resource.</p>
+    Conflict(String),
+    /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
+    ResourceNotFound(String),
+    /// <p>Resource not found. Verify the ARN for the host resource and try again.</p>
+    ResourceUnavailable(String),
+    /// <p>The operation is not supported. Check the connection status and try again.</p>
+    UnsupportedOperation(String),
+}
+
+impl UpdateHostError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHostError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateHostError::Conflict(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateHostError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(UpdateHostError::ResourceUnavailable(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(UpdateHostError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateHostError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateHostError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateHostError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateHostError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateHostError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateHostError {}
 /// Trait representing the capabilities of the AWS CodeStar connections API. AWS CodeStar connections clients implement this trait.
 #[async_trait]
 pub trait CodeStarConnections {
@@ -804,6 +878,12 @@ pub trait CodeStarConnections {
         &self,
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates a specified host with the provided configurations.</p>
+    async fn update_host(
+        &self,
+        input: UpdateHostInput,
+    ) -> Result<UpdateHostOutput, RusotoError<UpdateHostError>>;
 }
 /// A client for the AWS CodeStar connections API.
 #[derive(Clone)]
@@ -1074,5 +1154,26 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
+    }
+
+    /// <p>Updates a specified host with the provided configurations.</p>
+    async fn update_host(
+        &self,
+        input: UpdateHostInput,
+    ) -> Result<UpdateHostOutput, RusotoError<UpdateHostError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.UpdateHost",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateHostError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateHostOutput, _>()
     }
 }

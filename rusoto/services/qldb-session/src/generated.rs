@@ -59,13 +59,18 @@ pub struct AbortTransactionRequest {}
 /// <p>Contains the details of the aborted transaction.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct AbortTransactionResult {}
+pub struct AbortTransactionResult {
+    /// <p>Contains server-side performance information for the command.</p>
+    #[serde(rename = "TimingInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timing_information: Option<TimingInformation>,
+}
 
 /// <p>Contains the details of the transaction to commit.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
-    /// <p>Specifies the commit digest for the transaction to commit. For every active transaction, the commit digest must be passed. QLDB validates <code>CommitDigest</code> and rejects the commit with an error if the digest computed on the client does not match the digest computed by QLDB.</p>
+    /// <p>Specifies the commit digest for the transaction to commit. For every active transaction, the commit digest must be passed. QLDB validates <code>CommitDigest</code> and rejects the commit with an error if the digest computed on the client does not match the digest computed by QLDB.</p> <p>The purpose of the <code>CommitDigest</code> parameter is to ensure that QLDB commits a transaction if and only if the server has processed the exact set of statements sent by the client, in the same order that client sent them, and with no duplicates.</p>
     #[serde(rename = "CommitDigest")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -91,6 +96,14 @@ pub struct CommitTransactionResult {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_digest: Option<bytes::Bytes>,
+    /// <p>Contains metrics about the number of I/O requests that were consumed.</p>
+    #[serde(rename = "ConsumedIOs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumed_i_os: Option<IOUsage>,
+    /// <p>Contains server-side performance information for the command.</p>
+    #[serde(rename = "TimingInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timing_information: Option<TimingInformation>,
     /// <p>The transaction ID of the committed transaction.</p>
     #[serde(rename = "TransactionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -105,7 +118,12 @@ pub struct EndSessionRequest {}
 /// <p>Contains the details of the ended session.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct EndSessionResult {}
+pub struct EndSessionResult {
+    /// <p>Contains server-side performance information for the command.</p>
+    #[serde(rename = "TimingInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timing_information: Option<TimingInformation>,
+}
 
 /// <p>Specifies a request to execute a statement.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -127,10 +145,18 @@ pub struct ExecuteStatementRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteStatementResult {
+    /// <p>Contains metrics about the number of I/O requests that were consumed.</p>
+    #[serde(rename = "ConsumedIOs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumed_i_os: Option<IOUsage>,
     /// <p>Contains the details of the first fetched page.</p>
     #[serde(rename = "FirstPage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_page: Option<Page>,
+    /// <p>Contains server-side performance information for the command.</p>
+    #[serde(rename = "TimingInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timing_information: Option<TimingInformation>,
 }
 
 /// <p>Specifies the details of the page to be fetched.</p>
@@ -149,10 +175,32 @@ pub struct FetchPageRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FetchPageResult {
+    /// <p>Contains metrics about the number of I/O requests that were consumed.</p>
+    #[serde(rename = "ConsumedIOs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumed_i_os: Option<IOUsage>,
     /// <p>Contains details of the fetched page.</p>
     #[serde(rename = "Page")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<Page>,
+    /// <p>Contains server-side performance information for the command.</p>
+    #[serde(rename = "TimingInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timing_information: Option<TimingInformation>,
+}
+
+/// <p>Contains I/O usage metrics for a command that was invoked.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct IOUsage {
+    /// <p>The number of read I/O requests that the command performed.</p>
+    #[serde(rename = "ReadIOs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_i_os: Option<i64>,
+    /// <p>The number of write I/O requests that the command performed.</p>
+    #[serde(rename = "WriteIOs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub write_i_os: Option<i64>,
 }
 
 /// <p>Contains details of the fetched page.</p>
@@ -256,6 +304,10 @@ pub struct StartSessionResult {
     #[serde(rename = "SessionToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_token: Option<String>,
+    /// <p>Contains server-side performance information for the command.</p>
+    #[serde(rename = "TimingInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timing_information: Option<TimingInformation>,
 }
 
 /// <p>Specifies a request to start a transaction.</p>
@@ -267,13 +319,27 @@ pub struct StartTransactionRequest {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTransactionResult {
+    /// <p>Contains server-side performance information for the command.</p>
+    #[serde(rename = "TimingInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timing_information: Option<TimingInformation>,
     /// <p>The transaction ID of the started transaction.</p>
     #[serde(rename = "TransactionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transaction_id: Option<String>,
 }
 
-/// <p>A structure that can contain an Amazon Ion value in multiple encoding formats.</p>
+/// <p>Contains server-side performance information for a command. Amazon QLDB captures timing information between the times when it receives the request and when it sends the corresponding response.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TimingInformation {
+    /// <p>The amount of time that was taken for the command to finish processing, measured in milliseconds.</p>
+    #[serde(rename = "ProcessingTimeMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_time_milliseconds: Option<i64>,
+}
+
+/// <p>A structure that can contain a value in multiple encoding formats.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ValueHolder {
     /// <p>An Amazon Ion binary value contained in a <code>ValueHolder</code> structure.</p>
@@ -348,7 +414,7 @@ impl Error for SendCommandError {}
 /// Trait representing the capabilities of the QLDB Session API. QLDB Session clients implement this trait.
 #[async_trait]
 pub trait QldbSession {
-    /// <p><p>Sends a command to an Amazon QLDB ledger.</p> <note> <p>Instead of interacting directly with this API, we recommend that you use the Amazon QLDB Driver or the QLDB Shell to execute data transactions on a ledger.</p> <ul> <li> <p>If you are working with an AWS SDK, use the QLDB Driver. The driver provides a high-level abstraction layer above this <code>qldbsession</code> data plane and manages <code>SendCommand</code> API calls for you. For information and a list of supported programming languages, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-driver.html">Getting started with the driver</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> <li> <p>If you are working with the AWS Command Line Interface (AWS CLI), use the QLDB Shell. The shell is a command line interface that uses the QLDB Driver to interact with a ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html">Accessing Amazon QLDB using the QLDB Shell</a>.</p> </li> </ul> </note></p>
+    /// <p><p>Sends a command to an Amazon QLDB ledger.</p> <note> <p>Instead of interacting directly with this API, we recommend using the QLDB driver or the QLDB shell to execute data transactions on a ledger.</p> <ul> <li> <p>If you are working with an AWS SDK, use the QLDB driver. The driver provides a high-level abstraction layer above this <i>QLDB Session</i> data plane and manages <code>SendCommand</code> API calls for you. For information and a list of supported programming languages, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-driver.html">Getting started with the driver</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> <li> <p>If you are working with the AWS Command Line Interface (AWS CLI), use the QLDB shell. The shell is a command line interface that uses the QLDB driver to interact with a ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html">Accessing Amazon QLDB using the QLDB shell</a>.</p> </li> </ul> </note></p>
     async fn send_command(
         &self,
         input: SendCommandRequest,
@@ -394,7 +460,7 @@ impl QldbSessionClient {
 
 #[async_trait]
 impl QldbSession for QldbSessionClient {
-    /// <p><p>Sends a command to an Amazon QLDB ledger.</p> <note> <p>Instead of interacting directly with this API, we recommend that you use the Amazon QLDB Driver or the QLDB Shell to execute data transactions on a ledger.</p> <ul> <li> <p>If you are working with an AWS SDK, use the QLDB Driver. The driver provides a high-level abstraction layer above this <code>qldbsession</code> data plane and manages <code>SendCommand</code> API calls for you. For information and a list of supported programming languages, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-driver.html">Getting started with the driver</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> <li> <p>If you are working with the AWS Command Line Interface (AWS CLI), use the QLDB Shell. The shell is a command line interface that uses the QLDB Driver to interact with a ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html">Accessing Amazon QLDB using the QLDB Shell</a>.</p> </li> </ul> </note></p>
+    /// <p><p>Sends a command to an Amazon QLDB ledger.</p> <note> <p>Instead of interacting directly with this API, we recommend using the QLDB driver or the QLDB shell to execute data transactions on a ledger.</p> <ul> <li> <p>If you are working with an AWS SDK, use the QLDB driver. The driver provides a high-level abstraction layer above this <i>QLDB Session</i> data plane and manages <code>SendCommand</code> API calls for you. For information and a list of supported programming languages, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-driver.html">Getting started with the driver</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> <li> <p>If you are working with the AWS Command Line Interface (AWS CLI), use the QLDB shell. The shell is a command line interface that uses the QLDB driver to interact with a ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html">Accessing Amazon QLDB using the QLDB shell</a>.</p> </li> </ul> </note></p>
     async fn send_command(
         &self,
         input: SendCommandRequest,

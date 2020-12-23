@@ -25,6 +25,36 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>An object that contains information about your account details.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccountDetails {
+    /// <p>Additional email addresses where updates are sent about your account review process.</p>
+    #[serde(rename = "AdditionalContactEmailAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_contact_email_addresses: Option<Vec<String>>,
+    /// <p>The language you would prefer for the case. The contact language can be one of <code>ENGLISH</code> or <code>JAPANESE</code>.</p>
+    #[serde(rename = "ContactLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_language: Option<String>,
+    /// <p><p>The type of email your account is sending. The mail type can be one of the following:</p> <ul> <li> <p> <code>MARKETING</code> – Most of your sending traffic is to keep your customers informed of your latest offering.</p> </li> <li> <p> <code>TRANSACTIONAL</code> – Most of your sending traffic is to communicate during a transaction with a customer.</p> </li> </ul></p>
+    #[serde(rename = "MailType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mail_type: Option<String>,
+    /// <p>Information about the review of the latest details you submitted.</p>
+    #[serde(rename = "ReviewDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub review_details: Option<ReviewDetails>,
+    /// <p>A description of the types of email that you plan to send.</p>
+    #[serde(rename = "UseCaseDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_case_description: Option<String>,
+    /// <p>The URL of your website. This information helps us better understand the type of content that you plan to send.</p>
+    #[serde(rename = "WebsiteURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub website_url: Option<String>,
+}
+
 /// <p>An object that contains information about a blacklisting event that impacts one of the dedicated IP addresses that is associated with your account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -57,6 +87,50 @@ pub struct Body {
     pub text: Option<Content>,
 }
 
+/// <p>An object that contains the body of the message. You can specify a template message.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BulkEmailContent {
+    /// <p>The template to use for the bulk email message.</p>
+    #[serde(rename = "Template")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template: Option<Template>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BulkEmailEntry {
+    /// <p><p>Represents the destination of the message, consisting of To:, CC:, and BCC: fields.</p> <note> <p>Amazon SES does not support the SMTPUTF8 extension, as described in <a href="https://tools.ietf.org/html/rfc6531">RFC6531</a>. For this reason, the local part of a destination email address (the part of the email address that precedes the @ sign) may only contain <a href="https://en.wikipedia.org/wiki/Email_address#Local-part">7-bit ASCII characters</a>. If the domain part of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in <a href="https://tools.ietf.org/html/rfc3492.html">RFC3492</a>.</p> </note></p>
+    #[serde(rename = "Destination")]
+    pub destination: Destination,
+    /// <p>The <code>ReplacementEmailContent</code> associated with a <code>BulkEmailEntry</code>.</p>
+    #[serde(rename = "ReplacementEmailContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_email_content: Option<ReplacementEmailContent>,
+    /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send using the <code>SendBulkTemplatedEmail</code> operation. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>
+    #[serde(rename = "ReplacementTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_tags: Option<Vec<MessageTag>>,
+}
+
+/// <p>The result of the <code>SendBulkEmail</code> operation of each specified <code>BulkEmailEntry</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BulkEmailEntryResult {
+    /// <p>A description of an error that prevented a message being sent using the <code>SendBulkTemplatedEmail</code> operation.</p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// <p>The unique message identifier returned from the <code>SendBulkTemplatedEmail</code> operation.</p>
+    #[serde(rename = "MessageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+    /// <p><p>The status of a message sent using the <code>SendBulkTemplatedEmail</code> operation.</p> <p>Possible values for this parameter include:</p> <ul> <li> <p>SUCCESS: Amazon SES accepted the message, and will attempt to deliver it to the recipients.</p> </li> <li> <p>MESSAGE<em>REJECTED: The message was rejected because it contained a virus.</p> </li> <li> <p>MAIL</em>FROM<em>DOMAIN</em>NOT<em>VERIFIED: The sender&#39;s email address or domain was not verified.</p> </li> <li> <p>CONFIGURATION</em>SET<em>DOES</em>NOT<em>EXIST: The configuration set you specified does not exist.</p> </li> <li> <p>TEMPLATE</em>DOES<em>NOT</em>EXIST: The template you specified does not exist.</p> </li> <li> <p>ACCOUNT<em>SUSPENDED: Your account has been shut down because of issues related to your email sending practices.</p> </li> <li> <p>ACCOUNT</em>THROTTLED: The number of emails you can send has been reduced because your account has exceeded its allocated sending limit.</p> </li> <li> <p>ACCOUNT<em>DAILY</em>QUOTA<em>EXCEEDED: You have reached or exceeded the maximum number of emails you can send from your account in a 24-hour period.</p> </li> <li> <p>INVALID</em>SENDING<em>POOL</em>NAME: The configuration set you specified refers to an IP pool that does not exist.</p> </li> <li> <p>ACCOUNT<em>SENDING</em>PAUSED: Email sending for the Amazon SES account was disabled using the <a href="https://docs.aws.amazon.com/ses/latest/APIReference/API_UpdateAccountSendingEnabled.html">UpdateAccountSendingEnabled</a> operation.</p> </li> <li> <p>CONFIGURATION<em>SET</em>SENDING<em>PAUSED: Email sending for this configuration set was disabled using the &lt;a href=&quot;https://docs.aws.amazon.com/ses/latest/APIReference/API</em>UpdateConfigurationSetSendingEnabled.html&quot;&gt;UpdateConfigurationSetSendingEnabled</a> operation.</p> </li> <li> <p>INVALID<em>PARAMETER</em>VALUE: One or more of the parameters you specified when calling this operation was invalid. See the error message for additional information.</p> </li> <li> <p>TRANSIENT_FAILURE: Amazon SES was unable to process your request because of a temporary issue.</p> </li> <li> <p>FAILED: Amazon SES was unable to process your request. See the error message for additional information.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>An object that defines an Amazon CloudWatch destination for email events. You can use Amazon CloudWatch to monitor and gain insights on your email sending metrics.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchDestination {
@@ -77,6 +151,57 @@ pub struct CloudWatchDimensionConfiguration {
     /// <p>The location where the Amazon SES API v2 finds the value of a dimension to publish to Amazon CloudWatch. If you want to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code> or <code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want to use your own email headers, choose <code>emailHeader</code>. If you want to use link tags, choose <code>linkTags</code>.</p>
     #[serde(rename = "DimensionValueSource")]
     pub dimension_value_source: String,
+}
+
+/// <p>A contact is the end-user who is receiving the email.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Contact {
+    /// <p>The contact's email address.</p>
+    #[serde(rename = "EmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email_address: Option<String>,
+    /// <p>A timestamp noting the last time the contact's information was updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The default topic preferences applied to the contact.</p>
+    #[serde(rename = "TopicDefaultPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_default_preferences: Option<Vec<TopicPreference>>,
+    /// <p>The contact's preference for being opted-in to or opted-out of a topic.</p>
+    #[serde(rename = "TopicPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_preferences: Option<Vec<TopicPreference>>,
+    /// <p>A boolean value status noting if the contact is unsubscribed from all contact list topics.</p>
+    #[serde(rename = "UnsubscribeAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unsubscribe_all: Option<bool>,
+}
+
+/// <p>A list that contains contacts that have subscribed to a particular topic or topics.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContactList {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_list_name: Option<String>,
+    /// <p>A timestamp noting the last time the contact list was updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+}
+
+/// <p>An object that contains details about the action of a contact list.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ContactListDestination {
+    /// <p><p>&gt;The type of action that you want to perform on the addresses. Acceptable values:</p> <ul> <li> <p>PUT: add the addresses to the contact list. If the record already exists, it will override it with the new value.</p> </li> <li> <p>DELETE: remove the addresses from the contact list.</p> </li> </ul></p>
+    #[serde(rename = "ContactListImportAction")]
+    pub contact_list_import_action: String,
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
 }
 
 /// <p>An object that represents the content of the email, and optionally a character set specification.</p>
@@ -149,6 +274,86 @@ pub struct CreateConfigurationSetRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetResponse {}
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateContactListRequest {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>A description of what the contact list is about.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The tags associated with a contact list.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>An interest group, theme, or label within a list. A contact list can have multiple topics.</p>
+    #[serde(rename = "Topics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<Topic>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateContactListResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateContactRequest {
+    /// <p>The attribute data attached to a contact.</p>
+    #[serde(rename = "AttributesData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes_data: Option<String>,
+    /// <p>The name of the contact list to which the contact should be added.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>The contact's email address.</p>
+    #[serde(rename = "EmailAddress")]
+    pub email_address: String,
+    /// <p>The contact's preferences for being opted-in to or opted-out of topics.</p>
+    #[serde(rename = "TopicPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_preferences: Option<Vec<TopicPreference>>,
+    /// <p>A boolean value status noting if the contact is unsubscribed from all contact list topics.</p>
+    #[serde(rename = "UnsubscribeAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unsubscribe_all: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateContactResponse {}
+
+/// <p>Represents a request to create a custom verification email template.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCustomVerificationEmailTemplateRequest {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    #[serde(rename = "FailureRedirectionURL")]
+    pub failure_redirection_url: String,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    #[serde(rename = "FromEmailAddress")]
+    pub from_email_address: String,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    #[serde(rename = "SuccessRedirectionURL")]
+    pub success_redirection_url: String,
+    /// <p>The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML, with some limitations. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html#custom-verification-emails-faq">Custom Verification Email Frequently Asked Questions</a> in the <i>Amazon SES Developer Guide</i>.</p>
+    #[serde(rename = "TemplateContent")]
+    pub template_content: String,
+    /// <p>The name of the custom verification email template.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+    /// <p>The subject line of the custom verification email.</p>
+    #[serde(rename = "TemplateSubject")]
+    pub template_subject: String,
+}
+
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCustomVerificationEmailTemplateResponse {}
+
 /// <p>A request to create a new dedicated IP pool.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -199,6 +404,26 @@ pub struct CreateDeliverabilityTestReportResponse {
     pub report_id: String,
 }
 
+/// <p>Represents a request to create a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateEmailIdentityPolicyRequest {
+    /// <p>The email identity for which you want to create a policy.</p>
+    #[serde(rename = "EmailIdentity")]
+    pub email_identity: String,
+    /// <p>The text of the policy in JSON format. The policy cannot exceed 4 KB.</p> <p>For information about the syntax of sending authorization policies, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-policies.html">Amazon SES Developer Guide</a>.</p>
+    #[serde(rename = "Policy")]
+    pub policy: String,
+    /// <p>The name of the policy.</p> <p>The policy name cannot exceed 64 characters and can only include alphanumeric characters, dashes, and underscores.</p>
+    #[serde(rename = "PolicyName")]
+    pub policy_name: String,
+}
+
+/// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateEmailIdentityPolicyResponse {}
+
 /// <p>A request to begin the verification process for an email identity (an email address or domain).</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -232,6 +457,71 @@ pub struct CreateEmailIdentityResponse {
     #[serde(rename = "VerifiedForSendingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verified_for_sending_status: Option<bool>,
+}
+
+/// <p>Represents a request to create an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateEmailTemplateRequest {
+    /// <p>The content of the email template, composed of a subject line, an HTML part, and a text-only part.</p>
+    #[serde(rename = "TemplateContent")]
+    pub template_content: EmailTemplateContent,
+    /// <p>The name of the template you want to create.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateEmailTemplateResponse {}
+
+/// <p>Represents a request to create an import job from a data source for a data destination.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateImportJobRequest {
+    /// <p>The data source for the import job.</p>
+    #[serde(rename = "ImportDataSource")]
+    pub import_data_source: ImportDataSource,
+    /// <p>The destination for the import job.</p>
+    #[serde(rename = "ImportDestination")]
+    pub import_destination: ImportDestination,
+}
+
+/// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateImportJobResponse {
+    /// <p>A string that represents the import job ID.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+/// <p>Contains information about a custom verification email template.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomVerificationEmailTemplateMetadata {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    #[serde(rename = "FailureRedirectionURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_redirection_url: Option<String>,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    #[serde(rename = "FromEmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_email_address: Option<String>,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    #[serde(rename = "SuccessRedirectionURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success_redirection_url: Option<String>,
+    /// <p>The name of the custom verification email template.</p>
+    #[serde(rename = "TemplateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+    /// <p>The subject line of the custom verification email.</p>
+    #[serde(rename = "TemplateSubject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_subject: Option<String>,
 }
 
 /// <p>An object that contains information about the volume of email sent on each day of the analysis period.</p>
@@ -302,6 +592,47 @@ pub struct DeleteConfigurationSetRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetResponse {}
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteContactListRequest {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteContactListResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteContactRequest {
+    /// <p>The name of the contact list from which the contact should be removed.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>The contact's email address.</p>
+    #[serde(rename = "EmailAddress")]
+    pub email_address: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteContactResponse {}
+
+/// <p>Represents a request to delete an existing custom verification email template.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCustomVerificationEmailTemplateRequest {
+    /// <p>The name of the custom verification email template that you want to delete.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteCustomVerificationEmailTemplateResponse {}
+
 /// <p>A request to delete a dedicated IP pool.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -316,6 +647,23 @@ pub struct DeleteDedicatedIpPoolRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDedicatedIpPoolResponse {}
 
+/// <p>Represents a request to delete a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteEmailIdentityPolicyRequest {
+    /// <p>The email identity for which you want to delete a policy.</p>
+    #[serde(rename = "EmailIdentity")]
+    pub email_identity: String,
+    /// <p>The name of the policy.</p> <p>The policy name cannot exceed 64 characters and can only include alphanumeric characters, dashes, and underscores.</p>
+    #[serde(rename = "PolicyName")]
+    pub policy_name: String,
+}
+
+/// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteEmailIdentityPolicyResponse {}
+
 /// <p>A request to delete an existing email identity. When you delete an identity, you lose the ability to send email from that identity. You can restore your ability to send email by completing the verification process for the identity again.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -329,6 +677,20 @@ pub struct DeleteEmailIdentityRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEmailIdentityResponse {}
+
+/// <p>Represents a request to delete an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteEmailTemplateRequest {
+    /// <p>The name of the template to be deleted.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteEmailTemplateResponse {}
 
 /// <p>A request to remove an email address from the suppression list for your account.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -562,6 +924,37 @@ pub struct EmailContent {
     pub template: Option<Template>,
 }
 
+/// <p>The content of the email, composed of a subject line, an HTML part, and a text-only part.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EmailTemplateContent {
+    /// <p>The HTML body of the email.</p>
+    #[serde(rename = "Html")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html: Option<String>,
+    /// <p>The subject line of the email.</p>
+    #[serde(rename = "Subject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject: Option<String>,
+    /// <p>The email body that will be visible to recipients whose email clients do not display HTML.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+}
+
+/// <p>Contains information about an email template.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EmailTemplateMetadata {
+    /// <p>The time and date the template was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The name of the template.</p>
+    #[serde(rename = "TemplateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+}
+
 /// <p>In the Amazon SES API v2, <i>events</i> include message sends, deliveries, opens, clicks, bounces, complaints and delivery delays. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -624,6 +1017,20 @@ pub struct EventDestinationDefinition {
     pub sns_destination: Option<SnsDestination>,
 }
 
+/// <p>An object that contains the failure details about an import job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FailureInfo {
+    /// <p>A message about why the import job failed.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>An Amazon S3 presigned URL that contains all the failed records and related information.</p>
+    #[serde(rename = "FailedRecordsS3Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_records_s3_url: Option<String>,
+}
+
 /// <p>A request to obtain information about the email-sending capabilities of your Amazon SES account.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -637,6 +1044,10 @@ pub struct GetAccountResponse {
     #[serde(rename = "DedicatedIpAutoWarmupEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dedicated_ip_auto_warmup_enabled: Option<bool>,
+    /// <p>An object that defines your account details.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details: Option<AccountDetails>,
     /// <p><p>The reputation status of your Amazon SES account. The status can be one of the following:</p> <ul> <li> <p> <code>HEALTHY</code> – There are no reputation-related issues that currently impact your account.</p> </li> <li> <p> <code>PROBATION</code> – We&#39;ve identified potential issues with your Amazon SES account. We&#39;re placing your account under review while you work on correcting these issues.</p> </li> <li> <p> <code>SHUTDOWN</code> – Your account&#39;s ability to send email is currently paused because of an issue with the email sent from your account. When you correct the issue, you can contact us and request that your account&#39;s ability to send email is resumed.</p> </li> </ul></p>
     #[serde(rename = "EnforcementStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -737,6 +1148,130 @@ pub struct GetConfigurationSetResponse {
     #[serde(rename = "TrackingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracking_options: Option<TrackingOptions>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetContactListRequest {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetContactListResponse {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_list_name: Option<String>,
+    /// <p>A timestamp noting when the contact list was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>A description of what the contact list is about.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A timestamp noting the last time the contact list was updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The tags associated with a contact list.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>An interest group, theme, or label within a list. A contact list can have multiple topics.</p>
+    #[serde(rename = "Topics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<Topic>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetContactRequest {
+    /// <p>The name of the contact list to which the contact belongs.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>The contact's email addres.</p>
+    #[serde(rename = "EmailAddress")]
+    pub email_address: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetContactResponse {
+    /// <p>The attribute data attached to a contact.</p>
+    #[serde(rename = "AttributesData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes_data: Option<String>,
+    /// <p>The name of the contact list to which the contact belongs.</p>
+    #[serde(rename = "ContactListName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_list_name: Option<String>,
+    /// <p>A timestamp noting when the contact was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The contact's email addres.</p>
+    #[serde(rename = "EmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email_address: Option<String>,
+    /// <p>A timestamp noting the last time the contact's information was updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The default topic preferences applied to the contact.</p>
+    #[serde(rename = "TopicDefaultPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_default_preferences: Option<Vec<TopicPreference>>,
+    /// <p>The contact's preference for being opted-in to or opted-out of a topic.&gt;</p>
+    #[serde(rename = "TopicPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_preferences: Option<Vec<TopicPreference>>,
+    /// <p>A boolean value status noting if the contact is unsubscribed from all contact list topics.</p>
+    #[serde(rename = "UnsubscribeAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unsubscribe_all: Option<bool>,
+}
+
+/// <p>Represents a request to retrieve an existing custom verification email template.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCustomVerificationEmailTemplateRequest {
+    /// <p>The name of the custom verification email template that you want to retrieve.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>The following elements are returned by the service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCustomVerificationEmailTemplateResponse {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    #[serde(rename = "FailureRedirectionURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_redirection_url: Option<String>,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    #[serde(rename = "FromEmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_email_address: Option<String>,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    #[serde(rename = "SuccessRedirectionURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success_redirection_url: Option<String>,
+    /// <p>The content of the custom verification email.</p>
+    #[serde(rename = "TemplateContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_content: Option<String>,
+    /// <p>The name of the custom verification email template.</p>
+    #[serde(rename = "TemplateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+    /// <p>The subject line of the custom verification email.</p>
+    #[serde(rename = "TemplateSubject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_subject: Option<String>,
 }
 
 /// <p>A request to obtain more information about a dedicated IP address.</p>
@@ -897,6 +1432,25 @@ pub struct GetDomainStatisticsReportResponse {
     pub overall_volume: OverallVolume,
 }
 
+/// <p>A request to return the policies of an email identity.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetEmailIdentityPoliciesRequest {
+    /// <p>The email identity that you want to retrieve policies for.</p>
+    #[serde(rename = "EmailIdentity")]
+    pub email_identity: String,
+}
+
+/// <p>Identity policies associated with email identity.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetEmailIdentityPoliciesResponse {
+    /// <p>A map of policy names to policies.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policies: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>A request to return details about an email identity.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -926,6 +1480,10 @@ pub struct GetEmailIdentityResponse {
     #[serde(rename = "MailFromAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mail_from_attributes: Option<MailFromAttributes>,
+    /// <p>A map of policy names to policies.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policies: Option<::std::collections::HashMap<String, String>>,
     /// <p>An array of objects that define the tags (keys and values) that are associated with the email identity.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -934,6 +1492,78 @@ pub struct GetEmailIdentityResponse {
     #[serde(rename = "VerifiedForSendingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verified_for_sending_status: Option<bool>,
+}
+
+/// <p>Represents a request to display the template object (which includes the subject line, HTML part and text part) for the template you specify.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetEmailTemplateRequest {
+    /// <p>The name of the template you want to retrieve.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>The following element is returned by the service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetEmailTemplateResponse {
+    /// <p>The content of the email template, composed of a subject line, an HTML part, and a text-only part.</p>
+    #[serde(rename = "TemplateContent")]
+    pub template_content: EmailTemplateContent,
+    /// <p>The name of the template you want to retrieve.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>Represents a request for information about an import job using the import job ID.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetImportJobRequest {
+    /// <p>The ID of the import job.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+/// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetImportJobResponse {
+    /// <p>The time stamp of when the import job was completed.</p>
+    #[serde(rename = "CompletedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed_timestamp: Option<f64>,
+    /// <p>The time stamp of when the import job was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The number of records that failed processing because of invalid input or other reasons.</p>
+    #[serde(rename = "FailedRecordsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_records_count: Option<i64>,
+    /// <p>The failure details about an import job.</p>
+    #[serde(rename = "FailureInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_info: Option<FailureInfo>,
+    /// <p>The data source of the import job.</p>
+    #[serde(rename = "ImportDataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_data_source: Option<ImportDataSource>,
+    /// <p>The destination of the import job.</p>
+    #[serde(rename = "ImportDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_destination: Option<ImportDestination>,
+    /// <p>A string that represents the import job ID.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The status of the import job.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>The current number of records processed.</p>
+    #[serde(rename = "ProcessedRecordsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processed_records_count: Option<i64>,
 }
 
 /// <p>A request to retrieve information about an email address that's on the suppression list for your account.</p>
@@ -970,6 +1600,49 @@ pub struct IdentityInfo {
     #[serde(rename = "SendingEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sending_enabled: Option<bool>,
+}
+
+/// <p>An object that contains details about the data source of the import job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ImportDataSource {
+    /// <p>The data format of the import job's data source.</p>
+    #[serde(rename = "DataFormat")]
+    pub data_format: String,
+    /// <p>An Amazon S3 URL in the format s3://<i>&lt;bucket_name&gt;</i>/<i>&lt;object&gt;</i>.</p>
+    #[serde(rename = "S3Url")]
+    pub s3_url: String,
+}
+
+/// <p>An object that contains details about the resource destination the import job is going to target.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ImportDestination {
+    /// <p>An object that contains the action of the import job towards a contact list.</p>
+    #[serde(rename = "ContactListDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_list_destination: Option<ContactListDestination>,
+    /// <p>An object that contains the action of the import job towards suppression list.</p>
+    #[serde(rename = "SuppressionListDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppression_list_destination: Option<SuppressionListDestination>,
+}
+
+/// <p>A summary of the import job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImportJobSummary {
+    /// <p>The date and time when the import job was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    #[serde(rename = "ImportDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_destination: Option<ImportDestination>,
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
 }
 
 /// <p>An object that contains information about the inbox placement data settings for a verified domain that’s associated with your AWS account. This data is available only if you enabled the Deliverability dashboard for the domain.</p>
@@ -1033,6 +1706,107 @@ pub struct ListConfigurationSetsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_sets: Option<Vec<String>>,
     /// <p>A token that indicates that there are additional configuration sets to list. To view additional configuration sets, issue another request to <code>ListConfigurationSets</code>, and pass this token in the <code>NextToken</code> parameter.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListContactListsRequest {
+    /// <p>A string token indicating that there might be additional contact lists available to be listed. Use the token provided in the Response to use in the subsequent call to ListContactLists with the same parameters to retrieve the next page of contact lists.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Maximum number of contact lists to return at once. Use this parameter to paginate results. If additional contact lists exist beyond the specified limit, the <code>NextToken</code> element is sent in the response. Use the <code>NextToken</code> value in subsequent requests to retrieve additional lists.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListContactListsResponse {
+    /// <p>The available contact lists.</p>
+    #[serde(rename = "ContactLists")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_lists: Option<Vec<ContactList>>,
+    /// <p>A string token indicating that there might be additional contact lists available to be listed. Copy this token to a subsequent call to <code>ListContactLists</code> with the same parameters to retrieve the next page of contact lists.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>A filter that can be applied to a list of contacts.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListContactsFilter {
+    /// <p>The status by which you are filtering: <code>OPT_IN</code> or <code>OPT_OUT</code>.</p>
+    #[serde(rename = "FilteredStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filtered_status: Option<String>,
+    /// <p>Used for filtering by a specific topic preference.</p>
+    #[serde(rename = "TopicFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_filter: Option<TopicFilter>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListContactsRequest {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>A filter that can be applied to a list of contacts.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<ListContactsFilter>,
+    /// <p>A string token indicating that there might be additional contacts available to be listed. Use the token provided in the Response to use in the subsequent call to ListContacts with the same parameters to retrieve the next page of contacts.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The number of contacts that may be returned at once, which is dependent on if there are more or less contacts than the value of the PageSize. Use this parameter to paginate results. If additional contacts exist beyond the specified limit, the <code>NextToken</code> element is sent in the response. Use the <code>NextToken</code> value in subsequent requests to retrieve additional contacts.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListContactsResponse {
+    /// <p>The contacts present in a specific contact list.</p>
+    #[serde(rename = "Contacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contacts: Option<Vec<Contact>>,
+    /// <p>A string token indicating that there might be additional contacts available to be listed. Copy this token to a subsequent call to <code>ListContacts</code> with the same parameters to retrieve the next page of contacts.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Represents a request to list the existing custom verification email templates for your account.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCustomVerificationEmailTemplatesRequest {
+    /// <p>A token returned from a previous call to <code>ListCustomVerificationEmailTemplates</code> to indicate the position in the list of custom verification email templates.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The number of results to show in a single call to <code>ListCustomVerificationEmailTemplates</code>. If the number of results is larger than the number you specified in this parameter, then the response includes a <code>NextToken</code> element, which you can use to obtain additional results.</p> <p>The value you specify has to be at least 1, and can be no more than 50.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+}
+
+/// <p>The following elements are returned by the service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCustomVerificationEmailTemplatesResponse {
+    /// <p>A list of the custom verification email templates that exist in your account.</p>
+    #[serde(rename = "CustomVerificationEmailTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_verification_email_templates: Option<Vec<CustomVerificationEmailTemplateMetadata>>,
+    /// <p>A token indicating that there are additional custom verification email templates available to be listed. Pass this token to a subsequent call to <code>ListCustomVerificationEmailTemplates</code> to retrieve the next 50 custom verification email templates.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1155,6 +1929,79 @@ pub struct ListEmailIdentitiesResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+/// <p>Represents a request to list the email templates present in your Amazon SES account in the current AWS Region. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListEmailTemplatesRequest {
+    /// <p>A token returned from a previous call to <code>ListEmailTemplates</code> to indicate the position in the list of email templates.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The number of results to show in a single call to <code>ListEmailTemplates</code>. If the number of results is larger than the number you specified in this parameter, then the response includes a <code>NextToken</code> element, which you can use to obtain additional results.</p> <p>The value you specify has to be at least 1, and can be no more than 10.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+}
+
+/// <p>The following elements are returned by the service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListEmailTemplatesResponse {
+    /// <p>A token indicating that there are additional email templates available to be listed. Pass this token to a subsequent <code>ListEmailTemplates</code> call to retrieve the next 10 email templates.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array the contains the name and creation time stamp for each template in your Amazon SES account.</p>
+    #[serde(rename = "TemplatesMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub templates_metadata: Option<Vec<EmailTemplateMetadata>>,
+}
+
+/// <p>Represents a request to list all of the import jobs for a data destination within the specified maximum number of import jobs.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListImportJobsRequest {
+    /// <p>The destination of the import job, which can be used to list import jobs that have a certain <code>ImportDestinationType</code>.</p>
+    #[serde(rename = "ImportDestinationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_destination_type: Option<String>,
+    /// <p>A string token indicating that there might be additional import jobs available to be listed. Copy this token to a subsequent call to <code>ListImportJobs</code> with the same parameters to retrieve the next page of import jobs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Maximum number of import jobs to return at once. Use this parameter to paginate results. If additional import jobs exist beyond the specified limit, the <code>NextToken</code> element is sent in the response. Use the <code>NextToken</code> value in subsequent requests to retrieve additional addresses.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+}
+
+/// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListImportJobsResponse {
+    /// <p>A list of the import job summaries.</p>
+    #[serde(rename = "ImportJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_jobs: Option<Vec<ImportJobSummary>>,
+    /// <p>A string token indicating that there might be additional import jobs available to be listed. Copy this token to a subsequent call to <code>ListImportJobs</code> with the same parameters to retrieve the next page of import jobs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>An object used to specify a list or topic to which an email belongs, which will be used when a contact chooses to unsubscribe.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListManagementOptions {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>The name of the topic.</p>
+    #[serde(rename = "TopicName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_name: Option<String>,
 }
 
 /// <p>A request to obtain a list of email destinations that are on the suppression list for your account.</p>
@@ -1319,6 +2166,38 @@ pub struct PutAccountDedicatedIpWarmupAttributesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountDedicatedIpWarmupAttributesResponse {}
+
+/// <p>A request to submit new account details.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAccountDetailsRequest {
+    /// <p>Additional email addresses that you would like to be notified regarding Amazon SES matters.</p>
+    #[serde(rename = "AdditionalContactEmailAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_contact_email_addresses: Option<Vec<String>>,
+    /// <p>The language you would prefer to be contacted with.</p>
+    #[serde(rename = "ContactLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_language: Option<String>,
+    /// <p>The type of email your account will send.</p>
+    #[serde(rename = "MailType")]
+    pub mail_type: String,
+    /// <p>Indicates whether or not your account should have production access in the current AWS Region.</p> <p>If the value is <code>false</code>, then your account is in the <i>sandbox</i>. When your account is in the sandbox, you can only send email to verified identities. Additionally, the maximum number of emails you can send in a 24-hour period (your sending quota) is 200, and the maximum number of emails you can send per second (your maximum sending rate) is 1.</p> <p>If the value is <code>true</code>, then your account has production access. When your account has production access, you can send email to any address. The sending quota and maximum sending rate for your account vary based on your specific use case.</p>
+    #[serde(rename = "ProductionAccessEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub production_access_enabled: Option<bool>,
+    /// <p>A description of the types of email that you plan to send.</p>
+    #[serde(rename = "UseCaseDescription")]
+    pub use_case_description: String,
+    /// <p>The URL of your website. This information helps us better understand the type of content that you plan to send.</p>
+    #[serde(rename = "WebsiteURL")]
+    pub website_url: String,
+}
+
+/// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutAccountDetailsResponse {}
 
 /// <p>A request to change the ability of your account to send email.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1615,6 +2494,26 @@ pub struct RawMessage {
     pub data: bytes::Bytes,
 }
 
+/// <p>The <code>ReplaceEmailContent</code> object to be used for a specific <code>BulkEmailEntry</code>. The <code>ReplacementTemplate</code> can be specified within this object.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ReplacementEmailContent {
+    /// <p>The <code>ReplacementTemplate</code> associated with <code>ReplacementEmailContent</code>.</p>
+    #[serde(rename = "ReplacementTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_template: Option<ReplacementTemplate>,
+}
+
+/// <p>An object which contains <code>ReplacementTemplateData</code> to be used for a specific <code>BulkEmailEntry</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ReplacementTemplate {
+    /// <p>A list of replacement values to apply to the template. This parameter is a JSON object, typically consisting of key-value pairs in which the keys correspond to replacement tags in the email template.</p>
+    #[serde(rename = "ReplacementTemplateData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_template_data: Option<String>,
+}
+
 /// <p>Enable or disable collection of reputation metrics for emails that you send using this configuration set in the current AWS Region. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReputationOptions {
@@ -1628,7 +2527,95 @@ pub struct ReputationOptions {
     pub reputation_metrics_enabled: Option<bool>,
 }
 
-/// <p>A request to send an email message.</p>
+/// <p>An object that contains information about your account details review.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReviewDetails {
+    /// <p>The associated support center case ID (if any).</p>
+    #[serde(rename = "CaseId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub case_id: Option<String>,
+    /// <p><p>The status of the latest review of your account. The status can be one of the following:</p> <ul> <li> <p> <code>PENDING</code> – We have received your appeal and are in the process of reviewing it.</p> </li> <li> <p> <code>GRANTED</code> – Your appeal has been reviewed and your production access has been granted.</p> </li> <li> <p> <code>DENIED</code> – Your appeal has been reviewed and your production access has been denied.</p> </li> <li> <p> <code>FAILED</code> – An internal error occurred and we didn&#39;t receive your appeal. You can submit your appeal again.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Represents a request to send email messages to multiple destinations using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SendBulkEmailRequest {
+    /// <p>The list of bulk email entry objects.</p>
+    #[serde(rename = "BulkEmailEntries")]
+    pub bulk_email_entries: Vec<BulkEmailEntry>,
+    /// <p>The name of the configuration set that you want to use when sending the email.</p>
+    #[serde(rename = "ConfigurationSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_set_name: Option<String>,
+    /// <p>An object that contains the body of the message. You can specify a template message.</p>
+    #[serde(rename = "DefaultContent")]
+    pub default_content: BulkEmailContent,
+    /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send using the <code>SendEmail</code> operation. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>
+    #[serde(rename = "DefaultEmailTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_email_tags: Option<Vec<MessageTag>>,
+    /// <p>The address that you want bounce and complaint notifications to be sent to.</p>
+    #[serde(rename = "FeedbackForwardingEmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_forwarding_email_address: Option<String>,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>FeedbackForwardingEmailAddress</code> parameter.</p> <p>For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com) attaches a policy to it that authorizes you to use feedback@example.com, then you would specify the <code>FeedbackForwardingEmailAddressIdentityArn</code> to be arn:aws:ses:us-east-1:123456789012:identity/example.com, and the <code>FeedbackForwardingEmailAddress</code> to be feedback@example.com.</p> <p>For more information about sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+    #[serde(rename = "FeedbackForwardingEmailAddressIdentityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_forwarding_email_address_identity_arn: Option<String>,
+    /// <p>The email address that you want to use as the "From" address for the email. The address that you specify has to be verified.</p>
+    #[serde(rename = "FromEmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_email_address: Option<String>,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>FromEmailAddress</code> parameter.</p> <p>For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com) attaches a policy to it that authorizes you to use sender@example.com, then you would specify the <code>FromEmailAddressIdentityArn</code> to be arn:aws:ses:us-east-1:123456789012:identity/example.com, and the <code>FromEmailAddress</code> to be sender@example.com.</p> <p>For more information about sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+    #[serde(rename = "FromEmailAddressIdentityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_email_address_identity_arn: Option<String>,
+    /// <p>The "Reply-to" email addresses for the message. When the recipient replies to the message, each Reply-to address receives the reply.</p>
+    #[serde(rename = "ReplyToAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reply_to_addresses: Option<Vec<String>>,
+}
+
+/// <p>The following data is returned in JSON format by the service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SendBulkEmailResponse {
+    #[serde(rename = "BulkEmailEntryResults")]
+    pub bulk_email_entry_results: Vec<BulkEmailEntryResult>,
+}
+
+/// <p>Represents a request to send a custom verification email to a specified recipient.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SendCustomVerificationEmailRequest {
+    /// <p>Name of a configuration set to use when sending the verification email.</p>
+    #[serde(rename = "ConfigurationSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_set_name: Option<String>,
+    /// <p>The email address to verify.</p>
+    #[serde(rename = "EmailAddress")]
+    pub email_address: String,
+    /// <p>The name of the custom verification email template to use when sending the verification email.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>The following element is returned by the service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SendCustomVerificationEmailResponse {
+    /// <p>The unique message identifier returned from the <code>SendCustomVerificationEmail</code> operation.</p>
+    #[serde(rename = "MessageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+}
+
+/// <p>Represents a request to send a single formatted email using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-formatted.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendEmailRequest {
@@ -1636,12 +2623,13 @@ pub struct SendEmailRequest {
     #[serde(rename = "ConfigurationSetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_set_name: Option<String>,
-    /// <p>An object that contains the body of the message. You can send either a Simple message or a Raw message.</p>
+    /// <p>An object that contains the body of the message. You can send either a Simple message Raw message or a template Message.</p>
     #[serde(rename = "Content")]
     pub content: EmailContent,
     /// <p>An object that contains the recipients of the email message.</p>
     #[serde(rename = "Destination")]
-    pub destination: Destination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<Destination>,
     /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send using the <code>SendEmail</code> operation. Tags correspond to characteristics of the email that you define, so that you can publish email sending events. </p>
     #[serde(rename = "EmailTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1650,10 +2638,22 @@ pub struct SendEmailRequest {
     #[serde(rename = "FeedbackForwardingEmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub feedback_forwarding_email_address: Option<String>,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>FeedbackForwardingEmailAddress</code> parameter.</p> <p>For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com) attaches a policy to it that authorizes you to use feedback@example.com, then you would specify the <code>FeedbackForwardingEmailAddressIdentityArn</code> to be arn:aws:ses:us-east-1:123456789012:identity/example.com, and the <code>FeedbackForwardingEmailAddress</code> to be feedback@example.com.</p> <p>For more information about sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+    #[serde(rename = "FeedbackForwardingEmailAddressIdentityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_forwarding_email_address_identity_arn: Option<String>,
     /// <p>The email address that you want to use as the "From" address for the email. The address that you specify has to be verified. </p>
     #[serde(rename = "FromEmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_email_address: Option<String>,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>FromEmailAddress</code> parameter.</p> <p>For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com) attaches a policy to it that authorizes you to use sender@example.com, then you would specify the <code>FromEmailAddressIdentityArn</code> to be arn:aws:ses:us-east-1:123456789012:identity/example.com, and the <code>FromEmailAddress</code> to be sender@example.com.</p> <p>For more information about sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>For Raw emails, the <code>FromEmailAddressIdentityArn</code> value overrides the X-SES-SOURCE-ARN and X-SES-FROM-ARN headers specified in raw email message content.</p>
+    #[serde(rename = "FromEmailAddressIdentityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_email_address_identity_arn: Option<String>,
+    /// <p>An object used to specify a list or topic to which an email belongs, which will be used when a contact chooses to unsubscribe.</p>
+    #[serde(rename = "ListManagementOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_management_options: Option<ListManagementOptions>,
     /// <p>The "Reply-to" email addresses for the message. When the recipient replies to the message, each Reply-to address receives the reply.</p>
     #[serde(rename = "ReplyToAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1763,6 +2763,14 @@ pub struct SuppressionAttributes {
     pub suppressed_reasons: Option<Vec<String>>,
 }
 
+/// <p>An object that contains details about the action of suppression list.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SuppressionListDestination {
+    /// <p><p>The type of action that you want to perform on the address. Acceptable values:</p> <ul> <li> <p>PUT: add the addresses to the suppression list. If the record already exists, it will override it with the new value.</p> </li> <li> <p>DELETE: remove the addresses from the suppression list.</p> </li> </ul></p>
+    #[serde(rename = "SuppressionListImportAction")]
+    pub suppression_list_import_action: String,
+}
+
 /// <p>An object that contains information about the suppression list preferences for your account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SuppressionOptions {
@@ -1810,6 +2818,74 @@ pub struct Template {
     #[serde(rename = "TemplateData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_data: Option<String>,
+    /// <p>The name of the template. You will refer to this name when you send email using the <code>SendTemplatedEmail</code> or <code>SendBulkTemplatedEmail</code> operations. </p>
+    #[serde(rename = "TemplateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+}
+
+/// <p>&gt;Represents a request to create a preview of the MIME content of an email when provided with a template and a set of replacement data.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TestRenderEmailTemplateRequest {
+    /// <p>A list of replacement values to apply to the template. This parameter is a JSON object, typically consisting of key-value pairs in which the keys correspond to replacement tags in the email template.</p>
+    #[serde(rename = "TemplateData")]
+    pub template_data: String,
+    /// <p>The name of the template that you want to render.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>The following element is returned by the service.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TestRenderEmailTemplateResponse {
+    /// <p>The complete MIME message rendered by applying the data in the <code>TemplateData</code> parameter to the template specified in the TemplateName parameter.</p>
+    #[serde(rename = "RenderedTemplate")]
+    pub rendered_template: String,
+}
+
+/// <p>An interest group, theme, or label within a list. Lists can have multiple topics.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Topic {
+    /// <p>The default subscription status to be applied to a contact if the contact has not noted their preference for subscribing to a topic.</p>
+    #[serde(rename = "DefaultSubscriptionStatus")]
+    pub default_subscription_status: String,
+    /// <p>A description of what the topic is about, which the contact will see.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the topic the contact will see.</p>
+    #[serde(rename = "DisplayName")]
+    pub display_name: String,
+    /// <p>The name of the topic.</p>
+    #[serde(rename = "TopicName")]
+    pub topic_name: String,
+}
+
+/// <p>Used for filtering by a specific topic preference.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TopicFilter {
+    /// <p>The name of a topic on which you wish to apply the filter.</p>
+    #[serde(rename = "TopicName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_name: Option<String>,
+    /// <p>Notes that the default subscription status should be applied to a contact because the contact has not noted their preference for subscribing to a topic.</p>
+    #[serde(rename = "UseDefaultIfPreferenceUnavailable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_default_if_preference_unavailable: Option<bool>,
+}
+
+/// <p>The contact's preference for being opted-in to or opted-out of a topic.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TopicPreference {
+    /// <p>The contact's subscription status to a topic which is either <code>OPT_IN</code> or <code>OPT_OUT</code>.</p>
+    #[serde(rename = "SubscriptionStatus")]
+    pub subscription_status: String,
+    /// <p>The name of the topic.</p>
+    #[serde(rename = "TopicName")]
+    pub topic_name: String,
 }
 
 /// <p>An object that defines the tracking options for a configuration set. When you use the Amazon SES API v2 to send an email, it contains an invisible image that's used to track when recipients open your email. If your email contains links, those links are changed slightly in order to track when recipients click them.</p> <p>These images and links include references to a domain operated by AWS. You can optionally configure the Amazon SES to use a domain that you operate for these images and links.</p>
@@ -1854,6 +2930,119 @@ pub struct UpdateConfigurationSetEventDestinationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConfigurationSetEventDestinationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateContactListRequest {
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>A description of what the contact list is about.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An interest group, theme, or label within a list. A contact list can have multiple topics.</p>
+    #[serde(rename = "Topics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<Topic>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateContactListResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateContactRequest {
+    /// <p>The attribute data attached to a contact.</p>
+    #[serde(rename = "AttributesData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes_data: Option<String>,
+    /// <p>The name of the contact list.</p>
+    #[serde(rename = "ContactListName")]
+    pub contact_list_name: String,
+    /// <p>The contact's email addres.</p>
+    #[serde(rename = "EmailAddress")]
+    pub email_address: String,
+    /// <p>The contact's preference for being opted-in to or opted-out of a topic.</p>
+    #[serde(rename = "TopicPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_preferences: Option<Vec<TopicPreference>>,
+    /// <p>A boolean value status noting if the contact is unsubscribed from all contact list topics.</p>
+    #[serde(rename = "UnsubscribeAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unsubscribe_all: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateContactResponse {}
+
+/// <p>Represents a request to update an existing custom verification email template.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateCustomVerificationEmailTemplateRequest {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    #[serde(rename = "FailureRedirectionURL")]
+    pub failure_redirection_url: String,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    #[serde(rename = "FromEmailAddress")]
+    pub from_email_address: String,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    #[serde(rename = "SuccessRedirectionURL")]
+    pub success_redirection_url: String,
+    /// <p>The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML, with some limitations. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html#custom-verification-emails-faq">Custom Verification Email Frequently Asked Questions</a> in the <i>Amazon SES Developer Guide</i>.</p>
+    #[serde(rename = "TemplateContent")]
+    pub template_content: String,
+    /// <p>The name of the custom verification email template that you want to update.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+    /// <p>The subject line of the custom verification email.</p>
+    #[serde(rename = "TemplateSubject")]
+    pub template_subject: String,
+}
+
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateCustomVerificationEmailTemplateResponse {}
+
+/// <p>Represents a request to update a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateEmailIdentityPolicyRequest {
+    /// <p>The email identity for which you want to update policy.</p>
+    #[serde(rename = "EmailIdentity")]
+    pub email_identity: String,
+    /// <p>The text of the policy in JSON format. The policy cannot exceed 4 KB.</p> <p> For information about the syntax of sending authorization policies, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-policies.html">Amazon SES Developer Guide</a>.</p>
+    #[serde(rename = "Policy")]
+    pub policy: String,
+    /// <p>The name of the policy.</p> <p>The policy name cannot exceed 64 characters and can only include alphanumeric characters, dashes, and underscores.</p>
+    #[serde(rename = "PolicyName")]
+    pub policy_name: String,
+}
+
+/// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateEmailIdentityPolicyResponse {}
+
+/// <p>Represents a request to update an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateEmailTemplateRequest {
+    /// <p>The content of the email template, composed of a subject line, an HTML part, and a text-only part.</p>
+    #[serde(rename = "TemplateContent")]
+    pub template_content: EmailTemplateContent,
+    /// <p>The name of the template you want to update.</p>
+    #[serde(rename = "TemplateName")]
+    pub template_name: String,
+}
+
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateEmailTemplateResponse {}
 
 /// <p>An object that contains information about the amount of email that was delivered to recipients.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2023,6 +3212,178 @@ impl fmt::Display for CreateConfigurationSetEventDestinationError {
     }
 }
 impl Error for CreateConfigurationSetEventDestinationError {}
+/// Errors returned by CreateContact
+#[derive(Debug, PartialEq)]
+pub enum CreateContactError {
+    /// <p>The resource specified in your request already exists.</p>
+    AlreadyExists(String),
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl CreateContactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContactError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateContactError::AlreadyExists(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateContactError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateContactError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateContactError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateContactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateContactError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateContactError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateContactError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateContactError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateContactError {}
+/// Errors returned by CreateContactList
+#[derive(Debug, PartialEq)]
+pub enum CreateContactListError {
+    /// <p>The resource specified in your request already exists.</p>
+    AlreadyExists(String),
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>There are too many instances of the specified resource type.</p>
+    LimitExceeded(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl CreateContactListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContactListError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateContactListError::AlreadyExists(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateContactListError::BadRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateContactListError::LimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateContactListError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateContactListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateContactListError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateContactListError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateContactListError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateContactListError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateContactListError {}
+/// Errors returned by CreateCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateCustomVerificationEmailTemplateError {
+    /// <p>The resource specified in your request already exists.</p>
+    AlreadyExists(String),
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>There are too many instances of the specified resource type.</p>
+    LimitExceeded(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl CreateCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCustomVerificationEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateCustomVerificationEmailTemplateError::AlreadyExists(err.msg),
+                    )
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        CreateCustomVerificationEmailTemplateError::BadRequest(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateCustomVerificationEmailTemplateError::LimitExceeded(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        CreateCustomVerificationEmailTemplateError::NotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        CreateCustomVerificationEmailTemplateError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateCustomVerificationEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCustomVerificationEmailTemplateError::AlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomVerificationEmailTemplateError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomVerificationEmailTemplateError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomVerificationEmailTemplateError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomVerificationEmailTemplateError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateCustomVerificationEmailTemplateError {}
 /// Errors returned by CreateDedicatedIpPool
 #[derive(Debug, PartialEq)]
 pub enum CreateDedicatedIpPoolError {
@@ -2245,6 +3606,158 @@ impl fmt::Display for CreateEmailIdentityError {
     }
 }
 impl Error for CreateEmailIdentityError {}
+/// Errors returned by CreateEmailIdentityPolicy
+#[derive(Debug, PartialEq)]
+pub enum CreateEmailIdentityPolicyError {
+    /// <p>The resource specified in your request already exists.</p>
+    AlreadyExists(String),
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>There are too many instances of the specified resource type.</p>
+    LimitExceeded(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl CreateEmailIdentityPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEmailIdentityPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateEmailIdentityPolicyError::AlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateEmailIdentityPolicyError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateEmailIdentityPolicyError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateEmailIdentityPolicyError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateEmailIdentityPolicyError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateEmailIdentityPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateEmailIdentityPolicyError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateEmailIdentityPolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateEmailIdentityPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEmailIdentityPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateEmailIdentityPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateEmailIdentityPolicyError {}
+/// Errors returned by CreateEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateEmailTemplateError {
+    /// <p>The resource specified in your request already exists.</p>
+    AlreadyExists(String),
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>There are too many instances of the specified resource type.</p>
+    LimitExceeded(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl CreateEmailTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateEmailTemplateError::AlreadyExists(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateEmailTemplateError::BadRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateEmailTemplateError::LimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateEmailTemplateError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateEmailTemplateError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateEmailTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateEmailTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEmailTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateEmailTemplateError {}
+/// Errors returned by CreateImportJob
+#[derive(Debug, PartialEq)]
+pub enum CreateImportJobError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>There are too many instances of the specified resource type.</p>
+    LimitExceeded(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl CreateImportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImportJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateImportJobError::BadRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateImportJobError::LimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateImportJobError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateImportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateImportJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateImportJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateImportJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateImportJobError {}
 /// Errors returned by DeleteConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationSetError {
@@ -2355,6 +3868,154 @@ impl fmt::Display for DeleteConfigurationSetEventDestinationError {
     }
 }
 impl Error for DeleteConfigurationSetEventDestinationError {}
+/// Errors returned by DeleteContact
+#[derive(Debug, PartialEq)]
+pub enum DeleteContactError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteContactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContactError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteContactError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteContactError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteContactError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteContactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteContactError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteContactError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteContactError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteContactError {}
+/// Errors returned by DeleteContactList
+#[derive(Debug, PartialEq)]
+pub enum DeleteContactListError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource is being modified by another operation or thread.</p>
+    ConcurrentModification(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteContactListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContactListError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteContactListError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteContactListError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteContactListError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteContactListError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteContactListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteContactListError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteContactListError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteContactListError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteContactListError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteContactListError {}
+/// Errors returned by DeleteCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteCustomVerificationEmailTemplateError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteCustomVerificationEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DeleteCustomVerificationEmailTemplateError::BadRequest(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteCustomVerificationEmailTemplateError::NotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DeleteCustomVerificationEmailTemplateError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCustomVerificationEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCustomVerificationEmailTemplateError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomVerificationEmailTemplateError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomVerificationEmailTemplateError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteCustomVerificationEmailTemplateError {}
 /// Errors returned by DeleteDedicatedIpPool
 #[derive(Debug, PartialEq)]
 pub enum DeleteDedicatedIpPoolError {
@@ -2457,6 +4118,94 @@ impl fmt::Display for DeleteEmailIdentityError {
     }
 }
 impl Error for DeleteEmailIdentityError {}
+/// Errors returned by DeleteEmailIdentityPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteEmailIdentityPolicyError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteEmailIdentityPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEmailIdentityPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteEmailIdentityPolicyError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteEmailIdentityPolicyError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteEmailIdentityPolicyError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteEmailIdentityPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteEmailIdentityPolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteEmailIdentityPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteEmailIdentityPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteEmailIdentityPolicyError {}
+/// Errors returned by DeleteEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteEmailTemplateError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteEmailTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteEmailTemplateError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteEmailTemplateError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteEmailTemplateError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteEmailTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteEmailTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteEmailTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteEmailTemplateError {}
 /// Errors returned by DeleteSuppressedDestination
 #[derive(Debug, PartialEq)]
 pub enum DeleteSuppressedDestinationError {
@@ -2683,6 +4432,144 @@ impl fmt::Display for GetConfigurationSetEventDestinationsError {
     }
 }
 impl Error for GetConfigurationSetEventDestinationsError {}
+/// Errors returned by GetContact
+#[derive(Debug, PartialEq)]
+pub enum GetContactError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl GetContactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContactError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetContactError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetContactError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetContactError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetContactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetContactError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetContactError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetContactError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetContactError {}
+/// Errors returned by GetContactList
+#[derive(Debug, PartialEq)]
+pub enum GetContactListError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl GetContactListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContactListError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetContactListError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetContactListError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetContactListError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetContactListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetContactListError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetContactListError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetContactListError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetContactListError {}
+/// Errors returned by GetCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum GetCustomVerificationEmailTemplateError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl GetCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCustomVerificationEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        GetCustomVerificationEmailTemplateError::BadRequest(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetCustomVerificationEmailTemplateError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        GetCustomVerificationEmailTemplateError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCustomVerificationEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCustomVerificationEmailTemplateError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCustomVerificationEmailTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetCustomVerificationEmailTemplateError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetCustomVerificationEmailTemplateError {}
 /// Errors returned by GetDedicatedIp
 #[derive(Debug, PartialEq)]
 pub enum GetDedicatedIpError {
@@ -3011,6 +4898,134 @@ impl fmt::Display for GetEmailIdentityError {
     }
 }
 impl Error for GetEmailIdentityError {}
+/// Errors returned by GetEmailIdentityPolicies
+#[derive(Debug, PartialEq)]
+pub enum GetEmailIdentityPoliciesError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl GetEmailIdentityPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEmailIdentityPoliciesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetEmailIdentityPoliciesError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetEmailIdentityPoliciesError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetEmailIdentityPoliciesError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetEmailIdentityPoliciesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetEmailIdentityPoliciesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetEmailIdentityPoliciesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetEmailIdentityPoliciesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetEmailIdentityPoliciesError {}
+/// Errors returned by GetEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum GetEmailTemplateError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl GetEmailTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetEmailTemplateError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetEmailTemplateError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetEmailTemplateError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetEmailTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetEmailTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetEmailTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetEmailTemplateError {}
+/// Errors returned by GetImportJob
+#[derive(Debug, PartialEq)]
+pub enum GetImportJobError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl GetImportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImportJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetImportJobError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetImportJobError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetImportJobError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetImportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetImportJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetImportJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetImportJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetImportJobError {}
 /// Errors returned by GetSuppressedDestination
 #[derive(Debug, PartialEq)]
 pub enum GetSuppressedDestinationError {
@@ -3093,6 +5108,130 @@ impl fmt::Display for ListConfigurationSetsError {
     }
 }
 impl Error for ListConfigurationSetsError {}
+/// Errors returned by ListContactLists
+#[derive(Debug, PartialEq)]
+pub enum ListContactListsError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl ListContactListsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContactListsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListContactListsError::BadRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListContactListsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListContactListsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListContactListsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListContactListsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListContactListsError {}
+/// Errors returned by ListContacts
+#[derive(Debug, PartialEq)]
+pub enum ListContactsError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl ListContactsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContactsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListContactsError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListContactsError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListContactsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListContactsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListContactsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListContactsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListContactsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListContactsError {}
+/// Errors returned by ListCustomVerificationEmailTemplates
+#[derive(Debug, PartialEq)]
+pub enum ListCustomVerificationEmailTemplatesError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl ListCustomVerificationEmailTemplatesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCustomVerificationEmailTemplatesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        ListCustomVerificationEmailTemplatesError::BadRequest(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        ListCustomVerificationEmailTemplatesError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCustomVerificationEmailTemplatesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCustomVerificationEmailTemplatesError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomVerificationEmailTemplatesError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListCustomVerificationEmailTemplatesError {}
 /// Errors returned by ListDedicatedIpPools
 #[derive(Debug, PartialEq)]
 pub enum ListDedicatedIpPoolsError {
@@ -3271,6 +5410,78 @@ impl fmt::Display for ListEmailIdentitiesError {
     }
 }
 impl Error for ListEmailIdentitiesError {}
+/// Errors returned by ListEmailTemplates
+#[derive(Debug, PartialEq)]
+pub enum ListEmailTemplatesError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl ListEmailTemplatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEmailTemplatesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListEmailTemplatesError::BadRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListEmailTemplatesError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListEmailTemplatesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListEmailTemplatesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListEmailTemplatesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListEmailTemplatesError {}
+/// Errors returned by ListImportJobs
+#[derive(Debug, PartialEq)]
+pub enum ListImportJobsError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl ListImportJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImportJobsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListImportJobsError::BadRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListImportJobsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListImportJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListImportJobsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListImportJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListImportJobsError {}
 /// Errors returned by ListSuppressedDestinations
 #[derive(Debug, PartialEq)]
 pub enum ListSuppressedDestinationsError {
@@ -3409,6 +5620,48 @@ impl fmt::Display for PutAccountDedicatedIpWarmupAttributesError {
     }
 }
 impl Error for PutAccountDedicatedIpWarmupAttributesError {}
+/// Errors returned by PutAccountDetails
+#[derive(Debug, PartialEq)]
+pub enum PutAccountDetailsError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>If there is already an ongoing account details update under review.</p>
+    Conflict(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl PutAccountDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccountDetailsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(PutAccountDetailsError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(PutAccountDetailsError::Conflict(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(PutAccountDetailsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAccountDetailsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAccountDetailsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutAccountDetailsError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutAccountDetailsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutAccountDetailsError {}
 /// Errors returned by PutAccountSendingAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutAccountSendingAttributesError {
@@ -4189,6 +6442,164 @@ impl fmt::Display for PutSuppressedDestinationError {
     }
 }
 impl Error for PutSuppressedDestinationError {}
+/// Errors returned by SendBulkEmail
+#[derive(Debug, PartialEq)]
+pub enum SendBulkEmailError {
+    /// <p>The message can't be sent because the account's ability to send email has been permanently restricted.</p>
+    AccountSuspended(String),
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>There are too many instances of the specified resource type.</p>
+    LimitExceeded(String),
+    /// <p>The message can't be sent because the sending domain isn't verified.</p>
+    MailFromDomainNotVerified(String),
+    /// <p>The message can't be sent because it contains invalid content.</p>
+    MessageRejected(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>The message can't be sent because the account's ability to send email is currently paused.</p>
+    SendingPaused(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl SendBulkEmailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendBulkEmailError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccountSuspendedException" => {
+                    return RusotoError::Service(SendBulkEmailError::AccountSuspended(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(SendBulkEmailError::BadRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(SendBulkEmailError::LimitExceeded(err.msg))
+                }
+                "MailFromDomainNotVerifiedException" => {
+                    return RusotoError::Service(SendBulkEmailError::MailFromDomainNotVerified(
+                        err.msg,
+                    ))
+                }
+                "MessageRejected" => {
+                    return RusotoError::Service(SendBulkEmailError::MessageRejected(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(SendBulkEmailError::NotFound(err.msg))
+                }
+                "SendingPausedException" => {
+                    return RusotoError::Service(SendBulkEmailError::SendingPaused(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(SendBulkEmailError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SendBulkEmailError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SendBulkEmailError::AccountSuspended(ref cause) => write!(f, "{}", cause),
+            SendBulkEmailError::BadRequest(ref cause) => write!(f, "{}", cause),
+            SendBulkEmailError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SendBulkEmailError::MailFromDomainNotVerified(ref cause) => write!(f, "{}", cause),
+            SendBulkEmailError::MessageRejected(ref cause) => write!(f, "{}", cause),
+            SendBulkEmailError::NotFound(ref cause) => write!(f, "{}", cause),
+            SendBulkEmailError::SendingPaused(ref cause) => write!(f, "{}", cause),
+            SendBulkEmailError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SendBulkEmailError {}
+/// Errors returned by SendCustomVerificationEmail
+#[derive(Debug, PartialEq)]
+pub enum SendCustomVerificationEmailError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>There are too many instances of the specified resource type.</p>
+    LimitExceeded(String),
+    /// <p>The message can't be sent because the sending domain isn't verified.</p>
+    MailFromDomainNotVerified(String),
+    /// <p>The message can't be sent because it contains invalid content.</p>
+    MessageRejected(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>The message can't be sent because the account's ability to send email is currently paused.</p>
+    SendingPaused(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl SendCustomVerificationEmailError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SendCustomVerificationEmailError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(SendCustomVerificationEmailError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(SendCustomVerificationEmailError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "MailFromDomainNotVerifiedException" => {
+                    return RusotoError::Service(
+                        SendCustomVerificationEmailError::MailFromDomainNotVerified(err.msg),
+                    )
+                }
+                "MessageRejected" => {
+                    return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(SendCustomVerificationEmailError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "SendingPausedException" => {
+                    return RusotoError::Service(SendCustomVerificationEmailError::SendingPaused(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(SendCustomVerificationEmailError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SendCustomVerificationEmailError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SendCustomVerificationEmailError::BadRequest(ref cause) => write!(f, "{}", cause),
+            SendCustomVerificationEmailError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SendCustomVerificationEmailError::MailFromDomainNotVerified(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendCustomVerificationEmailError::MessageRejected(ref cause) => write!(f, "{}", cause),
+            SendCustomVerificationEmailError::NotFound(ref cause) => write!(f, "{}", cause),
+            SendCustomVerificationEmailError::SendingPaused(ref cause) => write!(f, "{}", cause),
+            SendCustomVerificationEmailError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SendCustomVerificationEmailError {}
 /// Errors returned by SendEmail
 #[derive(Debug, PartialEq)]
 pub enum SendEmailError {
@@ -4309,6 +6720,50 @@ impl fmt::Display for TagResourceError {
     }
 }
 impl Error for TagResourceError {}
+/// Errors returned by TestRenderEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum TestRenderEmailTemplateError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl TestRenderEmailTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestRenderEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TestRenderEmailTemplateError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TestRenderEmailTemplateError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(TestRenderEmailTemplateError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TestRenderEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TestRenderEmailTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TestRenderEmailTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            TestRenderEmailTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TestRenderEmailTemplateError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4415,6 +6870,250 @@ impl fmt::Display for UpdateConfigurationSetEventDestinationError {
     }
 }
 impl Error for UpdateConfigurationSetEventDestinationError {}
+/// Errors returned by UpdateContact
+#[derive(Debug, PartialEq)]
+pub enum UpdateContactError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource is being modified by another operation or thread.</p>
+    ConcurrentModification(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateContactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateContactError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateContactError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateContactError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateContactError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateContactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateContactError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateContactError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateContactError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateContactError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateContactError {}
+/// Errors returned by UpdateContactList
+#[derive(Debug, PartialEq)]
+pub enum UpdateContactListError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource is being modified by another operation or thread.</p>
+    ConcurrentModification(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateContactListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactListError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateContactListError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateContactListError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateContactListError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateContactListError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateContactListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateContactListError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateContactListError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateContactListError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateContactListError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateContactListError {}
+/// Errors returned by UpdateCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum UpdateCustomVerificationEmailTemplateError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateCustomVerificationEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        UpdateCustomVerificationEmailTemplateError::BadRequest(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateCustomVerificationEmailTemplateError::NotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        UpdateCustomVerificationEmailTemplateError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateCustomVerificationEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateCustomVerificationEmailTemplateError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomVerificationEmailTemplateError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomVerificationEmailTemplateError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateCustomVerificationEmailTemplateError {}
+/// Errors returned by UpdateEmailIdentityPolicy
+#[derive(Debug, PartialEq)]
+pub enum UpdateEmailIdentityPolicyError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateEmailIdentityPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEmailIdentityPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateEmailIdentityPolicyError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateEmailIdentityPolicyError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateEmailIdentityPolicyError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateEmailIdentityPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateEmailIdentityPolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateEmailIdentityPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateEmailIdentityPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateEmailIdentityPolicyError {}
+/// Errors returned by UpdateEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum UpdateEmailTemplateError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateEmailTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEmailTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateEmailTemplateError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateEmailTemplateError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateEmailTemplateError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateEmailTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateEmailTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateEmailTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateEmailTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateEmailTemplateError {}
 /// Trait representing the capabilities of the Amazon SES V2 API. Amazon SES V2 clients implement this trait.
 #[async_trait]
 pub trait SesV2 {
@@ -4431,6 +7130,27 @@ pub trait SesV2 {
     ) -> Result<
         CreateConfigurationSetEventDestinationResponse,
         RusotoError<CreateConfigurationSetEventDestinationError>,
+    >;
+
+    /// <p>Creates a contact, which is an end-user who is receiving the email, and adds them to a contact list.</p>
+    async fn create_contact(
+        &self,
+        input: CreateContactRequest,
+    ) -> Result<CreateContactResponse, RusotoError<CreateContactError>>;
+
+    /// <p>Creates a contact list.</p>
+    async fn create_contact_list(
+        &self,
+        input: CreateContactListRequest,
+    ) -> Result<CreateContactListResponse, RusotoError<CreateContactListError>>;
+
+    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn create_custom_verification_email_template(
+        &self,
+        input: CreateCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        CreateCustomVerificationEmailTemplateResponse,
+        RusotoError<CreateCustomVerificationEmailTemplateError>,
     >;
 
     /// <p>Create a new pool of dedicated IP addresses. A pool can include one or more dedicated IP addresses that are associated with your AWS account. You can associate a pool with a configuration set. When you send an email that uses that configuration set, the message is sent from one of the addresses in the associated pool.</p>
@@ -4454,6 +7174,24 @@ pub trait SesV2 {
         input: CreateEmailIdentityRequest,
     ) -> Result<CreateEmailIdentityResponse, RusotoError<CreateEmailIdentityError>>;
 
+    /// <p>Creates the specified sending authorization policy for the given identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn create_email_identity_policy(
+        &self,
+        input: CreateEmailIdentityPolicyRequest,
+    ) -> Result<CreateEmailIdentityPolicyResponse, RusotoError<CreateEmailIdentityPolicyError>>;
+
+    /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn create_email_template(
+        &self,
+        input: CreateEmailTemplateRequest,
+    ) -> Result<CreateEmailTemplateResponse, RusotoError<CreateEmailTemplateError>>;
+
+    /// <p>Creates an import job for a data destination.</p>
+    async fn create_import_job(
+        &self,
+        input: CreateImportJobRequest,
+    ) -> Result<CreateImportJobResponse, RusotoError<CreateImportJobError>>;
+
     /// <p>Delete an existing configuration set.</p> <p> <i>Configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
     async fn delete_configuration_set(
         &self,
@@ -4469,6 +7207,27 @@ pub trait SesV2 {
         RusotoError<DeleteConfigurationSetEventDestinationError>,
     >;
 
+    /// <p>Removes a contact from a contact list.</p>
+    async fn delete_contact(
+        &self,
+        input: DeleteContactRequest,
+    ) -> Result<DeleteContactResponse, RusotoError<DeleteContactError>>;
+
+    /// <p>Deletes a contact list and all of the contacts on that list.</p>
+    async fn delete_contact_list(
+        &self,
+        input: DeleteContactListRequest,
+    ) -> Result<DeleteContactListResponse, RusotoError<DeleteContactListError>>;
+
+    /// <p>Deletes an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/es/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn delete_custom_verification_email_template(
+        &self,
+        input: DeleteCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        DeleteCustomVerificationEmailTemplateResponse,
+        RusotoError<DeleteCustomVerificationEmailTemplateError>,
+    >;
+
     /// <p>Delete a dedicated IP pool.</p>
     async fn delete_dedicated_ip_pool(
         &self,
@@ -4480,6 +7239,18 @@ pub trait SesV2 {
         &self,
         input: DeleteEmailIdentityRequest,
     ) -> Result<DeleteEmailIdentityResponse, RusotoError<DeleteEmailIdentityError>>;
+
+    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn delete_email_identity_policy(
+        &self,
+        input: DeleteEmailIdentityPolicyRequest,
+    ) -> Result<DeleteEmailIdentityPolicyResponse, RusotoError<DeleteEmailIdentityPolicyError>>;
+
+    /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn delete_email_template(
+        &self,
+        input: DeleteEmailTemplateRequest,
+    ) -> Result<DeleteEmailTemplateResponse, RusotoError<DeleteEmailTemplateError>>;
 
     /// <p>Removes an email address from the suppression list for your account.</p>
     async fn delete_suppressed_destination(
@@ -4509,6 +7280,27 @@ pub trait SesV2 {
     ) -> Result<
         GetConfigurationSetEventDestinationsResponse,
         RusotoError<GetConfigurationSetEventDestinationsError>,
+    >;
+
+    /// <p>Returns a contact from a contact list.</p>
+    async fn get_contact(
+        &self,
+        input: GetContactRequest,
+    ) -> Result<GetContactResponse, RusotoError<GetContactError>>;
+
+    /// <p>Returns contact list metadata. It does not return any information about the contacts present in the list.</p>
+    async fn get_contact_list(
+        &self,
+        input: GetContactListRequest,
+    ) -> Result<GetContactListResponse, RusotoError<GetContactListError>>;
+
+    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn get_custom_verification_email_template(
+        &self,
+        input: GetCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        GetCustomVerificationEmailTemplateResponse,
+        RusotoError<GetCustomVerificationEmailTemplateError>,
     >;
 
     /// <p>Get information about a dedicated IP address, including the name of the dedicated IP pool that it's associated with, as well information about the automatic warm-up process for the address.</p>
@@ -4552,11 +7344,29 @@ pub trait SesV2 {
         input: GetDomainStatisticsReportRequest,
     ) -> Result<GetDomainStatisticsReportResponse, RusotoError<GetDomainStatisticsReportError>>;
 
-    /// <p>Provides information about a specific identity, including the identity's verification status, its DKIM authentication status, and its custom Mail-From settings.</p>
+    /// <p>Provides information about a specific identity, including the identity's verification status, sending authorization policies, its DKIM authentication status, and its custom Mail-From settings.</p>
     async fn get_email_identity(
         &self,
         input: GetEmailIdentityRequest,
     ) -> Result<GetEmailIdentityResponse, RusotoError<GetEmailIdentityError>>;
+
+    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn get_email_identity_policies(
+        &self,
+        input: GetEmailIdentityPoliciesRequest,
+    ) -> Result<GetEmailIdentityPoliciesResponse, RusotoError<GetEmailIdentityPoliciesError>>;
+
+    /// <p>Displays the template object (which includes the subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn get_email_template(
+        &self,
+        input: GetEmailTemplateRequest,
+    ) -> Result<GetEmailTemplateResponse, RusotoError<GetEmailTemplateError>>;
+
+    /// <p>Provides information about an import job.</p>
+    async fn get_import_job(
+        &self,
+        input: GetImportJobRequest,
+    ) -> Result<GetImportJobResponse, RusotoError<GetImportJobError>>;
 
     /// <p>Retrieves information about a specific email address that's on the suppression list for your account.</p>
     async fn get_suppressed_destination(
@@ -4569,6 +7379,27 @@ pub trait SesV2 {
         &self,
         input: ListConfigurationSetsRequest,
     ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
+
+    /// <p>Lists all of the contact lists available.</p>
+    async fn list_contact_lists(
+        &self,
+        input: ListContactListsRequest,
+    ) -> Result<ListContactListsResponse, RusotoError<ListContactListsError>>;
+
+    /// <p>Lists the contacts present in a specific contact list.</p>
+    async fn list_contacts(
+        &self,
+        input: ListContactsRequest,
+    ) -> Result<ListContactsResponse, RusotoError<ListContactsError>>;
+
+    /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn list_custom_verification_email_templates(
+        &self,
+        input: ListCustomVerificationEmailTemplatesRequest,
+    ) -> Result<
+        ListCustomVerificationEmailTemplatesResponse,
+        RusotoError<ListCustomVerificationEmailTemplatesError>,
+    >;
 
     /// <p>List all of the dedicated IP pools that exist in your AWS account in the current Region.</p>
     async fn list_dedicated_ip_pools(
@@ -4600,6 +7431,18 @@ pub trait SesV2 {
         input: ListEmailIdentitiesRequest,
     ) -> Result<ListEmailIdentitiesResponse, RusotoError<ListEmailIdentitiesError>>;
 
+    /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn list_email_templates(
+        &self,
+        input: ListEmailTemplatesRequest,
+    ) -> Result<ListEmailTemplatesResponse, RusotoError<ListEmailTemplatesError>>;
+
+    /// <p>Lists all of the import jobs.</p>
+    async fn list_import_jobs(
+        &self,
+        input: ListImportJobsRequest,
+    ) -> Result<ListImportJobsResponse, RusotoError<ListImportJobsError>>;
+
     /// <p>Retrieves a list of email addresses that are on the suppression list for your account.</p>
     async fn list_suppressed_destinations(
         &self,
@@ -4620,6 +7463,12 @@ pub trait SesV2 {
         PutAccountDedicatedIpWarmupAttributesResponse,
         RusotoError<PutAccountDedicatedIpWarmupAttributesError>,
     >;
+
+    /// <p>Update your Amazon SES account details.</p>
+    async fn put_account_details(
+        &self,
+        input: PutAccountDetailsRequest,
+    ) -> Result<PutAccountDetailsResponse, RusotoError<PutAccountDetailsError>>;
 
     /// <p>Enable or disable the ability of your account to send email.</p>
     async fn put_account_sending_attributes(
@@ -4747,7 +7596,19 @@ pub trait SesV2 {
         input: PutSuppressedDestinationRequest,
     ) -> Result<PutSuppressedDestinationResponse, RusotoError<PutSuppressedDestinationError>>;
 
-    /// <p><p>Sends an email message. You can use the Amazon SES API v2 to send two types of messages:</p> <ul> <li> <p> <b>Simple</b> – A standard email message. When you create this type of message, you specify the sender, the recipient, and the message body, and Amazon SES assembles the message for you.</p> </li> <li> <p> <b>Raw</b> – A raw, MIME-formatted email message. When you send this type of email, you have to specify all of the message headers, as well as the message body. You can use this message type to send messages that contain attachments. The message that you specify has to be a valid MIME message.</p> </li> </ul></p>
+    /// <p>Composes an email message to multiple destinations.</p>
+    async fn send_bulk_email(
+        &self,
+        input: SendBulkEmailRequest,
+    ) -> Result<SendBulkEmailResponse, RusotoError<SendBulkEmailError>>;
+
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn send_custom_verification_email(
+        &self,
+        input: SendCustomVerificationEmailRequest,
+    ) -> Result<SendCustomVerificationEmailResponse, RusotoError<SendCustomVerificationEmailError>>;
+
+    /// <p><p>Sends an email message. You can use the Amazon SES API v2 to send two types of messages:</p> <ul> <li> <p> <b>Simple</b> – A standard email message. When you create this type of message, you specify the sender, the recipient, and the message body, and Amazon SES assembles the message for you.</p> </li> <li> <p> <b>Raw</b> – A raw, MIME-formatted email message. When you send this type of email, you have to specify all of the message headers, as well as the message body. You can use this message type to send messages that contain attachments. The message that you specify has to be a valid MIME message.</p> </li> <li> <p> <b>Templated</b> – A message that contains personalization tags. When you send this type of email, Amazon SES API v2 automatically replaces the tags with values that you specify.</p> </li> </ul></p>
     async fn send_email(
         &self,
         input: SendEmailRequest,
@@ -4758,6 +7619,12 @@ pub trait SesV2 {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn test_render_email_template(
+        &self,
+        input: TestRenderEmailTemplateRequest,
+    ) -> Result<TestRenderEmailTemplateResponse, RusotoError<TestRenderEmailTemplateError>>;
 
     /// <p>Remove one or more tags (keys and values) from a specified resource.</p>
     async fn untag_resource(
@@ -4773,6 +7640,39 @@ pub trait SesV2 {
         UpdateConfigurationSetEventDestinationResponse,
         RusotoError<UpdateConfigurationSetEventDestinationError>,
     >;
+
+    /// <p>Updates a contact's preferences for a list. It is not necessary to specify all existing topic preferences in the TopicPreferences object, just the ones that need updating.</p>
+    async fn update_contact(
+        &self,
+        input: UpdateContactRequest,
+    ) -> Result<UpdateContactResponse, RusotoError<UpdateContactError>>;
+
+    /// <p>Updates contact list metadata. This operation does a complete replacement.</p>
+    async fn update_contact_list(
+        &self,
+        input: UpdateContactListRequest,
+    ) -> Result<UpdateContactListResponse, RusotoError<UpdateContactListError>>;
+
+    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn update_custom_verification_email_template(
+        &self,
+        input: UpdateCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        UpdateCustomVerificationEmailTemplateResponse,
+        RusotoError<UpdateCustomVerificationEmailTemplateError>,
+    >;
+
+    /// <p>Updates the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn update_email_identity_policy(
+        &self,
+        input: UpdateEmailIdentityPolicyRequest,
+    ) -> Result<UpdateEmailIdentityPolicyResponse, RusotoError<UpdateEmailIdentityPolicyError>>;
+
+    /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    async fn update_email_template(
+        &self,
+        input: UpdateEmailTemplateRequest,
+    ) -> Result<UpdateEmailTemplateResponse, RusotoError<UpdateEmailTemplateError>>;
 }
 /// A client for the Amazon SES V2 API.
 #[derive(Clone)]
@@ -4886,6 +7786,110 @@ impl SesV2 for SesV2Client {
         }
     }
 
+    /// <p>Creates a contact, which is an end-user who is receiving the email, and adds them to a contact list.</p>
+    #[allow(unused_mut)]
+    async fn create_contact(
+        &self,
+        input: CreateContactRequest,
+    ) -> Result<CreateContactResponse, RusotoError<CreateContactError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}/contacts",
+            contact_list_name = input.contact_list_name
+        );
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateContactResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateContactError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a contact list.</p>
+    #[allow(unused_mut)]
+    async fn create_contact_list(
+        &self,
+        input: CreateContactListRequest,
+    ) -> Result<CreateContactListResponse, RusotoError<CreateContactListError>> {
+        let request_uri = "/v2/email/contact-lists";
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateContactListResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateContactListError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn create_custom_verification_email_template(
+        &self,
+        input: CreateCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        CreateCustomVerificationEmailTemplateResponse,
+        RusotoError<CreateCustomVerificationEmailTemplateError>,
+    > {
+        let request_uri = "/v2/email/custom-verification-email-templates";
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCustomVerificationEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCustomVerificationEmailTemplateError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Create a new pool of dedicated IP addresses. A pool can include one or more dedicated IP addresses that are associated with your AWS account. You can associate a pool with a configuration set. When you send an email that uses that configuration set, the message is sent from one of the addresses in the associated pool.</p>
     #[allow(unused_mut)]
     async fn create_dedicated_ip_pool(
@@ -4985,6 +7989,107 @@ impl SesV2 for SesV2Client {
         }
     }
 
+    /// <p>Creates the specified sending authorization policy for the given identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn create_email_identity_policy(
+        &self,
+        input: CreateEmailIdentityPolicyRequest,
+    ) -> Result<CreateEmailIdentityPolicyResponse, RusotoError<CreateEmailIdentityPolicyError>>
+    {
+        let request_uri = format!(
+            "/v2/email/identities/{email_identity}/policies/{policy_name}",
+            email_identity = input.email_identity,
+            policy_name = input.policy_name
+        );
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateEmailIdentityPolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEmailIdentityPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn create_email_template(
+        &self,
+        input: CreateEmailTemplateRequest,
+    ) -> Result<CreateEmailTemplateResponse, RusotoError<CreateEmailTemplateError>> {
+        let request_uri = "/v2/email/templates";
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEmailTemplateError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an import job for a data destination.</p>
+    #[allow(unused_mut)]
+    async fn create_import_job(
+        &self,
+        input: CreateImportJobRequest,
+    ) -> Result<CreateImportJobResponse, RusotoError<CreateImportJobError>> {
+        let request_uri = "/v2/email/import-jobs";
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateImportJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateImportJobError::from_response(response))
+        }
+    }
+
     /// <p>Delete an existing configuration set.</p> <p> <i>Configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
     #[allow(unused_mut)]
     async fn delete_configuration_set(
@@ -5053,6 +8158,111 @@ impl SesV2 for SesV2Client {
         }
     }
 
+    /// <p>Removes a contact from a contact list.</p>
+    #[allow(unused_mut)]
+    async fn delete_contact(
+        &self,
+        input: DeleteContactRequest,
+    ) -> Result<DeleteContactResponse, RusotoError<DeleteContactError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}/contacts/{email_address}",
+            contact_list_name = input.contact_list_name,
+            email_address = input.email_address
+        );
+
+        let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteContactResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteContactError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a contact list and all of the contacts on that list.</p>
+    #[allow(unused_mut)]
+    async fn delete_contact_list(
+        &self,
+        input: DeleteContactListRequest,
+    ) -> Result<DeleteContactListResponse, RusotoError<DeleteContactListError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}",
+            contact_list_name = input.contact_list_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteContactListResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteContactListError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/es/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn delete_custom_verification_email_template(
+        &self,
+        input: DeleteCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        DeleteCustomVerificationEmailTemplateResponse,
+        RusotoError<DeleteCustomVerificationEmailTemplateError>,
+    > {
+        let request_uri = format!(
+            "/v2/email/custom-verification-email-templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCustomVerificationEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCustomVerificationEmailTemplateError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Delete a dedicated IP pool.</p>
     #[allow(unused_mut)]
     async fn delete_dedicated_ip_pool(
@@ -5116,6 +8326,74 @@ impl SesV2 for SesV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteEmailIdentityError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn delete_email_identity_policy(
+        &self,
+        input: DeleteEmailIdentityPolicyRequest,
+    ) -> Result<DeleteEmailIdentityPolicyResponse, RusotoError<DeleteEmailIdentityPolicyError>>
+    {
+        let request_uri = format!(
+            "/v2/email/identities/{email_identity}/policies/{policy_name}",
+            email_identity = input.email_identity,
+            policy_name = input.policy_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteEmailIdentityPolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEmailIdentityPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn delete_email_template(
+        &self,
+        input: DeleteEmailTemplateRequest,
+    ) -> Result<DeleteEmailTemplateResponse, RusotoError<DeleteEmailTemplateError>> {
+        let request_uri = format!(
+            "/v2/email/templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEmailTemplateError::from_response(response))
         }
     }
 
@@ -5282,6 +8560,111 @@ impl SesV2 for SesV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetConfigurationSetEventDestinationsError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Returns a contact from a contact list.</p>
+    #[allow(unused_mut)]
+    async fn get_contact(
+        &self,
+        input: GetContactRequest,
+    ) -> Result<GetContactResponse, RusotoError<GetContactError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}/contacts/{email_address}",
+            contact_list_name = input.contact_list_name,
+            email_address = input.email_address
+        );
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetContactResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContactError::from_response(response))
+        }
+    }
+
+    /// <p>Returns contact list metadata. It does not return any information about the contacts present in the list.</p>
+    #[allow(unused_mut)]
+    async fn get_contact_list(
+        &self,
+        input: GetContactListRequest,
+    ) -> Result<GetContactListResponse, RusotoError<GetContactListError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}",
+            contact_list_name = input.contact_list_name
+        );
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetContactListResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContactListError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn get_custom_verification_email_template(
+        &self,
+        input: GetCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        GetCustomVerificationEmailTemplateResponse,
+        RusotoError<GetCustomVerificationEmailTemplateError>,
+    > {
+        let request_uri = format!(
+            "/v2/email/custom-verification-email-templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCustomVerificationEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCustomVerificationEmailTemplateError::from_response(
                 response,
             ))
         }
@@ -5504,7 +8887,7 @@ impl SesV2 for SesV2Client {
         }
     }
 
-    /// <p>Provides information about a specific identity, including the identity's verification status, its DKIM authentication status, and its custom Mail-From settings.</p>
+    /// <p>Provides information about a specific identity, including the identity's verification status, sending authorization policies, its DKIM authentication status, and its custom Mail-From settings.</p>
     #[allow(unused_mut)]
     async fn get_email_identity(
         &self,
@@ -5534,6 +8917,102 @@ impl SesV2 for SesV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetEmailIdentityError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn get_email_identity_policies(
+        &self,
+        input: GetEmailIdentityPoliciesRequest,
+    ) -> Result<GetEmailIdentityPoliciesResponse, RusotoError<GetEmailIdentityPoliciesError>> {
+        let request_uri = format!(
+            "/v2/email/identities/{email_identity}/policies",
+            email_identity = input.email_identity
+        );
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetEmailIdentityPoliciesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEmailIdentityPoliciesError::from_response(response))
+        }
+    }
+
+    /// <p>Displays the template object (which includes the subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn get_email_template(
+        &self,
+        input: GetEmailTemplateRequest,
+    ) -> Result<GetEmailTemplateResponse, RusotoError<GetEmailTemplateError>> {
+        let request_uri = format!(
+            "/v2/email/templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEmailTemplateError::from_response(response))
+        }
+    }
+
+    /// <p>Provides information about an import job.</p>
+    #[allow(unused_mut)]
+    async fn get_import_job(
+        &self,
+        input: GetImportJobRequest,
+    ) -> Result<GetImportJobResponse, RusotoError<GetImportJobError>> {
+        let request_uri = format!("/v2/email/import-jobs/{job_id}", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetImportJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetImportJobError::from_response(response))
         }
     }
 
@@ -5606,6 +9085,133 @@ impl SesV2 for SesV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListConfigurationSetsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all of the contact lists available.</p>
+    #[allow(unused_mut)]
+    async fn list_contact_lists(
+        &self,
+        input: ListContactListsRequest,
+    ) -> Result<ListContactListsResponse, RusotoError<ListContactListsError>> {
+        let request_uri = "/v2/email/contact-lists";
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("PageSize", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListContactListsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListContactListsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the contacts present in a specific contact list.</p>
+    #[allow(unused_mut)]
+    async fn list_contacts(
+        &self,
+        input: ListContactsRequest,
+    ) -> Result<ListContactsResponse, RusotoError<ListContactsError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}/contacts",
+            contact_list_name = input.contact_list_name
+        );
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("PageSize", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListContactsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListContactsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn list_custom_verification_email_templates(
+        &self,
+        input: ListCustomVerificationEmailTemplatesRequest,
+    ) -> Result<
+        ListCustomVerificationEmailTemplatesResponse,
+        RusotoError<ListCustomVerificationEmailTemplatesError>,
+    > {
+        let request_uri = "/v2/email/custom-verification-email-templates";
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("PageSize", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCustomVerificationEmailTemplatesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCustomVerificationEmailTemplatesError::from_response(
+                response,
+            ))
         }
     }
 
@@ -5778,6 +9384,86 @@ impl SesV2 for SesV2Client {
         }
     }
 
+    /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn list_email_templates(
+        &self,
+        input: ListEmailTemplatesRequest,
+    ) -> Result<ListEmailTemplatesResponse, RusotoError<ListEmailTemplatesError>> {
+        let request_uri = "/v2/email/templates";
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("PageSize", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListEmailTemplatesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListEmailTemplatesError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all of the import jobs.</p>
+    #[allow(unused_mut)]
+    async fn list_import_jobs(
+        &self,
+        input: ListImportJobsRequest,
+    ) -> Result<ListImportJobsResponse, RusotoError<ListImportJobsError>> {
+        let request_uri = "/v2/email/import-jobs";
+
+        let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("PageSize", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListImportJobsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListImportJobsError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves a list of email addresses that are on the suppression list for your account.</p>
     #[allow(unused_mut)]
     async fn list_suppressed_destinations(
@@ -5897,6 +9583,38 @@ impl SesV2 for SesV2Client {
             Err(PutAccountDedicatedIpWarmupAttributesError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Update your Amazon SES account details.</p>
+    #[allow(unused_mut)]
+    async fn put_account_details(
+        &self,
+        input: PutAccountDetailsRequest,
+    ) -> Result<PutAccountDetailsResponse, RusotoError<PutAccountDetailsError>> {
+        let request_uri = "/v2/email/account/details";
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutAccountDetailsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutAccountDetailsError::from_response(response))
         }
     }
 
@@ -6464,7 +10182,72 @@ impl SesV2 for SesV2Client {
         }
     }
 
-    /// <p><p>Sends an email message. You can use the Amazon SES API v2 to send two types of messages:</p> <ul> <li> <p> <b>Simple</b> – A standard email message. When you create this type of message, you specify the sender, the recipient, and the message body, and Amazon SES assembles the message for you.</p> </li> <li> <p> <b>Raw</b> – A raw, MIME-formatted email message. When you send this type of email, you have to specify all of the message headers, as well as the message body. You can use this message type to send messages that contain attachments. The message that you specify has to be a valid MIME message.</p> </li> </ul></p>
+    /// <p>Composes an email message to multiple destinations.</p>
+    #[allow(unused_mut)]
+    async fn send_bulk_email(
+        &self,
+        input: SendBulkEmailRequest,
+    ) -> Result<SendBulkEmailResponse, RusotoError<SendBulkEmailError>> {
+        let request_uri = "/v2/email/outbound-bulk-emails";
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SendBulkEmailResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SendBulkEmailError::from_response(response))
+        }
+    }
+
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn send_custom_verification_email(
+        &self,
+        input: SendCustomVerificationEmailRequest,
+    ) -> Result<SendCustomVerificationEmailResponse, RusotoError<SendCustomVerificationEmailError>>
+    {
+        let request_uri = "/v2/email/outbound-custom-verification-emails";
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SendCustomVerificationEmailResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SendCustomVerificationEmailError::from_response(response))
+        }
+    }
+
+    /// <p><p>Sends an email message. You can use the Amazon SES API v2 to send two types of messages:</p> <ul> <li> <p> <b>Simple</b> – A standard email message. When you create this type of message, you specify the sender, the recipient, and the message body, and Amazon SES assembles the message for you.</p> </li> <li> <p> <b>Raw</b> – A raw, MIME-formatted email message. When you send this type of email, you have to specify all of the message headers, as well as the message body. You can use this message type to send messages that contain attachments. The message that you specify has to be a valid MIME message.</p> </li> <li> <p> <b>Templated</b> – A message that contains personalization tags. When you send this type of email, Amazon SES API v2 automatically replaces the tags with values that you specify.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn send_email(
         &self,
@@ -6525,6 +10308,41 @@ impl SesV2 for SesV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn test_render_email_template(
+        &self,
+        input: TestRenderEmailTemplateRequest,
+    ) -> Result<TestRenderEmailTemplateResponse, RusotoError<TestRenderEmailTemplateError>> {
+        let request_uri = format!(
+            "/v2/email/templates/{template_name}/render",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TestRenderEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TestRenderEmailTemplateError::from_response(response))
         }
     }
 
@@ -6599,6 +10417,189 @@ impl SesV2 for SesV2Client {
             Err(UpdateConfigurationSetEventDestinationError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Updates a contact's preferences for a list. It is not necessary to specify all existing topic preferences in the TopicPreferences object, just the ones that need updating.</p>
+    #[allow(unused_mut)]
+    async fn update_contact(
+        &self,
+        input: UpdateContactRequest,
+    ) -> Result<UpdateContactResponse, RusotoError<UpdateContactError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}/contacts/{email_address}",
+            contact_list_name = input.contact_list_name,
+            email_address = input.email_address
+        );
+
+        let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateContactResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateContactError::from_response(response))
+        }
+    }
+
+    /// <p>Updates contact list metadata. This operation does a complete replacement.</p>
+    #[allow(unused_mut)]
+    async fn update_contact_list(
+        &self,
+        input: UpdateContactListRequest,
+    ) -> Result<UpdateContactListResponse, RusotoError<UpdateContactListError>> {
+        let request_uri = format!(
+            "/v2/email/contact-lists/{contact_list_name}",
+            contact_list_name = input.contact_list_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateContactListResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateContactListError::from_response(response))
+        }
+    }
+
+    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn update_custom_verification_email_template(
+        &self,
+        input: UpdateCustomVerificationEmailTemplateRequest,
+    ) -> Result<
+        UpdateCustomVerificationEmailTemplateResponse,
+        RusotoError<UpdateCustomVerificationEmailTemplateError>,
+    > {
+        let request_uri = format!(
+            "/v2/email/custom-verification-email-templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateCustomVerificationEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCustomVerificationEmailTemplateError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Updates the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn update_email_identity_policy(
+        &self,
+        input: UpdateEmailIdentityPolicyRequest,
+    ) -> Result<UpdateEmailIdentityPolicyResponse, RusotoError<UpdateEmailIdentityPolicyError>>
+    {
+        let request_uri = format!(
+            "/v2/email/identities/{email_identity}/policies/{policy_name}",
+            email_identity = input.email_identity,
+            policy_name = input.policy_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateEmailIdentityPolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateEmailIdentityPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    #[allow(unused_mut)]
+    async fn update_email_template(
+        &self,
+        input: UpdateEmailTemplateRequest,
+    ) -> Result<UpdateEmailTemplateResponse, RusotoError<UpdateEmailTemplateError>> {
+        let request_uri = format!(
+            "/v2/email/templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateEmailTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateEmailTemplateError::from_response(response))
         }
     }
 }

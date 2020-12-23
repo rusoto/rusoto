@@ -213,7 +213,11 @@ pub struct CompleteLayerUploadResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryRequest {
-    /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
+    /// <p>The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.</p>
+    #[serde(rename = "encryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_configuration: Option<EncryptionConfiguration>,
+    /// <p>The image scanning configuration for the repository. This determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
     #[serde(rename = "imageScanningConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_scanning_configuration: Option<ImageScanningConfiguration>,
@@ -270,6 +274,23 @@ pub struct DeleteLifecyclePolicyResponse {
     #[serde(rename = "repositoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteRegistryPolicyRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteRegistryPolicyResponse {
+    /// <p>The contents of the registry permissions policy that was deleted.</p>
+    #[serde(rename = "policyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_text: Option<String>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -429,6 +450,23 @@ pub struct DescribeImagesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeRegistryRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeRegistryResponse {
+    /// <p>The ID of the registry.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The replication configuration for the registry.</p>
+    #[serde(rename = "replicationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_configuration: Option<ReplicationConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRepositoriesRequest {
     /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>
     #[serde(rename = "maxResults")]
@@ -461,14 +499,21 @@ pub struct DescribeRepositoriesResponse {
     pub repositories: Option<Vec<Repository>>,
 }
 
+/// <p>The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.</p> <p>By default, when no encryption configuration is set or the <code>AES256</code> encryption type is used, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts your data at rest using an AES-256 encryption algorithm. This does not require any action on your part.</p> <p>For more control over the encryption of the contents of your repository, you can use server-side encryption with customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) to encrypt your images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/encryption-at-rest.html">Amazon ECR encryption at rest</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EncryptionConfiguration {
+    /// <p>The encryption type to use.</p> <p>If you use the <code>KMS</code> encryption type, the contents of the repository will be encrypted using server-side encryption with customer master keys (CMKs) stored in AWS KMS. When you use AWS KMS to encrypt your data, you can either use the default AWS managed CMK for Amazon ECR, or specify your own CMK, which you already created. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs Stored in AWS Key Management Service (SSE-KMS)</a> in the <i>Amazon Simple Storage Service Console Developer Guide.</i>.</p> <p>If you use the <code>AES256</code> encryption type, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts the images in the repository using an AES-256 encryption algorithm. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Protecting Data Using Server-Side Encryption with Amazon S3-Managed Encryption Keys (SSE-S3)</a> in the <i>Amazon Simple Storage Service Console Developer Guide.</i>.</p>
+    #[serde(rename = "encryptionType")]
+    pub encryption_type: String,
+    /// <p>If you use the <code>KMS</code> encryption type, specify the CMK to use for encryption. The alias, key ID, or full ARN of the CMK can be specified. The key must exist in the same Region as the repository. If no key is specified, the default AWS managed CMK for Amazon ECR will be used.</p>
+    #[serde(rename = "kmsKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct GetAuthorizationTokenRequest {
-    /// <p>A list of AWS account IDs that are associated with the registries for which to get AuthorizationData objects. If you do not specify a registry, the default registry is assumed.</p>
-    #[serde(rename = "registryIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_ids: Option<Vec<String>>,
-}
+pub struct GetAuthorizationTokenRequest {}
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -603,6 +648,23 @@ pub struct GetLifecyclePolicyResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetRegistryPolicyRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetRegistryPolicyResponse {
+    /// <p>The JSON text of the permissions policy for a registry.</p>
+    #[serde(rename = "policyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_text: Option<String>,
+    /// <p>The ID of the registry.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -642,7 +704,7 @@ pub struct Image {
     #[serde(rename = "imageManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest: Option<String>,
-    /// <p>The media type associated with the image manifest.</p>
+    /// <p>The manifest media type of the image.</p>
     #[serde(rename = "imageManifestMediaType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest_media_type: Option<String>,
@@ -660,10 +722,18 @@ pub struct Image {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageDetail {
+    /// <p>The artifact media type of the image.</p>
+    #[serde(rename = "artifactMediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_media_type: Option<String>,
     /// <p>The <code>sha256</code> digest of the image manifest.</p>
     #[serde(rename = "imageDigest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_digest: Option<String>,
+    /// <p>The media type of the image manifest.</p>
+    #[serde(rename = "imageManifestMediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_manifest_media_type: Option<String>,
     /// <p>The date and time, expressed in standard JavaScript date format, at which the current image was pushed to the repository. </p>
     #[serde(rename = "imagePushedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1013,7 +1083,7 @@ pub struct PutImageRequest {
     #[serde(rename = "imageManifestMediaType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest_media_type: Option<String>,
-    /// <p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or OCI formats.</p>
+    /// <p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or Open Container Initiative (OCI) formats.</p>
     #[serde(rename = "imageTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tag: Option<String>,
@@ -1131,6 +1201,71 @@ pub struct PutLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutRegistryPolicyRequest {
+    /// <p>The JSON policy text to apply to your registry. The policy text follows the same format as IAM policy text. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry-permissions.html">Registry permissions</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    #[serde(rename = "policyText")]
+    pub policy_text: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutRegistryPolicyResponse {
+    /// <p>The JSON policy text for your registry.</p>
+    #[serde(rename = "policyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_text: Option<String>,
+    /// <p>The registry ID.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutReplicationConfigurationRequest {
+    /// <p>An object representing the replication configuration for a registry.</p>
+    #[serde(rename = "replicationConfiguration")]
+    pub replication_configuration: ReplicationConfiguration,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutReplicationConfigurationResponse {
+    /// <p>The contents of the replication configuration for the registry.</p>
+    #[serde(rename = "replicationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_configuration: Option<ReplicationConfiguration>,
+}
+
+/// <p>The replication configuration for a registry.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ReplicationConfiguration {
+    /// <p>An array of objects representing the replication rules for a replication configuration. A replication configuration may contain only one replication rule but the rule may contain one or more replication destinations.</p>
+    #[serde(rename = "rules")]
+    pub rules: Vec<ReplicationRule>,
+}
+
+/// <p>An array of objects representing the details of a replication destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ReplicationDestination {
+    /// <p>A Region to replicate to.</p>
+    #[serde(rename = "region")]
+    pub region: String,
+    /// <p>The account ID of the destination registry to replicate to.</p>
+    #[serde(rename = "registryId")]
+    pub registry_id: String,
+}
+
+/// <p>An array of objects representing the replication destinations for a replication configuration. A replication configuration may contain only one replication rule but the rule may contain one or more replication destinations.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ReplicationRule {
+    /// <p>An array of objects representing the details of a replication destination.</p>
+    #[serde(rename = "destinations")]
+    pub destinations: Vec<ReplicationDestination>,
+}
+
 /// <p>An object representing a repository.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1139,6 +1274,10 @@ pub struct Repository {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
+    /// <p>The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.</p>
+    #[serde(rename = "encryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_configuration: Option<EncryptionConfiguration>,
     #[serde(rename = "imageScanningConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_scanning_configuration: Option<ImageScanningConfiguration>,
@@ -1158,7 +1297,7 @@ pub struct Repository {
     #[serde(rename = "repositoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
-    /// <p>The URI for the repository. You can use this URI for Docker <code>push</code> or <code>pull</code> operations.</p>
+    /// <p>The URI for the repository. You can use this URI for container image <code>push</code> and <code>pull</code> operations.</p>
     #[serde(rename = "repositoryUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_uri: Option<String>,
@@ -1507,6 +1646,8 @@ pub enum CompleteLayerUploadError {
     InvalidLayer(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The image layer already exists in the associated repository.</p>
     LayerAlreadyExists(String),
     /// <p>Layer parts must be at least 5 MiB in size.</p>
@@ -1515,7 +1656,7 @@ pub enum CompleteLayerUploadError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+    /// <p>The upload could not be found, or the specified upload ID is not valid for this repository.</p>
     UploadNotFound(String),
 }
 
@@ -1533,6 +1674,9 @@ impl CompleteLayerUploadError {
                     return RusotoError::Service(CompleteLayerUploadError::InvalidParameter(
                         err.msg,
                     ))
+                }
+                "KmsException" => {
+                    return RusotoError::Service(CompleteLayerUploadError::Kms(err.msg))
                 }
                 "LayerAlreadyExistsException" => {
                     return RusotoError::Service(CompleteLayerUploadError::LayerAlreadyExists(
@@ -1569,6 +1713,7 @@ impl fmt::Display for CompleteLayerUploadError {
             CompleteLayerUploadError::EmptyUpload(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::InvalidLayer(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::Kms(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::LayerAlreadyExists(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::LayerPartTooSmall(ref cause) => write!(f, "{}", cause),
             CompleteLayerUploadError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
@@ -1585,6 +1730,8 @@ pub enum CreateRepositoryError {
     InvalidParameter(String),
     /// <p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     InvalidTagParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository already exists in the specified registry.</p>
@@ -1607,6 +1754,7 @@ impl CreateRepositoryError {
                         err.msg,
                     ))
                 }
+                "KmsException" => return RusotoError::Service(CreateRepositoryError::Kms(err.msg)),
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateRepositoryError::LimitExceeded(err.msg))
                 }
@@ -1634,6 +1782,7 @@ impl fmt::Display for CreateRepositoryError {
         match *self {
             CreateRepositoryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::Kms(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::RepositoryAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateRepositoryError::Server(ref cause) => write!(f, "{}", cause),
@@ -1698,11 +1847,59 @@ impl fmt::Display for DeleteLifecyclePolicyError {
     }
 }
 impl Error for DeleteLifecyclePolicyError {}
+/// Errors returned by DeleteRegistryPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteRegistryPolicyError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The registry doesn't have an associated registry policy.</p>
+    RegistryPolicyNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DeleteRegistryPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegistryPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteRegistryPolicyError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "RegistryPolicyNotFoundException" => {
+                    return RusotoError::Service(DeleteRegistryPolicyError::RegistryPolicyNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DeleteRegistryPolicyError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteRegistryPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteRegistryPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteRegistryPolicyError::RegistryPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRegistryPolicyError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteRegistryPolicyError {}
 /// Errors returned by DeleteRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryError {
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The specified repository contains images. To delete a repository that contains images, you must force the deletion with the <code>force</code> parameter.</p>
     RepositoryNotEmpty(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
@@ -1718,6 +1915,7 @@ impl DeleteRepositoryError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRepositoryError::InvalidParameter(err.msg))
                 }
+                "KmsException" => return RusotoError::Service(DeleteRepositoryError::Kms(err.msg)),
                 "RepositoryNotEmptyException" => {
                     return RusotoError::Service(DeleteRepositoryError::RepositoryNotEmpty(err.msg))
                 }
@@ -1739,6 +1937,7 @@ impl fmt::Display for DeleteRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteRepositoryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::Kms(ref cause) => write!(f, "{}", cause),
             DeleteRepositoryError::RepositoryNotEmpty(ref cause) => write!(f, "{}", cause),
             DeleteRepositoryError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             DeleteRepositoryError::Server(ref cause) => write!(f, "{}", cause),
@@ -1912,6 +2111,42 @@ impl fmt::Display for DescribeImagesError {
     }
 }
 impl Error for DescribeImagesError {}
+/// Errors returned by DescribeRegistry
+#[derive(Debug, PartialEq)]
+pub enum DescribeRegistryError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DescribeRegistryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRegistryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeRegistryError::InvalidParameter(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeRegistryError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeRegistryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeRegistryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeRegistryError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeRegistryError {}
 /// Errors returned by DescribeRepositories
 #[derive(Debug, PartialEq)]
 pub enum DescribeRepositoriesError {
@@ -2166,6 +2401,50 @@ impl fmt::Display for GetLifecyclePolicyPreviewError {
     }
 }
 impl Error for GetLifecyclePolicyPreviewError {}
+/// Errors returned by GetRegistryPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetRegistryPolicyError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The registry doesn't have an associated registry policy.</p>
+    RegistryPolicyNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl GetRegistryPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegistryPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetRegistryPolicyError::InvalidParameter(err.msg))
+                }
+                "RegistryPolicyNotFoundException" => {
+                    return RusotoError::Service(GetRegistryPolicyError::RegistryPolicyNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(GetRegistryPolicyError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetRegistryPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetRegistryPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetRegistryPolicyError::RegistryPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            GetRegistryPolicyError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetRegistryPolicyError {}
 /// Errors returned by GetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryPolicyError {
@@ -2225,6 +2504,8 @@ impl Error for GetRepositoryPolicyError {}
 pub enum InitiateLayerUploadError {
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
@@ -2239,6 +2520,9 @@ impl InitiateLayerUploadError {
                     return RusotoError::Service(InitiateLayerUploadError::InvalidParameter(
                         err.msg,
                     ))
+                }
+                "KmsException" => {
+                    return RusotoError::Service(InitiateLayerUploadError::Kms(err.msg))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(InitiateLayerUploadError::RepositoryNotFound(
@@ -2260,6 +2544,7 @@ impl fmt::Display for InitiateLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             InitiateLayerUploadError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            InitiateLayerUploadError::Kms(ref cause) => write!(f, "{}", cause),
             InitiateLayerUploadError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             InitiateLayerUploadError::Server(ref cause) => write!(f, "{}", cause),
         }
@@ -2363,6 +2648,8 @@ pub enum PutImageError {
     ImageTagAlreadyExists(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
     LayersNotFound(String),
     /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
@@ -2391,6 +2678,7 @@ impl PutImageError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutImageError::InvalidParameter(err.msg))
                 }
+                "KmsException" => return RusotoError::Service(PutImageError::Kms(err.msg)),
                 "LayersNotFoundException" => {
                     return RusotoError::Service(PutImageError::LayersNotFound(err.msg))
                 }
@@ -2419,6 +2707,7 @@ impl fmt::Display for PutImageError {
             PutImageError::ImageDigestDoesNotMatch(ref cause) => write!(f, "{}", cause),
             PutImageError::ImageTagAlreadyExists(ref cause) => write!(f, "{}", cause),
             PutImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutImageError::Kms(ref cause) => write!(f, "{}", cause),
             PutImageError::LayersNotFound(ref cause) => write!(f, "{}", cause),
             PutImageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             PutImageError::ReferencedImagesNotFound(ref cause) => write!(f, "{}", cause),
@@ -2572,6 +2861,82 @@ impl fmt::Display for PutLifecyclePolicyError {
     }
 }
 impl Error for PutLifecyclePolicyError {}
+/// Errors returned by PutRegistryPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutRegistryPolicyError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl PutRegistryPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRegistryPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(PutRegistryPolicyError::InvalidParameter(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(PutRegistryPolicyError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutRegistryPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutRegistryPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutRegistryPolicyError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutRegistryPolicyError {}
+/// Errors returned by PutReplicationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutReplicationConfigurationError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl PutReplicationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutReplicationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        PutReplicationConfigurationError::InvalidParameter(err.msg),
+                    )
+                }
+                "ServerException" => {
+                    return RusotoError::Service(PutReplicationConfigurationError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutReplicationConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutReplicationConfigurationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutReplicationConfigurationError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutReplicationConfigurationError {}
 /// Errors returned by SetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetRepositoryPolicyError {
@@ -2685,7 +3050,7 @@ pub enum StartLifecyclePolicyPreviewError {
     InvalidParameter(String),
     /// <p>The lifecycle policy could not be found, and no policy is set to the repository.</p>
     LifecyclePolicyNotFound(String),
-    /// <p>The previous lifecycle policy preview request has not completed. Please try again later.</p>
+    /// <p>The previous lifecycle policy preview request has not completed. Wait and try again.</p>
     LifecyclePolicyPreviewInProgress(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
@@ -2863,13 +3228,15 @@ pub enum UploadLayerPartError {
     InvalidLayerPart(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation failed due to a KMS exception.</p>
+    Kms(String),
     /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+    /// <p>The upload could not be found, or the specified upload ID is not valid for this repository.</p>
     UploadNotFound(String),
 }
 
@@ -2883,6 +3250,7 @@ impl UploadLayerPartError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(UploadLayerPartError::InvalidParameter(err.msg))
                 }
+                "KmsException" => return RusotoError::Service(UploadLayerPartError::Kms(err.msg)),
                 "LimitExceededException" => {
                     return RusotoError::Service(UploadLayerPartError::LimitExceeded(err.msg))
                 }
@@ -2908,6 +3276,7 @@ impl fmt::Display for UploadLayerPartError {
         match *self {
             UploadLayerPartError::InvalidLayerPart(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UploadLayerPartError::Kms(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             UploadLayerPartError::Server(ref cause) => write!(f, "{}", cause),
@@ -2955,6 +3324,11 @@ pub trait Ecr {
         input: DeleteLifecyclePolicyRequest,
     ) -> Result<DeleteLifecyclePolicyResponse, RusotoError<DeleteLifecyclePolicyError>>;
 
+    /// <p>Deletes the registry permissions policy.</p>
+    async fn delete_registry_policy(
+        &self,
+    ) -> Result<DeleteRegistryPolicyResponse, RusotoError<DeleteRegistryPolicyError>>;
+
     /// <p>Deletes a repository. If the repository contains images, you must either delete all images in the repository or use the <code>force</code> option to delete the repository.</p>
     async fn delete_repository(
         &self,
@@ -2978,6 +3352,11 @@ pub trait Ecr {
         &self,
         input: DescribeImagesRequest,
     ) -> Result<DescribeImagesResponse, RusotoError<DescribeImagesError>>;
+
+    /// <p>Describes the settings for a registry. The replication configuration for a repository can be created or updated with the <a>PutReplicationConfiguration</a> API action.</p>
+    async fn describe_registry(
+        &self,
+    ) -> Result<DescribeRegistryResponse, RusotoError<DescribeRegistryError>>;
 
     /// <p>Describes image repositories in a registry.</p>
     async fn describe_repositories(
@@ -3008,6 +3387,11 @@ pub trait Ecr {
         &self,
         input: GetLifecyclePolicyPreviewRequest,
     ) -> Result<GetLifecyclePolicyPreviewResponse, RusotoError<GetLifecyclePolicyPreviewError>>;
+
+    /// <p>Retrieves the permissions policy for a registry.</p>
+    async fn get_registry_policy(
+        &self,
+    ) -> Result<GetRegistryPolicyResponse, RusotoError<GetRegistryPolicyError>>;
 
     /// <p>Retrieves the repository policy for the specified repository.</p>
     async fn get_repository_policy(
@@ -3059,6 +3443,18 @@ pub trait Ecr {
         &self,
         input: PutLifecyclePolicyRequest,
     ) -> Result<PutLifecyclePolicyResponse, RusotoError<PutLifecyclePolicyError>>;
+
+    /// <p>Creates or updates the permissions policy for your registry.</p> <p>A registry policy is used to specify permissions for another AWS account and is used when configuring cross-account replication. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry-permissions.html">Registry permissions</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    async fn put_registry_policy(
+        &self,
+        input: PutRegistryPolicyRequest,
+    ) -> Result<PutRegistryPolicyResponse, RusotoError<PutRegistryPolicyError>>;
+
+    /// <p><p>Creates or updates the replication configuration for a registry. The existing replication configuration for a repository can be retrieved with the <a>DescribeRegistry</a> API action. The first time the PutReplicationConfiguration API is called, a service-linked IAM role is created in your account for the replication process. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECR</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p> <note> <p>When configuring cross-account replication, the destination account must grant the source account permission to replicate. This permission is controlled using a registry permissions policy. For more information, see <a>PutRegistryPolicy</a>.</p> </note></p>
+    async fn put_replication_configuration(
+        &self,
+        input: PutReplicationConfigurationRequest,
+    ) -> Result<PutReplicationConfigurationResponse, RusotoError<PutReplicationConfigurationError>>;
 
     /// <p>Applies a repository policy to the specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn set_repository_policy(
@@ -3265,6 +3661,26 @@ impl Ecr for EcrClient {
             .deserialize::<DeleteLifecyclePolicyResponse, _>()
     }
 
+    /// <p>Deletes the registry permissions policy.</p>
+    async fn delete_registry_policy(
+        &self,
+    ) -> Result<DeleteRegistryPolicyResponse, RusotoError<DeleteRegistryPolicyError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DeleteRegistryPolicy",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteRegistryPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRegistryPolicyResponse, _>()
+    }
+
     /// <p>Deletes a repository. If the repository contains images, you must either delete all images in the repository or use the <code>force</code> option to delete the repository.</p>
     async fn delete_repository(
         &self,
@@ -3350,6 +3766,25 @@ impl Ecr for EcrClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeImagesResponse, _>()
+    }
+
+    /// <p>Describes the settings for a registry. The replication configuration for a repository can be created or updated with the <a>PutReplicationConfiguration</a> API action.</p>
+    async fn describe_registry(
+        &self,
+    ) -> Result<DescribeRegistryResponse, RusotoError<DescribeRegistryError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DescribeRegistry",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeRegistryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeRegistryResponse, _>()
     }
 
     /// <p>Describes image repositories in a registry.</p>
@@ -3460,6 +3895,25 @@ impl Ecr for EcrClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetLifecyclePolicyPreviewResponse, _>()
+    }
+
+    /// <p>Retrieves the permissions policy for a registry.</p>
+    async fn get_registry_policy(
+        &self,
+    ) -> Result<GetRegistryPolicyResponse, RusotoError<GetRegistryPolicyError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.GetRegistryPolicy",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, GetRegistryPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRegistryPolicyResponse, _>()
     }
 
     /// <p>Retrieves the repository policy for the specified repository.</p>
@@ -3633,6 +4087,50 @@ impl Ecr for EcrClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<PutLifecyclePolicyResponse, _>()
+    }
+
+    /// <p>Creates or updates the permissions policy for your registry.</p> <p>A registry policy is used to specify permissions for another AWS account and is used when configuring cross-account replication. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry-permissions.html">Registry permissions</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    async fn put_registry_policy(
+        &self,
+        input: PutRegistryPolicyRequest,
+    ) -> Result<PutRegistryPolicyResponse, RusotoError<PutRegistryPolicyError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.PutRegistryPolicy",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutRegistryPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutRegistryPolicyResponse, _>()
+    }
+
+    /// <p><p>Creates or updates the replication configuration for a registry. The existing replication configuration for a repository can be retrieved with the <a>DescribeRegistry</a> API action. The first time the PutReplicationConfiguration API is called, a service-linked IAM role is created in your account for the replication process. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECR</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p> <note> <p>When configuring cross-account replication, the destination account must grant the source account permission to replicate. This permission is controlled using a registry permissions policy. For more information, see <a>PutRegistryPolicy</a>.</p> </note></p>
+    async fn put_replication_configuration(
+        &self,
+        input: PutReplicationConfigurationRequest,
+    ) -> Result<PutReplicationConfigurationResponse, RusotoError<PutReplicationConfigurationError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.PutReplicationConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutReplicationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutReplicationConfigurationResponse, _>()
     }
 
     /// <p>Applies a repository policy to the specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>

@@ -88,6 +88,23 @@ pub struct AddIpRoutesResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddRegionRequest {
+    /// <p>The identifier of the directory to which you want to add Region replication.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The name of the Region where you want to add domain controllers for replication. For example, <code>us-east-1</code>.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
+    #[serde(rename = "VPCSettings")]
+    pub vpc_settings: DirectoryVpcSettings,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddRegionResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceRequest {
     /// <p>Identifier (ID) for the directory to which to add the tag.</p>
     #[serde(rename = "ResourceId")]
@@ -137,6 +154,10 @@ pub struct Certificate {
     #[serde(rename = "CertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
+    /// <p>A <code>ClientCertAuthSettings</code> object that contains client certificate authentication settings.</p>
+    #[serde(rename = "ClientCertAuthSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_cert_auth_settings: Option<ClientCertAuthSettings>,
     /// <p>The common name for the certificate.</p>
     #[serde(rename = "CommonName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -157,6 +178,10 @@ pub struct Certificate {
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_reason: Option<String>,
+    /// <p>The function that the registered certificate performs. Valid values include <code>ClientLDAPS</code> or <code>ClientCertAuth</code>. The default value is <code>ClientLDAPS</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Contains general information about a certificate.</p>
@@ -179,6 +204,19 @@ pub struct CertificateInfo {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>The function that the registered certificate performs. Valid values include <code>ClientLDAPS</code> or <code>ClientCertAuth</code>. The default value is <code>ClientLDAPS</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Contains information about the client certificate authentication settings for the <code>RegisterCertificate</code> and <code>DescribeCertificate</code> operations. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ClientCertAuthSettings {
+    /// <p>Specifies the URL of the default OCSP server used to check for revocation status. A secondary value to any OCSP address found in the AIA extension of the user certificate.</p>
+    #[serde(rename = "OCSPUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ocsp_url: Option<String>,
 }
 
 /// <p>Contains information about a computer account in a directory.</p>
@@ -347,7 +385,7 @@ pub struct CreateDirectoryRequest {
     /// <p>The fully qualified name for the directory, such as <code>corp.example.com</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the user name <code>Administrator</code> and this password.</p> <p>If you need to change the password for the administrator account, you can use the <a>ResetUserPassword</a> API call.</p>
+    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the user name <code>Administrator</code> and this password.</p> <p>If you need to change the password for the administrator account, you can use the <a>ResetUserPassword</a> API call.</p> <p>The regex pattern for this string is made up of the following conditions:</p> <ul> <li> <p>Length (?=^.{8,64}$) – Must be between 8 and 64 characters</p> </li> </ul> <p>AND any 3 of the following password complexity rules required by Active Directory:</p> <ul> <li> <p>Numbers and upper case and lowercase (?=.*\d)(?=.*[A-Z])(?=.*[a-z])</p> </li> <li> <p>Numbers and special characters and lower case (?=.*\d)(?=.*[^A-Za-z0-9\s])(?=.*[a-z])</p> </li> <li> <p>Special characters and upper case and lower case (?=.*[^A-Za-z0-9\s])(?=.*[A-Z])(?=.*[a-z])</p> </li> <li> <p>Numbers and upper case and special characters (?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9\s])</p> </li> </ul> <p>For additional information about how Active Directory passwords are enforced, see <a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements">Password must meet complexity requirements</a> on the Microsoft website.</p>
     #[serde(rename = "Password")]
     pub password: String,
     /// <p>The NetBIOS name of the directory, such as <code>CORP</code>.</p>
@@ -785,6 +823,35 @@ pub struct DescribeLDAPSSettingsResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeRegionsRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The <code>DescribeRegionsResult.NextToken</code> value from a previous call to <a>DescribeRegions</a>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the Region. For example, <code>us-east-1</code>.</p>
+    #[serde(rename = "RegionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeRegionsResult {
+    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <a>DescribeRegions</a> to retrieve the next set of items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>List of Region information related to the directory for each replicated Region.</p>
+    #[serde(rename = "RegionsDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regions_description: Option<Vec<RegionDescription>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSharedDirectoriesRequest {
     /// <p>The number of shared directories to return in the response object.</p>
     #[serde(rename = "Limit")]
@@ -992,6 +1059,10 @@ pub struct DirectoryDescription {
     #[serde(rename = "RadiusStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub radius_status: Option<String>,
+    /// <p>Lists the Regions where the directory has replicated.</p>
+    #[serde(rename = "RegionsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regions_info: Option<RegionsInfo>,
     /// <p>The method used when sharing a directory to determine whether the directory should be shared within your AWS organization (<code>ORGANIZATIONS</code>) or with any AWS account by sending a shared directory request (<code>HANDSHAKE</code>).</p>
     #[serde(rename = "ShareMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1081,8 +1152,7 @@ pub struct DirectoryLimits {
 }
 
 /// <p>Contains VPC information for the <a>CreateDirectory</a> or <a>CreateMicrosoftAD</a> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DirectoryVpcSettings {
     /// <p>The identifiers of the subnets for the directory servers. The two subnets must be in different Availability Zones. AWS Directory Service creates a directory server and a DNS server in each of these subnets.</p>
     #[serde(rename = "SubnetIds")]
@@ -1113,6 +1183,21 @@ pub struct DirectoryVpcSettingsDescription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisableClientAuthenticationRequest {
+    /// <p>The identifier of the directory </p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The type of client authentication to disable. Currently, only the parameter, <code>SmartCard</code> is supported.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisableClientAuthenticationResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1210,6 +1295,21 @@ pub struct DomainController {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EnableClientAuthenticationRequest {
+    /// <p>The identifier of the specified directory. </p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The type of client authentication to enable. Currently only the value <code>SmartCard</code> is supported. Smart card authentication in AD Connector requires that you enable Kerberos Constrained Delegation for the Service User to the LDAP service in the on-premises AD. </p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EnableClientAuthenticationResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1600,7 +1700,7 @@ pub struct RadiusSettings {
     #[serde(rename = "RadiusRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub radius_retries: Option<i64>,
-    /// <p>An array of strings that contains the IP addresses of the RADIUS server endpoints, or the IP addresses of your RADIUS server load balancer.</p>
+    /// <p>An array of strings that contains the fully qualified domain name (FQDN) or IP addresses of the RADIUS server endpoints, or the FQDN or IP addresses of your RADIUS server load balancer.</p>
     #[serde(rename = "RadiusServers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub radius_servers: Option<Vec<String>>,
@@ -1618,15 +1718,78 @@ pub struct RadiusSettings {
     pub use_same_username: Option<bool>,
 }
 
+/// <p>The replicated Region information for a directory.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RegionDescription {
+    /// <p>The desired number of domain controllers in the specified Region for the specified directory.</p>
+    #[serde(rename = "DesiredNumberOfDomainControllers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub desired_number_of_domain_controllers: Option<i64>,
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_id: Option<String>,
+    /// <p>The date and time that the Region description was last updated.</p>
+    #[serde(rename = "LastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p>Specifies when the Region replication began.</p>
+    #[serde(rename = "LaunchTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_time: Option<f64>,
+    /// <p>The name of the Region. For example, <code>us-east-1</code>.</p>
+    #[serde(rename = "RegionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+    /// <p>Specifies whether the Region is the primary Region or an additional Region.</p>
+    #[serde(rename = "RegionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_type: Option<String>,
+    /// <p>The status of the replication process for the specified Region.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The date and time that the Region status was last updated.</p>
+    #[serde(rename = "StatusLastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_last_updated_date_time: Option<f64>,
+    #[serde(rename = "VpcSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_settings: Option<DirectoryVpcSettings>,
+}
+
+/// <p>Provides information about the Regions that are configured for multi-Region replication.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RegionsInfo {
+    /// <p>Lists the Regions where the directory has been replicated, excluding the primary Region.</p>
+    #[serde(rename = "AdditionalRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_regions: Option<Vec<String>>,
+    /// <p>The Region where the AWS Managed Microsoft AD directory was originally created.</p>
+    #[serde(rename = "PrimaryRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_region: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCertificateRequest {
     /// <p>The certificate PEM string that needs to be registered.</p>
     #[serde(rename = "CertificateData")]
     pub certificate_data: String,
+    /// <p>A <code>ClientCertAuthSettings</code> object that contains client certificate authentication settings.</p>
+    #[serde(rename = "ClientCertAuthSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_cert_auth_settings: Option<ClientCertAuthSettings>,
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
+    /// <p>The function that the registered certificate performs. Valid values include <code>ClientLDAPS</code> or <code>ClientCertAuth</code>. The default value is <code>ClientLDAPS</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1686,6 +1849,18 @@ pub struct RemoveIpRoutesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveIpRoutesResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveRegionRequest {
+    /// <p>The identifier of the directory for which you want to remove Region replication.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemoveRegionResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2237,6 +2412,88 @@ impl fmt::Display for AddIpRoutesError {
     }
 }
 impl Error for AddIpRoutesError {}
+/// Errors returned by AddRegion
+#[derive(Debug, PartialEq)]
+pub enum AddRegionError {
+    /// <p>Client authentication is not available in this region at this time.</p>
+    AccessDenied(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The Region you specified is the same Region where the AWS Managed Microsoft AD directory was created. Specify a different Region and try again.</p>
+    DirectoryAlreadyInRegion(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>You have reached the limit for maximum number of simultaneous Region replications per directory.</p>
+    RegionLimitExceeded(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl AddRegionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRegionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(AddRegionError::AccessDenied(err.msg))
+                }
+                "ClientException" => return RusotoError::Service(AddRegionError::Client(err.msg)),
+                "DirectoryAlreadyInRegionException" => {
+                    return RusotoError::Service(AddRegionError::DirectoryAlreadyInRegion(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(AddRegionError::DirectoryDoesNotExist(err.msg))
+                }
+                "DirectoryUnavailableException" => {
+                    return RusotoError::Service(AddRegionError::DirectoryUnavailable(err.msg))
+                }
+                "EntityDoesNotExistException" => {
+                    return RusotoError::Service(AddRegionError::EntityDoesNotExist(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(AddRegionError::InvalidParameter(err.msg))
+                }
+                "RegionLimitExceededException" => {
+                    return RusotoError::Service(AddRegionError::RegionLimitExceeded(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(AddRegionError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(AddRegionError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AddRegionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddRegionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AddRegionError::Client(ref cause) => write!(f, "{}", cause),
+            AddRegionError::DirectoryAlreadyInRegion(ref cause) => write!(f, "{}", cause),
+            AddRegionError::DirectoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            AddRegionError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            AddRegionError::EntityDoesNotExist(ref cause) => write!(f, "{}", cause),
+            AddRegionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AddRegionError::RegionLimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddRegionError::Service(ref cause) => write!(f, "{}", cause),
+            AddRegionError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AddRegionError {}
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
@@ -3703,6 +3960,76 @@ impl fmt::Display for DescribeLDAPSSettingsError {
     }
 }
 impl Error for DescribeLDAPSSettingsError {}
+/// Errors returned by DescribeRegions
+#[derive(Debug, PartialEq)]
+pub enum DescribeRegionsError {
+    /// <p>Client authentication is not available in this region at this time.</p>
+    AccessDenied(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl DescribeRegionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRegionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeRegionsError::AccessDenied(err.msg))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(DescribeRegionsError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(DescribeRegionsError::DirectoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(DescribeRegionsError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeRegionsError::InvalidParameter(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DescribeRegionsError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(DescribeRegionsError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeRegionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeRegionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeRegionsError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeRegionsError::DirectoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeRegionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeRegionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeRegionsError::Service(ref cause) => write!(f, "{}", cause),
+            DescribeRegionsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeRegionsError {}
 /// Errors returned by DescribeSharedDirectories
 #[derive(Debug, PartialEq)]
 pub enum DescribeSharedDirectoriesError {
@@ -3889,6 +4216,82 @@ impl fmt::Display for DescribeTrustsError {
     }
 }
 impl Error for DescribeTrustsError {}
+/// Errors returned by DisableClientAuthentication
+#[derive(Debug, PartialEq)]
+pub enum DisableClientAuthenticationError {
+    /// <p>Client authentication is not available in this region at this time.</p>
+    AccessDenied(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>Client authentication is already enabled.</p>
+    InvalidClientAuthStatus(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl DisableClientAuthenticationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableClientAuthenticationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DisableClientAuthenticationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(DisableClientAuthenticationError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(
+                        DisableClientAuthenticationError::DirectoryDoesNotExist(err.msg),
+                    )
+                }
+                "InvalidClientAuthStatusException" => {
+                    return RusotoError::Service(
+                        DisableClientAuthenticationError::InvalidClientAuthStatus(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DisableClientAuthenticationError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(
+                        DisableClientAuthenticationError::UnsupportedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisableClientAuthenticationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisableClientAuthenticationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisableClientAuthenticationError::Client(ref cause) => write!(f, "{}", cause),
+            DisableClientAuthenticationError::DirectoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableClientAuthenticationError::InvalidClientAuthStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableClientAuthenticationError::Service(ref cause) => write!(f, "{}", cause),
+            DisableClientAuthenticationError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisableClientAuthenticationError {}
 /// Errors returned by DisableLDAPS
 #[derive(Debug, PartialEq)]
 pub enum DisableLDAPSError {
@@ -4049,6 +4452,92 @@ impl fmt::Display for DisableSsoError {
     }
 }
 impl Error for DisableSsoError {}
+/// Errors returned by EnableClientAuthentication
+#[derive(Debug, PartialEq)]
+pub enum EnableClientAuthenticationError {
+    /// <p>Client authentication is not available in this region at this time.</p>
+    AccessDenied(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>Client authentication is already enabled.</p>
+    InvalidClientAuthStatus(String),
+    /// <p>Client authentication setup could not be completed because at least one valid certificate must be registered in the system.</p>
+    NoAvailableCertificate(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl EnableClientAuthenticationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableClientAuthenticationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(EnableClientAuthenticationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(EnableClientAuthenticationError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(
+                        EnableClientAuthenticationError::DirectoryDoesNotExist(err.msg),
+                    )
+                }
+                "InvalidClientAuthStatusException" => {
+                    return RusotoError::Service(
+                        EnableClientAuthenticationError::InvalidClientAuthStatus(err.msg),
+                    )
+                }
+                "NoAvailableCertificateException" => {
+                    return RusotoError::Service(
+                        EnableClientAuthenticationError::NoAvailableCertificate(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(EnableClientAuthenticationError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(
+                        EnableClientAuthenticationError::UnsupportedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for EnableClientAuthenticationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EnableClientAuthenticationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnableClientAuthenticationError::Client(ref cause) => write!(f, "{}", cause),
+            EnableClientAuthenticationError::DirectoryDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableClientAuthenticationError::InvalidClientAuthStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableClientAuthenticationError::NoAvailableCertificate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableClientAuthenticationError::Service(ref cause) => write!(f, "{}", cause),
+            EnableClientAuthenticationError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for EnableClientAuthenticationError {}
 /// Errors returned by EnableLDAPS
 #[derive(Debug, PartialEq)]
 pub enum EnableLDAPSError {
@@ -4062,7 +4551,7 @@ pub enum EnableLDAPSError {
     InvalidLDAPSStatus(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    /// <p>The LDAP activities could not be performed because at least one valid certificate must be registered with the system.</p>
+    /// <p>Client authentication setup could not be completed because at least one valid certificate must be registered in the system.</p>
     NoAvailableCertificate(String),
     /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
@@ -4853,6 +5342,66 @@ impl fmt::Display for RemoveIpRoutesError {
     }
 }
 impl Error for RemoveIpRoutesError {}
+/// Errors returned by RemoveRegion
+#[derive(Debug, PartialEq)]
+pub enum RemoveRegionError {
+    /// <p>Client authentication is not available in this region at this time.</p>
+    AccessDenied(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl RemoveRegionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveRegionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(RemoveRegionError::AccessDenied(err.msg))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(RemoveRegionError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(RemoveRegionError::DirectoryDoesNotExist(err.msg))
+                }
+                "DirectoryUnavailableException" => {
+                    return RusotoError::Service(RemoveRegionError::DirectoryUnavailable(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(RemoveRegionError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(RemoveRegionError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemoveRegionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveRegionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RemoveRegionError::Client(ref cause) => write!(f, "{}", cause),
+            RemoveRegionError::DirectoryDoesNotExist(ref cause) => write!(f, "{}", cause),
+            RemoveRegionError::DirectoryUnavailable(ref cause) => write!(f, "{}", cause),
+            RemoveRegionError::Service(ref cause) => write!(f, "{}", cause),
+            RemoveRegionError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RemoveRegionError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -5032,7 +5581,7 @@ impl Error for RestoreFromSnapshotError {}
 /// Errors returned by ShareDirectory
 #[derive(Debug, PartialEq)]
 pub enum ShareDirectoryError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>Client authentication is not available in this region at this time.</p>
     AccessDenied(String),
     /// <p>A client exception has occurred.</p>
     Client(String),
@@ -5572,6 +6121,12 @@ pub trait DirectoryService {
         input: AddIpRoutesRequest,
     ) -> Result<AddIpRoutesResult, RusotoError<AddIpRoutesError>>;
 
+    /// <p>Adds two domain controllers in the specified Region for the specified directory.</p>
+    async fn add_region(
+        &self,
+        input: AddRegionRequest,
+    ) -> Result<AddRegionResult, RusotoError<AddRegionError>>;
+
     /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
     async fn add_tags_to_resource(
         &self,
@@ -5596,7 +6151,7 @@ pub trait DirectoryService {
         input: CreateAliasRequest,
     ) -> Result<CreateAliasResult, RusotoError<CreateAliasError>>;
 
-    /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
+    /// <p>Creates an Active Directory computer object in the specified directory.</p>
     async fn create_computer(
         &self,
         input: CreateComputerRequest,
@@ -5668,7 +6223,7 @@ pub trait DirectoryService {
         input: DeleteTrustRequest,
     ) -> Result<DeleteTrustResult, RusotoError<DeleteTrustError>>;
 
-    /// <p>Deletes from the system the certificate that was registered for a secured LDAP connection.</p>
+    /// <p>Deletes from the system the certificate that was registered for secure LDAP or client certificate authentication.</p>
     async fn deregister_certificate(
         &self,
         input: DeregisterCertificateRequest,
@@ -5680,7 +6235,7 @@ pub trait DirectoryService {
         input: DeregisterEventTopicRequest,
     ) -> Result<DeregisterEventTopicResult, RusotoError<DeregisterEventTopicError>>;
 
-    /// <p>Displays information about the certificate registered for a secured LDAP connection.</p>
+    /// <p>Displays information about the certificate registered for secure LDAP or client certificate authentication.</p>
     async fn describe_certificate(
         &self,
         input: DescribeCertificateRequest,
@@ -5716,6 +6271,12 @@ pub trait DirectoryService {
         input: DescribeLDAPSSettingsRequest,
     ) -> Result<DescribeLDAPSSettingsResult, RusotoError<DescribeLDAPSSettingsError>>;
 
+    /// <p>Provides information about the Regions that are configured for multi-Region replication.</p>
+    async fn describe_regions(
+        &self,
+        input: DescribeRegionsRequest,
+    ) -> Result<DescribeRegionsResult, RusotoError<DescribeRegionsError>>;
+
     /// <p>Returns the shared directories in your account. </p>
     async fn describe_shared_directories(
         &self,
@@ -5734,6 +6295,12 @@ pub trait DirectoryService {
         input: DescribeTrustsRequest,
     ) -> Result<DescribeTrustsResult, RusotoError<DescribeTrustsError>>;
 
+    /// <p>Disables alternative client authentication methods for the specified directory. </p>
+    async fn disable_client_authentication(
+        &self,
+        input: DisableClientAuthenticationRequest,
+    ) -> Result<DisableClientAuthenticationResult, RusotoError<DisableClientAuthenticationError>>;
+
     /// <p>Deactivates LDAP secure calls for the specified directory.</p>
     async fn disable_ldaps(
         &self,
@@ -5751,6 +6318,12 @@ pub trait DirectoryService {
         &self,
         input: DisableSsoRequest,
     ) -> Result<DisableSsoResult, RusotoError<DisableSsoError>>;
+
+    /// <p>Enables alternative client authentication methods for the specified directory.</p>
+    async fn enable_client_authentication(
+        &self,
+        input: EnableClientAuthenticationRequest,
+    ) -> Result<EnableClientAuthenticationResult, RusotoError<EnableClientAuthenticationError>>;
 
     /// <p>Activates the switch for the specific directory to always use LDAP secure calls.</p>
     async fn enable_ldaps(
@@ -5781,7 +6354,7 @@ pub trait DirectoryService {
         input: GetSnapshotLimitsRequest,
     ) -> Result<GetSnapshotLimitsResult, RusotoError<GetSnapshotLimitsError>>;
 
-    /// <p>For the specified directory, lists all the certificates registered for a secured LDAP connection.</p>
+    /// <p>For the specified directory, lists all the certificates registered for a secure LDAP or client certificate authentication.</p>
     async fn list_certificates(
         &self,
         input: ListCertificatesRequest,
@@ -5811,7 +6384,7 @@ pub trait DirectoryService {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Registers a certificate for secured LDAP connection.</p>
+    /// <p>Registers a certificate for a secure LDAP or client certificate authentication.</p>
     async fn register_certificate(
         &self,
         input: RegisterCertificateRequest,
@@ -5834,6 +6407,12 @@ pub trait DirectoryService {
         &self,
         input: RemoveIpRoutesRequest,
     ) -> Result<RemoveIpRoutesResult, RusotoError<RemoveIpRoutesError>>;
+
+    /// <p>Stops all replication and removes the domain controllers from the specified Region. You cannot remove the primary Region with this operation. Instead, use the <code>DeleteDirectory</code> API.</p>
+    async fn remove_region(
+        &self,
+        input: RemoveRegionRequest,
+    ) -> Result<RemoveRegionResult, RusotoError<RemoveRegionError>>;
 
     /// <p>Removes tags from a directory.</p>
     async fn remove_tags_from_resource(
@@ -5983,6 +6562,24 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AddIpRoutesResult, _>()
     }
 
+    /// <p>Adds two domain controllers in the specified Region for the specified directory.</p>
+    async fn add_region(
+        &self,
+        input: AddRegionRequest,
+    ) -> Result<AddRegionResult, RusotoError<AddRegionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DirectoryService_20150416.AddRegion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AddRegionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddRegionResult, _>()
+    }
+
     /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
     async fn add_tags_to_resource(
         &self,
@@ -6061,7 +6658,7 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateAliasResult, _>()
     }
 
-    /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
+    /// <p>Creates an Active Directory computer object in the specified directory.</p>
     async fn create_computer(
         &self,
         input: CreateComputerRequest,
@@ -6296,7 +6893,7 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTrustResult, _>()
     }
 
-    /// <p>Deletes from the system the certificate that was registered for a secured LDAP connection.</p>
+    /// <p>Deletes from the system the certificate that was registered for secure LDAP or client certificate authentication.</p>
     async fn deregister_certificate(
         &self,
         input: DeregisterCertificateRequest,
@@ -6338,7 +6935,7 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeregisterEventTopicResult, _>()
     }
 
-    /// <p>Displays information about the certificate registered for a secured LDAP connection.</p>
+    /// <p>Displays information about the certificate registered for secure LDAP or client certificate authentication.</p>
     async fn describe_certificate(
         &self,
         input: DescribeCertificateRequest,
@@ -6467,6 +7064,24 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLDAPSSettingsResult, _>()
     }
 
+    /// <p>Provides information about the Regions that are configured for multi-Region replication.</p>
+    async fn describe_regions(
+        &self,
+        input: DescribeRegionsRequest,
+    ) -> Result<DescribeRegionsResult, RusotoError<DescribeRegionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DirectoryService_20150416.DescribeRegions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeRegionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeRegionsResult, _>()
+    }
+
     /// <p>Returns the shared directories in your account. </p>
     async fn describe_shared_directories(
         &self,
@@ -6528,6 +7143,29 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrustsResult, _>()
     }
 
+    /// <p>Disables alternative client authentication methods for the specified directory. </p>
+    async fn disable_client_authentication(
+        &self,
+        input: DisableClientAuthenticationRequest,
+    ) -> Result<DisableClientAuthenticationResult, RusotoError<DisableClientAuthenticationError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.DisableClientAuthentication",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DisableClientAuthenticationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisableClientAuthenticationResult, _>()
+    }
+
     /// <p>Deactivates LDAP secure calls for the specified directory.</p>
     async fn disable_ldaps(
         &self,
@@ -6580,6 +7218,29 @@ impl DirectoryService for DirectoryServiceClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DisableSsoResult, _>()
+    }
+
+    /// <p>Enables alternative client authentication methods for the specified directory.</p>
+    async fn enable_client_authentication(
+        &self,
+        input: EnableClientAuthenticationRequest,
+    ) -> Result<EnableClientAuthenticationResult, RusotoError<EnableClientAuthenticationError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.EnableClientAuthentication",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, EnableClientAuthenticationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<EnableClientAuthenticationResult, _>()
     }
 
     /// <p>Activates the switch for the specific directory to always use LDAP secure calls.</p>
@@ -6676,7 +7337,7 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetSnapshotLimitsResult, _>()
     }
 
-    /// <p>For the specified directory, lists all the certificates registered for a secured LDAP connection.</p>
+    /// <p>For the specified directory, lists all the certificates registered for a secure LDAP or client certificate authentication.</p>
     async fn list_certificates(
         &self,
         input: ListCertificatesRequest,
@@ -6775,7 +7436,7 @@ impl DirectoryService for DirectoryServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResult, _>()
     }
 
-    /// <p>Registers a certificate for secured LDAP connection.</p>
+    /// <p>Registers a certificate for a secure LDAP or client certificate authentication.</p>
     async fn register_certificate(
         &self,
         input: RegisterCertificateRequest,
@@ -6854,6 +7515,24 @@ impl DirectoryService for DirectoryServiceClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<RemoveIpRoutesResult, _>()
+    }
+
+    /// <p>Stops all replication and removes the domain controllers from the specified Region. You cannot remove the primary Region with this operation. Instead, use the <code>DeleteDirectory</code> API.</p>
+    async fn remove_region(
+        &self,
+        input: RemoveRegionRequest,
+    ) -> Result<RemoveRegionResult, RusotoError<RemoveRegionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DirectoryService_20150416.RemoveRegion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RemoveRegionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RemoveRegionResult, _>()
     }
 
     /// <p>Removes tags from a directory.</p>

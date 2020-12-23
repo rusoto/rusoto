@@ -110,7 +110,7 @@ pub struct AddApplicationInputProcessingConfigurationResponse {
     #[serde(rename = "ApplicationVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_version_id: Option<i64>,
-    /// <p>The input ID that is associated with the application input. This is the ID that Amazon Kinesis Data Analytics assigns to each input configuration that you add to your application.</p>
+    /// <p>The input ID that is associated with the application input. This is the ID that Kinesis Data Analytics assigns to each input configuration that you add to your application.</p>
     #[serde(rename = "InputId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_id: Option<String>,
@@ -203,7 +203,7 @@ pub struct AddApplicationReferenceDataSourceResponse {
     #[serde(rename = "ApplicationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_arn: Option<String>,
-    /// <p>The updated application version ID. Amazon Kinesis Data Analytics increments this ID when the application is updated.</p>
+    /// <p>The updated application version ID. Kinesis Data Analytics increments this ID when the application is updated.</p>
     #[serde(rename = "ApplicationVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_version_id: Option<i64>,
@@ -219,7 +219,7 @@ pub struct AddApplicationVpcConfigurationRequest {
     /// <p>The name of an existing application.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
-    /// <p>The version of the application to which you want to add the input processing configuration. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned.</p>
+    /// <p>The version of the application to which you want to add the VPC configuration. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
     /// <p>Description of the VPC to add to the application.</p>
@@ -244,7 +244,7 @@ pub struct AddApplicationVpcConfigurationResponse {
     pub vpc_configuration_description: Option<VpcConfigurationDescription>,
 }
 
-/// <p>Describes code configuration for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes code configuration for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationCodeConfiguration {
@@ -257,7 +257,7 @@ pub struct ApplicationCodeConfiguration {
     pub code_content_type: String,
 }
 
-/// <p>Describes code configuration for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes code configuration for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationCodeConfigurationDescription {
@@ -270,7 +270,7 @@ pub struct ApplicationCodeConfigurationDescription {
     pub code_content_type: String,
 }
 
-/// <p>Describes updates to a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes code configuration updates to a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationCodeConfigurationUpdate {
@@ -284,26 +284,26 @@ pub struct ApplicationCodeConfigurationUpdate {
     pub code_content_update: Option<CodeContentUpdate>,
 }
 
-/// <p>Specifies the creation parameters for an Amazon Kinesis Data Analytics application.</p>
+/// <p>Specifies the creation parameters for a Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationConfiguration {
-    /// <p>The code location and type parameters for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>The code location and type parameters for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationCodeConfiguration")]
     pub application_code_configuration: ApplicationCodeConfiguration,
-    /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationSnapshotConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_snapshot_configuration: Option<ApplicationSnapshotConfiguration>,
-    /// <p>Describes execution properties for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes execution properties for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "EnvironmentProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_properties: Option<EnvironmentProperties>,
-    /// <p>The creation and update parameters for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>The creation and update parameters for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "FlinkApplicationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flink_application_configuration: Option<FlinkApplicationConfiguration>,
-    /// <p>The creation and update parameters for an SQL-based Kinesis Data Analytics application.</p>
+    /// <p>The creation and update parameters for a SQL-based Kinesis Data Analytics application.</p>
     #[serde(rename = "SqlApplicationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sql_application_configuration: Option<SqlApplicationConfiguration>,
@@ -313,24 +313,24 @@ pub struct ApplicationConfiguration {
     pub vpc_configurations: Option<Vec<VpcConfiguration>>,
 }
 
-/// <p>Describes details about the application code and starting parameters for an Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes details about the application code and starting parameters for a Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationConfigurationDescription {
-    /// <p>The details about the application code for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>The details about the application code for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationCodeConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_code_configuration_description: Option<ApplicationCodeConfigurationDescription>,
-    /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationSnapshotConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_snapshot_configuration_description:
         Option<ApplicationSnapshotConfigurationDescription>,
-    /// <p>Describes execution properties for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes execution properties for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "EnvironmentPropertyDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_property_descriptions: Option<EnvironmentPropertyDescriptions>,
-    /// <p>The details about a Java-based Kinesis Data Analytics application.</p>
+    /// <p>The details about a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "FlinkApplicationConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flink_application_configuration_description:
@@ -339,7 +339,7 @@ pub struct ApplicationConfigurationDescription {
     #[serde(rename = "RunConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_configuration_description: Option<RunConfigurationDescription>,
-    /// <p>The details about inputs, outputs, and reference data sources for an SQL-based Kinesis Data Analytics application.</p>
+    /// <p>The details about inputs, outputs, and reference data sources for a SQL-based Kinesis Data Analytics application.</p>
     #[serde(rename = "SqlApplicationConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sql_application_configuration_description: Option<SqlApplicationConfigurationDescription>,
@@ -353,23 +353,23 @@ pub struct ApplicationConfigurationDescription {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationConfigurationUpdate {
-    /// <p>Describes updates to a Java-based Kinesis Data Analytics application's code configuration.</p>
+    /// <p>Describes updates to a Flink-based Kinesis Data Analytics application's code configuration.</p>
     #[serde(rename = "ApplicationCodeConfigurationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_code_configuration_update: Option<ApplicationCodeConfigurationUpdate>,
-    /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationSnapshotConfigurationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_snapshot_configuration_update: Option<ApplicationSnapshotConfigurationUpdate>,
-    /// <p>Describes updates to the environment properties for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes updates to the environment properties for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "EnvironmentPropertyUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_property_updates: Option<EnvironmentPropertyUpdates>,
-    /// <p>Describes updates to a Java-based Kinesis Data Analytics application's configuration.</p>
+    /// <p>Describes updates to a Flink-based Kinesis Data Analytics application's configuration.</p>
     #[serde(rename = "FlinkApplicationConfigurationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flink_application_configuration_update: Option<FlinkApplicationConfigurationUpdate>,
-    /// <p>Describes updates to an SQL-based Kinesis Data Analytics application's configuration.</p>
+    /// <p>Describes updates to a SQL-based Kinesis Data Analytics application's configuration.</p>
     #[serde(rename = "SqlApplicationConfigurationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sql_application_configuration_update: Option<SqlApplicationConfigurationUpdate>,
@@ -386,7 +386,7 @@ pub struct ApplicationDetail {
     /// <p>The ARN of the application.</p>
     #[serde(rename = "ApplicationARN")]
     pub application_arn: String,
-    /// <p>Provides details about the application's SQL or Java code and starting parameters.</p>
+    /// <p>Provides details about the application's Java, SQL, or Scala code and starting parameters.</p>
     #[serde(rename = "ApplicationConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_configuration_description: Option<ApplicationConfigurationDescription>,
@@ -415,7 +415,7 @@ pub struct ApplicationDetail {
     #[serde(rename = "LastUpdateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_timestamp: Option<f64>,
-    /// <p>The runtime environment for the application (<code>SQL-1.0</code> or <code>FLINK-1_6</code>).</p>
+    /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
     pub runtime_environment: String,
     /// <p>Specifies the IAM role that the application uses to access external resources.</p>
@@ -436,29 +436,29 @@ pub struct ApplicationRestoreConfiguration {
     pub snapshot_name: Option<String>,
 }
 
-/// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationSnapshotConfiguration {
-    /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "SnapshotsEnabled")]
     pub snapshots_enabled: bool,
 }
 
-/// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationSnapshotConfigurationDescription {
-    /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "SnapshotsEnabled")]
     pub snapshots_enabled: bool,
 }
 
-/// <p>Describes updates to whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes updates to whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationSnapshotConfigurationUpdate {
-    /// <p>Describes updates to whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>Describes updates to whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "SnapshotsEnabledUpdate")]
     pub snapshots_enabled_update: bool,
 }
@@ -479,12 +479,12 @@ pub struct ApplicationSummary {
     /// <p>Provides the current application version.</p>
     #[serde(rename = "ApplicationVersionId")]
     pub application_version_id: i64,
-    /// <p>The runtime environment for the application (<code>SQL-1.0</code> or <code>FLINK-1_6</code>).</p>
+    /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
     pub runtime_environment: String,
 }
 
-/// <p>For an SQL-based application, provides additional mapping information when the record format uses delimiters, such as CSV. For example, the following sample records use CSV format, where the records use the <i>'\n'</i> as the row delimiter and a comma (",") as the column delimiter: </p> <p> <code>"name1", "address1"</code> </p> <p> <code>"name2", "address2"</code> </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, provides additional mapping information when the record format uses delimiters, such as CSV. For example, the following sample records use CSV format, where the records use the <i>'\n'</i> as the row delimiter and a comma (",") as the column delimiter: </p> <p> <code>"name1", "address1"</code> </p> <p> <code>"name2", "address2"</code> </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CSVMappingParameters {
     /// <p>The column delimiter. For example, in a CSV format, a comma (",") is the typical column delimiter.</p>
@@ -495,7 +495,7 @@ pub struct CSVMappingParameters {
     pub record_row_delimiter: String,
 }
 
-/// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/concepts/programming-model.html#checkpoints-for-fault-tolerance"> Checkpoints for Fault Tolerance</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>.</p>
+/// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/concepts/programming-model.html#checkpoints-for-fault-tolerance"> Checkpoints for Fault Tolerance</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckpointConfiguration {
@@ -503,20 +503,20 @@ pub struct CheckpointConfiguration {
     #[serde(rename = "CheckpointInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpoint_interval: Option<i64>,
-    /// <p><p>Describes whether checkpointing is enabled for a Java-based Kinesis Data Analytics application.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointingEnabled</code> value of <code>true</code>, even if this value is set to another value using this API or in application code.</p> </note></p>
+    /// <p><p>Describes whether checkpointing is enabled for a Flink-based Kinesis Data Analytics application.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointingEnabled</code> value of <code>true</code>, even if this value is set to another value using this API or in application code.</p> </note></p>
     #[serde(rename = "CheckpointingEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpointing_enabled: Option<bool>,
-    /// <p><p>Describes whether the application uses Amazon Kinesis Data Analytics&#39; default checkpointing behavior. You must set this property to <code>CUSTOM</code> in order to set the <code>CheckpointingEnabled</code>, <code>CheckpointInterval</code>, or <code>MinPauseBetweenCheckpoints</code> parameters.</p> <note> <p>If this value is set to <code>DEFAULT</code>, the application will use the following values, even if they are set to other values using APIs or application code:</p> <ul> <li> <p> <b>CheckpointingEnabled:</b> true</p> </li> <li> <p> <b>CheckpointInterval:</b> 60000</p> </li> <li> <p> <b>MinPauseBetweenCheckpoints:</b> 5000</p> </li> </ul> </note></p>
+    /// <p><p>Describes whether the application uses Kinesis Data Analytics&#39; default checkpointing behavior. You must set this property to <code>CUSTOM</code> in order to set the <code>CheckpointingEnabled</code>, <code>CheckpointInterval</code>, or <code>MinPauseBetweenCheckpoints</code> parameters.</p> <note> <p>If this value is set to <code>DEFAULT</code>, the application will use the following values, even if they are set to other values using APIs or application code:</p> <ul> <li> <p> <b>CheckpointingEnabled:</b> true</p> </li> <li> <p> <b>CheckpointInterval:</b> 60000</p> </li> <li> <p> <b>MinPauseBetweenCheckpoints:</b> 5000</p> </li> </ul> </note></p>
     #[serde(rename = "ConfigurationType")]
     pub configuration_type: String,
-    /// <p><p>Describes the minimum time in milliseconds after a checkpoint operation completes that a new checkpoint operation can start. If a checkpoint operation takes longer than the <code>CheckpointInterval</code>, the application otherwise performs continual checkpoint operations. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/ops/state/large_state_tuning.html#tuning-checkpointing"> Tuning Checkpointing</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>MinPauseBetweenCheckpoints</code> value of 5000, even if this value is set using this API or in application code.</p> </note></p>
+    /// <p><p>Describes the minimum time in milliseconds after a checkpoint operation completes that a new checkpoint operation can start. If a checkpoint operation takes longer than the <code>CheckpointInterval</code>, the application otherwise performs continual checkpoint operations. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/ops/state/large_state_tuning.html#tuning-checkpointing"> Tuning Checkpointing</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>MinPauseBetweenCheckpoints</code> value of 5000, even if this value is set using this API or in application code.</p> </note></p>
     #[serde(rename = "MinPauseBetweenCheckpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_pause_between_checkpoints: Option<i64>,
 }
 
-/// <p>Describes checkpointing parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes checkpointing parameters for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckpointConfigurationDescription {
@@ -524,7 +524,7 @@ pub struct CheckpointConfigurationDescription {
     #[serde(rename = "CheckpointInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpoint_interval: Option<i64>,
-    /// <p><p>Describes whether checkpointing is enabled for a Java-based Kinesis Data Analytics application.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointingEnabled</code> value of <code>true</code>, even if this value is set to another value using this API or in application code.</p> </note></p>
+    /// <p><p>Describes whether checkpointing is enabled for a Flink-based Kinesis Data Analytics application.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointingEnabled</code> value of <code>true</code>, even if this value is set to another value using this API or in application code.</p> </note></p>
     #[serde(rename = "CheckpointingEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpointing_enabled: Option<bool>,
@@ -538,7 +538,7 @@ pub struct CheckpointConfigurationDescription {
     pub min_pause_between_checkpoints: Option<i64>,
 }
 
-/// <p>Describes updates to the checkpointing parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes updates to the checkpointing parameters for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckpointConfigurationUpdate {
@@ -599,7 +599,7 @@ pub struct CloudWatchLoggingOptionUpdate {
     pub log_stream_arn_update: Option<String>,
 }
 
-/// <p>Specifies either the application code, or the location of the application code, for a Java-based Amazon Kinesis Data Analytics application. </p>
+/// <p>Specifies either the application code, or the location of the application code, for a Flink-based Kinesis Data Analytics application. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeContent {
@@ -607,11 +607,11 @@ pub struct CodeContent {
     #[serde(rename = "S3ContentLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_content_location: Option<S3ContentLocation>,
-    /// <p>The text-format code for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>The text-format code for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "TextContent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_content: Option<String>,
-    /// <p>The zip-format code for a Java-based Kinesis Data Analytics application.</p>
+    /// <p>The zip-format code for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ZipFileContent")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -622,7 +622,7 @@ pub struct CodeContent {
     pub zip_file_content: Option<bytes::Bytes>,
 }
 
-/// <p>Describes details about the application code for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes details about the application code for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeContentDescription {
@@ -644,7 +644,7 @@ pub struct CodeContentDescription {
     pub text_content: Option<String>,
 }
 
-/// <p>Describes an update to the code of a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes an update to the code of a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeContentUpdate {
@@ -669,6 +669,30 @@ pub struct CodeContentUpdate {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateApplicationPresignedUrlRequest {
+    /// <p>The name of the application.</p>
+    #[serde(rename = "ApplicationName")]
+    pub application_name: String,
+    /// <p>The duration in seconds for which the returned URL will be valid.</p>
+    #[serde(rename = "SessionExpirationDurationInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_expiration_duration_in_seconds: Option<i64>,
+    /// <p>The type of the extension for which to create and return a URL. Currently, the only valid extension URL type is <code>FLINK_DASHBOARD_URL</code>. </p>
+    #[serde(rename = "UrlType")]
+    pub url_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateApplicationPresignedUrlResponse {
+    /// <p>The URL of the extension.</p>
+    #[serde(rename = "AuthorizedUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorized_url: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>Use this parameter to configure the application.</p>
     #[serde(rename = "ApplicationConfiguration")]
@@ -685,7 +709,7 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "CloudWatchLoggingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logging_options: Option<Vec<CloudWatchLoggingOption>>,
-    /// <p>The runtime environment for the application (<code>SQL-1.0</code> or <code>FLINK-1_6</code>).</p>
+    /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
     pub runtime_environment: String,
     /// <p>The IAM role used by the application to access Kinesis data streams, Kinesis Data Firehose delivery streams, Amazon S3 objects, and other external resources.</p>
@@ -931,7 +955,7 @@ pub struct DescribeApplicationSnapshotResponse {
     pub snapshot_details: SnapshotDetails,
 }
 
-/// <p>Describes the data format when records are written to the destination in an SQL-based Amazon Kinesis Data Analytics application. </p>
+/// <p>Describes the data format when records are written to the destination in a SQL-based Kinesis Data Analytics application. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DestinationSchema {
     /// <p>Specifies the format of the records on the output stream.</p>
@@ -984,7 +1008,7 @@ pub struct DiscoverInputSchemaResponse {
     pub raw_input_records: Option<Vec<String>>,
 }
 
-/// <p>Describes execution properties for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes execution properties for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnvironmentProperties {
@@ -993,7 +1017,7 @@ pub struct EnvironmentProperties {
     pub property_groups: Vec<PropertyGroup>,
 }
 
-/// <p>Describes the execution properties for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes the execution properties for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentPropertyDescriptions {
@@ -1003,7 +1027,7 @@ pub struct EnvironmentPropertyDescriptions {
     pub property_group_descriptions: Option<Vec<PropertyGroup>>,
 }
 
-/// <p>Describes updates to the execution property groups for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes updates to the execution property groups for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnvironmentPropertyUpdates {
@@ -1012,11 +1036,11 @@ pub struct EnvironmentPropertyUpdates {
     pub property_groups: Vec<PropertyGroup>,
 }
 
-/// <p>Describes configuration parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes configuration parameters for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlinkApplicationConfiguration {
-    /// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/concepts/programming-model.html#checkpoints-for-fault-tolerance"> Checkpoints for Fault Tolerance</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>. </p>
+    /// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/concepts/programming-model.html#checkpoints-for-fault-tolerance"> Checkpoints for Fault Tolerance</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>. </p>
     #[serde(rename = "CheckpointConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpoint_configuration: Option<CheckpointConfiguration>,
@@ -1030,7 +1054,7 @@ pub struct FlinkApplicationConfiguration {
     pub parallelism_configuration: Option<ParallelismConfiguration>,
 }
 
-/// <p>Describes configuration parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes configuration parameters for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlinkApplicationConfigurationDescription {
@@ -1038,7 +1062,7 @@ pub struct FlinkApplicationConfigurationDescription {
     #[serde(rename = "CheckpointConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpoint_configuration_description: Option<CheckpointConfigurationDescription>,
-    /// <p>The job plan for an application. For more information about the job plan, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/internals/job_scheduling.html">Jobs and Scheduling</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>. To retrieve the job plan for the application, use the <a>DescribeApplicationRequest$IncludeAdditionalDetails</a> parameter of the <a>DescribeApplication</a> operation.</p>
+    /// <p>The job plan for an application. For more information about the job plan, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/internals/job_scheduling.html">Jobs and Scheduling</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>. To retrieve the job plan for the application, use the <a>DescribeApplicationRequest$IncludeAdditionalDetails</a> parameter of the <a>DescribeApplication</a> operation.</p>
     #[serde(rename = "JobPlanDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_plan_description: Option<String>,
@@ -1052,7 +1076,7 @@ pub struct FlinkApplicationConfigurationDescription {
     pub parallelism_configuration_description: Option<ParallelismConfigurationDescription>,
 }
 
-/// <p>Describes updates to the configuration parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes updates to the configuration parameters for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlinkApplicationConfigurationUpdate {
@@ -1070,17 +1094,16 @@ pub struct FlinkApplicationConfigurationUpdate {
     pub parallelism_configuration_update: Option<ParallelismConfigurationUpdate>,
 }
 
-/// <p>Describes the starting parameters for an Apache Flink-based Kinesis Data Analytics application.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+/// <p>Describes the starting parameters for a Flink-based Kinesis Data Analytics application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FlinkRunConfiguration {
-    /// <p>When restoring from a savepoint, specifies whether the runtime is allowed to skip a state that cannot be mapped to the new program. This will happen if the program is updated between savepoints to remove stateful parameters, and state data in the savepoint no longer corresponds to valid application data. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/ops/state/savepoints.html#allowing-non-restored-state"> Allowing Non-Restored State</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink documentation</a>.</p>
+    /// <p><p>When restoring from a snapshot, specifies whether the runtime is allowed to skip a state that cannot be mapped to the new program. This will happen if the program is updated between snapshots to remove stateful parameters, and state data in the snapshot no longer corresponds to valid application data. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/ops/state/savepoints.html#allowing-non-restored-state"> Allowing Non-Restored State</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink documentation</a>.</p> <note> <p>This value defaults to <code>false</code>. If you update your application without specifying this parameter, <code>AllowNonRestoredState</code> will be set to <code>false</code>, even if it was previously set to <code>true</code>.</p> </note></p>
     #[serde(rename = "AllowNonRestoredState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_non_restored_state: Option<bool>,
 }
 
-/// <p>When you configure the application input for an SQL-based Amazon Kinesis Data Analytics application, you specify the streaming source, the in-application stream name that is created, and the mapping between the two. </p>
+/// <p>When you configure the application input for a SQL-based Kinesis Data Analytics application, you specify the streaming source, the in-application stream name that is created, and the mapping between the two. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Input {
@@ -1108,7 +1131,7 @@ pub struct Input {
     pub name_prefix: String,
 }
 
-/// <p>Describes the application input configuration for an SQL-based Amazon Kinesis Data Analytics application. </p>
+/// <p>Describes the application input configuration for a SQL-based Kinesis Data Analytics application. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDescription {
@@ -1150,20 +1173,20 @@ pub struct InputDescription {
     pub name_prefix: Option<String>,
 }
 
-/// <p>An object that contains the Amazon Resource Name (ARN) of the AWS Lambda function that is used to preprocess records in the stream in an SQL-based Amazon Kinesis Data Analytics application. </p>
+/// <p>An object that contains the Amazon Resource Name (ARN) of the AWS Lambda function that is used to preprocess records in the stream in a SQL-based Kinesis Data Analytics application. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessor {
-    /// <p><p>The ARN of the AWS Lambda function that operates on records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
+    /// <p><p>The ARN of the AWS Lambda function that operates on records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, an object that contains the Amazon Resource Name (ARN) of the AWS Lambda function that is used to preprocess records in the stream.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, an object that contains the Amazon Resource Name (ARN) of the AWS Lambda function that is used to preprocess records in the stream.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputLambdaProcessorDescription {
-    /// <p><p>The ARN of the AWS Lambda function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
+    /// <p><p>The ARN of the AWS Lambda function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
     /// <p><p>The ARN of the IAM role that is used to access the AWS Lambda function.</p> <note> <p>Provided for backward compatibility. Applications that are created with the current API version have an application-level service execution role rather than a resource-level role.</p> </note></p>
@@ -1172,16 +1195,16 @@ pub struct InputLambdaProcessorDescription {
     pub role_arn: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, represents an update to the <a>InputLambdaProcessor</a> that is used to preprocess the records in the stream.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, represents an update to the <a>InputLambdaProcessor</a> that is used to preprocess the records in the stream.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessorUpdate {
-    /// <p><p>The Amazon Resource Name (ARN) of the new AWS Lambda function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the new AWS Lambda function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARNUpdate")]
     pub resource_arn_update: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the number of in-application streams to create for a given streaming source. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the number of in-application streams to create for a given streaming source. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputParallelism {
     /// <p>The number of in-application streams to create.</p>
@@ -1190,7 +1213,7 @@ pub struct InputParallelism {
     pub count: Option<i64>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides updates to the parallelism count.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, provides updates to the parallelism count.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputParallelismUpdate {
@@ -1199,7 +1222,7 @@ pub struct InputParallelismUpdate {
     pub count_update: i64,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes a processor that is used to preprocess the records in the stream before being processed by your application code. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes a processor that is used to preprocess the records in the stream before being processed by your application code. Currently, the only input processor available is <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfiguration {
@@ -1208,7 +1231,7 @@ pub struct InputProcessingConfiguration {
     pub input_lambda_processor: InputLambdaProcessor,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides the configuration information about an input processor. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, provides the configuration information about an input processor. Currently, the only input processor available is <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputProcessingConfigurationDescription {
@@ -1218,7 +1241,7 @@ pub struct InputProcessingConfigurationDescription {
     pub input_lambda_processor_description: Option<InputLambdaProcessorDescription>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes updates to an <a>InputProcessingConfiguration</a>.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes updates to an <a>InputProcessingConfiguration</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfigurationUpdate {
@@ -1227,7 +1250,7 @@ pub struct InputProcessingConfigurationUpdate {
     pub input_lambda_processor_update: InputLambdaProcessorUpdate,
 }
 
-/// <p>Describes updates for an SQL-based Amazon Kinesis Data Analytics application's input schema.</p>
+/// <p>Describes updates for an SQL-based Kinesis Data Analytics application's input schema.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSchemaUpdate {
@@ -1254,7 +1277,7 @@ pub struct InputStartingPositionConfiguration {
     pub input_starting_position: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes updates to a specific input configuration (identified by the <code>InputId</code> of an application). </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes updates to a specific input configuration (identified by the <code>InputId</code> of an application). </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputUpdate {
@@ -1287,7 +1310,7 @@ pub struct InputUpdate {
     pub name_prefix_update: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides additional mapping information when JSON is the record format on the streaming source.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, provides additional mapping information when JSON is the record format on the streaming source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JSONMappingParameters {
     /// <p>The path to the top-level parent that contains the records.</p>
@@ -1295,7 +1318,7 @@ pub struct JSONMappingParameters {
     pub record_row_path: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, identifies a Kinesis Data Firehose delivery stream as the streaming source. You provide the delivery stream's Amazon Resource Name (ARN).</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, identifies a Kinesis Data Firehose delivery stream as the streaming source. You provide the delivery stream's Amazon Resource Name (ARN).</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInput {
@@ -1317,7 +1340,7 @@ pub struct KinesisFirehoseInputDescription {
     pub role_arn: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, when updating application input configuration, provides information about a Kinesis Data Firehose delivery stream as the streaming source.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, when updating application input configuration, provides information about a Kinesis Data Firehose delivery stream as the streaming source.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInputUpdate {
@@ -1326,7 +1349,7 @@ pub struct KinesisFirehoseInputUpdate {
     pub resource_arn_update: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, when configuring application output, identifies a Kinesis Data Firehose delivery stream as the destination. You provide the stream Amazon Resource Name (ARN) of the delivery stream. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, when configuring application output, identifies a Kinesis Data Firehose delivery stream as the destination. You provide the stream Amazon Resource Name (ARN) of the delivery stream. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutput {
@@ -1335,7 +1358,7 @@ pub struct KinesisFirehoseOutput {
     pub resource_arn: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application's output, describes the Kinesis Data Firehose delivery stream that is configured as its destination.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application's output, describes the Kinesis Data Firehose delivery stream that is configured as its destination.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisFirehoseOutputDescription {
@@ -1348,7 +1371,7 @@ pub struct KinesisFirehoseOutputDescription {
     pub role_arn: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, when updating an output configuration using the <a>UpdateApplication</a> operation, provides information about a Kinesis Data Firehose delivery stream that is configured as the destination.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, when updating an output configuration using the <a>UpdateApplication</a> operation, provides information about a Kinesis Data Firehose delivery stream that is configured as the destination.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutputUpdate {
@@ -1357,7 +1380,7 @@ pub struct KinesisFirehoseOutputUpdate {
     pub resource_arn_update: String,
 }
 
-/// <p> Identifies an Amazon Kinesis data stream as the streaming source. You provide the stream's Amazon Resource Name (ARN).</p>
+/// <p> Identifies a Kinesis data stream as the streaming source. You provide the stream's Amazon Resource Name (ARN).</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInput {
@@ -1366,7 +1389,7 @@ pub struct KinesisStreamsInput {
     pub resource_arn: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the Kinesis data stream that is configured as the streaming source in the application input configuration. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the Kinesis data stream that is configured as the streaming source in the application input configuration. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisStreamsInputDescription {
@@ -1379,7 +1402,7 @@ pub struct KinesisStreamsInputDescription {
     pub role_arn: Option<String>,
 }
 
-/// <p>When you update the input configuration for an SQL-based Amazon Kinesis Data Analytics application, provides information about an Amazon Kinesis stream as the streaming source.</p>
+/// <p>When you update the input configuration for a SQL-based Kinesis Data Analytics application, provides information about a Kinesis stream as the streaming source.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInputUpdate {
@@ -1388,7 +1411,7 @@ pub struct KinesisStreamsInputUpdate {
     pub resource_arn_update: String,
 }
 
-/// <p>When you configure an SQL-based Amazon Kinesis Data Analytics application's output, identifies a Kinesis data stream as the destination. You provide the stream Amazon Resource Name (ARN). </p>
+/// <p>When you configure a SQL-based Kinesis Data Analytics application's output, identifies a Kinesis data stream as the destination. You provide the stream Amazon Resource Name (ARN). </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutput {
@@ -1397,7 +1420,7 @@ pub struct KinesisStreamsOutput {
     pub resource_arn: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application's output, describes the Kinesis data stream that is configured as its destination. </p>
+/// <p>For an SQL-based Kinesis Data Analytics application's output, describes the Kinesis data stream that is configured as its destination. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisStreamsOutputDescription {
@@ -1410,7 +1433,7 @@ pub struct KinesisStreamsOutputDescription {
     pub role_arn: Option<String>,
 }
 
-/// <p>When you update an SQL-based Amazon Kinesis Data Analytics application's output configuration using the <a>UpdateApplication</a> operation, provides information about a Kinesis data stream that is configured as the destination.</p>
+/// <p>When you update a SQL-based Kinesis Data Analytics application's output configuration using the <a>UpdateApplication</a> operation, provides information about a Kinesis data stream that is configured as the destination.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutputUpdate {
@@ -1419,16 +1442,16 @@ pub struct KinesisStreamsOutputUpdate {
     pub resource_arn_update: String,
 }
 
-/// <p>When you configure an SQL-based Amazon Kinesis Data Analytics application's output, identifies an AWS Lambda function as the destination. You provide the function Amazon Resource Name (ARN) of the Lambda function. </p>
+/// <p>When you configure a SQL-based Kinesis Data Analytics application's output, identifies an AWS Lambda function as the destination. You provide the function Amazon Resource Name (ARN) of the Lambda function. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutput {
-    /// <p><p>The Amazon Resource Name (ARN) of the destination Lambda function to write to.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the destination Lambda function to write to.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application output, describes the AWS Lambda function that is configured as its destination. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application's output, describes the AWS Lambda function that is configured as its destination. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaOutputDescription {
@@ -1441,11 +1464,11 @@ pub struct LambdaOutputDescription {
     pub role_arn: Option<String>,
 }
 
-/// <p>When you update an SQL-based Amazon Kinesis Data Analytics application's output configuration using the <a>UpdateApplication</a> operation, provides information about an AWS Lambda function that is configured as the destination.</p>
+/// <p>When you update an SQL-based Kinesis Data Analytics application's output configuration using the <a>UpdateApplication</a> operation, provides information about an AWS Lambda function that is configured as the destination.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutputUpdate {
-    /// <p><p>The Amazon Resource Name (ARN) of the destination AWS Lambda function.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the destination AWS Lambda function.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARNUpdate")]
     pub resource_arn_update: String,
 }
@@ -1521,7 +1544,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>When you configure an SQL-based Amazon Kinesis Data Analytics application's input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.</p>
+/// <p>When you configure a SQL-based Kinesis Data Analytics application's input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MappingParameters {
     /// <p>Provides additional mapping information when the record format uses delimiters (for example, CSV).</p>
@@ -1534,7 +1557,7 @@ pub struct MappingParameters {
     pub json_mapping_parameters: Option<JSONMappingParameters>,
 }
 
-/// <p>Describes configuration parameters for Amazon CloudWatch logging for a Java-based Kinesis Data Analytics application. For more information about CloudWatch logging, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html">Monitoring</a>.</p>
+/// <p>Describes configuration parameters for Amazon CloudWatch logging for a Flink-based Kinesis Data Analytics application. For more information about CloudWatch logging, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html">Monitoring</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitoringConfiguration {
@@ -1545,13 +1568,13 @@ pub struct MonitoringConfiguration {
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_level: Option<String>,
-    /// <p>Describes the granularity of the CloudWatch Logs for an application.</p>
+    /// <p>Describes the granularity of the CloudWatch Logs for an application. The <code>Parallelism</code> level is not recommended for applications with a Parallelism over 64 due to excessive costs.</p>
     #[serde(rename = "MetricsLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metrics_level: Option<String>,
 }
 
-/// <p>Describes configuration parameters for CloudWatch logging for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes configuration parameters for CloudWatch logging for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MonitoringConfigurationDescription {
@@ -1569,7 +1592,7 @@ pub struct MonitoringConfigurationDescription {
     pub metrics_level: Option<String>,
 }
 
-/// <p>Describes updates to configuration parameters for Amazon CloudWatch logging for a Java-based Kinesis Data Analytics application.</p>
+/// <p>Describes updates to configuration parameters for Amazon CloudWatch logging for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitoringConfigurationUpdate {
@@ -1581,24 +1604,24 @@ pub struct MonitoringConfigurationUpdate {
     #[serde(rename = "LogLevelUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_level_update: Option<String>,
-    /// <p>Describes updates to the granularity of the CloudWatch Logs for an application.</p>
+    /// <p>Describes updates to the granularity of the CloudWatch Logs for an application. The <code>Parallelism</code> level is not recommended for applications with a Parallelism over 64 due to excessive costs.</p>
     #[serde(rename = "MetricsLevelUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metrics_level_update: Option<String>,
 }
 
-/// <p><p> Describes an SQL-based Amazon Kinesis Data Analytics application&#39;s output configuration, in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream. </p> <p/></p>
+/// <p><p> Describes a SQL-based Kinesis Data Analytics application&#39;s output configuration, in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream. </p> <p/></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Output {
     /// <p>Describes the data format when records are written to the destination. </p>
     #[serde(rename = "DestinationSchema")]
     pub destination_schema: DestinationSchema,
-    /// <p>Identifies an Amazon Kinesis Data Firehose delivery stream as the destination.</p>
+    /// <p>Identifies a Kinesis Data Firehose delivery stream as the destination.</p>
     #[serde(rename = "KinesisFirehoseOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_firehose_output: Option<KinesisFirehoseOutput>,
-    /// <p>Identifies an Amazon Kinesis data stream as the destination.</p>
+    /// <p>Identifies a Kinesis data stream as the destination.</p>
     #[serde(rename = "KinesisStreamsOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_streams_output: Option<KinesisStreamsOutput>,
@@ -1611,7 +1634,7 @@ pub struct Output {
     pub name: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the application output configuration, which includes the in-application stream name and the destination where the stream data is written. The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the application output configuration, which includes the in-application stream name and the destination where the stream data is written. The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputDescription {
@@ -1641,7 +1664,7 @@ pub struct OutputDescription {
     pub output_id: Option<String>,
 }
 
-/// <p> For an SQL-based Amazon Kinesis Data Analytics application, describes updates to the output configuration identified by the <code>OutputId</code>. </p>
+/// <p> For a SQL-based Kinesis Data Analytics application, describes updates to the output configuration identified by the <code>OutputId</code>. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputUpdate {
@@ -1670,7 +1693,7 @@ pub struct OutputUpdate {
     pub output_id: String,
 }
 
-/// <p>Describes parameters for how a Java-based Amazon Kinesis Data Analytics application executes multiple tasks simultaneously. For more information about parallelism, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/parallel.html">Parallel Execution</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>.</p>
+/// <p>Describes parameters for how a Flink-based Kinesis Data Analytics application application executes multiple tasks simultaneously. For more information about parallelism, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/parallel.html">Parallel Execution</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParallelismConfiguration {
@@ -1681,17 +1704,17 @@ pub struct ParallelismConfiguration {
     /// <p>Describes whether the application uses the default parallelism for the Kinesis Data Analytics service. You must set this property to <code>CUSTOM</code> in order to change your application's <code>AutoScalingEnabled</code>, <code>Parallelism</code>, or <code>ParallelismPerKPU</code> properties.</p>
     #[serde(rename = "ConfigurationType")]
     pub configuration_type: String,
-    /// <p>Describes the initial number of parallel tasks that a Java-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, Kinesis Data Analytics increases the <code>CurrentParallelism</code> value in response to application load. The service can increase the <code>CurrentParallelism</code> value up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
+    /// <p>Describes the initial number of parallel tasks that a Flink-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, Kinesis Data Analytics increases the <code>CurrentParallelism</code> value in response to application load. The service can increase the <code>CurrentParallelism</code> value up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
     #[serde(rename = "Parallelism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelism: Option<i64>,
-    /// <p>Describes the number of parallel tasks that a Java-based Kinesis Data Analytics application can perform per Kinesis Processing Unit (KPU) used by the application. For more information about KPUs, see <a href="http://aws.amazon.com/kinesis/data-analytics/pricing/">Amazon Kinesis Data Analytics Pricing</a>.</p>
+    /// <p>Describes the number of parallel tasks that a Flink-based Kinesis Data Analytics application can perform per Kinesis Processing Unit (KPU) used by the application. For more information about KPUs, see <a href="http://aws.amazon.com/kinesis/data-analytics/pricing/">Amazon Kinesis Data Analytics Pricing</a>.</p>
     #[serde(rename = "ParallelismPerKPU")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelism_per_kpu: Option<i64>,
 }
 
-/// <p>Describes parameters for how a Java-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>
+/// <p>Describes parameters for how a Flink-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParallelismConfigurationDescription {
@@ -1703,21 +1726,21 @@ pub struct ParallelismConfigurationDescription {
     #[serde(rename = "ConfigurationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_type: Option<String>,
-    /// <p>Describes the current number of parallel tasks that a Java-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, Kinesis Data Analytics can increase this value in response to application load. The service can increase this value up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
+    /// <p>Describes the current number of parallel tasks that a Flink-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, Kinesis Data Analytics can increase this value in response to application load. The service can increase this value up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
     #[serde(rename = "CurrentParallelism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_parallelism: Option<i64>,
-    /// <p>Describes the initial number of parallel tasks that a Java-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, then Kinesis Data Analytics can increase the <code>CurrentParallelism</code> value in response to application load. The service can increase <code>CurrentParallelism</code> up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
+    /// <p>Describes the initial number of parallel tasks that a Flink-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, then Kinesis Data Analytics can increase the <code>CurrentParallelism</code> value in response to application load. The service can increase <code>CurrentParallelism</code> up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
     #[serde(rename = "Parallelism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelism: Option<i64>,
-    /// <p>Describes the number of parallel tasks that a Java-based Kinesis Data Analytics application can perform per Kinesis Processing Unit (KPU) used by the application.</p>
+    /// <p>Describes the number of parallel tasks that a Flink-based Kinesis Data Analytics application can perform per Kinesis Processing Unit (KPU) used by the application.</p>
     #[serde(rename = "ParallelismPerKPU")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelism_per_kpu: Option<i64>,
 }
 
-/// <p>Describes updates to parameters for how a Java-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>
+/// <p>Describes updates to parameters for how a Flink-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParallelismConfigurationUpdate {
@@ -1739,7 +1762,7 @@ pub struct ParallelismConfigurationUpdate {
     pub parallelism_update: Option<i64>,
 }
 
-/// <p>Property key-value pairs passed into a Java-based Kinesis Data Analytics application.</p>
+/// <p>Property key-value pairs passed into a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PropertyGroup {
     /// <p>Describes the key of an application execution property key-value pair.</p>
@@ -1750,7 +1773,7 @@ pub struct PropertyGroup {
     pub property_map: ::std::collections::HashMap<String, String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the mapping of each data element in the streaming source to the corresponding column in the in-application stream.</p> <p>Also used to describe the format of the reference data source.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the mapping of each data element in the streaming source to the corresponding column in the in-application stream.</p> <p>Also used to describe the format of the reference data source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecordColumn {
     /// <p>A reference to the data element in the streaming input or the reference data source.</p>
@@ -1765,7 +1788,7 @@ pub struct RecordColumn {
     pub sql_type: String,
 }
 
-/// <p> For an SQL-based Amazon Kinesis Data Analytics application, describes the record format and relevant mapping information that should be applied to schematize the records on the stream. </p>
+/// <p> For a SQL-based Kinesis Data Analytics application, describes the record format and relevant mapping information that should be applied to schematize the records on the stream. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecordFormat {
     /// <p>When you configure application input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.</p>
@@ -1777,7 +1800,7 @@ pub struct RecordFormat {
     pub record_format_type: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the reference data source by providing the source information (Amazon S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the reference data source by providing the source information (Amazon S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSource {
@@ -1793,7 +1816,7 @@ pub struct ReferenceDataSource {
     pub table_name: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the reference data source configured for an application.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the reference data source configured for an application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReferenceDataSourceDescription {
@@ -1812,7 +1835,7 @@ pub struct ReferenceDataSourceDescription {
     pub table_name: String,
 }
 
-/// <p>When you update a reference data source configuration for a SQL-based Amazon Kinesis Data Analytics application, this object provides all the updated values (such as the source bucket name and object key name), the in-application table name that is created, and updated mapping information that maps the data in the Amazon S3 object to the in-application reference table that is created.</p>
+/// <p>When you update a reference data source configuration for a SQL-based Kinesis Data Analytics application, this object provides all the updated values (such as the source bucket name and object key name), the in-application table name that is created, and updated mapping information that maps the data in the Amazon S3 object to the in-application reference table that is created.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSourceUpdate {
@@ -1833,7 +1856,7 @@ pub struct ReferenceDataSourceUpdate {
     pub table_name_update: Option<String>,
 }
 
-/// <p>Describes the starting parameters for an Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes the starting parameters for an Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunConfiguration {
@@ -1841,11 +1864,11 @@ pub struct RunConfiguration {
     #[serde(rename = "ApplicationRestoreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_restore_configuration: Option<ApplicationRestoreConfiguration>,
-    /// <p>Describes the starting parameters for an Apache Flink-based Kinesis Data Analytics application.</p>
+    /// <p>Describes the starting parameters for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "FlinkRunConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flink_run_configuration: Option<FlinkRunConfiguration>,
-    /// <p>Describes the starting parameters for an SQL-based Kinesis Data Analytics application.</p>
+    /// <p>Describes the starting parameters for a SQL-based Kinesis Data Analytics application application.</p>
     #[serde(rename = "SqlRunConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sql_run_configurations: Option<Vec<SqlRunConfiguration>>,
@@ -1859,6 +1882,9 @@ pub struct RunConfigurationDescription {
     #[serde(rename = "ApplicationRestoreConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_restore_configuration_description: Option<ApplicationRestoreConfiguration>,
+    #[serde(rename = "FlinkRunConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flink_run_configuration_description: Option<FlinkRunConfiguration>,
 }
 
 /// <p>Describes the updates to the starting parameters for a Kinesis Data Analytics application.</p>
@@ -1869,13 +1895,13 @@ pub struct RunConfigurationUpdate {
     #[serde(rename = "ApplicationRestoreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_restore_configuration: Option<ApplicationRestoreConfiguration>,
-    /// <p>Describes the starting parameters for an Apache Flink-based Kinesis Data Analytics application.</p>
+    /// <p>Describes the starting parameters for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "FlinkRunConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flink_run_configuration: Option<FlinkRunConfiguration>,
 }
 
-/// <p>Describes the location of a Java-based Amazon Kinesis Data Analytics application's code stored in an S3 bucket.</p>
+/// <p>Describes the location of a Flink-based Kinesis Data Analytics application's code stored in an S3 bucket.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3ApplicationCodeLocationDescription {
@@ -1891,7 +1917,7 @@ pub struct S3ApplicationCodeLocationDescription {
     pub object_version: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket and the name of the Amazon S3 object that contains the data.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket and the name of the Amazon S3 object that contains the data.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Configuration {
@@ -1903,7 +1929,7 @@ pub struct S3Configuration {
     pub file_key: String,
 }
 
-/// <p>For a Java-based Amazon Kinesis Data Analytics application, provides a description of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data. </p>
+/// <p>For a Flink-based Kinesis Data Analytics application, provides a description of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ContentLocation {
@@ -1919,7 +1945,7 @@ pub struct S3ContentLocation {
     pub object_version: Option<String>,
 }
 
-/// <p>Describes an update for the Amazon S3 code content location for a Java-based Amazon Kinesis Data Analytics application.</p>
+/// <p>Describes an update for the Amazon S3 code content location for a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ContentLocationUpdate {
@@ -1937,7 +1963,7 @@ pub struct S3ContentLocationUpdate {
     pub object_version_update: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, identifies the Amazon S3 bucket and object that contains the reference data.</p> <p>A Kinesis Data Analytics application loads reference data only once. If the data changes, you call the <a>UpdateApplication</a> operation to trigger reloading of data into your application. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, identifies the Amazon S3 bucket and object that contains the reference data.</p> <p>A Kinesis Data Analytics application loads reference data only once. If the data changes, you call the <a>UpdateApplication</a> operation to trigger reloading of data into your application. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSource {
@@ -1951,7 +1977,7 @@ pub struct S3ReferenceDataSource {
     pub file_key: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides the bucket name and object key name that stores the reference data.</p>
+/// <p>For a SQL-based Kinesis Data Analytics application, provides the bucket name and object key name that stores the reference data.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3ReferenceDataSourceDescription {
@@ -1967,7 +1993,7 @@ pub struct S3ReferenceDataSourceDescription {
     pub reference_role_arn: Option<String>,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the Amazon S3 bucket name and object key name for an in-application reference table. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the Amazon S3 bucket name and object key name for an in-application reference table. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSourceUpdate {
@@ -2000,7 +2026,7 @@ pub struct SnapshotDetails {
     pub snapshot_status: String,
 }
 
-/// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream. </p>
+/// <p>For a SQL-based Kinesis Data Analytics application, describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceSchema {
     /// <p>A list of <code>RecordColumn</code> objects. </p>
@@ -2015,7 +2041,7 @@ pub struct SourceSchema {
     pub record_format: RecordFormat,
 }
 
-/// <p>Describes the inputs, outputs, and reference data sources for an SQL-based Kinesis Data Analytics application.</p>
+/// <p>Describes the inputs, outputs, and reference data sources for a SQL-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlApplicationConfiguration {
@@ -2033,7 +2059,7 @@ pub struct SqlApplicationConfiguration {
     pub reference_data_sources: Option<Vec<ReferenceDataSource>>,
 }
 
-/// <p>Describes the inputs, outputs, and reference data sources for an SQL-based Kinesis Data Analytics application.</p>
+/// <p>Describes the inputs, outputs, and reference data sources for a SQL-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SqlApplicationConfigurationDescription {
@@ -2051,7 +2077,7 @@ pub struct SqlApplicationConfigurationDescription {
     pub reference_data_source_descriptions: Option<Vec<ReferenceDataSourceDescription>>,
 }
 
-/// <p>Describes updates to the input streams, destination streams, and reference data sources for an SQL-based Kinesis Data Analytics application.</p>
+/// <p>Describes updates to the input streams, destination streams, and reference data sources for a SQL-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlApplicationConfigurationUpdate {
@@ -2069,7 +2095,7 @@ pub struct SqlApplicationConfigurationUpdate {
     pub reference_data_source_updates: Option<Vec<ReferenceDataSourceUpdate>>,
 }
 
-/// <p>Describes the starting parameters for an SQL-based Kinesis Data Analytics application.</p>
+/// <p>Describes the starting parameters for a SQL-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlRunConfiguration {
@@ -2102,6 +2128,10 @@ pub struct StopApplicationRequest {
     /// <p>The name of the running application to stop.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
+    /// <p>Set to <code>true</code> to force the application to stop. If you set <code>Force</code> to <code>true</code>, Kinesis Data Analytics stops the application without taking a snapshot. </p> <note> <p>Force-stopping your application may lead to data loss or duplication. To prevent data loss or duplicate processing of data during application restarts, we recommend you to take frequent snapshots of your application.</p> </note> <p>You can only force stop a Flink-based Kinesis Data Analytics application. You can't force stop a SQL-based Kinesis Data Analytics application.</p> <p>The application must be in the <code>STARTING</code>, <code>UPDATING</code>, <code>STOPPING</code>, <code>AUTOSCALING</code>, or <code>RUNNING</code> status. </p>
+    #[serde(rename = "Force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2138,7 +2168,7 @@ pub struct TagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>The ARN of the Kinesis Analytics application from which to remove the tags.</p>
+    /// <p>The ARN of the Kinesis Data Analytics application from which to remove the tags.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
     /// <p>A list of keys of tags to remove from the specified application.</p>
@@ -2603,6 +2633,8 @@ impl Error for AddApplicationReferenceDataSourceError {}
 pub enum AddApplicationVpcConfigurationError {
     /// <p>Exception thrown as a result of concurrent modifications to an application. This error can be the result of attempting to modify an application without using the current application ID.</p>
     ConcurrentModification(String),
+    /// <p>The user-provided application configuration is not valid.</p>
+    InvalidApplicationConfiguration(String),
     /// <p>The specified input parameter value is not valid.</p>
     InvalidArgument(String),
     /// <p>The application is not available for this operation.</p>
@@ -2620,6 +2652,13 @@ impl AddApplicationVpcConfigurationError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         AddApplicationVpcConfigurationError::ConcurrentModification(err.msg),
+                    )
+                }
+                "InvalidApplicationConfigurationException" => {
+                    return RusotoError::Service(
+                        AddApplicationVpcConfigurationError::InvalidApplicationConfiguration(
+                            err.msg,
+                        ),
                     )
                 }
                 "InvalidArgumentException" => {
@@ -2649,6 +2688,9 @@ impl fmt::Display for AddApplicationVpcConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             AddApplicationVpcConfigurationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationVpcConfigurationError::InvalidApplicationConfiguration(ref cause) => {
                 write!(f, "{}", cause)
             }
             AddApplicationVpcConfigurationError::InvalidArgument(ref cause) => {
@@ -2730,9 +2772,65 @@ impl fmt::Display for CreateApplicationError {
     }
 }
 impl Error for CreateApplicationError {}
+/// Errors returned by CreateApplicationPresignedUrl
+#[derive(Debug, PartialEq)]
+pub enum CreateApplicationPresignedUrlError {
+    /// <p>The specified input parameter value is not valid.</p>
+    InvalidArgument(String),
+    /// <p>The application is not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>Specified application can't be found.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateApplicationPresignedUrlError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateApplicationPresignedUrlError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        CreateApplicationPresignedUrlError::InvalidArgument(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateApplicationPresignedUrlError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateApplicationPresignedUrlError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateApplicationPresignedUrlError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateApplicationPresignedUrlError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateApplicationPresignedUrlError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateApplicationPresignedUrlError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateApplicationPresignedUrlError {}
 /// Errors returned by CreateApplicationSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationSnapshotError {
+    /// <p>The user-provided application configuration is not valid.</p>
+    InvalidApplicationConfiguration(String),
     /// <p>The specified input parameter value is not valid.</p>
     InvalidArgument(String),
     /// <p>The request JSON is not valid for the operation.</p>
@@ -2751,6 +2849,11 @@ impl CreateApplicationSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationSnapshotError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidApplicationConfigurationException" => {
+                    return RusotoError::Service(
+                        CreateApplicationSnapshotError::InvalidApplicationConfiguration(err.msg),
+                    )
+                }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(CreateApplicationSnapshotError::InvalidArgument(
                         err.msg,
@@ -2792,6 +2895,9 @@ impl fmt::Display for CreateApplicationSnapshotError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            CreateApplicationSnapshotError::InvalidApplicationConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateApplicationSnapshotError::InvalidArgument(ref cause) => write!(f, "{}", cause),
             CreateApplicationSnapshotError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             CreateApplicationSnapshotError::LimitExceeded(ref cause) => write!(f, "{}", cause),
@@ -3253,6 +3359,8 @@ impl Error for DeleteApplicationSnapshotError {}
 pub enum DeleteApplicationVpcConfigurationError {
     /// <p>Exception thrown as a result of concurrent modifications to an application. This error can be the result of attempting to modify an application without using the current application ID.</p>
     ConcurrentModification(String),
+    /// <p>The user-provided application configuration is not valid.</p>
+    InvalidApplicationConfiguration(String),
     /// <p>The specified input parameter value is not valid.</p>
     InvalidArgument(String),
     /// <p>The application is not available for this operation.</p>
@@ -3270,6 +3378,13 @@ impl DeleteApplicationVpcConfigurationError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         DeleteApplicationVpcConfigurationError::ConcurrentModification(err.msg),
+                    )
+                }
+                "InvalidApplicationConfigurationException" => {
+                    return RusotoError::Service(
+                        DeleteApplicationVpcConfigurationError::InvalidApplicationConfiguration(
+                            err.msg,
+                        ),
                     )
                 }
                 "InvalidArgumentException" => {
@@ -3299,6 +3414,9 @@ impl fmt::Display for DeleteApplicationVpcConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteApplicationVpcConfigurationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationVpcConfigurationError::InvalidApplicationConfiguration(ref cause) => {
                 write!(f, "{}", cause)
             }
             DeleteApplicationVpcConfigurationError::InvalidArgument(ref cause) => {
@@ -3417,11 +3535,11 @@ pub enum DiscoverInputSchemaError {
     InvalidArgument(String),
     /// <p>The request JSON is not valid for the operation.</p>
     InvalidRequest(String),
-    /// <p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams <code>ProvisionedThroughputExceededException</code>. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
+    /// <p>Discovery failed to get a record from the streaming source because of the Kinesis Streams <code>ProvisionedThroughputExceededException</code>. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
     ResourceProvisionedThroughputExceeded(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// <p>The data format is not valid. Amazon Kinesis Data Analytics cannot detect the schema for the given streaming source.</p>
+    /// <p>The data format is not valid. Kinesis Data Analytics cannot detect the schema for the given streaming source.</p>
     UnableToDetectSchema(String),
 }
 
@@ -3651,6 +3769,8 @@ impl Error for StartApplicationError {}
 /// Errors returned by StopApplication
 #[derive(Debug, PartialEq)]
 pub enum StopApplicationError {
+    /// <p>Exception thrown as a result of concurrent modifications to an application. This error can be the result of attempting to modify an application without using the current application ID.</p>
+    ConcurrentModification(String),
     /// <p>The user-provided application configuration is not valid.</p>
     InvalidApplicationConfiguration(String),
     /// <p>The specified input parameter value is not valid.</p>
@@ -3667,6 +3787,11 @@ impl StopApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(StopApplicationError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
                 "InvalidApplicationConfigurationException" => {
                     return RusotoError::Service(
                         StopApplicationError::InvalidApplicationConfiguration(err.msg),
@@ -3695,6 +3820,7 @@ impl fmt::Display for StopApplicationError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            StopApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
             StopApplicationError::InvalidApplicationConfiguration(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -3900,13 +4026,13 @@ pub trait KinesisAnalyticsV2 {
         RusotoError<AddApplicationCloudWatchLoggingOptionError>,
     >;
 
-    /// <p> Adds a streaming source to your SQL-based Amazon Kinesis Data Analytics application. </p> <p>You can add a streaming source when you create an application, or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p>
+    /// <p> Adds a streaming source to your SQL-based Kinesis Data Analytics application. </p> <p>You can add a streaming source when you create an application, or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p>
     async fn add_application_input(
         &self,
         input: AddApplicationInputRequest,
     ) -> Result<AddApplicationInputResponse, RusotoError<AddApplicationInputError>>;
 
-    /// <p>Adds an <a>InputProcessingConfiguration</a> to an SQL-based Kinesis Data Analytics application. An input processor pre-processes records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+    /// <p>Adds an <a>InputProcessingConfiguration</a> to a SQL-based Kinesis Data Analytics application. An input processor pre-processes records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a>.</p>
     async fn add_application_input_processing_configuration(
         &self,
         input: AddApplicationInputProcessingConfigurationRequest,
@@ -3915,13 +4041,13 @@ pub trait KinesisAnalyticsV2 {
         RusotoError<AddApplicationInputProcessingConfigurationError>,
     >;
 
-    /// <p>Adds an external destination to your SQL-based Amazon Kinesis Data Analytics application.</p> <p>If you want Kinesis Data Analytics to deliver data from an in-application stream within your application to an external destination (such as an Kinesis data stream, a Kinesis Data Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
+    /// <p>Adds an external destination to your SQL-based Kinesis Data Analytics application.</p> <p>If you want Kinesis Data Analytics to deliver data from an in-application stream within your application to an external destination (such as an Kinesis data stream, a Kinesis Data Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
     async fn add_application_output(
         &self,
         input: AddApplicationOutputRequest,
     ) -> Result<AddApplicationOutputResponse, RusotoError<AddApplicationOutputError>>;
 
-    /// <p>Adds a reference data source to an existing SQL-based Amazon Kinesis Data Analytics application.</p> <p>Kinesis Data Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in an Amazon S3 object maps to columns in the resulting in-application table.</p>
+    /// <p>Adds a reference data source to an existing SQL-based Kinesis Data Analytics application.</p> <p>Kinesis Data Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in an Amazon S3 object maps to columns in the resulting in-application table.</p>
     async fn add_application_reference_data_source(
         &self,
         input: AddApplicationReferenceDataSourceRequest,
@@ -3939,11 +4065,20 @@ pub trait KinesisAnalyticsV2 {
         RusotoError<AddApplicationVpcConfigurationError>,
     >;
 
-    /// <p>Creates an Amazon Kinesis Data Analytics application. For information about creating a Kinesis Data Analytics application, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html">Creating an Application</a>. </p>
+    /// <p>Creates a Kinesis Data Analytics application. For information about creating a Kinesis Data Analytics application, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html">Creating an Application</a>.</p>
     async fn create_application(
         &self,
         input: CreateApplicationRequest,
     ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>;
+
+    /// <p><p>Creates and returns a URL that you can use to connect to an application&#39;s extension. Currently, the only available extension is the Apache Flink dashboard.</p> <p>The IAM role or user used to call this API defines the permissions to access the extension. Once the presigned URL is created, no additional permission is required to access this URL. IAM authorization policies for this API are also enforced for every HTTP request that attempts to connect to the extension. </p> <note> <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes to be valid. If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p> </note></p>
+    async fn create_application_presigned_url(
+        &self,
+        input: CreateApplicationPresignedUrlRequest,
+    ) -> Result<
+        CreateApplicationPresignedUrlResponse,
+        RusotoError<CreateApplicationPresignedUrlError>,
+    >;
 
     /// <p>Creates a snapshot of the application's state data.</p>
     async fn create_application_snapshot(
@@ -3957,7 +4092,7 @@ pub trait KinesisAnalyticsV2 {
         input: DeleteApplicationRequest,
     ) -> Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>>;
 
-    /// <p>Deletes an Amazon CloudWatch log stream from an Amazon Kinesis Data Analytics application. </p>
+    /// <p>Deletes an Amazon CloudWatch log stream from an Kinesis Data Analytics application. </p>
     async fn delete_application_cloud_watch_logging_option(
         &self,
         input: DeleteApplicationCloudWatchLoggingOptionRequest,
@@ -3975,13 +4110,13 @@ pub trait KinesisAnalyticsV2 {
         RusotoError<DeleteApplicationInputProcessingConfigurationError>,
     >;
 
-    /// <p>Deletes the output destination configuration from your SQL-based Amazon Kinesis Data Analytics application's configuration. Kinesis Data Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p>
+    /// <p>Deletes the output destination configuration from your SQL-based Kinesis Data Analytics application's configuration. Kinesis Data Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p>
     async fn delete_application_output(
         &self,
         input: DeleteApplicationOutputRequest,
     ) -> Result<DeleteApplicationOutputResponse, RusotoError<DeleteApplicationOutputError>>;
 
-    /// <p>Deletes a reference data source configuration from the specified SQL-based Amazon Kinesis Data Analytics application's configuration.</p> <p>If the application is running, Kinesis Data Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p>
+    /// <p>Deletes a reference data source configuration from the specified SQL-based Kinesis Data Analytics application's configuration.</p> <p>If the application is running, Kinesis Data Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p>
     async fn delete_application_reference_data_source(
         &self,
         input: DeleteApplicationReferenceDataSourceRequest,
@@ -4005,7 +4140,7 @@ pub trait KinesisAnalyticsV2 {
         RusotoError<DeleteApplicationVpcConfigurationError>,
     >;
 
-    /// <p>Returns information about a specific Amazon Kinesis Data Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p>
+    /// <p>Returns information about a specific Kinesis Data Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p>
     async fn describe_application(
         &self,
         input: DescribeApplicationRequest,
@@ -4017,7 +4152,7 @@ pub trait KinesisAnalyticsV2 {
         input: DescribeApplicationSnapshotRequest,
     ) -> Result<DescribeApplicationSnapshotResponse, RusotoError<DescribeApplicationSnapshotError>>;
 
-    /// <p>Infers a schema for an SQL-based Amazon Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
+    /// <p>Infers a schema for a SQL-based Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
     async fn discover_input_schema(
         &self,
         input: DiscoverInputSchemaRequest,
@@ -4029,7 +4164,7 @@ pub trait KinesisAnalyticsV2 {
         input: ListApplicationSnapshotsRequest,
     ) -> Result<ListApplicationSnapshotsResponse, RusotoError<ListApplicationSnapshotsError>>;
 
-    /// <p>Returns a list of Amazon Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
+    /// <p>Returns a list of Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
@@ -4041,31 +4176,31 @@ pub trait KinesisAnalyticsV2 {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Starts the specified Amazon Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
+    /// <p>Starts the specified Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
     async fn start_application(
         &self,
         input: StartApplicationRequest,
     ) -> Result<StartApplicationResponse, RusotoError<StartApplicationError>>;
 
-    /// <p>Stops the application from processing data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. </p>
+    /// <p>Stops the application from processing data. You can stop an application only if it is in the running status, unless you set the <code>Force</code> parameter to <code>true</code>.</p> <p>You can use the <a>DescribeApplication</a> operation to find the application status. </p> <p>Kinesis Data Analytics takes a snapshot when the application is stopped, unless <code>Force</code> is set to <code>true</code>.</p>
     async fn stop_application(
         &self,
         input: StopApplicationRequest,
     ) -> Result<StopApplicationResponse, RusotoError<StopApplicationError>>;
 
-    /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
+    /// <p>Adds one or more key-value tags to a Kinesis Data Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
-    /// <p>Removes one or more tags from a Kinesis Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
+    /// <p>Removes one or more tags from a Kinesis Data Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p>Updates an existing Amazon Kinesis Data Analytics application. Using this operation, you can update application code, input configuration, and output configuration. </p> <p>Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update your application. </p>
+    /// <p><p>Updates an existing Kinesis Data Analytics application. Using this operation, you can update application code, input configuration, and output configuration. </p> <p>Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update your application. </p> <note> <p>You cannot update the <code>RuntimeEnvironment</code> of an existing application. If you need to update an application&#39;s <code>RuntimeEnvironment</code>, you must delete the application and create it again.</p> </note></p>
     async fn update_application(
         &self,
         input: UpdateApplicationRequest,
@@ -4139,7 +4274,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<AddApplicationCloudWatchLoggingOptionResponse, _>()
     }
 
-    /// <p> Adds a streaming source to your SQL-based Amazon Kinesis Data Analytics application. </p> <p>You can add a streaming source when you create an application, or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p>
+    /// <p> Adds a streaming source to your SQL-based Kinesis Data Analytics application. </p> <p>You can add a streaming source when you create an application, or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p>
     async fn add_application_input(
         &self,
         input: AddApplicationInputRequest,
@@ -4160,7 +4295,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<AddApplicationInputResponse, _>()
     }
 
-    /// <p>Adds an <a>InputProcessingConfiguration</a> to an SQL-based Kinesis Data Analytics application. An input processor pre-processes records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+    /// <p>Adds an <a>InputProcessingConfiguration</a> to a SQL-based Kinesis Data Analytics application. An input processor pre-processes records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a>.</p>
     async fn add_application_input_processing_configuration(
         &self,
         input: AddApplicationInputProcessingConfigurationRequest,
@@ -4188,7 +4323,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<AddApplicationInputProcessingConfigurationResponse, _>()
     }
 
-    /// <p>Adds an external destination to your SQL-based Amazon Kinesis Data Analytics application.</p> <p>If you want Kinesis Data Analytics to deliver data from an in-application stream within your application to an external destination (such as an Kinesis data stream, a Kinesis Data Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
+    /// <p>Adds an external destination to your SQL-based Kinesis Data Analytics application.</p> <p>If you want Kinesis Data Analytics to deliver data from an in-application stream within your application to an external destination (such as an Kinesis data stream, a Kinesis Data Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
     async fn add_application_output(
         &self,
         input: AddApplicationOutputRequest,
@@ -4210,7 +4345,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<AddApplicationOutputResponse, _>()
     }
 
-    /// <p>Adds a reference data source to an existing SQL-based Amazon Kinesis Data Analytics application.</p> <p>Kinesis Data Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in an Amazon S3 object maps to columns in the resulting in-application table.</p>
+    /// <p>Adds a reference data source to an existing SQL-based Kinesis Data Analytics application.</p> <p>Kinesis Data Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in an Amazon S3 object maps to columns in the resulting in-application table.</p>
     async fn add_application_reference_data_source(
         &self,
         input: AddApplicationReferenceDataSourceRequest,
@@ -4263,7 +4398,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<AddApplicationVpcConfigurationResponse, _>()
     }
 
-    /// <p>Creates an Amazon Kinesis Data Analytics application. For information about creating a Kinesis Data Analytics application, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html">Creating an Application</a>. </p>
+    /// <p>Creates a Kinesis Data Analytics application. For information about creating a Kinesis Data Analytics application, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html">Creating an Application</a>.</p>
     async fn create_application(
         &self,
         input: CreateApplicationRequest,
@@ -4282,6 +4417,31 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateApplicationResponse, _>()
+    }
+
+    /// <p><p>Creates and returns a URL that you can use to connect to an application&#39;s extension. Currently, the only available extension is the Apache Flink dashboard.</p> <p>The IAM role or user used to call this API defines the permissions to access the extension. Once the presigned URL is created, no additional permission is required to access this URL. IAM authorization policies for this API are also enforced for every HTTP request that attempts to connect to the extension. </p> <note> <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes to be valid. If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p> </note></p>
+    async fn create_application_presigned_url(
+        &self,
+        input: CreateApplicationPresignedUrlRequest,
+    ) -> Result<
+        CreateApplicationPresignedUrlResponse,
+        RusotoError<CreateApplicationPresignedUrlError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "KinesisAnalytics_20180523.CreateApplicationPresignedUrl",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateApplicationPresignedUrlError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateApplicationPresignedUrlResponse, _>()
     }
 
     /// <p>Creates a snapshot of the application's state data.</p>
@@ -4328,7 +4488,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationResponse, _>()
     }
 
-    /// <p>Deletes an Amazon CloudWatch log stream from an Amazon Kinesis Data Analytics application. </p>
+    /// <p>Deletes an Amazon CloudWatch log stream from an Kinesis Data Analytics application. </p>
     async fn delete_application_cloud_watch_logging_option(
         &self,
         input: DeleteApplicationCloudWatchLoggingOptionRequest,
@@ -4384,7 +4544,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<DeleteApplicationInputProcessingConfigurationResponse, _>()
     }
 
-    /// <p>Deletes the output destination configuration from your SQL-based Amazon Kinesis Data Analytics application's configuration. Kinesis Data Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p>
+    /// <p>Deletes the output destination configuration from your SQL-based Kinesis Data Analytics application's configuration. Kinesis Data Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p>
     async fn delete_application_output(
         &self,
         input: DeleteApplicationOutputRequest,
@@ -4406,7 +4566,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<DeleteApplicationOutputResponse, _>()
     }
 
-    /// <p>Deletes a reference data source configuration from the specified SQL-based Amazon Kinesis Data Analytics application's configuration.</p> <p>If the application is running, Kinesis Data Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p>
+    /// <p>Deletes a reference data source configuration from the specified SQL-based Kinesis Data Analytics application's configuration.</p> <p>If the application is running, Kinesis Data Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p>
     async fn delete_application_reference_data_source(
         &self,
         input: DeleteApplicationReferenceDataSourceRequest,
@@ -4485,7 +4645,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<DeleteApplicationVpcConfigurationResponse, _>()
     }
 
-    /// <p>Returns information about a specific Amazon Kinesis Data Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p>
+    /// <p>Returns information about a specific Kinesis Data Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p>
     async fn describe_application(
         &self,
         input: DescribeApplicationRequest,
@@ -4529,7 +4689,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<DescribeApplicationSnapshotResponse, _>()
     }
 
-    /// <p>Infers a schema for an SQL-based Amazon Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
+    /// <p>Infers a schema for a SQL-based Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
     async fn discover_input_schema(
         &self,
         input: DiscoverInputSchemaRequest,
@@ -4572,7 +4732,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<ListApplicationSnapshotsResponse, _>()
     }
 
-    /// <p>Returns a list of Amazon Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
+    /// <p>Returns a list of Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
@@ -4611,7 +4771,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
-    /// <p>Starts the specified Amazon Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
+    /// <p>Starts the specified Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
     async fn start_application(
         &self,
         input: StartApplicationRequest,
@@ -4629,7 +4789,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<StartApplicationResponse, _>()
     }
 
-    /// <p>Stops the application from processing data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. </p>
+    /// <p>Stops the application from processing data. You can stop an application only if it is in the running status, unless you set the <code>Force</code> parameter to <code>true</code>.</p> <p>You can use the <a>DescribeApplication</a> operation to find the application status. </p> <p>Kinesis Data Analytics takes a snapshot when the application is stopped, unless <code>Force</code> is set to <code>true</code>.</p>
     async fn stop_application(
         &self,
         input: StopApplicationRequest,
@@ -4647,7 +4807,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<StopApplicationResponse, _>()
     }
 
-    /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
+    /// <p>Adds one or more key-value tags to a Kinesis Data Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -4665,7 +4825,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
-    /// <p>Removes one or more tags from a Kinesis Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
+    /// <p>Removes one or more tags from a Kinesis Data Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -4683,7 +4843,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
-    /// <p>Updates an existing Amazon Kinesis Data Analytics application. Using this operation, you can update application code, input configuration, and output configuration. </p> <p>Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update your application. </p>
+    /// <p><p>Updates an existing Kinesis Data Analytics application. Using this operation, you can update application code, input configuration, and output configuration. </p> <p>Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update your application. </p> <note> <p>You cannot update the <code>RuntimeEnvironment</code> of an existing application. If you need to update an application&#39;s <code>RuntimeEnvironment</code>, you must delete the application and create it again.</p> </note></p>
     async fn update_application(
         &self,
         input: UpdateApplicationRequest,

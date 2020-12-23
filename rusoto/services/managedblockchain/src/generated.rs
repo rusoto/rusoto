@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>A policy type that defines the voting rules for the network. The rules decide if a proposal is approved. Approval may be based on criteria such as the percentage of <code>YES</code> votes and the duration of the proposal. The policy applies to all proposals and is specified when the network is created.</p>
+/// <p>A policy type that defines the voting rules for the network. The rules decide if a proposal is approved. Approval may be based on criteria such as the percentage of <code>YES</code> votes and the duration of the proposal. The policy applies to all proposals and is specified when the network is created.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApprovalThresholdPolicy {
     /// <p>The duration from the time that a proposal is created until it expires. If members cast neither the required number of <code>YES</code> votes to approve the proposal nor the number of <code>NO</code> votes required to reject it before the duration expires, the proposal is <code>EXPIRED</code> and <code>ProposalActions</code> are not carried out.</p>
@@ -118,10 +118,11 @@ pub struct CreateNodeInput {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time. This identifier is required only if you make a service request directly using an HTTP client. It is generated automatically if you use an AWS SDK or the AWS CLI.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
-    /// <p>The unique identifier of the member that owns this node.</p>
+    /// <p>The unique identifier of the member that owns this node.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[serde(rename = "MemberId")]
-    pub member_id: String,
-    /// <p>The unique identifier of the network in which this node runs.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
+    /// <p><p>The unique identifier of the network for the node.</p> <p>Ethereum public networks have the following <code>NetworkId</code>s:</p> <ul> <li> <p> <code>n-ethereum-mainnet</code> </p> </li> <li> <p> <code>n-ethereum-rinkeby</code> </p> </li> <li> <p> <code>n-ethereum-ropsten</code> </p> </li> </ul></p>
     #[serde(rename = "NetworkId")]
     pub network_id: String,
     /// <p>The properties of a node configuration.</p>
@@ -186,10 +187,11 @@ pub struct DeleteMemberOutput {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNodeInput {
-    /// <p>The unique identifier of the member that owns this node.</p>
+    /// <p>The unique identifier of the member that owns this node.</p> <p>Applies only to Hyperledger Fabric and is required for Hyperledger Fabric.</p>
     #[serde(rename = "MemberId")]
-    pub member_id: String,
-    /// <p>The unique identifier of the network that the node belongs to.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
+    /// <p><p>The unique identifier of the network that the node is on.</p> <p>Ethereum public networks have the following <code>NetworkId</code>s:</p> <ul> <li> <p> <code>n-ethereum-mainnet</code> </p> </li> <li> <p> <code>n-ethereum-rinkeby</code> </p> </li> <li> <p> <code>n-ethereum-ropsten</code> </p> </li> </ul></p>
     #[serde(rename = "NetworkId")]
     pub network_id: String,
     /// <p>The unique identifier of the node.</p>
@@ -241,10 +243,11 @@ pub struct GetNetworkOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNodeInput {
-    /// <p>The unique identifier of the member that owns the node.</p>
+    /// <p>The unique identifier of the member that owns the node.</p> <p>Applies only to Hyperledger Fabric and is required for Hyperledger Fabric.</p>
     #[serde(rename = "MemberId")]
-    pub member_id: String,
-    /// <p>The unique identifier of the network to which the node belongs.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
+    /// <p>The unique identifier of the network that the node is on.</p>
     #[serde(rename = "NetworkId")]
     pub network_id: String,
     /// <p>The unique identifier of the node.</p>
@@ -281,7 +284,7 @@ pub struct GetProposalOutput {
     pub proposal: Option<Proposal>,
 }
 
-/// <p>An invitation to an AWS account to create a member and join the network.</p>
+/// <p>An invitation to an AWS account to create a member and join the network.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invitation {
@@ -306,7 +309,7 @@ pub struct Invitation {
     pub status: Option<String>,
 }
 
-/// <p>An action to invite a specific AWS account to create a member and join the network. The <code>InviteAction</code> is carried out when a <code>Proposal</code> is <code>APPROVED</code>.</p>
+/// <p>An action to invite a specific AWS account to create a member and join the network. The <code>InviteAction</code> is carried out when a <code>Proposal</code> is <code>APPROVED</code>.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InviteAction {
     /// <p>The AWS account ID to invite.</p>
@@ -400,7 +403,7 @@ pub struct ListNetworksInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An optional status specifier. If provided, only networks currently in this status are listed.</p>
+    /// <p>An optional status specifier. If provided, only networks currently in this status are listed.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -426,9 +429,10 @@ pub struct ListNodesInput {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The unique identifier of the member who owns the nodes to list.</p>
+    /// <p>The unique identifier of the member who owns the nodes to list.</p> <p>Applies only to Hyperledger Fabric and is required for Hyperledger Fabric.</p>
     #[serde(rename = "MemberId")]
-    pub member_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
     /// <p>The unique identifier of the network for which to list nodes.</p>
     #[serde(rename = "NetworkId")]
     pub network_id: String,
@@ -481,7 +485,7 @@ pub struct ListProposalVotesOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p> The listing of votes. </p>
+    /// <p> The list of votes. </p>
     #[serde(rename = "ProposalVotes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proposal_votes: Option<Vec<VoteSummary>>,
@@ -534,7 +538,7 @@ pub struct LogConfigurations {
     pub cloudwatch: Option<LogConfiguration>,
 }
 
-/// <p>Member configuration properties.</p>
+/// <p>Member configuration properties.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
@@ -572,7 +576,7 @@ pub struct Member {
     pub status: Option<String>,
 }
 
-/// <p>Configuration properties of the member.</p>
+/// <p>Configuration properties of the member.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MemberConfiguration {
@@ -583,7 +587,7 @@ pub struct MemberConfiguration {
     /// <p>Configuration properties of the blockchain framework relevant to the member.</p>
     #[serde(rename = "FrameworkConfiguration")]
     pub framework_configuration: MemberFrameworkConfiguration,
-    /// <p><p/></p>
+    /// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network.</p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<MemberLogPublishingConfiguration>,
@@ -610,7 +614,7 @@ pub struct MemberFabricAttributes {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MemberFabricConfiguration {
-    /// <p>The password for the member's initial administrative user. The <code>AdminPassword</code> must be at least eight characters long and no more than 32 characters. It must contain at least one uppercase letter, one lowercase letter, and one digit. It cannot have a single quote(‘), double quote(“), forward slash(/), backward slash(\), @, or a space.</p>
+    /// <p>The password for the member's initial administrative user. The <code>AdminPassword</code> must be at least eight characters long and no more than 32 characters. It must contain at least one uppercase letter, one lowercase letter, and one digit. It cannot have a single quotation mark (‘), a double quotation marks (“), a forward slash(/), a backward slash(\), @, or a space.</p>
     #[serde(rename = "AdminPassword")]
     pub admin_password: String,
     /// <p>The user name for the member's initial administrative user.</p>
@@ -656,7 +660,7 @@ pub struct MemberLogPublishingConfiguration {
     pub fabric: Option<MemberFabricLogPublishingConfiguration>,
 }
 
-/// <p>A summary of configuration properties for a member.</p>
+/// <p>A summary of configuration properties for a member.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberSummary {
@@ -732,6 +736,16 @@ pub struct Network {
     pub vpc_endpoint_service_name: Option<String>,
 }
 
+/// <p>Attributes of Ethereum for a network.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NetworkEthereumAttributes {
+    /// <p><p>The Ethereum <code>CHAIN_ID</code> associated with the Ethereum network. Chain IDs are as follows:</p> <ul> <li> <p>mainnet = <code>1</code> </p> </li> <li> <p>rinkeby = <code>4</code> </p> </li> <li> <p>ropsten = <code>3</code> </p> </li> </ul></p>
+    #[serde(rename = "ChainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chain_id: Option<String>,
+}
+
 /// <p>Attributes of Hyperledger Fabric for a network.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -759,6 +773,10 @@ pub struct NetworkFabricConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkFrameworkAttributes {
+    /// <p>Attributes of an Ethereum network for Managed Blockchain resources participating in an Ethereum network.</p>
+    #[serde(rename = "Ethereum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ethereum: Option<NetworkEthereumAttributes>,
     /// <p>Attributes of Hyperledger Fabric for a Managed Blockchain network that uses Hyperledger Fabric.</p>
     #[serde(rename = "Fabric")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -809,7 +827,7 @@ pub struct NetworkSummary {
     pub status: Option<String>,
 }
 
-/// <p>Configuration properties of a peer node.</p>
+/// <p>Configuration properties of a node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Node {
@@ -833,41 +851,64 @@ pub struct Node {
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p><p/></p>
+    /// <p>Configuration properties for logging events associated with a peer node on a Hyperledger Fabric network on Managed Blockchain.</p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
-    /// <p>The unique identifier of the member to which the node belongs.</p>
+    /// <p>The unique identifier of the member to which the node belongs.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[serde(rename = "MemberId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_id: Option<String>,
-    /// <p>The unique identifier of the network that the node is in.</p>
+    /// <p>The unique identifier of the network that the node is on.</p>
     #[serde(rename = "NetworkId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_id: Option<String>,
+    /// <p>The state database that the node uses. Values are <code>LevelDB</code> or <code>CouchDB</code>.</p> <p>Applies only to Hyperledger Fabric.</p>
+    #[serde(rename = "StateDB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_db: Option<String>,
     /// <p>The status of the node.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-/// <p>Configuration properties of a peer node.</p>
+/// <p>Configuration properties of a node.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodeConfiguration {
     /// <p>The Availability Zone in which the node exists.</p>
     #[serde(rename = "AvailabilityZone")]
-    pub availability_zone: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
     /// <p>The Amazon Managed Blockchain instance type for the node.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p><p/></p>
+    /// <p>Configuration properties for logging events associated with a peer node on a Hyperledger Fabric network on Managed Blockchain. </p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
+    /// <p>The state database that the node uses. Values are <code>LevelDB</code> or <code>CouchDB</code>. When using an Amazon Managed Blockchain network with Hyperledger Fabric version 1.4 or later, the default is <code>CouchDB</code>.</p> <p>Applies only to Hyperledger Fabric.</p>
+    #[serde(rename = "StateDB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_db: Option<String>,
 }
 
-/// <p>Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain network that uses Hyperledger Fabric.</p>
+/// <p>Attributes of an Ethereum node.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NodeEthereumAttributes {
+    /// <p>The endpoint on which the Ethereum node listens to run Ethereum JSON-RPC methods over HTTP connections from a client. Use this endpoint in client code for smart contracts when using an HTTP connection. Connections to this endpoint are authenticated using <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p>
+    #[serde(rename = "HttpEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_endpoint: Option<String>,
+    /// <p>The endpoint on which the Ethereum node listens to run Ethereum JSON-RPC methods over WebSockets connections from a client. Use this endpoint in client code for smart contracts when using a WebSockets connection. Connections to this endpoint are authenticated using <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p>
+    #[serde(rename = "WebSocketEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_socket_endpoint: Option<String>,
+}
+
+/// <p>Attributes of Hyperledger Fabric for a peer node on a Hyperledger Fabric network on Managed Blockchain.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeFabricAttributes {
@@ -894,17 +935,21 @@ pub struct NodeFabricLogPublishingConfiguration {
     pub peer_logs: Option<LogConfigurations>,
 }
 
-/// <p>Attributes relevant to a peer node on a Managed Blockchain network for the blockchain framework that the network uses.</p>
+/// <p>Attributes relevant to a node on a Managed Blockchain network for the blockchain framework that the network uses.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeFrameworkAttributes {
+    /// <p>Attributes of Ethereum for a node on a Managed Blockchain network that uses Ethereum.</p>
+    #[serde(rename = "Ethereum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ethereum: Option<NodeEthereumAttributes>,
     /// <p>Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain network that uses Hyperledger Fabric.</p>
     #[serde(rename = "Fabric")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fabric: Option<NodeFabricAttributes>,
 }
 
-/// <p>Configuration properties for logging events associated with a peer node owned by a member in a Managed Blockchain network.</p>
+/// <p>Configuration properties for logging events associated with a peer node on a Hyperledger Fabric network on Managed Blockchain.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NodeLogPublishingConfiguration {
     /// <p>Configuration properties for logging events associated with a node that is owned by a member of a Managed Blockchain network using the Hyperledger Fabric framework.</p>
@@ -913,7 +958,7 @@ pub struct NodeLogPublishingConfiguration {
     pub fabric: Option<NodeFabricLogPublishingConfiguration>,
 }
 
-/// <p>A summary of configuration properties for a peer node.</p>
+/// <p>A summary of configuration properties for a node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeSummary {
@@ -939,7 +984,7 @@ pub struct NodeSummary {
     pub status: Option<String>,
 }
 
-/// <p>Properties of a proposal on a Managed Blockchain network.</p>
+/// <p>Properties of a proposal on a Managed Blockchain network.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Proposal {
@@ -993,7 +1038,7 @@ pub struct Proposal {
     pub yes_vote_count: Option<i64>,
 }
 
-/// <p> The actions to carry out if a proposal is <code>APPROVED</code>. </p>
+/// <p> The actions to carry out if a proposal is <code>APPROVED</code>. </p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProposalActions {
     /// <p> The actions to perform for an <code>APPROVED</code> proposal to invite an AWS account to create a member and join the network. </p>
@@ -1006,7 +1051,7 @@ pub struct ProposalActions {
     pub removals: Option<Vec<RemoveAction>>,
 }
 
-/// <p>Properties of a proposal.</p>
+/// <p>Properties of a proposal.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProposalSummary {
@@ -1052,7 +1097,7 @@ pub struct RejectInvitationInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectInvitationOutput {}
 
-/// <p>An action to remove a member from a Managed Blockchain network as the result of a removal proposal that is <code>APPROVED</code>. The member and all associated resources are deleted from the network.</p>
+/// <p>An action to remove a member from a Managed Blockchain network as the result of a removal proposal that is <code>APPROVED</code>. The member and all associated resources are deleted from the network.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemoveAction {
     /// <p>The unique identifier of the member to remove.</p>
@@ -1067,10 +1112,10 @@ pub struct UpdateMemberInput {
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<MemberLogPublishingConfiguration>,
-    /// <p>The unique ID of the member.</p>
+    /// <p>The unique identifier of the member.</p>
     #[serde(rename = "MemberId")]
     pub member_id: String,
-    /// <p>The unique ID of the Managed Blockchain network to which the member belongs.</p>
+    /// <p>The unique identifier of the Managed Blockchain network to which the member belongs.</p>
     #[serde(rename = "NetworkId")]
     pub network_id: String,
 }
@@ -1086,13 +1131,14 @@ pub struct UpdateNodeInput {
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
-    /// <p>The unique ID of the member that owns the node.</p>
+    /// <p>The unique identifier of the member that owns the node.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[serde(rename = "MemberId")]
-    pub member_id: String,
-    /// <p>The unique ID of the Managed Blockchain network to which the node belongs.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
+    /// <p>The unique identifier of the network that the node is on.</p>
     #[serde(rename = "NetworkId")]
     pub network_id: String,
-    /// <p>The unique ID of the node.</p>
+    /// <p>The unique identifier of the node.</p>
     #[serde(rename = "NodeId")]
     pub node_id: String,
 }
@@ -1122,7 +1168,7 @@ pub struct VoteOnProposalInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoteOnProposalOutput {}
 
-/// <p> Properties of an individual vote that a member cast for a proposal. </p>
+/// <p> Properties of an individual vote that a member cast for a proposal. </p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoteSummary {
@@ -1140,7 +1186,7 @@ pub struct VoteSummary {
     pub vote: Option<String>,
 }
 
-/// <p> The voting rules for the network to decide if a proposal is accepted </p>
+/// <p> The voting rules for the network to decide if a proposal is accepted </p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VotingPolicy {
     /// <p>Defines the rules for the network for voting on proposals, such as the percentage of <code>YES</code> votes required for the proposal to be approved and the duration of the proposal. The policy applies to all proposals and is specified when the network is created.</p>
@@ -2294,121 +2340,121 @@ impl Error for VoteOnProposalError {}
 /// Trait representing the capabilities of the ManagedBlockchain API. ManagedBlockchain clients implement this trait.
 #[async_trait]
 pub trait ManagedBlockchain {
-    /// <p>Creates a member within a Managed Blockchain network.</p>
+    /// <p>Creates a member within a Managed Blockchain network.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn create_member(
         &self,
         input: CreateMemberInput,
     ) -> Result<CreateMemberOutput, RusotoError<CreateMemberError>>;
 
-    /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p>
+    /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn create_network(
         &self,
         input: CreateNetworkInput,
     ) -> Result<CreateNetworkOutput, RusotoError<CreateNetworkError>>;
 
-    /// <p>Creates a peer node in a member.</p>
+    /// <p>Creates a node on the specified blockchain network.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     async fn create_node(
         &self,
         input: CreateNodeInput,
     ) -> Result<CreateNodeOutput, RusotoError<CreateNodeError>>;
 
-    /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p>
+    /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn create_proposal(
         &self,
         input: CreateProposalInput,
     ) -> Result<CreateProposalOutput, RusotoError<CreateProposalError>>;
 
-    /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p>
+    /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn delete_member(
         &self,
         input: DeleteMemberInput,
     ) -> Result<DeleteMemberOutput, RusotoError<DeleteMemberError>>;
 
-    /// <p>Deletes a peer node from a member that your AWS account owns. All data on the node is lost and cannot be recovered.</p>
+    /// <p>Deletes a node that your AWS account owns. All data on the node is lost and cannot be recovered.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     async fn delete_node(
         &self,
         input: DeleteNodeInput,
     ) -> Result<DeleteNodeOutput, RusotoError<DeleteNodeError>>;
 
-    /// <p>Returns detailed information about a member.</p>
+    /// <p>Returns detailed information about a member.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn get_member(
         &self,
         input: GetMemberInput,
     ) -> Result<GetMemberOutput, RusotoError<GetMemberError>>;
 
-    /// <p>Returns detailed information about a network.</p>
+    /// <p>Returns detailed information about a network.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     async fn get_network(
         &self,
         input: GetNetworkInput,
     ) -> Result<GetNetworkOutput, RusotoError<GetNetworkError>>;
 
-    /// <p>Returns detailed information about a peer node.</p>
+    /// <p>Returns detailed information about a node.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     async fn get_node(
         &self,
         input: GetNodeInput,
     ) -> Result<GetNodeOutput, RusotoError<GetNodeError>>;
 
-    /// <p>Returns detailed information about a proposal.</p>
+    /// <p>Returns detailed information about a proposal.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn get_proposal(
         &self,
         input: GetProposalInput,
     ) -> Result<GetProposalOutput, RusotoError<GetProposalError>>;
 
-    /// <p>Returns a listing of all invitations made on the specified network.</p>
+    /// <p>Returns a list of all invitations for the current AWS account.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn list_invitations(
         &self,
         input: ListInvitationsInput,
     ) -> Result<ListInvitationsOutput, RusotoError<ListInvitationsError>>;
 
-    /// <p>Returns a listing of the members in a network and properties of their configurations.</p>
+    /// <p>Returns a list of the members in a network and properties of their configurations.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn list_members(
         &self,
         input: ListMembersInput,
     ) -> Result<ListMembersOutput, RusotoError<ListMembersError>>;
 
-    /// <p>Returns information about the networks in which the current AWS account has members.</p>
+    /// <p>Returns information about the networks in which the current AWS account participates.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     async fn list_networks(
         &self,
         input: ListNetworksInput,
     ) -> Result<ListNetworksOutput, RusotoError<ListNetworksError>>;
 
-    /// <p>Returns information about the nodes within a network.</p>
+    /// <p>Returns information about the nodes within a network.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     async fn list_nodes(
         &self,
         input: ListNodesInput,
     ) -> Result<ListNodesOutput, RusotoError<ListNodesError>>;
 
-    /// <p>Returns the listing of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p>
+    /// <p>Returns the list of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn list_proposal_votes(
         &self,
         input: ListProposalVotesInput,
     ) -> Result<ListProposalVotesOutput, RusotoError<ListProposalVotesError>>;
 
-    /// <p>Returns a listing of proposals for the network.</p>
+    /// <p>Returns a list of proposals for the network.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn list_proposals(
         &self,
         input: ListProposalsInput,
     ) -> Result<ListProposalsOutput, RusotoError<ListProposalsError>>;
 
-    /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p>
+    /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn reject_invitation(
         &self,
         input: RejectInvitationInput,
     ) -> Result<RejectInvitationOutput, RusotoError<RejectInvitationError>>;
 
-    /// <p>Updates a member configuration with new parameters.</p>
+    /// <p>Updates a member configuration with new parameters.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn update_member(
         &self,
         input: UpdateMemberInput,
     ) -> Result<UpdateMemberOutput, RusotoError<UpdateMemberError>>;
 
-    /// <p>Updates a node configuration with new parameters.</p>
+    /// <p>Updates a node configuration with new parameters.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn update_node(
         &self,
         input: UpdateNodeInput,
     ) -> Result<UpdateNodeOutput, RusotoError<UpdateNodeError>>;
 
-    /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p>
+    /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn vote_on_proposal(
         &self,
         input: VoteOnProposalInput,
@@ -2454,7 +2500,7 @@ impl ManagedBlockchainClient {
 
 #[async_trait]
 impl ManagedBlockchain for ManagedBlockchainClient {
-    /// <p>Creates a member within a Managed Blockchain network.</p>
+    /// <p>Creates a member within a Managed Blockchain network.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn create_member(
         &self,
@@ -2489,7 +2535,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p>
+    /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn create_network(
         &self,
@@ -2521,15 +2567,14 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Creates a peer node in a member.</p>
+    /// <p>Creates a node on the specified blockchain network.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     #[allow(unused_mut)]
     async fn create_node(
         &self,
         input: CreateNodeInput,
     ) -> Result<CreateNodeOutput, RusotoError<CreateNodeError>> {
         let request_uri = format!(
-            "/networks/{network_id}/members/{member_id}/nodes",
-            member_id = input.member_id,
+            "/networks/{network_id}/nodes",
             network_id = input.network_id
         );
 
@@ -2557,7 +2602,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p>
+    /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn create_proposal(
         &self,
@@ -2592,7 +2637,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p>
+    /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn delete_member(
         &self,
@@ -2625,15 +2670,14 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Deletes a peer node from a member that your AWS account owns. All data on the node is lost and cannot be recovered.</p>
+    /// <p>Deletes a node that your AWS account owns. All data on the node is lost and cannot be recovered.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     #[allow(unused_mut)]
     async fn delete_node(
         &self,
         input: DeleteNodeInput,
     ) -> Result<DeleteNodeOutput, RusotoError<DeleteNodeError>> {
         let request_uri = format!(
-            "/networks/{network_id}/members/{member_id}/nodes/{node_id}",
-            member_id = input.member_id,
+            "/networks/{network_id}/nodes/{node_id}",
             network_id = input.network_id,
             node_id = input.node_id
         );
@@ -2641,6 +2685,12 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let mut request =
             SignedRequest::new("DELETE", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.member_id {
+            params.put("memberId", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -2659,7 +2709,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns detailed information about a member.</p>
+    /// <p>Returns detailed information about a member.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn get_member(
         &self,
@@ -2692,7 +2742,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns detailed information about a network.</p>
+    /// <p>Returns detailed information about a network.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     #[allow(unused_mut)]
     async fn get_network(
         &self,
@@ -2721,15 +2771,14 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns detailed information about a peer node.</p>
+    /// <p>Returns detailed information about a node.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     #[allow(unused_mut)]
     async fn get_node(
         &self,
         input: GetNodeInput,
     ) -> Result<GetNodeOutput, RusotoError<GetNodeError>> {
         let request_uri = format!(
-            "/networks/{network_id}/members/{member_id}/nodes/{node_id}",
-            member_id = input.member_id,
+            "/networks/{network_id}/nodes/{node_id}",
             network_id = input.network_id,
             node_id = input.node_id
         );
@@ -2737,6 +2786,12 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let mut request =
             SignedRequest::new("GET", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.member_id {
+            params.put("memberId", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -2755,7 +2810,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns detailed information about a proposal.</p>
+    /// <p>Returns detailed information about a proposal.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn get_proposal(
         &self,
@@ -2788,7 +2843,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns a listing of all invitations made on the specified network.</p>
+    /// <p>Returns a list of all invitations for the current AWS account.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn list_invitations(
         &self,
@@ -2826,7 +2881,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns a listing of the members in a network and properties of their configurations.</p>
+    /// <p>Returns a list of the members in a network and properties of their configurations.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn list_members(
         &self,
@@ -2876,7 +2931,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns information about the networks in which the current AWS account has members.</p>
+    /// <p>Returns information about the networks in which the current AWS account participates.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     #[allow(unused_mut)]
     async fn list_networks(
         &self,
@@ -2923,15 +2978,14 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns information about the nodes within a network.</p>
+    /// <p>Returns information about the nodes within a network.</p> <p>Applies to Hyperledger Fabric and Ethereum.</p>
     #[allow(unused_mut)]
     async fn list_nodes(
         &self,
         input: ListNodesInput,
     ) -> Result<ListNodesOutput, RusotoError<ListNodesError>> {
         let request_uri = format!(
-            "/networks/{network_id}/members/{member_id}/nodes",
-            member_id = input.member_id,
+            "/networks/{network_id}/nodes",
             network_id = input.network_id
         );
 
@@ -2942,6 +2996,9 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.member_id {
+            params.put("memberId", x);
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
@@ -2968,7 +3025,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns the listing of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p>
+    /// <p>Returns the list of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn list_proposal_votes(
         &self,
@@ -3010,7 +3067,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns a listing of proposals for the network.</p>
+    /// <p>Returns a list of proposals for the network.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn list_proposals(
         &self,
@@ -3051,7 +3108,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p>
+    /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn reject_invitation(
         &self,
@@ -3083,7 +3140,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Updates a member configuration with new parameters.</p>
+    /// <p>Updates a member configuration with new parameters.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn update_member(
         &self,
@@ -3119,15 +3176,14 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Updates a node configuration with new parameters.</p>
+    /// <p>Updates a node configuration with new parameters.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn update_node(
         &self,
         input: UpdateNodeInput,
     ) -> Result<UpdateNodeOutput, RusotoError<UpdateNodeError>> {
         let request_uri = format!(
-            "/networks/{network_id}/members/{member_id}/nodes/{node_id}",
-            member_id = input.member_id,
+            "/networks/{network_id}/nodes/{node_id}",
             network_id = input.network_id,
             node_id = input.node_id
         );
@@ -3156,7 +3212,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p>
+    /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn vote_on_proposal(
         &self,

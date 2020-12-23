@@ -48,6 +48,9 @@ pub struct Channel {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     #[serde(rename = "HlsIngest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_ingest: Option<HlsIngest>,
@@ -55,6 +58,9 @@ pub struct Channel {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -121,6 +127,50 @@ pub struct CmafPackageCreateOrUpdateParameters {
     pub stream_selection: Option<StreamSelection>,
 }
 
+/// <p>the option to configure log subscription.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ConfigureLogsRequest {
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
+    /// <p>The ID of the channel to log subscription.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConfigureLogsResponse {
+    /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A short text description of the Channel.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
+    #[serde(rename = "HlsIngest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_ingest: Option<HlsIngest>,
+    /// <p>The ID of the Channel.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>A new Channel configuration.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -149,6 +199,9 @@ pub struct CreateChannelResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     #[serde(rename = "HlsIngest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_ingest: Option<HlsIngest>,
@@ -156,6 +209,9 @@ pub struct CreateChannelResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -420,6 +476,14 @@ pub struct DashPackage {
     #[serde(rename = "SuggestedPresentationDelaySeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub suggested_presentation_delay_seconds: Option<i64>,
+    /// <p>Determines the type of UTCTiming included in the Media Presentation Description (MPD)</p>
+    #[serde(rename = "UtcTiming")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub utc_timing: Option<String>,
+    /// <p>Specifies the value attribute of the UTCTiming field when utcTiming is set to HTTP-ISO or HTTP-HEAD</p>
+    #[serde(rename = "UtcTimingUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub utc_timing_uri: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -465,6 +529,9 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     #[serde(rename = "HlsIngest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_ingest: Option<HlsIngest>,
@@ -472,6 +539,9 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -604,6 +674,15 @@ pub struct DescribeOriginEndpointResponse {
     pub whitelist: Option<Vec<String>>,
 }
 
+/// <p>Configure egress access logging.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EgressAccessLogs {
+    /// <p>Customize the log group name.</p>
+    #[serde(rename = "LogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
+}
+
 /// <p>A HarvestJob resource configuration</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -692,7 +771,10 @@ pub struct HlsManifest {
     /// &quot;PASSTHROUGH&quot; causes the manifest to contain a copy of the SCTE-35 ad
     /// markers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest.
     /// &quot;SCTE35_ENHANCED&quot; generates ad markers and blackout tags based on SCTE-35
-    /// messages in the input source.</p>
+    /// messages in the input source.
+    /// &quot;DATERANGE&quot; inserts EXT-X-DATERANGE tags to signal ad and program transition events
+    /// in HLS and CMAF manifests. For this option, you must set a programDateTimeIntervalSeconds value
+    /// that is greater than 0.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
@@ -744,7 +826,10 @@ pub struct HlsManifestCreateOrUpdateParameters {
     /// &quot;PASSTHROUGH&quot; causes the manifest to contain a copy of the SCTE-35 ad
     /// markers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest.
     /// &quot;SCTE35_ENHANCED&quot; generates ad markers and blackout tags based on SCTE-35
-    /// messages in the input source.</p>
+    /// messages in the input source.
+    /// &quot;DATERANGE&quot; inserts EXT-X-DATERANGE tags to signal ad and program transition events
+    /// in HLS and CMAF manifests. For this option, you must set a programDateTimeIntervalSeconds value
+    /// that is greater than 0.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
@@ -797,7 +882,10 @@ pub struct HlsPackage {
     /// &quot;PASSTHROUGH&quot; causes the manifest to contain a copy of the SCTE-35 ad
     /// markers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest.
     /// &quot;SCTE35_ENHANCED&quot; generates ad markers and blackout tags based on SCTE-35
-    /// messages in the input source.</p>
+    /// messages in the input source.
+    /// &quot;DATERANGE&quot; inserts EXT-X-DATERANGE tags to signal ad and program transition events
+    /// in HLS and CMAF manifests. For this option, you must set a programDateTimeIntervalSeconds value
+    /// that is greater than 0.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
@@ -870,6 +958,15 @@ pub struct IngestEndpoint {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+/// <p>Configure ingress access logging.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct IngressAccessLogs {
+    /// <p>Customize the log group name.</p>
+    #[serde(rename = "LogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1090,6 +1187,9 @@ pub struct RotateChannelCredentialsResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     #[serde(rename = "HlsIngest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_ingest: Option<HlsIngest>,
@@ -1097,6 +1197,9 @@ pub struct RotateChannelCredentialsResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1124,6 +1227,9 @@ pub struct RotateIngestEndpointCredentialsResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     #[serde(rename = "HlsIngest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_ingest: Option<HlsIngest>,
@@ -1131,6 +1237,9 @@ pub struct RotateIngestEndpointCredentialsResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1234,6 +1343,9 @@ pub struct UpdateChannelResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     #[serde(rename = "HlsIngest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_ingest: Option<HlsIngest>,
@@ -1241,6 +1353,9 @@ pub struct UpdateChannelResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "IngressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress_access_logs: Option<IngressAccessLogs>,
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1365,6 +1480,66 @@ pub struct UpdateOriginEndpointResponse {
     pub whitelist: Option<Vec<String>>,
 }
 
+/// Errors returned by ConfigureLogs
+#[derive(Debug, PartialEq)]
+pub enum ConfigureLogsError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl ConfigureLogsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfigureLogsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(ConfigureLogsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ConfigureLogsError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ConfigureLogsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ConfigureLogsError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ConfigureLogsError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(ConfigureLogsError::UnprocessableEntity(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ConfigureLogsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ConfigureLogsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ConfigureLogsError {}
 /// Errors returned by CreateChannel
 #[derive(Debug, PartialEq)]
 pub enum CreateChannelError {
@@ -2412,6 +2587,12 @@ impl Error for UpdateOriginEndpointError {}
 /// Trait representing the capabilities of the MediaPackage API. MediaPackage clients implement this trait.
 #[async_trait]
 pub trait MediaPackage {
+    /// <p>Changes the Channel&#39;s properities to configure log subscription</p>
+    async fn configure_logs(
+        &self,
+        input: ConfigureLogsRequest,
+    ) -> Result<ConfigureLogsResponse, RusotoError<ConfigureLogsError>>;
+
     /// <p>Creates a new Channel.</p>
     async fn create_channel(
         &self,
@@ -2560,6 +2741,37 @@ impl MediaPackageClient {
 
 #[async_trait]
 impl MediaPackage for MediaPackageClient {
+    /// <p>Changes the Channel&#39;s properities to configure log subscription</p>
+    #[allow(unused_mut)]
+    async fn configure_logs(
+        &self,
+        input: ConfigureLogsRequest,
+    ) -> Result<ConfigureLogsResponse, RusotoError<ConfigureLogsError>> {
+        let request_uri = format!("/channels/{id}/configure_logs", id = input.id);
+
+        let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ConfigureLogsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ConfigureLogsError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new Channel.</p>
     #[allow(unused_mut)]
     async fn create_channel(

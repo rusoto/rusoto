@@ -785,12 +785,16 @@ pub struct Cluster {
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The name of the Availability Zone in which the cluster is located.</p>
     pub availability_zone: Option<String>,
+    /// <p>Describes the status of the Availability Zone relocation operation.</p>
+    pub availability_zone_relocation_status: Option<String>,
     /// <p><p>The availability status of the cluster for queries. Possible values are the following:</p> <ul> <li> <p>Available - The cluster is available for queries. </p> </li> <li> <p>Unavailable - The cluster is not available for queries.</p> </li> <li> <p>Maintenance - The cluster is intermittently available for queries due to maintenance activities.</p> </li> <li> <p>Modifying - The cluster is intermittently available for queries due to changes that modify the cluster.</p> </li> <li> <p>Failed - The cluster failed and is not available for queries.</p> </li> </ul></p>
     pub cluster_availability_status: Option<String>,
     /// <p>The date and time that the cluster was created.</p>
     pub cluster_create_time: Option<String>,
     /// <p>The unique identifier of the cluster.</p>
     pub cluster_identifier: Option<String>,
+    /// <p>The namespace Amazon Resource Name (ARN) of the cluster.</p>
+    pub cluster_namespace_arn: Option<String>,
     /// <p>The nodes in the cluster.</p>
     pub cluster_nodes: Option<Vec<ClusterNode>>,
     /// <p>The list of cluster parameter groups that are associated with this cluster. Each parameter group in the list is returned with its status.</p>
@@ -900,6 +904,11 @@ impl ClusterDeserializer {
                     obj.availability_zone =
                         Some(StringDeserializer::deserialize("AvailabilityZone", stack)?);
                 }
+                "AvailabilityZoneRelocationStatus" => {
+                    obj.availability_zone_relocation_status = Some(
+                        StringDeserializer::deserialize("AvailabilityZoneRelocationStatus", stack)?,
+                    );
+                }
                 "ClusterAvailabilityStatus" => {
                     obj.cluster_availability_status = Some(StringDeserializer::deserialize(
                         "ClusterAvailabilityStatus",
@@ -913,6 +922,12 @@ impl ClusterDeserializer {
                 "ClusterIdentifier" => {
                     obj.cluster_identifier =
                         Some(StringDeserializer::deserialize("ClusterIdentifier", stack)?);
+                }
+                "ClusterNamespaceArn" => {
+                    obj.cluster_namespace_arn = Some(StringDeserializer::deserialize(
+                        "ClusterNamespaceArn",
+                        stack,
+                    )?);
                 }
                 "ClusterNodes" => {
                     obj.cluster_nodes.get_or_insert(vec![]).extend(
@@ -2341,6 +2356,8 @@ pub struct CreateClusterMessage {
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The EC2 Availability Zone (AZ) in which you want Amazon Redshift to provision the cluster. For example, if you have several EC2 instances running in a specific Availability Zone, then you might want the cluster to be provisioned in the same zone in order to decrease network latency.</p> <p>Default: A random, system-chosen Availability Zone in the region that is specified by the endpoint.</p> <p>Example: <code>us-east-2d</code> </p> <p>Constraint: The specified Availability Zone must be in the same region as the current endpoint.</p>
     pub availability_zone: Option<String>,
+    /// <p>The option to enable relocation for an Amazon Redshift cluster between Availability Zones after the cluster is created.</p>
+    pub availability_zone_relocation: Option<bool>,
     /// <p>A unique identifier for the cluster. You use this identifier to refer to the cluster for any subsequent cluster operations such as deleting or modifying. The identifier also appears in the Amazon Redshift console.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>myexamplecluster</code> </p>
     pub cluster_identifier: String,
     /// <p><p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Working with Amazon Redshift Parameter Groups</a> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
@@ -2377,7 +2394,7 @@ pub struct CreateClusterMessage {
     pub master_user_password: String,
     /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters. The user name can&#39;t be <code>PUBLIC</code>.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
     pub master_username: String,
-    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.4xlarge</code> | <code>ra3.16xlarge</code> </p>
+    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.xlplus</code> | <code>ra3.4xlarge</code> | <code>ra3.16xlarge</code> </p>
     pub node_type: String,
     /// <p>The number of compute nodes in the cluster. This parameter is required when the <b>ClusterType</b> parameter is specified as <code>multi-node</code>. </p> <p>For information about determining how many nodes you need, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>If you don't specify this parameter, you get a single-node cluster. When requesting a multi-node cluster, you must specify the number of nodes that you want in the cluster.</p> <p>Default: <code>1</code> </p> <p>Constraints: Value must be at least 1 and no more than 100.</p>
     pub number_of_nodes: Option<i64>,
@@ -2421,6 +2438,12 @@ impl CreateClusterMessageSerializer {
         }
         if let Some(ref field_value) = obj.availability_zone {
             params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+        }
+        if let Some(ref field_value) = obj.availability_zone_relocation {
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZoneRelocation"),
+                &field_value,
+            );
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
@@ -5675,6 +5698,8 @@ pub struct Endpoint {
     pub address: Option<String>,
     /// <p>The port that the database engine is listening on.</p>
     pub port: Option<i64>,
+    /// <p>Describes a connection endpoint.</p>
+    pub vpc_endpoints: Option<Vec<SpartaProxyVpcEndpoint>>,
 }
 
 #[allow(dead_code)]
@@ -5692,6 +5717,11 @@ impl EndpointDeserializer {
                 }
                 "Port" => {
                     obj.port = Some(IntegerDeserializer::deserialize("Port", stack)?);
+                }
+                "VpcEndpoints" => {
+                    obj.vpc_endpoints.get_or_insert(vec![]).extend(
+                        SpartaProxyVpcEndpointListDeserializer::deserialize("VpcEndpoints", stack)?,
+                    );
                 }
                 _ => skip_tree(stack),
             }
@@ -7036,6 +7066,10 @@ pub struct ModifyClusterMessage {
     pub allow_version_upgrade: Option<bool>,
     /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>
     pub automated_snapshot_retention_period: Option<i64>,
+    /// <p>The option to initiate relocation for an Amazon Redshift cluster to the target Availability Zone.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The option to enable relocation for an Amazon Redshift cluster between Availability Zones after the cluster modification is complete.</p>
+    pub availability_zone_relocation: Option<bool>,
     /// <p>The unique identifier of the cluster to be modified.</p> <p>Example: <code>examplecluster</code> </p>
     pub cluster_identifier: String,
     /// <p>The name of the cluster parameter group to apply to this cluster. This change is applied only after the cluster is rebooted. To reboot a cluster use <a>RebootCluster</a>. </p> <p>Default: Uses existing setting.</p> <p>Constraints: The cluster parameter group must be in the same parameter group family that matches the cluster version.</p>
@@ -7048,7 +7082,7 @@ pub struct ModifyClusterMessage {
     pub cluster_version: Option<String>,
     /// <p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>
     pub elastic_ip: Option<String>,
-    /// <p>Indicates whether the cluster is encrypted. If the value is encrypted (true) and you provide a value for the <code>KmsKeyId</code> parameter, we encrypt the cluster with the provided <code>KmsKeyId</code>. If you don't provide a <code>KmsKeyId</code>, we encrypt with the default key. In the China region we use legacy encryption if you specify that the cluster is encrypted.</p> <p>If the value is not encrypted (false), then the cluster is decrypted. </p>
+    /// <p>Indicates whether the cluster is encrypted. If the value is encrypted (true) and you provide a value for the <code>KmsKeyId</code> parameter, we encrypt the cluster with the provided <code>KmsKeyId</code>. If you don't provide a <code>KmsKeyId</code>, we encrypt with the default key. </p> <p>If the value is not encrypted (false), then the cluster is decrypted. </p>
     pub encrypted: Option<bool>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
@@ -7066,10 +7100,12 @@ pub struct ModifyClusterMessage {
     pub master_user_password: Option<String>,
     /// <p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>
     pub new_cluster_identifier: Option<String>,
-    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p> For more information about resizing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/rs-resize-tutorial.html">Resizing Clusters in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.4xlarge</code> | <code>ra3.16xlarge</code> </p>
+    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p> For more information about resizing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/rs-resize-tutorial.html">Resizing Clusters in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.xlplus</code> | <code>ra3.4xlarge</code> | <code>ra3.16xlarge</code> </p>
     pub node_type: Option<String>,
     /// <p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p> For more information about resizing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/rs-resize-tutorial.html">Resizing Clusters in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Valid Values: Integer greater than <code>0</code>.</p>
     pub number_of_nodes: Option<i64>,
+    /// <p>The option to change the port of an Amazon Redshift cluster.</p>
+    pub port: Option<i64>,
     /// <p>The weekly time range (in UTC) during which system maintenance can occur, if necessary. If system maintenance is necessary during the window, it may result in an outage.</p> <p>This maintenance window change is made immediately. If the new maintenance window indicates the current time, there must be at least 120 minutes between the current time and end of the window in order to ensure that pending changes are applied.</p> <p>Default: Uses existing setting.</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi, for example <code>wed:07:30-wed:08:00</code>.</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes.</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>If <code>true</code>, the cluster can be accessed from a public network. Only clusters in VPCs can be set to be publicly available.</p>
@@ -7096,6 +7132,15 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.automated_snapshot_retention_period {
             params.put(
                 &format!("{}{}", prefix, "AutomatedSnapshotRetentionPeriod"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.availability_zone {
+            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+        }
+        if let Some(ref field_value) = obj.availability_zone_relocation {
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZoneRelocation"),
                 &field_value,
             );
         }
@@ -7173,6 +7218,9 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.number_of_nodes {
             params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
         }
+        if let Some(ref field_value) = obj.port {
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
+        }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
@@ -7192,7 +7240,7 @@ impl ModifyClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Describes a modify cluster parameter group operation. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterParameterGroupMessage {
@@ -8151,6 +8199,7 @@ impl ParametersListSerializer {
     }
 }
 
+/// <p>Describes a pause cluster operation. For example, a scheduled action to run the <code>PauseCluster</code> API operation. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8251,7 +8300,7 @@ pub struct PendingModifiedValues {
     pub cluster_type: Option<String>,
     /// <p>The pending or in-progress change of the service version.</p>
     pub cluster_version: Option<String>,
-    /// <p>The encryption type for a cluster. Possible values are: KMS and None. For the China region the possible values are None, and Legacy. </p>
+    /// <p>The encryption type for a cluster. Possible values are: KMS and None. </p>
     pub encryption_type: Option<String>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
@@ -8847,6 +8896,7 @@ impl ResetClusterParameterGroupMessageSerializer {
     }
 }
 
+/// <p>Describes a resize cluster operation. For example, a scheduled action to run the <code>ResizeCluster</code> API operation. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8859,7 +8909,7 @@ pub struct ResizeClusterMessage {
     pub cluster_type: Option<String>,
     /// <p>The new node type for the nodes you are adding. If not specified, the cluster's current node type is used.</p>
     pub node_type: Option<String>,
-    /// <p>The new number of nodes for the cluster.</p>
+    /// <p>The new number of nodes for the cluster. If not specified, the cluster's current number of nodes is used.</p>
     pub number_of_nodes: Option<i64>,
 }
 
@@ -8887,8 +8937,10 @@ impl ResizeClusterMessageDeserializer {
                     obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
                 }
                 "NumberOfNodes" => {
-                    obj.number_of_nodes =
-                        Some(IntegerDeserializer::deserialize("NumberOfNodes", stack)?);
+                    obj.number_of_nodes = Some(IntegerOptionalDeserializer::deserialize(
+                        "NumberOfNodes",
+                        stack,
+                    )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -9013,7 +9065,7 @@ pub struct ResizeProgressMessage {
     pub status: Option<String>,
     /// <p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>
     pub target_cluster_type: Option<String>,
-    /// <p>The type of encryption for the cluster after the resize is complete.</p> <p>Possible values are <code>KMS</code> and <code>None</code>. In the China region possible values are: <code>Legacy</code> and <code>None</code>.</p>
+    /// <p>The type of encryption for the cluster after the resize is complete.</p> <p>Possible values are <code>KMS</code> and <code>None</code>. </p>
     pub target_encryption_type: Option<String>,
     /// <p>The node type that the cluster will have after the resize operation is complete.</p>
     pub target_node_type: Option<String>,
@@ -9160,6 +9212,8 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The Amazon EC2 Availability Zone in which to restore the cluster.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Example: <code>us-east-2a</code> </p>
     pub availability_zone: Option<String>,
+    /// <p>The option to enable relocation for an Amazon Redshift cluster between Availability Zones after the cluster is restored.</p>
+    pub availability_zone_relocation: Option<bool>,
     /// <p><p>The identifier of the cluster that will be created from restoring the snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul></p>
     pub cluster_identifier: String,
     /// <p><p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Working with Amazon Redshift Parameter Groups</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
@@ -9232,6 +9286,12 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         }
         if let Some(ref field_value) = obj.availability_zone {
             params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+        }
+        if let Some(ref field_value) = obj.availability_zone_relocation {
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZoneRelocation"),
+                &field_value,
+            );
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
@@ -9533,6 +9593,7 @@ impl RestoreTableFromClusterSnapshotResultDeserializer {
         )
     }
 }
+/// <p>Describes a resume cluster operation. For example, a scheduled action to run the <code>ResumeCluster</code> API operation. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -10244,6 +10305,8 @@ pub struct Snapshot {
     pub encrypted: Option<bool>,
     /// <p>A boolean that indicates whether the snapshot data is encrypted using the HSM keys of the source cluster. <code>true</code> indicates that the data is encrypted using HSM keys.</p>
     pub encrypted_with_hsm: Option<bool>,
+    /// <p>The cluster version of the cluster used to create the snapshot. For example, 1.0.15503. </p>
+    pub engine_full_version: Option<String>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
     /// <p>The estimate of the time remaining before the snapshot backup will complete. Returns <code>0</code> for a completed backup. </p>
@@ -10357,6 +10420,10 @@ impl SnapshotDeserializer {
                 "EncryptedWithHSM" => {
                     obj.encrypted_with_hsm =
                         Some(BooleanDeserializer::deserialize("EncryptedWithHSM", stack)?);
+                }
+                "EngineFullVersion" => {
+                    obj.engine_full_version =
+                        Some(StringDeserializer::deserialize("EngineFullVersion", stack)?);
                 }
                 "EnhancedVpcRouting" => {
                     obj.enhanced_vpc_routing = Some(BooleanDeserializer::deserialize(
@@ -10880,6 +10947,55 @@ impl SourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+/// <p>The connection endpoint for connecting an Amazon Redshift cluster through the proxy.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct SpartaProxyVpcEndpoint {
+    /// <p>The connection endpoint ID for connecting an Amazon Redshift cluster through the proxy.</p>
+    pub vpc_endpoint_id: Option<String>,
+}
+
+#[allow(dead_code)]
+struct SpartaProxyVpcEndpointDeserializer;
+impl SpartaProxyVpcEndpointDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SpartaProxyVpcEndpoint, XmlParseError> {
+        deserialize_elements::<_, SpartaProxyVpcEndpoint, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "VpcEndpointId" => {
+                    obj.vpc_endpoint_id =
+                        Some(StringDeserializer::deserialize("VpcEndpointId", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct SpartaProxyVpcEndpointListDeserializer;
+impl SpartaProxyVpcEndpointListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SpartaProxyVpcEndpoint>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "SpartaProxyVpcEndpoint" {
+                obj.push(SpartaProxyVpcEndpointDeserializer::deserialize(
+                    "SpartaProxyVpcEndpoint",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
     }
 }
 #[allow(dead_code)]
@@ -13500,6 +13616,8 @@ impl Error for CreateSnapshotCopyGrantError {}
 pub enum CreateSnapshotScheduleError {
     /// <p>The schedule you submitted isn't valid.</p>
     InvalidScheduleFault(String),
+    /// <p>The tag is invalid.</p>
+    InvalidTagFault(String),
     /// <p>The definition you submitted is not supported.</p>
     ScheduleDefinitionTypeUnsupportedFault(String),
     /// <p>The specified snapshot schedule already exists. </p>
@@ -13522,6 +13640,11 @@ impl CreateSnapshotScheduleError {
                         return RusotoError::Service(
                             CreateSnapshotScheduleError::InvalidScheduleFault(parsed_error.message),
                         )
+                    }
+                    "InvalidTagFault" => {
+                        return RusotoError::Service(CreateSnapshotScheduleError::InvalidTagFault(
+                            parsed_error.message,
+                        ))
                     }
                     "ScheduleDefinitionTypeUnsupported" => {
                         return RusotoError::Service(
@@ -13571,6 +13694,7 @@ impl fmt::Display for CreateSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateSnapshotScheduleError::InvalidScheduleFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotScheduleError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
             CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -13588,6 +13712,8 @@ impl Error for CreateSnapshotScheduleError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// <p>The resource could not be found.</p>
@@ -13604,6 +13730,11 @@ impl CreateTagsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(CreateTagsError::InvalidClusterStateFault(
+                            parsed_error.message,
+                        ))
+                    }
                     "InvalidTagFault" => {
                         return RusotoError::Service(CreateTagsError::InvalidTagFault(
                             parsed_error.message,
@@ -13638,6 +13769,7 @@ impl fmt::Display for CreateTagsError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            CreateTagsError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
             CreateTagsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
             CreateTagsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
             CreateTagsError::TagLimitExceededFault(ref cause) => write!(f, "{}", cause),
@@ -18506,6 +18638,8 @@ impl Error for RestoreTableFromClusterSnapshotError {}
 pub enum ResumeClusterError {
     /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
+    /// <p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
+    InsufficientClusterCapacityFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
 }
@@ -18522,6 +18656,13 @@ impl ResumeClusterError {
                         return RusotoError::Service(ResumeClusterError::ClusterNotFoundFault(
                             parsed_error.message,
                         ))
+                    }
+                    "InsufficientClusterCapacity" => {
+                        return RusotoError::Service(
+                            ResumeClusterError::InsufficientClusterCapacityFault(
+                                parsed_error.message,
+                            ),
+                        )
                     }
                     "InvalidClusterState" => {
                         return RusotoError::Service(ResumeClusterError::InvalidClusterStateFault(
@@ -18548,6 +18689,9 @@ impl fmt::Display for ResumeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ResumeClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ResumeClusterError::InsufficientClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ResumeClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -19271,7 +19415,7 @@ pub trait Redshift {
         input: ResetClusterParameterGroupMessage,
     ) -> Result<ClusterParameterGroupNameMessage, RusotoError<ResetClusterParameterGroupError>>;
 
-    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.4xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc1.large (if your cluster is in a VPC)</p> </li> <li> <p>dc1.8xlarge (if your cluster is in a VPC)</p> </li> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.xlplus</p> </li> <li> <p>ra3.4xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
     async fn resize_cluster(
         &self,
         input: ResizeClusterMessage,
@@ -21980,7 +22124,7 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
-    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.4xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc1.large (if your cluster is in a VPC)</p> </li> <li> <p>dc1.8xlarge (if your cluster is in a VPC)</p> </li> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.xlplus</p> </li> <li> <p>ra3.4xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
     async fn resize_cluster(
         &self,
         input: ResizeClusterMessage,

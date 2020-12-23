@@ -65,24 +65,24 @@ pub struct DataPoint {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDimensionKeysRequest {
-    /// <p>The date and time specifying the end of the requested time series data. The value specified is <i>exclusive</i> - data points less than (but not equal to) <code>EndTime</code> will be returned.</p> <p>The value for <code>EndTime</code> must be later than the value for <code>StartTime</code>.</p>
+    /// <p>The date and time specifying the end of the requested time series data. The value specified is <i>exclusive</i>, which means that data points less than (but not equal to) <code>EndTime</code> are returned.</p> <p>The value for <code>EndTime</code> must be later than the value for <code>StartTime</code>.</p>
     #[serde(rename = "EndTime")]
     pub end_time: f64,
     /// <p><p>One or more filters to apply in the request. Restrictions:</p> <ul> <li> <p>Any number of filters by the same dimension, as specified in the <code>GroupBy</code> or <code>Partition</code> parameters.</p> </li> <li> <p>A single filter for any other dimension in this dimension group.</p> </li> </ul></p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A specification for how to aggregate the data points from a query result. You must specify a valid dimension group. Performance Insights will return all of the dimensions within that group, unless you provide the names of specific dimensions within that group. You can also request that Performance Insights return a limited number of values for a dimension.</p>
+    /// <p>A specification for how to aggregate the data points from a query result. You must specify a valid dimension group. Performance Insights returns all dimensions within this group, unless you provide the names of specific dimensions within this group. You can also request that Performance Insights return a limited number of values for a dimension.</p>
     #[serde(rename = "GroupBy")]
     pub group_by: DimensionGroup,
-    /// <p>An immutable, AWS Region-unique identifier for a data source. Performance Insights gathers metrics from this data source.</p> <p>To use an Amazon RDS instance as a data source, you specify its <code>DbiResourceId</code> value - for example: <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code> </p>
+    /// <p>An immutable, AWS Region-unique identifier for a data source. Performance Insights gathers metrics from this data source.</p> <p>To use an Amazon RDS instance as a data source, you specify its <code>DbiResourceId</code> value. For example, specify <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code> </p>
     #[serde(rename = "Identifier")]
     pub identifier: String,
     /// <p>The maximum number of items to return in the response. If more items exist than the specified <code>MaxRecords</code> value, a pagination token is included in the response so that the remaining results can be retrieved. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The name of a Performance Insights metric to be measured.</p> <p>Valid values for <code>Metric</code> are:</p> <ul> <li> <p> <code>db.load.avg</code> - a scaled representation of the number of active sessions for the database engine.</p> </li> <li> <p> <code>db.sampledload.avg</code> - the raw number of active sessions for the database engine.</p> </li> </ul></p>
+    /// <p>The name of a Performance Insights metric to be measured.</p> <p>Valid values for <code>Metric</code> are:</p> <ul> <li> <p> <code>db.load.avg</code> - a scaled representation of the number of active sessions for the database engine.</p> </li> <li> <p> <code>db.sampledload.avg</code> - the raw number of active sessions for the database engine.</p> </li> </ul> <p>If the number of active sessions is less than an internal Performance Insights threshold, <code>db.load.avg</code> and <code>db.sampledload.avg</code> are the same value. If the number of active sessions is greater than the internal threshold, Performance Insights samples the active sessions, with <code>db.load.avg</code> showing the scaled values, <code>db.sampledload.avg</code> showing the raw values, and <code>db.sampledload.avg</code> less than <code>db.load.avg</code>. For most use cases, you can query <code>db.load.avg</code> only. </p>
     #[serde(rename = "Metric")]
     pub metric: String,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the token, up to the value specified by <code>MaxRecords</code>.</p>
@@ -93,14 +93,14 @@ pub struct DescribeDimensionKeysRequest {
     #[serde(rename = "PartitionBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_by: Option<DimensionGroup>,
-    /// <p>The granularity, in seconds, of the data points returned from Performance Insights. A period can be as short as one second, or as long as one day (86400 seconds). Valid values are:</p> <ul> <li> <p> <code>1</code> (one second)</p> </li> <li> <p> <code>60</code> (one minute)</p> </li> <li> <p> <code>300</code> (five minutes)</p> </li> <li> <p> <code>3600</code> (one hour)</p> </li> <li> <p> <code>86400</code> (twenty-four hours)</p> </li> </ul> <p>If you don't specify <code>PeriodInSeconds</code>, then Performance Insights will choose a value for you, with a goal of returning roughly 100-200 data points in the response.</p>
+    /// <p>The granularity, in seconds, of the data points returned from Performance Insights. A period can be as short as one second, or as long as one day (86400 seconds). Valid values are:</p> <ul> <li> <p> <code>1</code> (one second)</p> </li> <li> <p> <code>60</code> (one minute)</p> </li> <li> <p> <code>300</code> (five minutes)</p> </li> <li> <p> <code>3600</code> (one hour)</p> </li> <li> <p> <code>86400</code> (twenty-four hours)</p> </li> </ul> <p>If you don't specify <code>PeriodInSeconds</code>, then Performance Insights chooses a value for you, with a goal of returning roughly 100-200 data points in the response.</p>
     #[serde(rename = "PeriodInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period_in_seconds: Option<i64>,
-    /// <p>The AWS service for which Performance Insights will return metrics. The only valid value for <i>ServiceType</i> is: <code>RDS</code> </p>
+    /// <p>The AWS service for which Performance Insights will return metrics. The only valid value for <i>ServiceType</i> is <code>RDS</code>.</p>
     #[serde(rename = "ServiceType")]
     pub service_type: String,
-    /// <p>The date and time specifying the beginning of the requested time series data. You can't specify a <code>StartTime</code> that's earlier than 7 days ago. The value specified is <i>inclusive</i> - data points equal to or greater than <code>StartTime</code> will be returned.</p> <p>The value for <code>StartTime</code> must be earlier than the value for <code>EndTime</code>.</p>
+    /// <p>The date and time specifying the beginning of the requested time series data. You must specify a <code>StartTime</code> within the past 7 days. The value specified is <i>inclusive</i>, which means that data points equal to or greater than <code>StartTime</code> are returned.</p> <p>The value for <code>StartTime</code> must be earlier than the value for <code>EndTime</code>.</p>
     #[serde(rename = "StartTime")]
     pub start_time: f64,
 }
@@ -130,15 +130,15 @@ pub struct DescribeDimensionKeysResponse {
     pub partition_keys: Option<Vec<ResponsePartitionKey>>,
 }
 
-/// <p>A logical grouping of Performance Insights metrics for a related subject area. For example, the <code>db.sql</code> dimension group consists of the following dimensions: <code>db.sql.id</code>, <code>db.sql.db_id</code>, <code>db.sql.statement</code>, and <code>db.sql.tokenized_id</code>.</p>
+/// <p><p>A logical grouping of Performance Insights metrics for a related subject area. For example, the <code>db.sql</code> dimension group consists of the following dimensions: <code>db.sql.id</code>, <code>db.sql.db<em>id</code>, <code>db.sql.statement</code>, and <code>db.sql.tokenized</em>id</code>.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DimensionGroup {
-    /// <p><p>A list of specific dimensions from a dimension group. If this parameter is not present, then it signifies that all of the dimensions in the group were requested, or are present in the response.</p> <p>Valid values for elements in the <code>Dimensions</code> array are:</p> <ul> <li> <p>db.user.id</p> </li> <li> <p>db.user.name</p> </li> <li> <p>db.host.id</p> </li> <li> <p>db.host.name</p> </li> <li> <p>db.sql.id</p> </li> <li> <p>db.sql.db<em>id</p> </li> <li> <p>db.sql.statement</p> </li> <li> <p>db.sql.tokenized</em>id</p> </li> <li> <p>db.sql<em>tokenized.id</p> </li> <li> <p>db.sql</em>tokenized.db<em>id</p> </li> <li> <p>db.sql</em>tokenized.statement</p> </li> <li> <p>db.wait<em>event.name</p> </li> <li> <p>db.wait</em>event.type</p> </li> <li> <p>db.wait<em>event</em>type.name</p> </li> </ul></p>
+    /// <p><p>A list of specific dimensions from a dimension group. If this parameter is not present, then it signifies that all of the dimensions in the group were requested, or are present in the response.</p> <p>Valid values for elements in the <code>Dimensions</code> array are:</p> <ul> <li> <p> <code>db.application.name</code> - The name of the application that is connected to the database (only Aurora PostgreSQL and RDS PostgreSQL)</p> </li> <li> <p> <code>db.host.id</code> - The host ID of the connected client (all engines)</p> </li> <li> <p> <code>db.host.name</code> - The host name of the connected client (all engines)</p> </li> <li> <p> <code>db.name</code> - The name of the database to which the client is connected (only Aurora PostgreSQL, RDS PostgreSQL, Aurora MySQL, RDS MySQL, and MariaDB)</p> </li> <li> <p> <code>db.session<em>type.name</code> - The type of the current session (only Aurora PostgreSQL and RDS PostgreSQL)</p> </li> <li> <p> <code>db.sql.id</code> - The SQL ID generated by Performance Insights (all engines)</p> </li> <li> <p> <code>db.sql.db</em>id</code> - The SQL ID generated by the database (all engines)</p> </li> <li> <p> <code>db.sql.statement</code> - The SQL text that is being executed (all engines)</p> </li> <li> <p> <code>db.sql.tokenized<em>id</code> </p> </li> <li> <p> <code>db.sql</em>tokenized.id</code> - The SQL digest ID generated by Performance Insights (all engines)</p> </li> <li> <p> <code>db.sql<em>tokenized.db</em>id</code> - SQL digest ID generated by the database (all engines)</p> </li> <li> <p> <code>db.sql<em>tokenized.statement</code> - The SQL digest text (all engines)</p> </li> <li> <p> <code>db.user.id</code> - The ID of the user logged in to the database (all engines)</p> </li> <li> <p> <code>db.user.name</code> - The name of the user logged in to the database (all engines)</p> </li> <li> <p> <code>db.wait</em>event.name</code> - The event for which the backend is waiting (all engines)</p> </li> <li> <p> <code>db.wait<em>event.type</code> - The type of event for which the backend is waiting (all engines)</p> </li> <li> <p> <code>db.wait</em>event_type.name</code> - The name of the event type for which the backend is waiting (all engines)</p> </li> </ul></p>
     #[serde(rename = "Dimensions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dimensions: Option<Vec<String>>,
-    /// <p><p>The name of the dimension group. Valid values are:</p> <ul> <li> <p> <code>db.user</code> </p> </li> <li> <p> <code>db.host</code> </p> </li> <li> <p> <code>db.sql</code> </p> </li> <li> <p> <code>db.sql<em>tokenized</code> </p> </li> <li> <p> <code>db.wait</em>event</code> </p> </li> <li> <p> <code>db.wait<em>event</em>type</code> </p> </li> </ul></p>
+    /// <p><p>The name of the dimension group. Valid values are:</p> <ul> <li> <p> <code>db</code> - The name of the database to which the client is connected (only Aurora PostgreSQL, RDS PostgreSQL, Aurora MySQL, RDS MySQL, and MariaDB)</p> </li> <li> <p> <code>db.application</code> - The name of the application that is connected to the database (only Aurora PostgreSQL and RDS PostgreSQL)</p> </li> <li> <p> <code>db.host</code> - The host name of the connected client (all engines)</p> </li> <li> <p> <code>db.session<em>type</code> - The type of the current session (only Aurora PostgreSQL and RDS PostgreSQL)</p> </li> <li> <p> <code>db.sql</code> - The SQL that is currently executing (all engines)</p> </li> <li> <p> <code>db.sql</em>tokenized</code> - The SQL digest (all engines)</p> </li> <li> <p> <code>db.wait<em>event</code> - The event for which the database backend is waiting (all engines)</p> </li> <li> <p> <code>db.wait</em>event_type</code> - The type of event for which the database backend is waiting (all engines)</p> </li> <li> <p> <code>db.user</code> - The user logged in to the database (all engines)</p> </li> </ul></p>
     #[serde(rename = "Group")]
     pub group: String,
     /// <p>The maximum number of items to fetch for this dimension group.</p>
@@ -168,10 +168,10 @@ pub struct DimensionKeyDescription {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceMetricsRequest {
-    /// <p>The date and time specifiying the end of the requested time series data. The value specified is <i>exclusive</i> - data points less than (but not equal to) <code>EndTime</code> will be returned.</p> <p>The value for <code>EndTime</code> must be later than the value for <code>StartTime</code>.</p>
+    /// <p>The date and time specifying the end of the requested time series data. The value specified is <i>exclusive</i> - data points less than (but not equal to) <code>EndTime</code> will be returned.</p> <p>The value for <code>EndTime</code> must be later than the value for <code>StartTime</code>.</p>
     #[serde(rename = "EndTime")]
     pub end_time: f64,
-    /// <p>An immutable, AWS Region-unique identifier for a data source. Performance Insights gathers metrics from this data source.</p> <p>To use an Amazon RDS instance as a data source, you specify its <code>DbiResourceId</code> value - for example: <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code> </p>
+    /// <p>An immutable, AWS Region-unique identifier for a data source. Performance Insights gathers metrics from this data source.</p> <p>To use a DB instance as a data source, specify its <code>DbiResourceId</code> value. For example, specify <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code>.</p>
     #[serde(rename = "Identifier")]
     pub identifier: String,
     /// <p>The maximum number of items to return in the response. If more items exist than the specified <code>MaxRecords</code> value, a pagination token is included in the response so that the remaining results can be retrieved. </p>
@@ -189,7 +189,7 @@ pub struct GetResourceMetricsRequest {
     #[serde(rename = "PeriodInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period_in_seconds: Option<i64>,
-    /// <p>The AWS service for which Performance Insights will return metrics. The only valid value for <i>ServiceType</i> is: <code>RDS</code> </p>
+    /// <p>The AWS service for which Performance Insights returns metrics. The only valid value for <i>ServiceType</i> is <code>RDS</code>.</p>
     #[serde(rename = "ServiceType")]
     pub service_type: String,
     /// <p>The date and time specifying the beginning of the requested time series data. You can't specify a <code>StartTime</code> that's earlier than 7 days ago. The value specified is <i>inclusive</i> - data points equal to or greater than <code>StartTime</code> will be returned.</p> <p>The value for <code>StartTime</code> must be earlier than the value for <code>EndTime</code>.</p>
@@ -208,7 +208,7 @@ pub struct GetResourceMetricsResponse {
     #[serde(rename = "AlignedStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aligned_start_time: Option<f64>,
-    /// <p>An immutable, AWS Region-unique identifier for a data source. Performance Insights gathers metrics from this data source.</p> <p>To use an Amazon RDS instance as a data source, you specify its <code>DbiResourceId</code> value - for example: <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code> </p>
+    /// <p>An immutable, AWS Region-unique identifier for a data source. Performance Insights gathers metrics from this data source.</p> <p>To use a DB instance as a data source, you specify its <code>DbiResourceId</code> value - for example: <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code> </p>
     #[serde(rename = "Identifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identifier: Option<String>,
@@ -222,7 +222,7 @@ pub struct GetResourceMetricsResponse {
     pub next_token: Option<String>,
 }
 
-/// <p>A time-ordered series of data points, correpsonding to a dimension of a Performance Insights metric.</p>
+/// <p>A time-ordered series of data points, corresponding to a dimension of a Performance Insights metric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MetricKeyDataPoints {
@@ -248,7 +248,7 @@ pub struct MetricQuery {
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by: Option<DimensionGroup>,
-    /// <p><p>The name of a Performance Insights metric to be measured.</p> <p>Valid values for <code>Metric</code> are:</p> <ul> <li> <p> <code>db.load.avg</code> - a scaled representation of the number of active sessions for the database engine.</p> </li> <li> <p> <code>db.sampledload.avg</code> - the raw number of active sessions for the database engine.</p> </li> </ul></p>
+    /// <p>The name of a Performance Insights metric to be measured.</p> <p>Valid values for <code>Metric</code> are:</p> <ul> <li> <p> <code>db.load.avg</code> - a scaled representation of the number of active sessions for the database engine.</p> </li> <li> <p> <code>db.sampledload.avg</code> - the raw number of active sessions for the database engine.</p> </li> </ul> <p>If the number of active sessions is less than an internal Performance Insights threshold, <code>db.load.avg</code> and <code>db.sampledload.avg</code> are the same value. If the number of active sessions is greater than the internal threshold, Performance Insights samples the active sessions, with <code>db.load.avg</code> showing the scaled values, <code>db.sampledload.avg</code> showing the raw values, and <code>db.sampledload.avg</code> less than <code>db.load.avg</code>. For most use cases, you can query <code>db.load.avg</code> only. </p>
     #[serde(rename = "Metric")]
     pub metric: String,
 }
@@ -270,7 +270,7 @@ pub struct ResponseResourceMetricKey {
     #[serde(rename = "Dimensions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dimensions: Option<::std::collections::HashMap<String, String>>,
-    /// <p><p>The name of a Performance Insights metric to be measured.</p> <p>Valid values for <code>Metric</code> are:</p> <ul> <li> <p> <code>db.load.avg</code> - a scaled representation of the number of active sessions for the database engine.</p> </li> <li> <p> <code>db.sampledload.avg</code> - the raw number of active sessions for the database engine.</p> </li> </ul></p>
+    /// <p>The name of a Performance Insights metric to be measured.</p> <p>Valid values for <code>Metric</code> are:</p> <ul> <li> <p> <code>db.load.avg</code> - a scaled representation of the number of active sessions for the database engine.</p> </li> <li> <p> <code>db.sampledload.avg</code> - the raw number of active sessions for the database engine.</p> </li> </ul> <p>If the number of active sessions is less than an internal Performance Insights threshold, <code>db.load.avg</code> and <code>db.sampledload.avg</code> are the same value. If the number of active sessions is greater than the internal threshold, Performance Insights samples the active sessions, with <code>db.load.avg</code> showing the scaled values, <code>db.sampledload.avg</code> showing the raw values, and <code>db.sampledload.avg</code> less than <code>db.load.avg</code>. For most use cases, you can query <code>db.load.avg</code> only. </p>
     #[serde(rename = "Metric")]
     pub metric: String,
 }
@@ -368,13 +368,13 @@ impl Error for GetResourceMetricsError {}
 /// Trait representing the capabilities of the AWS PI API. AWS PI clients implement this trait.
 #[async_trait]
 pub trait PerformanceInsights {
-    /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
+    /// <p><p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>
     async fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
     ) -> Result<DescribeDimensionKeysResponse, RusotoError<DescribeDimensionKeysError>>;
 
-    /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
+    /// <p><p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>
     async fn get_resource_metrics(
         &self,
         input: GetResourceMetricsRequest,
@@ -420,7 +420,7 @@ impl PerformanceInsightsClient {
 
 #[async_trait]
 impl PerformanceInsights for PerformanceInsightsClient {
-    /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
+    /// <p><p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>
     async fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
@@ -442,7 +442,7 @@ impl PerformanceInsights for PerformanceInsightsClient {
             .deserialize::<DescribeDimensionKeysResponse, _>()
     }
 
-    /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
+    /// <p><p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>
     async fn get_resource_metrics(
         &self,
         input: GetResourceMetricsRequest,
