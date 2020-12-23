@@ -231,7 +231,7 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
     }
 
     if operation.http_checksum_required.unwrap_or(false) {
-        parts.push("request.set_content_md5_header();".to_owned());
+        parts.push("request.maybe_set_content_md5_header();".to_owned());
     }
 
     Some(parts.join("\n"))
@@ -359,7 +359,7 @@ fn generate_list_serializer(shape: &Shape, service: &Service<'_>) -> String {
                 {element_type}Serializer::serialize(writer, \"{location_name}\", element)?;
             }}",
             element_type = element_type,
-            location_name = member.location_name.as_ref().unwrap()
+            location_name = member.location_name.as_ref().unwrap_or(&member.shape)
         );
         serializer += "writer.write(xml::writer::XmlEvent::end_element())?;";
     }

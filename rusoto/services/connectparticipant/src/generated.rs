@@ -24,6 +24,46 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>The case-insensitive input to indicate standard MIME type that describes the format of the file that will be uploaded.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AttachmentItem {
+    /// <p>A unique identifier for the attachment.</p>
+    #[serde(rename = "AttachmentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment_id: Option<String>,
+    /// <p>A case-sensitive name of the attachment being uploaded.</p>
+    #[serde(rename = "AttachmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment_name: Option<String>,
+    /// <p>Describes the MIME file type of the attachment. For a list of supported file types, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html#feature-limits">Feature specifications</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[serde(rename = "ContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>Status of the attachment.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CompleteAttachmentUploadRequest {
+    /// <p>A list of unique identifiers for the attachments.</p>
+    #[serde(rename = "AttachmentIds")]
+    pub attachment_ids: Vec<String>,
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>The authentication token associated with the participant's connection.</p>
+    #[serde(rename = "ConnectionToken")]
+    pub connection_token: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CompleteAttachmentUploadResponse {}
+
 /// <p>Connection credentials. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -41,7 +81,7 @@ pub struct ConnectionCredentials {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateParticipantConnectionRequest {
-    /// <p>Participant Token as obtained from <a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_StartChatContactResponse.html">StartChatContact</a> API response.</p>
+    /// <p>This is a header parameter.</p> <p>The Participant Token as obtained from <a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_StartChatContact.html">StartChatContact</a> API response.</p>
     #[serde(rename = "ParticipantToken")]
     pub participant_token: String,
     /// <p>Type of connection information required.</p>
@@ -77,6 +117,30 @@ pub struct DisconnectParticipantRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisconnectParticipantResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAttachmentRequest {
+    /// <p>A unique identifier for the attachment.</p>
+    #[serde(rename = "AttachmentId")]
+    pub attachment_id: String,
+    /// <p>The authentication token associated with the participant's connection.</p>
+    #[serde(rename = "ConnectionToken")]
+    pub connection_token: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAttachmentResponse {
+    /// <p>The pre-signed URL using which file would be downloaded from Amazon S3 by the API caller.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// <p>The expiration time of the URL in ISO timestamp. It's specified in ISO 8601 format: yyyy-MM-ddThh:mm:ss.SSSZ. For example, 2019-11-08T02:41:28.172Z.</p>
+    #[serde(rename = "UrlExpiry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url_expiry: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -135,6 +199,10 @@ pub struct Item {
     #[serde(rename = "AbsoluteTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_time: Option<String>,
+    /// <p>Provides information about the attachments.</p>
+    #[serde(rename = "Attachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments: Option<Vec<AttachmentItem>>,
     /// <p>The content of the message or event.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -228,6 +296,39 @@ pub struct SendMessageResponse {
     pub id: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartAttachmentUploadRequest {
+    /// <p>A case-sensitive name of the attachment being uploaded.</p>
+    #[serde(rename = "AttachmentName")]
+    pub attachment_name: String,
+    /// <p>The size of the attachment in bytes.</p>
+    #[serde(rename = "AttachmentSizeInBytes")]
+    pub attachment_size_in_bytes: i64,
+    /// <p>A unique case sensitive identifier to support idempotency of request.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>The authentication token associated with the participant's connection.</p>
+    #[serde(rename = "ConnectionToken")]
+    pub connection_token: String,
+    /// <p>Describes the MIME file type of the attachment. For a list of supported file types, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html#feature-limits">Feature specifications</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[serde(rename = "ContentType")]
+    pub content_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartAttachmentUploadResponse {
+    /// <p>A unique identifier for the attachment.</p>
+    #[serde(rename = "AttachmentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment_id: Option<String>,
+    /// <p>Fields to be used while uploading the attachment.</p>
+    #[serde(rename = "UploadMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upload_metadata: Option<UploadMetadata>,
+}
+
 /// <p>A filtering option for where to start. For example, if you sent 100 messages, start with message 50. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -246,6 +347,24 @@ pub struct StartPosition {
     pub most_recent: Option<i64>,
 }
 
+/// <p>Fields to be used while uploading the attachment.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UploadMetadata {
+    /// <p>The headers to be provided while uploading the file to the URL.</p>
+    #[serde(rename = "HeadersToInclude")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers_to_include: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The pre-signed URL using which file would be downloaded from Amazon S3 by the API caller.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// <p>The expiration time of the URL in ISO timestamp. It's specified in ISO 8601 format: yyyy-MM-ddThh:mm:ss.SSSZ. For example, 2019-11-08T02:41:28.172Z.</p>
+    #[serde(rename = "UrlExpiry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url_expiry: Option<String>,
+}
+
 /// <p>The websocket for the participant's connection.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -260,6 +379,68 @@ pub struct Websocket {
     pub url: Option<String>,
 }
 
+/// Errors returned by CompleteAttachmentUpload
+#[derive(Debug, PartialEq)]
+pub enum CompleteAttachmentUploadError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>An attachment with that identifier is already being uploaded.</p>
+    Conflict(String),
+    /// <p>This exception occurs when there is an internal failure in the Amazon Connect service.</p>
+    InternalServer(String),
+    /// <p>The number of attachments per contact exceeds the quota.</p>
+    ServiceQuotaExceeded(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl CompleteAttachmentUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteAttachmentUploadError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CompleteAttachmentUploadError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CompleteAttachmentUploadError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(CompleteAttachmentUploadError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CompleteAttachmentUploadError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CompleteAttachmentUploadError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CompleteAttachmentUploadError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CompleteAttachmentUploadError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CompleteAttachmentUploadError::Conflict(ref cause) => write!(f, "{}", cause),
+            CompleteAttachmentUploadError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CompleteAttachmentUploadError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CompleteAttachmentUploadError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CompleteAttachmentUploadError {}
 /// Errors returned by CreateParticipantConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateParticipantConnectionError {
@@ -354,6 +535,48 @@ impl fmt::Display for DisconnectParticipantError {
     }
 }
 impl Error for DisconnectParticipantError {}
+/// Errors returned by GetAttachment
+#[derive(Debug, PartialEq)]
+pub enum GetAttachmentError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>This exception occurs when there is an internal failure in the Amazon Connect service.</p>
+    InternalServer(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl GetAttachmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttachmentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetAttachmentError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(GetAttachmentError::InternalServer(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetAttachmentError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAttachmentError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAttachmentError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetAttachmentError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetAttachmentError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAttachmentError {}
 /// Errors returned by GetTranscript
 #[derive(Debug, PartialEq)]
 pub enum GetTranscriptError {
@@ -480,38 +703,108 @@ impl fmt::Display for SendMessageError {
     }
 }
 impl Error for SendMessageError {}
+/// Errors returned by StartAttachmentUpload
+#[derive(Debug, PartialEq)]
+pub enum StartAttachmentUploadError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>This exception occurs when there is an internal failure in the Amazon Connect service.</p>
+    InternalServer(String),
+    /// <p>The number of attachments per contact exceeds the quota.</p>
+    ServiceQuotaExceeded(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl StartAttachmentUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAttachmentUploadError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(StartAttachmentUploadError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(StartAttachmentUploadError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(StartAttachmentUploadError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StartAttachmentUploadError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartAttachmentUploadError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartAttachmentUploadError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartAttachmentUploadError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartAttachmentUploadError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            StartAttachmentUploadError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartAttachmentUploadError {}
 /// Trait representing the capabilities of the Amazon Connect Participant API. Amazon Connect Participant clients implement this trait.
 #[async_trait]
 pub trait ConnectParticipant {
-    /// <p>Creates the participant's connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until the they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{"topic":"aws/subscribe","content":{"topics":["aws/chat"]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p>
+    /// <p>Allows you to confirm that the attachment has been uploaded using the pre-signed URL provided in StartAttachmentUpload API. </p>
+    async fn complete_attachment_upload(
+        &self,
+        input: CompleteAttachmentUploadRequest,
+    ) -> Result<CompleteAttachmentUploadResponse, RusotoError<CompleteAttachmentUploadError>>;
+
+    /// <p><p>Creates the participant&#39;s connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{&quot;topic&quot;:&quot;aws/subscribe&quot;,&quot;content&quot;:{&quot;topics&quot;:[&quot;aws/chat&quot;]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p> <note> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p> </note></p>
     async fn create_participant_connection(
         &self,
         input: CreateParticipantConnectionRequest,
     ) -> Result<CreateParticipantConnectionResponse, RusotoError<CreateParticipantConnectionError>>;
 
-    /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p>
     async fn disconnect_participant(
         &self,
         input: DisconnectParticipantRequest,
     ) -> Result<DisconnectParticipantResponse, RusotoError<DisconnectParticipantError>>;
 
-    /// <p>Retrieves a transcript of the session. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p>Provides a pre-signed URL for download of a completed attachment. This is an asynchronous API for use with active contacts.</p>
+    async fn get_attachment(
+        &self,
+        input: GetAttachmentRequest,
+    ) -> Result<GetAttachmentResponse, RusotoError<GetAttachmentError>>;
+
+    /// <p>Retrieves a transcript of the session, including details about any attachments. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p>
     async fn get_transcript(
         &self,
         input: GetTranscriptRequest,
     ) -> Result<GetTranscriptResponse, RusotoError<GetTranscriptError>>;
 
-    /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p>
     async fn send_event(
         &self,
         input: SendEventRequest,
     ) -> Result<SendEventResponse, RusotoError<SendEventError>>;
 
-    /// <p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p><p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <note> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p> </note></p>
     async fn send_message(
         &self,
         input: SendMessageRequest,
     ) -> Result<SendMessageResponse, RusotoError<SendMessageError>>;
+
+    /// <p>Provides a pre-signed Amazon S3 URL in response for uploading the file directly to S3.</p>
+    async fn start_attachment_upload(
+        &self,
+        input: StartAttachmentUploadRequest,
+    ) -> Result<StartAttachmentUploadResponse, RusotoError<StartAttachmentUploadError>>;
 }
 /// A client for the Amazon Connect Participant API.
 #[derive(Clone)]
@@ -553,7 +846,40 @@ impl ConnectParticipantClient {
 
 #[async_trait]
 impl ConnectParticipant for ConnectParticipantClient {
-    /// <p>Creates the participant's connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until the they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{"topic":"aws/subscribe","content":{"topics":["aws/chat"]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p>
+    /// <p>Allows you to confirm that the attachment has been uploaded using the pre-signed URL provided in StartAttachmentUpload API. </p>
+    #[allow(unused_mut)]
+    async fn complete_attachment_upload(
+        &self,
+        input: CompleteAttachmentUploadRequest,
+    ) -> Result<CompleteAttachmentUploadResponse, RusotoError<CompleteAttachmentUploadError>> {
+        let request_uri = "/participant/complete-attachment-upload";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("participant.connect".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CompleteAttachmentUploadResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CompleteAttachmentUploadError::from_response(response))
+        }
+    }
+
+    /// <p><p>Creates the participant&#39;s connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{&quot;topic&quot;:&quot;aws/subscribe&quot;,&quot;content&quot;:{&quot;topics&quot;:[&quot;aws/chat&quot;]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p> <note> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p> </note></p>
     #[allow(unused_mut)]
     async fn create_participant_connection(
         &self,
@@ -587,7 +913,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         }
     }
 
-    /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p>
     #[allow(unused_mut)]
     async fn disconnect_participant(
         &self,
@@ -620,7 +946,40 @@ impl ConnectParticipant for ConnectParticipantClient {
         }
     }
 
-    /// <p>Retrieves a transcript of the session. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p>Provides a pre-signed URL for download of a completed attachment. This is an asynchronous API for use with active contacts.</p>
+    #[allow(unused_mut)]
+    async fn get_attachment(
+        &self,
+        input: GetAttachmentRequest,
+    ) -> Result<GetAttachmentResponse, RusotoError<GetAttachmentError>> {
+        let request_uri = "/participant/attachment";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("participant.connect".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAttachmentResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAttachmentError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves a transcript of the session, including details about any attachments. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p>
     #[allow(unused_mut)]
     async fn get_transcript(
         &self,
@@ -653,7 +1012,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         }
     }
 
-    /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p>
     #[allow(unused_mut)]
     async fn send_event(
         &self,
@@ -686,7 +1045,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         }
     }
 
-    /// <p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    /// <p><p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p> <note> <p>The Amazon Connect Participant Service APIs do not use <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 authentication</a>.</p> </note></p>
     #[allow(unused_mut)]
     async fn send_message(
         &self,
@@ -716,6 +1075,39 @@ impl ConnectParticipant for ConnectParticipantClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SendMessageError::from_response(response))
+        }
+    }
+
+    /// <p>Provides a pre-signed Amazon S3 URL in response for uploading the file directly to S3.</p>
+    #[allow(unused_mut)]
+    async fn start_attachment_upload(
+        &self,
+        input: StartAttachmentUploadRequest,
+    ) -> Result<StartAttachmentUploadResponse, RusotoError<StartAttachmentUploadError>> {
+        let request_uri = "/participant/start-attachment-upload";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("participant.connect".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartAttachmentUploadResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartAttachmentUploadError::from_response(response))
         }
     }
 }

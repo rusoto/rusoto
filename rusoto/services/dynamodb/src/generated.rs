@@ -364,6 +364,23 @@ pub struct BackupSummary {
     pub table_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchExecuteStatementInput {
+    /// <p> The list of PartiQL statements representing the batch to run. </p>
+    #[serde(rename = "Statements")]
+    pub statements: Vec<BatchStatementRequest>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchExecuteStatementOutput {
+    /// <p> The response to each PartiQL statement in the batch. </p>
+    #[serde(rename = "Responses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub responses: Option<Vec<BatchStatementResponse>>,
+}
+
 /// <p>Represents the input of a <code>BatchGetItem</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -397,6 +414,55 @@ pub struct BatchGetItemOutput {
     #[serde(rename = "UnprocessedKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_keys: Option<::std::collections::HashMap<String, KeysAndAttributes>>,
+}
+
+/// <p> An error associated with a statement in a PartiQL batch that was run. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchStatementError {
+    /// <p> The error code associated with the failed PartiQL batch statement. </p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p> The error message associated with the PartiQL batch resposne. </p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p> A PartiQL batch statement request. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchStatementRequest {
+    /// <p> The read consistency of the PartiQL batch request. </p>
+    #[serde(rename = "ConsistentRead")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consistent_read: Option<bool>,
+    /// <p> The parameters associated with a PartiQL statement in the batch request. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<Vec<AttributeValue>>,
+    /// <p> A valid PartiQL statement. </p>
+    #[serde(rename = "Statement")]
+    pub statement: String,
+}
+
+/// <p> A PartiQL batch statement response.. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchStatementResponse {
+    /// <p> The error associated with a failed PartiQL batch statement. </p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<BatchStatementError>,
+    /// <p> A DynamoDB item associated with a BatchStatementResponse </p>
+    #[serde(rename = "Item")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item: Option<::std::collections::HashMap<String, AttributeValue>>,
+    /// <p> The table name associated with a failed PartiQL batch statement. </p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
 }
 
 /// <p>Represents the input of a <code>BatchWriteItem</code> operation.</p>
@@ -564,7 +630,7 @@ pub struct ContinuousBackupsDescription {
     pub point_in_time_recovery_description: Option<PointInTimeRecoveryDescription>,
 }
 
-/// <p>Represents a Contributor Insights summary entry..</p>
+/// <p>Represents a Contributor Insights summary entry.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContributorInsightsSummary {
@@ -615,7 +681,7 @@ pub struct CreateGlobalSecondaryIndexAction {
     /// <p>Represents attributes that are copied (projected) from the table into an index. These are in addition to the primary key attributes and index key attributes, which are automatically projected.</p>
     #[serde(rename = "Projection")]
     pub projection: Projection,
-    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughput>,
@@ -693,7 +759,7 @@ pub struct CreateTableInput {
     #[serde(rename = "LocalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_secondary_indexes: Option<Vec<LocalSecondaryIndex>>,
-    /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p> If you set BillingMode as <code>PROVISIONED</code>, you must specify this property. If you set BillingMode as <code>PAY_PER_REQUEST</code>, you cannot specify this property. </p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p> If you set BillingMode as <code>PROVISIONED</code>, you must specify this property. If you set BillingMode as <code>PAY_PER_REQUEST</code>, you cannot specify this property.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughput>,
@@ -973,6 +1039,23 @@ pub struct DescribeEndpointsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeExportInput {
+    /// <p>The Amazon Resource Name (ARN) associated with the export.</p>
+    #[serde(rename = "ExportArn")]
+    pub export_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeExportOutput {
+    /// <p>Represents the properties of the export.</p>
+    #[serde(rename = "ExportDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_description: Option<ExportDescription>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalTableInput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
@@ -1007,6 +1090,27 @@ pub struct DescribeGlobalTableSettingsOutput {
     #[serde(rename = "ReplicaSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_settings: Option<Vec<ReplicaSettingsDescription>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeKinesisStreamingDestinationInput {
+    /// <p>The name of the table being described.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeKinesisStreamingDestinationOutput {
+    /// <p>The list of replica structures for the table being described.</p>
+    #[serde(rename = "KinesisDataStreamDestinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kinesis_data_stream_destinations: Option<Vec<KinesisDataStreamDestination>>,
+    /// <p>The name of the table being described.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
 }
 
 /// <p>Represents the input of a <code>DescribeLimits</code> operation. Has no content.</p>
@@ -1101,6 +1205,60 @@ pub struct Endpoint {
     pub cache_period_in_minutes: i64,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExecuteStatementInput {
+    /// <p> The consistency of a read operation. If set to <code>true</code>, then a strongly consistent read is used; otherwise, an eventually consistent read is used. </p>
+    #[serde(rename = "ConsistentRead")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consistent_read: Option<bool>,
+    /// <p> Set this value to get remaining results, if <code>NextToken</code> was returned in the statement response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The parameters for the PartiQL statement, if any. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<Vec<AttributeValue>>,
+    /// <p> The PartiQL statement representing the operation to run. </p>
+    #[serde(rename = "Statement")]
+    pub statement: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExecuteStatementOutput {
+    /// <p> If a read operation was used, this property will contain the result of the reade operation; a map of attribute names and their values. For the write operations this value will be empty. </p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<::std::collections::HashMap<String, AttributeValue>>>,
+    /// <p> If the response of a read request exceeds the response payload limit DynamoDB will set this value in the response. If set, you can use that this value in the subsequent request to get the remaining results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExecuteTransactionInput {
+    /// <p> Set this value to get remaining results, if <code>NextToken</code> was returned in the statement response. </p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p> The list of PartiQL statements representing the transaction to run. </p>
+    #[serde(rename = "TransactStatements")]
+    pub transact_statements: Vec<ParameterizedStatement>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExecuteTransactionOutput {
+    /// <p> The response to a PartiQL transaction. </p>
+    #[serde(rename = "Responses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub responses: Option<Vec<ItemResponse>>,
+}
+
 /// <p>Represents a condition to be compared with an attribute value. This condition can be used with <code>DeleteItem</code>, <code>PutItem</code>, or <code>UpdateItem</code> operations; if the comparison evaluates to true, the operation succeeds; if not, the operation fails. You can use <code>ExpectedAttributeValue</code> in one of two different ways:</p> <ul> <li> <p>Use <code>AttributeValueList</code> to specify one or more values to compare against an attribute. Use <code>ComparisonOperator</code> to specify how you want to perform the comparison. If the comparison evaluates to true, then the conditional operation succeeds.</p> </li> <li> <p>Use <code>Value</code> to specify a value that DynamoDB will compare against an attribute. If the values match, then <code>ExpectedAttributeValue</code> evaluates to true and the conditional operation succeeds. Optionally, you can also set <code>Exists</code> to false, indicating that you <i>do not</i> expect to find the attribute value in the table. In this case, the conditional operation succeeds only if the comparison evaluates to false.</p> </li> </ul> <p> <code>Value</code> and <code>Exists</code> are incompatible with <code>AttributeValueList</code> and <code>ComparisonOperator</code>. Note that if you use both sets of parameters at once, DynamoDB will return a <code>ValidationException</code> exception.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1121,6 +1279,150 @@ pub struct ExpectedAttributeValue {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<AttributeValue>,
+}
+
+/// <p>Represents the properties of the exported table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportDescription {
+    /// <p>The billable size of the table export.</p>
+    #[serde(rename = "BilledSizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billed_size_bytes: Option<i64>,
+    /// <p>The client token that was provided for the export task. A client token makes calls to <code>ExportTableToPointInTimeInput</code> idempotent, meaning that multiple identical calls have the same effect as one single call.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The time at which the export task completed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the table export.</p>
+    #[serde(rename = "ExportArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_arn: Option<String>,
+    /// <p>The format of the exported data. Valid values for <code>ExportFormat</code> are <code>DYNAMODB_JSON</code> or <code>ION</code>.</p>
+    #[serde(rename = "ExportFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_format: Option<String>,
+    /// <p>The name of the manifest file for the export task.</p>
+    #[serde(rename = "ExportManifest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_manifest: Option<String>,
+    /// <p>Export can be in one of the following states: IN_PROGRESS, COMPLETED, or FAILED.</p>
+    #[serde(rename = "ExportStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_status: Option<String>,
+    /// <p>Point in time from which table data was exported.</p>
+    #[serde(rename = "ExportTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_time: Option<f64>,
+    /// <p>Status code for the result of the failed export.</p>
+    #[serde(rename = "FailureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>Export failure reason description.</p>
+    #[serde(rename = "FailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_message: Option<String>,
+    /// <p>The number of items exported.</p>
+    #[serde(rename = "ItemCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_count: Option<i64>,
+    /// <p>The name of the Amazon S3 bucket containing the export.</p>
+    #[serde(rename = "S3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket: Option<String>,
+    /// <p>The ID of the AWS account that owns the bucket containing the export.</p>
+    #[serde(rename = "S3BucketOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_owner: Option<String>,
+    /// <p>The Amazon S3 bucket prefix used as the file name and path of the exported snapshot.</p>
+    #[serde(rename = "S3Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_prefix: Option<String>,
+    /// <p><p>Type of encryption used on the bucket where export data is stored. Valid values for <code>S3SseAlgorithm</code> are:</p> <ul> <li> <p> <code>AES256</code> - server-side encryption with Amazon S3 managed keys</p> </li> <li> <p> <code>KMS</code> - server-side encryption with AWS KMS managed keys</p> </li> </ul></p>
+    #[serde(rename = "S3SseAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_sse_algorithm: Option<String>,
+    /// <p>The ID of the AWS KMS managed key used to encrypt the S3 bucket where export data is stored (if applicable).</p>
+    #[serde(rename = "S3SseKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_sse_kms_key_id: Option<String>,
+    /// <p>The time at which the export task began.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the table that was exported.</p>
+    #[serde(rename = "TableArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_arn: Option<String>,
+    /// <p>Unique ID of the table that was exported.</p>
+    #[serde(rename = "TableId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_id: Option<String>,
+}
+
+/// <p>Summary information about an export task.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportSummary {
+    /// <p>The Amazon Resource Name (ARN) of the export.</p>
+    #[serde(rename = "ExportArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_arn: Option<String>,
+    /// <p>Export can be in one of the following states: IN_PROGRESS, COMPLETED, or FAILED.</p>
+    #[serde(rename = "ExportStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportTableToPointInTimeInput {
+    /// <p>Providing a <code>ClientToken</code> makes the call to <code>ExportTableToPointInTimeInput</code> idempotent, meaning that multiple identical calls have the same effect as one single call.</p> <p>A client token is valid for 8 hours after the first request that uses it is completed. After 8 hours, any request with the same client token is treated as a new request. Do not resubmit the same request with the same client token for more than 8 hours, or the result might not be idempotent.</p> <p>If you submit a request with the same client token but a change in other parameters within the 8-hour idempotency window, DynamoDB returns an <code>IdempotentParameterMismatch</code> exception.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The format for the exported data. Valid values for <code>ExportFormat</code> are <code>DYNAMODB_JSON</code> or <code>ION</code>.</p>
+    #[serde(rename = "ExportFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_format: Option<String>,
+    /// <p>Time in the past from which to export table data. The table export will be a snapshot of the table's state at this point in time.</p>
+    #[serde(rename = "ExportTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_time: Option<f64>,
+    /// <p>The name of the Amazon S3 bucket to export the snapshot to.</p>
+    #[serde(rename = "S3Bucket")]
+    pub s3_bucket: String,
+    /// <p>The ID of the AWS account that owns the bucket the export will be stored in.</p>
+    #[serde(rename = "S3BucketOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_owner: Option<String>,
+    /// <p>The Amazon S3 bucket prefix to use as the file name and path of the exported snapshot.</p>
+    #[serde(rename = "S3Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_prefix: Option<String>,
+    /// <p><p>Type of encryption used on the bucket where export data will be stored. Valid values for <code>S3SseAlgorithm</code> are:</p> <ul> <li> <p> <code>AES256</code> - server-side encryption with Amazon S3 managed keys</p> </li> <li> <p> <code>KMS</code> - server-side encryption with AWS KMS managed keys</p> </li> </ul></p>
+    #[serde(rename = "S3SseAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_sse_algorithm: Option<String>,
+    /// <p>The ID of the AWS KMS managed key used to encrypt the S3 bucket where export data will be stored (if applicable).</p>
+    #[serde(rename = "S3SseKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_sse_kms_key_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) associated with the table to export.</p>
+    #[serde(rename = "TableArn")]
+    pub table_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportTableToPointInTimeOutput {
+    /// <p>Contains a description of the table export.</p>
+    #[serde(rename = "ExportDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_description: Option<ExportDescription>,
 }
 
 /// <p>Represents a failure a contributor insights operation.</p>
@@ -1215,7 +1517,7 @@ pub struct GlobalSecondaryIndex {
     /// <p>Represents attributes that are copied (projected) from the table into the global secondary index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. </p>
     #[serde(rename = "Projection")]
     pub projection: Projection,
-    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughput>,
@@ -1270,7 +1572,7 @@ pub struct GlobalSecondaryIndexDescription {
     #[serde(rename = "Projection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub projection: Option<Projection>,
-    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughputDescription>,
@@ -1432,6 +1734,52 @@ pub struct KeysAndAttributes {
     pub projection_expression: Option<String>,
 }
 
+/// <p>Describes a Kinesis data stream destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct KinesisDataStreamDestination {
+    /// <p>The current status of replication.</p>
+    #[serde(rename = "DestinationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_status: Option<String>,
+    /// <p>The human-readable string that corresponds to the replica status.</p>
+    #[serde(rename = "DestinationStatusDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_status_description: Option<String>,
+    /// <p>The ARN for a specific Kinesis data stream.</p>
+    #[serde(rename = "StreamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct KinesisStreamingDestinationInput {
+    /// <p>The ARN for a Kinesis data stream.</p>
+    #[serde(rename = "StreamArn")]
+    pub stream_arn: String,
+    /// <p>The name of the DynamoDB table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct KinesisStreamingDestinationOutput {
+    /// <p>The current status of the replication.</p>
+    #[serde(rename = "DestinationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_status: Option<String>,
+    /// <p>The ARN for the specific Kinesis data stream.</p>
+    #[serde(rename = "StreamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+    /// <p>The name of the table being modified.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupsInput {
@@ -1499,6 +1847,36 @@ pub struct ListContributorInsightsOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contributor_insights_summaries: Option<Vec<ContributorInsightsSummary>>,
     /// <p>A token to go to the next page if there is one.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListExportsInput {
+    /// <p>Maximum number of results to return per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An optional string that, if supplied, must be copied from the output of a previous call to <code>ListExports</code>. When provided in this manner, the API fetches the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) associated with the exported table.</p>
+    #[serde(rename = "TableArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListExportsOutput {
+    /// <p>A list of <code>ExportSummary</code> objects.</p>
+    #[serde(rename = "ExportSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_summaries: Option<Vec<ExportSummary>>,
+    /// <p>If this value is returned, there are additional results to be displayed. To retrieve them, call <code>ListExports</code> again, with <code>NextToken</code> set to this value.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1650,6 +2028,19 @@ pub struct LocalSecondaryIndexInfo {
     pub projection: Option<Projection>,
 }
 
+/// <p> Represents a PartiQL statment that uses parameters. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ParameterizedStatement {
+    /// <p> The parameter values. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<Vec<AttributeValue>>,
+    /// <p> A PartiQL statment that uses parameters. </p>
+    #[serde(rename = "Statement")]
+    pub statement: String,
+}
+
 /// <p>The description of the point in time settings applied to the table.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1684,13 +2075,13 @@ pub struct Projection {
     #[serde(rename = "NonKeyAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_key_attributes: Option<Vec<String>>,
-    /// <p><p>The set of attributes that are projected into the index:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes is in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul></p>
+    /// <p><p>The set of attributes that are projected into the index:</p> <ul> <li> <p> <code>KEYS<em>ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - In addition to the attributes described in <code>KEYS</em>ONLY</code>, the secondary index will include other non-key attributes that you specify.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul></p>
     #[serde(rename = "ProjectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub projection_type: Option<String>,
 }
 
-/// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+/// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProvisionedThroughput {
     /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>If read/write capacity mode is <code>PAY_PER_REQUEST</code> the value is set to 0.</p>
@@ -1713,7 +2104,7 @@ pub struct ProvisionedThroughputDescription {
     #[serde(rename = "LastIncreaseDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_increase_date_time: Option<f64>,
-    /// <p>The number of provisioned throughput decreases for this table during this UTC calendar day. For current maximums on provisioned throughput decreases, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>The number of provisioned throughput decreases for this table during this UTC calendar day. For current maximums on provisioned throughput decreases, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "NumberOfDecreasesToday")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_decreases_today: Option<i64>,
@@ -2003,7 +2394,11 @@ pub struct ReplicaDescription {
     #[serde(rename = "RegionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region_name: Option<String>,
-    /// <p><p>The current state of the replica:</p> <ul> <li> <p> <code>CREATING</code> - The replica is being created.</p> </li> <li> <p> <code>UPDATING</code> - The replica is being updated.</p> </li> <li> <p> <code>DELETING</code> - The replica is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The replica is ready for use.</p> </li> </ul></p>
+    /// <p>The time at which the replica was first detected as inaccessible. To determine cause of inaccessibility check the <code>ReplicaStatus</code> property.</p>
+    #[serde(rename = "ReplicaInaccessibleDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_inaccessible_date_time: Option<f64>,
+    /// <p><p>The current state of the replica:</p> <ul> <li> <p> <code>CREATING</code> - The replica is being created.</p> </li> <li> <p> <code>UPDATING</code> - The replica is being updated.</p> </li> <li> <p> <code>DELETING</code> - The replica is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The replica is ready for use.</p> </li> <li> <p> <code>REGION<em>DISABLED</code> - The replica is inaccessible because the AWS Region has been disabled.</p> <note> <p>If the AWS Region remains inaccessible for more than 20 hours, DynamoDB will remove this replica from the replication group. The replica will not be deleted and replication will stop from and to this region.</p> </note> </li> <li> <p> <code>INACCESSIBLE</em>ENCRYPTION_CREDENTIALS </code> - The AWS KMS key used to encrypt the table is inaccessible.</p> <note> <p>If the AWS KMS key remains inaccessible for more than 20 hours, DynamoDB will remove this replica from the replication group. The replica will not be deleted and replication will stop from and to this region.</p> </note> </li> </ul></p>
     #[serde(rename = "ReplicaStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_status: Option<String>,
@@ -2578,7 +2973,7 @@ pub struct TableDescription {
     #[serde(rename = "CreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date_time: Option<f64>,
-    /// <p>The global secondary indexes, if any, on the table. Each index is scoped to a given partition key value. Each element is composed of:</p> <ul> <li> <p> <code>Backfilling</code> - If true, then the index is currently in the backfilling phase. Backfilling occurs only when a new global secondary index is added to the table. It is the process by which DynamoDB populates the new index with data from the table. (This attribute does not appear for indexes that were created during a <code>CreateTable</code> operation.) </p> <p> You can delete an index that is being created during the <code>Backfilling</code> phase when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is true. You can't delete the index that is being created when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is false. (This attribute does not appear for indexes that were created during a <code>CreateTable</code> operation.)</p> </li> <li> <p> <code>IndexName</code> - The name of the global secondary index.</p> </li> <li> <p> <code>IndexSizeBytes</code> - The total size of the global secondary index, in bytes. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>IndexStatus</code> - The current status of the global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The index is ready for use.</p> </li> </ul> </li> <li> <p> <code>ItemCount</code> - The number of items in the global secondary index. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>KeySchema</code> - Specifies the complete index key schema. The attribute names in the key schema must be between 1 and 255 characters (inclusive). The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes is in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>ProvisionedThroughput</code> - The provisioned throughput settings for the global secondary index, consisting of read and write capacity units, along with data about increases and decreases. </p> </li> </ul> <p>If the table is in the <code>DELETING</code> state, no information about indexes will be returned.</p>
+    /// <p>The global secondary indexes, if any, on the table. Each index is scoped to a given partition key value. Each element is composed of:</p> <ul> <li> <p> <code>Backfilling</code> - If true, then the index is currently in the backfilling phase. Backfilling occurs only when a new global secondary index is added to the table. It is the process by which DynamoDB populates the new index with data from the table. (This attribute does not appear for indexes that were created during a <code>CreateTable</code> operation.) </p> <p> You can delete an index that is being created during the <code>Backfilling</code> phase when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is true. You can't delete the index that is being created when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is false. (This attribute does not appear for indexes that were created during a <code>CreateTable</code> operation.)</p> </li> <li> <p> <code>IndexName</code> - The name of the global secondary index.</p> </li> <li> <p> <code>IndexSizeBytes</code> - The total size of the global secondary index, in bytes. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>IndexStatus</code> - The current status of the global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The index is ready for use.</p> </li> </ul> </li> <li> <p> <code>ItemCount</code> - The number of items in the global secondary index. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>KeySchema</code> - Specifies the complete index key schema. The attribute names in the key schema must be between 1 and 255 characters (inclusive). The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - In addition to the attributes described in <code>KEYS_ONLY</code>, the secondary index will include other non-key attributes that you specify.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>ProvisionedThroughput</code> - The provisioned throughput settings for the global secondary index, consisting of read and write capacity units, along with data about increases and decreases. </p> </li> </ul> <p>If the table is in the <code>DELETING</code> state, no information about indexes will be returned.</p>
     #[serde(rename = "GlobalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_secondary_indexes: Option<Vec<GlobalSecondaryIndexDescription>>,
@@ -2885,7 +3280,7 @@ pub struct UpdateGlobalSecondaryIndexAction {
     /// <p>The name of the global secondary index to be updated.</p>
     #[serde(rename = "IndexName")]
     pub index_name: String,
-    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
     pub provisioned_throughput: ProvisionedThroughput,
 }
@@ -3152,6 +3547,46 @@ pub struct WriteRequest {
     pub put_request: Option<PutRequest>,
 }
 
+/// Errors returned by BatchExecuteStatement
+#[derive(Debug, PartialEq)]
+pub enum BatchExecuteStatementError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
+    RequestLimitExceeded(String),
+}
+
+impl BatchExecuteStatementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchExecuteStatementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(BatchExecuteStatementError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "RequestLimitExceeded" => {
+                    return RusotoError::Service(BatchExecuteStatementError::RequestLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchExecuteStatementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchExecuteStatementError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchExecuteStatementError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchExecuteStatementError {}
 /// Errors returned by BatchGetItem
 #[derive(Debug, PartialEq)]
 pub enum BatchGetItemError {
@@ -3159,7 +3594,7 @@ pub enum BatchGetItemError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -3211,7 +3646,7 @@ pub enum BatchWriteItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -3271,7 +3706,7 @@ pub enum CreateBackupError {
     ContinuousBackupsUnavailable(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>A target table with the specified name is either being created or deleted. </p>
     TableInUse(String),
@@ -3331,7 +3766,7 @@ pub enum CreateGlobalTableError {
     GlobalTableAlreadyExists(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
@@ -3381,7 +3816,7 @@ impl Error for CreateGlobalTableError {}
 pub enum CreateTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -3427,7 +3862,7 @@ pub enum DeleteBackupError {
     BackupNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
 }
 
@@ -3477,7 +3912,7 @@ pub enum DeleteItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -3541,7 +3976,7 @@ impl Error for DeleteItemError {}
 pub enum DeleteTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -3728,6 +4163,48 @@ impl fmt::Display for DescribeEndpointsError {
     }
 }
 impl Error for DescribeEndpointsError {}
+/// Errors returned by DescribeExport
+#[derive(Debug, PartialEq)]
+pub enum DescribeExportError {
+    /// <p>The specified export was not found.</p>
+    ExportNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
+    LimitExceeded(String),
+}
+
+impl DescribeExportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExportError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ExportNotFoundException" => {
+                    return RusotoError::Service(DescribeExportError::ExportNotFound(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeExportError::InternalServerError(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DescribeExportError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeExportError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeExportError::ExportNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeExportError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeExportError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeExportError {}
 /// Errors returned by DescribeGlobalTable
 #[derive(Debug, PartialEq)]
 pub enum DescribeGlobalTableError {
@@ -3814,6 +4291,52 @@ impl fmt::Display for DescribeGlobalTableSettingsError {
     }
 }
 impl Error for DescribeGlobalTableSettingsError {}
+/// Errors returned by DescribeKinesisStreamingDestination
+#[derive(Debug, PartialEq)]
+pub enum DescribeKinesisStreamingDestinationError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeKinesisStreamingDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeKinesisStreamingDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeKinesisStreamingDestinationError::InternalServerError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeKinesisStreamingDestinationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeKinesisStreamingDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeKinesisStreamingDestinationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeKinesisStreamingDestinationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeKinesisStreamingDestinationError {}
 /// Errors returned by DescribeLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeLimitsError {
@@ -3964,6 +4487,382 @@ impl fmt::Display for DescribeTimeToLiveError {
     }
 }
 impl Error for DescribeTimeToLiveError {}
+/// Errors returned by DisableKinesisStreamingDestination
+#[derive(Debug, PartialEq)]
+pub enum DisableKinesisStreamingDestinationError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
+    LimitExceeded(String),
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
+    ResourceInUse(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl DisableKinesisStreamingDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableKinesisStreamingDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DisableKinesisStreamingDestinationError::InternalServerError(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        DisableKinesisStreamingDestinationError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        DisableKinesisStreamingDestinationError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisableKinesisStreamingDestinationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisableKinesisStreamingDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisableKinesisStreamingDestinationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableKinesisStreamingDestinationError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableKinesisStreamingDestinationError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableKinesisStreamingDestinationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisableKinesisStreamingDestinationError {}
+/// Errors returned by EnableKinesisStreamingDestination
+#[derive(Debug, PartialEq)]
+pub enum EnableKinesisStreamingDestinationError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
+    LimitExceeded(String),
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
+    ResourceInUse(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl EnableKinesisStreamingDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableKinesisStreamingDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        EnableKinesisStreamingDestinationError::InternalServerError(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        EnableKinesisStreamingDestinationError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        EnableKinesisStreamingDestinationError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        EnableKinesisStreamingDestinationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for EnableKinesisStreamingDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EnableKinesisStreamingDestinationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableKinesisStreamingDestinationError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableKinesisStreamingDestinationError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableKinesisStreamingDestinationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for EnableKinesisStreamingDestinationError {}
+/// Errors returned by ExecuteStatement
+#[derive(Debug, PartialEq)]
+pub enum ExecuteStatementError {
+    /// <p>A condition specified in the operation could not be evaluated.</p>
+    ConditionalCheckFailed(String),
+    /// <p> There was an attempt to insert an item with the same primary key as an item that already exists in the DynamoDB table. </p>
+    DuplicateItem(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>An item collection is too large. This exception is only returned for tables that have one or more local secondary indexes.</p>
+    ItemCollectionSizeLimitExceeded(String),
+    /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
+    RequestLimitExceeded(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+    /// <p>Operation was rejected because there is an ongoing transaction for the item.</p>
+    TransactionConflict(String),
+}
+
+impl ExecuteStatementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteStatementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConditionalCheckFailedException" => {
+                    return RusotoError::Service(ExecuteStatementError::ConditionalCheckFailed(
+                        err.msg,
+                    ))
+                }
+                "DuplicateItemException" => {
+                    return RusotoError::Service(ExecuteStatementError::DuplicateItem(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(ExecuteStatementError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ItemCollectionSizeLimitExceededException" => {
+                    return RusotoError::Service(
+                        ExecuteStatementError::ItemCollectionSizeLimitExceeded(err.msg),
+                    )
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        ExecuteStatementError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "RequestLimitExceeded" => {
+                    return RusotoError::Service(ExecuteStatementError::RequestLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ExecuteStatementError::ResourceNotFound(err.msg))
+                }
+                "TransactionConflictException" => {
+                    return RusotoError::Service(ExecuteStatementError::TransactionConflict(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExecuteStatementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExecuteStatementError::ConditionalCheckFailed(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::DuplicateItem(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::ItemCollectionSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExecuteStatementError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExecuteStatementError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::TransactionConflict(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExecuteStatementError {}
+/// Errors returned by ExecuteTransaction
+#[derive(Debug, PartialEq)]
+pub enum ExecuteTransactionError {
+    /// <p>DynamoDB rejected the request because you retried a request with a different payload but with an idempotent token that was already used.</p>
+    IdempotentParameterMismatch(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
+    RequestLimitExceeded(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+    /// <p><p>The entire transaction request was canceled.</p> <p>DynamoDB cancels a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB cancels a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <note> <p>If using Java, DynamoDB lists the cancellation reasons on the <code>CancellationReasons</code> property. This property is not set for other languages. Transaction cancellation reasons are ordered in the order of requested items, if an item has no error it will have <code>NONE</code> code and <code>Null</code> message.</p> </note> <p>Cancellation reason codes and possible error messages:</p> <ul> <li> <p>No Errors:</p> <ul> <li> <p>Code: <code>NONE</code> </p> </li> <li> <p>Message: <code>null</code> </p> </li> </ul> </li> <li> <p>Conditional Check Failed:</p> <ul> <li> <p>Code: <code>ConditionalCheckFailed</code> </p> </li> <li> <p>Message: The conditional request failed. </p> </li> </ul> </li> <li> <p>Item Collection Size Limit Exceeded:</p> <ul> <li> <p>Code: <code>ItemCollectionSizeLimitExceeded</code> </p> </li> <li> <p>Message: Collection size exceeded.</p> </li> </ul> </li> <li> <p>Transaction Conflict:</p> <ul> <li> <p>Code: <code>TransactionConflict</code> </p> </li> <li> <p>Message: Transaction is ongoing for the item.</p> </li> </ul> </li> <li> <p>Provisioned Throughput Exceeded:</p> <ul> <li> <p>Code: <code>ProvisionedThroughputExceeded</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.</p> <note> <p>This Message is received when provisioned throughput is exceeded is on a provisioned DynamoDB table.</p> </note> </li> <li> <p>The level of configured provisioned throughput for one or more global secondary indexes of the table was exceeded. Consider increasing your provisioning level for the under-provisioned global secondary indexes with the UpdateTable API.</p> <note> <p>This message is returned when provisioned throughput is exceeded is on a provisioned GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Throttling Error:</p> <ul> <li> <p>Code: <code>ThrottlingError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>Throughput exceeds the current capacity of your table or index. DynamoDB is automatically scaling your table or index so please try again shortly. If exceptions persist, check if you have a hot key: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html.</p> <note> <p>This message is returned when writes get throttled on an On-Demand table as DynamoDB is automatically scaling the table.</p> </note> </li> <li> <p>Throughput exceeds the current capacity for one or more global secondary indexes. DynamoDB is automatically scaling your index so please try again shortly.</p> <note> <p>This message is returned when when writes get throttled on an On-Demand GSI as DynamoDB is automatically scaling the GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Validation Error:</p> <ul> <li> <p>Code: <code>ValidationError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>One or more parameter values were invalid.</p> </li> <li> <p>The update expression attempted to update the secondary index key beyond allowed size limits.</p> </li> <li> <p>The update expression attempted to update the secondary index key to unsupported type.</p> </li> <li> <p>An operand in the update expression has an incorrect data type.</p> </li> <li> <p>Item size to update has exceeded the maximum allowed size.</p> </li> <li> <p>Number overflow. Attempting to store a number with magnitude larger than supported range.</p> </li> <li> <p>Type mismatch for attribute to update.</p> </li> <li> <p>Nesting Levels have exceeded supported limits.</p> </li> <li> <p>The document path provided in the update expression is invalid for update.</p> </li> <li> <p>The provided expression refers to an attribute that does not exist in the item.</p> </li> </ul> </li> </ul> </li> </ul></p>
+    TransactionCanceled(String),
+    /// <p>The transaction with the given request token is already in progress.</p>
+    TransactionInProgress(String),
+}
+
+impl ExecuteTransactionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteTransactionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        ExecuteTransactionError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(ExecuteTransactionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        ExecuteTransactionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "RequestLimitExceeded" => {
+                    return RusotoError::Service(ExecuteTransactionError::RequestLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ExecuteTransactionError::ResourceNotFound(err.msg))
+                }
+                "TransactionCanceledException" => {
+                    return RusotoError::Service(ExecuteTransactionError::TransactionCanceled(
+                        err.msg,
+                    ))
+                }
+                "TransactionInProgressException" => {
+                    return RusotoError::Service(ExecuteTransactionError::TransactionInProgress(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExecuteTransactionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExecuteTransactionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExecuteTransactionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExecuteTransactionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExecuteTransactionError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ExecuteTransactionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ExecuteTransactionError::TransactionCanceled(ref cause) => write!(f, "{}", cause),
+            ExecuteTransactionError::TransactionInProgress(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExecuteTransactionError {}
+/// Errors returned by ExportTableToPointInTime
+#[derive(Debug, PartialEq)]
+pub enum ExportTableToPointInTimeError {
+    /// <p>There was a conflict when writing to the specified S3 bucket.</p>
+    ExportConflict(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified <code>ExportTime</code> is outside of the point in time recovery window.</p>
+    InvalidExportTime(String),
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
+    LimitExceeded(String),
+    /// <p>Point in time recovery has not yet been enabled for this source table.</p>
+    PointInTimeRecoveryUnavailable(String),
+    /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    TableNotFound(String),
+}
+
+impl ExportTableToPointInTimeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportTableToPointInTimeError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ExportConflictException" => {
+                    return RusotoError::Service(ExportTableToPointInTimeError::ExportConflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        ExportTableToPointInTimeError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidExportTimeException" => {
+                    return RusotoError::Service(ExportTableToPointInTimeError::InvalidExportTime(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ExportTableToPointInTimeError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "PointInTimeRecoveryUnavailableException" => {
+                    return RusotoError::Service(
+                        ExportTableToPointInTimeError::PointInTimeRecoveryUnavailable(err.msg),
+                    )
+                }
+                "TableNotFoundException" => {
+                    return RusotoError::Service(ExportTableToPointInTimeError::TableNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExportTableToPointInTimeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExportTableToPointInTimeError::ExportConflict(ref cause) => write!(f, "{}", cause),
+            ExportTableToPointInTimeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExportTableToPointInTimeError::InvalidExportTime(ref cause) => write!(f, "{}", cause),
+            ExportTableToPointInTimeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ExportTableToPointInTimeError::PointInTimeRecoveryUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportTableToPointInTimeError::TableNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExportTableToPointInTimeError {}
 /// Errors returned by GetItem
 #[derive(Debug, PartialEq)]
 pub enum GetItemError {
@@ -3971,7 +4870,7 @@ pub enum GetItemError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -4084,6 +4983,42 @@ impl fmt::Display for ListContributorInsightsError {
     }
 }
 impl Error for ListContributorInsightsError {}
+/// Errors returned by ListExports
+#[derive(Debug, PartialEq)]
+pub enum ListExportsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
+    LimitExceeded(String),
+}
+
+impl ListExportsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExportsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListExportsError::InternalServerError(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListExportsError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListExportsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListExportsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListExportsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListExportsError {}
 /// Errors returned by ListGlobalTables
 #[derive(Debug, PartialEq)]
 pub enum ListGlobalTablesError {
@@ -4195,7 +5130,7 @@ pub enum PutItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -4261,7 +5196,7 @@ pub enum QueryError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -4311,7 +5246,7 @@ pub enum RestoreTableFromBackupError {
     BackupNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>A target table with the specified name already exists. </p>
     TableAlreadyExists(String),
@@ -4377,7 +5312,7 @@ pub enum RestoreTableToPointInTimeError {
     InternalServerError(String),
     /// <p>An invalid restore time was specified. RestoreDateTime must be between EarliestRestorableDateTime and LatestRestorableDateTime.</p>
     InvalidRestoreTime(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>Point in time recovery has not yet been enabled for this source table.</p>
     PointInTimeRecoveryUnavailable(String),
@@ -4461,7 +5396,7 @@ pub enum ScanError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -4507,7 +5442,7 @@ impl Error for ScanError {}
 pub enum TagResourceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4557,7 +5492,7 @@ pub enum TransactGetItemsError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -4623,7 +5558,7 @@ pub enum TransactWriteItemsError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -4701,7 +5636,7 @@ impl Error for TransactWriteItemsError {}
 pub enum UntagResourceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4905,7 +5840,7 @@ pub enum UpdateGlobalTableSettingsError {
     IndexNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The specified replica is no longer part of the global table.</p>
     ReplicaNotFound(String),
@@ -4983,7 +5918,7 @@ pub enum UpdateItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    /// <p>Throughput exceeds the current throughput quota for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a quota increase.</p>
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
@@ -5047,7 +5982,7 @@ impl Error for UpdateItemError {}
 pub enum UpdateTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -5095,7 +6030,7 @@ impl Error for UpdateTableError {}
 pub enum UpdateTableReplicaAutoScalingError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -5157,7 +6092,7 @@ impl Error for UpdateTableReplicaAutoScalingError {}
 pub enum UpdateTimeToLiveError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -5205,6 +6140,12 @@ impl Error for UpdateTimeToLiveError {}
 /// Trait representing the capabilities of the DynamoDB API. DynamoDB clients implement this trait.
 #[async_trait]
 pub trait DynamoDb {
+    /// <p> This operation allows you to perform batch reads and writes on data stored in DynamoDB, using PartiQL. </p>
+    async fn batch_execute_statement(
+        &self,
+        input: BatchExecuteStatementInput,
+    ) -> Result<BatchExecuteStatementOutput, RusotoError<BatchExecuteStatementError>>;
+
     /// <p>The <code>BatchGetItem</code> operation returns the attributes of one or more items from one or more tables. You identify requested items by primary key.</p> <p>A single operation can retrieve up to 16 MB of data, which can contain as many as 100 items. <code>BatchGetItem</code> returns a partial result if the response size limit is exceeded, the table's provisioned throughput is exceeded, or an internal processing failure occurs. If a partial result is returned, the operation returns a value for <code>UnprocessedKeys</code>. You can use this value to retry the operation starting with the next item to get.</p> <important> <p>If you request more than 100 items, <code>BatchGetItem</code> returns a <code>ValidationException</code> with the message "Too many items requested for the BatchGetItem call."</p> </important> <p>For example, if you ask to retrieve 100 items, but each individual item is 300 KB in size, the system returns 52 items (so as not to exceed the 16 MB limit). It also returns an appropriate <code>UnprocessedKeys</code> value so you can get the next page of results. If desired, your application can include its own logic to assemble the pages of results into one dataset.</p> <p>If <i>none</i> of the items can be processed due to insufficient provisioned throughput on all of the tables in the request, then <code>BatchGetItem</code> returns a <code>ProvisionedThroughputExceededException</code>. If <i>at least one</i> of the items is successfully processed, then <code>BatchGetItem</code> completes successfully, while returning the keys of the unread items in <code>UnprocessedKeys</code>.</p> <important> <p>If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, <i>we strongly recommend that you use an exponential backoff algorithm</i>. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations">Batch Operations and Error Handling</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </important> <p>By default, <code>BatchGetItem</code> performs eventually consistent reads on every table in the request. If you want strongly consistent reads instead, you can set <code>ConsistentRead</code> to <code>true</code> for any or all tables.</p> <p>In order to minimize response latency, <code>BatchGetItem</code> retrieves items in parallel.</p> <p>When designing your application, keep in mind that DynamoDB does not return items in any particular order. To help parse the response by item, include the primary key values for the items in your request in the <code>ProjectionExpression</code> parameter.</p> <p>If a requested item does not exist, it is not returned in the result. Requests for nonexistent items consume the minimum read capacity units according to the type of read. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#CapacityUnitCalculations">Working with Tables</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     async fn batch_get_item(
         &self,
@@ -5276,6 +6217,12 @@ pub trait DynamoDb {
         &self,
     ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
 
+    /// <p>Describes an existing table export.</p>
+    async fn describe_export(
+        &self,
+        input: DescribeExportInput,
+    ) -> Result<DescribeExportOutput, RusotoError<DescribeExportError>>;
+
     /// <p><p>Returns information about the specified global table.</p> <note> <p>This operation only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables. If you are using global tables <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html">Version 2019.11.21</a> you can use <a href="https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html">DescribeTable</a> instead.</p> </note></p>
     async fn describe_global_table(
         &self,
@@ -5288,7 +6235,16 @@ pub trait DynamoDb {
         input: DescribeGlobalTableSettingsInput,
     ) -> Result<DescribeGlobalTableSettingsOutput, RusotoError<DescribeGlobalTableSettingsError>>;
 
-    /// <p>Returns the current provisioned-capacity limits for your AWS account in a Region, both for the Region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial limits on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given Region. Also, there are per-table limits that apply when you create a table there. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these limits by filing a case at <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those limits imposed by your account so that you have enough time to apply for an increase before you hit a limit.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular Region to obtain your current account limits on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that Region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account limits for that Region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level limits.</p> <p>The per-table limits apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB doesn't let you increase provisioned capacity extremely rapidly. But the only upper limit that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account limits.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>
+    /// <p>Returns information about the status of Kinesis streaming.</p>
+    async fn describe_kinesis_streaming_destination(
+        &self,
+        input: DescribeKinesisStreamingDestinationInput,
+    ) -> Result<
+        DescribeKinesisStreamingDestinationOutput,
+        RusotoError<DescribeKinesisStreamingDestinationError>,
+    >;
+
+    /// <p>Returns the current provisioned-capacity quotas for your AWS account in a Region, both for the Region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial quotas on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given Region. Also, there are per-table quotas that apply when you create a table there. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these quotas by filing a case at <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those quotas imposed by your account so that you have enough time to apply for an increase before you hit a quota.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular Region to obtain your current account quotas on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that Region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account quotas for that Region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level quotas.</p> <p>The per-table quotas apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB doesn't let you increase provisioned capacity extremely rapidly, but the only quota that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account quotas.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>
     async fn describe_limits(
         &self,
     ) -> Result<DescribeLimitsOutput, RusotoError<DescribeLimitsError>>;
@@ -5314,13 +6270,49 @@ pub trait DynamoDb {
         input: DescribeTimeToLiveInput,
     ) -> Result<DescribeTimeToLiveOutput, RusotoError<DescribeTimeToLiveError>>;
 
+    /// <p>Stops replication from the DynamoDB table to the Kinesis data stream. This is done without deleting either of the resources.</p>
+    async fn disable_kinesis_streaming_destination(
+        &self,
+        input: KinesisStreamingDestinationInput,
+    ) -> Result<
+        KinesisStreamingDestinationOutput,
+        RusotoError<DisableKinesisStreamingDestinationError>,
+    >;
+
+    /// <p>Starts table data replication to the specified Kinesis data stream at a timestamp chosen during the enable workflow. If this operation doesn't return results immediately, use DescribeKinesisStreamingDestination to check if streaming to the Kinesis data stream is ACTIVE.</p>
+    async fn enable_kinesis_streaming_destination(
+        &self,
+        input: KinesisStreamingDestinationInput,
+    ) -> Result<
+        KinesisStreamingDestinationOutput,
+        RusotoError<EnableKinesisStreamingDestinationError>,
+    >;
+
+    /// <p> This operation allows you to perform reads and singleton writes on data stored in DynamoDB, using PartiQL. </p>
+    async fn execute_statement(
+        &self,
+        input: ExecuteStatementInput,
+    ) -> Result<ExecuteStatementOutput, RusotoError<ExecuteStatementError>>;
+
+    /// <p> This operation allows you to perform transactional reads or writes on data stored in DynamoDB, using PartiQL. </p>
+    async fn execute_transaction(
+        &self,
+        input: ExecuteTransactionInput,
+    ) -> Result<ExecuteTransactionOutput, RusotoError<ExecuteTransactionError>>;
+
+    /// <p>Exports table data to an S3 bucket. The table must have point in time recovery enabled, and you can export data from any time within the point in time recovery window.</p>
+    async fn export_table_to_point_in_time(
+        &self,
+        input: ExportTableToPointInTimeInput,
+    ) -> Result<ExportTableToPointInTimeOutput, RusotoError<ExportTableToPointInTimeError>>;
+
     /// <p>The <code>GetItem</code> operation returns a set of attributes for the item with the given primary key. If there is no matching item, <code>GetItem</code> does not return any data and there will be no <code>Item</code> element in the response.</p> <p> <code>GetItem</code> provides an eventually consistent read by default. If your application requires a strongly consistent read, set <code>ConsistentRead</code> to <code>true</code>. Although a strongly consistent read might take more time than an eventually consistent read, it always returns the last updated value.</p>
     async fn get_item(
         &self,
         input: GetItemInput,
     ) -> Result<GetItemOutput, RusotoError<GetItemError>>;
 
-    /// <p>List backups associated with an AWS account. To list backups for a given table, specify <code>TableName</code>. <code>ListBackups</code> returns a paginated list of results with at most 1 MB worth of items in a page. You can also specify a limit for the maximum number of entries to be returned in a page. </p> <p>In the request, start time is inclusive, but end time is exclusive. Note that these limits are for the time at which the original backup was requested.</p> <p>You can call <code>ListBackups</code> a maximum of five times per second.</p>
+    /// <p>List backups associated with an AWS account. To list backups for a given table, specify <code>TableName</code>. <code>ListBackups</code> returns a paginated list of results with at most 1 MB worth of items in a page. You can also specify a maximum number of entries to be returned in a page. </p> <p>In the request, start time is inclusive, but end time is exclusive. Note that these boundaries are for the time at which the original backup was requested.</p> <p>You can call <code>ListBackups</code> a maximum of five times per second.</p>
     async fn list_backups(
         &self,
         input: ListBackupsInput,
@@ -5331,6 +6323,12 @@ pub trait DynamoDb {
         &self,
         input: ListContributorInsightsInput,
     ) -> Result<ListContributorInsightsOutput, RusotoError<ListContributorInsightsError>>;
+
+    /// <p>Lists completed exports within the past 90 days.</p>
+    async fn list_exports(
+        &self,
+        input: ListExportsInput,
+    ) -> Result<ListExportsOutput, RusotoError<ListExportsError>>;
 
     /// <p><p>Lists all global tables that have a replica in the specified Region.</p> <note> <p>This operation only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>
     async fn list_global_tables(
@@ -5486,6 +6484,24 @@ impl DynamoDbClient {
 
 #[async_trait]
 impl DynamoDb for DynamoDbClient {
+    /// <p> This operation allows you to perform batch reads and writes on data stored in DynamoDB, using PartiQL. </p>
+    async fn batch_execute_statement(
+        &self,
+        input: BatchExecuteStatementInput,
+    ) -> Result<BatchExecuteStatementOutput, RusotoError<BatchExecuteStatementError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DynamoDB_20120810.BatchExecuteStatement");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, BatchExecuteStatementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchExecuteStatementOutput, _>()
+    }
+
     /// <p>The <code>BatchGetItem</code> operation returns the attributes of one or more items from one or more tables. You identify requested items by primary key.</p> <p>A single operation can retrieve up to 16 MB of data, which can contain as many as 100 items. <code>BatchGetItem</code> returns a partial result if the response size limit is exceeded, the table's provisioned throughput is exceeded, or an internal processing failure occurs. If a partial result is returned, the operation returns a value for <code>UnprocessedKeys</code>. You can use this value to retry the operation starting with the next item to get.</p> <important> <p>If you request more than 100 items, <code>BatchGetItem</code> returns a <code>ValidationException</code> with the message "Too many items requested for the BatchGetItem call."</p> </important> <p>For example, if you ask to retrieve 100 items, but each individual item is 300 KB in size, the system returns 52 items (so as not to exceed the 16 MB limit). It also returns an appropriate <code>UnprocessedKeys</code> value so you can get the next page of results. If desired, your application can include its own logic to assemble the pages of results into one dataset.</p> <p>If <i>none</i> of the items can be processed due to insufficient provisioned throughput on all of the tables in the request, then <code>BatchGetItem</code> returns a <code>ProvisionedThroughputExceededException</code>. If <i>at least one</i> of the items is successfully processed, then <code>BatchGetItem</code> completes successfully, while returning the keys of the unread items in <code>UnprocessedKeys</code>.</p> <important> <p>If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, <i>we strongly recommend that you use an exponential backoff algorithm</i>. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations">Batch Operations and Error Handling</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </important> <p>By default, <code>BatchGetItem</code> performs eventually consistent reads on every table in the request. If you want strongly consistent reads instead, you can set <code>ConsistentRead</code> to <code>true</code> for any or all tables.</p> <p>In order to minimize response latency, <code>BatchGetItem</code> retrieves items in parallel.</p> <p>When designing your application, keep in mind that DynamoDB does not return items in any particular order. To help parse the response by item, include the primary key values for the items in your request in the <code>ProjectionExpression</code> parameter.</p> <p>If a requested item does not exist, it is not returned in the result. Requests for nonexistent items consume the minimum read capacity units according to the type of read. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#CapacityUnitCalculations">Working with Tables</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     async fn batch_get_item(
         &self,
@@ -5709,6 +6725,24 @@ impl DynamoDb for DynamoDbClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeEndpointsResponse, _>()
     }
 
+    /// <p>Describes an existing table export.</p>
+    async fn describe_export(
+        &self,
+        input: DescribeExportInput,
+    ) -> Result<DescribeExportOutput, RusotoError<DescribeExportError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DynamoDB_20120810.DescribeExport");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeExportError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeExportOutput, _>()
+    }
+
     /// <p><p>Returns information about the specified global table.</p> <note> <p>This operation only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables. If you are using global tables <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html">Version 2019.11.21</a> you can use <a href="https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html">DescribeTable</a> instead.</p> </note></p>
     async fn describe_global_table(
         &self,
@@ -5750,7 +6784,35 @@ impl DynamoDb for DynamoDbClient {
             .deserialize::<DescribeGlobalTableSettingsOutput, _>()
     }
 
-    /// <p>Returns the current provisioned-capacity limits for your AWS account in a Region, both for the Region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial limits on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given Region. Also, there are per-table limits that apply when you create a table there. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these limits by filing a case at <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those limits imposed by your account so that you have enough time to apply for an increase before you hit a limit.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular Region to obtain your current account limits on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that Region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account limits for that Region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level limits.</p> <p>The per-table limits apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB doesn't let you increase provisioned capacity extremely rapidly. But the only upper limit that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account limits.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>
+    /// <p>Returns information about the status of Kinesis streaming.</p>
+    async fn describe_kinesis_streaming_destination(
+        &self,
+        input: DescribeKinesisStreamingDestinationInput,
+    ) -> Result<
+        DescribeKinesisStreamingDestinationOutput,
+        RusotoError<DescribeKinesisStreamingDestinationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.DescribeKinesisStreamingDestination",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeKinesisStreamingDestinationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeKinesisStreamingDestinationOutput, _>()
+    }
+
+    /// <p>Returns the current provisioned-capacity quotas for your AWS account in a Region, both for the Region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial quotas on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given Region. Also, there are per-table quotas that apply when you create a table there. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these quotas by filing a case at <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those quotas imposed by your account so that you have enough time to apply for an increase before you hit a quota.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular Region to obtain your current account quotas on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that Region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account quotas for that Region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level quotas.</p> <p>The per-table quotas apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB doesn't let you increase provisioned capacity extremely rapidly, but the only quota that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account quotas.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>
     async fn describe_limits(
         &self,
     ) -> Result<DescribeLimitsOutput, RusotoError<DescribeLimitsError>> {
@@ -5827,6 +6889,117 @@ impl DynamoDb for DynamoDbClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeTimeToLiveOutput, _>()
     }
 
+    /// <p>Stops replication from the DynamoDB table to the Kinesis data stream. This is done without deleting either of the resources.</p>
+    async fn disable_kinesis_streaming_destination(
+        &self,
+        input: KinesisStreamingDestinationInput,
+    ) -> Result<
+        KinesisStreamingDestinationOutput,
+        RusotoError<DisableKinesisStreamingDestinationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.DisableKinesisStreamingDestination",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisableKinesisStreamingDestinationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<KinesisStreamingDestinationOutput, _>()
+    }
+
+    /// <p>Starts table data replication to the specified Kinesis data stream at a timestamp chosen during the enable workflow. If this operation doesn't return results immediately, use DescribeKinesisStreamingDestination to check if streaming to the Kinesis data stream is ACTIVE.</p>
+    async fn enable_kinesis_streaming_destination(
+        &self,
+        input: KinesisStreamingDestinationInput,
+    ) -> Result<
+        KinesisStreamingDestinationOutput,
+        RusotoError<EnableKinesisStreamingDestinationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.EnableKinesisStreamingDestination",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                EnableKinesisStreamingDestinationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<KinesisStreamingDestinationOutput, _>()
+    }
+
+    /// <p> This operation allows you to perform reads and singleton writes on data stored in DynamoDB, using PartiQL. </p>
+    async fn execute_statement(
+        &self,
+        input: ExecuteStatementInput,
+    ) -> Result<ExecuteStatementOutput, RusotoError<ExecuteStatementError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DynamoDB_20120810.ExecuteStatement");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ExecuteStatementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ExecuteStatementOutput, _>()
+    }
+
+    /// <p> This operation allows you to perform transactional reads or writes on data stored in DynamoDB, using PartiQL. </p>
+    async fn execute_transaction(
+        &self,
+        input: ExecuteTransactionInput,
+    ) -> Result<ExecuteTransactionOutput, RusotoError<ExecuteTransactionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DynamoDB_20120810.ExecuteTransaction");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ExecuteTransactionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ExecuteTransactionOutput, _>()
+    }
+
+    /// <p>Exports table data to an S3 bucket. The table must have point in time recovery enabled, and you can export data from any time within the point in time recovery window.</p>
+    async fn export_table_to_point_in_time(
+        &self,
+        input: ExportTableToPointInTimeInput,
+    ) -> Result<ExportTableToPointInTimeOutput, RusotoError<ExportTableToPointInTimeError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DynamoDB_20120810.ExportTableToPointInTime");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ExportTableToPointInTimeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ExportTableToPointInTimeOutput, _>()
+    }
+
     /// <p>The <code>GetItem</code> operation returns a set of attributes for the item with the given primary key. If there is no matching item, <code>GetItem</code> does not return any data and there will be no <code>Item</code> element in the response.</p> <p> <code>GetItem</code> provides an eventually consistent read by default. If your application requires a strongly consistent read, set <code>ConsistentRead</code> to <code>true</code>. Although a strongly consistent read might take more time than an eventually consistent read, it always returns the last updated value.</p>
     async fn get_item(
         &self,
@@ -5845,7 +7018,7 @@ impl DynamoDb for DynamoDbClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetItemOutput, _>()
     }
 
-    /// <p>List backups associated with an AWS account. To list backups for a given table, specify <code>TableName</code>. <code>ListBackups</code> returns a paginated list of results with at most 1 MB worth of items in a page. You can also specify a limit for the maximum number of entries to be returned in a page. </p> <p>In the request, start time is inclusive, but end time is exclusive. Note that these limits are for the time at which the original backup was requested.</p> <p>You can call <code>ListBackups</code> a maximum of five times per second.</p>
+    /// <p>List backups associated with an AWS account. To list backups for a given table, specify <code>TableName</code>. <code>ListBackups</code> returns a paginated list of results with at most 1 MB worth of items in a page. You can also specify a maximum number of entries to be returned in a page. </p> <p>In the request, start time is inclusive, but end time is exclusive. Note that these boundaries are for the time at which the original backup was requested.</p> <p>You can call <code>ListBackups</code> a maximum of five times per second.</p>
     async fn list_backups(
         &self,
         input: ListBackupsInput,
@@ -5880,6 +7053,24 @@ impl DynamoDb for DynamoDbClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ListContributorInsightsOutput, _>()
+    }
+
+    /// <p>Lists completed exports within the past 90 days.</p>
+    async fn list_exports(
+        &self,
+        input: ListExportsInput,
+    ) -> Result<ListExportsOutput, RusotoError<ListExportsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "DynamoDB_20120810.ListExports");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListExportsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListExportsOutput, _>()
     }
 
     /// <p><p>Lists all global tables that have a replica in the specified Region.</p> <note> <p>This operation only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>

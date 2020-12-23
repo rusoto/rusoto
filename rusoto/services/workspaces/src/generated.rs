@@ -82,6 +82,26 @@ pub struct AccountModification {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateConnectionAliasRequest {
+    /// <p>The identifier of the connection alias.</p>
+    #[serde(rename = "AliasId")]
+    pub alias_id: String,
+    /// <p>The identifier of the directory to associate the connection alias with.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateConnectionAliasResult {
+    /// <p>The identifier of the connection alias association. You use the connection identifier in the DNS TXT record when you're configuring your DNS routing policies. </p>
+    #[serde(rename = "ConnectionIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_identifier: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -143,6 +163,65 @@ pub struct ComputeType {
     pub name: Option<String>,
 }
 
+/// <p>Describes a connection alias. Connection aliases are used for cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConnectionAlias {
+    /// <p>The identifier of the connection alias.</p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_id: Option<String>,
+    /// <p>The association status of the connection alias.</p>
+    #[serde(rename = "Associations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<ConnectionAliasAssociation>>,
+    /// <p>The connection string specified for the connection alias. The connection string must be in the form of a fully qualified domain name (FQDN), such as <code>www.example.com</code>.</p>
+    #[serde(rename = "ConnectionString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_string: Option<String>,
+    /// <p>The identifier of the AWS account that owns the connection alias.</p>
+    #[serde(rename = "OwnerAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_account_id: Option<String>,
+    /// <p>The current state of the connection alias.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p>Describes a connection alias association that is used for cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConnectionAliasAssociation {
+    /// <p>The identifier of the AWS account that associated the connection alias with a directory.</p>
+    #[serde(rename = "AssociatedAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub associated_account_id: Option<String>,
+    /// <p>The association status of the connection alias.</p>
+    #[serde(rename = "AssociationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_status: Option<String>,
+    /// <p>The identifier of the connection alias association. You use the connection identifier in the DNS TXT record when you're configuring your DNS routing policies.</p>
+    #[serde(rename = "ConnectionIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_identifier: Option<String>,
+    /// <p>The identifier of the directory associated with a connection alias.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+}
+
+/// <p>Describes the permissions for a connection alias. Connection aliases are used for cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ConnectionAliasPermission {
+    /// <p>Indicates whether the specified AWS account is allowed to associate the connection alias with a directory.</p>
+    #[serde(rename = "AllowAssociation")]
+    pub allow_association: bool,
+    /// <p>The identifier of the AWS account that the connection alias is shared with.</p>
+    #[serde(rename = "SharedAccountId")]
+    pub shared_account_id: String,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyWorkspaceImageRequest {
@@ -172,6 +251,27 @@ pub struct CopyWorkspaceImageResult {
     #[serde(rename = "ImageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionAliasRequest {
+    /// <p><p>A connection string in the form of a fully qualified domain name (FQDN), such as <code>www.example.com</code>.</p> <important> <p>After you create a connection string, it is always associated to your AWS account. You cannot recreate the same connection string with a different account, even if you delete all instances of it from the original account. The connection string is globally reserved for your account.</p> </important></p>
+    #[serde(rename = "ConnectionString")]
+    pub connection_string: String,
+    /// <p>The tags to associate with the connection alias.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateConnectionAliasResult {
+    /// <p>The identifier of the connection alias.</p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -206,10 +306,10 @@ pub struct CreateIpGroupResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
-    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
+    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, IP access control groups, and connection aliases.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags. If you want to add new tags to a set of existing tags, you must submit all of the existing tags along with the new ones.</p>
+    /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -243,7 +343,7 @@ pub struct CreateWorkspacesResult {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultWorkspaceCreationProperties {
-    /// <p>The identifier of any security groups to apply to WorkSpaces when they are created.</p>
+    /// <p>The identifier of the default security group to apply to WorkSpaces when they are created. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces-security-groups.html"> Security Groups for Your WorkSpaces</a>.</p>
     #[serde(rename = "CustomSecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_security_group_id: Option<String>,
@@ -271,6 +371,18 @@ pub struct DefaultWorkspaceCreationProperties {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteConnectionAliasRequest {
+    /// <p>The identifier of the connection alias to delete.</p>
+    #[serde(rename = "AliasId")]
+    pub alias_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteConnectionAliasResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIpGroupRequest {
     /// <p>The identifier of the IP access control group.</p>
     #[serde(rename = "GroupId")]
@@ -284,7 +396,7 @@ pub struct DeleteIpGroupResult {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
-    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
+    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, IP access control groups, and connection aliases.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>The tag keys.</p>
@@ -378,6 +490,73 @@ pub struct DescribeClientPropertiesResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeConnectionAliasPermissionsRequest {
+    /// <p>The identifier of the connection alias.</p>
+    #[serde(rename = "AliasId")]
+    pub alias_id: String,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeConnectionAliasPermissionsResult {
+    /// <p>The identifier of the connection alias.</p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_id: Option<String>,
+    /// <p>The permissions associated with a connection alias.</p>
+    #[serde(rename = "ConnectionAliasPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_alias_permissions: Option<Vec<ConnectionAliasPermission>>,
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeConnectionAliasesRequest {
+    /// <p>The identifiers of the connection aliases to describe.</p>
+    #[serde(rename = "AliasIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_ids: Option<Vec<String>>,
+    /// <p>The maximum number of connection aliases to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The identifier of the directory associated with the connection alias.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeConnectionAliasesResult {
+    /// <p>Information about the specified connection aliases.</p>
+    #[serde(rename = "ConnectionAliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_aliases: Option<Vec<ConnectionAlias>>,
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIpGroupsRequest {
     /// <p>The identifiers of one or more IP access control groups.</p>
     #[serde(rename = "GroupIds")]
@@ -409,7 +588,7 @@ pub struct DescribeIpGroupsResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
-    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
+    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, IP access control groups, and connection aliases.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
@@ -485,11 +664,48 @@ pub struct DescribeWorkspaceDirectoriesResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeWorkspaceImagePermissionsRequest {
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    pub image_id: String,
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeWorkspaceImagePermissionsResult {
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
+    /// <p>The identifiers of the AWS accounts that the image has been shared with.</p>
+    #[serde(rename = "ImagePermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_permissions: Option<Vec<ImagePermission>>,
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceImagesRequest {
     /// <p>The identifier of the image.</p>
     #[serde(rename = "ImageIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<String>>,
+    /// <p>The type (owned or shared) of the image.</p>
+    #[serde(rename = "ImageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_type: Option<String>,
     /// <p>The maximum number of items to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -604,6 +820,18 @@ pub struct DescribeWorkspacesResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateConnectionAliasRequest {
+    /// <p>The identifier of the connection alias to disassociate.</p>
+    #[serde(rename = "AliasId")]
+    pub alias_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateConnectionAliasResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -653,9 +881,23 @@ pub struct FailedWorkspaceChangeRequest {
     pub workspace_id: Option<String>,
 }
 
+/// <p>Describes the AWS accounts that have been granted permission to use a shared image. For more information about sharing images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/share-custom-image.html"> Share or Unshare a Custom WorkSpaces Image</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImagePermission {
+    /// <p>The identifier of the AWS account that an image has been shared with.</p>
+    #[serde(rename = "SharedAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_account_id: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportWorkspaceImageRequest {
+    /// <p><p>If specified, the version of Microsoft Office to subscribe to. Valid only for Windows 10 BYOL images. For more information about subscribing to Office for BYOL images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html"> Bring Your Own Windows Desktop Licenses</a>.</p> <note> <p>Although this parameter is an array, only one item is allowed at this time.</p> </note></p>
+    #[serde(rename = "Applications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub applications: Option<Vec<String>>,
     /// <p>The identifier of the EC2 image.</p>
     #[serde(rename = "Ec2ImageId")]
     pub ec_2_image_id: String,
@@ -665,7 +907,7 @@ pub struct ImportWorkspaceImageRequest {
     /// <p>The name of the WorkSpace image.</p>
     #[serde(rename = "ImageName")]
     pub image_name: String,
-    /// <p>The ingestion process to be used when importing the image.</p>
+    /// <p>The ingestion process to be used when importing the image, depending on which protocol you want to use for your BYOL Workspace image, either PCoIP or WorkSpaces Streaming Protocol (WSP). To use WSP, specify a value that ends in <code>_WSP</code>. To use PCoIP, specify a value that does not end in <code>_WSP</code>. </p> <p>For non-GPU-enabled bundles (bundles other than Graphics or GraphicsPro), specify <code>BYOL_REGULAR</code> or <code>BYOL_REGULAR_WSP</code>, depending on the protocol.</p>
     #[serde(rename = "IngestionProcess")]
     pub ingestion_process: String,
     /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>
@@ -1129,6 +1371,21 @@ pub struct TerminateWorkspacesResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionAliasPermissionRequest {
+    /// <p>The identifier of the connection alias that you want to update permissions for.</p>
+    #[serde(rename = "AliasId")]
+    pub alias_id: String,
+    /// <p>Indicates whether to share or unshare the connection alias with the specified AWS account.</p>
+    #[serde(rename = "ConnectionAliasPermission")]
+    pub connection_alias_permission: ConnectionAliasPermission,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateConnectionAliasPermissionResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRulesOfIpGroupRequest {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -1141,6 +1398,24 @@ pub struct UpdateRulesOfIpGroupRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRulesOfIpGroupResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateWorkspaceImagePermissionRequest {
+    /// <p>The permission to copy the image. This permission can be revoked only after an image has been shared.</p>
+    #[serde(rename = "AllowCopyImage")]
+    pub allow_copy_image: bool,
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    pub image_id: String,
+    /// <p><p>The identifier of the AWS account to share or unshare the image with.</p> <important> <p>Before sharing the image, confirm that you are sharing to the correct AWS account ID.</p> </important></p>
+    #[serde(rename = "SharedAccountId")]
+    pub shared_account_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateWorkspaceImagePermissionResult {}
 
 /// <p>Describes the user storage for a WorkSpace bundle.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1160,7 +1435,7 @@ pub struct Workspace {
     #[serde(rename = "BundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    /// <p>The name of the WorkSpace, as seen by the operating system.</p>
+    /// <p>The name of the WorkSpace, as seen by the operating system. The format of this name varies. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/launch-workspaces-tutorials.html"> Launch a WorkSpace</a>. </p>
     #[serde(rename = "ComputerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub computer_name: Option<String>,
@@ -1188,7 +1463,7 @@ pub struct Workspace {
     #[serde(rename = "RootVolumeEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_volume_encryption_enabled: Option<bool>,
-    /// <p>The operational state of the WorkSpace.</p>
+    /// <p><p>The operational state of the WorkSpace.</p> <note> <p>After a WorkSpace is terminated, the <code>TERMINATED</code> state is returned only briefly before the WorkSpace directory metadata is cleaned up, so this state is rarely returned. To confirm that a WorkSpace is terminated, check for the WorkSpace ID by using <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaces.html"> DescribeWorkSpaces</a>. If the WorkSpace ID isn&#39;t returned, then the WorkSpace has been successfully terminated.</p> </note></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -1323,7 +1598,7 @@ pub struct WorkspaceCreationProperties {
     #[serde(rename = "CustomSecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_security_group_id: Option<String>,
-    /// <p>The default organizational unit (OU) for your WorkSpace directories.</p>
+    /// <p><p>The default organizational unit (OU) for your WorkSpaces directories. This string must be the full Lightweight Directory Access Protocol (LDAP) distinguished name for the target domain and OU. It must be in the form <code>&quot;OU=<i>value</i>,DC=<i>value</i>,DC=<i>value</i>&quot;</code>, where <i>value</i> is any string of characters, and the number of domain components (DCs) is two or more. For example, <code>OU=WorkSpaces_machines,DC=machines,DC=example,DC=com</code>. </p> <important> <ul> <li> <p>To avoid errors, certain characters in the distinguished name must be escaped. For more information, see <a href="https://docs.microsoft.com/previous-versions/windows/desktop/ldap/distinguished-names"> Distinguished Names</a> in the Microsoft documentation.</p> </li> <li> <p>The API doesn&#39;t validate whether the OU exists.</p> </li> </ul> </important></p>
     #[serde(rename = "DefaultOu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_ou: Option<String>,
@@ -1335,6 +1610,10 @@ pub struct WorkspaceCreationProperties {
     #[serde(rename = "EnableMaintenanceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_maintenance_mode: Option<bool>,
+    /// <p><p>Indicates whether Amazon WorkDocs is enabled for your WorkSpaces.</p> <note> <p>If WorkDocs is already enabled for a WorkSpaces directory and you disable it, new WorkSpaces launched in the directory will not have WorkDocs enabled. However, WorkDocs remains enabled for any existing WorkSpaces, unless you either disable users&#39; access to WorkDocs or you delete the WorkDocs site. To disable users&#39; access to WorkDocs, see <a href="https://docs.aws.amazon.com/workdocs/latest/adminguide/inactive-user.html">Disabling Users</a> in the <i>Amazon WorkDocs Administration Guide</i>. To delete a WorkDocs site, see <a href="https://docs.aws.amazon.com/workdocs/latest/adminguide/manage-sites.html">Deleting a Site</a> in the <i>Amazon WorkDocs Administration Guide</i>.</p> <p>If you enable WorkDocs on a directory that already has existing WorkSpaces, the existing WorkSpaces and any new WorkSpaces that are launched in the directory will have WorkDocs enabled.</p> </note></p>
+    #[serde(rename = "EnableWorkDocs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_work_docs: Option<bool>,
     /// <p>Indicates whether users are local administrators of their WorkSpaces.</p>
     #[serde(rename = "UserEnabledAsLocalAdministrator")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1381,7 +1660,7 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "SelfservicePermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selfservice_permissions: Option<SelfservicePermissions>,
-    /// <p>The state of the directory's registration with Amazon WorkSpaces.</p>
+    /// <p>The state of the directory's registration with Amazon WorkSpaces. After a directory is deregistered, the <code>DEREGISTERED</code> state is returned very briefly before the directory metadata is cleaned up, so this state is rarely returned. To confirm that a directory is deregistered, check for the directory ID by using <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceDirectories.html"> DescribeWorkspaceDirectories</a>. If the directory ID isn't returned, then the directory has been successfully deregistered.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -1415,6 +1694,10 @@ pub struct WorkspaceDirectory {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceImage {
+    /// <p>The date when the image was created. If the image has been shared, the AWS account that the image has been shared with sees the original creation date of the image.</p>
+    #[serde(rename = "Created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<f64>,
     /// <p>The description of the image.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1439,6 +1722,10 @@ pub struct WorkspaceImage {
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<OperatingSystem>,
+    /// <p>The identifier of the AWS account that owns the image.</p>
+    #[serde(rename = "OwnerAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_account_id: Option<String>,
     /// <p>Specifies whether the image is running on dedicated hardware. When Bring Your Own License (BYOL) is enabled, this value is set to <code>DEDICATED</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html">Bring Your Own Windows Desktop Images</a>.</p>
     #[serde(rename = "RequiredTenancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1456,7 +1743,7 @@ pub struct WorkspaceProperties {
     #[serde(rename = "ComputeTypeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_type_name: Option<String>,
-    /// <p>The size of the root volume.</p>
+    /// <p>The size of the root volume. For important information about how to modify the size of the root and user volumes, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/modify-workspaces.html">Modify a WorkSpace</a>.</p>
     #[serde(rename = "RootVolumeSizeGib")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_volume_size_gib: Option<i64>,
@@ -1468,7 +1755,7 @@ pub struct WorkspaceProperties {
     #[serde(rename = "RunningModeAutoStopTimeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode_auto_stop_timeout_in_minutes: Option<i64>,
-    /// <p>The size of the user storage.</p>
+    /// <p>The size of the user storage. For important information about how to modify the size of the root and user volumes, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/modify-workspaces.html">Modify a WorkSpace</a>.</p>
     #[serde(rename = "UserVolumeSizeGib")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_volume_size_gib: Option<i64>,
@@ -1530,6 +1817,84 @@ pub struct WorkspacesIpGroup {
     pub user_rules: Option<Vec<IpRuleItem>>,
 }
 
+/// Errors returned by AssociateConnectionAlias
+#[derive(Debug, PartialEq)]
+pub enum AssociateConnectionAliasError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource is associated with a directory.</p>
+    ResourceAssociated(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl AssociateConnectionAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateConnectionAliasError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(AssociateConnectionAliasError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        AssociateConnectionAliasError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(
+                        AssociateConnectionAliasError::InvalidResourceState(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        AssociateConnectionAliasError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ResourceAssociatedException" => {
+                    return RusotoError::Service(AssociateConnectionAliasError::ResourceAssociated(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AssociateConnectionAliasError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateConnectionAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateConnectionAliasError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateConnectionAliasError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConnectionAliasError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConnectionAliasError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConnectionAliasError::ResourceAssociated(ref cause) => write!(f, "{}", cause),
+            AssociateConnectionAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateConnectionAliasError {}
 /// Errors returned by AssociateIpGroups
 #[derive(Debug, PartialEq)]
 pub enum AssociateIpGroupsError {
@@ -1734,6 +2099,76 @@ impl fmt::Display for CopyWorkspaceImageError {
     }
 }
 impl Error for CopyWorkspaceImageError {}
+/// Errors returned by CreateConnectionAlias
+#[derive(Debug, PartialEq)]
+pub enum CreateConnectionAliasError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateConnectionAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionAliasError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateConnectionAliasError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        CreateConnectionAliasError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(CreateConnectionAliasError::InvalidResourceState(
+                        err.msg,
+                    ))
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(CreateConnectionAliasError::OperationNotSupported(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateConnectionAliasError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateConnectionAliasError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateConnectionAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateConnectionAliasError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateConnectionAliasError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            CreateConnectionAliasError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            CreateConnectionAliasError::OperationNotSupported(ref cause) => write!(f, "{}", cause),
+            CreateConnectionAliasError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateConnectionAliasError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateConnectionAliasError {}
 /// Errors returned by CreateIpGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateIpGroupError {
@@ -1874,6 +2309,76 @@ impl fmt::Display for CreateWorkspacesError {
     }
 }
 impl Error for CreateWorkspacesError {}
+/// Errors returned by DeleteConnectionAlias
+#[derive(Debug, PartialEq)]
+pub enum DeleteConnectionAliasError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource is associated with a directory.</p>
+    ResourceAssociated(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteConnectionAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionAliasError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteConnectionAliasError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DeleteConnectionAliasError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(DeleteConnectionAliasError::InvalidResourceState(
+                        err.msg,
+                    ))
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(DeleteConnectionAliasError::OperationNotSupported(
+                        err.msg,
+                    ))
+                }
+                "ResourceAssociatedException" => {
+                    return RusotoError::Service(DeleteConnectionAliasError::ResourceAssociated(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteConnectionAliasError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteConnectionAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteConnectionAliasError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionAliasError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionAliasError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionAliasError::OperationNotSupported(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionAliasError::ResourceAssociated(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteConnectionAliasError {}
 /// Errors returned by DeleteIpGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteIpGroupError {
@@ -2194,6 +2699,124 @@ impl fmt::Display for DescribeClientPropertiesError {
     }
 }
 impl Error for DescribeClientPropertiesError {}
+/// Errors returned by DescribeConnectionAliasPermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeConnectionAliasPermissionsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeConnectionAliasPermissionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConnectionAliasPermissionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeConnectionAliasPermissionsError::AccessDenied(err.msg),
+                    )
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DescribeConnectionAliasPermissionsError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        DescribeConnectionAliasPermissionsError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeConnectionAliasPermissionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeConnectionAliasPermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeConnectionAliasPermissionsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConnectionAliasPermissionsError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConnectionAliasPermissionsError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConnectionAliasPermissionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeConnectionAliasPermissionsError {}
+/// Errors returned by DescribeConnectionAliases
+#[derive(Debug, PartialEq)]
+pub enum DescribeConnectionAliasesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+}
+
+impl DescribeConnectionAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionAliasesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeConnectionAliasesError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DescribeConnectionAliasesError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        DescribeConnectionAliasesError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeConnectionAliasesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeConnectionAliasesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeConnectionAliasesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConnectionAliasesError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeConnectionAliasesError {}
 /// Errors returned by DescribeIpGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeIpGroupsError {
@@ -2332,6 +2955,62 @@ impl fmt::Display for DescribeWorkspaceDirectoriesError {
     }
 }
 impl Error for DescribeWorkspaceDirectoriesError {}
+/// Errors returned by DescribeWorkspaceImagePermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorkspaceImagePermissionsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeWorkspaceImagePermissionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeWorkspaceImagePermissionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeWorkspaceImagePermissionsError::AccessDenied(err.msg),
+                    )
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DescribeWorkspaceImagePermissionsError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeWorkspaceImagePermissionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeWorkspaceImagePermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeWorkspaceImagePermissionsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWorkspaceImagePermissionsError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWorkspaceImagePermissionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeWorkspaceImagePermissionsError {}
 /// Errors returned by DescribeWorkspaceImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspaceImagesError {
@@ -2492,6 +3171,78 @@ impl fmt::Display for DescribeWorkspacesConnectionStatusError {
     }
 }
 impl Error for DescribeWorkspacesConnectionStatusError {}
+/// Errors returned by DisassociateConnectionAlias
+#[derive(Debug, PartialEq)]
+pub enum DisassociateConnectionAliasError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DisassociateConnectionAliasError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateConnectionAliasError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DisassociateConnectionAliasError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DisassociateConnectionAliasError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(
+                        DisassociateConnectionAliasError::InvalidResourceState(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        DisassociateConnectionAliasError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateConnectionAliasError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateConnectionAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateConnectionAliasError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateConnectionAliasError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateConnectionAliasError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateConnectionAliasError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateConnectionAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateConnectionAliasError {}
 /// Errors returned by DisassociateIpGroups
 #[derive(Debug, PartialEq)]
 pub enum DisassociateIpGroupsError {
@@ -2939,6 +3690,8 @@ pub enum ModifyWorkspaceCreationPropertiesError {
     AccessDenied(String),
     /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFound(String),
 }
@@ -2957,6 +3710,11 @@ impl ModifyWorkspaceCreationPropertiesError {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
                         ModifyWorkspaceCreationPropertiesError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        ModifyWorkspaceCreationPropertiesError::OperationNotSupported(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
@@ -2979,6 +3737,9 @@ impl fmt::Display for ModifyWorkspaceCreationPropertiesError {
                 write!(f, "{}", cause)
             }
             ModifyWorkspaceCreationPropertiesError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyWorkspaceCreationPropertiesError::OperationNotSupported(ref cause) => {
                 write!(f, "{}", cause)
             }
             ModifyWorkspaceCreationPropertiesError::ResourceNotFound(ref cause) => {
@@ -3432,6 +4193,100 @@ impl fmt::Display for TerminateWorkspacesError {
     }
 }
 impl Error for TerminateWorkspacesError {}
+/// Errors returned by UpdateConnectionAliasPermission
+#[derive(Debug, PartialEq)]
+pub enum UpdateConnectionAliasPermissionError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource is associated with a directory.</p>
+    ResourceAssociated(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateConnectionAliasPermissionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateConnectionAliasPermissionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        UpdateConnectionAliasPermissionError::AccessDenied(err.msg),
+                    )
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        UpdateConnectionAliasPermissionError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(
+                        UpdateConnectionAliasPermissionError::InvalidResourceState(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        UpdateConnectionAliasPermissionError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ResourceAssociatedException" => {
+                    return RusotoError::Service(
+                        UpdateConnectionAliasPermissionError::ResourceAssociated(err.msg),
+                    )
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateConnectionAliasPermissionError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateConnectionAliasPermissionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateConnectionAliasPermissionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateConnectionAliasPermissionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionAliasPermissionError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateConnectionAliasPermissionError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateConnectionAliasPermissionError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateConnectionAliasPermissionError::ResourceAssociated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateConnectionAliasPermissionError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateConnectionAliasPermissionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateConnectionAliasPermissionError {}
 /// Errors returned by UpdateRulesOfIpGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateRulesOfIpGroupError {
@@ -3494,9 +4349,89 @@ impl fmt::Display for UpdateRulesOfIpGroupError {
     }
 }
 impl Error for UpdateRulesOfIpGroupError {}
+/// Errors returned by UpdateWorkspaceImagePermission
+#[derive(Debug, PartialEq)]
+pub enum UpdateWorkspaceImagePermissionError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+}
+
+impl UpdateWorkspaceImagePermissionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateWorkspaceImagePermissionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateWorkspaceImagePermissionError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        UpdateWorkspaceImagePermissionError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        UpdateWorkspaceImagePermissionError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateWorkspaceImagePermissionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateWorkspaceImagePermissionError::ResourceUnavailable(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateWorkspaceImagePermissionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateWorkspaceImagePermissionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateWorkspaceImagePermissionError::InvalidParameterValues(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateWorkspaceImagePermissionError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateWorkspaceImagePermissionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateWorkspaceImagePermissionError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateWorkspaceImagePermissionError {}
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
 #[async_trait]
 pub trait Workspaces {
+    /// <p><p>Associates the specified connection alias with the specified directory to enable cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </note></p>
+    async fn associate_connection_alias(
+        &self,
+        input: AssociateConnectionAliasRequest,
+    ) -> Result<AssociateConnectionAliasResult, RusotoError<AssociateConnectionAliasError>>;
+
     /// <p>Associates the specified IP access control group with the specified directory.</p>
     async fn associate_ip_groups(
         &self,
@@ -3509,11 +4444,17 @@ pub trait Workspaces {
         input: AuthorizeIpRulesRequest,
     ) -> Result<AuthorizeIpRulesResult, RusotoError<AuthorizeIpRulesError>>;
 
-    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    /// <p><p>Copies the specified image from the specified Region to the current Region. For more information about copying images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/copy-custom-image.html"> Copy a Custom WorkSpaces Image</a>.</p> <note> <p>In the China (Ningxia) Region, you can copy images only within the same Region.</p> <p>In the AWS GovCloud (US-West) Region, to copy images to and from other AWS Regions, contact AWS Support.</p> </note> <important> <p>Before copying a shared image, be sure to verify that it has been shared from the correct AWS account. To determine if an image has been shared and to see the AWS account ID that owns an image, use the <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceImages.html">DescribeWorkSpaceImages</a> and <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceImagePermissions.html">DescribeWorkspaceImagePermissions</a> API operations. </p> </important></p>
     async fn copy_workspace_image(
         &self,
         input: CopyWorkspaceImageRequest,
     ) -> Result<CopyWorkspaceImageResult, RusotoError<CopyWorkspaceImageError>>;
+
+    /// <p>Creates the specified connection alias for use with cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+    async fn create_connection_alias(
+        &self,
+        input: CreateConnectionAliasRequest,
+    ) -> Result<CreateConnectionAliasResult, RusotoError<CreateConnectionAliasError>>;
 
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
     async fn create_ip_group(
@@ -3533,6 +4474,12 @@ pub trait Workspaces {
         input: CreateWorkspacesRequest,
     ) -> Result<CreateWorkspacesResult, RusotoError<CreateWorkspacesError>>;
 
+    /// <p><p>Deletes the specified connection alias. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <important> <p> <b>If you will no longer be using a fully qualified domain name (FQDN) as the registration code for your WorkSpaces users, you must take certain precautions to prevent potential security issues.</b> For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html#cross-region-redirection-security-considerations"> Security Considerations if You Stop Using Cross-Region Redirection</a>.</p> </important> <note> <p>To delete a connection alias that has been shared, the shared account must first disassociate the connection alias from any directories it has been associated with. Then you must unshare the connection alias from the account it has been shared with. You can delete a connection alias only after it is no longer shared with any accounts or associated with any directories.</p> </note></p>
+    async fn delete_connection_alias(
+        &self,
+        input: DeleteConnectionAliasRequest,
+    ) -> Result<DeleteConnectionAliasResult, RusotoError<DeleteConnectionAliasError>>;
+
     /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
     async fn delete_ip_group(
         &self,
@@ -3545,13 +4492,13 @@ pub trait Workspaces {
         input: DeleteTagsRequest,
     ) -> Result<DeleteTagsResult, RusotoError<DeleteTagsError>>;
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and unshare the image if it is shared with other accounts. </p>
     async fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
     ) -> Result<DeleteWorkspaceImageResult, RusotoError<DeleteWorkspaceImageError>>;
 
-    /// <p>Deregisters the specified directory. This operation is asynchronous and returns before the WorkSpace directory is deregistered. If any WorkSpaces are registered to this directory, you must remove them before you can deregister the directory.</p>
+    /// <p><p>Deregisters the specified directory. This operation is asynchronous and returns before the WorkSpace directory is deregistered. If any WorkSpaces are registered to this directory, you must remove them before you can deregister the directory.</p> <note> <p>Simple AD and AD Connector are made available to you free of charge to use with WorkSpaces. If there are no WorkSpaces being used with your Simple AD or AD Connector directory for 30 consecutive days, this directory will be automatically deregistered for use with Amazon WorkSpaces, and you will be charged for this directory as per the <a href="http://aws.amazon.com/directoryservice/pricing/">AWS Directory Services pricing terms</a>.</p> <p>To delete empty directories, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/delete-workspaces-directory.html"> Delete the Directory for Your WorkSpaces</a>. If you delete your Simple AD or AD Connector directory, you can always create a new one when you want to start using WorkSpaces again.</p> </note></p>
     async fn deregister_workspace_directory(
         &self,
         input: DeregisterWorkspaceDirectoryRequest,
@@ -3573,6 +4520,21 @@ pub trait Workspaces {
         &self,
         input: DescribeClientPropertiesRequest,
     ) -> Result<DescribeClientPropertiesResult, RusotoError<DescribeClientPropertiesError>>;
+
+    /// <p>Describes the permissions that the owner of a connection alias has granted to another AWS account for the specified connection alias. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+    async fn describe_connection_alias_permissions(
+        &self,
+        input: DescribeConnectionAliasPermissionsRequest,
+    ) -> Result<
+        DescribeConnectionAliasPermissionsResult,
+        RusotoError<DescribeConnectionAliasPermissionsError>,
+    >;
+
+    /// <p>Retrieves a list that describes the connection aliases used for cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+    async fn describe_connection_aliases(
+        &self,
+        input: DescribeConnectionAliasesRequest,
+    ) -> Result<DescribeConnectionAliasesResult, RusotoError<DescribeConnectionAliasesError>>;
 
     /// <p>Describes one or more of your IP access control groups.</p>
     async fn describe_ip_groups(
@@ -3597,6 +4559,15 @@ pub trait Workspaces {
         &self,
         input: DescribeWorkspaceDirectoriesRequest,
     ) -> Result<DescribeWorkspaceDirectoriesResult, RusotoError<DescribeWorkspaceDirectoriesError>>;
+
+    /// <p>Describes the permissions that the owner of an image has granted to other AWS accounts for an image.</p>
+    async fn describe_workspace_image_permissions(
+        &self,
+        input: DescribeWorkspaceImagePermissionsRequest,
+    ) -> Result<
+        DescribeWorkspaceImagePermissionsResult,
+        RusotoError<DescribeWorkspaceImagePermissionsError>,
+    >;
 
     /// <p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>
     async fn describe_workspace_images(
@@ -3625,19 +4596,25 @@ pub trait Workspaces {
         RusotoError<DescribeWorkspacesConnectionStatusError>,
     >;
 
+    /// <p><p>Disassociates a connection alias from a directory. Disassociating a connection alias disables cross-Region redirection between two directories in different AWS Regions. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </note></p>
+    async fn disassociate_connection_alias(
+        &self,
+        input: DisassociateConnectionAliasRequest,
+    ) -> Result<DisassociateConnectionAliasResult, RusotoError<DisassociateConnectionAliasError>>;
+
     /// <p>Disassociates the specified IP access control group from the specified directory.</p>
     async fn disassociate_ip_groups(
         &self,
         input: DisassociateIpGroupsRequest,
     ) -> Result<DisassociateIpGroupsResult, RusotoError<DisassociateIpGroupsError>>;
 
-    /// <p>Imports the specified Windows 7 or Windows 10 Bring Your Own License (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
+    /// <p>Imports the specified Windows 10 Bring Your Own License (BYOL) image into Amazon WorkSpaces. The image must be an already licensed Amazon EC2 image that is in your AWS account, and you must own the image. For more information about creating BYOL images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html"> Bring Your Own Windows Desktop Licenses</a>.</p>
     async fn import_workspace_image(
         &self,
         input: ImportWorkspaceImageRequest,
     ) -> Result<ImportWorkspaceImageResult, RusotoError<ImportWorkspaceImageError>>;
 
-    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable Bring Your Own License (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
+    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable Bring Your Own License (BYOL). </p> <p>This operation can be run only by AWS accounts that are enabled for BYOL. If your account isn't enabled for BYOL, you'll receive an <code>AccessDeniedException</code> error.</p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
     async fn list_available_management_cidr_ranges(
         &self,
         input: ListAvailableManagementCidrRangesRequest,
@@ -3688,7 +4665,7 @@ pub trait Workspaces {
         RusotoError<ModifyWorkspaceCreationPropertiesError>,
     >;
 
-    /// <p>Modifies the specified WorkSpace properties.</p>
+    /// <p>Modifies the specified WorkSpace properties. For important information about how to modify the size of the root and user volumes, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/modify-workspaces.html"> Modify a WorkSpace</a>. </p>
     async fn modify_workspace_properties(
         &self,
         input: ModifyWorkspacePropertiesRequest,
@@ -3706,7 +4683,7 @@ pub trait Workspaces {
         input: RebootWorkspacesRequest,
     ) -> Result<RebootWorkspacesResult, RusotoError<RebootWorkspacesError>>;
 
-    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, <code>UNHEALTHY</code>, or <code>STOPPED</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
+    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, <code>UNHEALTHY</code>, <code>STOPPED</code>, or <code>REBOOTING</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     async fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,
@@ -3742,17 +4719,35 @@ pub trait Workspaces {
         input: StopWorkspacesRequest,
     ) -> Result<StopWorkspacesResult, RusotoError<StopWorkspacesError>>;
 
-    /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
+    /// <p><p>Terminates the specified WorkSpaces.</p> <important> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user&#39;s data is destroyed. If you need to archive any user data, contact AWS Support before terminating the WorkSpace.</p> </important> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated. After a WorkSpace is terminated, the <code>TERMINATED</code> state is returned only briefly before the WorkSpace directory metadata is cleaned up, so this state is rarely returned. To confirm that a WorkSpace is terminated, check for the WorkSpace ID by using <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaces.html"> DescribeWorkSpaces</a>. If the WorkSpace ID isn&#39;t returned, then the WorkSpace has been successfully terminated.</p> <note> <p>Simple AD and AD Connector are made available to you free of charge to use with WorkSpaces. If there are no WorkSpaces being used with your Simple AD or AD Connector directory for 30 consecutive days, this directory will be automatically deregistered for use with Amazon WorkSpaces, and you will be charged for this directory as per the <a href="http://aws.amazon.com/directoryservice/pricing/">AWS Directory Services pricing terms</a>.</p> <p>To delete empty directories, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/delete-workspaces-directory.html"> Delete the Directory for Your WorkSpaces</a>. If you delete your Simple AD or AD Connector directory, you can always create a new one when you want to start using WorkSpaces again.</p> </note></p>
     async fn terminate_workspaces(
         &self,
         input: TerminateWorkspacesRequest,
     ) -> Result<TerminateWorkspacesResult, RusotoError<TerminateWorkspacesError>>;
+
+    /// <p><p>Shares or unshares a connection alias with one account by specifying whether that account has permission to associate the connection alias with a directory. If the association permission is granted, the connection alias is shared with that account. If the association permission is revoked, the connection alias is unshared with the account. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <ul> <li> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </li> <li> <p>To delete a connection alias that has been shared, the shared account must first disassociate the connection alias from any directories it has been associated with. Then you must unshare the connection alias from the account it has been shared with. You can delete a connection alias only after it is no longer shared with any accounts or associated with any directories.</p> </li> </ul> </note></p>
+    async fn update_connection_alias_permission(
+        &self,
+        input: UpdateConnectionAliasPermissionRequest,
+    ) -> Result<
+        UpdateConnectionAliasPermissionResult,
+        RusotoError<UpdateConnectionAliasPermissionError>,
+    >;
 
     /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
     async fn update_rules_of_ip_group(
         &self,
         input: UpdateRulesOfIpGroupRequest,
     ) -> Result<UpdateRulesOfIpGroupResult, RusotoError<UpdateRulesOfIpGroupError>>;
+
+    /// <p><p>Shares or unshares an image with one account in the same AWS Region by specifying whether that account has permission to copy the image. If the copy image permission is granted, the image is shared with that account. If the copy image permission is revoked, the image is unshared with the account.</p> <p>After an image has been shared, the recipient account can copy the image to other AWS Regions as needed.</p> <note> <p>In the China (Ningxia) Region, you can copy images only within the same Region.</p> <p>In the AWS GovCloud (US-West) Region, to copy images to and from other AWS Regions, contact AWS Support.</p> </note> <p>For more information about sharing images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/share-custom-image.html"> Share or Unshare a Custom WorkSpaces Image</a>.</p> <note> <ul> <li> <p>To delete an image that has been shared, you must unshare the image before you delete it.</p> </li> <li> <p>Sharing Bring Your Own License (BYOL) images across AWS accounts isn&#39;t supported at this time in the AWS GovCloud (US-West) Region. To share BYOL images across accounts in the AWS GovCloud (US-West) Region, contact AWS Support.</p> </li> </ul> </note></p>
+    async fn update_workspace_image_permission(
+        &self,
+        input: UpdateWorkspaceImagePermissionRequest,
+    ) -> Result<
+        UpdateWorkspaceImagePermissionResult,
+        RusotoError<UpdateWorkspaceImagePermissionError>,
+    >;
 }
 /// A client for the Amazon WorkSpaces API.
 #[derive(Clone)]
@@ -3794,6 +4789,25 @@ impl WorkspacesClient {
 
 #[async_trait]
 impl Workspaces for WorkspacesClient {
+    /// <p><p>Associates the specified connection alias with the specified directory to enable cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </note></p>
+    async fn associate_connection_alias(
+        &self,
+        input: AssociateConnectionAliasRequest,
+    ) -> Result<AssociateConnectionAliasResult, RusotoError<AssociateConnectionAliasError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkspacesService.AssociateConnectionAlias");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AssociateConnectionAliasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateConnectionAliasResult, _>()
+    }
+
     /// <p>Associates the specified IP access control group with the specified directory.</p>
     async fn associate_ip_groups(
         &self,
@@ -3830,7 +4844,7 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AuthorizeIpRulesResult, _>()
     }
 
-    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    /// <p><p>Copies the specified image from the specified Region to the current Region. For more information about copying images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/copy-custom-image.html"> Copy a Custom WorkSpaces Image</a>.</p> <note> <p>In the China (Ningxia) Region, you can copy images only within the same Region.</p> <p>In the AWS GovCloud (US-West) Region, to copy images to and from other AWS Regions, contact AWS Support.</p> </note> <important> <p>Before copying a shared image, be sure to verify that it has been shared from the correct AWS account. To determine if an image has been shared and to see the AWS account ID that owns an image, use the <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceImages.html">DescribeWorkSpaceImages</a> and <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceImagePermissions.html">DescribeWorkspaceImagePermissions</a> API operations. </p> </important></p>
     async fn copy_workspace_image(
         &self,
         input: CopyWorkspaceImageRequest,
@@ -3846,6 +4860,24 @@ impl Workspaces for WorkspacesClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CopyWorkspaceImageResult, _>()
+    }
+
+    /// <p>Creates the specified connection alias for use with cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+    async fn create_connection_alias(
+        &self,
+        input: CreateConnectionAliasRequest,
+    ) -> Result<CreateConnectionAliasResult, RusotoError<CreateConnectionAliasError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkspacesService.CreateConnectionAlias");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateConnectionAliasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionAliasResult, _>()
     }
 
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
@@ -3902,6 +4934,24 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkspacesResult, _>()
     }
 
+    /// <p><p>Deletes the specified connection alias. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <important> <p> <b>If you will no longer be using a fully qualified domain name (FQDN) as the registration code for your WorkSpaces users, you must take certain precautions to prevent potential security issues.</b> For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html#cross-region-redirection-security-considerations"> Security Considerations if You Stop Using Cross-Region Redirection</a>.</p> </important> <note> <p>To delete a connection alias that has been shared, the shared account must first disassociate the connection alias from any directories it has been associated with. Then you must unshare the connection alias from the account it has been shared with. You can delete a connection alias only after it is no longer shared with any accounts or associated with any directories.</p> </note></p>
+    async fn delete_connection_alias(
+        &self,
+        input: DeleteConnectionAliasRequest,
+    ) -> Result<DeleteConnectionAliasResult, RusotoError<DeleteConnectionAliasError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkspacesService.DeleteConnectionAlias");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteConnectionAliasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionAliasResult, _>()
+    }
+
     /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
     async fn delete_ip_group(
         &self,
@@ -3938,7 +4988,7 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsResult, _>()
     }
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and unshare the image if it is shared with other accounts. </p>
     async fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
@@ -3956,7 +5006,7 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkspaceImageResult, _>()
     }
 
-    /// <p>Deregisters the specified directory. This operation is asynchronous and returns before the WorkSpace directory is deregistered. If any WorkSpaces are registered to this directory, you must remove them before you can deregister the directory.</p>
+    /// <p><p>Deregisters the specified directory. This operation is asynchronous and returns before the WorkSpace directory is deregistered. If any WorkSpaces are registered to this directory, you must remove them before you can deregister the directory.</p> <note> <p>Simple AD and AD Connector are made available to you free of charge to use with WorkSpaces. If there are no WorkSpaces being used with your Simple AD or AD Connector directory for 30 consecutive days, this directory will be automatically deregistered for use with Amazon WorkSpaces, and you will be charged for this directory as per the <a href="http://aws.amazon.com/directoryservice/pricing/">AWS Directory Services pricing terms</a>.</p> <p>To delete empty directories, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/delete-workspaces-directory.html"> Delete the Directory for Your WorkSpaces</a>. If you delete your Simple AD or AD Connector directory, you can always create a new one when you want to start using WorkSpaces again.</p> </note></p>
     async fn deregister_workspace_directory(
         &self,
         input: DeregisterWorkspaceDirectoryRequest,
@@ -4037,6 +5087,56 @@ impl Workspaces for WorkspacesClient {
             .deserialize::<DescribeClientPropertiesResult, _>()
     }
 
+    /// <p>Describes the permissions that the owner of a connection alias has granted to another AWS account for the specified connection alias. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+    async fn describe_connection_alias_permissions(
+        &self,
+        input: DescribeConnectionAliasPermissionsRequest,
+    ) -> Result<
+        DescribeConnectionAliasPermissionsResult,
+        RusotoError<DescribeConnectionAliasPermissionsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DescribeConnectionAliasPermissions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConnectionAliasPermissionsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConnectionAliasPermissionsResult, _>()
+    }
+
+    /// <p>Retrieves a list that describes the connection aliases used for cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
+    async fn describe_connection_aliases(
+        &self,
+        input: DescribeConnectionAliasesRequest,
+    ) -> Result<DescribeConnectionAliasesResult, RusotoError<DescribeConnectionAliasesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DescribeConnectionAliases",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeConnectionAliasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConnectionAliasesResult, _>()
+    }
+
     /// <p>Describes one or more of your IP access control groups.</p>
     async fn describe_ip_groups(
         &self,
@@ -4113,6 +5213,34 @@ impl Workspaces for WorkspacesClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DescribeWorkspaceDirectoriesResult, _>()
+    }
+
+    /// <p>Describes the permissions that the owner of an image has granted to other AWS accounts for an image.</p>
+    async fn describe_workspace_image_permissions(
+        &self,
+        input: DescribeWorkspaceImagePermissionsRequest,
+    ) -> Result<
+        DescribeWorkspaceImagePermissionsResult,
+        RusotoError<DescribeWorkspaceImagePermissionsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DescribeWorkspaceImagePermissions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeWorkspaceImagePermissionsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeWorkspaceImagePermissionsResult, _>()
     }
 
     /// <p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>
@@ -4203,6 +5331,29 @@ impl Workspaces for WorkspacesClient {
             .deserialize::<DescribeWorkspacesConnectionStatusResult, _>()
     }
 
+    /// <p><p>Disassociates a connection alias from a directory. Disassociating a connection alias disables cross-Region redirection between two directories in different AWS Regions. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </note></p>
+    async fn disassociate_connection_alias(
+        &self,
+        input: DisassociateConnectionAliasRequest,
+    ) -> Result<DisassociateConnectionAliasResult, RusotoError<DisassociateConnectionAliasError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DisassociateConnectionAlias",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DisassociateConnectionAliasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateConnectionAliasResult, _>()
+    }
+
     /// <p>Disassociates the specified IP access control group from the specified directory.</p>
     async fn disassociate_ip_groups(
         &self,
@@ -4221,7 +5372,7 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DisassociateIpGroupsResult, _>()
     }
 
-    /// <p>Imports the specified Windows 7 or Windows 10 Bring Your Own License (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
+    /// <p>Imports the specified Windows 10 Bring Your Own License (BYOL) image into Amazon WorkSpaces. The image must be an already licensed Amazon EC2 image that is in your AWS account, and you must own the image. For more information about creating BYOL images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html"> Bring Your Own Windows Desktop Licenses</a>.</p>
     async fn import_workspace_image(
         &self,
         input: ImportWorkspaceImageRequest,
@@ -4239,7 +5390,7 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ImportWorkspaceImageResult, _>()
     }
 
-    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable Bring Your Own License (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
+    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable Bring Your Own License (BYOL). </p> <p>This operation can be run only by AWS accounts that are enabled for BYOL. If your account isn't enabled for BYOL, you'll receive an <code>AccessDeniedException</code> error.</p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
     async fn list_available_management_cidr_ranges(
         &self,
         input: ListAvailableManagementCidrRangesRequest,
@@ -4398,7 +5549,7 @@ impl Workspaces for WorkspacesClient {
             .deserialize::<ModifyWorkspaceCreationPropertiesResult, _>()
     }
 
-    /// <p>Modifies the specified WorkSpace properties.</p>
+    /// <p>Modifies the specified WorkSpace properties. For important information about how to modify the size of the root and user volumes, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/modify-workspaces.html"> Modify a WorkSpace</a>. </p>
     async fn modify_workspace_properties(
         &self,
         input: ModifyWorkspacePropertiesRequest,
@@ -4456,7 +5607,7 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<RebootWorkspacesResult, _>()
     }
 
-    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, <code>UNHEALTHY</code>, or <code>STOPPED</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
+    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, <code>UNHEALTHY</code>, <code>STOPPED</code>, or <code>REBOOTING</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     async fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,
@@ -4569,7 +5720,7 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<StopWorkspacesResult, _>()
     }
 
-    /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
+    /// <p><p>Terminates the specified WorkSpaces.</p> <important> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user&#39;s data is destroyed. If you need to archive any user data, contact AWS Support before terminating the WorkSpace.</p> </important> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated. After a WorkSpace is terminated, the <code>TERMINATED</code> state is returned only briefly before the WorkSpace directory metadata is cleaned up, so this state is rarely returned. To confirm that a WorkSpace is terminated, check for the WorkSpace ID by using <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaces.html"> DescribeWorkSpaces</a>. If the WorkSpace ID isn&#39;t returned, then the WorkSpace has been successfully terminated.</p> <note> <p>Simple AD and AD Connector are made available to you free of charge to use with WorkSpaces. If there are no WorkSpaces being used with your Simple AD or AD Connector directory for 30 consecutive days, this directory will be automatically deregistered for use with Amazon WorkSpaces, and you will be charged for this directory as per the <a href="http://aws.amazon.com/directoryservice/pricing/">AWS Directory Services pricing terms</a>.</p> <p>To delete empty directories, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/delete-workspaces-directory.html"> Delete the Directory for Your WorkSpaces</a>. If you delete your Simple AD or AD Connector directory, you can always create a new one when you want to start using WorkSpaces again.</p> </note></p>
     async fn terminate_workspaces(
         &self,
         input: TerminateWorkspacesRequest,
@@ -4585,6 +5736,31 @@ impl Workspaces for WorkspacesClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TerminateWorkspacesResult, _>()
+    }
+
+    /// <p><p>Shares or unshares a connection alias with one account by specifying whether that account has permission to associate the connection alias with a directory. If the association permission is granted, the connection alias is shared with that account. If the association permission is revoked, the connection alias is unshared with the account. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <ul> <li> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </li> <li> <p>To delete a connection alias that has been shared, the shared account must first disassociate the connection alias from any directories it has been associated with. Then you must unshare the connection alias from the account it has been shared with. You can delete a connection alias only after it is no longer shared with any accounts or associated with any directories.</p> </li> </ul> </note></p>
+    async fn update_connection_alias_permission(
+        &self,
+        input: UpdateConnectionAliasPermissionRequest,
+    ) -> Result<
+        UpdateConnectionAliasPermissionResult,
+        RusotoError<UpdateConnectionAliasPermissionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.UpdateConnectionAliasPermission",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateConnectionAliasPermissionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateConnectionAliasPermissionResult, _>()
     }
 
     /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
@@ -4603,5 +5779,30 @@ impl Workspaces for WorkspacesClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateRulesOfIpGroupResult, _>()
+    }
+
+    /// <p><p>Shares or unshares an image with one account in the same AWS Region by specifying whether that account has permission to copy the image. If the copy image permission is granted, the image is shared with that account. If the copy image permission is revoked, the image is unshared with the account.</p> <p>After an image has been shared, the recipient account can copy the image to other AWS Regions as needed.</p> <note> <p>In the China (Ningxia) Region, you can copy images only within the same Region.</p> <p>In the AWS GovCloud (US-West) Region, to copy images to and from other AWS Regions, contact AWS Support.</p> </note> <p>For more information about sharing images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/share-custom-image.html"> Share or Unshare a Custom WorkSpaces Image</a>.</p> <note> <ul> <li> <p>To delete an image that has been shared, you must unshare the image before you delete it.</p> </li> <li> <p>Sharing Bring Your Own License (BYOL) images across AWS accounts isn&#39;t supported at this time in the AWS GovCloud (US-West) Region. To share BYOL images across accounts in the AWS GovCloud (US-West) Region, contact AWS Support.</p> </li> </ul> </note></p>
+    async fn update_workspace_image_permission(
+        &self,
+        input: UpdateWorkspaceImagePermissionRequest,
+    ) -> Result<
+        UpdateWorkspaceImagePermissionResult,
+        RusotoError<UpdateWorkspaceImagePermissionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.UpdateWorkspaceImagePermission",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateWorkspaceImagePermissionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateWorkspaceImagePermissionResult, _>()
     }
 }

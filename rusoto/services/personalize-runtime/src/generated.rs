@@ -34,7 +34,15 @@ pub struct GetPersonalizedRankingRequest {
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of items (itemId's) to rank. If an item was not included in the training dataset, the item is appended to the end of the reranked list. The maximum is 500.</p>
+    /// <p>The Amazon Resource Name (ARN) of a filter you created to include items or exclude items from recommendations for a given user. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filter.html">Filtering Recommendations</a>.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
+    /// <p>The values to use when filtering recommendations. For each placeholder parameter in your filter expression, provide the parameter name (in matching case) as a key and the filter value(s) as the corresponding value. Separate multiple values for one parameter with a comma. </p> <p>For filter expressions that use an <code>INCLUDE</code> element to include items, you must provide values for all parameters that are defined in the expression. For filters with expressions that use an <code>EXCLUDE</code> element to exclude items, you can omit the <code>filter-values</code>.In this case, Amazon Personalize doesn't use that portion of the expression to filter recommendations.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filter.html">Filtering Recommendations</a>.</p>
+    #[serde(rename = "filterValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_values: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of items (by <code>itemId</code>) to rank. If an item was not included in the training dataset, the item is appended to the end of the reranked list. The maximum is 500.</p>
     #[serde(rename = "inputList")]
     pub input_list: Vec<String>,
     /// <p>The user for which you want the campaign to provide a personalized ranking.</p>
@@ -49,6 +57,10 @@ pub struct GetPersonalizedRankingResponse {
     #[serde(rename = "personalizedRanking")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub personalized_ranking: Option<Vec<PredictedItem>>,
+    /// <p>The ID of the recommendation.</p>
+    #[serde(rename = "recommendationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recommendation_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -61,10 +73,14 @@ pub struct GetRecommendationsRequest {
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The ARN of the filter to apply to the returned recommendations. For more information, see Using Filters with Amazon Personalize.</p>
+    /// <p>The ARN of the filter to apply to the returned recommendations. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filter.html">Filtering Recommendations</a>.</p> <p>When using this parameter, be sure the filter resource is <code>ACTIVE</code>.</p>
     #[serde(rename = "filterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_arn: Option<String>,
+    /// <p>The values to use when filtering recommendations. For each placeholder parameter in your filter expression, provide the parameter name (in matching case) as a key and the filter value(s) as the corresponding value. Separate multiple values for one parameter with a comma. </p> <p>For filter expressions that use an <code>INCLUDE</code> element to include items, you must provide values for all parameters that are defined in the expression. For filters with expressions that use an <code>EXCLUDE</code> element to exclude items, you can omit the <code>filter-values</code>.In this case, Amazon Personalize doesn't use that portion of the expression to filter recommendations.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filter.html">Filtering Recommendations</a>.</p>
+    #[serde(rename = "filterValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_values: Option<::std::collections::HashMap<String, String>>,
     /// <p>The item ID to provide recommendations for.</p> <p>Required for <code>RELATED_ITEMS</code> recipe type.</p>
     #[serde(rename = "itemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,6 +102,10 @@ pub struct GetRecommendationsResponse {
     #[serde(rename = "itemList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_list: Option<Vec<PredictedItem>>,
+    /// <p>The ID of the recommendation.</p>
+    #[serde(rename = "recommendationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recommendation_id: Option<String>,
 }
 
 /// <p>An object that identifies an item.</p> <p>The and APIs return a list of <code>PredictedItem</code>s.</p>

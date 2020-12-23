@@ -138,7 +138,7 @@ pub struct AddTagsInput {
     /// <p>The Amazon EMR resource identifier to which tags will be added. This value must be a cluster identifier.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>A list of tags to associate with a cluster and propagate to EC2 instances. Tags are user-defined key/value pairs that consist of a required key string with a maximum of 128 characters, and an optional value string with a maximum of 256 characters.</p>
+    /// <p>A list of tags to associate with a cluster and propagate to EC2 instances. Tags are user-defined key-value pairs that consist of a required key string with a maximum of 128 characters, and an optional value string with a maximum of 256 characters.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -230,7 +230,7 @@ pub struct AutoScalingPolicyStatus {
 /// <p>A configuration for Amazon EMR block public access. When <code>BlockPublicSecurityGroupRules</code> is set to <code>true</code>, Amazon EMR prevents cluster creation if one of the cluster's security groups has a rule that allows inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlockPublicAccessConfiguration {
-    /// <p>Indicates whether EMR block public access is enabled (<code>true</code>) or disabled (<code>false</code>). By default, the value is <code>false</code> for accounts that have created EMR clusters before July 2019. For accounts created after this, the default is <code>true</code>.</p>
+    /// <p>Indicates whether Amazon EMR block public access is enabled (<code>true</code>) or disabled (<code>false</code>). By default, the value is <code>false</code> for accounts that have created EMR clusters before July 2019. For accounts created after this, the default is <code>true</code>.</p>
     #[serde(rename = "BlockPublicSecurityGroupRules")]
     pub block_public_security_group_rules: bool,
     /// <p>Specifies ports and port ranges that are permitted to have security group rules that allow inbound traffic from all public sources. For example, if Port 23 (Telnet) is specified for <code>PermittedPublicSecurityGroupRuleRanges</code>, Amazon EMR allows cluster creation if a security group associated with the cluster has a rule that allows inbound traffic on Port 23 from IPv4 0.0.0.0/0 or IPv6 port ::/0 as the source.</p> <p>By default, Port 22, which is used for SSH access to the cluster EC2 instances, is in the list of <code>PermittedPublicSecurityGroupRuleRanges</code>.</p>
@@ -294,10 +294,10 @@ pub struct CancelStepsInfo {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelStepsInput {
-    /// <p>The <code>ClusterID</code> for which specified steps will be canceled. Use <a>RunJobFlow</a> and <a>ListClusters</a> to get ClusterIDs. </p>
+    /// <p>The <code>ClusterID</code> for the specified steps that will be canceled. Use <a>RunJobFlow</a> and <a>ListClusters</a> to get ClusterIDs. </p>
     #[serde(rename = "ClusterId")]
     pub cluster_id: String,
-    /// <p>The option to choose for cancelling <code>RUNNING</code> steps. By default, the value is <code>SEND_INTERRUPT</code>.</p>
+    /// <p>The option to choose to cancel <code>RUNNING</code> steps. By default, the value is <code>SEND_INTERRUPT</code>.</p>
     #[serde(rename = "StepCancellationOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_cancellation_option: Option<String>,
@@ -381,7 +381,7 @@ pub struct Cluster {
     #[serde(rename = "CustomAmiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_ami_id: Option<String>,
-    /// <p>The size, in GiB, of the EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later.</p>
+    /// <p>The size, in GiB, of the Amazon EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later.</p>
     #[serde(rename = "EbsRootVolumeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ebs_root_volume_size: Option<i64>,
@@ -397,7 +397,7 @@ pub struct Cluster {
     #[serde(rename = "InstanceCollectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_collection_type: Option<String>,
-    /// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>EMR Management Guide</i>.</p>
+    /// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>Amazon EMR Management Guide</i>.</p>
     #[serde(rename = "KerberosAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kerberos_attributes: Option<KerberosAttributes>,
@@ -425,6 +425,10 @@ pub struct Cluster {
     #[serde(rename = "OutpostArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outpost_arn: Option<String>,
+    /// <p>Placement group configured for an Amazon EMR cluster.</p>
+    #[serde(rename = "PlacementGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_groups: Option<Vec<PlacementGroupConfig>>,
     /// <p>The Amazon EMR release label, which determines the version of open-source application packages installed on the cluster. Release labels are in the form <code>emr-x.x.x</code>, where x.x.x is an Amazon EMR release version such as <code>emr-5.14.0</code>. For more information about Amazon EMR release versions and included application versions and features, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/">https://docs.aws.amazon.com/emr/latest/ReleaseGuide/</a>. The release label applies only to Amazon EMR releases version 4.0 and later. Earlier versions use <code>AmiVersion</code>.</p>
     #[serde(rename = "ReleaseLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -441,7 +445,7 @@ pub struct Cluster {
     #[serde(rename = "RunningAmiVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_ami_version: Option<String>,
-    /// <p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR blacklists and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> is available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
+    /// <p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR adds nodes to a deny list and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> is available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
     #[serde(rename = "ScaleDownBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale_down_behavior: Option<String>,
@@ -549,7 +553,7 @@ pub struct ClusterTimeline {
     #[serde(rename = "EndDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date_time: Option<f64>,
-    /// <p>The date and time when the cluster was ready to execute steps.</p>
+    /// <p>The date and time when the cluster was ready to run steps.</p>
     #[serde(rename = "ReadyDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ready_date_time: Option<f64>,
@@ -576,18 +580,18 @@ pub struct Command {
 /// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster can not be above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ComputeLimits {
-    /// <p> The upper boundary of EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p> The upper boundary of EC2 units. It is measured through vCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
     #[serde(rename = "MaximumCapacityUnits")]
     pub maximum_capacity_units: i64,
-    /// <p> The upper boundary of EC2 units for core node type in a cluster. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The core units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between core and task nodes. </p>
+    /// <p> The upper boundary of EC2 units for core node type in a cluster. It is measured through vCPU cores or instances for instance groups and measured through units for instance fleets. The core units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between core and task nodes. </p>
     #[serde(rename = "MaximumCoreCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_core_capacity_units: Option<i64>,
-    /// <p> The upper boundary of On-Demand EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The On-Demand units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between On-Demand and Spot instances. </p>
+    /// <p> The upper boundary of On-Demand EC2 units. It is measured through vCPU cores or instances for instance groups and measured through units for instance fleets. The On-Demand units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between On-Demand and Spot Instances. </p>
     #[serde(rename = "MaximumOnDemandCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_on_demand_capacity_units: Option<i64>,
-    /// <p> The lower boundary of EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p> The lower boundary of EC2 units. It is measured through vCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
     #[serde(rename = "MinimumCapacityUnits")]
     pub minimum_capacity_units: i64,
     /// <p> The unit type used for specifying a managed scaling policy. </p>
@@ -636,6 +640,82 @@ pub struct CreateSecurityConfigurationOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateStudioInput {
+    /// <p>Specifies whether the Studio authenticates users using single sign-on (SSO) or IAM. Amazon EMR Studio currently only supports SSO authentication.</p>
+    #[serde(rename = "AuthMode")]
+    pub auth_mode: String,
+    /// <p>The default Amazon S3 location to back up EMR Studio Workspaces and notebook files. A Studio user can select an alternative Amazon S3 location when creating a Workspace.</p>
+    #[serde(rename = "DefaultS3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_s3_location: Option<String>,
+    /// <p>A detailed description of the Studio.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ID of the Amazon EMR Studio Engine security group. The Engine security group allows inbound network traffic from the Workspace security group, and it must be in the same VPC specified by <code>VpcId</code>.</p>
+    #[serde(rename = "EngineSecurityGroupId")]
+    pub engine_security_group_id: String,
+    /// <p>A descriptive name for the Amazon EMR Studio.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The IAM role that will be assumed by the Amazon EMR Studio. The service role provides a way for Amazon EMR Studio to interoperate with other AWS services.</p>
+    #[serde(rename = "ServiceRole")]
+    pub service_role: String,
+    /// <p>A list of subnet IDs to associate with the Studio. The subnets must belong to the VPC specified by <code>VpcId</code>. Studio users can create a Workspace in any of the specified subnets.</p>
+    #[serde(rename = "SubnetIds")]
+    pub subnet_ids: Vec<String>,
+    /// <p>A list of tags to associate with the Studio. Tags are user-defined key-value pairs that consist of a required key string with a maximum of 128 characters, and an optional value string with a maximum of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The IAM user role that will be assumed by users and groups logged in to a Studio. The permissions attached to this IAM role can be scoped down for each user or group using session policies.</p>
+    #[serde(rename = "UserRole")]
+    pub user_role: String,
+    /// <p>The ID of the Amazon Virtual Private Cloud (Amazon VPC) to associate with the Studio.</p>
+    #[serde(rename = "VpcId")]
+    pub vpc_id: String,
+    /// <p>The ID of the Amazon EMR Studio Workspace security group. The Workspace security group allows outbound network traffic to resources in the Engine security group, and it must be in the same VPC specified by <code>VpcId</code>.</p>
+    #[serde(rename = "WorkspaceSecurityGroupId")]
+    pub workspace_security_group_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateStudioOutput {
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio_id: Option<String>,
+    /// <p>The unique Studio access URL.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateStudioSessionMappingInput {
+    /// <p>The globally unique identifier (GUID) of the user or group from the AWS SSO Identity Store. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserId</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-GroupId">GroupId</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_id: Option<String>,
+    /// <p>The name of the user or group. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserName</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName">DisplayName</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_name: Option<String>,
+    /// <p>Specifies whether the identity to map to the Studio is a user or a group.</p>
+    #[serde(rename = "IdentityType")]
+    pub identity_type: String,
+    /// <p>The Amazon Resource Name (ARN) for the session policy that will be applied to the user or group. Session policies refine Studio user permissions without the need to use multiple IAM user roles.</p>
+    #[serde(rename = "SessionPolicyArn")]
+    pub session_policy_arn: String,
+    /// <p>The ID of the Amazon EMR Studio to which the user or group will be mapped.</p>
+    #[serde(rename = "StudioId")]
+    pub studio_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityConfigurationInput {
     /// <p>The name of the security configuration.</p>
     #[serde(rename = "Name")]
@@ -645,6 +725,33 @@ pub struct DeleteSecurityConfigurationInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecurityConfigurationOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteStudioInput {
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    pub studio_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteStudioSessionMappingInput {
+    /// <p>The globally unique identifier (GUID) of the user or group to remove from the Amazon EMR Studio. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserId</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-GroupId">GroupId</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_id: Option<String>,
+    /// <p>The name of the user name or group to remove from the Studio. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserName</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName">DisplayName</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_name: Option<String>,
+    /// <p>Specifies whether the identity to delete from the Studio is a user or a group.</p>
+    #[serde(rename = "IdentityType")]
+    pub identity_type: String,
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    pub studio_id: String,
+}
 
 /// <p>This input determines which cluster to describe.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -699,6 +806,23 @@ pub struct DescribeJobFlowsOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeNotebookExecutionInput {
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    pub notebook_execution_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeNotebookExecutionOutput {
+    /// <p>Properties of the notebook execution.</p>
+    #[serde(rename = "NotebookExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution: Option<NotebookExecution>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityConfigurationInput {
     /// <p>The name of the security configuration.</p>
     #[serde(rename = "Name")]
@@ -742,6 +866,23 @@ pub struct DescribeStepOutput {
     #[serde(rename = "Step")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step: Option<Step>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeStudioInput {
+    /// <p>The Amazon EMR Studio ID.</p>
+    #[serde(rename = "StudioId")]
+    pub studio_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeStudioOutput {
+    /// <p>The Amazon EMR Studio details.</p>
+    #[serde(rename = "Studio")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio: Option<Studio>,
 }
 
 /// <p>Configuration of requested EBS block device associated with the instance group.</p>
@@ -849,6 +990,22 @@ pub struct Ec2InstanceAttributes {
     pub service_access_security_group: Option<String>,
 }
 
+/// <p>Specifies the execution engine (cluster) to run the notebook and perform the notebook execution, for example, an EMR cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ExecutionEngineConfig {
+    /// <p>The unique identifier of the execution engine. For an EMR cluster, this is the cluster ID.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>An optional unique ID of an EC2 security group to associate with the master instance of the EMR cluster for this notebook execution. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html">Specifying EC2 Security Groups for EMR Notebooks</a> in the <i>EMR Management Guide</i>.</p>
+    #[serde(rename = "MasterInstanceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_instance_security_group_id: Option<String>,
+    /// <p>The type of execution engine. A value of <code>EMR</code> specifies an EMR cluster.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>The details of the step failure. The service attempts to detect the root cause for many common failures.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -857,7 +1014,7 @@ pub struct FailureDetails {
     #[serde(rename = "LogFile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_file: Option<String>,
-    /// <p>The descriptive message including the error the EMR service has identified as the cause of step failure. This is text from an error log that describes the root cause of the failure.</p>
+    /// <p>The descriptive message including the error the Amazon EMR service has identified as the cause of step failure. This is text from an error log that describes the root cause of the failure.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
@@ -885,7 +1042,7 @@ pub struct GetBlockPublicAccessConfigurationOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetManagedScalingPolicyInput {
-    /// <p> Specifies the ID of the cluster for which the managed scaling policy will be fetched. </p>
+    /// <p>Specifies the ID of the cluster for which the managed scaling policy will be fetched. </p>
     #[serde(rename = "ClusterId")]
     pub cluster_id: String,
 }
@@ -893,10 +1050,38 @@ pub struct GetManagedScalingPolicyInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetManagedScalingPolicyOutput {
-    /// <p> Specifies the managed scaling policy that is attached to an Amazon EMR cluster. </p>
+    /// <p>Specifies the managed scaling policy that is attached to an Amazon EMR cluster. </p>
     #[serde(rename = "ManagedScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub managed_scaling_policy: Option<ManagedScalingPolicy>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetStudioSessionMappingInput {
+    /// <p>The globally unique identifier (GUID) of the user or group. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserId</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-GroupId">GroupId</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_id: Option<String>,
+    /// <p>The name of the user or group to fetch. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserName</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName">DisplayName</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_name: Option<String>,
+    /// <p>Specifies whether the identity to fetch is a user or a group.</p>
+    #[serde(rename = "IdentityType")]
+    pub identity_type: String,
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    pub studio_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetStudioSessionMappingOutput {
+    /// <p>The session mapping details for the specified Amazon EMR Studio and identity, including session policy ARN and creation time.</p>
+    #[serde(rename = "SessionMapping")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_mapping: Option<SessionMappingDetail>,
 }
 
 /// <p>A job flow step consisting of a JAR file whose main function will be executed. The main function submits a job for Hadoop to execute and waits for the job to finish or fail.</p>
@@ -935,7 +1120,7 @@ pub struct HadoopStepConfig {
     #[serde(rename = "MainClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub main_class: Option<String>,
-    /// <p>The list of Java properties that are set when the step runs. You can use these properties to pass key value pairs to your main function.</p>
+    /// <p>The list of Java properties that are set when the step runs. You can use these properties to pass key-value pairs to your main function.</p>
     #[serde(rename = "Properties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<::std::collections::HashMap<String, String>>,
@@ -995,7 +1180,7 @@ pub struct Instance {
     pub status: Option<InstanceStatus>,
 }
 
-/// <p><p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
+/// <p><p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot Instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceFleet {
@@ -1031,7 +1216,7 @@ pub struct InstanceFleet {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<InstanceFleetStatus>,
-    /// <p><p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedOnDemandCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
+    /// <p><p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand Instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand Instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand Instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedOnDemandCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only Spot Instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
     #[serde(rename = "TargetOnDemandCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_on_demand_capacity: Option<i64>,
@@ -1060,11 +1245,11 @@ pub struct InstanceFleetConfig {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
+    /// <p><p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand Instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand Instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand Instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only Spot Instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
     #[serde(rename = "TargetOnDemandCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_on_demand_capacity: Option<i64>,
-    /// <p><p>The target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only On-Demand instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
+    /// <p><p>The target capacity of Spot units for the instance fleet, which determines how many Spot Instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot Instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot Instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only On-Demand Instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
     #[serde(rename = "TargetSpotCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_spot_capacity: Option<i64>,
@@ -1087,14 +1272,14 @@ pub struct InstanceFleetModifyConfig {
     pub target_spot_capacity: Option<i64>,
 }
 
-/// <p><p>The launch specification for Spot instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand and Spot instance allocation strategies are available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+/// <p><p>The launch specification for Spot Instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand and Spot Instance allocation strategies are available in Amazon EMR version 5.12.1 and later.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceFleetProvisioningSpecifications {
-    /// <p><p> The launch specification for On-Demand instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+    /// <p><p> The launch specification for On-Demand Instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand Instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
     #[serde(rename = "OnDemandSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_demand_specification: Option<OnDemandProvisioningSpecification>,
-    /// <p>The launch specification for Spot instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p>
+    /// <p>The launch specification for Spot Instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p>
     #[serde(rename = "SpotSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spot_specification: Option<SpotProvisioningSpecification>,
@@ -1158,7 +1343,7 @@ pub struct InstanceGroup {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicyDescription>,
-    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
+    /// <p>The bid price for each EC2 Spot Instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1232,7 +1417,7 @@ pub struct InstanceGroupConfig {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicy>,
-    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
+    /// <p>The bid price for each EC2 Spot Instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1267,7 +1452,7 @@ pub struct InstanceGroupConfig {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroupDetail {
-    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
+    /// <p>The bid price for each EC2 Spot Instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1334,7 +1519,7 @@ pub struct InstanceGroupModifyConfig {
     #[serde(rename = "InstanceCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_count: Option<i64>,
-    /// <p>Unique ID of the instance group to expand or shrink.</p>
+    /// <p>Unique ID of the instance group to modify.</p>
     #[serde(rename = "InstanceGroupId")]
     pub instance_group_id: String,
     /// <p>Policy for customizing shrink operations.</p>
@@ -1460,15 +1645,15 @@ pub struct InstanceTimeline {
     pub ready_date_time: Option<f64>,
 }
 
-/// <p><p>An instance type configuration for each instance type in an instance fleet, which determines the EC2 instances Amazon EMR attempts to provision to fulfill On-Demand and Spot target capacities. There can be a maximum of 5 instance type configurations in a fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
+/// <p><p>An instance type configuration for each instance type in an instance fleet, which determines the EC2 instances Amazon EMR attempts to provision to fulfill On-Demand and Spot target capacities. There can be a maximum of five instance type configurations in a fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceTypeConfig {
-    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%. </p>
+    /// <p>The bid price for each EC2 Spot Instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%. </p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
-    /// <p>The bid price, as a percentage of On-Demand price, for each EC2 Spot instance as defined by <code>InstanceType</code>. Expressed as a number (for example, 20 specifies 20%). If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
+    /// <p>The bid price, as a percentage of On-Demand price, for each EC2 Spot Instance as defined by <code>InstanceType</code>. Expressed as a number (for example, 20 specifies 20%). If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPriceAsPercentageOfOnDemandPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price_as_percentage_of_on_demand_price: Option<f64>,
@@ -1476,7 +1661,7 @@ pub struct InstanceTypeConfig {
     #[serde(rename = "Configurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations: Option<Vec<Configuration>>,
-    /// <p>The configuration of Amazon Elastic Block Storage (EBS) attached to each instance as defined by <code>InstanceType</code>. </p>
+    /// <p>The configuration of Amazon Elastic Block Storage (Amazon EBS) attached to each instance as defined by <code>InstanceType</code>. </p>
     #[serde(rename = "EbsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ebs_configuration: Option<EbsConfiguration>,
@@ -1493,11 +1678,11 @@ pub struct InstanceTypeConfig {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceTypeSpecification {
-    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD.</p>
+    /// <p>The bid price for each EC2 Spot Instance type as defined by <code>InstanceType</code>. Expressed in USD.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
-    /// <p>The bid price, as a percentage of On-Demand price, for each EC2 Spot instance as defined by <code>InstanceType</code>. Expressed as a number (for example, 20 specifies 20%).</p>
+    /// <p>The bid price, as a percentage of On-Demand price, for each EC2 Spot Instance as defined by <code>InstanceType</code>. Expressed as a number (for example, 20 specifies 20%).</p>
     #[serde(rename = "BidPriceAsPercentageOfOnDemandPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price_as_percentage_of_on_demand_price: Option<f64>,
@@ -1505,7 +1690,7 @@ pub struct InstanceTypeSpecification {
     #[serde(rename = "Configurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations: Option<Vec<Configuration>>,
-    /// <p>The configuration of Amazon Elastic Block Storage (EBS) attached to each instance as defined by <code>InstanceType</code>.</p>
+    /// <p>The configuration of Amazon Elastic Block Storage (Amazon EBS) attached to each instance as defined by <code>InstanceType</code>.</p>
     #[serde(rename = "EbsBlockDevices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ebs_block_devices: Option<Vec<EbsBlockDevice>>,
@@ -1563,11 +1748,11 @@ pub struct JobFlowDetail {
     /// <p>The name of the job flow.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR blacklists and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
+    /// <p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR adds nodes to a deny list and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
     #[serde(rename = "ScaleDownBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale_down_behavior: Option<String>,
-    /// <p>The IAM role that will be assumed by the Amazon EMR service to access AWS resources on your behalf.</p>
+    /// <p>The IAM role that is assumed by the Amazon EMR service to access AWS resources on your behalf.</p>
     #[serde(rename = "ServiceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
@@ -1575,7 +1760,7 @@ pub struct JobFlowDetail {
     #[serde(rename = "Steps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub steps: Option<Vec<StepDetail>>,
-    /// <p>A list of strings set by third party software when the job flow is launched. If you are not using third party software to manage the job flow this value is empty.</p>
+    /// <p>A list of strings set by third-party software when the job flow is launched. If you are not using third-party software to manage the job flow, this value is empty.</p>
     #[serde(rename = "SupportedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_products: Option<Vec<String>>,
@@ -1613,7 +1798,7 @@ pub struct JobFlowExecutionStatusDetail {
     pub state: String,
 }
 
-/// <p>A description of the Amazon EC2 instance on which the cluster (job flow) runs. A valid JobFlowInstancesConfig must contain either InstanceGroups or InstanceFleets, which is the recommended configuration. They cannot be used together. You may also have MasterInstanceType, SlaveInstanceType, and InstanceCount (all three must be present), but we don't recommend this configuration.</p>
+/// <p>A description of the Amazon EC2 instance on which the cluster (job flow) runs. A valid JobFlowInstancesConfig must contain either InstanceGroups or InstanceFleets. They cannot be used together. You may also have MasterInstanceType, SlaveInstanceType, and InstanceCount (all three must be present), but we don't recommend this configuration.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JobFlowInstancesConfig {
@@ -1625,7 +1810,7 @@ pub struct JobFlowInstancesConfig {
     #[serde(rename = "AdditionalSlaveSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_slave_security_groups: Option<Vec<String>>,
-    /// <p>The name of the EC2 key pair that can be used to ssh to the master node as the user called "hadoop."</p>
+    /// <p>The name of the EC2 key pair that can be used to connect to the master node using SSH as the user called "hadoop."</p>
     #[serde(rename = "Ec2KeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_key_name: Option<String>,
@@ -1645,7 +1830,7 @@ pub struct JobFlowInstancesConfig {
     #[serde(rename = "EmrManagedSlaveSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emr_managed_slave_security_group: Option<String>,
-    /// <p>Applies only to Amazon EMR release versions earlier than 4.0. The Hadoop version for the cluster. Valid inputs are "0.18" (deprecated), "0.20" (deprecated), "0.20.205" (deprecated), "1.0.3", "2.2.0", or "2.4.0". If you do not set this value, the default of 0.18 is used, unless the <code>AmiVersion</code> parameter is set in the RunJobFlow call, in which case the default version of Hadoop for that AMI version is used.</p>
+    /// <p>Applies only to Amazon EMR release versions earlier than 4.0. The Hadoop version for the cluster. Valid inputs are "0.18" (no longer maintained), "0.20" (no longer maintained), "0.20.205" (no longer maintained), "1.0.3", "2.2.0", or "2.4.0". If you do not set this value, the default of 0.18 is used, unless the <code>AmiVersion</code> parameter is set in the RunJobFlow call, in which case the default version of Hadoop for that AMI version is used.</p>
     #[serde(rename = "HadoopVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hadoop_version: Option<String>,
@@ -1691,7 +1876,7 @@ pub struct JobFlowInstancesConfig {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobFlowInstancesDetail {
-    /// <p>The name of an Amazon EC2 key pair that can be used to ssh to the master node.</p>
+    /// <p>The name of an Amazon EC2 key pair that can be used to connect to the master node using SSH.</p>
     #[serde(rename = "Ec2KeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_key_name: Option<String>,
@@ -1725,7 +1910,7 @@ pub struct JobFlowInstancesDetail {
     #[serde(rename = "MasterPublicDnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_public_dns_name: Option<String>,
-    /// <p>An approximation of the cost of the cluster, represented in m1.small/hours. This value is incremented one time for every hour that an m1.small runs. Larger instances are weighted more, so an Amazon EC2 instance that is roughly four times more expensive would result in the normalized instance hours being incremented by four. This result is only an approximation and does not reflect the actual billing rate.</p>
+    /// <p>An approximation of the cost of the cluster, represented in m1.small/hours. This value is increased one time for every hour that an m1.small instance runs. Larger instances are weighted more heavily, so an Amazon EC2 instance that is roughly four times more expensive would result in the normalized instance hours being increased incrementally four times. This result is only an approximation and does not reflect the actual billing rate.</p>
     #[serde(rename = "NormalizedInstanceHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub normalized_instance_hours: Option<i64>,
@@ -1742,7 +1927,7 @@ pub struct JobFlowInstancesDetail {
     pub termination_protected: Option<bool>,
 }
 
-/// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>EMR Management Guide</i>.</p>
+/// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>Amazon EMR Management Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KerberosAttributes {
     /// <p>The Active Directory password for <code>ADDomainJoinUser</code>.</p>
@@ -1765,10 +1950,10 @@ pub struct KerberosAttributes {
     pub realm: String,
 }
 
-/// <p>A key value pair.</p>
+/// <p>A key-value pair.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KeyValue {
-    /// <p>The unique identifier of a key value pair.</p>
+    /// <p>The unique identifier of a key-value pair.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
@@ -1942,6 +2127,44 @@ pub struct ListInstancesOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListNotebookExecutionsInput {
+    /// <p>The unique ID of the editor associated with the notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub editor_id: Option<String>,
+    /// <p>The beginning of time range filter for listing notebook executions. The default is the timestamp of 30 days ago.</p>
+    #[serde(rename = "From")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from: Option<f64>,
+    /// <p>The pagination token, returned by a previous <code>ListNotebookExecutions</code> call, that indicates the start of the list for this <code>ListNotebookExecutions</code> call.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p><p>The status filter for listing notebook executions.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The end of time range filter for listing notebook executions. The default is the current timestamp.</p>
+    #[serde(rename = "To")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub to: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListNotebookExecutionsOutput {
+    /// <p>A pagination token that a subsequent <code>ListNotebookExecutions</code> can use to determine the next set of results to retrieve.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>A list of notebook executions.</p>
+    #[serde(rename = "NotebookExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_executions: Option<Vec<NotebookExecutionSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityConfigurationsInput {
     /// <p>The pagination token that indicates the set of results to retrieve.</p>
     #[serde(rename = "Marker")]
@@ -1997,10 +2220,62 @@ pub struct ListStepsOutput {
     pub steps: Option<Vec<StepSummary>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListStudioSessionMappingsInput {
+    /// <p>Specifies whether to return session mappings for users or groups. If not specified, the results include session mapping details for both users and groups.</p>
+    #[serde(rename = "IdentityType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_type: Option<String>,
+    /// <p>The pagination token that indicates the set of results to retrieve.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListStudioSessionMappingsOutput {
+    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>A list of session mapping summary objects. Each object includes session mapping details such as creation time, identity type (user or group), and Studio ID.</p>
+    #[serde(rename = "SessionMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_mappings: Option<Vec<SessionMappingSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListStudiosInput {
+    /// <p>The pagination token that indicates the set of results to retrieve.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListStudiosOutput {
+    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The list of Studio summary objects.</p>
+    #[serde(rename = "Studios")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studios: Option<Vec<StudioSummary>>,
+}
+
 /// <p> Managed scaling policy for an Amazon EMR cluster. The policy specifies the limits for resources that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ManagedScalingPolicy {
-    /// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster is not allowed to go above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p>The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster is not allowed to go above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration.</p>
     #[serde(rename = "ComputeLimits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_limits: Option<ComputeLimits>,
@@ -2065,12 +2340,112 @@ pub struct ModifyInstanceGroupsInput {
     pub instance_groups: Option<Vec<InstanceGroupModifyConfig>>,
 }
 
-/// <p><p> The launch specification for On-Demand instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+/// <p>A notebook execution. An execution is a specific instance that an EMR Notebook is run using the <code>StartNotebookExecution</code> action.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NotebookExecution {
+    /// <p>The Amazon Resource Name (ARN) of the notebook execution.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The unique identifier of the EMR Notebook that is used for the notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub editor_id: Option<String>,
+    /// <p>The timestamp when notebook execution ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The execution engine, such as an EMR cluster, used to run the EMR notebook and perform the notebook execution.</p>
+    #[serde(rename = "ExecutionEngine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_engine: Option<ExecutionEngineConfig>,
+    /// <p>The reason for the latest status change of the notebook execution.</p>
+    #[serde(rename = "LastStateChangeReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_state_change_reason: Option<String>,
+    /// <p>The unique identifier of a notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_id: Option<String>,
+    /// <p>A name for the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_name: Option<String>,
+    /// <p>The unique identifier of the EC2 security group associated with the EMR Notebook instance. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html">Specifying EC2 Security Groups for EMR Notebooks</a> in the <i>EMR Management Guide</i>.</p>
+    #[serde(rename = "NotebookInstanceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_instance_security_group_id: Option<String>,
+    /// <p>Input parameters in JSON format passed to the EMR Notebook at runtime for execution.</p>
+    #[serde(rename = "NotebookParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_params: Option<String>,
+    /// <p>The location of the notebook execution's output file in Amazon S3.</p>
+    #[serde(rename = "OutputNotebookURI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_notebook_uri: Option<String>,
+    /// <p>The timestamp when notebook execution started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>The status of the notebook execution.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A list of tags associated with a notebook execution. Tags are user-defined key-value pairs that consist of a required key string with a maximum of 128 characters and an optional value string with a maximum of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NotebookExecutionSummary {
+    /// <p>The unique identifier of the editor associated with the notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub editor_id: Option<String>,
+    /// <p>The timestamp when notebook execution started.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_id: Option<String>,
+    /// <p>The name of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_name: Option<String>,
+    /// <p>The timestamp when notebook execution started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>The status of the notebook execution.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p><p> The launch specification for On-Demand Instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand Instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnDemandProvisioningSpecification {
-    /// <p> Specifies the strategy to use in launching On-Demand instance fleets. Currently, the only option is lowest-price (the default), which launches the lowest price first. </p>
+    /// <p> Specifies the strategy to use in launching On-Demand Instance fleets. Currently, the only option is lowest-price (the default), which launches the lowest price first. </p>
     #[serde(rename = "AllocationStrategy")]
     pub allocation_strategy: String,
+}
+
+/// <p>Placement group configuration for an Amazon EMR cluster. The configuration specifies the placement strategy that can be applied to instance roles during cluster creation.</p> <p>To use this configuration, consider attaching managed policy AmazonElasticMapReducePlacementGroupPolicy to the EMR role.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PlacementGroupConfig {
+    /// <p>Role of the instance in the cluster.</p> <p>Starting with Amazon EMR version 5.23.0, the only supported instance role is <code>MASTER</code>.</p>
+    #[serde(rename = "InstanceRole")]
+    pub instance_role: String,
+    /// <p>EC2 Placement Group strategy associated with instance role.</p> <p>Starting with Amazon EMR version 5.23.0, the only supported placement strategy is <code>SPREAD</code> for the <code>MASTER</code> instance role.</p>
+    #[serde(rename = "PlacementStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_strategy: Option<String>,
 }
 
 /// <p>The Amazon EC2 Availability Zone configuration of the cluster (job flow).</p>
@@ -2148,10 +2523,10 @@ pub struct PutBlockPublicAccessConfigurationOutput {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutManagedScalingPolicyInput {
-    /// <p> Specifies the ID of an EMR cluster where the managed scaling policy is attached. </p>
+    /// <p>Specifies the ID of an EMR cluster where the managed scaling policy is attached. </p>
     #[serde(rename = "ClusterId")]
     pub cluster_id: String,
-    /// <p> Specifies the constraints for the managed scaling policy. </p>
+    /// <p>Specifies the constraints for the managed scaling policy. </p>
     #[serde(rename = "ManagedScalingPolicy")]
     pub managed_scaling_policy: ManagedScalingPolicy,
 }
@@ -2236,7 +2611,7 @@ pub struct RunJobFlowInput {
     #[serde(rename = "CustomAmiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_ami_id: Option<String>,
-    /// <p>The size, in GiB, of the EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later.</p>
+    /// <p>The size, in GiB, of the Amazon EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later.</p>
     #[serde(rename = "EbsRootVolumeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ebs_root_volume_size: Option<i64>,
@@ -2247,11 +2622,11 @@ pub struct RunJobFlowInput {
     #[serde(rename = "JobFlowRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_flow_role: Option<String>,
-    /// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>EMR Management Guide</i>.</p>
+    /// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>Amazon EMR Management Guide</i>.</p>
     #[serde(rename = "KerberosAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kerberos_attributes: Option<KerberosAttributes>,
-    /// <p>The AWS KMS customer master key (CMK) used for encrypting log files. If a value is not provided, the logs will remain encrypted by AES-256. This attribute is only available with EMR version 5.30.0 and later, excluding EMR 6.0.0.</p>
+    /// <p>The AWS KMS customer master key (CMK) used for encrypting log files. If a value is not provided, the logs remain encrypted by AES-256. This attribute is only available with Amazon EMR version 5.30.0 and later, excluding Amazon EMR 6.0.0.</p>
     #[serde(rename = "LogEncryptionKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_encryption_kms_key_id: Option<String>,
@@ -2270,6 +2645,10 @@ pub struct RunJobFlowInput {
     #[serde(rename = "NewSupportedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_supported_products: Option<Vec<SupportedProductConfig>>,
+    /// <p>The specified placement group configuration for an Amazon EMR cluster.</p>
+    #[serde(rename = "PlacementGroupConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_group_configs: Option<Vec<PlacementGroupConfig>>,
     /// <p>The Amazon EMR release label, which determines the version of open-source application packages installed on the cluster. Release labels are in the form <code>emr-x.x.x</code>, where x.x.x is an Amazon EMR release version such as <code>emr-5.14.0</code>. For more information about Amazon EMR release versions and included application versions and features, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/">https://docs.aws.amazon.com/emr/latest/ReleaseGuide/</a>. The release label applies only to Amazon EMR releases version 4.0 and later. Earlier versions use <code>AmiVersion</code>.</p>
     #[serde(rename = "ReleaseLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2278,7 +2657,7 @@ pub struct RunJobFlowInput {
     #[serde(rename = "RepoUpgradeOnBoot")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repo_upgrade_on_boot: Option<String>,
-    /// <p>Specifies the way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR blacklists and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
+    /// <p>Specifies the way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR adds nodes to a deny list and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
     #[serde(rename = "ScaleDownBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale_down_behavior: Option<String>,
@@ -2401,6 +2780,70 @@ pub struct SecurityConfigurationSummary {
     pub name: Option<String>,
 }
 
+/// <p>Details for an Amazon EMR Studio session mapping including creation time, user or group ID, Studio ID, and so on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SessionMappingDetail {
+    /// <p>The time the session mapping was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The globally unique identifier (GUID) of the user or group.</p>
+    #[serde(rename = "IdentityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_id: Option<String>,
+    /// <p>The name of the user or group. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserName</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName">DisplayName</a> in the <i>AWS SSO Identity Store API Reference</i>.</p>
+    #[serde(rename = "IdentityName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_name: Option<String>,
+    /// <p>Specifies whether the identity mapped to the Studio is a user or a group.</p>
+    #[serde(rename = "IdentityType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_type: Option<String>,
+    /// <p>The time the session mapping was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the session policy associated with the user or group.</p>
+    #[serde(rename = "SessionPolicyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_policy_arn: Option<String>,
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio_id: Option<String>,
+}
+
+/// <p>Details for an Amazon EMR Studio session mapping. The details do not include the time the session mapping was last modified.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SessionMappingSummary {
+    /// <p>The time the session mapping was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The globally unique identifier (GUID) of the user or group from the AWS SSO Identity Store.</p>
+    #[serde(rename = "IdentityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_id: Option<String>,
+    /// <p>The name of the user or group. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserName</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName">DisplayName</a> in the <i>AWS SSO Identity Store API Reference</i>.</p>
+    #[serde(rename = "IdentityName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_name: Option<String>,
+    /// <p>Specifies whether the identity mapped to the Studio is a user or a group.</p>
+    #[serde(rename = "IdentityType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the session policy associated with the user or group.</p>
+    #[serde(rename = "SessionPolicyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_policy_arn: Option<String>,
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio_id: Option<String>,
+}
+
 /// <p> The input argument to the <a>TerminationProtection</a> operation. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2454,23 +2897,65 @@ pub struct SimpleScalingPolicyConfiguration {
     pub scaling_adjustment: i64,
 }
 
-/// <p><p>The launch specification for Spot instances in the instance fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. Spot instance allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+/// <p><p>The launch specification for Spot Instances in the instance fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. Spot Instance allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpotProvisioningSpecification {
-    /// <p> Specifies the strategy to use in launching Spot instance fleets. Currently, the only option is capacity-optimized (the default), which launches instances from Spot instance pools with optimal capacity for the number of instances that are launching. </p>
+    /// <p> Specifies the strategy to use in launching Spot Instance fleets. Currently, the only option is capacity-optimized (the default), which launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching. </p>
     #[serde(rename = "AllocationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocation_strategy: Option<String>,
-    /// <p>The defined duration for Spot instances (also known as Spot blocks) in minutes. When specified, the Spot instance does not terminate before the defined duration expires, and defined duration pricing for Spot instances applies. Valid values are 60, 120, 180, 240, 300, or 360. The duration period starts as soon as a Spot instance receives its instance ID. At the end of the duration, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates. </p>
+    /// <p>The defined duration for Spot Instances (also known as Spot blocks) in minutes. When specified, the Spot Instance does not terminate before the defined duration expires, and defined duration pricing for Spot instances applies. Valid values are 60, 120, 180, 240, 300, or 360. The duration period starts as soon as a Spot Instance receives its instance ID. At the end of the duration, Amazon EC2 marks the Spot Instance for termination and provides a Spot Instance termination notice, which gives the instance a two-minute warning before it terminates. </p>
     #[serde(rename = "BlockDurationMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_duration_minutes: Option<i64>,
-    /// <p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired; that is, when all Spot instances could not be provisioned within the Spot provisioning timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>
+    /// <p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired; that is, when all Spot Instances could not be provisioned within the Spot provisioning timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot Instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>
     #[serde(rename = "TimeoutAction")]
     pub timeout_action: String,
-    /// <p>The spot provisioning timeout period in minutes. If Spot instances are not provisioned within this time period, the <code>TimeOutAction</code> is taken. Minimum value is 5 and maximum value is 1440. The timeout applies only during initial provisioning, when the cluster is first created.</p>
+    /// <p>The spot provisioning timeout period in minutes. If Spot Instances are not provisioned within this time period, the <code>TimeOutAction</code> is taken. Minimum value is 5 and maximum value is 1440. The timeout applies only during initial provisioning, when the cluster is first created.</p>
     #[serde(rename = "TimeoutDurationMinutes")]
     pub timeout_duration_minutes: i64,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartNotebookExecutionInput {
+    /// <p>The unique identifier of the EMR Notebook to use for notebook execution.</p>
+    #[serde(rename = "EditorId")]
+    pub editor_id: String,
+    /// <p>Specifies the execution engine (cluster) that runs the notebook execution.</p>
+    #[serde(rename = "ExecutionEngine")]
+    pub execution_engine: ExecutionEngineConfig,
+    /// <p>An optional name for the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_name: Option<String>,
+    /// <p>The unique identifier of the Amazon EC2 security group to associate with the EMR Notebook for this notebook execution.</p>
+    #[serde(rename = "NotebookInstanceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_instance_security_group_id: Option<String>,
+    /// <p>Input parameters in JSON format passed to the EMR Notebook at runtime for execution.</p>
+    #[serde(rename = "NotebookParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_params: Option<String>,
+    /// <p>The path and file name of the notebook file for this execution, relative to the path specified for the EMR Notebook. For example, if you specify a path of <code>s3://MyBucket/MyNotebooks</code> when you create an EMR Notebook for a notebook with an ID of <code>e-ABCDEFGHIJK1234567890ABCD</code> (the <code>EditorID</code> of this request), and you specify a <code>RelativePath</code> of <code>my_notebook_executions/notebook_execution.ipynb</code>, the location of the file for the notebook execution is <code>s3://MyBucket/MyNotebooks/e-ABCDEFGHIJK1234567890ABCD/my_notebook_executions/notebook_execution.ipynb</code>.</p>
+    #[serde(rename = "RelativePath")]
+    pub relative_path: String,
+    /// <p>The name or ARN of the IAM role that is used as the service role for Amazon EMR (the EMR role) for the notebook execution.</p>
+    #[serde(rename = "ServiceRole")]
+    pub service_role: String,
+    /// <p>A list of tags associated with a notebook execution. Tags are user-defined key-value pairs that consist of a required key string with a maximum of 128 characters and an optional value string with a maximum of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartNotebookExecutionOutput {
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_execution_id: Option<String>,
 }
 
 /// <p>This represents a step in a cluster.</p>
@@ -2630,6 +3115,110 @@ pub struct StepTimeline {
     pub start_date_time: Option<f64>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopNotebookExecutionInput {
+    /// <p>The unique identifier of the notebook execution.</p>
+    #[serde(rename = "NotebookExecutionId")]
+    pub notebook_execution_id: String,
+}
+
+/// <p>Details for an Amazon EMR Studio including ID, creation time, name, and so on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Studio {
+    /// <p>Specifies whether the Studio authenticates users using single sign-on (SSO) or IAM.</p>
+    #[serde(rename = "AuthMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_mode: Option<String>,
+    /// <p>The time the Amazon EMR Studio was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The default Amazon S3 location to back up Amazon EMR Studio Workspaces and notebook files.</p>
+    #[serde(rename = "DefaultS3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_s3_location: Option<String>,
+    /// <p>The detailed description of the EMR Studio.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ID of the Engine security group associated with the Amazon EMR Studio. The Engine security group allows inbound network traffic from resources in the Workspace security group.</p>
+    #[serde(rename = "EngineSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_security_group_id: Option<String>,
+    /// <p>The name of the EMR Studio.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The name of the IAM role assumed by the Amazon EMR Studio.</p>
+    #[serde(rename = "ServiceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the EMR Studio.</p>
+    #[serde(rename = "StudioArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio_arn: Option<String>,
+    /// <p>The ID of the EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio_id: Option<String>,
+    /// <p>The list of IDs of the subnets associated with the Amazon EMR Studio.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>A list of tags associated with the Amazon EMR Studio.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The unique access URL of the Amazon EMR Studio.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// <p>The name of the IAM role assumed by users logged in to the Amazon EMR Studio.</p>
+    #[serde(rename = "UserRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_role: Option<String>,
+    /// <p>The ID of the VPC associated with the EMR Studio.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+    /// <p>The ID of the Workspace security group associated with the Amazon EMR Studio. The Workspace security group allows outbound network traffic to resources in the Engine security group and to the internet.</p>
+    #[serde(rename = "WorkspaceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workspace_security_group_id: Option<String>,
+}
+
+/// <p>Details for an Amazon EMR Studio, including ID, Name, VPC, and Description. The details do not include subnets, IAM roles, security groups, or tags associated with the Studio.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StudioSummary {
+    /// <p>The time when the Amazon EMR Studio was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The detailed description of the EMR Studio.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the Amazon EMR Studio.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ID of the Amazon EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub studio_id: Option<String>,
+    /// <p>The unique access URL of the Amazon EMR Studio.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// <p>The ID of the Virtual Private Cloud (Amazon VPC) associated with the Amazon EMR Studio.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
 /// <p>The list of supported product configurations which allow user-supplied arguments. EMR accepts these arguments and forwards them to the corresponding installation script as bootstrap action arguments.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2644,7 +3233,7 @@ pub struct SupportedProductConfig {
     pub name: Option<String>,
 }
 
-/// <p>A key/value pair containing user-defined metadata that you can associate with an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p>
+/// <p>A key-value pair containing user-defined metadata that you can associate with an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>A user-defined key, which is the minimum required information for a valid tag. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag </a>. </p>
@@ -2661,9 +3250,31 @@ pub struct Tag {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateJobFlowsInput {
-    /// <p>A list of job flows to be shutdown.</p>
+    /// <p>A list of job flows to be shut down.</p>
     #[serde(rename = "JobFlowIds")]
     pub job_flow_ids: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateStudioSessionMappingInput {
+    /// <p>The globally unique identifier (GUID) of the user or group. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserId</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-GroupId">GroupId</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_id: Option<String>,
+    /// <p>The name of the user or group to update. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserId">UserName</a> and <a href="https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName">DisplayName</a> in the <i>AWS SSO Identity Store API Reference</i>. Either <code>IdentityName</code> or <code>IdentityId</code> must be specified.</p>
+    #[serde(rename = "IdentityName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_name: Option<String>,
+    /// <p>Specifies whether the identity to update is a user or a group.</p>
+    #[serde(rename = "IdentityType")]
+    pub identity_type: String,
+    /// <p>The Amazon Resource Name (ARN) of the session policy to associate with the specified user or group.</p>
+    #[serde(rename = "SessionPolicyArn")]
+    pub session_policy_arn: String,
+    /// <p>The ID of the EMR Studio.</p>
+    #[serde(rename = "StudioId")]
+    pub studio_id: String,
 }
 
 /// <p>EBS volume specifications such as volume type, IOPS, and size (GiB) that will be requested for the EBS volume attached to an EC2 instance in the cluster.</p>
@@ -2893,6 +3504,86 @@ impl fmt::Display for CreateSecurityConfigurationError {
     }
 }
 impl Error for CreateSecurityConfigurationError {}
+/// Errors returned by CreateStudio
+#[derive(Debug, PartialEq)]
+pub enum CreateStudioError {
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
+    InternalServer(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl CreateStudioError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStudioError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateStudioError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateStudioError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateStudioError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateStudioError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateStudioError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateStudioError {}
+/// Errors returned by CreateStudioSessionMapping
+#[derive(Debug, PartialEq)]
+pub enum CreateStudioSessionMappingError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl CreateStudioSessionMappingError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateStudioSessionMappingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        CreateStudioSessionMappingError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateStudioSessionMappingError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateStudioSessionMappingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateStudioSessionMappingError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStudioSessionMappingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateStudioSessionMappingError {}
 /// Errors returned by DeleteSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteSecurityConfigurationError {
@@ -2935,6 +3626,86 @@ impl fmt::Display for DeleteSecurityConfigurationError {
     }
 }
 impl Error for DeleteSecurityConfigurationError {}
+/// Errors returned by DeleteStudio
+#[derive(Debug, PartialEq)]
+pub enum DeleteStudioError {
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
+    InternalServer(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl DeleteStudioError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStudioError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteStudioError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteStudioError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteStudioError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteStudioError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteStudioError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteStudioError {}
+/// Errors returned by DeleteStudioSessionMapping
+#[derive(Debug, PartialEq)]
+pub enum DeleteStudioSessionMappingError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl DeleteStudioSessionMappingError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteStudioSessionMappingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DeleteStudioSessionMappingError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteStudioSessionMappingError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteStudioSessionMappingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteStudioSessionMappingError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStudioSessionMappingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteStudioSessionMappingError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -3003,6 +3774,48 @@ impl fmt::Display for DescribeJobFlowsError {
     }
 }
 impl Error for DescribeJobFlowsError {}
+/// Errors returned by DescribeNotebookExecution
+#[derive(Debug, PartialEq)]
+pub enum DescribeNotebookExecutionError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl DescribeNotebookExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNotebookExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeNotebookExecutionError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeNotebookExecutionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeNotebookExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeNotebookExecutionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotebookExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeNotebookExecutionError {}
 /// Errors returned by DescribeSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeSecurityConfigurationError {
@@ -3081,6 +3894,42 @@ impl fmt::Display for DescribeStepError {
     }
 }
 impl Error for DescribeStepError {}
+/// Errors returned by DescribeStudio
+#[derive(Debug, PartialEq)]
+pub enum DescribeStudioError {
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
+    InternalServer(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl DescribeStudioError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStudioError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeStudioError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeStudioError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeStudioError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeStudioError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeStudioError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeStudioError {}
 /// Errors returned by GetBlockPublicAccessConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBlockPublicAccessConfigurationError {
@@ -3149,6 +3998,46 @@ impl fmt::Display for GetManagedScalingPolicyError {
     }
 }
 impl Error for GetManagedScalingPolicyError {}
+/// Errors returned by GetStudioSessionMapping
+#[derive(Debug, PartialEq)]
+pub enum GetStudioSessionMappingError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl GetStudioSessionMappingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStudioSessionMappingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(GetStudioSessionMappingError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetStudioSessionMappingError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetStudioSessionMappingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetStudioSessionMappingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetStudioSessionMappingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetStudioSessionMappingError {}
 /// Errors returned by ListBootstrapActions
 #[derive(Debug, PartialEq)]
 pub enum ListBootstrapActionsError {
@@ -3329,6 +4218,46 @@ impl fmt::Display for ListInstancesError {
     }
 }
 impl Error for ListInstancesError {}
+/// Errors returned by ListNotebookExecutions
+#[derive(Debug, PartialEq)]
+pub enum ListNotebookExecutionsError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl ListNotebookExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNotebookExecutionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListNotebookExecutionsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListNotebookExecutionsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListNotebookExecutionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListNotebookExecutionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListNotebookExecutionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListNotebookExecutionsError {}
 /// Errors returned by ListSecurityConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityConfigurationsError {
@@ -3407,6 +4336,84 @@ impl fmt::Display for ListStepsError {
     }
 }
 impl Error for ListStepsError {}
+/// Errors returned by ListStudioSessionMappings
+#[derive(Debug, PartialEq)]
+pub enum ListStudioSessionMappingsError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl ListStudioSessionMappingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStudioSessionMappingsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        ListStudioSessionMappingsError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListStudioSessionMappingsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListStudioSessionMappingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListStudioSessionMappingsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListStudioSessionMappingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListStudioSessionMappingsError {}
+/// Errors returned by ListStudios
+#[derive(Debug, PartialEq)]
+pub enum ListStudiosError {
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
+    InternalServer(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl ListStudiosError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStudiosError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListStudiosError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListStudiosError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListStudiosError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListStudiosError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListStudiosError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListStudiosError {}
 /// Errors returned by ModifyCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterError {
@@ -3777,6 +4784,86 @@ impl fmt::Display for SetVisibleToAllUsersError {
     }
 }
 impl Error for SetVisibleToAllUsersError {}
+/// Errors returned by StartNotebookExecution
+#[derive(Debug, PartialEq)]
+pub enum StartNotebookExecutionError {
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
+    InternalServer(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl StartNotebookExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartNotebookExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StartNotebookExecutionError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartNotebookExecutionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartNotebookExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartNotebookExecutionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartNotebookExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartNotebookExecutionError {}
+/// Errors returned by StopNotebookExecution
+#[derive(Debug, PartialEq)]
+pub enum StopNotebookExecutionError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl StopNotebookExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopNotebookExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(StopNotebookExecutionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StopNotebookExecutionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopNotebookExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopNotebookExecutionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StopNotebookExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopNotebookExecutionError {}
 /// Errors returned by TerminateJobFlows
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobFlowsError {
@@ -3809,6 +4896,50 @@ impl fmt::Display for TerminateJobFlowsError {
     }
 }
 impl Error for TerminateJobFlowsError {}
+/// Errors returned by UpdateStudioSessionMapping
+#[derive(Debug, PartialEq)]
+pub enum UpdateStudioSessionMappingError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl UpdateStudioSessionMappingError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateStudioSessionMappingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        UpdateStudioSessionMappingError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateStudioSessionMappingError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateStudioSessionMappingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateStudioSessionMappingError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStudioSessionMappingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateStudioSessionMappingError {}
 /// Trait representing the capabilities of the Amazon EMR API. Amazon EMR clients implement this trait.
 #[async_trait]
 pub trait Emr {
@@ -3836,7 +4967,7 @@ pub trait Emr {
         input: AddTagsInput,
     ) -> Result<AddTagsOutput, RusotoError<AddTagsError>>;
 
-    /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
+    /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee that a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
     async fn cancel_steps(
         &self,
         input: CancelStepsInput,
@@ -3848,11 +4979,35 @@ pub trait Emr {
         input: CreateSecurityConfigurationInput,
     ) -> Result<CreateSecurityConfigurationOutput, RusotoError<CreateSecurityConfigurationError>>;
 
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Creates a new Amazon EMR Studio.</p></p>
+    async fn create_studio(
+        &self,
+        input: CreateStudioInput,
+    ) -> Result<CreateStudioOutput, RusotoError<CreateStudioError>>;
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Maps a user or group to the Amazon EMR Studio specified by <code>StudioId</code>, and applies a session policy to refine Studio permissions for that user or group.</p></p>
+    async fn create_studio_session_mapping(
+        &self,
+        input: CreateStudioSessionMappingInput,
+    ) -> Result<(), RusotoError<CreateStudioSessionMappingError>>;
+
     /// <p>Deletes a security configuration.</p>
     async fn delete_security_configuration(
         &self,
         input: DeleteSecurityConfigurationInput,
     ) -> Result<DeleteSecurityConfigurationOutput, RusotoError<DeleteSecurityConfigurationError>>;
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Removes an Amazon EMR Studio from the Studio metadata store.</p></p>
+    async fn delete_studio(
+        &self,
+        input: DeleteStudioInput,
+    ) -> Result<(), RusotoError<DeleteStudioError>>;
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Removes a user or group from an Amazon EMR Studio.</p></p>
+    async fn delete_studio_session_mapping(
+        &self,
+        input: DeleteStudioSessionMappingInput,
+    ) -> Result<(), RusotoError<DeleteStudioSessionMappingError>>;
 
     /// <p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. </p>
     async fn describe_cluster(
@@ -3860,11 +5015,17 @@ pub trait Emr {
         input: DescribeClusterInput,
     ) -> Result<DescribeClusterOutput, RusotoError<DescribeClusterError>>;
 
-    /// <p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
+    /// <p>This API is no longer supported and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
     async fn describe_job_flows(
         &self,
         input: DescribeJobFlowsInput,
     ) -> Result<DescribeJobFlowsOutput, RusotoError<DescribeJobFlowsError>>;
+
+    /// <p>Provides details of a notebook execution.</p>
+    async fn describe_notebook_execution(
+        &self,
+        input: DescribeNotebookExecutionInput,
+    ) -> Result<DescribeNotebookExecutionOutput, RusotoError<DescribeNotebookExecutionError>>;
 
     /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
     async fn describe_security_configuration(
@@ -3878,6 +5039,12 @@ pub trait Emr {
         input: DescribeStepInput,
     ) -> Result<DescribeStepOutput, RusotoError<DescribeStepError>>;
 
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns details for the specified Amazon EMR Studio including ID, Name, VPC, Studio access URL, and so on.</p></p>
+    async fn describe_studio(
+        &self,
+        input: DescribeStudioInput,
+    ) -> Result<DescribeStudioOutput, RusotoError<DescribeStudioError>>;
+
     /// <p>Returns the Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
     async fn get_block_public_access_configuration(
         &self,
@@ -3886,11 +5053,17 @@ pub trait Emr {
         RusotoError<GetBlockPublicAccessConfigurationError>,
     >;
 
-    /// <p> Fetches the attached managed scaling policy for an Amazon EMR cluster. </p>
+    /// <p>Fetches the attached managed scaling policy for an Amazon EMR cluster. </p>
     async fn get_managed_scaling_policy(
         &self,
         input: GetManagedScalingPolicyInput,
     ) -> Result<GetManagedScalingPolicyOutput, RusotoError<GetManagedScalingPolicyError>>;
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Fetches mapping details for the specified Amazon EMR Studio and identity (user or group).</p></p>
+    async fn get_studio_session_mapping(
+        &self,
+        input: GetStudioSessionMappingInput,
+    ) -> Result<GetStudioSessionMappingOutput, RusotoError<GetStudioSessionMappingError>>;
 
     /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
     async fn list_bootstrap_actions(
@@ -3922,6 +5095,12 @@ pub trait Emr {
         input: ListInstancesInput,
     ) -> Result<ListInstancesOutput, RusotoError<ListInstancesError>>;
 
+    /// <p>Provides summaries of all notebook executions. You can filter the list based on multiple criteria such as status, time range, and editor id. Returns a maximum of 50 notebook executions and a marker to track the paging of a longer notebook execution list across multiple <code>ListNotebookExecution</code> calls.</p>
+    async fn list_notebook_executions(
+        &self,
+        input: ListNotebookExecutionsInput,
+    ) -> Result<ListNotebookExecutionsOutput, RusotoError<ListNotebookExecutionsError>>;
+
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
     async fn list_security_configurations(
         &self,
@@ -3933,6 +5112,18 @@ pub trait Emr {
         &self,
         input: ListStepsInput,
     ) -> Result<ListStepsOutput, RusotoError<ListStepsError>>;
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns a list of all user or group session mappings for the EMR Studio specified by <code>StudioId</code>.</p></p>
+    async fn list_studio_session_mappings(
+        &self,
+        input: ListStudioSessionMappingsInput,
+    ) -> Result<ListStudioSessionMappingsOutput, RusotoError<ListStudioSessionMappingsError>>;
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns a list of all Amazon EMR Studios associated with the AWS account. The list includes details such as ID, Studio Access URL, and creation time for each Studio.</p></p>
+    async fn list_studios(
+        &self,
+        input: ListStudiosInput,
+    ) -> Result<ListStudiosOutput, RusotoError<ListStudiosError>>;
 
     /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
     async fn modify_cluster(
@@ -3967,7 +5158,7 @@ pub trait Emr {
         RusotoError<PutBlockPublicAccessConfigurationError>,
     >;
 
-    /// <p> Creates or updates a managed scaling policy for an Amazon EMR cluster. The managed scaling policy defines the limits for resources, such as EC2 instances that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p>Creates or updates a managed scaling policy for an Amazon EMR cluster. The managed scaling policy defines the limits for resources, such as EC2 instances that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
     async fn put_managed_scaling_policy(
         &self,
         input: PutManagedScalingPolicyInput,
@@ -4009,11 +5200,29 @@ pub trait Emr {
         input: SetVisibleToAllUsersInput,
     ) -> Result<(), RusotoError<SetVisibleToAllUsersError>>;
 
+    /// <p>Starts a notebook execution.</p>
+    async fn start_notebook_execution(
+        &self,
+        input: StartNotebookExecutionInput,
+    ) -> Result<StartNotebookExecutionOutput, RusotoError<StartNotebookExecutionError>>;
+
+    /// <p>Stops a notebook execution.</p>
+    async fn stop_notebook_execution(
+        &self,
+        input: StopNotebookExecutionInput,
+    ) -> Result<(), RusotoError<StopNotebookExecutionError>>;
+
     /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
     async fn terminate_job_flows(
         &self,
         input: TerminateJobFlowsInput,
     ) -> Result<(), RusotoError<TerminateJobFlowsError>>;
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Updates the session policy attached to the user or group for the specified Amazon EMR Studio.</p></p>
+    async fn update_studio_session_mapping(
+        &self,
+        input: UpdateStudioSessionMappingInput,
+    ) -> Result<(), RusotoError<UpdateStudioSessionMappingError>>;
 }
 /// A client for the Amazon EMR API.
 #[derive(Clone)]
@@ -4127,7 +5336,7 @@ impl Emr for EmrClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
     }
 
-    /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
+    /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee that a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
     async fn cancel_steps(
         &self,
         input: CancelStepsInput,
@@ -4168,6 +5377,44 @@ impl Emr for EmrClient {
             .deserialize::<CreateSecurityConfigurationOutput, _>()
     }
 
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Creates a new Amazon EMR Studio.</p></p>
+    async fn create_studio(
+        &self,
+        input: CreateStudioInput,
+    ) -> Result<CreateStudioOutput, RusotoError<CreateStudioError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.CreateStudio");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateStudioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateStudioOutput, _>()
+    }
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Maps a user or group to the Amazon EMR Studio specified by <code>StudioId</code>, and applies a session policy to refine Studio permissions for that user or group.</p></p>
+    async fn create_studio_session_mapping(
+        &self,
+        input: CreateStudioSessionMappingInput,
+    ) -> Result<(), RusotoError<CreateStudioSessionMappingError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ElasticMapReduce.CreateStudioSessionMapping",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateStudioSessionMappingError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Deletes a security configuration.</p>
     async fn delete_security_configuration(
         &self,
@@ -4191,6 +5438,43 @@ impl Emr for EmrClient {
             .deserialize::<DeleteSecurityConfigurationOutput, _>()
     }
 
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Removes an Amazon EMR Studio from the Studio metadata store.</p></p>
+    async fn delete_studio(
+        &self,
+        input: DeleteStudioInput,
+    ) -> Result<(), RusotoError<DeleteStudioError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.DeleteStudio");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteStudioError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Removes a user or group from an Amazon EMR Studio.</p></p>
+    async fn delete_studio_session_mapping(
+        &self,
+        input: DeleteStudioSessionMappingInput,
+    ) -> Result<(), RusotoError<DeleteStudioSessionMappingError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ElasticMapReduce.DeleteStudioSessionMapping",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteStudioSessionMappingError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. </p>
     async fn describe_cluster(
         &self,
@@ -4209,7 +5493,7 @@ impl Emr for EmrClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeClusterOutput, _>()
     }
 
-    /// <p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
+    /// <p>This API is no longer supported and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
     async fn describe_job_flows(
         &self,
         input: DescribeJobFlowsInput,
@@ -4225,6 +5509,25 @@ impl Emr for EmrClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeJobFlowsOutput, _>()
+    }
+
+    /// <p>Provides details of a notebook execution.</p>
+    async fn describe_notebook_execution(
+        &self,
+        input: DescribeNotebookExecutionInput,
+    ) -> Result<DescribeNotebookExecutionOutput, RusotoError<DescribeNotebookExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.DescribeNotebookExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeNotebookExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeNotebookExecutionOutput, _>()
     }
 
     /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
@@ -4268,6 +5571,24 @@ impl Emr for EmrClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeStepOutput, _>()
     }
 
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns details for the specified Amazon EMR Studio including ID, Name, VPC, Studio access URL, and so on.</p></p>
+    async fn describe_studio(
+        &self,
+        input: DescribeStudioInput,
+    ) -> Result<DescribeStudioOutput, RusotoError<DescribeStudioError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.DescribeStudio");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeStudioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeStudioOutput, _>()
+    }
+
     /// <p>Returns the Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
     async fn get_block_public_access_configuration(
         &self,
@@ -4294,7 +5615,7 @@ impl Emr for EmrClient {
             .deserialize::<GetBlockPublicAccessConfigurationOutput, _>()
     }
 
-    /// <p> Fetches the attached managed scaling policy for an Amazon EMR cluster. </p>
+    /// <p>Fetches the attached managed scaling policy for an Amazon EMR cluster. </p>
     async fn get_managed_scaling_policy(
         &self,
         input: GetManagedScalingPolicyInput,
@@ -4311,6 +5632,25 @@ impl Emr for EmrClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetManagedScalingPolicyOutput, _>()
+    }
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Fetches mapping details for the specified Amazon EMR Studio and identity (user or group).</p></p>
+    async fn get_studio_session_mapping(
+        &self,
+        input: GetStudioSessionMappingInput,
+    ) -> Result<GetStudioSessionMappingOutput, RusotoError<GetStudioSessionMappingError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.GetStudioSessionMapping");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetStudioSessionMappingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetStudioSessionMappingOutput, _>()
     }
 
     /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
@@ -4403,6 +5743,25 @@ impl Emr for EmrClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesOutput, _>()
     }
 
+    /// <p>Provides summaries of all notebook executions. You can filter the list based on multiple criteria such as status, time range, and editor id. Returns a maximum of 50 notebook executions and a marker to track the paging of a longer notebook execution list across multiple <code>ListNotebookExecution</code> calls.</p>
+    async fn list_notebook_executions(
+        &self,
+        input: ListNotebookExecutionsInput,
+    ) -> Result<ListNotebookExecutionsOutput, RusotoError<ListNotebookExecutionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.ListNotebookExecutions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListNotebookExecutionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListNotebookExecutionsOutput, _>()
+    }
+
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
     async fn list_security_configurations(
         &self,
@@ -4442,6 +5801,43 @@ impl Emr for EmrClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListStepsOutput, _>()
+    }
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns a list of all user or group session mappings for the EMR Studio specified by <code>StudioId</code>.</p></p>
+    async fn list_studio_session_mappings(
+        &self,
+        input: ListStudioSessionMappingsInput,
+    ) -> Result<ListStudioSessionMappingsOutput, RusotoError<ListStudioSessionMappingsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.ListStudioSessionMappings");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListStudioSessionMappingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListStudioSessionMappingsOutput, _>()
+    }
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns a list of all Amazon EMR Studios associated with the AWS account. The list includes details such as ID, Studio Access URL, and creation time for each Studio.</p></p>
+    async fn list_studios(
+        &self,
+        input: ListStudiosInput,
+    ) -> Result<ListStudiosOutput, RusotoError<ListStudiosError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.ListStudios");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListStudiosError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListStudiosOutput, _>()
     }
 
     /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
@@ -4542,7 +5938,7 @@ impl Emr for EmrClient {
             .deserialize::<PutBlockPublicAccessConfigurationOutput, _>()
     }
 
-    /// <p> Creates or updates a managed scaling policy for an Amazon EMR cluster. The managed scaling policy defines the limits for resources, such as EC2 instances that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p>Creates or updates a managed scaling policy for an Amazon EMR cluster. The managed scaling policy defines the limits for resources, such as EC2 instances that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
     async fn put_managed_scaling_policy(
         &self,
         input: PutManagedScalingPolicyInput,
@@ -4673,6 +6069,42 @@ impl Emr for EmrClient {
         Ok(())
     }
 
+    /// <p>Starts a notebook execution.</p>
+    async fn start_notebook_execution(
+        &self,
+        input: StartNotebookExecutionInput,
+    ) -> Result<StartNotebookExecutionOutput, RusotoError<StartNotebookExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.StartNotebookExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartNotebookExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartNotebookExecutionOutput, _>()
+    }
+
+    /// <p>Stops a notebook execution.</p>
+    async fn stop_notebook_execution(
+        &self,
+        input: StopNotebookExecutionInput,
+    ) -> Result<(), RusotoError<StopNotebookExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ElasticMapReduce.StopNotebookExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopNotebookExecutionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
     async fn terminate_job_flows(
         &self,
@@ -4685,6 +6117,26 @@ impl Emr for EmrClient {
 
         let response = self
             .sign_and_dispatch(request, TerminateJobFlowsError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Updates the session policy attached to the user or group for the specified Amazon EMR Studio.</p></p>
+    async fn update_studio_session_mapping(
+        &self,
+        input: UpdateStudioSessionMappingInput,
+    ) -> Result<(), RusotoError<UpdateStudioSessionMappingError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ElasticMapReduce.UpdateStudioSessionMapping",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateStudioSessionMappingError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())

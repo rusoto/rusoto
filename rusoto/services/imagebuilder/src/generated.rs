@@ -29,7 +29,11 @@ use serde_json;
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Ami {
-    /// <p>The description of the EC2 AMI. </p>
+    /// <p> The account ID of the owner of the AMI. </p>
+    #[serde(rename = "accountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The description of the EC2 AMI. Minimum and maximum length are in characters.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -57,7 +61,7 @@ pub struct AmiDistributionConfiguration {
     #[serde(rename = "amiTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The description of the distribution configuration. </p>
+    /// <p>The description of the distribution configuration. Minimum and maximum length are in characters.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -73,6 +77,10 @@ pub struct AmiDistributionConfiguration {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p> The ID of an account to which you want to distribute an image. </p>
+    #[serde(rename = "targetAccountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_account_ids: Option<Vec<String>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -265,6 +273,144 @@ pub struct ComponentVersion {
     pub version: Option<String>,
 }
 
+/// <p>A container encapsulates the runtime environment for an application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Container {
+    /// <p>A list of URIs for containers created in the context Region.</p>
+    #[serde(rename = "imageUris")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_uris: Option<Vec<String>>,
+    /// <p>Containers and container images are Region-specific. This is the Region context for the container.</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+}
+
+/// <p>Container distribution settings for encryption, licensing, and sharing in a specific Region.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ContainerDistributionConfiguration {
+    /// <p>Tags that are attached to the container distribution configuration.</p>
+    #[serde(rename = "containerTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_tags: Option<Vec<String>>,
+    /// <p>The description of the container distribution configuration.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The destination repository for the container distribution configuration.</p>
+    #[serde(rename = "targetRepository")]
+    pub target_repository: TargetContainerRepository,
+}
+
+/// <p>A container recipe.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContainerRecipe {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Components for build and test that are included in the container recipe.</p>
+    #[serde(rename = "components")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub components: Option<Vec<ComponentConfiguration>>,
+    /// <p>Specifies the type of container, such as Docker.</p>
+    #[serde(rename = "containerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_type: Option<String>,
+    /// <p>The date when this container recipe was created.</p>
+    #[serde(rename = "dateCreated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_created: Option<String>,
+    /// <p>The description of the container recipe.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Dockerfiles are text documents that are used to build Docker containers, and ensure that they contain all of the elements required by the application running inside. The template data consists of contextual variables where Image Builder places build information or scripts, based on your container image recipe.</p>
+    #[serde(rename = "dockerfileTemplateData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dockerfile_template_data: Option<String>,
+    /// <p>A flag that indicates if the target container is encrypted.</p>
+    #[serde(rename = "encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encrypted: Option<bool>,
+    /// <p>Identifies which KMS key is used to encrypt the container image for distribution to the target Region.</p>
+    #[serde(rename = "kmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The name of the container recipe.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The owner of the container recipe.</p>
+    #[serde(rename = "owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    /// <p>The source image for the container recipe.</p>
+    #[serde(rename = "parentImage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_image: Option<String>,
+    /// <p>The system platform for the container, such as Windows or Linux.</p>
+    #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
+    /// <p>Tags that are attached to the container recipe.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The destination repository for the container image.</p>
+    #[serde(rename = "targetRepository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_repository: Option<TargetContainerRepository>,
+    /// <p>The semantic version of the container recipe (&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;).</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The working directory for use during build and test workflows.</p>
+    #[serde(rename = "workingDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<String>,
+}
+
+/// <p>A summary of a container recipe</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContainerRecipeSummary {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Specifies the type of container, such as "Docker".</p>
+    #[serde(rename = "containerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_type: Option<String>,
+    /// <p>The date when this container recipe was created.</p>
+    #[serde(rename = "dateCreated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_created: Option<String>,
+    /// <p>The name of the container recipe.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The owner of the container recipe.</p>
+    #[serde(rename = "owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    /// <p>The source image for the container recipe.</p>
+    #[serde(rename = "parentImage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_image: Option<String>,
+    /// <p>The system platform for the container, such as Windows or Linux.</p>
+    #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
+    /// <p>Tags that are attached to the container recipe.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComponentRequest {
@@ -329,6 +475,80 @@ pub struct CreateComponentResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateContainerRecipeRequest {
+    /// <p>The client token used to make this request idempotent.</p>
+    #[serde(rename = "clientToken")]
+    pub client_token: String,
+    /// <p>Components for build and test that are included in the container recipe.</p>
+    #[serde(rename = "components")]
+    pub components: Vec<ComponentConfiguration>,
+    /// <p>The type of container to create.</p>
+    #[serde(rename = "containerType")]
+    pub container_type: String,
+    /// <p>The description of the container recipe.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Dockerfile template used to build your image as an inline data blob.</p>
+    #[serde(rename = "dockerfileTemplateData")]
+    pub dockerfile_template_data: String,
+    /// <p>The S3 URI for the Dockerfile that will be used to build your container image.</p>
+    #[serde(rename = "dockerfileTemplateUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dockerfile_template_uri: Option<String>,
+    /// <p>Specifies the operating system version for the source image.</p>
+    #[serde(rename = "imageOsVersionOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_os_version_override: Option<String>,
+    /// <p>Identifies which KMS key is used to encrypt the container image.</p>
+    #[serde(rename = "kmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The name of the container recipe.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The source image for the container recipe.</p>
+    #[serde(rename = "parentImage")]
+    pub parent_image: String,
+    /// <p>Specifies the operating system platform when you use a custom source image.</p>
+    #[serde(rename = "platformOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_override: Option<String>,
+    /// <p>The semantic version of the container recipe (&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;).</p>
+    #[serde(rename = "semanticVersion")]
+    pub semantic_version: String,
+    /// <p>Tags that are attached to the container recipe.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The destination repository for the container image.</p>
+    #[serde(rename = "targetRepository")]
+    pub target_repository: TargetContainerRepository,
+    /// <p>The working directory for use during build and test workflows.</p>
+    #[serde(rename = "workingDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateContainerRecipeResponse {
+    /// <p>The client token used to make this request idempotent.</p>
+    #[serde(rename = "clientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>Returns the Amazon Resource Name (ARN) of the container recipe that the request created.</p>
+    #[serde(rename = "containerRecipeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_arn: Option<String>,
+    /// <p>The request ID that uniquely identifies this request.</p>
+    #[serde(rename = "requestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionConfigurationRequest {
     /// <p> The idempotency token of the distribution configuration. </p>
     #[serde(rename = "clientToken")]
@@ -372,6 +592,10 @@ pub struct CreateImagePipelineRequest {
     /// <p> The idempotency token used to make this request idempotent. </p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
+    /// <p>The Amazon Resource Name (ARN) of the container recipe that is used to configure images created by this container pipeline.</p>
+    #[serde(rename = "containerRecipeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_arn: Option<String>,
     /// <p> The description of the image pipeline. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -386,7 +610,8 @@ pub struct CreateImagePipelineRequest {
     pub enhanced_image_metadata_enabled: Option<bool>,
     /// <p> The Amazon Resource Name (ARN) of the image recipe that will be used to configure images created by this image pipeline. </p>
     #[serde(rename = "imageRecipeArn")]
-    pub image_recipe_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_recipe_arn: Option<String>,
     /// <p> The image test configuration of the image pipeline. </p>
     #[serde(rename = "imageTestsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -448,7 +673,7 @@ pub struct CreateImageRecipeRequest {
     /// <p> The name of the image recipe. </p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The parent image of the image recipe. The value of the string can be the ARN of the parent image or an AMI ID. The format for the ARN follows this example: <code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/2019.x.x</code>. The ARN ends with <code>/20xx.x.x</code>, which communicates to EC2 Image Builder that you want to use the latest AMI created in 20xx (year). You can provide the specific version that you want to use, or you can use a wildcard in all of the fields. If you enter an AMI ID for the string value, you must have access to the AMI, and the AMI must be in the same Region in which you are using Image Builder. </p>
+    /// <p>The parent image of the image recipe. The value of the string can be the ARN of the parent image or an AMI ID. The format for the ARN follows this example: <code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/xxxx.x.x</code>. You can provide the specific version that you want to use, or you can use a wildcard in all of the fields. If you enter an AMI ID for the string value, you must have access to the AMI, and the AMI must be in the same Region in which you are using Image Builder. </p>
     #[serde(rename = "parentImage")]
     pub parent_image: String,
     /// <p>The semantic version of the image recipe. </p>
@@ -487,6 +712,10 @@ pub struct CreateImageRequest {
     /// <p> The idempotency token used to make this request idempotent. </p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
+    /// <p>The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.</p>
+    #[serde(rename = "containerRecipeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_arn: Option<String>,
     /// <p> The Amazon Resource Name (ARN) of the distribution configuration that defines and configures the outputs of your pipeline. </p>
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -497,7 +726,8 @@ pub struct CreateImageRequest {
     pub enhanced_image_metadata_enabled: Option<bool>,
     /// <p> The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed. </p>
     #[serde(rename = "imageRecipeArn")]
-    pub image_recipe_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_recipe_arn: Option<String>,
     /// <p> The image tests configuration of the image. </p>
     #[serde(rename = "imageTestsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -622,6 +852,27 @@ pub struct DeleteComponentResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteContainerRecipeRequest {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe to delete.</p>
+    #[serde(rename = "containerRecipeArn")]
+    pub container_recipe_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteContainerRecipeResponse {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe that was deleted.</p>
+    #[serde(rename = "containerRecipeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_arn: Option<String>,
+    /// <p>The request ID that uniquely identifies this request.</p>
+    #[serde(rename = "requestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration to delete. </p>
     #[serde(rename = "distributionConfigurationArn")]
@@ -732,6 +983,10 @@ pub struct Distribution {
     #[serde(rename = "amiDistributionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_distribution_configuration: Option<AmiDistributionConfiguration>,
+    /// <p>Container distribution settings for encryption, licensing, and sharing in a specific Region.</p>
+    #[serde(rename = "containerDistributionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_distribution_configuration: Option<ContainerDistributionConfiguration>,
     /// <p>The License Manager Configuration to associate with the AMI in the specified Region.</p>
     #[serde(rename = "licenseConfigurationArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -802,6 +1057,10 @@ pub struct DistributionConfigurationSummary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>A list of Regions where the container image is distributed to.</p>
+    #[serde(rename = "regions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regions: Option<Vec<String>>,
     /// <p>The tags associated with the distribution configuration.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -892,6 +1151,48 @@ pub struct GetComponentResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component: Option<Component>,
     /// <p>The request ID that uniquely identifies this request. </p>
+    #[serde(rename = "requestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetContainerRecipePolicyRequest {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe for the policy being requested.</p>
+    #[serde(rename = "containerRecipeArn")]
+    pub container_recipe_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetContainerRecipePolicyResponse {
+    /// <p>The container recipe policy object that is returned.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The request ID that uniquely identifies this request.</p>
+    #[serde(rename = "requestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetContainerRecipeRequest {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe to retrieve.</p>
+    #[serde(rename = "containerRecipeArn")]
+    pub container_recipe_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetContainerRecipeResponse {
+    /// <p>The container recipe object that is returned.</p>
+    #[serde(rename = "containerRecipe")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe: Option<ContainerRecipe>,
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1054,6 +1355,10 @@ pub struct Image {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The container recipe used to create the container image type.</p>
+    #[serde(rename = "containerRecipe")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe: Option<ContainerRecipe>,
     /// <p>The date on which this image was created.</p>
     #[serde(rename = "dateCreated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1110,6 +1415,10 @@ pub struct Image {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies whether this is an AMI or container image.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
     /// <p>The semantic version of the image.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1124,6 +1433,10 @@ pub struct ImagePipeline {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the container recipe that is used for this pipeline.</p>
+    #[serde(rename = "containerRecipeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_arn: Option<String>,
     /// <p>The date on which this image pipeline was created.</p>
     #[serde(rename = "dateCreated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1230,6 +1543,10 @@ pub struct ImageRecipe {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies which type of image is created by the recipe - an AMI or a container image.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
     /// <p>The version of the image recipe.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1328,6 +1645,10 @@ pub struct ImageSummary {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies whether this is an AMI or container image.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
     /// <p>The version of the image.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1375,6 +1696,10 @@ pub struct ImageVersion {
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
+    /// <p>Specifies whether this is an AMI or container image.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
     /// <p>The semantic version of the image semantic version.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1615,6 +1940,10 @@ pub struct ListComponentBuildVersionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentsRequest {
+    /// <p>Returns the list of component build versions for the specified semantic version.</p>
+    #[serde(rename = "byName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_name: Option<bool>,
     /// <p>The filters. </p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1652,8 +1981,46 @@ pub struct ListComponentsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListContainerRecipesRequest {
+    /// <p>Request filters that are used to narrow the list of container images that are returned.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return in the list.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Provides a token for pagination, which determines where to begin the next set of results when the current set reaches the maximum for one request.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns container recipes belonging to the specified owner, that have been shared with you. You can omit this field to return container recipes belonging to your account.</p>
+    #[serde(rename = "owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListContainerRecipesResponse {
+    /// <p>The list of container recipes returned for the request.</p>
+    #[serde(rename = "containerRecipeSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_summary_list: Option<Vec<ContainerRecipeSummary>>,
+    /// <p>The next token field is used for paginated responses. When this is not empty, there are additional container recipes that the service has not included in this response. Use this token with the next request to retrieve additional list items.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The request ID that uniquely identifies this request.</p>
+    #[serde(rename = "requestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionConfigurationsRequest {
-    /// <p>The filters. </p>
+    /// <p><p>The filters. </p> <ul> <li> <p> <code>name</code> - The name of this distribution configuration.</p> </li> </ul></p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1833,10 +2200,18 @@ pub struct ListImageRecipesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
+    /// <p>Requests a list of images with a specific recipe name.</p>
+    #[serde(rename = "byName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_name: Option<bool>,
     /// <p>The filters. </p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
+    /// <p>Includes deprecated images in the response list.</p>
+    #[serde(rename = "includeDeprecated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_deprecated: Option<bool>,
     /// <p>The maximum items to return in a request. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1936,6 +2311,10 @@ pub struct OutputResources {
     #[serde(rename = "amis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amis: Option<Vec<Ami>>,
+    /// <p>Container images that the pipeline has generated and stored in the output repository.</p>
+    #[serde(rename = "containers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub containers: Option<Vec<Container>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1957,6 +2336,30 @@ pub struct PutComponentPolicyResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component_arn: Option<String>,
     /// <p>The request ID that uniquely identifies this request. </p>
+    #[serde(rename = "requestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutContainerRecipePolicyRequest {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe that this policy should be applied to.</p>
+    #[serde(rename = "containerRecipeArn")]
+    pub container_recipe_arn: String,
+    /// <p>The policy to apply to the container recipe.</p>
+    #[serde(rename = "policy")]
+    pub policy: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutContainerRecipePolicyResponse {
+    /// <p>The Amazon Resource Name (ARN) of the container recipe that this policy was applied to.</p>
+    #[serde(rename = "containerRecipeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_arn: Option<String>,
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2026,11 +2429,11 @@ pub struct S3Logs {
 /// <p>A schedule configures how often and when a pipeline will automatically create a new image. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
-    /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, EC2 Image Builder will build a new image only when there are known changes pending. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time.</p>
+    /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, and you use semantic version filters on the source image or components in your image recipe, EC2 Image Builder will build a new image only when there are new versions of the image or components in your recipe that match the semantic version filter. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time. For semantic version syntax, see <a href="https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_CreateComponent.html">CreateComponent</a> in the <i> EC2 Image Builder API Reference</i>.</p>
     #[serde(rename = "pipelineExecutionStartCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_execution_start_condition: Option<String>,
-    /// <p>The expression determines how often EC2 Image Builder evaluates your <code>pipelineExecutionStartCondition</code>.</p>
+    /// <p>The cron expression determines how often EC2 Image Builder evaluates your <code>pipelineExecutionStartCondition</code>.</p> <p>For information on how to format a cron expression in Image Builder, see <a href="https://docs.aws.amazon.com/imagebuilder/latest/userguide/image-builder-cron.html">Use cron expressions in EC2 Image Builder</a>.</p>
     #[serde(rename = "scheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
@@ -2078,6 +2481,17 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+/// <p>The container repository where the output container image is stored.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TargetContainerRepository {
+    /// <p>The name of the container repository where the output container image is stored. This name is prefixed by the repository location.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+    /// <p>Specifies the service in which this image was registered.</p>
+    #[serde(rename = "service")]
+    pub service: String,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2135,6 +2549,10 @@ pub struct UpdateImagePipelineRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
+    /// <p>The Amazon Resource Name (ARN) of the container pipeline to update.</p>
+    #[serde(rename = "containerRecipeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_recipe_arn: Option<String>,
     /// <p>The description of the image pipeline. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2152,7 +2570,8 @@ pub struct UpdateImagePipelineRequest {
     pub image_pipeline_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the image recipe that will be used to configure images updated by this image pipeline. </p>
     #[serde(rename = "imageRecipeArn")]
-    pub image_recipe_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_recipe_arn: Option<String>,
     /// <p>The image test configuration of the image pipeline. </p>
     #[serde(rename = "imageTestsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2434,6 +2853,112 @@ impl fmt::Display for CreateComponentError {
     }
 }
 impl Error for CreateComponentError {}
+/// Errors returned by CreateContainerRecipe
+#[derive(Debug, PartialEq)]
+pub enum CreateContainerRecipeError {
+    /// <p>You have exceeded the permitted request rate for the specific operation.</p>
+    CallRateLimitExceeded(String),
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an invalid resource identifier.</p>
+    Client(String),
+    /// <p>You are not authorized to perform the requested operation.</p>
+    Forbidden(String),
+    /// <p>You have specified a client token for an operation using parameter values that differ from a previous request that used the same client token.</p>
+    IdempotentParameterMismatch(String),
+    /// <p>You have made a request for an action that is not supported by the service.</p>
+    InvalidRequest(String),
+    /// <p>Your version number is out of bounds or does not follow the required syntax.</p>
+    InvalidVersionNumber(String),
+    /// <p>The resource that you are trying to create already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The resource that you are trying to operate on is currently in use. Review the message details and retry later.</p>
+    ResourceInUse(String),
+    /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
+    Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
+    /// <p>The service is unable to process your request at this time.</p>
+    ServiceUnavailable(String),
+}
+
+impl CreateContainerRecipeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContainerRecipeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CallRateLimitExceededException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::CallRateLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::Client(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::Forbidden(err.msg))
+                }
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        CreateContainerRecipeError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "InvalidVersionNumberException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::InvalidVersionNumber(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::ResourceInUse(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::Service(err.msg))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateContainerRecipeError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateContainerRecipeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateContainerRecipeError::CallRateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::Client(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateContainerRecipeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::InvalidVersionNumber(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::Service(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            CreateContainerRecipeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateContainerRecipeError {}
 /// Errors returned by CreateDistributionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateDistributionConfigurationError {
@@ -3034,6 +3559,80 @@ impl fmt::Display for DeleteComponentError {
     }
 }
 impl Error for DeleteComponentError {}
+/// Errors returned by DeleteContainerRecipe
+#[derive(Debug, PartialEq)]
+pub enum DeleteContainerRecipeError {
+    /// <p>You have exceeded the permitted request rate for the specific operation.</p>
+    CallRateLimitExceeded(String),
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an invalid resource identifier.</p>
+    Client(String),
+    /// <p>You are not authorized to perform the requested operation.</p>
+    Forbidden(String),
+    /// <p>You have made a request for an action that is not supported by the service.</p>
+    InvalidRequest(String),
+    /// <p>You have attempted to mutate or delete a resource with a dependency that prohibits this action. See the error message for more details.</p>
+    ResourceDependency(String),
+    /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
+    Service(String),
+    /// <p>The service is unable to process your request at this time.</p>
+    ServiceUnavailable(String),
+}
+
+impl DeleteContainerRecipeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerRecipeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CallRateLimitExceededException" => {
+                    return RusotoError::Service(DeleteContainerRecipeError::CallRateLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(DeleteContainerRecipeError::Client(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteContainerRecipeError::Forbidden(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteContainerRecipeError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceDependencyException" => {
+                    return RusotoError::Service(DeleteContainerRecipeError::ResourceDependency(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteContainerRecipeError::Service(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteContainerRecipeError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteContainerRecipeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteContainerRecipeError::CallRateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteContainerRecipeError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteContainerRecipeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteContainerRecipeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteContainerRecipeError::ResourceDependency(ref cause) => write!(f, "{}", cause),
+            DeleteContainerRecipeError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteContainerRecipeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteContainerRecipeError {}
 /// Errors returned by DeleteDistributionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteDistributionConfigurationError {
@@ -3548,6 +4147,140 @@ impl fmt::Display for GetComponentPolicyError {
     }
 }
 impl Error for GetComponentPolicyError {}
+/// Errors returned by GetContainerRecipe
+#[derive(Debug, PartialEq)]
+pub enum GetContainerRecipeError {
+    /// <p>You have exceeded the permitted request rate for the specific operation.</p>
+    CallRateLimitExceeded(String),
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an invalid resource identifier.</p>
+    Client(String),
+    /// <p>You are not authorized to perform the requested operation.</p>
+    Forbidden(String),
+    /// <p>You have made a request for an action that is not supported by the service.</p>
+    InvalidRequest(String),
+    /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
+    Service(String),
+    /// <p>The service is unable to process your request at this time.</p>
+    ServiceUnavailable(String),
+}
+
+impl GetContainerRecipeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContainerRecipeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CallRateLimitExceededException" => {
+                    return RusotoError::Service(GetContainerRecipeError::CallRateLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(GetContainerRecipeError::Client(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetContainerRecipeError::Forbidden(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetContainerRecipeError::InvalidRequest(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetContainerRecipeError::Service(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetContainerRecipeError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetContainerRecipeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetContainerRecipeError::CallRateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipeError::Client(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipeError::Service(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetContainerRecipeError {}
+/// Errors returned by GetContainerRecipePolicy
+#[derive(Debug, PartialEq)]
+pub enum GetContainerRecipePolicyError {
+    /// <p>You have exceeded the permitted request rate for the specific operation.</p>
+    CallRateLimitExceeded(String),
+    /// <p>You are not authorized to perform the requested operation.</p>
+    Forbidden(String),
+    /// <p>You have made a request for an action that is not supported by the service.</p>
+    InvalidRequest(String),
+    /// <p>At least one of the resources referenced by your request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
+    Service(String),
+    /// <p>The service is unable to process your request at this time.</p>
+    ServiceUnavailable(String),
+}
+
+impl GetContainerRecipePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContainerRecipePolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CallRateLimitExceededException" => {
+                    return RusotoError::Service(
+                        GetContainerRecipePolicyError::CallRateLimitExceeded(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetContainerRecipePolicyError::Forbidden(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetContainerRecipePolicyError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetContainerRecipePolicyError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetContainerRecipePolicyError::Service(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetContainerRecipePolicyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetContainerRecipePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetContainerRecipePolicyError::CallRateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetContainerRecipePolicyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipePolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipePolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipePolicyError::Service(ref cause) => write!(f, "{}", cause),
+            GetContainerRecipePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetContainerRecipePolicyError {}
 /// Errors returned by GetDistributionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetDistributionConfigurationError {
@@ -4258,6 +4991,78 @@ impl fmt::Display for ListComponentsError {
     }
 }
 impl Error for ListComponentsError {}
+/// Errors returned by ListContainerRecipes
+#[derive(Debug, PartialEq)]
+pub enum ListContainerRecipesError {
+    /// <p>You have exceeded the permitted request rate for the specific operation.</p>
+    CallRateLimitExceeded(String),
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an invalid resource identifier.</p>
+    Client(String),
+    /// <p>You are not authorized to perform the requested operation.</p>
+    Forbidden(String),
+    /// <p>You have provided an invalid pagination token in your request.</p>
+    InvalidPaginationToken(String),
+    /// <p>You have made a request for an action that is not supported by the service.</p>
+    InvalidRequest(String),
+    /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
+    Service(String),
+    /// <p>The service is unable to process your request at this time.</p>
+    ServiceUnavailable(String),
+}
+
+impl ListContainerRecipesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContainerRecipesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CallRateLimitExceededException" => {
+                    return RusotoError::Service(ListContainerRecipesError::CallRateLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(ListContainerRecipesError::Client(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListContainerRecipesError::Forbidden(err.msg))
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(ListContainerRecipesError::InvalidPaginationToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListContainerRecipesError::InvalidRequest(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ListContainerRecipesError::Service(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListContainerRecipesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListContainerRecipesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListContainerRecipesError::CallRateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListContainerRecipesError::Client(ref cause) => write!(f, "{}", cause),
+            ListContainerRecipesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListContainerRecipesError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            ListContainerRecipesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListContainerRecipesError::Service(ref cause) => write!(f, "{}", cause),
+            ListContainerRecipesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListContainerRecipesError {}
 /// Errors returned by ListDistributionConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionConfigurationsError {
@@ -4930,6 +5735,92 @@ impl fmt::Display for PutComponentPolicyError {
     }
 }
 impl Error for PutComponentPolicyError {}
+/// Errors returned by PutContainerRecipePolicy
+#[derive(Debug, PartialEq)]
+pub enum PutContainerRecipePolicyError {
+    /// <p>You have exceeded the permitted request rate for the specific operation.</p>
+    CallRateLimitExceeded(String),
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an invalid resource identifier.</p>
+    Client(String),
+    /// <p>You are not authorized to perform the requested operation.</p>
+    Forbidden(String),
+    /// <p>The value that you provided for the specified parameter is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>You have made a request for an action that is not supported by the service.</p>
+    InvalidRequest(String),
+    /// <p>At least one of the resources referenced by your request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
+    Service(String),
+    /// <p>The service is unable to process your request at this time.</p>
+    ServiceUnavailable(String),
+}
+
+impl PutContainerRecipePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutContainerRecipePolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CallRateLimitExceededException" => {
+                    return RusotoError::Service(
+                        PutContainerRecipePolicyError::CallRateLimitExceeded(err.msg),
+                    )
+                }
+                "ClientException" => {
+                    return RusotoError::Service(PutContainerRecipePolicyError::Client(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(PutContainerRecipePolicyError::Forbidden(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        PutContainerRecipePolicyError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(PutContainerRecipePolicyError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutContainerRecipePolicyError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(PutContainerRecipePolicyError::Service(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PutContainerRecipePolicyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutContainerRecipePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutContainerRecipePolicyError::CallRateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutContainerRecipePolicyError::Client(ref cause) => write!(f, "{}", cause),
+            PutContainerRecipePolicyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutContainerRecipePolicyError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutContainerRecipePolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PutContainerRecipePolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutContainerRecipePolicyError::Service(ref cause) => write!(f, "{}", cause),
+            PutContainerRecipePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutContainerRecipePolicyError {}
 /// Errors returned by PutImagePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutImagePolicyError {
@@ -5577,6 +6468,12 @@ pub trait ImageBuilder {
         input: CreateComponentRequest,
     ) -> Result<CreateComponentResponse, RusotoError<CreateComponentError>>;
 
+    /// <p>Creates a new container recipe. Container recipes define how images are configured, tested, and assessed.</p>
+    async fn create_container_recipe(
+        &self,
+        input: CreateContainerRecipeRequest,
+    ) -> Result<CreateContainerRecipeResponse, RusotoError<CreateContainerRecipeError>>;
+
     /// <p>Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
     async fn create_distribution_configuration(
         &self,
@@ -5618,6 +6515,12 @@ pub trait ImageBuilder {
         &self,
         input: DeleteComponentRequest,
     ) -> Result<DeleteComponentResponse, RusotoError<DeleteComponentError>>;
+
+    /// <p>Deletes a container recipe.</p>
+    async fn delete_container_recipe(
+        &self,
+        input: DeleteContainerRecipeRequest,
+    ) -> Result<DeleteContainerRecipeResponse, RusotoError<DeleteContainerRecipeError>>;
 
     /// <p> Deletes a distribution configuration. </p>
     async fn delete_distribution_configuration(
@@ -5666,6 +6569,18 @@ pub trait ImageBuilder {
         &self,
         input: GetComponentPolicyRequest,
     ) -> Result<GetComponentPolicyResponse, RusotoError<GetComponentPolicyError>>;
+
+    /// <p>Retrieves a container recipe.</p>
+    async fn get_container_recipe(
+        &self,
+        input: GetContainerRecipeRequest,
+    ) -> Result<GetContainerRecipeResponse, RusotoError<GetContainerRecipeError>>;
+
+    /// <p>Retrieves the policy for a container recipe.</p>
+    async fn get_container_recipe_policy(
+        &self,
+        input: GetContainerRecipePolicyRequest,
+    ) -> Result<GetContainerRecipePolicyResponse, RusotoError<GetContainerRecipePolicyError>>;
 
     /// <p> Gets a distribution configuration. </p>
     async fn get_distribution_configuration(
@@ -5730,7 +6645,13 @@ pub trait ImageBuilder {
         input: ListComponentsRequest,
     ) -> Result<ListComponentsResponse, RusotoError<ListComponentsError>>;
 
-    /// <p> Returns a list of distribution configurations. </p>
+    /// <p>Returns a list of container recipes.</p>
+    async fn list_container_recipes(
+        &self,
+        input: ListContainerRecipesRequest,
+    ) -> Result<ListContainerRecipesResponse, RusotoError<ListContainerRecipesError>>;
+
+    /// <p>Returns a list of distribution configurations. </p>
     async fn list_distribution_configurations(
         &self,
         input: ListDistributionConfigurationsRequest,
@@ -5789,6 +6710,12 @@ pub trait ImageBuilder {
         &self,
         input: PutComponentPolicyRequest,
     ) -> Result<PutComponentPolicyResponse, RusotoError<PutComponentPolicyError>>;
+
+    /// <p>Applies a policy to a container image. We recommend that you call the RAM API CreateResourceShare (https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html) to share resources. If you call the Image Builder API <code>PutContainerImagePolicy</code>, you must also call the RAM API PromoteResourceShareCreatedFromPolicy (https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html) in order for the resource to be visible to all principals with whom the resource is shared.</p>
+    async fn put_container_recipe_policy(
+        &self,
+        input: PutContainerRecipePolicyRequest,
+    ) -> Result<PutContainerRecipePolicyResponse, RusotoError<PutContainerRecipePolicyError>>;
 
     /// <p>Applies a policy to an image. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImagePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
     async fn put_image_policy(
@@ -5943,6 +6870,37 @@ impl ImageBuilder for ImageBuilderClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateComponentError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new container recipe. Container recipes define how images are configured, tested, and assessed.</p>
+    #[allow(unused_mut)]
+    async fn create_container_recipe(
+        &self,
+        input: CreateContainerRecipeRequest,
+    ) -> Result<CreateContainerRecipeResponse, RusotoError<CreateContainerRecipeError>> {
+        let request_uri = "/CreateContainerRecipe";
+
+        let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateContainerRecipeResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateContainerRecipeError::from_response(response))
         }
     }
 
@@ -6143,6 +7101,38 @@ impl ImageBuilder for ImageBuilderClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteComponentError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a container recipe.</p>
+    #[allow(unused_mut)]
+    async fn delete_container_recipe(
+        &self,
+        input: DeleteContainerRecipeRequest,
+    ) -> Result<DeleteContainerRecipeResponse, RusotoError<DeleteContainerRecipeError>> {
+        let request_uri = "/DeleteContainerRecipe";
+
+        let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("containerRecipeArn", &input.container_recipe_arn);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteContainerRecipeResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteContainerRecipeError::from_response(response))
         }
     }
 
@@ -6386,6 +7376,70 @@ impl ImageBuilder for ImageBuilderClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetComponentPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves a container recipe.</p>
+    #[allow(unused_mut)]
+    async fn get_container_recipe(
+        &self,
+        input: GetContainerRecipeRequest,
+    ) -> Result<GetContainerRecipeResponse, RusotoError<GetContainerRecipeError>> {
+        let request_uri = "/GetContainerRecipe";
+
+        let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("containerRecipeArn", &input.container_recipe_arn);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetContainerRecipeResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContainerRecipeError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves the policy for a container recipe.</p>
+    #[allow(unused_mut)]
+    async fn get_container_recipe_policy(
+        &self,
+        input: GetContainerRecipePolicyRequest,
+    ) -> Result<GetContainerRecipePolicyResponse, RusotoError<GetContainerRecipePolicyError>> {
+        let request_uri = "/GetContainerRecipePolicy";
+
+        let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("containerRecipeArn", &input.container_recipe_arn);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetContainerRecipePolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContainerRecipePolicyError::from_response(response))
         }
     }
 
@@ -6717,7 +7771,38 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns a list of distribution configurations. </p>
+    /// <p>Returns a list of container recipes.</p>
+    #[allow(unused_mut)]
+    async fn list_container_recipes(
+        &self,
+        input: ListContainerRecipesRequest,
+    ) -> Result<ListContainerRecipesResponse, RusotoError<ListContainerRecipesError>> {
+        let request_uri = "/ListContainerRecipes";
+
+        let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListContainerRecipesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListContainerRecipesError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of distribution configurations. </p>
     #[allow(unused_mut)]
     async fn list_distribution_configurations(
         &self,
@@ -6998,6 +8083,37 @@ impl ImageBuilder for ImageBuilderClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutComponentPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Applies a policy to a container image. We recommend that you call the RAM API CreateResourceShare (https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html) to share resources. If you call the Image Builder API <code>PutContainerImagePolicy</code>, you must also call the RAM API PromoteResourceShareCreatedFromPolicy (https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html) in order for the resource to be visible to all principals with whom the resource is shared.</p>
+    #[allow(unused_mut)]
+    async fn put_container_recipe_policy(
+        &self,
+        input: PutContainerRecipePolicyRequest,
+    ) -> Result<PutContainerRecipePolicyResponse, RusotoError<PutContainerRecipePolicyError>> {
+        let request_uri = "/PutContainerRecipePolicy";
+
+        let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutContainerRecipePolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutContainerRecipePolicyError::from_response(response))
         }
     }
 

@@ -62,13 +62,13 @@ pub struct AssociateServiceQuotaTemplateResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceQuotaIncreaseRequestFromTemplateRequest {
-    /// <p>Specifies the AWS Region for the quota that you want to delete.</p>
+    /// <p>The AWS Region.</p>
     #[serde(rename = "AwsRegion")]
     pub aws_region: String,
-    /// <p>Specifies the code for the quota that you want to delete.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     pub quota_code: String,
-    /// <p>Specifies the code for the service that you want to delete.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -85,15 +85,15 @@ pub struct DisassociateServiceQuotaTemplateRequest {}
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceQuotaTemplateResponse {}
 
-/// <p>Returns an error that explains why the action did not succeed.</p>
+/// <p>An error that explains why an action did not succeed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorReason {
-    /// <p>Service Quotas returns the following error values. </p> <p> <code>DEPENDENCY_ACCESS_DENIED_ERROR</code> is returned when the caller does not have permission to call the service or service quota. To resolve the error, you need permission to access the service or service quota.</p> <p> <code>DEPENDENCY_THROTTLING_ERROR</code> is returned when the service being called is throttling Service Quotas.</p> <p> <code>DEPENDENCY_SERVICE_ERROR</code> is returned when the service being called has availability issues.</p> <p> <code>SERVICE_QUOTA_NOT_AVAILABLE_ERROR</code> is returned when there was an error in Service Quotas.</p>
+    /// <p><p>Service Quotas returns the following error values:</p> <ul> <li> <p> <code>DEPENDENCY<em>ACCESS</em>DENIED<em>ERROR</code> - The caller does not have the required permissions to complete the action. To resolve the error, you must have permission to access the service or quota.</p> </li> <li> <p> <code>DEPENDENCY</em>THROTTLING<em>ERROR</code> - The service is throttling Service Quotas.</p> </li> <li> <p> <code>DEPENDENCY</em>SERVICE<em>ERROR</code> - The service is not available.</p> </li> <li> <p> <code>SERVICE</em>QUOTA<em>NOT</em>AVAILABLE_ERROR</code> - There was an error in Service Quotas.</p> </li> </ul></p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>The error message that provides more detail.</p>
+    /// <p>The error message.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -102,10 +102,10 @@ pub struct ErrorReason {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAWSDefaultServiceQuotaRequest {
-    /// <p>Identifies the service quota you want to select.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     pub quota_code: String,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -113,7 +113,7 @@ pub struct GetAWSDefaultServiceQuotaRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAWSDefaultServiceQuotaResponse {
-    /// <p>Returns the <a>ServiceQuota</a> object which contains all values for a quota.</p>
+    /// <p>Information about the quota.</p>
     #[serde(rename = "Quota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota: Option<ServiceQuota>,
@@ -126,7 +126,7 @@ pub struct GetAssociationForServiceQuotaTemplateRequest {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssociationForServiceQuotaTemplateResponse {
-    /// <p>Specifies whether the template is <code>ASSOCIATED</code> or <code>DISASSOCIATED</code>. If the template is <code>ASSOCIATED</code>, then it requests service quota increases for all new accounts created in your organization. </p>
+    /// <p>The association status. If the status is <code>ASSOCIATED</code>, the quota increase requests in the template are automatically applied to new accounts in your organization.</p>
     #[serde(rename = "ServiceQuotaTemplateAssociationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_quota_template_association_status: Option<String>,
@@ -135,7 +135,7 @@ pub struct GetAssociationForServiceQuotaTemplateResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestedServiceQuotaChangeRequest {
-    /// <p>Identifies the quota increase request.</p>
+    /// <p>The ID of the quota increase request.</p>
     #[serde(rename = "RequestId")]
     pub request_id: String,
 }
@@ -143,7 +143,7 @@ pub struct GetRequestedServiceQuotaChangeRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRequestedServiceQuotaChangeResponse {
-    /// <p>Returns the <code>RequestedServiceQuotaChange</code> object for the specific increase request.</p>
+    /// <p>Information about the quota increase request.</p>
     #[serde(rename = "RequestedQuota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_quota: Option<RequestedServiceQuotaChange>,
@@ -152,13 +152,13 @@ pub struct GetRequestedServiceQuotaChangeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceQuotaIncreaseRequestFromTemplateRequest {
-    /// <p>Specifies the AWS Region for the quota that you want to use.</p>
+    /// <p>The AWS Region.</p>
     #[serde(rename = "AwsRegion")]
     pub aws_region: String,
-    /// <p>Specifies the quota you want.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     pub quota_code: String,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -166,7 +166,7 @@ pub struct GetServiceQuotaIncreaseRequestFromTemplateRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceQuotaIncreaseRequestFromTemplateResponse {
-    /// <p>This object contains the details about the quota increase request.</p>
+    /// <p>Information about the quota increase request.</p>
     #[serde(rename = "ServiceQuotaIncreaseRequestInTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_quota_increase_request_in_template: Option<ServiceQuotaIncreaseRequestInTemplate>,
@@ -175,10 +175,10 @@ pub struct GetServiceQuotaIncreaseRequestFromTemplateResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceQuotaRequest {
-    /// <p>Identifies the service quota you want to select.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     pub quota_code: String,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -186,7 +186,7 @@ pub struct GetServiceQuotaRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceQuotaResponse {
-    /// <p>Returns the <a>ServiceQuota</a> object which contains all values for a quota.</p>
+    /// <p>Information about the quota.</p>
     #[serde(rename = "Quota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota: Option<ServiceQuota>,
@@ -195,15 +195,15 @@ pub struct GetServiceQuotaResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAWSDefaultServiceQuotasRequest {
-    /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, if any, make another call with the token returned from this call.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    /// <p>The token for the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -211,11 +211,11 @@ pub struct ListAWSDefaultServiceQuotasRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAWSDefaultServiceQuotasResponse {
-    /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A list of the quotas in the account with the AWS default values. </p>
+    /// <p>Information about the quotas.</p>
     #[serde(rename = "Quotas")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quotas: Option<Vec<ServiceQuota>>,
@@ -224,21 +224,21 @@ pub struct ListAWSDefaultServiceQuotasResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
-    /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, if any, make another call with the token returned from this call.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    /// <p>The token for the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies the service quota that you want to use</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     pub quota_code: String,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
-    /// <p>Specifies the status value of the quota increase request.</p>
+    /// <p>The status value of the quota increase request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -247,11 +247,11 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
-    /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Returns a list of service quota requests.</p>
+    /// <p>Information about the quota increase requests.</p>
     #[serde(rename = "RequestedQuotas")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
@@ -260,19 +260,19 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryRequest {
-    /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, if any, make another call with the token returned from this call.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    /// <p>The token for the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_code: Option<String>,
-    /// <p>Specifies the status value of the quota increase request.</p>
+    /// <p>The status of the quota increase request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -281,11 +281,11 @@ pub struct ListRequestedServiceQuotaChangeHistoryRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryResponse {
-    /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Returns a list of service quota requests.</p>
+    /// <p>Information about the quota increase requests.</p>
     #[serde(rename = "RequestedQuotas")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
@@ -294,19 +294,19 @@ pub struct ListRequestedServiceQuotaChangeHistoryResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceQuotaIncreaseRequestsInTemplateRequest {
-    /// <p>Specifies the AWS Region for the quota that you want to use.</p>
+    /// <p>The AWS Region.</p>
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_region: Option<String>,
-    /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, if any, make another call with the token returned from this call.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    /// <p>The token for the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The identifier for a service. When performing an operation, use the <code>ServiceCode</code> to specify a particular service. </p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_code: Option<String>,
@@ -315,11 +315,11 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceQuotaIncreaseRequestsInTemplateResponse {
-    /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Returns the list of values of the quota increase request in the template.</p>
+    /// <p>Information about the quota increase requests.</p>
     #[serde(rename = "ServiceQuotaIncreaseRequestInTemplateList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_quota_increase_request_in_template_list:
@@ -329,15 +329,15 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceQuotasRequest {
-    /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, if any, make another call with the token returned from this call.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    /// <p>The token for the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The identifier for a service. When performing an operation, use the <code>ServiceCode</code> to specify a particular service. </p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -345,11 +345,11 @@ pub struct ListServiceQuotasRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceQuotasResponse {
-    /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The response information for a quota lists all attribute information for the quota. </p>
+    /// <p>Information about the quotas.</p>
     #[serde(rename = "Quotas")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quotas: Option<Vec<ServiceQuota>>,
@@ -358,11 +358,11 @@ pub struct ListServiceQuotasResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
-    /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, if any, make another call with the token returned from this call.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    /// <p>The token for the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -371,33 +371,50 @@ pub struct ListServicesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServicesResponse {
-    /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Returns a list of services. </p>
+    /// <p>Information about the services.</p>
     #[serde(rename = "Services")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub services: Option<Vec<ServiceInfo>>,
 }
 
-/// <p>A structure that uses CloudWatch metrics to gather data about the service quota.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) for the applied quota for which you want to list tags. You can get this information by using the Service Quotas console, or by listing the quotas using the <a href="https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html">list-service-quotas</a> AWS CLI command or the <a href="https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_ListServiceQuotas.html">ListServiceQuotas</a> AWS API operation.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A complex data type that contains zero or more tag elements.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Information about the CloudWatch metric that reflects quota usage.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MetricInfo {
-    /// <p>A dimension is a name/value pair that is part of the identity of a metric. Every metric has specific characteristics that describe it, and you can think of dimensions as categories for those characteristics. These dimensions are part of the CloudWatch Metric Identity that measures usage against a particular service quota.</p>
+    /// <p>The metric dimension. This is a name/value pair that is part of the identity of a metric.</p>
     #[serde(rename = "MetricDimensions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_dimensions: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The name of the CloudWatch metric that measures usage of a service quota. This is a required field.</p>
+    /// <p>The name of the metric.</p>
     #[serde(rename = "MetricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
-    /// <p>The namespace of the metric. The namespace is a container for CloudWatch metrics. You can specify a name for the namespace when you create a metric.</p>
+    /// <p>The namespace of the metric.</p>
     #[serde(rename = "MetricNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_namespace: Option<String>,
-    /// <p>Statistics are metric data aggregations over specified periods of time. This is the recommended statistic to use when comparing usage in the CloudWatch Metric against your Service Quota.</p>
+    /// <p>The metric statistic that we recommend you use when determining quota usage.</p>
     #[serde(rename = "MetricStatisticRecommendation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_statistic_recommendation: Option<String>,
@@ -406,16 +423,16 @@ pub struct MetricInfo {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutServiceQuotaIncreaseRequestIntoTemplateRequest {
-    /// <p>Specifies the AWS Region for the quota. </p>
+    /// <p>The AWS Region.</p>
     #[serde(rename = "AwsRegion")]
     pub aws_region: String,
-    /// <p>Specifies the new, increased value for the quota. </p>
+    /// <p>The new, increased value for the quota.</p>
     #[serde(rename = "DesiredValue")]
     pub desired_value: f64,
-    /// <p>Specifies the service quota that you want to use.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     pub quota_code: String,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -423,21 +440,21 @@ pub struct PutServiceQuotaIncreaseRequestIntoTemplateRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutServiceQuotaIncreaseRequestIntoTemplateResponse {
-    /// <p>A structure that contains information about one service quota increase request.</p>
+    /// <p>Information about the quota increase request.</p>
     #[serde(rename = "ServiceQuotaIncreaseRequestInTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_quota_increase_request_in_template: Option<ServiceQuotaIncreaseRequestInTemplate>,
 }
 
-/// <p>A structure that contains information about the quota period.</p>
+/// <p>Information about the quota period.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QuotaPeriod {
-    /// <p>The time unit of a period.</p>
+    /// <p>The time unit.</p>
     #[serde(rename = "PeriodUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period_unit: Option<String>,
-    /// <p>The value of a period.</p>
+    /// <p>The value.</p>
     #[serde(rename = "PeriodValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period_value: Option<i64>,
@@ -446,13 +463,13 @@ pub struct QuotaPeriod {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestServiceQuotaIncreaseRequest {
-    /// <p>Specifies the value submitted in the service quota increase request. </p>
+    /// <p>The new, increased value for the quota.</p>
     #[serde(rename = "DesiredValue")]
     pub desired_value: f64,
-    /// <p>Specifies the service quota that you want to use.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     pub quota_code: String,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     pub service_code: String,
 }
@@ -460,198 +477,239 @@ pub struct RequestServiceQuotaIncreaseRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestServiceQuotaIncreaseResponse {
-    /// <p>Returns a list of service quota requests.</p>
+    /// <p>Information about the quota increase request.</p>
     #[serde(rename = "RequestedQuota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_quota: Option<RequestedServiceQuotaChange>,
 }
 
-/// <p>A structure that contains information about a requested change for a quota.</p>
+/// <p>Information about a quota increase request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestedServiceQuotaChange {
-    /// <p>The case Id for the service quota increase request.</p>
+    /// <p>The case ID.</p>
     #[serde(rename = "CaseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub case_id: Option<String>,
-    /// <p>The date and time when the service quota increase request was received and the case Id was created. </p>
+    /// <p>The date and time when the quota increase request was received and the case ID was created.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    /// <p>New increased value for the service quota.</p>
+    /// <p>The new, increased value for the quota.</p>
     #[serde(rename = "DesiredValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_value: Option<f64>,
-    /// <p>Identifies if the quota is global.</p>
+    /// <p>Indicates whether the quota is global.</p>
     #[serde(rename = "GlobalQuota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_quota: Option<bool>,
-    /// <p>The unique identifier of a requested service quota change.</p>
+    /// <p>The unique identifier.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The date and time of the most recent change in the service quota increase request.</p>
+    /// <p>The date and time of the most recent change.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
-    /// <p>The Amazon Resource Name (ARN) of the service quota.</p>
+    /// <p>The Amazon Resource Name (ARN) of the quota.</p>
     #[serde(rename = "QuotaArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_arn: Option<String>,
-    /// <p>Specifies the service quota that you want to use.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_code: Option<String>,
-    /// <p>Name of the service quota.</p>
+    /// <p>The quota name.</p>
     #[serde(rename = "QuotaName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_name: Option<String>,
-    /// <p>The IAM identity who submitted the service quota increase request.</p>
+    /// <p>The IAM identity of the requester.</p>
     #[serde(rename = "Requester")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requester: Option<String>,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_code: Option<String>,
-    /// <p>The name of the AWS service specified in the increase request. </p>
+    /// <p>The service name.</p>
     #[serde(rename = "ServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
-    /// <p>State of the service quota increase request.</p>
+    /// <p>The state of the quota increase request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Specifies the unit used for the quota.</p>
+    /// <p>The unit of measurement.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
 }
 
-/// <p>A structure that contains the <code>ServiceName</code> and <code>ServiceCode</code>. It does not include all details of the service quota. To get those values, use the <a>ListServiceQuotas</a> operation. </p>
+/// <p>Information about a service.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceInfo {
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_code: Option<String>,
-    /// <p>The name of the AWS service specified in the increase request. </p>
+    /// <p>The service name.</p>
     #[serde(rename = "ServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
 }
 
-/// <p>A structure that contains the full set of details that define the service quota.</p>
+/// <p>Information about a quota.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceQuota {
-    /// <p>Specifies if the quota value can be increased.</p>
+    /// <p>Indicates whether the quota value can be increased.</p>
     #[serde(rename = "Adjustable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adjustable: Option<bool>,
-    /// <p>Specifies the <code>ErrorCode</code> and <code>ErrorMessage</code> when success isn't achieved.</p>
+    /// <p>The error code and error reason.</p>
     #[serde(rename = "ErrorReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_reason: Option<ErrorReason>,
-    /// <p>Specifies if the quota is global.</p>
+    /// <p>Indicates whether the quota is global.</p>
     #[serde(rename = "GlobalQuota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_quota: Option<bool>,
-    /// <p>Identifies the unit and value of how time is measured.</p>
+    /// <p>The period of time.</p>
     #[serde(rename = "Period")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period: Option<QuotaPeriod>,
-    /// <p>The Amazon Resource Name (ARN) of the service quota.</p>
+    /// <p>The Amazon Resource Name (ARN) of the quota.</p>
     #[serde(rename = "QuotaArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_arn: Option<String>,
-    /// <p>The code identifier for the service quota specified.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_code: Option<String>,
-    /// <p>The name identifier of the service quota.</p>
+    /// <p>The quota name.</p>
     #[serde(rename = "QuotaName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_name: Option<String>,
-    /// <p>Specifies the service that you want to use.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_code: Option<String>,
-    /// <p>The name of the AWS service specified in the increase request. </p>
+    /// <p>The service name.</p>
     #[serde(rename = "ServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
-    /// <p>The unit of measurement for the value of the service quota.</p>
+    /// <p>The unit of measurement.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
-    /// <p>Specifies the details about the measurement. </p>
+    /// <p>Information about the measurement.</p>
     #[serde(rename = "UsageMetric")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_metric: Option<MetricInfo>,
-    /// <p>The value of service quota.</p>
+    /// <p>The quota value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<f64>,
 }
 
-/// <p>A structure that contains information about one service quota increase request.</p>
+/// <p>Information about a quota increase request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceQuotaIncreaseRequestInTemplate {
-    /// <p>The AWS Region where the increase request occurs.</p>
+    /// <p>The AWS Region.</p>
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_region: Option<String>,
-    /// <p>Identifies the new, increased value of the service quota in the increase request. </p>
+    /// <p>The new, increased value of the quota.</p>
     #[serde(rename = "DesiredValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_value: Option<f64>,
-    /// <p>Specifies if the quota is a global quota.</p>
+    /// <p>Indicates whether the quota is global.</p>
     #[serde(rename = "GlobalQuota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_quota: Option<bool>,
-    /// <p>The code identifier for the service quota specified in the increase request.</p>
+    /// <p>The quota identifier.</p>
     #[serde(rename = "QuotaCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_code: Option<String>,
-    /// <p>The name of the service quota in the increase request.</p>
+    /// <p>The quota name.</p>
     #[serde(rename = "QuotaName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota_name: Option<String>,
-    /// <p>The code identifier for the AWS service specified in the increase request.</p>
+    /// <p>The service identifier.</p>
     #[serde(rename = "ServiceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_code: Option<String>,
-    /// <p>The name of the AWS service specified in the increase request. </p>
+    /// <p>The service name.</p>
     #[serde(rename = "ServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
-    /// <p>The unit of measure for the increase request.</p>
+    /// <p>The unit of measurement.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
 }
 
+/// <p>A complex data type that contains a tag key and tag value.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Tag {
+    /// <p>A string that contains a tag key. The string length should be between 1 and 128 characters. Valid characters include a-z, A-Z, 0-9, space, and the special characters _ - . : / = + @.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>A string that contains an optional tag value. The string length should be between 0 and 256 characters. Valid characters include a-z, A-Z, 0-9, space, and the special characters _ - . : / = + @.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) for the applied quota. You can get this information by using the Service Quotas console, or by listing the quotas using the <a href="https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html">list-service-quotas</a> AWS CLI command or the <a href="https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_ListServiceQuotas.html">ListServiceQuotas</a> AWS API operation.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tags that you want to add to the resource.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) for the applied quota that you want to untag. You can get this information by using the Service Quotas console, or by listing the quotas using the <a href="https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html">list-service-quotas</a> AWS CLI command or the <a href="https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_ListServiceQuotas.html">ListServiceQuotas</a> AWS API operation.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The keys of the tags that you want to remove from the resource.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
 /// Errors returned by AssociateServiceQuotaTemplate
 #[derive(Debug, PartialEq)]
 pub enum AssociateServiceQuotaTemplateError {
-    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization. To enable, call <a>AssociateServiceQuotaTemplate</a>.</p>
+    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization.</p>
     AWSServiceAccessNotEnabled(String),
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
     /// <p>The account making this call is not a member of an organization.</p>
     NoAvailableOrganization(String),
-    /// <p>The organization that your account belongs to, is not in All Features mode. To enable all features mode, see <a href="https://docs.aws.amazon.com/organizations/latest/APIReference/API_EnableAllFeatures.html">EnableAllFeatures</a>.</p>
+    /// <p>The organization that your account belongs to is not in All Features mode.</p>
     OrganizationNotInAllFeaturesMode(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>The Service Quotas template is not available in the Region where you are making the request. Please make the request in us-east-1. </p>
+    /// <p>The Service Quotas template is not available in this AWS Region.</p>
     TemplatesNotAvailableInRegion(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -741,23 +799,23 @@ impl Error for AssociateServiceQuotaTemplateError {}
 /// Errors returned by DeleteServiceQuotaIncreaseRequestFromTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceQuotaIncreaseRequestFromTemplateError {
-    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization. To enable, call <a>AssociateServiceQuotaTemplate</a>.</p>
+    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization.</p>
     AWSServiceAccessNotEnabled(String),
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>The account making this call is not a member of an organization.</p>
     NoAvailableOrganization(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>The Service Quotas template is not available in the Region where you are making the request. Please make the request in us-east-1. </p>
+    /// <p>The Service Quotas template is not available in this AWS Region.</p>
     TemplatesNotAvailableInRegion(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -821,21 +879,21 @@ impl Error for DeleteServiceQuotaIncreaseRequestFromTemplateError {}
 /// Errors returned by DisassociateServiceQuotaTemplate
 #[derive(Debug, PartialEq)]
 pub enum DisassociateServiceQuotaTemplateError {
-    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization. To enable, call <a>AssociateServiceQuotaTemplate</a>.</p>
+    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization.</p>
     AWSServiceAccessNotEnabled(String),
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
     /// <p>The account making this call is not a member of an organization.</p>
     NoAvailableOrganization(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>The quota request template is not associated with your organization. </p> <p>To use the template, call <a>AssociateServiceQuotaTemplate</a>. </p>
+    /// <p>The quota request template is not associated with your organization.</p>
     ServiceQuotaTemplateNotInUse(String),
-    /// <p>The Service Quotas template is not available in the Region where you are making the request. Please make the request in us-east-1. </p>
+    /// <p>The Service Quotas template is not available in this AWS Region.</p>
     TemplatesNotAvailableInRegion(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -929,15 +987,15 @@ impl Error for DisassociateServiceQuotaTemplateError {}
 /// Errors returned by GetAWSDefaultServiceQuota
 #[derive(Debug, PartialEq)]
 pub enum GetAWSDefaultServiceQuotaError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -991,21 +1049,21 @@ impl Error for GetAWSDefaultServiceQuotaError {}
 /// Errors returned by GetAssociationForServiceQuotaTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetAssociationForServiceQuotaTemplateError {
-    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization. To enable, call <a>AssociateServiceQuotaTemplate</a>.</p>
+    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization.</p>
     AWSServiceAccessNotEnabled(String),
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
     /// <p>The account making this call is not a member of an organization.</p>
     NoAvailableOrganization(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>The quota request template is not associated with your organization. </p> <p>To use the template, call <a>AssociateServiceQuotaTemplate</a>. </p>
+    /// <p>The quota request template is not associated with your organization.</p>
     ServiceQuotaTemplateNotInUse(String),
-    /// <p>The Service Quotas template is not available in the Region where you are making the request. Please make the request in us-east-1. </p>
+    /// <p>The Service Quotas template is not available in this AWS Region.</p>
     TemplatesNotAvailableInRegion(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1105,15 +1163,15 @@ impl Error for GetAssociationForServiceQuotaTemplateError {}
 /// Errors returned by GetRequestedServiceQuotaChange
 #[derive(Debug, PartialEq)]
 pub enum GetRequestedServiceQuotaChangeError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1177,15 +1235,15 @@ impl Error for GetRequestedServiceQuotaChangeError {}
 /// Errors returned by GetServiceQuota
 #[derive(Debug, PartialEq)]
 pub enum GetServiceQuotaError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1231,23 +1289,23 @@ impl Error for GetServiceQuotaError {}
 /// Errors returned by GetServiceQuotaIncreaseRequestFromTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetServiceQuotaIncreaseRequestFromTemplateError {
-    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization. To enable, call <a>AssociateServiceQuotaTemplate</a>.</p>
+    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization.</p>
     AWSServiceAccessNotEnabled(String),
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>The account making this call is not a member of an organization.</p>
     NoAvailableOrganization(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>The Service Quotas template is not available in the Region where you are making the request. Please make the request in us-east-1. </p>
+    /// <p>The Service Quotas template is not available in this AWS Region.</p>
     TemplatesNotAvailableInRegion(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1353,17 +1411,17 @@ impl Error for GetServiceQuotaIncreaseRequestFromTemplateError {}
 /// Errors returned by ListAWSDefaultServiceQuotas
 #[derive(Debug, PartialEq)]
 pub enum ListAWSDefaultServiceQuotasError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>Invalid input was provided.</p>
     InvalidPaginationToken(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1427,17 +1485,17 @@ impl Error for ListAWSDefaultServiceQuotasError {}
 /// Errors returned by ListRequestedServiceQuotaChangeHistory
 #[derive(Debug, PartialEq)]
 pub enum ListRequestedServiceQuotaChangeHistoryError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>Invalid input was provided.</p>
     InvalidPaginationToken(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1515,17 +1573,17 @@ impl Error for ListRequestedServiceQuotaChangeHistoryError {}
 /// Errors returned by ListRequestedServiceQuotaChangeHistoryByQuota
 #[derive(Debug, PartialEq)]
 pub enum ListRequestedServiceQuotaChangeHistoryByQuotaError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>Invalid input was provided.</p>
     InvalidPaginationToken(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1607,21 +1665,21 @@ impl Error for ListRequestedServiceQuotaChangeHistoryByQuotaError {}
 /// Errors returned by ListServiceQuotaIncreaseRequestsInTemplate
 #[derive(Debug, PartialEq)]
 pub enum ListServiceQuotaIncreaseRequestsInTemplateError {
-    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization. To enable, call <a>AssociateServiceQuotaTemplate</a>.</p>
+    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization.</p>
     AWSServiceAccessNotEnabled(String),
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>The account making this call is not a member of an organization.</p>
     NoAvailableOrganization(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>The Service Quotas template is not available in the Region where you are making the request. Please make the request in us-east-1. </p>
+    /// <p>The Service Quotas template is not available in this AWS Region.</p>
     TemplatesNotAvailableInRegion(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1719,17 +1777,17 @@ impl Error for ListServiceQuotaIncreaseRequestsInTemplateError {}
 /// Errors returned by ListServiceQuotas
 #[derive(Debug, PartialEq)]
 pub enum ListServiceQuotasError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>Invalid input was provided.</p>
     InvalidPaginationToken(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1781,15 +1839,15 @@ impl Error for ListServiceQuotasError {}
 /// Errors returned by ListServices
 #[derive(Debug, PartialEq)]
 pub enum ListServicesError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>Invalid input was provided.</p>
     InvalidPaginationToken(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1832,16 +1890,70 @@ impl fmt::Display for ListServicesError {
     }
 }
 impl Error for ListServicesError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>You do not have sufficient permission to perform this action.</p>
+    AccessDenied(String),
+    /// <p>Invalid input was provided.</p>
+    IllegalArgument(String),
+    /// <p>The specified resource does not exist.</p>
+    NoSuchResource(String),
+    /// <p>Something went wrong.</p>
+    Service(String),
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
+    TooManyRequests(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
+                }
+                "IllegalArgumentException" => {
+                    return RusotoError::Service(ListTagsForResourceError::IllegalArgument(err.msg))
+                }
+                "NoSuchResourceException" => {
+                    return RusotoError::Service(ListTagsForResourceError::NoSuchResource(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Service(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListTagsForResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::IllegalArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Service(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutServiceQuotaIncreaseRequestIntoTemplate
 #[derive(Debug, PartialEq)]
 pub enum PutServiceQuotaIncreaseRequestIntoTemplateError {
-    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization. To enable, call <a>AssociateServiceQuotaTemplate</a>.</p>
+    /// <p>The action you attempted is not allowed unless Service Access with Service Quotas is enabled in your organization.</p>
     AWSServiceAccessNotEnabled(String),
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
     /// <p>The account making this call is not a member of an organization.</p>
     NoAvailableOrganization(String),
@@ -1849,11 +1961,11 @@ pub enum PutServiceQuotaIncreaseRequestIntoTemplateError {
     NoSuchResource(String),
     /// <p>You have exceeded your service quota. To perform the requested action, remove some of the relevant resources, or use Service Quotas to request a service quota increase.</p>
     QuotaExceeded(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>The Service Quotas template is not available in the Region where you are making the request. Please make the request in us-east-1. </p>
+    /// <p>The Service Quotas template is not available in this AWS Region.</p>
     TemplatesNotAvailableInRegion(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -1967,13 +2079,13 @@ impl Error for PutServiceQuotaIncreaseRequestIntoTemplateError {}
 /// Errors returned by RequestServiceQuotaIncrease
 #[derive(Debug, PartialEq)]
 pub enum RequestServiceQuotaIncreaseError {
-    /// <p>You do not have sufficient access to perform this action.</p>
+    /// <p>You do not have sufficient permission to perform this action.</p>
     AccessDenied(String),
     /// <p>You can't perform this action because a dependency does not have access.</p>
     DependencyAccessDenied(String),
-    /// <p>Invalid input was provided. </p>
+    /// <p>Invalid input was provided.</p>
     IllegalArgument(String),
-    /// <p>Invalid input was provided for the . </p>
+    /// <p>The resource is in an invalid state.</p>
     InvalidResourceState(String),
     /// <p>The specified resource does not exist.</p>
     NoSuchResource(String),
@@ -1981,9 +2093,9 @@ pub enum RequestServiceQuotaIncreaseError {
     QuotaExceeded(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
-    /// <p>Something went wrong. </p>
+    /// <p>Something went wrong.</p>
     Service(String),
-    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota. </p>
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
     TooManyRequests(String),
 }
 
@@ -2066,10 +2178,130 @@ impl fmt::Display for RequestServiceQuotaIncreaseError {
     }
 }
 impl Error for RequestServiceQuotaIncreaseError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>You do not have sufficient permission to perform this action.</p>
+    AccessDenied(String),
+    /// <p>Invalid input was provided.</p>
+    IllegalArgument(String),
+    /// <p>The specified resource does not exist.</p>
+    NoSuchResource(String),
+    /// <p>Something went wrong.</p>
+    Service(String),
+    /// <p>The specified tag is a reserved word and cannot be used.</p>
+    TagPolicyViolation(String),
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
+    TooManyRequests(String),
+    /// <p>You've exceeded the number of tags allowed for a resource. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/sq-tagging.html#sq-tagging-restrictions">Tag restrictions</a> in the <i>Service Quotas User Guide</i>.</p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
+                }
+                "IllegalArgumentException" => {
+                    return RusotoError::Service(TagResourceError::IllegalArgument(err.msg))
+                }
+                "NoSuchResourceException" => {
+                    return RusotoError::Service(TagResourceError::NoSuchResource(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(TagResourceError::Service(err.msg))
+                }
+                "TagPolicyViolationException" => {
+                    return RusotoError::Service(TagResourceError::TagPolicyViolation(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyRequests(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::IllegalArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagPolicyViolation(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>You do not have sufficient permission to perform this action.</p>
+    AccessDenied(String),
+    /// <p>Invalid input was provided.</p>
+    IllegalArgument(String),
+    /// <p>The specified resource does not exist.</p>
+    NoSuchResource(String),
+    /// <p>Something went wrong.</p>
+    Service(String),
+    /// <p>Due to throttling, the request was denied. Slow down the rate of request calls, or request an increase for this quota.</p>
+    TooManyRequests(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
+                }
+                "IllegalArgumentException" => {
+                    return RusotoError::Service(UntagResourceError::IllegalArgument(err.msg))
+                }
+                "NoSuchResourceException" => {
+                    return RusotoError::Service(UntagResourceError::NoSuchResource(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(UntagResourceError::Service(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UntagResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::IllegalArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Service Quotas API. Service Quotas clients implement this trait.
 #[async_trait]
 pub trait ServiceQuotas {
-    /// <p>Associates the Service Quotas template with your organization so that when new accounts are created in your organization, the template submits increase requests for the specified service quotas. Use the Service Quotas template to request an increase for any adjustable quota value. After you define the Service Quotas template, use this operation to associate, or enable, the template. </p>
+    /// <p>Associates your quota request template with your organization. When a new account is created in your organization, the quota increase requests in the template are automatically applied to the account. You can add a quota increase request for any adjustable quota to your template.</p>
     async fn associate_service_quota_template(
         &self,
     ) -> Result<
@@ -2077,7 +2309,7 @@ pub trait ServiceQuotas {
         RusotoError<AssociateServiceQuotaTemplateError>,
     >;
 
-    /// <p>Removes a service quota increase request from the Service Quotas template. </p>
+    /// <p>Deletes the quota increase request for the specified quota from your quota request template.</p>
     async fn delete_service_quota_increase_request_from_template(
         &self,
         input: DeleteServiceQuotaIncreaseRequestFromTemplateRequest,
@@ -2086,7 +2318,7 @@ pub trait ServiceQuotas {
         RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError>,
     >;
 
-    /// <p><p>Disables the Service Quotas template. Once the template is disabled, it does not request quota increases for new accounts in your organization. Disabling the quota template does not apply the quota increase requests from the template. </p> <p> <b>Related operations</b> </p> <ul> <li> <p>To enable the quota template, call <a>AssociateServiceQuotaTemplate</a>. </p> </li> <li> <p>To delete a specific service quota from the template, use <a>DeleteServiceQuotaIncreaseRequestFromTemplate</a>.</p> </li> </ul></p>
+    /// <p>Disables your quota request template. After a template is disabled, the quota increase requests in the template are not applied to new accounts in your organization. Disabling a quota request template does not apply its quota increase requests.</p>
     async fn disassociate_service_quota_template(
         &self,
     ) -> Result<
@@ -2094,13 +2326,13 @@ pub trait ServiceQuotas {
         RusotoError<DisassociateServiceQuotaTemplateError>,
     >;
 
-    /// <p>Retrieves the default service quotas values. The Value returned for each quota is the AWS default value, even if the quotas have been increased.. </p>
+    /// <p>Retrieves the default value for the specified quota. The default value does not reflect any quota increases.</p>
     async fn get_aws_default_service_quota(
         &self,
         input: GetAWSDefaultServiceQuotaRequest,
     ) -> Result<GetAWSDefaultServiceQuotaResponse, RusotoError<GetAWSDefaultServiceQuotaError>>;
 
-    /// <p>Retrieves the <code>ServiceQuotaTemplateAssociationStatus</code> value from the service. Use this action to determine if the Service Quota template is associated, or enabled. </p>
+    /// <p>Retrieves the status of the association for the quota request template.</p>
     async fn get_association_for_service_quota_template(
         &self,
     ) -> Result<
@@ -2108,7 +2340,7 @@ pub trait ServiceQuotas {
         RusotoError<GetAssociationForServiceQuotaTemplateError>,
     >;
 
-    /// <p>Retrieves the details for a particular increase request. </p>
+    /// <p>Retrieves information about the specified quota increase request.</p>
     async fn get_requested_service_quota_change(
         &self,
         input: GetRequestedServiceQuotaChangeRequest,
@@ -2117,13 +2349,13 @@ pub trait ServiceQuotas {
         RusotoError<GetRequestedServiceQuotaChangeError>,
     >;
 
-    /// <p>Returns the details for the specified service quota. This operation provides a different Value than the <code>GetAWSDefaultServiceQuota</code> operation. This operation returns the applied value for each quota. <code>GetAWSDefaultServiceQuota</code> returns the default AWS value for each quota. </p>
+    /// <p>Retrieves the applied quota value for the specified quota. For some quotas, only the default values are available. If the applied quota value is not available for a quota, the quota is not retrieved.</p>
     async fn get_service_quota(
         &self,
         input: GetServiceQuotaRequest,
     ) -> Result<GetServiceQuotaResponse, RusotoError<GetServiceQuotaError>>;
 
-    /// <p>Returns the details of the service quota increase request in your template.</p>
+    /// <p>Retrieves information about the specified quota increase request in your quota request template.</p>
     async fn get_service_quota_increase_request_from_template(
         &self,
         input: GetServiceQuotaIncreaseRequestFromTemplateRequest,
@@ -2132,13 +2364,13 @@ pub trait ServiceQuotas {
         RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError>,
     >;
 
-    /// <p><p>Lists all default service quotas for the specified AWS service or all AWS services. ListAWSDefaultServiceQuotas is similar to <a>ListServiceQuotas</a> except for the Value object. The Value object returned by <code>ListAWSDefaultServiceQuotas</code> is the default value assigned by AWS. This request returns a list of all service quotas for the specified service. The listing of each you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
+    /// <p>Lists the default values for the quotas for the specified AWS service. A default value does not reflect any quota increases.</p>
     async fn list_aws_default_service_quotas(
         &self,
         input: ListAWSDefaultServiceQuotasRequest,
     ) -> Result<ListAWSDefaultServiceQuotasResponse, RusotoError<ListAWSDefaultServiceQuotasError>>;
 
-    /// <p>Requests a list of the changes to quotas for a service.</p>
+    /// <p>Retrieves the quota increase requests for the specified service.</p>
     async fn list_requested_service_quota_change_history(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryRequest,
@@ -2147,7 +2379,7 @@ pub trait ServiceQuotas {
         RusotoError<ListRequestedServiceQuotaChangeHistoryError>,
     >;
 
-    /// <p>Requests a list of the changes to specific service quotas. This command provides additional granularity over the <code>ListRequestedServiceQuotaChangeHistory</code> command. Once a quota change request has reached <code>CASE_CLOSED, APPROVED,</code> or <code>DENIED</code>, the history has been kept for 90 days.</p>
+    /// <p>Retrieves the quota increase requests for the specified quota.</p>
     async fn list_requested_service_quota_change_history_by_quota(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryByQuotaRequest,
@@ -2156,7 +2388,7 @@ pub trait ServiceQuotas {
         RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError>,
     >;
 
-    /// <p>Returns a list of the quota increase requests in the template. </p>
+    /// <p>Lists the quota increase requests in the specified quota request template.</p>
     async fn list_service_quota_increase_requests_in_template(
         &self,
         input: ListServiceQuotaIncreaseRequestsInTemplateRequest,
@@ -2165,19 +2397,25 @@ pub trait ServiceQuotas {
         RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError>,
     >;
 
-    /// <p><p>Lists all service quotas for the specified AWS service. This request returns a list of the service quotas for the specified service. you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
+    /// <p>Lists the applied quota values for the specified AWS service. For some quotas, only the default values are available. If the applied quota value is not available for a quota, the quota is not retrieved.</p>
     async fn list_service_quotas(
         &self,
         input: ListServiceQuotasRequest,
     ) -> Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>>;
 
-    /// <p>Lists the AWS services available in Service Quotas. Not all AWS services are available in Service Quotas. To list the see the list of the service quotas for a specific service, use <a>ListServiceQuotas</a>.</p>
+    /// <p>Lists the names and codes for the services integrated with Service Quotas.</p>
     async fn list_services(
         &self,
         input: ListServicesRequest,
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
 
-    /// <p>Defines and adds a quota to the service quota template. To add a quota to the template, you must provide the <code>ServiceCode</code>, <code>QuotaCode</code>, <code>AwsRegion</code>, and <code>DesiredValue</code>. Once you add a quota to the template, use <a>ListServiceQuotaIncreaseRequestsInTemplate</a> to see the list of quotas in the template.</p>
+    /// <p>Returns a list of the tags assigned to the specified applied quota.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Adds a quota increase request to your quota request template.</p>
     async fn put_service_quota_increase_request_into_template(
         &self,
         input: PutServiceQuotaIncreaseRequestIntoTemplateRequest,
@@ -2186,11 +2424,23 @@ pub trait ServiceQuotas {
         RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError>,
     >;
 
-    /// <p>Retrieves the details of a service quota increase request. The response to this command provides the details in the <a>RequestedServiceQuotaChange</a> object. </p>
+    /// <p>Submits a quota increase request for the specified quota.</p>
     async fn request_service_quota_increase(
         &self,
         input: RequestServiceQuotaIncreaseRequest,
     ) -> Result<RequestServiceQuotaIncreaseResponse, RusotoError<RequestServiceQuotaIncreaseError>>;
+
+    /// <p>Adds tags to the specified applied quota. You can include one or more tags to add to the quota.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes tags from the specified applied quota. You can specify one or more tags to remove.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 }
 /// A client for the Service Quotas API.
 #[derive(Clone)]
@@ -2232,7 +2482,7 @@ impl ServiceQuotasClient {
 
 #[async_trait]
 impl ServiceQuotas for ServiceQuotasClient {
-    /// <p>Associates the Service Quotas template with your organization so that when new accounts are created in your organization, the template submits increase requests for the specified service quotas. Use the Service Quotas template to request an increase for any adjustable quota value. After you define the Service Quotas template, use this operation to associate, or enable, the template. </p>
+    /// <p>Associates your quota request template with your organization. When a new account is created in your organization, the quota increase requests in the template are automatically applied to the account. You can add a quota increase request for any adjustable quota to your template.</p>
     async fn associate_service_quota_template(
         &self,
     ) -> Result<
@@ -2255,7 +2505,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<AssociateServiceQuotaTemplateResponse, _>()
     }
 
-    /// <p>Removes a service quota increase request from the Service Quotas template. </p>
+    /// <p>Deletes the quota increase request for the specified quota from your quota request template.</p>
     async fn delete_service_quota_increase_request_from_template(
         &self,
         input: DeleteServiceQuotaIncreaseRequestFromTemplateRequest,
@@ -2283,7 +2533,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<DeleteServiceQuotaIncreaseRequestFromTemplateResponse, _>()
     }
 
-    /// <p><p>Disables the Service Quotas template. Once the template is disabled, it does not request quota increases for new accounts in your organization. Disabling the quota template does not apply the quota increase requests from the template. </p> <p> <b>Related operations</b> </p> <ul> <li> <p>To enable the quota template, call <a>AssociateServiceQuotaTemplate</a>. </p> </li> <li> <p>To delete a specific service quota from the template, use <a>DeleteServiceQuotaIncreaseRequestFromTemplate</a>.</p> </li> </ul></p>
+    /// <p>Disables your quota request template. After a template is disabled, the quota increase requests in the template are not applied to new accounts in your organization. Disabling a quota request template does not apply its quota increase requests.</p>
     async fn disassociate_service_quota_template(
         &self,
     ) -> Result<
@@ -2309,7 +2559,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<DisassociateServiceQuotaTemplateResponse, _>()
     }
 
-    /// <p>Retrieves the default service quotas values. The Value returned for each quota is the AWS default value, even if the quotas have been increased.. </p>
+    /// <p>Retrieves the default value for the specified quota. The default value does not reflect any quota increases.</p>
     async fn get_aws_default_service_quota(
         &self,
         input: GetAWSDefaultServiceQuotaRequest,
@@ -2332,7 +2582,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<GetAWSDefaultServiceQuotaResponse, _>()
     }
 
-    /// <p>Retrieves the <code>ServiceQuotaTemplateAssociationStatus</code> value from the service. Use this action to determine if the Service Quota template is associated, or enabled. </p>
+    /// <p>Retrieves the status of the association for the quota request template.</p>
     async fn get_association_for_service_quota_template(
         &self,
     ) -> Result<
@@ -2358,7 +2608,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<GetAssociationForServiceQuotaTemplateResponse, _>()
     }
 
-    /// <p>Retrieves the details for a particular increase request. </p>
+    /// <p>Retrieves information about the specified quota increase request.</p>
     async fn get_requested_service_quota_change(
         &self,
         input: GetRequestedServiceQuotaChangeRequest,
@@ -2383,7 +2633,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<GetRequestedServiceQuotaChangeResponse, _>()
     }
 
-    /// <p>Returns the details for the specified service quota. This operation provides a different Value than the <code>GetAWSDefaultServiceQuota</code> operation. This operation returns the applied value for each quota. <code>GetAWSDefaultServiceQuota</code> returns the default AWS value for each quota. </p>
+    /// <p>Retrieves the applied quota value for the specified quota. For some quotas, only the default values are available. If the applied quota value is not available for a quota, the quota is not retrieved.</p>
     async fn get_service_quota(
         &self,
         input: GetServiceQuotaRequest,
@@ -2401,7 +2651,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetServiceQuotaResponse, _>()
     }
 
-    /// <p>Returns the details of the service quota increase request in your template.</p>
+    /// <p>Retrieves information about the specified quota increase request in your quota request template.</p>
     async fn get_service_quota_increase_request_from_template(
         &self,
         input: GetServiceQuotaIncreaseRequestFromTemplateRequest,
@@ -2429,7 +2679,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<GetServiceQuotaIncreaseRequestFromTemplateResponse, _>()
     }
 
-    /// <p><p>Lists all default service quotas for the specified AWS service or all AWS services. ListAWSDefaultServiceQuotas is similar to <a>ListServiceQuotas</a> except for the Value object. The Value object returned by <code>ListAWSDefaultServiceQuotas</code> is the default value assigned by AWS. This request returns a list of all service quotas for the specified service. The listing of each you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
+    /// <p>Lists the default values for the quotas for the specified AWS service. A default value does not reflect any quota increases.</p>
     async fn list_aws_default_service_quotas(
         &self,
         input: ListAWSDefaultServiceQuotasRequest,
@@ -2452,7 +2702,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<ListAWSDefaultServiceQuotasResponse, _>()
     }
 
-    /// <p>Requests a list of the changes to quotas for a service.</p>
+    /// <p>Retrieves the quota increase requests for the specified service.</p>
     async fn list_requested_service_quota_change_history(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryRequest,
@@ -2480,7 +2730,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<ListRequestedServiceQuotaChangeHistoryResponse, _>()
     }
 
-    /// <p>Requests a list of the changes to specific service quotas. This command provides additional granularity over the <code>ListRequestedServiceQuotaChangeHistory</code> command. Once a quota change request has reached <code>CASE_CLOSED, APPROVED,</code> or <code>DENIED</code>, the history has been kept for 90 days.</p>
+    /// <p>Retrieves the quota increase requests for the specified quota.</p>
     async fn list_requested_service_quota_change_history_by_quota(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryByQuotaRequest,
@@ -2508,7 +2758,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<ListRequestedServiceQuotaChangeHistoryByQuotaResponse, _>()
     }
 
-    /// <p>Returns a list of the quota increase requests in the template. </p>
+    /// <p>Lists the quota increase requests in the specified quota request template.</p>
     async fn list_service_quota_increase_requests_in_template(
         &self,
         input: ListServiceQuotaIncreaseRequestsInTemplateRequest,
@@ -2536,7 +2786,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<ListServiceQuotaIncreaseRequestsInTemplateResponse, _>()
     }
 
-    /// <p><p>Lists all service quotas for the specified AWS service. This request returns a list of the service quotas for the specified service. you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
+    /// <p>Lists the applied quota values for the specified AWS service. For some quotas, only the default values are available. If the applied quota value is not available for a quota, the quota is not retrieved.</p>
     async fn list_service_quotas(
         &self,
         input: ListServiceQuotasRequest,
@@ -2554,7 +2804,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListServiceQuotasResponse, _>()
     }
 
-    /// <p>Lists the AWS services available in Service Quotas. Not all AWS services are available in Service Quotas. To list the see the list of the service quotas for a specific service, use <a>ListServiceQuotas</a>.</p>
+    /// <p>Lists the names and codes for the services integrated with Service Quotas.</p>
     async fn list_services(
         &self,
         input: ListServicesRequest,
@@ -2572,7 +2822,25 @@ impl ServiceQuotas for ServiceQuotasClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
     }
 
-    /// <p>Defines and adds a quota to the service quota template. To add a quota to the template, you must provide the <code>ServiceCode</code>, <code>QuotaCode</code>, <code>AwsRegion</code>, and <code>DesiredValue</code>. Once you add a quota to the template, use <a>ListServiceQuotaIncreaseRequestsInTemplate</a> to see the list of quotas in the template.</p>
+    /// <p>Returns a list of the tags assigned to the specified applied quota.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ServiceQuotasV20190624.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
+    }
+
+    /// <p>Adds a quota increase request to your quota request template.</p>
     async fn put_service_quota_increase_request_into_template(
         &self,
         input: PutServiceQuotaIncreaseRequestIntoTemplateRequest,
@@ -2600,7 +2868,7 @@ impl ServiceQuotas for ServiceQuotasClient {
             .deserialize::<PutServiceQuotaIncreaseRequestIntoTemplateResponse, _>()
     }
 
-    /// <p>Retrieves the details of a service quota increase request. The response to this command provides the details in the <a>RequestedServiceQuotaChange</a> object. </p>
+    /// <p>Submits a quota increase request for the specified quota.</p>
     async fn request_service_quota_increase(
         &self,
         input: RequestServiceQuotaIncreaseRequest,
@@ -2621,5 +2889,41 @@ impl ServiceQuotas for ServiceQuotasClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<RequestServiceQuotaIncreaseResponse, _>()
+    }
+
+    /// <p>Adds tags to the specified applied quota. You can include one or more tags to add to the quota.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ServiceQuotasV20190624.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+    }
+
+    /// <p>Removes tags from the specified applied quota. You can specify one or more tags to remove.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "ServiceQuotasV20190624.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 }

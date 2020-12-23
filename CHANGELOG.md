@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update to `hyper-rustls` 0.21.
 - Disable `chrono`'s `oldtime` feature
 - Remove dependency on `regex`
+- Update to botocore 1.19.42
 
 
 ## [0.45.0] - 2020-07-22

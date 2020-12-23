@@ -91,6 +91,10 @@ pub struct MeterUsageRequest {
     /// <p>Timestamp, in UTC, for which the usage is being reported. Your application can meter usage for up to one hour in the past. Make sure the timestamp value is not before the start of the software usage.</p>
     #[serde(rename = "Timestamp")]
     pub timestamp: f64,
+    /// <p>The set of UsageAllocations to submit.</p> <p>The sum of all UsageAllocation quantities must equal the UsageQuantity of the MeterUsage request, and each UsageAllocation must have a unique set of tags (include no tags).</p>
+    #[serde(rename = "UsageAllocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage_allocations: Option<Vec<UsageAllocation>>,
     /// <p>It will be one of the fcp dimension name provided during the publishing of the product.</p>
     #[serde(rename = "UsageDimension")]
     pub usage_dimension: String,
@@ -160,6 +164,29 @@ pub struct ResolveCustomerResult {
     pub product_code: Option<String>,
 }
 
+/// <p>Metadata assigned to an allocation. Each tag is made up of a key and a value.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Tag {
+    /// <p>One part of a key-value pair that makes up a tag. A key is a label that acts like a category for the specific tag values.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>One part of a key-value pair that makes up a tag. A value acts as a descriptor within a tag category (key). The value can be empty or null.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p>Usage allocations allow you to split usage into buckets by tags.</p> <p>Each UsageAllocation indicates the usage quantity for a specific set of tags.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct UsageAllocation {
+    /// <p>The total quantity allocated to this bucket of usage.</p>
+    #[serde(rename = "AllocatedUsageQuantity")]
+    pub allocated_usage_quantity: i64,
+    /// <p>The set of tags that define the bucket of usage. For the bucket of items with no tags, this parameter can be left out.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>A UsageRecord indicates a quantity of usage for a given product, customer, dimension and time.</p> <p>Multiple requests with the same UsageRecords as input will be deduplicated to prevent double charges.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UsageRecord {
@@ -176,6 +203,10 @@ pub struct UsageRecord {
     /// <p>Timestamp, in UTC, for which the usage is being reported.</p> <p>Your application can meter usage for up to one hour in the past. Make sure the timestamp value is not before the start of the software usage.</p>
     #[serde(rename = "Timestamp")]
     pub timestamp: f64,
+    /// <p>The set of UsageAllocations to submit. The sum of all UsageAllocation quantities must equal the Quantity of the UsageRecord.</p>
+    #[serde(rename = "UsageAllocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage_allocations: Option<Vec<UsageAllocation>>,
 }
 
 /// <p>A UsageRecordResult indicates the status of a given UsageRecord processed by BatchMeterUsage.</p>
@@ -207,6 +238,10 @@ pub enum BatchMeterUsageError {
     InvalidCustomerIdentifier(String),
     /// <p>The product code passed does not match the product code used for publishing the product.</p>
     InvalidProductCode(String),
+    /// <p>The tag is invalid, or the number of tags is greater than 5.</p>
+    InvalidTag(String),
+    /// <p>The usage allocation objects are invalid, or the number of allocations is greater than 500 for a single usage record.</p>
+    InvalidUsageAllocations(String),
     /// <p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
     InvalidUsageDimension(String),
     /// <p>The calls to the API are throttled.</p>
@@ -234,6 +269,14 @@ impl BatchMeterUsageError {
                 }
                 "InvalidProductCodeException" => {
                     return RusotoError::Service(BatchMeterUsageError::InvalidProductCode(err.msg))
+                }
+                "InvalidTagException" => {
+                    return RusotoError::Service(BatchMeterUsageError::InvalidTag(err.msg))
+                }
+                "InvalidUsageAllocationsException" => {
+                    return RusotoError::Service(BatchMeterUsageError::InvalidUsageAllocations(
+                        err.msg,
+                    ))
                 }
                 "InvalidUsageDimensionException" => {
                     return RusotoError::Service(BatchMeterUsageError::InvalidUsageDimension(
@@ -263,6 +306,8 @@ impl fmt::Display for BatchMeterUsageError {
             BatchMeterUsageError::InternalServiceError(ref cause) => write!(f, "{}", cause),
             BatchMeterUsageError::InvalidCustomerIdentifier(ref cause) => write!(f, "{}", cause),
             BatchMeterUsageError::InvalidProductCode(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            BatchMeterUsageError::InvalidUsageAllocations(ref cause) => write!(f, "{}", cause),
             BatchMeterUsageError::InvalidUsageDimension(ref cause) => write!(f, "{}", cause),
             BatchMeterUsageError::Throttling(ref cause) => write!(f, "{}", cause),
             BatchMeterUsageError::TimestampOutOfBounds(ref cause) => write!(f, "{}", cause),
@@ -283,6 +328,10 @@ pub enum MeterUsageError {
     InvalidEndpointRegion(String),
     /// <p>The product code passed does not match the product code used for publishing the product.</p>
     InvalidProductCode(String),
+    /// <p>The tag is invalid, or the number of tags is greater than 5.</p>
+    InvalidTag(String),
+    /// <p>The usage allocation objects are invalid, or the number of allocations is greater than 500 for a single usage record.</p>
+    InvalidUsageAllocations(String),
     /// <p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
     InvalidUsageDimension(String),
     /// <p>The calls to the API are throttled.</p>
@@ -310,6 +359,12 @@ impl MeterUsageError {
                 "InvalidProductCodeException" => {
                     return RusotoError::Service(MeterUsageError::InvalidProductCode(err.msg))
                 }
+                "InvalidTagException" => {
+                    return RusotoError::Service(MeterUsageError::InvalidTag(err.msg))
+                }
+                "InvalidUsageAllocationsException" => {
+                    return RusotoError::Service(MeterUsageError::InvalidUsageAllocations(err.msg))
+                }
                 "InvalidUsageDimensionException" => {
                     return RusotoError::Service(MeterUsageError::InvalidUsageDimension(err.msg))
                 }
@@ -335,6 +390,8 @@ impl fmt::Display for MeterUsageError {
             MeterUsageError::InternalServiceError(ref cause) => write!(f, "{}", cause),
             MeterUsageError::InvalidEndpointRegion(ref cause) => write!(f, "{}", cause),
             MeterUsageError::InvalidProductCode(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            MeterUsageError::InvalidUsageAllocations(ref cause) => write!(f, "{}", cause),
             MeterUsageError::InvalidUsageDimension(ref cause) => write!(f, "{}", cause),
             MeterUsageError::Throttling(ref cause) => write!(f, "{}", cause),
             MeterUsageError::TimestampOutOfBounds(ref cause) => write!(f, "{}", cause),
@@ -475,13 +532,13 @@ impl Error for ResolveCustomerError {}
 /// Trait representing the capabilities of the AWSMarketplace Metering API. AWSMarketplace Metering clients implement this trait.
 #[async_trait]
 pub trait MarketplaceMetering {
-    /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
+    /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p> <p>A UsageRecord can optionally include multiple usage allocations, to provide customers with usagedata split into buckets by tags that you define (or allow the customer to define).</p> <p>BatchMeterUsage requests must be less than 1MB in size.</p>
     async fn batch_meter_usage(
         &self,
         input: BatchMeterUsageRequest,
     ) -> Result<BatchMeterUsageResult, RusotoError<BatchMeterUsageError>>;
 
-    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account using credentials from the EC2 instance, ECS task, or EKS pod.</p>
+    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account using credentials from the EC2 instance, ECS task, or EKS pod.</p> <p>MeterUsage can optionally include multiple usage allocations, to provide customers with usage data split into buckets by tags that you define (or allow the customer to define).</p>
     async fn meter_usage(
         &self,
         input: MeterUsageRequest,
@@ -539,7 +596,7 @@ impl MarketplaceMeteringClient {
 
 #[async_trait]
 impl MarketplaceMetering for MarketplaceMeteringClient {
-    /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
+    /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p> <p>A UsageRecord can optionally include multiple usage allocations, to provide customers with usagedata split into buckets by tags that you define (or allow the customer to define).</p> <p>BatchMeterUsage requests must be less than 1MB in size.</p>
     async fn batch_meter_usage(
         &self,
         input: BatchMeterUsageRequest,
@@ -557,7 +614,7 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
         proto::json::ResponsePayload::new(&response).deserialize::<BatchMeterUsageResult, _>()
     }
 
-    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account using credentials from the EC2 instance, ECS task, or EKS pod.</p>
+    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account using credentials from the EC2 instance, ECS task, or EKS pod.</p> <p>MeterUsage can optionally include multiple usage allocations, to provide customers with usage data split into buckets by tags that you define (or allow the customer to define).</p>
     async fn meter_usage(
         &self,
         input: MeterUsageRequest,

@@ -398,6 +398,7 @@ async fn hould_parse_headers() {
 async fn should_serialize_complicated_request() {
     let request = GetObjectRequest {
         bucket: "bucket".to_string(),
+        expected_bucket_owner: sstr("expected_bucket_owner"),
         if_match: sstr("if_match"),
         if_modified_since: sstr("if_modified_since"),
         if_none_match: sstr("if_none_match"),
@@ -451,6 +452,7 @@ async fn should_parse_location_constraint() {
     let result = client
         .get_bucket_location(GetBucketLocationRequest {
             bucket: "example-bucket".to_owned(),
+            expected_bucket_owner: sstr("expected_bucket_owner"),
         })
         .await;
 

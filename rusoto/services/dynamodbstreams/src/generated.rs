@@ -51,11 +51,11 @@ impl DynamoDbStreamsClient {
 }
 
 use serde_json;
-/// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
+/// <p>Represents the data for an attribute.</p> <p>Each attribute value is described as a name-value pair. The name is the data type, and the value is the data itself.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes">Data Types</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttributeValue {
-    /// <p>A Binary data type.</p>
+    /// <p>An attribute of type Binary. For example:</p> <p> <code>"B": "dGhpcyB0ZXh0IGlzIGJhc2U2NC1lbmNvZGVk"</code> </p>
     #[serde(rename = "B")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -64,11 +64,11 @@ pub struct AttributeValue {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub b: Option<bytes::Bytes>,
-    /// <p>A Boolean data type.</p>
+    /// <p>An attribute of type Boolean. For example:</p> <p> <code>"BOOL": true</code> </p>
     #[serde(rename = "BOOL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bool: Option<bool>,
-    /// <p>A Binary Set data type.</p>
+    /// <p>An attribute of type Binary Set. For example:</p> <p> <code>"BS": ["U3Vubnk=", "UmFpbnk=", "U25vd3k="]</code> </p>
     #[serde(rename = "BS")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlobList::deserialize_blob_list",
@@ -77,31 +77,31 @@ pub struct AttributeValue {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bs: Option<Vec<bytes::Bytes>>,
-    /// <p>A List data type.</p>
+    /// <p>An attribute of type List. For example:</p> <p> <code>"L": [ {"S": "Cookies"} , {"S": "Coffee"}, {"N", "3.14159"}]</code> </p>
     #[serde(rename = "L")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub l: Option<Vec<AttributeValue>>,
-    /// <p>A Map data type.</p>
+    /// <p>An attribute of type Map. For example:</p> <p> <code>"M": {"Name": {"S": "Joe"}, "Age": {"N": "35"}}</code> </p>
     #[serde(rename = "M")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m: Option<::std::collections::HashMap<String, AttributeValue>>,
-    /// <p>A Number data type.</p>
+    /// <p>An attribute of type Number. For example:</p> <p> <code>"N": "123.45"</code> </p> <p>Numbers are sent across the network to DynamoDB as strings, to maximize compatibility across languages and libraries. However, DynamoDB treats them as number type attributes for mathematical operations.</p>
     #[serde(rename = "N")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<String>,
-    /// <p>A Number Set data type.</p>
+    /// <p>An attribute of type Number Set. For example:</p> <p> <code>"NS": ["42.2", "-19", "7.5", "3.14"]</code> </p> <p>Numbers are sent across the network to DynamoDB as strings, to maximize compatibility across languages and libraries. However, DynamoDB treats them as number type attributes for mathematical operations.</p>
     #[serde(rename = "NS")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ns: Option<Vec<String>>,
-    /// <p>A Null data type.</p>
+    /// <p>An attribute of type Null. For example:</p> <p> <code>"NULL": true</code> </p>
     #[serde(rename = "NULL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub null: Option<bool>,
-    /// <p>A String data type.</p>
+    /// <p>An attribute of type String. For example:</p> <p> <code>"S": "Hello"</code> </p>
     #[serde(rename = "S")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s: Option<String>,
-    /// <p>A String Set data type.</p>
+    /// <p>An attribute of type String Set. For example:</p> <p> <code>"SS": ["Giraffe", "Hippo" ,"Zebra"]</code> </p>
     #[serde(rename = "SS")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ss: Option<Vec<String>>,
@@ -204,14 +204,14 @@ pub struct Identity {
     pub type_: Option<String>,
 }
 
-/// <p><p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key (partition key) would be represented by one <code>KeySchemaElement</code>. A composite primary key (partition key and sort key) would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+/// <p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key would be represented by one <code>KeySchemaElement</code> (for the partition key). A composite primary key would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <p>A <code>KeySchemaElement</code> must be a scalar, top-level attribute (not a nested attribute). The data type must be one of String, Number, or Binary. The attribute cannot be nested within a List or a Map.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeySchemaElement {
     /// <p>The name of a key attribute.</p>
     #[serde(rename = "AttributeName")]
     pub attribute_name: String,
-    /// <p>The attribute data, consisting of the data type and the attribute value itself.</p>
+    /// <p><p>The role that this key attribute will assume:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeyType")]
     pub key_type: String,
 }
@@ -286,11 +286,11 @@ pub struct Record {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SequenceNumberRange {
-    /// <p>The last sequence number.</p>
+    /// <p>The last sequence number for the stream records contained within a shard. String contains numeric characters only.</p>
     #[serde(rename = "EndingSequenceNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_sequence_number: Option<String>,
-    /// <p>The first sequence number.</p>
+    /// <p>The first sequence number for the stream records contained within a shard. String contains numeric characters only.</p>
     #[serde(rename = "StartingSequenceNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_sequence_number: Option<String>,
@@ -413,7 +413,7 @@ pub struct StreamRecord {
 pub enum DescribeStreamError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The operation tried to access a nonexistent stream.</p>
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
 }
 
@@ -451,11 +451,11 @@ pub enum GetRecordsError {
     ExpiredIterator(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#APIRetries">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken.</p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>.</p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account quota of 256 tables.</p>
     LimitExceeded(String),
-    /// <p>The operation tried to access a nonexistent stream.</p>
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// <p><p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <code>GetRecords</code> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul></p>
+    /// <p><p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li> <p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li> <p>You obtain a shard iterator, but before you use the iterator in a <code>GetRecords</code> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul></p>
     TrimmedDataAccess(String),
 }
 
@@ -503,9 +503,9 @@ impl Error for GetRecordsError {}
 pub enum GetShardIteratorError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The operation tried to access a nonexistent stream.</p>
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// <p><p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <code>GetRecords</code> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul></p>
+    /// <p><p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li> <p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li> <p>You obtain a shard iterator, but before you use the iterator in a <code>GetRecords</code> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul></p>
     TrimmedDataAccess(String),
 }
 
@@ -547,7 +547,7 @@ impl Error for GetShardIteratorError {}
 pub enum ListStreamsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The operation tried to access a nonexistent stream.</p>
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
 }
 

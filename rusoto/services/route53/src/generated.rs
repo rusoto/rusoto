@@ -116,6 +116,44 @@ impl AccountLimitTypeSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ActivateKeySigningKeyRequest {
+    /// <p>A unique string used to identify a hosted zone.</p>
+    pub hosted_zone_id: String,
+    /// <p>An alphanumeric string used to identify a key signing key (KSK).</p>
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ActivateKeySigningKeyResponse {
+    pub change_info: ChangeInfo,
+}
+
+#[allow(dead_code)]
+struct ActivateKeySigningKeyResponseDeserializer;
+impl ActivateKeySigningKeyResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ActivateKeySigningKeyResponse, XmlParseError> {
+        deserialize_elements::<_, ActivateKeySigningKeyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ChangeInfo" => {
+                        obj.change_info = ChangeInfoDeserializer::deserialize("ChangeInfo", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether the specified health check is healthy.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -976,6 +1014,83 @@ impl CreateHostedZoneResponseDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateKeySigningKeyRequest {
+    /// <p>A unique string that identifies the request.</p>
+    pub caller_reference: String,
+    /// <p>The unique string (ID) used to identify a hosted zone.</p>
+    pub hosted_zone_id: String,
+    /// <p>The Amazon resource name (ARN) for a customer managed key (CMK) in AWS Key Management Service (KMS). The <code>KeyManagementServiceArn</code> must be unique for each key signing key (KSK) in a single hosted zone. To see an example of <code>KeyManagementServiceArn</code> that grants the correct permissions for DNSSEC, scroll down to <b>Example</b>. </p> <p>You must configure the CMK as follows:</p> <dl> <dt>Status</dt> <dd> <p>Enabled</p> </dd> <dt>Key spec</dt> <dd> <p>ECC_NIST_P256</p> </dd> <dt>Key usage</dt> <dd> <p>Sign and verify</p> </dd> <dt>Key policy</dt> <dd> <p>The key policy must give permission for the following actions:</p> <ul> <li> <p>DescribeKey</p> </li> <li> <p>GetPublicKey</p> </li> <li> <p>Sign</p> </li> </ul> <p>The key policy must also include the Amazon Route 53 service in the principal for your account. Specify the following:</p> <ul> <li> <p> <code>"Service": "api-service.dnssec.route53.aws.internal"</code> </p> </li> </ul> </dd> </dl> <p>For more information about working with CMK in KMS, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service concepts</a>.</p>
+    pub key_management_service_arn: String,
+    /// <p>An alphanumeric string used to identify a key signing key (KSK). <code>Name</code> must be unique for each key signing key in the same hosted zone.</p>
+    pub name: String,
+    /// <p>A string specifying the initial status of the key signing key (KSK). You can set the value to <code>ACTIVE</code> or <code>INACTIVE</code>.</p>
+    pub status: String,
+}
+
+pub struct CreateKeySigningKeyRequestSerializer;
+impl CreateKeySigningKeyRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CreateKeySigningKeyRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        NonceSerializer::serialize(&mut writer, "CallerReference", &obj.caller_reference)?;
+        ResourceIdSerializer::serialize(&mut writer, "HostedZoneId", &obj.hosted_zone_id)?;
+        SigningKeyStringSerializer::serialize(
+            &mut writer,
+            "KeyManagementServiceArn",
+            &obj.key_management_service_arn,
+        )?;
+        SigningKeyNameSerializer::serialize(&mut writer, "Name", &obj.name)?;
+        SigningKeyStatusSerializer::serialize(&mut writer, "Status", &obj.status)?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateKeySigningKeyResponse {
+    pub change_info: ChangeInfo,
+    /// <p>The key signing key (KSK) that the request creates.</p>
+    pub key_signing_key: KeySigningKey,
+    /// <p>The unique URL representing the new key signing key (KSK).</p>
+    pub location: String,
+}
+
+#[allow(dead_code)]
+struct CreateKeySigningKeyResponseDeserializer;
+impl CreateKeySigningKeyResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateKeySigningKeyResponse, XmlParseError> {
+        deserialize_elements::<_, CreateKeySigningKeyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ChangeInfo" => {
+                        obj.change_info = ChangeInfoDeserializer::deserialize("ChangeInfo", stack)?;
+                    }
+                    "KeySigningKey" => {
+                        obj.key_signing_key =
+                            KeySigningKeyDeserializer::deserialize("KeySigningKey", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQueryLoggingConfigRequest {
     /// <p>The Amazon Resource Name (ARN) for the log group that you want to Amazon Route 53 to send query logs to. This is the format of the ARN:</p> <p>arn:aws:logs:<i>region</i>:<i>account-id</i>:log-group:<i>log_group_name</i> </p> <p>To get the ARN for a log group, you can use the CloudWatch console, the <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html">DescribeLogGroups</a> API action, the <a href="https://docs.aws.amazon.com/cli/latest/reference/logs/describe-log-groups.html">describe-log-groups</a> command, or the applicable command in one of the AWS SDKs.</p>
     pub cloud_watch_logs_log_group_arn: String,
@@ -1413,6 +1528,82 @@ impl DNSRCodeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// <p>A string repesenting the status of DNSSEC signing.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DNSSECStatus {
+    /// <p>Indicates your hosted zone signging status: <code>SIGNING</code>, <code>NOT_SIGNING</code>, or <code>INTERNAL_FAILURE</code>. If the status is <code>INTERNAL_FAILURE</code>, see <code>StatusMessage</code> for information about steps that you can take to correct the problem.</p> <p>A status <code>INTERNAL_FAILURE</code> means there was an error during a request. Before you can continue to work with DNSSEC signing, including working with key signing keys (KSKs), you must correct the problem by enabling or disabling DNSSEC signing for the hosted zone.</p>
+    pub serve_signature: Option<String>,
+    /// <p>The status message provided for the following DNSSEC signing status: <code>INTERNAL_FAILURE</code>. The status message includes information about what the problem might be and steps that you can take to correct the issue.</p>
+    pub status_message: Option<String>,
+}
+
+#[allow(dead_code)]
+struct DNSSECStatusDeserializer;
+impl DNSSECStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DNSSECStatus, XmlParseError> {
+        deserialize_elements::<_, DNSSECStatus, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ServeSignature" => {
+                    obj.serve_signature = Some(ServeSignatureDeserializer::deserialize(
+                        "ServeSignature",
+                        stack,
+                    )?);
+                }
+                "StatusMessage" => {
+                    obj.status_message = Some(SigningKeyStatusMessageDeserializer::deserialize(
+                        "StatusMessage",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeactivateKeySigningKeyRequest {
+    /// <p>A unique string used to identify a hosted zone.</p>
+    pub hosted_zone_id: String,
+    /// <p>An alphanumeric string used to identify a key signing key (KSK).</p>
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeactivateKeySigningKeyResponse {
+    pub change_info: ChangeInfo,
+}
+
+#[allow(dead_code)]
+struct DeactivateKeySigningKeyResponseDeserializer;
+impl DeactivateKeySigningKeyResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeactivateKeySigningKeyResponse, XmlParseError> {
+        deserialize_elements::<_, DeactivateKeySigningKeyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ChangeInfo" => {
+                        obj.change_info = ChangeInfoDeserializer::deserialize("ChangeInfo", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>A complex type that lists the name servers in a delegation set, as well as the <code>CallerReference</code> and the <code>ID</code> for the delegation set.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -1549,6 +1740,44 @@ impl DeleteHostedZoneResponseDeserializer {
         stack: &mut T,
     ) -> Result<DeleteHostedZoneResponse, XmlParseError> {
         deserialize_elements::<_, DeleteHostedZoneResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ChangeInfo" => {
+                        obj.change_info = ChangeInfoDeserializer::deserialize("ChangeInfo", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteKeySigningKeyRequest {
+    /// <p>A unique string used to identify a hosted zone.</p>
+    pub hosted_zone_id: String,
+    /// <p>An alphanumeric string used to identify a key signing key (KSK).</p>
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteKeySigningKeyResponse {
+    pub change_info: ChangeInfo,
+}
+
+#[allow(dead_code)]
+struct DeleteKeySigningKeyResponseDeserializer;
+impl DeleteKeySigningKeyResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteKeySigningKeyResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteKeySigningKeyResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1790,6 +2019,42 @@ impl DimensionListDeserializer {
         })
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisableHostedZoneDNSSECRequest {
+    /// <p>A unique string used to identify a hosted zone.</p>
+    pub hosted_zone_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DisableHostedZoneDNSSECResponse {
+    pub change_info: ChangeInfo,
+}
+
+#[allow(dead_code)]
+struct DisableHostedZoneDNSSECResponseDeserializer;
+impl DisableHostedZoneDNSSECResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableHostedZoneDNSSECResponse, XmlParseError> {
+        deserialize_elements::<_, DisableHostedZoneDNSSECResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ChangeInfo" => {
+                        obj.change_info = ChangeInfoDeserializer::deserialize("ChangeInfo", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[allow(dead_code)]
 struct DisabledDeserializer;
 impl DisabledDeserializer {
@@ -1878,6 +2143,42 @@ impl DisassociateVPCFromHostedZoneResponseDeserializer {
         stack: &mut T,
     ) -> Result<DisassociateVPCFromHostedZoneResponse, XmlParseError> {
         deserialize_elements::<_, DisassociateVPCFromHostedZoneResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ChangeInfo" => {
+                        obj.change_info = ChangeInfoDeserializer::deserialize("ChangeInfo", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EnableHostedZoneDNSSECRequest {
+    /// <p>A unique string used to identify a hosted zone.</p>
+    pub hosted_zone_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct EnableHostedZoneDNSSECResponse {
+    pub change_info: ChangeInfo,
+}
+
+#[allow(dead_code)]
+struct EnableHostedZoneDNSSECResponseDeserializer;
+impl EnableHostedZoneDNSSECResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableHostedZoneDNSSECResponse, XmlParseError> {
+        deserialize_elements::<_, EnableHostedZoneDNSSECResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2352,6 +2653,48 @@ impl GetCheckerIpRangesResponseDeserializer {
                 Ok(())
             },
         )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDNSSECRequest {
+    /// <p>A unique string used to identify a hosted zone.</p>
+    pub hosted_zone_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetDNSSECResponse {
+    /// <p>The key signing keys (KSKs) in your account.</p>
+    pub key_signing_keys: Vec<KeySigningKey>,
+    /// <p>A string repesenting the status of DNSSEC.</p>
+    pub status: DNSSECStatus,
+}
+
+#[allow(dead_code)]
+struct GetDNSSECResponseDeserializer;
+impl GetDNSSECResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetDNSSECResponse, XmlParseError> {
+        deserialize_elements::<_, GetDNSSECResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "KeySigningKeys" => {
+                    obj.key_signing_keys
+                        .extend(KeySigningKeysDeserializer::deserialize(
+                            "KeySigningKeys",
+                            stack,
+                        )?);
+                }
+                "Status" => {
+                    obj.status = DNSSECStatusDeserializer::deserialize("Status", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 /// <p>A request for information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p>
@@ -3898,6 +4241,158 @@ impl IsPrivateZoneSerializer {
     }
 }
 
+/// <p>A key signing key (KSK) is a complex type that represents a public/private key pair. The private key is used to generate a digital signature for the zone signing key (ZSK). The public key is stored in the DNS and is used to authenticate the ZSK. A KSK is always associated with a hosted zone; it cannot exist by itself.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct KeySigningKey {
+    /// <p>The date when the key signing key (KSK) was created.</p>
+    pub created_date: Option<String>,
+    /// <p>A string that represents a DNSKEY record.</p>
+    pub dnskey_record: Option<String>,
+    /// <p>A string that represents a delegation signer (DS) record.</p>
+    pub ds_record: Option<String>,
+    /// <p>A string used to represent the delegation signer digest algorithm. This value must follow the guidelines provided by <a href="https://tools.ietf.org/html/rfc8624#section-3.3">RFC-8624 Section 3.3</a>. </p>
+    pub digest_algorithm_mnemonic: Option<String>,
+    /// <p>An integer used to represent the delegation signer digest algorithm. This value must follow the guidelines provided by <a href="https://tools.ietf.org/html/rfc8624#section-3.3">RFC-8624 Section 3.3</a>.</p>
+    pub digest_algorithm_type: Option<i64>,
+    /// <p>A cryptographic digest of a DNSKEY resource record (RR). DNSKEY records are used to publish the public key that resolvers can use to verify DNSSEC signatures that are used to secure certain kinds of information provided by the DNS system.</p>
+    pub digest_value: Option<String>,
+    /// <p>An integer that specifies how the key is used. For key signing key (KSK), this value is always 257.</p>
+    pub flag: Option<i64>,
+    /// <p>An integer used to identify the DNSSEC record for the domain name. The process used to calculate the value is described in <a href="https://tools.ietf.org/rfc/rfc4034.txt">RFC-4034 Appendix B</a>.</p>
+    pub key_tag: Option<i64>,
+    /// <p>The Amazon resource name (ARN) used to identify the customer managed key (CMK) in AWS Key Management Service (KMS). The <code>KmsArn</code> must be unique for each key signing key (KSK) in a single hosted zone.</p> <p>You must configure the CMK as follows:</p> <dl> <dt>Status</dt> <dd> <p>Enabled</p> </dd> <dt>Key spec</dt> <dd> <p>ECC_NIST_P256</p> </dd> <dt>Key usage</dt> <dd> <p>Sign and verify</p> </dd> <dt>Key policy</dt> <dd> <p>The key policy must give permission for the following actions:</p> <ul> <li> <p>DescribeKey</p> </li> <li> <p>GetPublicKey</p> </li> <li> <p>Sign</p> </li> </ul> <p>The key policy must also include the Amazon Route 53 service in the principal for your account. Specify the following:</p> <ul> <li> <p> <code>"Service": "api-service.dnssec.route53.aws.internal"</code> </p> </li> </ul> </dd> </dl> <p>For more information about working with the customer managed key (CMK) in KMS, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service concepts</a>.</p>
+    pub kms_arn: Option<String>,
+    /// <p>The last time that the key signing key (KSK) was changed.</p>
+    pub last_modified_date: Option<String>,
+    /// <p>An alphanumeric string used to identify a key signing key (KSK). <code>Name</code> must be unique for each key signing key in the same hosted zone.</p>
+    pub name: Option<String>,
+    /// <p>The public key, represented as a Base64 encoding, as required by <a href="https://tools.ietf.org/rfc/rfc4034.txt"> RFC-4034 Page 5</a>.</p>
+    pub public_key: Option<String>,
+    /// <p>A string used to represent the signing algorithm. This value must follow the guidelines provided by <a href="https://tools.ietf.org/html/rfc8624#section-3.1">RFC-8624 Section 3.1</a>. </p>
+    pub signing_algorithm_mnemonic: Option<String>,
+    /// <p>An integer used to represent the signing algorithm. This value must follow the guidelines provided by <a href="https://tools.ietf.org/html/rfc8624#section-3.1">RFC-8624 Section 3.1</a>. </p>
+    pub signing_algorithm_type: Option<i64>,
+    /// <p><p>A string that represents the current key signing key (KSK) status.</p> <p>Status can have one of the following values:</p> <dl> <dt>ACTIVE</dt> <dd> <p>The KSK is being used for signing.</p> </dd> <dt>INACTIVE</dt> <dd> <p>The KSK is not being used for signing.</p> </dd> <dt>ACTION<em>NEEDED</dt> <dd> <p>There is an error in the KSK that requires you to take action to resolve.</p> </dd> <dt>INTERNAL</em>FAILURE</dt> <dd> <p>There was an error during a request. Before you can continue to work with DNSSEC signing, including actions that involve this KSK, you must correct the problem. For example, you may need to activate or deactivate the KSK.</p> </dd> </dl></p>
+    pub status: Option<String>,
+    /// <p>The status message provided for the following key signing key (KSK) statuses: <code>ACTION_NEEDED</code> or <code>INTERNAL_FAILURE</code>. The status message includes information about what the problem might be and steps that you can take to correct the issue.</p>
+    pub status_message: Option<String>,
+}
+
+#[allow(dead_code)]
+struct KeySigningKeyDeserializer;
+impl KeySigningKeyDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KeySigningKey, XmlParseError> {
+        deserialize_elements::<_, KeySigningKey, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreatedDate" => {
+                    obj.created_date =
+                        Some(TimeStampDeserializer::deserialize("CreatedDate", stack)?);
+                }
+                "DNSKEYRecord" => {
+                    obj.dnskey_record = Some(SigningKeyStringDeserializer::deserialize(
+                        "DNSKEYRecord",
+                        stack,
+                    )?);
+                }
+                "DSRecord" => {
+                    obj.ds_record = Some(SigningKeyStringDeserializer::deserialize(
+                        "DSRecord", stack,
+                    )?);
+                }
+                "DigestAlgorithmMnemonic" => {
+                    obj.digest_algorithm_mnemonic =
+                        Some(SigningKeyStringDeserializer::deserialize(
+                            "DigestAlgorithmMnemonic",
+                            stack,
+                        )?);
+                }
+                "DigestAlgorithmType" => {
+                    obj.digest_algorithm_type = Some(SigningKeyIntegerDeserializer::deserialize(
+                        "DigestAlgorithmType",
+                        stack,
+                    )?);
+                }
+                "DigestValue" => {
+                    obj.digest_value = Some(SigningKeyStringDeserializer::deserialize(
+                        "DigestValue",
+                        stack,
+                    )?);
+                }
+                "Flag" => {
+                    obj.flag = Some(SigningKeyIntegerDeserializer::deserialize("Flag", stack)?);
+                }
+                "KeyTag" => {
+                    obj.key_tag = Some(SigningKeyTagDeserializer::deserialize("KeyTag", stack)?);
+                }
+                "KmsArn" => {
+                    obj.kms_arn = Some(SigningKeyStringDeserializer::deserialize("KmsArn", stack)?);
+                }
+                "LastModifiedDate" => {
+                    obj.last_modified_date = Some(TimeStampDeserializer::deserialize(
+                        "LastModifiedDate",
+                        stack,
+                    )?);
+                }
+                "Name" => {
+                    obj.name = Some(SigningKeyNameDeserializer::deserialize("Name", stack)?);
+                }
+                "PublicKey" => {
+                    obj.public_key = Some(SigningKeyStringDeserializer::deserialize(
+                        "PublicKey",
+                        stack,
+                    )?);
+                }
+                "SigningAlgorithmMnemonic" => {
+                    obj.signing_algorithm_mnemonic =
+                        Some(SigningKeyStringDeserializer::deserialize(
+                            "SigningAlgorithmMnemonic",
+                            stack,
+                        )?);
+                }
+                "SigningAlgorithmType" => {
+                    obj.signing_algorithm_type = Some(SigningKeyIntegerDeserializer::deserialize(
+                        "SigningAlgorithmType",
+                        stack,
+                    )?);
+                }
+                "Status" => {
+                    obj.status = Some(SigningKeyStatusDeserializer::deserialize("Status", stack)?);
+                }
+                "StatusMessage" => {
+                    obj.status_message = Some(SigningKeyStatusMessageDeserializer::deserialize(
+                        "StatusMessage",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct KeySigningKeysDeserializer;
+impl KeySigningKeysDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<KeySigningKey>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(KeySigningKeyDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 #[allow(dead_code)]
 struct LimitValueDeserializer;
 impl LimitValueDeserializer {
@@ -4183,7 +4678,7 @@ impl ListHostedZonesByNameResponseDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHostedZonesByVPCRequest {
-    /// <p>(Optional) The maximum number of hosted zones that you want Amazon Route 53 to return. If the specified VPC is associated with more than <code>MaxItems</code> hosted zones, the response includes a <code>NextToken</code> element. <code>NextToken</code> contains the hosted zone ID of the first hosted zone that Route 53 will return if you submit another request.</p>
+    /// <p>(Optional) The maximum number of hosted zones that you want Amazon Route 53 to return. If the specified VPC is associated with more than <code>MaxItems</code> hosted zones, the response includes a <code>NextToken</code> element. <code>NextToken</code> contains an encrypted token that identifies the first hosted zone that Route 53 will return if you submit another request.</p>
     pub max_items: Option<String>,
     /// <p>If the previous response included a <code>NextToken</code> element, the specified VPC is associated with more hosted zones. To get more hosted zones, submit another <code>ListHostedZonesByVPC</code> request. </p> <p>For the value of <code>NextToken</code>, specify the value of <code>NextToken</code> from the previous response.</p> <p>If the previous response didn't include a <code>NextToken</code> element, there are no more hosted zones to get.</p>
     pub next_token: Option<String>,
@@ -6109,11 +6604,115 @@ impl SearchStringSerializer {
 }
 
 #[allow(dead_code)]
+struct ServeSignatureDeserializer;
+impl ServeSignatureDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
 struct ServicePrincipalDeserializer;
 impl ServicePrincipalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct SigningKeyIntegerDeserializer;
+impl SigningKeyIntegerDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
+#[allow(dead_code)]
+struct SigningKeyNameDeserializer;
+impl SigningKeyNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct SigningKeyNameSerializer;
+impl SigningKeyNameSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+#[allow(dead_code)]
+struct SigningKeyStatusDeserializer;
+impl SigningKeyStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct SigningKeyStatusSerializer;
+impl SigningKeyStatusSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+#[allow(dead_code)]
+struct SigningKeyStatusMessageDeserializer;
+impl SigningKeyStatusMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct SigningKeyStringDeserializer;
+impl SigningKeyStringDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct SigningKeyStringSerializer;
+impl SigningKeyStringSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+#[allow(dead_code)]
+struct SigningKeyTagDeserializer;
+impl SigningKeyTagDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -7420,6 +8019,88 @@ impl VPCsDeserializer {
         })
     }
 }
+/// Errors returned by ActivateKeySigningKey
+#[derive(Debug, PartialEq)]
+pub enum ActivateKeySigningKeyError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p>The KeyManagementServiceArn that you specified isn't valid to use with DNSSEC signing.</p>
+    InvalidKMSArn(String),
+    /// <p>The key signing key (KSK) status isn't valid or another KSK has the status <code>INTERNAL_FAILURE</code>.</p>
+    InvalidKeySigningKeyStatus(String),
+    /// <p>Your hosted zone status isn't valid for this operation. In the hosted zone, change the status to enable <code>DNSSEC</code> or disable <code>DNSSEC</code>.</p>
+    InvalidSigningStatus(String),
+    /// <p>The specified key signing key (KSK) doesn't exist.</p>
+    NoSuchKeySigningKey(String),
+}
+
+impl ActivateKeySigningKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivateKeySigningKeyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            ActivateKeySigningKeyError::ConcurrentModification(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidKMSArn" => {
+                        return RusotoError::Service(ActivateKeySigningKeyError::InvalidKMSArn(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKeySigningKeyStatus" => {
+                        return RusotoError::Service(
+                            ActivateKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidSigningStatus" => {
+                        return RusotoError::Service(
+                            ActivateKeySigningKeyError::InvalidSigningStatus(parsed_error.message),
+                        )
+                    }
+                    "NoSuchKeySigningKey" => {
+                        return RusotoError::Service(
+                            ActivateKeySigningKeyError::NoSuchKeySigningKey(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ActivateKeySigningKeyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ActivateKeySigningKeyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            ActivateKeySigningKeyError::InvalidKMSArn(ref cause) => write!(f, "{}", cause),
+            ActivateKeySigningKeyError::InvalidKeySigningKeyStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ActivateKeySigningKeyError::InvalidSigningStatus(ref cause) => write!(f, "{}", cause),
+            ActivateKeySigningKeyError::NoSuchKeySigningKey(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ActivateKeySigningKeyError {}
 /// Errors returned by AssociateVPCWithHostedZone
 #[derive(Debug, PartialEq)]
 pub enum AssociateVPCWithHostedZoneError {
@@ -7862,6 +8543,132 @@ impl fmt::Display for CreateHostedZoneError {
     }
 }
 impl Error for CreateHostedZoneError {}
+/// Errors returned by CreateKeySigningKey
+#[derive(Debug, PartialEq)]
+pub enum CreateKeySigningKeyError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p>Parameter name is not valid.</p>
+    InvalidArgument(String),
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>The KeyManagementServiceArn that you specified isn't valid to use with DNSSEC signing.</p>
+    InvalidKMSArn(String),
+    /// <p>The key signing key (KSK) name that you specified isn't a valid name.</p>
+    InvalidKeySigningKeyName(String),
+    /// <p>The key signing key (KSK) status isn't valid or another KSK has the status <code>INTERNAL_FAILURE</code>.</p>
+    InvalidKeySigningKeyStatus(String),
+    /// <p>Your hosted zone status isn't valid for this operation. In the hosted zone, change the status to enable <code>DNSSEC</code> or disable <code>DNSSEC</code>.</p>
+    InvalidSigningStatus(String),
+    /// <p>You've already created a key signing key (KSK) with this name or with the same customer managed key (CMK) ARN.</p>
+    KeySigningKeyAlreadyExists(String),
+    /// <p>No hosted zone exists with the ID that you specified.</p>
+    NoSuchHostedZone(String),
+    /// <p>You've reached the limit for the number of key signing keys (KSKs). Remove at least one KSK, and then try again.</p>
+    TooManyKeySigningKeys(String),
+}
+
+impl CreateKeySigningKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeySigningKeyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            CreateKeySigningKeyError::ConcurrentModification(parsed_error.message),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(CreateKeySigningKeyError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return RusotoError::Service(CreateKeySigningKeyError::InvalidInput(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKMSArn" => {
+                        return RusotoError::Service(CreateKeySigningKeyError::InvalidKMSArn(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKeySigningKeyName" => {
+                        return RusotoError::Service(
+                            CreateKeySigningKeyError::InvalidKeySigningKeyName(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidKeySigningKeyStatus" => {
+                        return RusotoError::Service(
+                            CreateKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidSigningStatus" => {
+                        return RusotoError::Service(
+                            CreateKeySigningKeyError::InvalidSigningStatus(parsed_error.message),
+                        )
+                    }
+                    "KeySigningKeyAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateKeySigningKeyError::KeySigningKeyAlreadyExists(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(CreateKeySigningKeyError::NoSuchHostedZone(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyKeySigningKeys" => {
+                        return RusotoError::Service(
+                            CreateKeySigningKeyError::TooManyKeySigningKeys(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateKeySigningKeyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateKeySigningKeyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateKeySigningKeyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateKeySigningKeyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateKeySigningKeyError::InvalidKMSArn(ref cause) => write!(f, "{}", cause),
+            CreateKeySigningKeyError::InvalidKeySigningKeyName(ref cause) => write!(f, "{}", cause),
+            CreateKeySigningKeyError::InvalidKeySigningKeyStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateKeySigningKeyError::InvalidSigningStatus(ref cause) => write!(f, "{}", cause),
+            CreateKeySigningKeyError::KeySigningKeyAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateKeySigningKeyError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            CreateKeySigningKeyError::TooManyKeySigningKeys(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateKeySigningKeyError {}
 /// Errors returned by CreateQueryLoggingConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateQueryLoggingConfigError {
@@ -7973,7 +8780,7 @@ pub enum CreateReusableDelegationSetError {
     DelegationSetNotAvailable(String),
     /// <p>The specified HostedZone can't be found.</p>
     HostedZoneNotFound(String),
-    /// <p>Parameter name is invalid.</p>
+    /// <p>Parameter name is not valid.</p>
     InvalidArgument(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
@@ -8077,7 +8884,7 @@ impl Error for CreateReusableDelegationSetError {}
 pub enum CreateTrafficPolicyError {
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// <p>The format of the traffic policy document that you specified in the <code>Document</code> element is invalid.</p>
+    /// <p>The format of the traffic policy document that you specified in the <code>Document</code> element is not valid.</p>
     InvalidTrafficPolicyDocument(String),
     /// <p>This traffic policy can't be created because the current account has reached the limit on the number of traffic policies.</p> <p>For information about default limits, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>To get the current limit for an account, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetAccountLimit.html">GetAccountLimit</a>. </p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     TooManyTrafficPolicies(String),
@@ -8247,7 +9054,7 @@ pub enum CreateTrafficPolicyVersionError {
     ConcurrentModification(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// <p>The format of the traffic policy document that you specified in the <code>Document</code> element is invalid.</p>
+    /// <p>The format of the traffic policy document that you specified in the <code>Document</code> element is not valid.</p>
     InvalidTrafficPolicyDocument(String),
     /// <p>No traffic policy exists with the specified ID.</p>
     NoSuchTrafficPolicy(String),
@@ -8397,6 +9204,104 @@ impl fmt::Display for CreateVPCAssociationAuthorizationError {
     }
 }
 impl Error for CreateVPCAssociationAuthorizationError {}
+/// Errors returned by DeactivateKeySigningKey
+#[derive(Debug, PartialEq)]
+pub enum DeactivateKeySigningKeyError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p>The key signing key (KSK) status isn't valid or another KSK has the status <code>INTERNAL_FAILURE</code>.</p>
+    InvalidKeySigningKeyStatus(String),
+    /// <p>Your hosted zone status isn't valid for this operation. In the hosted zone, change the status to enable <code>DNSSEC</code> or disable <code>DNSSEC</code>.</p>
+    InvalidSigningStatus(String),
+    /// <p>The key signing key (KSK) is specified in a parent DS record.</p>
+    KeySigningKeyInParentDSRecord(String),
+    /// <p>The key signing key (KSK) that you specified can't be deactivated because it's the only KSK for a currently-enabled DNSSEC. Disable DNSSEC signing, or add or enable another KSK.</p>
+    KeySigningKeyInUse(String),
+    /// <p>The specified key signing key (KSK) doesn't exist.</p>
+    NoSuchKeySigningKey(String),
+}
+
+impl DeactivateKeySigningKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivateKeySigningKeyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            DeactivateKeySigningKeyError::ConcurrentModification(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidKeySigningKeyStatus" => {
+                        return RusotoError::Service(
+                            DeactivateKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidSigningStatus" => {
+                        return RusotoError::Service(
+                            DeactivateKeySigningKeyError::InvalidSigningStatus(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "KeySigningKeyInParentDSRecord" => {
+                        return RusotoError::Service(
+                            DeactivateKeySigningKeyError::KeySigningKeyInParentDSRecord(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "KeySigningKeyInUse" => {
+                        return RusotoError::Service(
+                            DeactivateKeySigningKeyError::KeySigningKeyInUse(parsed_error.message),
+                        )
+                    }
+                    "NoSuchKeySigningKey" => {
+                        return RusotoError::Service(
+                            DeactivateKeySigningKeyError::NoSuchKeySigningKey(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeactivateKeySigningKeyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeactivateKeySigningKeyError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeactivateKeySigningKeyError::InvalidKeySigningKeyStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeactivateKeySigningKeyError::InvalidSigningStatus(ref cause) => write!(f, "{}", cause),
+            DeactivateKeySigningKeyError::KeySigningKeyInParentDSRecord(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeactivateKeySigningKeyError::KeySigningKeyInUse(ref cause) => write!(f, "{}", cause),
+            DeactivateKeySigningKeyError::NoSuchKeySigningKey(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeactivateKeySigningKeyError {}
 /// Errors returned by DeleteHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum DeleteHealthCheckError {
@@ -8533,6 +9438,86 @@ impl fmt::Display for DeleteHostedZoneError {
     }
 }
 impl Error for DeleteHostedZoneError {}
+/// Errors returned by DeleteKeySigningKey
+#[derive(Debug, PartialEq)]
+pub enum DeleteKeySigningKeyError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p>The KeyManagementServiceArn that you specified isn't valid to use with DNSSEC signing.</p>
+    InvalidKMSArn(String),
+    /// <p>The key signing key (KSK) status isn't valid or another KSK has the status <code>INTERNAL_FAILURE</code>.</p>
+    InvalidKeySigningKeyStatus(String),
+    /// <p>Your hosted zone status isn't valid for this operation. In the hosted zone, change the status to enable <code>DNSSEC</code> or disable <code>DNSSEC</code>.</p>
+    InvalidSigningStatus(String),
+    /// <p>The specified key signing key (KSK) doesn't exist.</p>
+    NoSuchKeySigningKey(String),
+}
+
+impl DeleteKeySigningKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteKeySigningKeyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            DeleteKeySigningKeyError::ConcurrentModification(parsed_error.message),
+                        )
+                    }
+                    "InvalidKMSArn" => {
+                        return RusotoError::Service(DeleteKeySigningKeyError::InvalidKMSArn(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKeySigningKeyStatus" => {
+                        return RusotoError::Service(
+                            DeleteKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidSigningStatus" => {
+                        return RusotoError::Service(
+                            DeleteKeySigningKeyError::InvalidSigningStatus(parsed_error.message),
+                        )
+                    }
+                    "NoSuchKeySigningKey" => {
+                        return RusotoError::Service(DeleteKeySigningKeyError::NoSuchKeySigningKey(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteKeySigningKeyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteKeySigningKeyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteKeySigningKeyError::InvalidKMSArn(ref cause) => write!(f, "{}", cause),
+            DeleteKeySigningKeyError::InvalidKeySigningKeyStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteKeySigningKeyError::InvalidSigningStatus(ref cause) => write!(f, "{}", cause),
+            DeleteKeySigningKeyError::NoSuchKeySigningKey(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteKeySigningKeyError {}
 /// Errors returned by DeleteQueryLoggingConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteQueryLoggingConfigError {
@@ -8917,6 +9902,110 @@ impl fmt::Display for DeleteVPCAssociationAuthorizationError {
     }
 }
 impl Error for DeleteVPCAssociationAuthorizationError {}
+/// Errors returned by DisableHostedZoneDNSSEC
+#[derive(Debug, PartialEq)]
+pub enum DisableHostedZoneDNSSECError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p>The hosted zone doesn't have any DNSSEC resources.</p>
+    DNSSECNotFound(String),
+    /// <p>Parameter name is not valid.</p>
+    InvalidArgument(String),
+    /// <p>The KeyManagementServiceArn that you specified isn't valid to use with DNSSEC signing.</p>
+    InvalidKMSArn(String),
+    /// <p>The key signing key (KSK) status isn't valid or another KSK has the status <code>INTERNAL_FAILURE</code>.</p>
+    InvalidKeySigningKeyStatus(String),
+    /// <p>The key signing key (KSK) is specified in a parent DS record.</p>
+    KeySigningKeyInParentDSRecord(String),
+    /// <p>No hosted zone exists with the ID that you specified.</p>
+    NoSuchHostedZone(String),
+}
+
+impl DisableHostedZoneDNSSECError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableHostedZoneDNSSECError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            DisableHostedZoneDNSSECError::ConcurrentModification(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "DNSSECNotFound" => {
+                        return RusotoError::Service(DisableHostedZoneDNSSECError::DNSSECNotFound(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(DisableHostedZoneDNSSECError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKMSArn" => {
+                        return RusotoError::Service(DisableHostedZoneDNSSECError::InvalidKMSArn(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKeySigningKeyStatus" => {
+                        return RusotoError::Service(
+                            DisableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "KeySigningKeyInParentDSRecord" => {
+                        return RusotoError::Service(
+                            DisableHostedZoneDNSSECError::KeySigningKeyInParentDSRecord(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(
+                            DisableHostedZoneDNSSECError::NoSuchHostedZone(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DisableHostedZoneDNSSECError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisableHostedZoneDNSSECError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableHostedZoneDNSSECError::DNSSECNotFound(ref cause) => write!(f, "{}", cause),
+            DisableHostedZoneDNSSECError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DisableHostedZoneDNSSECError::InvalidKMSArn(ref cause) => write!(f, "{}", cause),
+            DisableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableHostedZoneDNSSECError::KeySigningKeyInParentDSRecord(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableHostedZoneDNSSECError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisableHostedZoneDNSSECError {}
 /// Errors returned by DisassociateVPCFromHostedZone
 #[derive(Debug, PartialEq)]
 pub enum DisassociateVPCFromHostedZoneError {
@@ -9007,6 +10096,122 @@ impl fmt::Display for DisassociateVPCFromHostedZoneError {
     }
 }
 impl Error for DisassociateVPCFromHostedZoneError {}
+/// Errors returned by EnableHostedZoneDNSSEC
+#[derive(Debug, PartialEq)]
+pub enum EnableHostedZoneDNSSECError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p>The hosted zone doesn't have any DNSSEC resources.</p>
+    DNSSECNotFound(String),
+    /// <p>The hosted zone nameservers don't match the parent nameservers. The hosted zone and parent must have the same nameservers.</p>
+    HostedZonePartiallyDelegated(String),
+    /// <p>Parameter name is not valid.</p>
+    InvalidArgument(String),
+    /// <p>The KeyManagementServiceArn that you specified isn't valid to use with DNSSEC signing.</p>
+    InvalidKMSArn(String),
+    /// <p>The key signing key (KSK) status isn't valid or another KSK has the status <code>INTERNAL_FAILURE</code>.</p>
+    InvalidKeySigningKeyStatus(String),
+    /// <p>A key signing key (KSK) with <code>ACTIVE</code> status wasn't found.</p>
+    KeySigningKeyWithActiveStatusNotFound(String),
+    /// <p>No hosted zone exists with the ID that you specified.</p>
+    NoSuchHostedZone(String),
+}
+
+impl EnableHostedZoneDNSSECError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableHostedZoneDNSSECError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            EnableHostedZoneDNSSECError::ConcurrentModification(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "DNSSECNotFound" => {
+                        return RusotoError::Service(EnableHostedZoneDNSSECError::DNSSECNotFound(
+                            parsed_error.message,
+                        ))
+                    }
+                    "HostedZonePartiallyDelegated" => {
+                        return RusotoError::Service(
+                            EnableHostedZoneDNSSECError::HostedZonePartiallyDelegated(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(EnableHostedZoneDNSSECError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKMSArn" => {
+                        return RusotoError::Service(EnableHostedZoneDNSSECError::InvalidKMSArn(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidKeySigningKeyStatus" => {
+                        return RusotoError::Service(
+                            EnableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "KeySigningKeyWithActiveStatusNotFound" => {
+                        return RusotoError::Service(
+                            EnableHostedZoneDNSSECError::KeySigningKeyWithActiveStatusNotFound(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(EnableHostedZoneDNSSECError::NoSuchHostedZone(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for EnableHostedZoneDNSSECError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EnableHostedZoneDNSSECError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableHostedZoneDNSSECError::DNSSECNotFound(ref cause) => write!(f, "{}", cause),
+            EnableHostedZoneDNSSECError::HostedZonePartiallyDelegated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableHostedZoneDNSSECError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            EnableHostedZoneDNSSECError::InvalidKMSArn(ref cause) => write!(f, "{}", cause),
+            EnableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableHostedZoneDNSSECError::KeySigningKeyWithActiveStatusNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableHostedZoneDNSSECError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for EnableHostedZoneDNSSECError {}
 /// Errors returned by GetAccountLimit
 #[derive(Debug, PartialEq)]
 pub enum GetAccountLimitError {
@@ -9137,6 +10342,58 @@ impl fmt::Display for GetCheckerIpRangesError {
     }
 }
 impl Error for GetCheckerIpRangesError {}
+/// Errors returned by GetDNSSEC
+#[derive(Debug, PartialEq)]
+pub enum GetDNSSECError {
+    /// <p>Parameter name is not valid.</p>
+    InvalidArgument(String),
+    /// <p>No hosted zone exists with the ID that you specified.</p>
+    NoSuchHostedZone(String),
+}
+
+impl GetDNSSECError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDNSSECError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(GetDNSSECError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(GetDNSSECError::NoSuchHostedZone(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetDNSSECError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDNSSECError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetDNSSECError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDNSSECError {}
 /// Errors returned by GetGeoLocation
 #[derive(Debug, PartialEq)]
 pub enum GetGeoLocationError {
@@ -11160,7 +12417,13 @@ impl Error for UpdateTrafficPolicyInstanceError {}
 /// Trait representing the capabilities of the Route 53 API. Route 53 clients implement this trait.
 #[async_trait]
 pub trait Route53 {
-    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <note> <p>To perform the association, the VPC and the private hosted zone must already exist. Also, you can&#39;t convert a public hosted zone into a private hosted zone.</p> </note> <p>If you want to associate a VPC that was created by one AWS account with a private hosted zone that was created by a different account, do one of the following:</p> <ul> <li> <p>Use the AWS account that created the private hosted zone to submit a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateVPCAssociationAuthorization.html">CreateVPCAssociationAuthorization</a> request. Then use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> </li> <li> <p>If a subnet in the VPC was shared with another account, you can use the account that the subnet was shared with to submit an <code>AssociateVPCWithHostedZone</code> request. For more information about sharing subnets, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html">Working with Shared VPCs</a>.</p> </li> </ul></p>
+    /// <p>Activates a key signing key (KSK) so that it can be used for signing by DNSSEC. This operation changes the KSK status to <code>ACTIVE</code>.</p>
+    async fn activate_key_signing_key(
+        &self,
+        input: ActivateKeySigningKeyRequest,
+    ) -> Result<ActivateKeySigningKeyResponse, RusotoError<ActivateKeySigningKeyError>>;
+
+    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
     async fn associate_vpc_with_hosted_zone(
         &self,
         input: AssociateVPCWithHostedZoneRequest,
@@ -11190,6 +12453,12 @@ pub trait Route53 {
         &self,
         input: CreateHostedZoneRequest,
     ) -> Result<CreateHostedZoneResponse, RusotoError<CreateHostedZoneError>>;
+
+    /// <p>Creates a new key signing key (KSK) associated with a hosted zone. You can only have two KSKs per hosted zone.</p>
+    async fn create_key_signing_key(
+        &self,
+        input: CreateKeySigningKeyRequest,
+    ) -> Result<CreateKeySigningKeyResponse, RusotoError<CreateKeySigningKeyError>>;
 
     /// <p><p>Creates a configuration for DNS query logging. After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group.</p> <p>DNS query logs contain information about the queries that Route 53 receives for a specified public hosted zone, such as the following:</p> <ul> <li> <p>Route 53 edge location that responded to the DNS query</p> </li> <li> <p>Domain or subdomain that was requested</p> </li> <li> <p>DNS record type, such as A or AAAA</p> </li> <li> <p>DNS response code, such as <code>NoError</code> or <code>ServFail</code> </p> </li> </ul> <dl> <dt>Log Group and Resource Policy</dt> <dd> <p>Before you create a query logging configuration, perform the following operations.</p> <note> <p>If you create a query logging configuration using the Route 53 console, Route 53 performs these operations automatically.</p> </note> <ol> <li> <p>Create a CloudWatch Logs log group, and make note of the ARN, which you specify when you create a query logging configuration. Note the following:</p> <ul> <li> <p>You must create the log group in the us-east-1 region.</p> </li> <li> <p>You must use the same AWS account to create the log group and the hosted zone that you want to configure query logging for.</p> </li> <li> <p>When you create log groups for query logging, we recommend that you use a consistent prefix, for example:</p> <p> <code>/aws/route53/<i>hosted zone name</i> </code> </p> <p>In the next step, you&#39;ll create a resource policy, which controls access to one or more log groups and the associated AWS resources, such as Route 53 hosted zones. There&#39;s a limit on the number of resource policies that you can create, so we recommend that you use a consistent prefix so you can use the same resource policy for all the log groups that you create for query logging.</p> </li> </ul> </li> <li> <p>Create a CloudWatch Logs resource policy, and give it the permissions that Route 53 needs to create log streams and to send query logs to log streams. For the value of <code>Resource</code>, specify the ARN for the log group that you created in the previous step. To use the same resource policy for all the CloudWatch Logs log groups that you created for query logging configurations, replace the hosted zone name with <code><em></code>, for example:</p> <p> <code>arn:aws:logs:us-east-1:123412341234:log-group:/aws/route53/</em></code> </p> <note> <p>You can&#39;t use the CloudWatch console to create or edit a resource policy. You must use the CloudWatch API, one of the AWS SDKs, or the AWS CLI.</p> </note> </li> </ol> </dd> <dt>Log Streams and Edge Locations</dt> <dd> <p>When Route 53 finishes creating the configuration for DNS query logging, it does the following:</p> <ul> <li> <p>Creates a log stream for an edge location the first time that the edge location responds to DNS queries for the specified hosted zone. That log stream is used to log all queries that Route 53 responds to for that edge location.</p> </li> <li> <p>Begins to send query logs to the applicable log stream.</p> </li> </ul> <p>The name of each log stream is in the following format:</p> <p> <code> <i>hosted zone ID</i>/<i>edge location code</i> </code> </p> <p>The edge location code is a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location. (These abbreviations might change in the future.) For a list of edge locations, see &quot;The Route 53 Global Network&quot; on the <a href="http://aws.amazon.com/route53/details/">Route 53 Product Details</a> page.</p> </dd> <dt>Queries That Are Logged</dt> <dd> <p>Query logs contain only the queries that DNS resolvers forward to Route 53. If a DNS resolver has already cached the response to a query (such as the IP address for a load balancer for example.com), the resolver will continue to return the cached response. It doesn&#39;t forward another query to Route 53 until the TTL for the corresponding resource record set expires. Depending on how many DNS queries are submitted for a resource record set, and depending on the TTL for that resource record set, query logs might contain information about only one query out of every several thousand queries that are submitted to DNS. For more information about how DNS works, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html">Routing Internet Traffic to Your Website or Web Application</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Log File Format</dt> <dd> <p>For a list of the values in each query log and the format of each value, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Pricing</dt> <dd> <p>For information about charges for query logs, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </dd> <dt>How to Stop Logging</dt> <dd> <p>If you want Route 53 to stop sending query logs to CloudWatch Logs, delete the query logging configuration. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteQueryLoggingConfig.html">DeleteQueryLoggingConfig</a>.</p> </dd> </dl></p>
     async fn create_query_logging_config(
@@ -11230,6 +12499,12 @@ pub trait Route53 {
         RusotoError<CreateVPCAssociationAuthorizationError>,
     >;
 
+    /// <p>Deactivates a key signing key (KSK) so that it will not be used for signing by DNSSEC. This operation changes the KSK status to <code>INACTIVE</code>.</p>
+    async fn deactivate_key_signing_key(
+        &self,
+        input: DeactivateKeySigningKeyRequest,
+    ) -> Result<DeactivateKeySigningKeyResponse, RusotoError<DeactivateKeySigningKeyError>>;
+
     /// <p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important> <p>If you're using AWS Cloud Map and you configured Cloud Map to create a Route 53 health check when you register an instance, you can't use the Route 53 <code>DeleteHealthCheck</code> command to delete the health check. The health check is deleted automatically when you deregister the instance; there can be a delay of several hours before the health check is deleted from Route 53. </p>
     async fn delete_health_check(
         &self,
@@ -11241,6 +12516,12 @@ pub trait Route53 {
         &self,
         input: DeleteHostedZoneRequest,
     ) -> Result<DeleteHostedZoneResponse, RusotoError<DeleteHostedZoneError>>;
+
+    /// <p>Deletes a key signing key (KSK). Before you can delete a KSK, you must deactivate it. The KSK must be deactived before you can delete it regardless of whether the hosted zone is enabled for DNSSEC signing.</p>
+    async fn delete_key_signing_key(
+        &self,
+        input: DeleteKeySigningKeyRequest,
+    ) -> Result<DeleteKeySigningKeyResponse, RusotoError<DeleteKeySigningKeyError>>;
 
     /// <p>Deletes a configuration for DNS query logging. If you delete a configuration, Amazon Route 53 stops sending query logs to CloudWatch Logs. Route 53 doesn't delete any logs that are already in CloudWatch Logs.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a>.</p>
     async fn delete_query_logging_config(
@@ -11254,7 +12535,7 @@ pub trait Route53 {
         input: DeleteReusableDelegationSetRequest,
     ) -> Result<DeleteReusableDelegationSetResponse, RusotoError<DeleteReusableDelegationSetError>>;
 
-    /// <p>Deletes a traffic policy.</p>
+    /// <p><p>Deletes a traffic policy.</p> <p>When you delete a traffic policy, Route 53 sets a flag on the policy to indicate that it has been deleted. However, Route 53 never fully deletes the traffic policy. Note the following:</p> <ul> <li> <p>Deleted traffic policies aren&#39;t listed if you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTrafficPolicies.html">ListTrafficPolicies</a>.</p> </li> <li> <p> There&#39;s no way to get a list of deleted policies.</p> </li> <li> <p>If you retain the ID of the policy, you can get information about the policy, including the traffic policy document, by running <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetTrafficPolicy.html">GetTrafficPolicy</a>.</p> </li> </ul></p>
     async fn delete_traffic_policy(
         &self,
         input: DeleteTrafficPolicyRequest,
@@ -11275,6 +12556,12 @@ pub trait Route53 {
         RusotoError<DeleteVPCAssociationAuthorizationError>,
     >;
 
+    /// <p>Disables DNSSEC signing in a specific hosted zone. This action does not deactivate any key signing keys (KSKs) that are active in the hosted zone.</p>
+    async fn disable_hosted_zone_dnssec(
+        &self,
+        input: DisableHostedZoneDNSSECRequest,
+    ) -> Result<DisableHostedZoneDNSSECResponse, RusotoError<DisableHostedZoneDNSSECError>>;
+
     /// <p><p>Disassociates an Amazon Virtual Private Cloud (Amazon VPC) from an Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last Amazon VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the Amazon VPC.</p> </li> <li> <p>Some services, such as AWS Cloud Map and Amazon Elastic File System (Amazon EFS) automatically create hosted zones and associate VPCs with the hosted zones. A service can create a hosted zone using your account or using its own account. You can disassociate a VPC from a hosted zone only if the service created the hosted zone using your account.</p> <p>When you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZonesByVPC.html">DisassociateVPCFromHostedZone</a>, if the hosted zone has a value for <code>OwningAccount</code>, you can use <code>DisassociateVPCFromHostedZone</code>. If the hosted zone has a value for <code>OwningService</code>, you can&#39;t use <code>DisassociateVPCFromHostedZone</code>.</p> </li> </ul></p>
     async fn disassociate_vpc_from_hosted_zone(
         &self,
@@ -11283,6 +12570,12 @@ pub trait Route53 {
         DisassociateVPCFromHostedZoneResponse,
         RusotoError<DisassociateVPCFromHostedZoneError>,
     >;
+
+    /// <p>Enables DNSSEC signing in a specific hosted zone.</p>
+    async fn enable_hosted_zone_dnssec(
+        &self,
+        input: EnableHostedZoneDNSSECRequest,
+    ) -> Result<EnableHostedZoneDNSSECResponse, RusotoError<EnableHostedZoneDNSSECError>>;
 
     /// <p><p>Gets the specified limit for the current account, for example, the maximum number of health checks that you can create using the account.</p> <p>For the default limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p> <note> <p>You can also view account limits in AWS Trusted Advisor. Sign in to the AWS Management Console and open the Trusted Advisor console at <a href="https://console.aws.amazon.com/trustedadvisor">https://console.aws.amazon.com/trustedadvisor/</a>. Then choose <b>Service limits</b> in the navigation pane.</p> </note></p>
     async fn get_account_limit(
@@ -11301,6 +12594,12 @@ pub trait Route53 {
         &self,
         input: GetCheckerIpRangesRequest,
     ) -> Result<GetCheckerIpRangesResponse, RusotoError<GetCheckerIpRangesError>>;
+
+    /// <p>Returns information about DNSSEC for a specific hosted zone, including the key signing keys (KSKs) and zone signing keys (ZSKs) in the hosted zone.</p>
+    async fn get_dnssec(
+        &self,
+        input: GetDNSSECRequest,
+    ) -> Result<GetDNSSECResponse, RusotoError<GetDNSSECError>>;
 
     /// <p>Gets information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p> <p>Use the following syntax to determine whether a continent is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?continentcode=<i>two-letter abbreviation for a continent</i> </code> </p> <p>Use the following syntax to determine whether a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?countrycode=<i>two-character country code</i> </code> </p> <p>Use the following syntax to determine whether a subdivision of a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?countrycode=<i>two-character country code</i>&amp;subdivisioncode=<i>subdivision code</i> </code> </p>
     async fn get_geo_location(
@@ -11374,7 +12673,7 @@ pub trait Route53 {
         RusotoError<GetReusableDelegationSetLimitError>,
     >;
 
-    /// <p>Gets information about a specific traffic policy version.</p>
+    /// <p>Gets information about a specific traffic policy version.</p> <p>For information about how of deleting a traffic policy affects the response from <code>GetTrafficPolicy</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     async fn get_traffic_policy(
         &self,
         input: GetTrafficPolicyRequest,
@@ -11455,7 +12754,7 @@ pub trait Route53 {
         input: ListTagsForResourcesRequest,
     ) -> Result<ListTagsForResourcesResponse, RusotoError<ListTagsForResourcesError>>;
 
-    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p>
+    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p> <p>For information about how of deleting a traffic policy affects the response from <code>ListTrafficPolicies</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     async fn list_traffic_policies(
         &self,
         input: ListTrafficPoliciesRequest,
@@ -11570,7 +12869,38 @@ impl Route53Client {
 
 #[async_trait]
 impl Route53 for Route53Client {
-    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <note> <p>To perform the association, the VPC and the private hosted zone must already exist. Also, you can&#39;t convert a public hosted zone into a private hosted zone.</p> </note> <p>If you want to associate a VPC that was created by one AWS account with a private hosted zone that was created by a different account, do one of the following:</p> <ul> <li> <p>Use the AWS account that created the private hosted zone to submit a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateVPCAssociationAuthorization.html">CreateVPCAssociationAuthorization</a> request. Then use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> </li> <li> <p>If a subnet in the VPC was shared with another account, you can use the account that the subnet was shared with to submit an <code>AssociateVPCWithHostedZone</code> request. For more information about sharing subnets, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html">Working with Shared VPCs</a>.</p> </li> </ul></p>
+    /// <p>Activates a key signing key (KSK) so that it can be used for signing by DNSSEC. This operation changes the KSK status to <code>ACTIVE</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn activate_key_signing_key(
+        &self,
+        input: ActivateKeySigningKeyRequest,
+    ) -> Result<ActivateKeySigningKeyResponse, RusotoError<ActivateKeySigningKeyError>> {
+        let request_uri = format!(
+            "/2013-04-01/keysigningkey/{hosted_zone_id}/{name}/activate",
+            hosted_zone_id = input.hosted_zone_id,
+            name = input.name
+        )
+        .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
+        .replace("/change/change/", "/change/");
+
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, ActivateKeySigningKeyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ActivateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
     #[allow(unused_variables, warnings)]
     async fn associate_vpc_with_hosted_zone(
         &self,
@@ -11746,6 +13076,40 @@ impl Route53 for Route53Client {
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
             CreateHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
+        result.location = value; // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Creates a new key signing key (KSK) associated with a hosted zone. You can only have two KSKs per hosted zone.</p>
+    #[allow(unused_variables, warnings)]
+    async fn create_key_signing_key(
+        &self,
+        input: CreateKeySigningKeyRequest,
+    ) -> Result<CreateKeySigningKeyResponse, RusotoError<CreateKeySigningKeyError>> {
+        let request_uri = "/2013-04-01/keysigningkey";
+
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        CreateKeySigningKeyRequestSerializer::serialize(
+            &mut writer,
+            "CreateKeySigningKeyRequest",
+            &input,
+            "https://route53.amazonaws.com/doc/2013-04-01/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, CreateKeySigningKeyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
         })
         .await?;
         let mut result = result;
@@ -11978,6 +13342,37 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
+    /// <p>Deactivates a key signing key (KSK) so that it will not be used for signing by DNSSEC. This operation changes the KSK status to <code>INACTIVE</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn deactivate_key_signing_key(
+        &self,
+        input: DeactivateKeySigningKeyRequest,
+    ) -> Result<DeactivateKeySigningKeyResponse, RusotoError<DeactivateKeySigningKeyError>> {
+        let request_uri = format!(
+            "/2013-04-01/keysigningkey/{hosted_zone_id}/{name}/deactivate",
+            hosted_zone_id = input.hosted_zone_id,
+            name = input.name
+        )
+        .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
+        .replace("/change/change/", "/change/");
+
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, DeactivateKeySigningKeyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DeactivateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important> <p>If you're using AWS Cloud Map and you configured Cloud Map to create a Route 53 health check when you register an instance, you can't use the Route 53 <code>DeleteHealthCheck</code> command to delete the health check. The health check is deleted automatically when you deregister the instance; there can be a delay of several hours before the health check is deleted from Route 53. </p>
     #[allow(unused_variables, warnings)]
     async fn delete_health_check(
@@ -12024,6 +13419,37 @@ impl Route53 for Route53Client {
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
             DeleteHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Deletes a key signing key (KSK). Before you can delete a KSK, you must deactivate it. The KSK must be deactived before you can delete it regardless of whether the hosted zone is enabled for DNSSEC signing.</p>
+    #[allow(unused_variables, warnings)]
+    async fn delete_key_signing_key(
+        &self,
+        input: DeleteKeySigningKeyRequest,
+    ) -> Result<DeleteKeySigningKeyResponse, RusotoError<DeleteKeySigningKeyError>> {
+        let request_uri = format!(
+            "/2013-04-01/keysigningkey/{hosted_zone_id}/{name}",
+            hosted_zone_id = input.hosted_zone_id,
+            name = input.name
+        )
+        .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
+        .replace("/change/change/", "/change/");
+
+        let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, DeleteKeySigningKeyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DeleteKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
         })
         .await?;
         let mut result = result;
@@ -12078,7 +13504,7 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
-    /// <p>Deletes a traffic policy.</p>
+    /// <p><p>Deletes a traffic policy.</p> <p>When you delete a traffic policy, Route 53 sets a flag on the policy to indicate that it has been deleted. However, Route 53 never fully deletes the traffic policy. Note the following:</p> <ul> <li> <p>Deleted traffic policies aren&#39;t listed if you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTrafficPolicies.html">ListTrafficPolicies</a>.</p> </li> <li> <p> There&#39;s no way to get a list of deleted policies.</p> </li> <li> <p>If you retain the ID of the policy, you can get information about the policy, including the traffic policy document, by running <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetTrafficPolicy.html">GetTrafficPolicy</a>.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn delete_traffic_policy(
         &self,
@@ -12170,6 +13596,36 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
+    /// <p>Disables DNSSEC signing in a specific hosted zone. This action does not deactivate any key signing keys (KSKs) that are active in the hosted zone.</p>
+    #[allow(unused_variables, warnings)]
+    async fn disable_hosted_zone_dnssec(
+        &self,
+        input: DisableHostedZoneDNSSECRequest,
+    ) -> Result<DisableHostedZoneDNSSECResponse, RusotoError<DisableHostedZoneDNSSECError>> {
+        let request_uri = format!(
+            "/2013-04-01/hostedzone/{id}/disable-dnssec",
+            id = input.hosted_zone_id
+        )
+        .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
+        .replace("/change/change/", "/change/");
+
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, DisableHostedZoneDNSSECError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DisableHostedZoneDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p><p>Disassociates an Amazon Virtual Private Cloud (Amazon VPC) from an Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last Amazon VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the Amazon VPC.</p> </li> <li> <p>Some services, such as AWS Cloud Map and Amazon Elastic File System (Amazon EFS) automatically create hosted zones and associate VPCs with the hosted zones. A service can create a hosted zone using your account or using its own account. You can disassociate a VPC from a hosted zone only if the service created the hosted zone using your account.</p> <p>When you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZonesByVPC.html">DisassociateVPCFromHostedZone</a>, if the hosted zone has a value for <code>OwningAccount</code>, you can use <code>DisassociateVPCFromHostedZone</code>. If the hosted zone has a value for <code>OwningService</code>, you can&#39;t use <code>DisassociateVPCFromHostedZone</code>.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn disassociate_vpc_from_hosted_zone(
@@ -12205,6 +13661,36 @@ impl Route53 for Route53Client {
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
             DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Enables DNSSEC signing in a specific hosted zone.</p>
+    #[allow(unused_variables, warnings)]
+    async fn enable_hosted_zone_dnssec(
+        &self,
+        input: EnableHostedZoneDNSSECRequest,
+    ) -> Result<EnableHostedZoneDNSSECResponse, RusotoError<EnableHostedZoneDNSSECError>> {
+        let request_uri = format!(
+            "/2013-04-01/hostedzone/{id}/enable-dnssec",
+            id = input.hosted_zone_id
+        )
+        .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
+        .replace("/change/change/", "/change/");
+
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, EnableHostedZoneDNSSECError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            EnableHostedZoneDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)
         })
         .await?;
         let mut result = result;
@@ -12283,6 +13769,36 @@ impl Route53 for Route53Client {
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
             GetCheckerIpRangesResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Returns information about DNSSEC for a specific hosted zone, including the key signing keys (KSKs) and zone signing keys (ZSKs) in the hosted zone.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_dnssec(
+        &self,
+        input: GetDNSSECRequest,
+    ) -> Result<GetDNSSECResponse, RusotoError<GetDNSSECError>> {
+        let request_uri = format!(
+            "/2013-04-01/hostedzone/{id}/dnssec",
+            id = input.hosted_zone_id
+        )
+        .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
+        .replace("/change/change/", "/change/");
+
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetDNSSECError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)
         })
         .await?;
         let mut result = result;
@@ -12599,7 +14115,7 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
-    /// <p>Gets information about a specific traffic policy version.</p>
+    /// <p>Gets information about a specific traffic policy version.</p> <p>For information about how of deleting a traffic policy affects the response from <code>GetTrafficPolicy</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     #[allow(unused_variables, warnings)]
     async fn get_traffic_policy(
         &self,
@@ -13048,7 +14564,7 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
-    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p>
+    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p> <p>For information about how of deleting a traffic policy affects the response from <code>ListTrafficPolicies</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     #[allow(unused_variables, warnings)]
     async fn list_traffic_policies(
         &self,

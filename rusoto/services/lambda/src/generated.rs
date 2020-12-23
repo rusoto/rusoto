@@ -191,6 +191,48 @@ pub struct AliasRoutingConfiguration {
     pub additional_version_weights: Option<::std::collections::HashMap<String, f64>>,
 }
 
+/// <p>List of signing profiles that can sign a code package. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AllowedPublishers {
+    /// <p>The Amazon Resource Name (ARN) for each of the signing profiles. A signing profile defines a trusted user who can sign a code package. </p>
+    #[serde(rename = "SigningProfileVersionArns")]
+    pub signing_profile_version_arns: Vec<String>,
+}
+
+/// <p>Details about a Code signing configuration. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CodeSigningConfig {
+    /// <p>List of allowed publishers.</p>
+    #[serde(rename = "AllowedPublishers")]
+    pub allowed_publishers: AllowedPublishers,
+    /// <p>The Amazon Resource Name (ARN) of the Code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+    /// <p>Unique identifer for the Code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigId")]
+    pub code_signing_config_id: String,
+    /// <p>The code signing policy controls the validation failure action for signature mismatch or expiry.</p>
+    #[serde(rename = "CodeSigningPolicies")]
+    pub code_signing_policies: CodeSigningPolicies,
+    /// <p>Code signing configuration description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The date and time that the Code signing configuration was last modified, in ISO-8601 format (YYYY-MM-DDThh:mm:ss.sTZD). </p>
+    #[serde(rename = "LastModified")]
+    pub last_modified: String,
+}
+
+/// <p>Code signing configuration policies specifies the validation failure action for signature mismatch or expiry.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CodeSigningPolicies {
+    /// <p>Code signing configuration policy for deployment validation failure. If you set the policy to <code>Enforce</code>, Lambda blocks the deployment request if signature validation checks fail. If you set the policy to <code>Warn</code>, Lambda allows the deployment and creates a CloudWatch log. </p> <p>Default value: <code>Warn</code> </p>
+    #[serde(rename = "UntrustedArtifactOnDeployment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub untrusted_artifact_on_deployment: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Concurrency {
@@ -224,8 +266,32 @@ pub struct CreateAliasRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCodeSigningConfigRequest {
+    /// <p>Signing profiles for this code signing configuration.</p>
+    #[serde(rename = "AllowedPublishers")]
+    pub allowed_publishers: AllowedPublishers,
+    /// <p>The code signing policies define the actions to take if the validation checks fail. </p>
+    #[serde(rename = "CodeSigningPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_signing_policies: Option<CodeSigningPolicies>,
+    /// <p>Descriptive name for this code signing configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCodeSigningConfigResponse {
+    /// <p>The code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfig")]
+    pub code_signing_config: CodeSigningConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSourceMappingRequest {
-    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
+    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. For standard queues the max is 10,000. For FIFO queues the max is 10.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Self-Managed Apache Kafka</b> - Default 100. Max 10,000.</p> </li> </ul></p>
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
@@ -237,25 +303,30 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "DestinationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_config: Option<DestinationConfig>,
-    /// <p>Disables the event source mapping to pause polling and invocation.</p>
+    /// <p>If true, the event source mapping is active. Set to false to pause polling and invocation.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - The ARN of the cluster.</p> </li> </ul></p>
     #[serde(rename = "EventSourceArn")]
-    pub event_source_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Version or Alias ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction:PROD</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it's limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
-    /// <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds.</p>
+    /// <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
+    #[serde(rename = "FunctionResponseTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_response_types: Option<Vec<String>>,
+    /// <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    /// <p>(Streams) Discard records older than the specified age. The default value is infinite (-1).</p>
     #[serde(rename = "MaximumRecordAgeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_record_age_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    /// <p>(Streams) Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records will be retried until the record expires.</p>
     #[serde(rename = "MaximumRetryAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_retry_attempts: Option<i64>,
@@ -263,7 +334,19 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "ParallelizationFactor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelization_factor: Option<i64>,
-    /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
+    /// <p> (MQ) The name of the Amazon MQ broker destination queue to consume. </p>
+    #[serde(rename = "Queues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queues: Option<Vec<String>>,
+    /// <p>The Self-Managed Apache Kafka cluster to send records.</p>
+    #[serde(rename = "SelfManagedEventSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_managed_event_source: Option<SelfManagedEventSource>,
+    /// <p>An array of the authentication protocol, or the VPC components to secure your event source.</p>
+    #[serde(rename = "SourceAccessConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_access_configurations: Option<Vec<SourceAccessConfiguration>>,
+    /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis, Amazon DynamoDB, and Amazon MSK Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
     #[serde(rename = "StartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_position: Option<String>,
@@ -271,6 +354,14 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "StartingPositionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_position_timestamp: Option<f64>,
+    /// <p>The name of the Kafka topic.</p>
+    #[serde(rename = "Topics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<String>>,
+    /// <p>(Streams) The duration of a processing window in seconds. The range is between 1 second up to 15 minutes.</p>
+    #[serde(rename = "TumblingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tumbling_window_in_seconds: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -279,6 +370,10 @@ pub struct CreateFunctionRequest {
     /// <p>The code for the function.</p>
     #[serde(rename = "Code")]
     pub code: FunctionCode,
+    /// <p>To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_signing_config_arn: Option<String>,
     /// <p>A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">Dead Letter Queues</a>.</p>
     #[serde(rename = "DeadLetterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -300,7 +395,12 @@ pub struct CreateFunctionRequest {
     pub function_name: String,
     /// <p>The name of the method within your code that Lambda calls to execute your function. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/programming-model-v2.html">Programming Model</a>.</p>
     #[serde(rename = "Handler")]
-    pub handler: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub handler: Option<String>,
+    /// <p>Configuration values that override the container image Dockerfile.</p>
+    #[serde(rename = "ImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_config: Option<ImageConfig>,
     /// <p>The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.</p>
     #[serde(rename = "KMSKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -309,10 +409,14 @@ pub struct CreateFunctionRequest {
     #[serde(rename = "Layers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub layers: Option<Vec<String>>,
-    /// <p>The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.</p>
+    /// <p>The amount of memory available to the function at runtime. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB.</p>
     #[serde(rename = "MemorySize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory_size: Option<i64>,
+    /// <p>The type of deployment package. Set to <code>Image</code> for container image and set <code>Zip</code> for ZIP archive.</p>
+    #[serde(rename = "PackageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_type: Option<String>,
     /// <p>Set to true to publish the first version of the function during creation.</p>
     #[serde(rename = "Publish")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -322,7 +426,8 @@ pub struct CreateFunctionRequest {
     pub role: String,
     /// <p>The identifier of the function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime</a>.</p>
     #[serde(rename = "Runtime")]
-    pub runtime: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime: Option<String>,
     /// <p>A list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> to apply to the function.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -363,10 +468,30 @@ pub struct DeleteAliasRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCodeSigningConfigRequest {
+    /// <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteCodeSigningConfigResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSourceMappingRequest {
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFunctionCodeSigningConfigRequest {
+    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -482,7 +607,7 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
-    /// <p>(Streams) If the function returns an error, split the batch in two and retry.</p>
+    /// <p>(Streams) If the function returns an error, split the batch in two and retry. The default value is false.</p>
     #[serde(rename = "BisectBatchOnFunctionError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bisect_batch_on_function_error: Option<bool>,
@@ -498,6 +623,10 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "FunctionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_arn: Option<String>,
+    /// <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
+    #[serde(rename = "FunctionResponseTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_response_types: Option<Vec<String>>,
     /// <p>The date that the event source mapping was last updated, or its state changed.</p>
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -506,22 +635,42 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "LastProcessingResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_processing_result: Option<String>,
-    /// <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds.</p>
+    /// <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds. The default value is zero.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    /// <p>(Streams) Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p>
     #[serde(rename = "MaximumRecordAgeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_record_age_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    /// <p>(Streams) Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p>
     #[serde(rename = "MaximumRetryAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_retry_attempts: Option<i64>,
-    /// <p>(Streams) The number of batches to process from each shard concurrently.</p>
+    /// <p>(Streams) The number of batches to process from each shard concurrently. The default value is 1.</p>
     #[serde(rename = "ParallelizationFactor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelization_factor: Option<i64>,
+    /// <p> (MQ) The name of the Amazon MQ broker destination queue to consume. </p>
+    #[serde(rename = "Queues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queues: Option<Vec<String>>,
+    /// <p>The Self-Managed Apache Kafka cluster for your event source.</p>
+    #[serde(rename = "SelfManagedEventSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_managed_event_source: Option<SelfManagedEventSource>,
+    /// <p>An array of the authentication protocol, or the VPC components to secure your event source.</p>
+    #[serde(rename = "SourceAccessConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_access_configurations: Option<Vec<SourceAccessConfiguration>>,
+    /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis, Amazon DynamoDB, and Amazon MSK Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
+    #[serde(rename = "StartingPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_position: Option<String>,
+    /// <p>With <code>StartingPosition</code> set to <code>AT_TIMESTAMP</code>, the time from which to start reading.</p>
+    #[serde(rename = "StartingPositionTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_position_timestamp: Option<f64>,
     /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -530,6 +679,14 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "StateTransitionReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_transition_reason: Option<String>,
+    /// <p>The name of the Kafka topic.</p>
+    #[serde(rename = "Topics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<String>>,
+    /// <p>(Streams) The duration of a processing window in seconds. The range is between 1 second up to 15 minutes.</p>
+    #[serde(rename = "TumblingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tumbling_window_in_seconds: Option<i64>,
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -547,10 +704,14 @@ pub struct FileSystemConfig {
     pub local_mount_path: String,
 }
 
-/// <p>The code for the Lambda function. You can specify either an object in Amazon S3, or upload a deployment package directly.</p>
+/// <p>The code for the Lambda function. You can specify either an object in Amazon S3, upload a .zip file archive deployment package directly, or specify the URI of a container image.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FunctionCode {
+    /// <p>URI of a container image in the Amazon ECR registry.</p>
+    #[serde(rename = "ImageUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_uri: Option<String>,
     /// <p>An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.</p>
     #[serde(rename = "S3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -578,6 +739,10 @@ pub struct FunctionCode {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FunctionCodeLocation {
+    /// <p>URI of a container image in the Amazon ECR registry.</p>
+    #[serde(rename = "ImageUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_uri: Option<String>,
     /// <p>A presigned URL that you can use to download the deployment package.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -586,6 +751,10 @@ pub struct FunctionCodeLocation {
     #[serde(rename = "RepositoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_type: Option<String>,
+    /// <p>The resolved URI for the image.</p>
+    #[serde(rename = "ResolvedImageUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_image_uri: Option<String>,
 }
 
 /// <p>Details about a function's configuration.</p>
@@ -628,6 +797,10 @@ pub struct FunctionConfiguration {
     #[serde(rename = "Handler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub handler: Option<String>,
+    /// <p>The function's image configuration values.</p>
+    #[serde(rename = "ImageConfigResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_config_response: Option<ImageConfigResponse>,
     /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer managed CMK.</p>
     #[serde(rename = "KMSKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -656,10 +829,14 @@ pub struct FunctionConfiguration {
     #[serde(rename = "MasterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_arn: Option<String>,
-    /// <p>The memory that's allocated to the function.</p>
+    /// <p>The amount of memory available to the function at runtime. </p>
     #[serde(rename = "MemorySize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory_size: Option<i64>,
+    /// <p>The type of deployment package. Set to <code>Image</code> for container image and set <code>Zip</code> for .zip file archive.</p>
+    #[serde(rename = "PackageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_type: Option<String>,
     /// <p>The latest updated revision of the function or alias.</p>
     #[serde(rename = "RevisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -672,6 +849,14 @@ pub struct FunctionConfiguration {
     #[serde(rename = "Runtime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub runtime: Option<String>,
+    /// <p>The ARN of the signing job.</p>
+    #[serde(rename = "SigningJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_job_arn: Option<String>,
+    /// <p>The ARN of the signing profile version.</p>
+    #[serde(rename = "SigningProfileVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_profile_version_arn: Option<String>,
     /// <p>The current state of the function. When the state is <code>Inactive</code>, you can reactivate the function by invoking it.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -757,10 +942,45 @@ pub struct GetAliasRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCodeSigningConfigRequest {
+    /// <p>The The Amazon Resource Name (ARN) of the code signing configuration. </p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCodeSigningConfigResponse {
+    /// <p>The code signing configuration</p>
+    #[serde(rename = "CodeSigningConfig")]
+    pub code_signing_config: CodeSigningConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventSourceMappingRequest {
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetFunctionCodeSigningConfigRequest {
+    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetFunctionCodeSigningConfigResponse {
+    /// <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -982,6 +1202,51 @@ pub struct GetProvisionedConcurrencyConfigResponse {
     pub status_reason: Option<String>,
 }
 
+/// <p>Configuration values that override the container image Dockerfile settings. See <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-parms.html">Container settings</a>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ImageConfig {
+    /// <p>Specifies parameters that you want to pass in with ENTRYPOINT. </p>
+    #[serde(rename = "Command")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub command: Option<Vec<String>>,
+    /// <p>Specifies the entry point to their application, which is typically the location of the runtime executable.</p>
+    #[serde(rename = "EntryPoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entry_point: Option<Vec<String>>,
+    /// <p>Specifies the working directory.</p>
+    #[serde(rename = "WorkingDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<String>,
+}
+
+/// <p>Error response to GetFunctionConfiguration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImageConfigError {
+    /// <p>Error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>Error message.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>Response to GetFunctionConfiguration request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImageConfigResponse {
+    /// <p>Error response to GetFunctionConfiguration.</p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<ImageConfigError>,
+    /// <p>Configuration values that override the container image Dockerfile.</p>
+    #[serde(rename = "ImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_config: Option<ImageConfig>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvocationRequest {
@@ -1067,6 +1332,14 @@ pub struct Layer {
     #[serde(rename = "CodeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_size: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of a signing job.</p>
+    #[serde(rename = "SigningJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_job_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for a signing profile version.</p>
+    #[serde(rename = "SigningProfileVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_profile_version_arn: Option<String>,
 }
 
 /// <p>A ZIP archive that contains the contents of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. You can specify either an Amazon S3 location, or upload a layer archive directly.</p>
@@ -1112,6 +1385,14 @@ pub struct LayerVersionContentOutput {
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of a signing job.</p>
+    #[serde(rename = "SigningJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_job_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for a signing profile version.</p>
+    #[serde(rename = "SigningProfileVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_profile_version_arn: Option<String>,
 }
 
 /// <p>Details about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>.</p>
@@ -1197,8 +1478,34 @@ pub struct ListAliasesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCodeSigningConfigsRequest {
+    /// <p>Specify the pagination token that's returned by a previous request to retrieve the next page of results.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>Maximum number of items to return.</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_items: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCodeSigningConfigsResponse {
+    /// <p>The code signing configurations</p>
+    #[serde(rename = "CodeSigningConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_signing_configs: Option<Vec<CodeSigningConfig>>,
+    /// <p>The pagination token that's included if more results are available.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSourceMappingsRequest {
-    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - The ARN of the cluster.</p> </li> </ul></p>
     #[serde(rename = "EventSourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source_arn: Option<String>,
@@ -1252,6 +1559,35 @@ pub struct ListFunctionEventInvokeConfigsResponse {
     #[serde(rename = "FunctionEventInvokeConfigs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_event_invoke_configs: Option<Vec<FunctionEventInvokeConfig>>,
+    /// <p>The pagination token that's included if more results are available.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFunctionsByCodeSigningConfigRequest {
+    /// <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+    /// <p>Specify the pagination token that's returned by a previous request to retrieve the next page of results.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>Maximum number of items to return.</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_items: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFunctionsByCodeSigningConfigResponse {
+    /// <p>The function ARNs. </p>
+    #[serde(rename = "FunctionArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arns: Option<Vec<String>>,
     /// <p>The pagination token that's included if more results are available.</p>
     #[serde(rename = "NextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1565,6 +1901,28 @@ pub struct PublishVersionRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutFunctionCodeSigningConfigRequest {
+    /// <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutFunctionCodeSigningConfigResponse {
+    /// <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFunctionConcurrencyRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -1678,6 +2036,28 @@ pub struct RemovePermissionRequest {
     pub statement_id: String,
 }
 
+/// <p>The Self-Managed Apache Kafka cluster for your event source.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SelfManagedEventSource {
+    /// <p>The list of bootstrap servers for your Kafka brokers in the following format: <code>"KAFKA_BOOTSTRAP_SERVERS": ["abc.xyz.com:xxxx","abc2.xyz.com:xxxx"]</code>.</p>
+    #[serde(rename = "Endpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoints: Option<::std::collections::HashMap<String, Vec<String>>>,
+}
+
+/// <p>You can specify the authentication protocol, or the VPC components to secure access to your event source.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SourceAccessConfiguration {
+    /// <p><p>The type of authentication protocol or the VPC components for your event source. For example: <code>&quot;Type&quot;:&quot;SASL<em>SCRAM</em>512<em>AUTH&quot;</code>.</p> <ul> <li> <p> <code>BASIC</em>AUTH</code> - (MQ) The Secrets Manager secret that stores your broker credentials.</p> </li> <li> <p> <code>VPC<em>SUBNET</code> - The subnets associated with your VPC. Lambda connects to these subnets to fetch data from your Kafka cluster.</p> </li> <li> <p> <code>VPC</em>SECURITY<em>GROUP</code> - The VPC security group used to manage access to your Kafka brokers.</p> </li> <li> <p> <code>SASL</em>SCRAM<em>256</em>AUTH</code> - The ARN of your secret key used for SASL SCRAM-256 authentication of your Kafka brokers.</p> </li> <li> <p> <code>SASL<em>SCRAM</em>512_AUTH</code> - The ARN of your secret key used for SASL SCRAM-512 authentication of your Kafka brokers.</p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value for your chosen configuration in <code>Type</code>. For example: <code>"URI": "arn:aws:secretsmanager:us-east-1:01234567890:secret:MyBrokerSecretName"</code>.</p>
+    #[serde(rename = "URI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1749,8 +2129,36 @@ pub struct UpdateAliasRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateCodeSigningConfigRequest {
+    /// <p>Signing profiles for this code signing configuration.</p>
+    #[serde(rename = "AllowedPublishers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allowed_publishers: Option<AllowedPublishers>,
+    /// <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+    #[serde(rename = "CodeSigningConfigArn")]
+    pub code_signing_config_arn: String,
+    /// <p>The code signing policy.</p>
+    #[serde(rename = "CodeSigningPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_signing_policies: Option<CodeSigningPolicies>,
+    /// <p>Descriptive name for this code signing configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateCodeSigningConfigResponse {
+    /// <p>The code signing configuration</p>
+    #[serde(rename = "CodeSigningConfig")]
+    pub code_signing_config: CodeSigningConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEventSourceMappingRequest {
-    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
+    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. For standard queues the max is 10,000. For FIFO queues the max is 10.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Self-Managed Apache Kafka</b> - Default 100. Max 10,000.</p> </li> </ul></p>
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
@@ -1762,7 +2170,7 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "DestinationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_config: Option<DestinationConfig>,
-    /// <p>Disables the event source mapping to pause polling and invocation.</p>
+    /// <p>If true, the event source mapping is active. Set to false to pause polling and invocation.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
@@ -1770,15 +2178,19 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "FunctionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_name: Option<String>,
-    /// <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds.</p>
+    /// <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
+    #[serde(rename = "FunctionResponseTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_response_types: Option<Vec<String>>,
+    /// <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    /// <p>(Streams) Discard records older than the specified age. The default value is infinite (-1).</p>
     #[serde(rename = "MaximumRecordAgeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_record_age_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    /// <p>(Streams) Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records will be retried until the record expires.</p>
     #[serde(rename = "MaximumRetryAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_retry_attempts: Option<i64>,
@@ -1786,6 +2198,14 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "ParallelizationFactor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelization_factor: Option<i64>,
+    /// <p>An array of the authentication protocol, or the VPC components to secure your event source.</p>
+    #[serde(rename = "SourceAccessConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_access_configurations: Option<Vec<SourceAccessConfiguration>>,
+    /// <p>(Streams) The duration of a processing window in seconds. The range is between 1 second up to 15 minutes.</p>
+    #[serde(rename = "TumblingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tumbling_window_in_seconds: Option<i64>,
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
@@ -1801,6 +2221,10 @@ pub struct UpdateFunctionCodeRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
+    /// <p>URI of a container image in the Amazon ECR registry.</p>
+    #[serde(rename = "ImageUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_uri: Option<String>,
     /// <p>Set to true to publish a new version of the function after updating the code. This has the same effect as calling <a>PublishVersion</a> separately.</p>
     #[serde(rename = "Publish")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1858,6 +2282,10 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "Handler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub handler: Option<String>,
+    /// <p>Configuration values that override the container image Dockerfile.</p>
+    #[serde(rename = "ImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_config: Option<ImageConfig>,
     /// <p>The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.</p>
     #[serde(rename = "KMSKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1866,7 +2294,7 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "Layers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub layers: Option<Vec<String>>,
-    /// <p>The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.</p>
+    /// <p>The amount of memory available to the function at runtime. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB.</p>
     #[serde(rename = "MemorySize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory_size: Option<i64>,
@@ -2154,6 +2582,46 @@ impl fmt::Display for CreateAliasError {
     }
 }
 impl Error for CreateAliasError {}
+/// Errors returned by CreateCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum CreateCodeSigningConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+}
+
+impl CreateCodeSigningConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        CreateCodeSigningConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(CreateCodeSigningConfigError::Service(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCodeSigningConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateCodeSigningConfigError {}
 /// Errors returned by CreateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSourceMappingError {
@@ -2221,8 +2689,14 @@ impl Error for CreateEventSourceMappingError {}
 /// Errors returned by CreateFunction
 #[derive(Debug, PartialEq)]
 pub enum CreateFunctionError {
+    /// <p>The specified code signing configuration does not exist.</p>
+    CodeSigningConfigNotFound(String),
     /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
+    /// <p>The code signature failed one or more of the validation checks for signature mismatch or expiry, and the code signing policy is set to ENFORCE. Lambda blocks the deployment. </p>
+    CodeVerificationFailed(String),
+    /// <p>The code signature failed the integrity check. Lambda always blocks deployment if the integrity check fails, even if code signing policy is set to WARN.</p>
+    InvalidCodeSignature(String),
     /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The resource already exists, or another operation is in progress.</p>
@@ -2239,8 +2713,21 @@ impl CreateFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "CodeSigningConfigNotFoundException" => {
+                    return RusotoError::Service(CreateFunctionError::CodeSigningConfigNotFound(
+                        err.msg,
+                    ))
+                }
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(CreateFunctionError::CodeStorageExceeded(err.msg))
+                }
+                "CodeVerificationFailedException" => {
+                    return RusotoError::Service(CreateFunctionError::CodeVerificationFailed(
+                        err.msg,
+                    ))
+                }
+                "InvalidCodeSignatureException" => {
+                    return RusotoError::Service(CreateFunctionError::InvalidCodeSignature(err.msg))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateFunctionError::InvalidParameterValue(
@@ -2270,7 +2757,10 @@ impl fmt::Display for CreateFunctionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            CreateFunctionError::CodeSigningConfigNotFound(ref cause) => write!(f, "{}", cause),
             CreateFunctionError::CodeStorageExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::CodeVerificationFailed(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::InvalidCodeSignature(ref cause) => write!(f, "{}", cause),
             CreateFunctionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             CreateFunctionError::ResourceConflict(ref cause) => write!(f, "{}", cause),
             CreateFunctionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -2328,6 +2818,62 @@ impl fmt::Display for DeleteAliasError {
     }
 }
 impl Error for DeleteAliasError {}
+/// Errors returned by DeleteCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteCodeSigningConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+}
+
+impl DeleteCodeSigningConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DeleteCodeSigningConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(DeleteCodeSigningConfigError::ResourceConflict(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteCodeSigningConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteCodeSigningConfigError::Service(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCodeSigningConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCodeSigningConfigError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            DeleteCodeSigningConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteCodeSigningConfigError {}
 /// Errors returned by DeleteEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSourceMappingError {
@@ -2448,6 +2994,90 @@ impl fmt::Display for DeleteFunctionError {
     }
 }
 impl Error for DeleteFunctionError {}
+/// Errors returned by DeleteFunctionCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteFunctionCodeSigningConfigError {
+    /// <p>The specified code signing configuration does not exist.</p>
+    CodeSigningConfigNotFound(String),
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteFunctionCodeSigningConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteFunctionCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CodeSigningConfigNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionCodeSigningConfigError::CodeSigningConfigNotFound(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionCodeSigningConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionCodeSigningConfigError::ResourceConflict(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionCodeSigningConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteFunctionCodeSigningConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionCodeSigningConfigError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFunctionCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFunctionCodeSigningConfigError::CodeSigningConfigNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFunctionCodeSigningConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFunctionCodeSigningConfigError::ResourceConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFunctionCodeSigningConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFunctionCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionCodeSigningConfigError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteFunctionCodeSigningConfigError {}
 /// Errors returned by DeleteFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionConcurrencyError {
@@ -2768,6 +3398,52 @@ impl fmt::Display for GetAliasError {
     }
 }
 impl Error for GetAliasError {}
+/// Errors returned by GetCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum GetCodeSigningConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+}
+
+impl GetCodeSigningConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(GetCodeSigningConfigError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetCodeSigningConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetCodeSigningConfigError::Service(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCodeSigningConfigError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetCodeSigningConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCodeSigningConfigError {}
 /// Errors returned by GetEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum GetEventSourceMappingError {
@@ -2870,6 +3546,68 @@ impl fmt::Display for GetFunctionError {
     }
 }
 impl Error for GetFunctionError {}
+/// Errors returned by GetFunctionCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum GetFunctionCodeSigningConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl GetFunctionCodeSigningConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetFunctionCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        GetFunctionCodeSigningConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetFunctionCodeSigningConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetFunctionCodeSigningConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        GetFunctionCodeSigningConfigError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetFunctionCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetFunctionCodeSigningConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFunctionCodeSigningConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFunctionCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+            GetFunctionCodeSigningConfigError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetFunctionCodeSigningConfigError {}
 /// Errors returned by GetFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionConcurrencyError {
@@ -3602,6 +4340,44 @@ impl fmt::Display for ListAliasesError {
     }
 }
 impl Error for ListAliasesError {}
+/// Errors returned by ListCodeSigningConfigs
+#[derive(Debug, PartialEq)]
+pub enum ListCodeSigningConfigsError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+}
+
+impl ListCodeSigningConfigsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCodeSigningConfigsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ListCodeSigningConfigsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ListCodeSigningConfigsError::Service(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCodeSigningConfigsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCodeSigningConfigsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListCodeSigningConfigsError::Service(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListCodeSigningConfigsError {}
 /// Errors returned by ListEventSourceMappings
 #[derive(Debug, PartialEq)]
 pub enum ListEventSourceMappingsError {
@@ -3764,6 +4540,60 @@ impl fmt::Display for ListFunctionsError {
     }
 }
 impl Error for ListFunctionsError {}
+/// Errors returned by ListFunctionsByCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum ListFunctionsByCodeSigningConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+}
+
+impl ListFunctionsByCodeSigningConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListFunctionsByCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ListFunctionsByCodeSigningConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListFunctionsByCodeSigningConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ListFunctionsByCodeSigningConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFunctionsByCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFunctionsByCodeSigningConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFunctionsByCodeSigningConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFunctionsByCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFunctionsByCodeSigningConfigError {}
 /// Errors returned by ListLayerVersions
 #[derive(Debug, PartialEq)]
 pub enum ListLayerVersionsError {
@@ -4148,6 +4978,88 @@ impl fmt::Display for PublishVersionError {
     }
 }
 impl Error for PublishVersionError {}
+/// Errors returned by PutFunctionCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum PutFunctionCodeSigningConfigError {
+    /// <p>The specified code signing configuration does not exist.</p>
+    CodeSigningConfigNotFound(String),
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl PutFunctionCodeSigningConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutFunctionCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CodeSigningConfigNotFoundException" => {
+                    return RusotoError::Service(
+                        PutFunctionCodeSigningConfigError::CodeSigningConfigNotFound(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        PutFunctionCodeSigningConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(
+                        PutFunctionCodeSigningConfigError::ResourceConflict(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        PutFunctionCodeSigningConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(PutFunctionCodeSigningConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        PutFunctionCodeSigningConfigError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutFunctionCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutFunctionCodeSigningConfigError::CodeSigningConfigNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFunctionCodeSigningConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFunctionCodeSigningConfigError::ResourceConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFunctionCodeSigningConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFunctionCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+            PutFunctionCodeSigningConfigError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutFunctionCodeSigningConfigError {}
 /// Errors returned by PutFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum PutFunctionConcurrencyError {
@@ -4642,6 +5554,54 @@ impl fmt::Display for UpdateAliasError {
     }
 }
 impl Error for UpdateAliasError {}
+/// Errors returned by UpdateCodeSigningConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateCodeSigningConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+}
+
+impl UpdateCodeSigningConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCodeSigningConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        UpdateCodeSigningConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateCodeSigningConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(UpdateCodeSigningConfigError::Service(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateCodeSigningConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateCodeSigningConfigError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCodeSigningConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCodeSigningConfigError::Service(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateCodeSigningConfigError {}
 /// Errors returned by UpdateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateEventSourceMappingError {
@@ -4717,8 +5677,14 @@ impl Error for UpdateEventSourceMappingError {}
 /// Errors returned by UpdateFunctionCode
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionCodeError {
+    /// <p>The specified code signing configuration does not exist.</p>
+    CodeSigningConfigNotFound(String),
     /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
+    /// <p>The code signature failed one or more of the validation checks for signature mismatch or expiry, and the code signing policy is set to ENFORCE. Lambda blocks the deployment. </p>
+    CodeVerificationFailed(String),
+    /// <p>The code signature failed the integrity check. Lambda always blocks deployment if the integrity check fails, even if code signing policy is set to WARN.</p>
+    InvalidCodeSignature(String),
     /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
@@ -4737,8 +5703,23 @@ impl UpdateFunctionCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFunctionCodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "CodeSigningConfigNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateFunctionCodeError::CodeSigningConfigNotFound(err.msg),
+                    )
+                }
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::CodeStorageExceeded(
+                        err.msg,
+                    ))
+                }
+                "CodeVerificationFailedException" => {
+                    return RusotoError::Service(UpdateFunctionCodeError::CodeVerificationFailed(
+                        err.msg,
+                    ))
+                }
+                "InvalidCodeSignatureException" => {
+                    return RusotoError::Service(UpdateFunctionCodeError::InvalidCodeSignature(
                         err.msg,
                     ))
                 }
@@ -4775,7 +5756,10 @@ impl fmt::Display for UpdateFunctionCodeError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            UpdateFunctionCodeError::CodeSigningConfigNotFound(ref cause) => write!(f, "{}", cause),
             UpdateFunctionCodeError::CodeStorageExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::CodeVerificationFailed(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionCodeError::InvalidCodeSignature(ref cause) => write!(f, "{}", cause),
             UpdateFunctionCodeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             UpdateFunctionCodeError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
             UpdateFunctionCodeError::ResourceConflict(ref cause) => write!(f, "{}", cause),
@@ -4789,6 +5773,12 @@ impl Error for UpdateFunctionCodeError {}
 /// Errors returned by UpdateFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionConfigurationError {
+    /// <p>The specified code signing configuration does not exist.</p>
+    CodeSigningConfigNotFound(String),
+    /// <p>The code signature failed one or more of the validation checks for signature mismatch or expiry, and the code signing policy is set to ENFORCE. Lambda blocks the deployment. </p>
+    CodeVerificationFailed(String),
+    /// <p>The code signature failed the integrity check. Lambda always blocks deployment if the integrity check fails, even if code signing policy is set to WARN.</p>
+    InvalidCodeSignature(String),
     /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
@@ -4809,6 +5799,21 @@ impl UpdateFunctionConfigurationError {
     ) -> RusotoError<UpdateFunctionConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "CodeSigningConfigNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateFunctionConfigurationError::CodeSigningConfigNotFound(err.msg),
+                    )
+                }
+                "CodeVerificationFailedException" => {
+                    return RusotoError::Service(
+                        UpdateFunctionConfigurationError::CodeVerificationFailed(err.msg),
+                    )
+                }
+                "InvalidCodeSignatureException" => {
+                    return RusotoError::Service(
+                        UpdateFunctionConfigurationError::InvalidCodeSignature(err.msg),
+                    )
+                }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         UpdateFunctionConfigurationError::InvalidParameterValue(err.msg),
@@ -4848,6 +5853,15 @@ impl fmt::Display for UpdateFunctionConfigurationError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            UpdateFunctionConfigurationError::CodeSigningConfigNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFunctionConfigurationError::CodeVerificationFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFunctionConfigurationError::InvalidCodeSignature(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdateFunctionConfigurationError::InvalidParameterValue(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -4947,13 +5961,19 @@ pub trait Lambda {
         input: CreateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<CreateAliasError>>;
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p>Creates a code signing configuration. A <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-trustedcode.html">code signing configuration</a> defines a list of allowed signing profiles and defines the code-signing validation policy (action to be taken if deployment validation checks fail). </p>
+    async fn create_code_signing_config(
+        &self,
+        input: CreateCodeSigningConfigRequest,
+    ) -> Result<CreateCodeSigningConfigResponse, RusotoError<CreateCodeSigningConfigError>>;
+
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-mq.html">Using AWS Lambda with Amazon MQ</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html">Using AWS Lambda with Amazon MSK</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/kafka-smaa.html">Using AWS Lambda with Self-Managed Apache Kafka</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, RusotoError<CreateEventSourceMappingError>>;
 
-    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>When you create a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute or so. During this time, you can't invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and <code>StateReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the function is ready to invoke. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html">Invoking Functions</a>.</p>
+    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package is a .zip file archive or container image that contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>When you create a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute or so. During this time, you can't invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and <code>StateReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the function is ready to invoke. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>You can use code signing if your deployment package is a .zip file archive. To enable code signing for this function, specify the ARN of a code-signing configuration. When a user attempts to deploy a code package with <a>UpdateFunctionCode</a>, Lambda checks that the code package has a valid signature from a trusted publisher. The code-signing configuration includes set set of signing profiles, which define the trusted publishers for this function.</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html">Invoking Functions</a>.</p>
     async fn create_function(
         &self,
         input: CreateFunctionRequest,
@@ -4964,6 +5984,12 @@ pub trait Lambda {
         &self,
         input: DeleteAliasRequest,
     ) -> Result<(), RusotoError<DeleteAliasError>>;
+
+    /// <p>Deletes the code signing configuration. You can delete the code signing configuration only if no function is using it. </p>
+    async fn delete_code_signing_config(
+        &self,
+        input: DeleteCodeSigningConfigRequest,
+    ) -> Result<DeleteCodeSigningConfigResponse, RusotoError<DeleteCodeSigningConfigError>>;
 
     /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p> <p>When you delete an event source mapping, it enters a <code>Deleting</code> state and might not be completely deleted for several seconds.</p>
     async fn delete_event_source_mapping(
@@ -4976,6 +6002,12 @@ pub trait Lambda {
         &self,
         input: DeleteFunctionRequest,
     ) -> Result<(), RusotoError<DeleteFunctionError>>;
+
+    /// <p>Removes the code signing configuration from the function.</p>
+    async fn delete_function_code_signing_config(
+        &self,
+        input: DeleteFunctionCodeSigningConfigRequest,
+    ) -> Result<(), RusotoError<DeleteFunctionCodeSigningConfigError>>;
 
     /// <p>Removes a concurrent execution limit from a function.</p>
     async fn delete_function_concurrency(
@@ -5012,6 +6044,12 @@ pub trait Lambda {
         input: GetAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<GetAliasError>>;
 
+    /// <p>Returns information about the specified code signing configuration.</p>
+    async fn get_code_signing_config(
+        &self,
+        input: GetCodeSigningConfigRequest,
+    ) -> Result<GetCodeSigningConfigResponse, RusotoError<GetCodeSigningConfigError>>;
+
     /// <p>Returns details about an event source mapping. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
     async fn get_event_source_mapping(
         &self,
@@ -5023,6 +6061,12 @@ pub trait Lambda {
         &self,
         input: GetFunctionRequest,
     ) -> Result<GetFunctionResponse, RusotoError<GetFunctionError>>;
+
+    /// <p>Returns the code signing configuration for the specified function.</p>
+    async fn get_function_code_signing_config(
+        &self,
+        input: GetFunctionCodeSigningConfigRequest,
+    ) -> Result<GetFunctionCodeSigningConfigResponse, RusotoError<GetFunctionCodeSigningConfigError>>;
 
     /// <p>Returns details about the reserved concurrency configuration for a function. To set a concurrency limit for a function, use <a>PutFunctionConcurrency</a>.</p>
     async fn get_function_concurrency(
@@ -5093,6 +6137,12 @@ pub trait Lambda {
         input: ListAliasesRequest,
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
+    /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuring-codesigning.html">code signing configurations</a>. A request returns up to 10,000 configurations per call. You can use the <code>MaxItems</code> parameter to return fewer configurations per call. </p>
+    async fn list_code_signing_configs(
+        &self,
+        input: ListCodeSigningConfigsRequest,
+    ) -> Result<ListCodeSigningConfigsResponse, RusotoError<ListCodeSigningConfigsError>>;
+
     /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
     async fn list_event_source_mappings(
         &self,
@@ -5113,6 +6163,15 @@ pub trait Lambda {
         &self,
         input: ListFunctionsRequest,
     ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>;
+
+    /// <p>List the functions that use the specified code signing configuration. You can use this method prior to deleting a code signing configuration, to verify that no functions are using it.</p>
+    async fn list_functions_by_code_signing_config(
+        &self,
+        input: ListFunctionsByCodeSigningConfigRequest,
+    ) -> Result<
+        ListFunctionsByCodeSigningConfigResponse,
+        RusotoError<ListFunctionsByCodeSigningConfigError>,
+    >;
 
     /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
     async fn list_layer_versions(
@@ -5158,6 +6217,12 @@ pub trait Lambda {
         &self,
         input: PublishVersionRequest,
     ) -> Result<FunctionConfiguration, RusotoError<PublishVersionError>>;
+
+    /// <p>Update the code signing configuration for the function. Changes to the code signing configuration take effect the next time a user tries to deploy a code package to the function. </p>
+    async fn put_function_code_signing_config(
+        &self,
+        input: PutFunctionCodeSigningConfigRequest,
+    ) -> Result<PutFunctionCodeSigningConfigResponse, RusotoError<PutFunctionCodeSigningConfigError>>;
 
     /// <p>Sets the maximum number of simultaneous executions for a function, and reserves capacity for that concurrency level.</p> <p>Concurrency settings apply to the function as a whole, including all published versions and the unpublished version. Reserving concurrency both ensures that your function has capacity to process the specified number of events simultaneously, and prevents it from scaling beyond that level. Use <a>GetFunction</a> to see the current setting for a function.</p> <p>Use <a>GetAccountSettings</a> to see your Regional concurrency limit. You can reserve concurrency for as many functions as you like, as long as you leave at least 100 simultaneous executions unreserved for functions that aren't configured with a per-function limit. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
     async fn put_function_concurrency(
@@ -5210,13 +6275,19 @@ pub trait Lambda {
         input: UpdateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<UpdateAliasError>>;
 
-    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p>Update the code signing configuration. Changes to the code signing configuration take effect the next time a user tries to deploy a code package to the function. </p>
+    async fn update_code_signing_config(
+        &self,
+        input: UpdateCodeSigningConfigRequest,
+    ) -> Result<UpdateCodeSigningConfigResponse, RusotoError<UpdateCodeSigningConfigError>>;
+
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, RusotoError<UpdateEventSourceMappingError>>;
 
-    /// <p>Updates a Lambda function's code.</p> <p>The function's code is locked when you publish a version. You can't modify the code of a published version, only the unpublished version.</p>
+    /// <p><p>Updates a Lambda function&#39;s code. If code signing is enabled for the function, the code package must be signed by a trusted publisher. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-trustedcode.html">Configuring code signing</a>.</p> <p>The function&#39;s code is locked when you publish a version. You can&#39;t modify the code of a published version, only the unpublished version.</p> <note> <p>For a function defined as a container image, Lambda resolves the image tag to an image digest. In Amazon ECR, if you update the image tag to a new image, Lambda does not automatically update the function.</p> </note></p>
     async fn update_function_code(
         &self,
         input: UpdateFunctionCodeRequest,
@@ -5390,7 +6461,38 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p>Creates a code signing configuration. A <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-trustedcode.html">code signing configuration</a> defines a list of allowed signing profiles and defines the code-signing validation policy (action to be taken if deployment validation checks fail). </p>
+    #[allow(unused_mut)]
+    async fn create_code_signing_config(
+        &self,
+        input: CreateCodeSigningConfigRequest,
+    ) -> Result<CreateCodeSigningConfigResponse, RusotoError<CreateCodeSigningConfigError>> {
+        let request_uri = "/2020-04-22/code-signing-configs/";
+
+        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCodeSigningConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCodeSigningConfigError::from_response(response))
+        }
+    }
+
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-mq.html">Using AWS Lambda with Amazon MQ</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html">Using AWS Lambda with Amazon MSK</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/kafka-smaa.html">Using AWS Lambda with Self-Managed Apache Kafka</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn create_event_source_mapping(
         &self,
@@ -5421,7 +6523,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>When you create a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute or so. During this time, you can't invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and <code>StateReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the function is ready to invoke. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html">Invoking Functions</a>.</p>
+    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package is a .zip file archive or container image that contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>When you create a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute or so. During this time, you can't invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and <code>StateReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the function is ready to invoke. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>You can use code signing if your deployment package is a .zip file archive. To enable code signing for this function, specify the ARN of a code-signing configuration. When a user attempts to deploy a code package with <a>UpdateFunctionCode</a>, Lambda checks that the code package has a valid signature from a trusted publisher. The code-signing configuration includes set set of signing profiles, which define the trusted publishers for this function.</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html">Invoking Functions</a>.</p>
     #[allow(unused_mut)]
     async fn create_function(
         &self,
@@ -5480,6 +6582,37 @@ impl Lambda for LambdaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAliasError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the code signing configuration. You can delete the code signing configuration only if no function is using it. </p>
+    #[allow(unused_mut)]
+    async fn delete_code_signing_config(
+        &self,
+        input: DeleteCodeSigningConfigRequest,
+    ) -> Result<DeleteCodeSigningConfigResponse, RusotoError<DeleteCodeSigningConfigError>> {
+        let request_uri = format!(
+            "/2020-04-22/code-signing-configs/{code_signing_config_arn}",
+            code_signing_config_arn = input.code_signing_config_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCodeSigningConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCodeSigningConfigError::from_response(response))
         }
     }
 
@@ -5547,6 +6680,38 @@ impl Lambda for LambdaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFunctionError::from_response(response))
+        }
+    }
+
+    /// <p>Removes the code signing configuration from the function.</p>
+    #[allow(unused_mut)]
+    async fn delete_function_code_signing_config(
+        &self,
+        input: DeleteFunctionCodeSigningConfigRequest,
+    ) -> Result<(), RusotoError<DeleteFunctionCodeSigningConfigError>> {
+        let request_uri = format!(
+            "/2020-06-30/functions/{function_name}/code-signing-config",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFunctionCodeSigningConfigError::from_response(
+                response,
+            ))
         }
     }
 
@@ -5744,6 +6909,37 @@ impl Lambda for LambdaClient {
         }
     }
 
+    /// <p>Returns information about the specified code signing configuration.</p>
+    #[allow(unused_mut)]
+    async fn get_code_signing_config(
+        &self,
+        input: GetCodeSigningConfigRequest,
+    ) -> Result<GetCodeSigningConfigResponse, RusotoError<GetCodeSigningConfigError>> {
+        let request_uri = format!(
+            "/2020-04-22/code-signing-configs/{code_signing_config_arn}",
+            code_signing_config_arn = input.code_signing_config_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCodeSigningConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCodeSigningConfigError::from_response(response))
+        }
+    }
+
     /// <p>Returns details about an event source mapping. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
     #[allow(unused_mut)]
     async fn get_event_source_mapping(
@@ -5809,6 +7005,38 @@ impl Lambda for LambdaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetFunctionError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the code signing configuration for the specified function.</p>
+    #[allow(unused_mut)]
+    async fn get_function_code_signing_config(
+        &self,
+        input: GetFunctionCodeSigningConfigRequest,
+    ) -> Result<GetFunctionCodeSigningConfigResponse, RusotoError<GetFunctionCodeSigningConfigError>>
+    {
+        let request_uri = format!(
+            "/2020-06-30/functions/{function_name}/code-signing-config",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetFunctionCodeSigningConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetFunctionCodeSigningConfigError::from_response(response))
         }
     }
 
@@ -6220,6 +7448,43 @@ impl Lambda for LambdaClient {
         }
     }
 
+    /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuring-codesigning.html">code signing configurations</a>. A request returns up to 10,000 configurations per call. You can use the <code>MaxItems</code> parameter to return fewer configurations per call. </p>
+    #[allow(unused_mut)]
+    async fn list_code_signing_configs(
+        &self,
+        input: ListCodeSigningConfigsRequest,
+    ) -> Result<ListCodeSigningConfigsResponse, RusotoError<ListCodeSigningConfigsError>> {
+        let request_uri = "/2020-04-22/code-signing-configs/";
+
+        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCodeSigningConfigsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCodeSigningConfigsError::from_response(response))
+        }
+    }
+
     /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
     #[allow(unused_mut)]
     async fn list_event_source_mappings(
@@ -6346,6 +7611,51 @@ impl Lambda for LambdaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListFunctionsError::from_response(response))
+        }
+    }
+
+    /// <p>List the functions that use the specified code signing configuration. You can use this method prior to deleting a code signing configuration, to verify that no functions are using it.</p>
+    #[allow(unused_mut)]
+    async fn list_functions_by_code_signing_config(
+        &self,
+        input: ListFunctionsByCodeSigningConfigRequest,
+    ) -> Result<
+        ListFunctionsByCodeSigningConfigResponse,
+        RusotoError<ListFunctionsByCodeSigningConfigError>,
+    > {
+        let request_uri = format!(
+            "/2020-04-22/code-signing-configs/{code_signing_config_arn}/functions",
+            code_signing_config_arn = input.code_signing_config_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFunctionsByCodeSigningConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFunctionsByCodeSigningConfigError::from_response(
+                response,
+            ))
         }
     }
 
@@ -6611,6 +7921,41 @@ impl Lambda for LambdaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PublishVersionError::from_response(response))
+        }
+    }
+
+    /// <p>Update the code signing configuration for the function. Changes to the code signing configuration take effect the next time a user tries to deploy a code package to the function. </p>
+    #[allow(unused_mut)]
+    async fn put_function_code_signing_config(
+        &self,
+        input: PutFunctionCodeSigningConfigRequest,
+    ) -> Result<PutFunctionCodeSigningConfigResponse, RusotoError<PutFunctionCodeSigningConfigError>>
+    {
+        let request_uri = format!(
+            "/2020-06-30/functions/{function_name}/code-signing-config",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutFunctionCodeSigningConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutFunctionCodeSigningConfigError::from_response(response))
         }
     }
 
@@ -6907,7 +8252,41 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p>Update the code signing configuration. Changes to the code signing configuration take effect the next time a user tries to deploy a code package to the function. </p>
+    #[allow(unused_mut)]
+    async fn update_code_signing_config(
+        &self,
+        input: UpdateCodeSigningConfigRequest,
+    ) -> Result<UpdateCodeSigningConfigResponse, RusotoError<UpdateCodeSigningConfigError>> {
+        let request_uri = format!(
+            "/2020-04-22/code-signing-configs/{code_signing_config_arn}",
+            code_signing_config_arn = input.code_signing_config_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateCodeSigningConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCodeSigningConfigError::from_response(response))
+        }
+    }
+
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn update_event_source_mapping(
         &self,
@@ -6941,7 +8320,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p>Updates a Lambda function's code.</p> <p>The function's code is locked when you publish a version. You can't modify the code of a published version, only the unpublished version.</p>
+    /// <p><p>Updates a Lambda function&#39;s code. If code signing is enabled for the function, the code package must be signed by a trusted publisher. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-trustedcode.html">Configuring code signing</a>.</p> <p>The function&#39;s code is locked when you publish a version. You can&#39;t modify the code of a published version, only the unpublished version.</p> <note> <p>For a function defined as a container image, Lambda resolves the image tag to an image digest. In Amazon ECR, if you update the image tag to a new image, Lambda does not automatically update the function.</p> </note></p>
     #[allow(unused_mut)]
     async fn update_function_code(
         &self,

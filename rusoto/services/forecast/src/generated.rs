@@ -119,14 +119,26 @@ pub struct CreateDatasetImportJobRequest {
     /// <p>The name for the dataset import job. We recommend including the current timestamp in the name, for example, <code>20190721DatasetImport</code>. This can help you avoid getting a <code>ResourceAlreadyExistsException</code> exception.</p>
     #[serde(rename = "DatasetImportJobName")]
     pub dataset_import_job_name: String,
+    /// <p><p>The format of the geolocation attribute. The geolocation attribute can be formatted in one of two ways:</p> <ul> <li> <p> <code>LAT<em>LONG</code> - the latitude and longitude in decimal format (Example: 47.61</em>-122.33).</p> </li> <li> <p> <code>CC<em>POSTALCODE</code> (US Only) - the country code (US), followed by the 5-digit ZIP code (Example: US</em>98121).</p> </li> </ul></p>
+    #[serde(rename = "GeolocationFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geolocation_format: Option<String>,
     /// <p><p>The optional metadata that you apply to the dataset import job to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per resource - 50.</p> </li> <li> <p>For each resource, each tag key must be unique, and each tag key can have only one value.</p> </li> <li> <p>Maximum key length - 128 Unicode characters in UTF-8.</p> </li> <li> <p>Maximum value length - 256 Unicode characters in UTF-8.</p> </li> <li> <p>If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : / @.</p> </li> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>Do not use <code>aws:</code>, <code>AWS:</code>, or any upper or lowercase combination of such as a prefix for keys as it is reserved for AWS use. You cannot edit or delete tag keys with this prefix. Values can have this prefix. If a tag value has <code>aws</code> as its prefix but the key does not, then Forecast considers it to be a user tag and will count against the limit of 50 tags. Tags with only the key prefix of <code>aws</code> do not count against your tags per resource limit.</p> </li> </ul></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p>A single time zone for every item in your dataset. This option is ideal for datasets with all timestamps within a single time zone, or if all timestamps are normalized to a single time zone. </p> <p>Refer to the <a href="http://joda-time.sourceforge.net/timezones.html">Joda-Time API</a> for a complete list of valid time zone names.</p>
+    #[serde(rename = "TimeZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
     /// <p>The format of timestamps in the dataset. The format that you specify depends on the <code>DataFrequency</code> specified when the dataset was created. The following formats are supported</p> <ul> <li> <p>"yyyy-MM-dd"</p> <p>For the following data frequencies: Y, M, W, and D</p> </li> <li> <p>"yyyy-MM-dd HH:mm:ss"</p> <p>For the following data frequencies: H, 30min, 15min, and 1min; and optionally, for: Y, M, W, and D</p> </li> </ul> <p>If the format isn't specified, Amazon Forecast expects the format to be "yyyy-MM-dd HH:mm:ss".</p>
     #[serde(rename = "TimestampFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp_format: Option<String>,
+    /// <p>Automatically derive time zone information from the geolocation attribute. This option is ideal for datasets that contain timestamps in multiple time zones and those timestamps are expressed in local time.</p>
+    #[serde(rename = "UseGeolocationForTimeZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_geolocation_for_time_zone: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -233,8 +245,34 @@ pub struct CreateForecastResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreatePredictorBacktestExportJobRequest {
+    #[serde(rename = "Destination")]
+    pub destination: DataDestination,
+    /// <p>The Amazon Resource Name (ARN) of the predictor that you want to export.</p>
+    #[serde(rename = "PredictorArn")]
+    pub predictor_arn: String,
+    /// <p>The name for the backtest export job.</p>
+    #[serde(rename = "PredictorBacktestExportJobName")]
+    pub predictor_backtest_export_job_name: String,
+    /// <p><p>Optional metadata to help you categorize and organize your backtests. Each tag consists of a key and an optional value, both of which you define. Tag keys and values are case sensitive.</p> <p>The following restrictions apply to tags:</p> <ul> <li> <p>For each resource, each tag key must be unique and each tag key must have one value.</p> </li> <li> <p>Maximum number of tags per resource: 50.</p> </li> <li> <p>Maximum key length: 128 Unicode characters in UTF-8.</p> </li> <li> <p>Maximum value length: 256 Unicode characters in UTF-8.</p> </li> <li> <p>Accepted characters: all letters and numbers, spaces representable in UTF-8, and + - = . _ : / @. If your tagging schema is used across other services and resources, the character restrictions of those services also apply. </p> </li> <li> <p>Key prefixes cannot include any upper or lowercase combination of <code>aws:</code> or <code>AWS:</code>. Values can have this prefix. If a tag value has <code>aws</code> as its prefix but the key does not, Forecast considers it to be a user tag and will count against the limit of 50 tags. Tags with only the key prefix of <code>aws</code> do not count against your tags per resource limit. You cannot edit or delete tag keys with this prefix.</p> </li> </ul></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreatePredictorBacktestExportJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the predictor backtest export job that you want to export.</p>
+    #[serde(rename = "PredictorBacktestExportJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictor_backtest_export_job_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePredictorRequest {
-    /// <p><p>The Amazon Resource Name (ARN) of the algorithm to use for model training. Required if <code>PerformAutoML</code> is not set to <code>true</code>.</p> <p class="title"> <b>Supported algorithms:</b> </p> <ul> <li> <p> <code>arn:aws:forecast:::algorithm/ARIMA</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/Deep<em>AR</em>Plus</code> </p> <p>Supports hyperparameter optimization (HPO)</p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/ETS</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/NPTS</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/Prophet</code> </p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the algorithm to use for model training. Required if <code>PerformAutoML</code> is not set to <code>true</code>.</p> <p class="title"> <b>Supported algorithms:</b> </p> <ul> <li> <p> <code>arn:aws:forecast:::algorithm/ARIMA</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/CNN-QR</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/Deep<em>AR</em>Plus</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/ETS</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/NPTS</code> </p> </li> <li> <p> <code>arn:aws:forecast:::algorithm/Prophet</code> </p> </li> </ul></p>
     #[serde(rename = "AlgorithmArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm_arn: Option<String>,
@@ -252,6 +290,10 @@ pub struct CreatePredictorRequest {
     /// <p>Specifies the number of time-steps that the model is trained to predict. The forecast horizon is also called the prediction length.</p> <p>For example, if you configure a dataset for daily data collection (using the <code>DataFrequency</code> parameter of the <a>CreateDataset</a> operation) and set the forecast horizon to 10, the model returns predictions for 10 days.</p> <p>The maximum forecast horizon is the lesser of 500 time-steps or 1/3 of the TARGET_TIME_SERIES dataset length.</p>
     #[serde(rename = "ForecastHorizon")]
     pub forecast_horizon: i64,
+    /// <p>Specifies the forecast types used to train a predictor. You can specify up to five forecast types. Forecast types can be quantiles from 0.01 to 0.99, by increments of 0.01 or higher. You can also specify the mean forecast with <code>mean</code>. </p> <p>The default value is <code>["0.10", "0.50", "0.9"]</code>.</p>
+    #[serde(rename = "ForecastTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forecast_types: Option<Vec<String>>,
     /// <p>Provides hyperparameter override values for the algorithm. If you don't provide this parameter, Amazon Forecast uses default values. The individual algorithms specify which hyperparameters support hyperparameter optimization (HPO). For more information, see <a>aws-forecast-choosing-recipes</a>.</p> <p>If you included the <code>HPOConfig</code> object, you must set <code>PerformHPO</code> to true.</p>
     #[serde(rename = "HPOConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -263,7 +305,7 @@ pub struct CreatePredictorRequest {
     #[serde(rename = "PerformAutoML")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub perform_auto_ml: Option<bool>,
-    /// <p><p>Whether to perform hyperparameter optimization (HPO). HPO finds optimal hyperparameter values for your training data. The process of performing HPO is known as running a hyperparameter tuning job.</p> <p>The default value is <code>false</code>. In this case, Amazon Forecast uses default hyperparameter values from the chosen algorithm.</p> <p>To override the default values, set <code>PerformHPO</code> to <code>true</code> and, optionally, supply the <a>HyperParameterTuningJobConfig</a> object. The tuning job specifies a metric to optimize, which hyperparameters participate in tuning, and the valid range for each tunable hyperparameter. In this case, you are required to specify an algorithm and <code>PerformAutoML</code> must be false.</p> <p>The following algorithm supports HPO:</p> <ul> <li> <p>DeepAR+</p> </li> </ul></p>
+    /// <p><p>Whether to perform hyperparameter optimization (HPO). HPO finds optimal hyperparameter values for your training data. The process of performing HPO is known as running a hyperparameter tuning job.</p> <p>The default value is <code>false</code>. In this case, Amazon Forecast uses default hyperparameter values from the chosen algorithm.</p> <p>To override the default values, set <code>PerformHPO</code> to <code>true</code> and, optionally, supply the <a>HyperParameterTuningJobConfig</a> object. The tuning job specifies a metric to optimize, which hyperparameters participate in tuning, and the valid range for each tunable hyperparameter. In this case, you are required to specify an algorithm and <code>PerformAutoML</code> must be false.</p> <p>The following algorithms support HPO:</p> <ul> <li> <p>DeepAR+</p> </li> <li> <p>CNN-QR</p> </li> </ul></p>
     #[serde(rename = "PerformHPO")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub perform_hpo: Option<bool>,
@@ -289,7 +331,7 @@ pub struct CreatePredictorResponse {
     pub predictor_arn: Option<String>,
 }
 
-/// <p>The destination for an exported forecast, an AWS Identity and Access Management (IAM) role that allows Amazon Forecast to access the location and, optionally, an AWS Key Management Service (KMS) key. This object is submitted in the <a>CreateForecastExportJob</a> request.</p>
+/// <p>The destination for an export job. Provide an S3 path, an AWS Identity and Access Management (IAM) role that allows Amazon Forecast to access the location, and an AWS Key Management Service (KMS) key (optional). </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataDestination {
     /// <p>The path to an Amazon Simple Storage Service (Amazon S3) bucket along with the credentials to access the bucket.</p>
@@ -433,6 +475,14 @@ pub struct DeleteForecastRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeletePredictorBacktestExportJobRequest {
+    /// <p>The Amazon Resource Name (ARN) of the predictor backtest export job to delete.</p>
+    #[serde(rename = "PredictorBacktestExportJobArn")]
+    pub predictor_backtest_export_job_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePredictorRequest {
     /// <p>The Amazon Resource Name (ARN) of the predictor to delete.</p>
     #[serde(rename = "PredictorArn")]
@@ -519,6 +569,10 @@ pub struct DescribeDatasetImportJobResponse {
     #[serde(rename = "FieldStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_statistics: Option<::std::collections::HashMap<String, Statistics>>,
+    /// <p>The format of the geolocation attribute. Valid Values:<code>"LAT_LONG"</code> and <code>"CC_POSTALCODE"</code>.</p>
+    #[serde(rename = "GeolocationFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geolocation_format: Option<String>,
     /// <p><p>The last time that the dataset was modified. The time depends on the status of the job, as follows:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The same time as <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -531,10 +585,18 @@ pub struct DescribeDatasetImportJobResponse {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>The single time zone applied to every item in the dataset</p>
+    #[serde(rename = "TimeZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
     /// <p><p>The format of timestamps in the dataset. The format that you specify depends on the <code>DataFrequency</code> specified when the dataset was created. The following formats are supported</p> <ul> <li> <p>&quot;yyyy-MM-dd&quot;</p> <p>For the following data frequencies: Y, M, W, and D</p> </li> <li> <p>&quot;yyyy-MM-dd HH:mm:ss&quot;</p> <p>For the following data frequencies: H, 30min, 15min, and 1min; and optionally, for: Y, M, W, and D</p> </li> </ul></p>
     #[serde(rename = "TimestampFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp_format: Option<String>,
+    /// <p>Whether <code>TimeZone</code> is automatically derived from the geolocation attribute.</p>
+    #[serde(rename = "UseGeolocationForTimeZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_geolocation_for_time_zone: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -686,6 +748,50 @@ pub struct DescribeForecastResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePredictorBacktestExportJobRequest {
+    /// <p>The Amazon Resource Name (ARN) of the predictor backtest export job.</p>
+    #[serde(rename = "PredictorBacktestExportJobArn")]
+    pub predictor_backtest_export_job_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribePredictorBacktestExportJobResponse {
+    /// <p>When the predictor backtest export job was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<DataDestination>,
+    /// <p>When the last successful export job finished.</p>
+    #[serde(rename = "LastModificationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modification_time: Option<f64>,
+    /// <p>Information about any errors that may have occurred during the backtest export.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the predictor.</p>
+    #[serde(rename = "PredictorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictor_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the predictor backtest export job.</p>
+    #[serde(rename = "PredictorBacktestExportJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictor_backtest_export_job_arn: Option<String>,
+    /// <p>The name of the predictor backtest export job.</p>
+    #[serde(rename = "PredictorBacktestExportJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictor_backtest_export_job_name: Option<String>,
+    /// <p><p>The status of the predictor backtest export job. States include: </p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code> </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code> </p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePredictorRequest {
     /// <p>The Amazon Resource Name (ARN) of the predictor that you want information about.</p>
     #[serde(rename = "PredictorArn")]
@@ -727,6 +833,10 @@ pub struct DescribePredictorResponse {
     #[serde(rename = "ForecastHorizon")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecast_horizon: Option<i64>,
+    /// <p>The forecast types used during predictor training. Default value is <code>["0.1","0.5","0.9"]</code> </p>
+    #[serde(rename = "ForecastTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forecast_types: Option<Vec<String>>,
     /// <p>The hyperparameter override values for the algorithm.</p>
     #[serde(rename = "HPOConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -767,7 +877,7 @@ pub struct DescribePredictorResponse {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The default training parameters or overrides selected during model training. If using the AutoML algorithm or if HPO is turned on while using the DeepAR+ algorithms, the optimized values for the chosen hyperparameters are returned. For more information, see <a>aws-forecast-choosing-recipes</a>.</p>
+    /// <p>The default training parameters or overrides selected during model training. When running AutoML or choosing HPO with CNN-QR or DeepAR+, the optimized values for the chosen hyperparameters are returned. For more information, see <a>aws-forecast-choosing-recipes</a>.</p>
     #[serde(rename = "TrainingParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -782,6 +892,24 @@ pub struct EncryptionConfig {
     /// <p>The ARN of the IAM role that Amazon Forecast can assume to access the AWS KMS key.</p> <p>Passing a role across AWS accounts is not allowed. If you pass a role that isn't in your account, you get an <code>InvalidInputException</code> error.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
+}
+
+/// <p> Provides detailed error metrics to evaluate the performance of a predictor. This object is part of the <a>Metrics</a> object. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ErrorMetric {
+    /// <p> The Forecast type used to compute WAPE and RMSE. </p>
+    #[serde(rename = "ForecastType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forecast_type: Option<String>,
+    /// <p> The root-mean-square error (RMSE). </p>
+    #[serde(rename = "RMSE")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rmse: Option<f64>,
+    /// <p> The weighted absolute percentage error (WAPE). </p>
+    #[serde(rename = "WAPE")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wape: Option<f64>,
 }
 
 /// <p>Parameters that define how to split a dataset into training data and testing data, and the number of iterations to perform. These parameters are specified in the predefined algorithms but you can override them in the <a>CreatePredictor</a> request.</p>
@@ -845,7 +973,7 @@ pub struct FeaturizationMethod {
     /// <p>The name of the method. The "filling" method is the only supported method.</p>
     #[serde(rename = "FeaturizationMethodName")]
     pub featurization_method_name: String,
-    /// <p><p>The method parameters (key-value pairs), which are a map of override parameters. Specify these parameters to override the default values. Related Time Series attributes do not accept aggregation parameters.</p> <p>The following list shows the parameters and their valid values for the &quot;filling&quot; featurization method for a <b>Target Time Series</b> dataset. Bold signifies the default value.</p> <ul> <li> <p> <code>aggregation</code>: <b>sum</b>, <code>avg</code>, <code>first</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>frontfill</code>: <b>none</b> </p> </li> <li> <p> <code>middlefill</code>: <b>zero</b>, <code>nan</code> (not a number), <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>backfill</code>: <b>zero</b>, <code>nan</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> </ul> <p>The following list shows the parameters and their valid values for a <b>Related Time Series</b> featurization method (there are no defaults):</p> <ul> <li> <p> <code>middlefill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>backfill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>futurefill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> </ul></p>
+    /// <p>The method parameters (key-value pairs), which are a map of override parameters. Specify these parameters to override the default values. Related Time Series attributes do not accept aggregation parameters.</p> <p>The following list shows the parameters and their valid values for the "filling" featurization method for a <b>Target Time Series</b> dataset. Bold signifies the default value.</p> <ul> <li> <p> <code>aggregation</code>: <b>sum</b>, <code>avg</code>, <code>first</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>frontfill</code>: <b>none</b> </p> </li> <li> <p> <code>middlefill</code>: <b>zero</b>, <code>nan</code> (not a number), <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>backfill</code>: <b>zero</b>, <code>nan</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> </ul> <p>The following list shows the parameters and their valid values for a <b>Related Time Series</b> featurization method (there are no defaults):</p> <ul> <li> <p> <code>middlefill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>backfill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>futurefill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> </ul> <p>To set a filling method to a specific value, set the fill parameter to <code>value</code> and define the value in a corresponding <code>_value</code> parameter. For example, to set backfilling to a value of 2, include the following: <code>"backfill": "value"</code> and <code>"backfill_value":"2"</code>. </p>
     #[serde(rename = "FeaturizationMethodParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub featurization_method_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1138,6 +1266,36 @@ pub struct ListForecastsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPredictorBacktestExportJobsRequest {
+    /// <p><p>An array of filters. For each filter, provide a condition and a match statement. The condition is either <code>IS</code> or <code>IS<em>NOT</code>, which specifies whether to include or exclude the predictor backtest export jobs that match the statement from the list. The match statement consists of a key and a value.</p> <p> <b>Filter properties</b> </p> <ul> <li> <p> <code>Condition</code> - The condition to apply. Valid values are <code>IS</code> and <code>IS</em>NOT</code>. To include the predictor backtest export jobs that match the statement, specify <code>IS</code>. To exclude matching predictor backtest export jobs, specify <code>IS_NOT</code>.</p> </li> <li> <p> <code>Key</code> - The name of the parameter to filter on. Valid values are <code>PredictorBacktestExportJobArn</code> and <code>Status</code>.</p> </li> <li> <p> <code>Value</code> - The value to match.</p> </li> </ul></p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The number of items to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the result of the previous request was truncated, the response includes a NextToken. To retrieve the next set of results, use the token in the next request. Tokens expire after 24 hours.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPredictorBacktestExportJobsResponse {
+    /// <p>Returns this token if the response is truncated. To retrieve the next set of results, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of objects that summarize the properties of each predictor backtest export job.</p>
+    #[serde(rename = "PredictorBacktestExportJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictor_backtest_export_jobs: Option<Vec<PredictorBacktestExportJobSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPredictorsRequest {
     /// <p>An array of filters. For each filter, you provide a condition and a match statement. The condition is either <code>IS</code> or <code>IS_NOT</code>, which specifies whether to include or exclude the predictors that match the statement from the list, respectively. The match statement consists of a key and a value.</p> <p> <b>Filter properties</b> </p> <ul> <li> <p> <code>Condition</code> - The condition to apply. Valid values are <code>IS</code> and <code>IS_NOT</code>. To include the predictors that match the statement, specify <code>IS</code>. To exclude matching predictors, specify <code>IS_NOT</code>.</p> </li> <li> <p> <code>Key</code> - The name of the parameter to filter on. Valid values are <code>DatasetGroupArn</code> and <code>Status</code>.</p> </li> <li> <p> <code>Value</code> - The value to match.</p> </li> </ul> <p>For example, to list all predictors whose status is ACTIVE, you would specify:</p> <p> <code>"Filters": [ { "Condition": "IS", "Key": "Status", "Value": "ACTIVE" } ]</code> </p>
     #[serde(rename = "Filters")]
@@ -1187,10 +1345,10 @@ pub struct ListTagsForResourceResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Metrics {
-    /// <p>The root mean square error (RMSE).</p>
-    #[serde(rename = "RMSE")]
+    /// <p> Provides detailed error metrics on forecast type, root-mean square-error (RMSE), and weighted average percentage error (WAPE). </p>
+    #[serde(rename = "ErrorMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rmse: Option<f64>,
+    pub error_metrics: Option<Vec<ErrorMetric>>,
     /// <p>An array of weighted quantile losses. Quantiles divide a probability distribution into regions of equal probability. The distribution in this case is the loss function.</p>
     #[serde(rename = "WeightedQuantileLosses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1212,6 +1370,39 @@ pub struct ParameterRanges {
     #[serde(rename = "IntegerParameterRanges")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integer_parameter_ranges: Option<Vec<IntegerParameterRange>>,
+}
+
+/// <p>Provides a summary of the predictor backtest export job properties used in the <a>ListPredictorBacktestExportJobs</a> operation. To get a complete set of properties, call the <a>DescribePredictorBacktestExportJob</a> operation, and provide the listed <code>PredictorBacktestExportJobArn</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PredictorBacktestExportJobSummary {
+    /// <p>When the predictor backtest export job was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<DataDestination>,
+    /// <p>When the last successful export job finished.</p>
+    #[serde(rename = "LastModificationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modification_time: Option<f64>,
+    /// <p>Information about any errors that may have occurred during the backtest export.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the predictor backtest export job.</p>
+    #[serde(rename = "PredictorBacktestExportJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictor_backtest_export_job_arn: Option<String>,
+    /// <p>The name of the predictor backtest export job.</p>
+    #[serde(rename = "PredictorBacktestExportJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictor_backtest_export_job_name: Option<String>,
+    /// <p><p>The status of the predictor backtest export job. States include: </p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code> </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code> </p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>The algorithm used to perform a backtest and the status of those tests.</p>
@@ -1272,7 +1463,7 @@ pub struct PredictorSummary {
     pub status: Option<String>,
 }
 
-/// <p>The path to the file(s) in an Amazon Simple Storage Service (Amazon S3) bucket, and an AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the file(s). Optionally, includes an AWS Key Management Service (KMS) key. This object is part of the <a>DataSource</a> object that is submitted in the <a>CreateDatasetImportJob</a> request, and part of the <a>DataDestination</a> object that is submitted in the <a>CreateForecastExportJob</a> request.</p>
+/// <p>The path to the file(s) in an Amazon Simple Storage Service (Amazon S3) bucket, and an AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the file(s). Optionally, includes an AWS Key Management Service (KMS) key. This object is part of the <a>DataSource</a> object that is submitted in the <a>CreateDatasetImportJob</a> request, and part of the <a>DataDestination</a> object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Config {
     /// <p>The Amazon Resource Name (ARN) of an AWS Key Management Service (KMS) key.</p>
@@ -1347,13 +1538,13 @@ pub struct Statistics {
     pub stddev: Option<f64>,
 }
 
-/// <p><p>Describes a supplementary feature of a dataset group. This object is part of the <a>InputDataConfig</a> object.</p> <p>The only supported feature is a holiday calendar. If you use the calendar, all data in the datasets should belong to the same country as the calendar. For the holiday calendar data, see the <a href="http://jollyday.sourceforge.net/data.html">Jollyday</a> web site.</p> <p>India and Korea&#39;s holidays are not included in the Jollyday library, but both are supported by Amazon Forecast. Their holidays are:</p> <p> <b>&quot;IN&quot; - INDIA</b> </p> <ul> <li> <p> <code>JANUARY 26 - REPUBLIC DAY</code> </p> </li> <li> <p> <code>AUGUST 15 - INDEPENDENCE DAY</code> </p> </li> <li> <p> <code>OCTOBER 2 GANDHI&#39;S BIRTHDAY</code> </p> </li> </ul> <p> <b>&quot;KR&quot; - KOREA</b> </p> <ul> <li> <p> <code>JANUARY 1 - NEW YEAR</code> </p> </li> <li> <p> <code>MARCH 1 - INDEPENDENCE MOVEMENT DAY</code> </p> </li> <li> <p> <code>MAY 5 - CHILDREN&#39;S DAY</code> </p> </li> <li> <p> <code>JUNE 6 - MEMORIAL DAY</code> </p> </li> <li> <p> <code>AUGUST 15 - LIBERATION DAY</code> </p> </li> <li> <p> <code>OCTOBER 3 - NATIONAL FOUNDATION DAY</code> </p> </li> <li> <p> <code>OCTOBER 9 - HANGEUL DAY</code> </p> </li> <li> <p> <code>DECEMBER 25 - CHRISTMAS DAY</code> </p> </li> </ul></p>
+/// <p>Describes a supplementary feature of a dataset group. This object is part of the <a>InputDataConfig</a> object. Forecast supports the Weather Index and Holidays built-in featurizations.</p> <p> <b>Weather Index</b> </p> <p>The Amazon Forecast Weather Index is a built-in featurization that incorporates historical and projected weather information into your model. The Weather Index supplements your datasets with over two years of historical weather data and up to 14 days of projected weather data. For more information, see <a href="https://docs.aws.amazon.com/forecast/latest/dg/weather.html">Amazon Forecast Weather Index</a>.</p> <p> <b>Holidays</b> </p> <p>Holidays is a built-in featurization that incorporates a feature-engineered dataset of national holiday information into your model. It provides native support for the holiday calendars of 66 countries. To view the holiday calendars, refer to the <a href="http://jollyday.sourceforge.net/data.html">Jollyday</a> library. For more information, see <a href="https://docs.aws.amazon.com/forecast/latest/dg/holidays.html">Holidays Featurization</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SupplementaryFeature {
-    /// <p>The name of the feature. This must be "holiday".</p>
+    /// <p>The name of the feature. Valid values: <code>"holiday"</code> and <code>"weather"</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>One of the following 2 letter country codes:</p> <ul> <li> <p>&quot;AR&quot; - ARGENTINA</p> </li> <li> <p>&quot;AT&quot; - AUSTRIA</p> </li> <li> <p>&quot;AU&quot; - AUSTRALIA</p> </li> <li> <p>&quot;BE&quot; - BELGIUM</p> </li> <li> <p>&quot;BR&quot; - BRAZIL</p> </li> <li> <p>&quot;CA&quot; - CANADA</p> </li> <li> <p>&quot;CN&quot; - CHINA</p> </li> <li> <p>&quot;CZ&quot; - CZECH REPUBLIC</p> </li> <li> <p>&quot;DK&quot; - DENMARK</p> </li> <li> <p>&quot;EC&quot; - ECUADOR</p> </li> <li> <p>&quot;FI&quot; - FINLAND</p> </li> <li> <p>&quot;FR&quot; - FRANCE</p> </li> <li> <p>&quot;DE&quot; - GERMANY</p> </li> <li> <p>&quot;HU&quot; - HUNGARY</p> </li> <li> <p>&quot;IE&quot; - IRELAND</p> </li> <li> <p>&quot;IN&quot; - INDIA</p> </li> <li> <p>&quot;IT&quot; - ITALY</p> </li> <li> <p>&quot;JP&quot; - JAPAN</p> </li> <li> <p>&quot;KR&quot; - KOREA</p> </li> <li> <p>&quot;LU&quot; - LUXEMBOURG</p> </li> <li> <p>&quot;MX&quot; - MEXICO</p> </li> <li> <p>&quot;NL&quot; - NETHERLANDS</p> </li> <li> <p>&quot;NO&quot; - NORWAY</p> </li> <li> <p>&quot;PL&quot; - POLAND</p> </li> <li> <p>&quot;PT&quot; - PORTUGAL</p> </li> <li> <p>&quot;RU&quot; - RUSSIA</p> </li> <li> <p>&quot;ZA&quot; - SOUTH AFRICA</p> </li> <li> <p>&quot;ES&quot; - SPAIN</p> </li> <li> <p>&quot;SE&quot; - SWEDEN</p> </li> <li> <p>&quot;CH&quot; - SWITZERLAND</p> </li> <li> <p>&quot;US&quot; - UNITED STATES</p> </li> <li> <p>&quot;UK&quot; - UNITED KINGDOM</p> </li> </ul></p>
+    /// <p><p> <b>Weather Index</b> </p> <p>To enable the Weather Index, set the value to <code>&quot;true&quot;</code> </p> <p> <b>Holidays</b> </p> <p>To enable Holidays, specify a country with one of the following two-letter country codes:</p> <ul> <li> <p>&quot;AL&quot; - ALBANIA</p> </li> <li> <p>&quot;AR&quot; - ARGENTINA</p> </li> <li> <p>&quot;AT&quot; - AUSTRIA</p> </li> <li> <p>&quot;AU&quot; - AUSTRALIA</p> </li> <li> <p>&quot;BA&quot; - BOSNIA HERZEGOVINA</p> </li> <li> <p>&quot;BE&quot; - BELGIUM</p> </li> <li> <p>&quot;BG&quot; - BULGARIA</p> </li> <li> <p>&quot;BO&quot; - BOLIVIA</p> </li> <li> <p>&quot;BR&quot; - BRAZIL</p> </li> <li> <p>&quot;BY&quot; - BELARUS</p> </li> <li> <p>&quot;CA&quot; - CANADA</p> </li> <li> <p>&quot;CL&quot; - CHILE</p> </li> <li> <p>&quot;CO&quot; - COLOMBIA</p> </li> <li> <p>&quot;CR&quot; - COSTA RICA</p> </li> <li> <p>&quot;HR&quot; - CROATIA</p> </li> <li> <p>&quot;CZ&quot; - CZECH REPUBLIC</p> </li> <li> <p>&quot;DK&quot; - DENMARK</p> </li> <li> <p>&quot;EC&quot; - ECUADOR</p> </li> <li> <p>&quot;EE&quot; - ESTONIA</p> </li> <li> <p>&quot;ET&quot; - ETHIOPIA</p> </li> <li> <p>&quot;FI&quot; - FINLAND</p> </li> <li> <p>&quot;FR&quot; - FRANCE</p> </li> <li> <p>&quot;DE&quot; - GERMANY</p> </li> <li> <p>&quot;GR&quot; - GREECE</p> </li> <li> <p>&quot;HU&quot; - HUNGARY</p> </li> <li> <p>&quot;IS&quot; - ICELAND</p> </li> <li> <p>&quot;IN&quot; - INDIA</p> </li> <li> <p>&quot;IE&quot; - IRELAND</p> </li> <li> <p>&quot;IT&quot; - ITALY</p> </li> <li> <p>&quot;JP&quot; - JAPAN</p> </li> <li> <p>&quot;KZ&quot; - KAZAKHSTAN</p> </li> <li> <p>&quot;KR&quot; - KOREA</p> </li> <li> <p>&quot;LV&quot; - LATVIA</p> </li> <li> <p>&quot;LI&quot; - LIECHTENSTEIN</p> </li> <li> <p>&quot;LT&quot; - LITHUANIA</p> </li> <li> <p>&quot;LU&quot; - LUXEMBOURG</p> </li> <li> <p>&quot;MK&quot; - MACEDONIA</p> </li> <li> <p>&quot;MT&quot; - MALTA</p> </li> <li> <p>&quot;MX&quot; - MEXICO</p> </li> <li> <p>&quot;MD&quot; - MOLDOVA</p> </li> <li> <p>&quot;ME&quot; - MONTENEGRO</p> </li> <li> <p>&quot;NL&quot; - NETHERLANDS</p> </li> <li> <p>&quot;NZ&quot; - NEW ZEALAND</p> </li> <li> <p>&quot;NI&quot; - NICARAGUA</p> </li> <li> <p>&quot;NG&quot; - NIGERIA</p> </li> <li> <p>&quot;NO&quot; - NORWAY</p> </li> <li> <p>&quot;PA&quot; - PANAMA</p> </li> <li> <p>&quot;PY&quot; - PARAGUAY</p> </li> <li> <p>&quot;PE&quot; - PERU</p> </li> <li> <p>&quot;PL&quot; - POLAND</p> </li> <li> <p>&quot;PT&quot; - PORTUGAL</p> </li> <li> <p>&quot;RO&quot; - ROMANIA</p> </li> <li> <p>&quot;RU&quot; - RUSSIA</p> </li> <li> <p>&quot;RS&quot; - SERBIA</p> </li> <li> <p>&quot;SK&quot; - SLOVAKIA</p> </li> <li> <p>&quot;SI&quot; - SLOVENIA</p> </li> <li> <p>&quot;ZA&quot; - SOUTH AFRICA</p> </li> <li> <p>&quot;ES&quot; - SPAIN</p> </li> <li> <p>&quot;SE&quot; - SWEDEN</p> </li> <li> <p>&quot;CH&quot; - SWITZERLAND</p> </li> <li> <p>&quot;UA&quot; - UKRAINE</p> </li> <li> <p>&quot;AE&quot; - UNITED ARAB EMIRATES</p> </li> <li> <p>&quot;US&quot; - UNITED STATES</p> </li> <li> <p>&quot;UK&quot; - UNITED KINGDOM</p> </li> <li> <p>&quot;UY&quot; - URUGUAY</p> </li> <li> <p>&quot;VE&quot; - VENEZUELA</p> </li> </ul></p>
     #[serde(rename = "Value")]
     pub value: String,
 }
@@ -1814,6 +2005,82 @@ impl fmt::Display for CreatePredictorError {
     }
 }
 impl Error for CreatePredictorError {}
+/// Errors returned by CreatePredictorBacktestExportJob
+#[derive(Debug, PartialEq)]
+pub enum CreatePredictorBacktestExportJobError {
+    /// <p>We can't process the request because it includes an invalid value or a value that exceeds the valid range.</p>
+    InvalidInput(String),
+    /// <p>The limit on the number of resources per account has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>There is already a resource with this name. Try again with a different name.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>We can't find a resource with that Amazon Resource Name (ARN). Check the ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl CreatePredictorBacktestExportJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreatePredictorBacktestExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        CreatePredictorBacktestExportJobError::InvalidInput(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        CreatePredictorBacktestExportJobError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreatePredictorBacktestExportJobError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        CreatePredictorBacktestExportJobError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreatePredictorBacktestExportJobError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreatePredictorBacktestExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreatePredictorBacktestExportJobError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePredictorBacktestExportJobError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePredictorBacktestExportJobError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePredictorBacktestExportJobError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePredictorBacktestExportJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreatePredictorBacktestExportJobError {}
 /// Errors returned by DeleteDataset
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatasetError {
@@ -2076,6 +2343,62 @@ impl fmt::Display for DeletePredictorError {
     }
 }
 impl Error for DeletePredictorError {}
+/// Errors returned by DeletePredictorBacktestExportJob
+#[derive(Debug, PartialEq)]
+pub enum DeletePredictorBacktestExportJobError {
+    /// <p>We can't process the request because it includes an invalid value or a value that exceeds the valid range.</p>
+    InvalidInput(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>We can't find a resource with that Amazon Resource Name (ARN). Check the ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl DeletePredictorBacktestExportJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeletePredictorBacktestExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        DeletePredictorBacktestExportJobError::InvalidInput(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        DeletePredictorBacktestExportJobError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeletePredictorBacktestExportJobError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeletePredictorBacktestExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeletePredictorBacktestExportJobError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePredictorBacktestExportJobError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePredictorBacktestExportJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeletePredictorBacktestExportJobError {}
 /// Errors returned by DescribeDataset
 #[derive(Debug, PartialEq)]
 pub enum DescribeDatasetError {
@@ -2302,6 +2625,52 @@ impl fmt::Display for DescribePredictorError {
     }
 }
 impl Error for DescribePredictorError {}
+/// Errors returned by DescribePredictorBacktestExportJob
+#[derive(Debug, PartialEq)]
+pub enum DescribePredictorBacktestExportJobError {
+    /// <p>We can't process the request because it includes an invalid value or a value that exceeds the valid range.</p>
+    InvalidInput(String),
+    /// <p>We can't find a resource with that Amazon Resource Name (ARN). Check the ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribePredictorBacktestExportJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribePredictorBacktestExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        DescribePredictorBacktestExportJobError::InvalidInput(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribePredictorBacktestExportJobError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribePredictorBacktestExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribePredictorBacktestExportJobError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePredictorBacktestExportJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribePredictorBacktestExportJobError {}
 /// Errors returned by GetAccuracyMetrics
 #[derive(Debug, PartialEq)]
 pub enum GetAccuracyMetricsError {
@@ -2516,6 +2885,50 @@ impl fmt::Display for ListForecastsError {
     }
 }
 impl Error for ListForecastsError {}
+/// Errors returned by ListPredictorBacktestExportJobs
+#[derive(Debug, PartialEq)]
+pub enum ListPredictorBacktestExportJobsError {
+    /// <p>We can't process the request because it includes an invalid value or a value that exceeds the valid range.</p>
+    InvalidInput(String),
+    /// <p>The token is not valid. Tokens expire after 24 hours.</p>
+    InvalidNextToken(String),
+}
+
+impl ListPredictorBacktestExportJobsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListPredictorBacktestExportJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        ListPredictorBacktestExportJobsError::InvalidInput(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        ListPredictorBacktestExportJobsError::InvalidNextToken(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPredictorBacktestExportJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPredictorBacktestExportJobsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListPredictorBacktestExportJobsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListPredictorBacktestExportJobsError {}
 /// Errors returned by ListPredictors
 #[derive(Debug, PartialEq)]
 pub enum ListPredictorsError {
@@ -2719,7 +3132,7 @@ pub trait Forecast {
         input: CreateDatasetRequest,
     ) -> Result<CreateDatasetResponse, RusotoError<CreateDatasetError>>;
 
-    /// <p><p>Creates a dataset group, which holds a collection of related datasets. You can add datasets to the dataset group when you create the dataset group, or later by using the <a>UpdateDatasetGroup</a> operation.</p> <p>After creating a dataset group and adding datasets, you use the dataset group when you create a predictor. For more information, see <a>howitworks-datasets-groups</a>.</p> <p>To get a list of all your datasets groups, use the <a>ListDatasetGroups</a> operation.</p> <note> <p>The <code>Status</code> of a dataset group must be <code>ACTIVE</code> before you can create use the dataset group to create a predictor. To get the status, use the <a>DescribeDatasetGroup</a> operation.</p> </note></p>
+    /// <p><p>Creates a dataset group, which holds a collection of related datasets. You can add datasets to the dataset group when you create the dataset group, or later by using the <a>UpdateDatasetGroup</a> operation.</p> <p>After creating a dataset group and adding datasets, you use the dataset group when you create a predictor. For more information, see <a>howitworks-datasets-groups</a>.</p> <p>To get a list of all your datasets groups, use the <a>ListDatasetGroups</a> operation.</p> <note> <p>The <code>Status</code> of a dataset group must be <code>ACTIVE</code> before you can use the dataset group to create a predictor. To get the status, use the <a>DescribeDatasetGroup</a> operation.</p> </note></p>
     async fn create_dataset_group(
         &self,
         input: CreateDatasetGroupRequest,
@@ -2743,11 +3156,20 @@ pub trait Forecast {
         input: CreateForecastExportJobRequest,
     ) -> Result<CreateForecastExportJobResponse, RusotoError<CreateForecastExportJobError>>;
 
-    /// <p><p>Creates an Amazon Forecast predictor.</p> <p>In the request, you provide a dataset group and either specify an algorithm or let Amazon Forecast choose the algorithm for you using AutoML. If you specify an algorithm, you also can override algorithm-specific hyperparameters.</p> <p>Amazon Forecast uses the chosen algorithm to train a model using the latest version of the datasets in the specified dataset group. The result is called a predictor. You then generate a forecast using the <a>CreateForecast</a> operation.</p> <p>After training a model, the <code>CreatePredictor</code> operation also evaluates it. To see the evaluation metrics, use the <a>GetAccuracyMetrics</a> operation. Always review the evaluation metrics before deciding to use the predictor to generate a forecast.</p> <p>Optionally, you can specify a featurization configuration to fill and aggregate the data fields in the <code>TARGET<em>TIME</em>SERIES</code> dataset to improve model training. For more information, see <a>FeaturizationConfig</a>.</p> <p>For RELATED<em>TIME</em>SERIES datasets, <code>CreatePredictor</code> verifies that the <code>DataFrequency</code> specified when the dataset was created matches the <code>ForecastFrequency</code>. TARGET<em>TIME</em>SERIES datasets don&#39;t have this restriction. Amazon Forecast also verifies the delimiter and timestamp format. For more information, see <a>howitworks-datasets-groups</a>.</p> <p> <b>AutoML</b> </p> <p>If you want Amazon Forecast to evaluate each algorithm and choose the one that minimizes the <code>objective function</code>, set <code>PerformAutoML</code> to <code>true</code>. The <code>objective function</code> is defined as the mean of the weighted p10, p50, and p90 quantile losses. For more information, see <a>EvaluationResult</a>.</p> <p>When AutoML is enabled, the following properties are disallowed:</p> <ul> <li> <p> <code>AlgorithmArn</code> </p> </li> <li> <p> <code>HPOConfig</code> </p> </li> <li> <p> <code>PerformHPO</code> </p> </li> <li> <p> <code>TrainingParameters</code> </p> </li> </ul> <p>To get a list of all of your predictors, use the <a>ListPredictors</a> operation.</p> <note> <p>Before you can use the predictor to create a forecast, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
+    /// <p><p>Creates an Amazon Forecast predictor.</p> <p>In the request, provide a dataset group and either specify an algorithm or let Amazon Forecast choose an algorithm for you using AutoML. If you specify an algorithm, you also can override algorithm-specific hyperparameters.</p> <p>Amazon Forecast uses the algorithm to train a predictor using the latest version of the datasets in the specified dataset group. You can then generate a forecast using the <a>CreateForecast</a> operation.</p> <p> To see the evaluation metrics, use the <a>GetAccuracyMetrics</a> operation. </p> <p>You can specify a featurization configuration to fill and aggregate the data fields in the <code>TARGET<em>TIME</em>SERIES</code> dataset to improve model training. For more information, see <a>FeaturizationConfig</a>.</p> <p>For RELATED<em>TIME</em>SERIES datasets, <code>CreatePredictor</code> verifies that the <code>DataFrequency</code> specified when the dataset was created matches the <code>ForecastFrequency</code>. TARGET<em>TIME</em>SERIES datasets don&#39;t have this restriction. Amazon Forecast also verifies the delimiter and timestamp format. For more information, see <a>howitworks-datasets-groups</a>.</p> <p>By default, predictors are trained and evaluated at the 0.1 (P10), 0.5 (P50), and 0.9 (P90) quantiles. You can choose custom forecast types to train and evaluate your predictor by setting the <code>ForecastTypes</code>. </p> <p> <b>AutoML</b> </p> <p>If you want Amazon Forecast to evaluate each algorithm and choose the one that minimizes the <code>objective function</code>, set <code>PerformAutoML</code> to <code>true</code>. The <code>objective function</code> is defined as the mean of the weighted losses over the forecast types. By default, these are the p10, p50, and p90 quantile losses. For more information, see <a>EvaluationResult</a>.</p> <p>When AutoML is enabled, the following properties are disallowed:</p> <ul> <li> <p> <code>AlgorithmArn</code> </p> </li> <li> <p> <code>HPOConfig</code> </p> </li> <li> <p> <code>PerformHPO</code> </p> </li> <li> <p> <code>TrainingParameters</code> </p> </li> </ul> <p>To get a list of all of your predictors, use the <a>ListPredictors</a> operation.</p> <note> <p>Before you can use the predictor to create a forecast, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
     async fn create_predictor(
         &self,
         input: CreatePredictorRequest,
     ) -> Result<CreatePredictorResponse, RusotoError<CreatePredictorError>>;
+
+    /// <p><p>Exports backtest forecasts and accuracy metrics generated by the <a>CreatePredictor</a> operation. Two folders containing CSV files are exported to your specified S3 bucket.</p> <p> The export file names will match the following conventions:</p> <p> <code>&lt;ExportJobName&gt;<em>&lt;ExportTimestamp&gt;</em>&lt;PartNumber&gt;.csv</code> </p> <p>The &lt;ExportTimestamp&gt; component is in Java SimpleDate format (yyyy-MM-ddTHH-mm-ssZ).</p> <p>You must specify a <a>DataDestination</a> object that includes an Amazon S3 bucket and an AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the Amazon S3 bucket. For more information, see <a>aws-forecast-iam-roles</a>.</p> <note> <p>The <code>Status</code> of the export job must be <code>ACTIVE</code> before you can access the export in your Amazon S3 bucket. To get the status, use the <a>DescribePredictorBacktestExportJob</a> operation.</p> </note></p>
+    async fn create_predictor_backtest_export_job(
+        &self,
+        input: CreatePredictorBacktestExportJobRequest,
+    ) -> Result<
+        CreatePredictorBacktestExportJobResponse,
+        RusotoError<CreatePredictorBacktestExportJobError>,
+    >;
 
     /// <p><p>Deletes an Amazon Forecast dataset that was created using the <a>CreateDataset</a> operation. You can only delete datasets that have a status of <code>ACTIVE</code> or <code>CREATE_FAILED</code>. To get the status use the <a>DescribeDataset</a> operation.</p> <note> <p>Forecast does not automatically update any dataset groups that contain the deleted dataset. In order to update the dataset group, use the operation, omitting the deleted dataset&#39;s ARN.</p> </note></p>
     async fn delete_dataset(
@@ -2785,6 +3207,12 @@ pub trait Forecast {
         input: DeletePredictorRequest,
     ) -> Result<(), RusotoError<DeletePredictorError>>;
 
+    /// <p>Deletes a predictor backtest export job.</p>
+    async fn delete_predictor_backtest_export_job(
+        &self,
+        input: DeletePredictorBacktestExportJobRequest,
+    ) -> Result<(), RusotoError<DeletePredictorBacktestExportJobError>>;
+
     /// <p><p>Describes an Amazon Forecast dataset created using the <a>CreateDataset</a> operation.</p> <p>In addition to listing the parameters specified in the <code>CreateDataset</code> request, this operation includes the following dataset properties:</p> <ul> <li> <p> <code>CreationTime</code> </p> </li> <li> <p> <code>LastModificationTime</code> </p> </li> <li> <p> <code>Status</code> </p> </li> </ul></p>
     async fn describe_dataset(
         &self,
@@ -2821,7 +3249,16 @@ pub trait Forecast {
         input: DescribePredictorRequest,
     ) -> Result<DescribePredictorResponse, RusotoError<DescribePredictorError>>;
 
-    /// <p><p>Provides metrics on the accuracy of the models that were trained by the <a>CreatePredictor</a> operation. Use metrics to see how well the model performed and to decide whether to use the predictor to generate a forecast. For more information, see <a>metrics</a>.</p> <p>This operation generates metrics for each backtest window that was evaluated. The number of backtest windows (<code>NumberOfBacktestWindows</code>) is specified using the <a>EvaluationParameters</a> object, which is optionally included in the <code>CreatePredictor</code> request. If <code>NumberOfBacktestWindows</code> isn&#39;t specified, the number defaults to one.</p> <p>The parameters of the <code>filling</code> method determine which items contribute to the metrics. If you want all items to contribute, specify <code>zero</code>. If you want only those items that have complete data in the range being evaluated to contribute, specify <code>nan</code>. For more information, see <a>FeaturizationMethod</a>.</p> <note> <p>Before you can get accuracy metrics, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
+    /// <p><p>Describes a predictor backtest export job created using the <a>CreatePredictorBacktestExportJob</a> operation.</p> <p>In addition to listing the properties provided by the user in the <code>CreatePredictorBacktestExportJob</code> request, this operation lists the following properties:</p> <ul> <li> <p> <code>CreationTime</code> </p> </li> <li> <p> <code>LastModificationTime</code> </p> </li> <li> <p> <code>Status</code> </p> </li> <li> <p> <code>Message</code> (if an error occurred)</p> </li> </ul></p>
+    async fn describe_predictor_backtest_export_job(
+        &self,
+        input: DescribePredictorBacktestExportJobRequest,
+    ) -> Result<
+        DescribePredictorBacktestExportJobResponse,
+        RusotoError<DescribePredictorBacktestExportJobError>,
+    >;
+
+    /// <p><p>Provides metrics on the accuracy of the models that were trained by the <a>CreatePredictor</a> operation. Use metrics to see how well the model performed and to decide whether to use the predictor to generate a forecast. For more information, see <a href="https://docs.aws.amazon.com/forecast/latest/dg/metrics.html">Predictor Metrics</a>.</p> <p>This operation generates metrics for each backtest window that was evaluated. The number of backtest windows (<code>NumberOfBacktestWindows</code>) is specified using the <a>EvaluationParameters</a> object, which is optionally included in the <code>CreatePredictor</code> request. If <code>NumberOfBacktestWindows</code> isn&#39;t specified, the number defaults to one.</p> <p>The parameters of the <code>filling</code> method determine which items contribute to the metrics. If you want all items to contribute, specify <code>zero</code>. If you want only those items that have complete data in the range being evaluated to contribute, specify <code>nan</code>. For more information, see <a>FeaturizationMethod</a>.</p> <note> <p>Before you can get accuracy metrics, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
     async fn get_accuracy_metrics(
         &self,
         input: GetAccuracyMetricsRequest,
@@ -2856,6 +3293,15 @@ pub trait Forecast {
         &self,
         input: ListForecastsRequest,
     ) -> Result<ListForecastsResponse, RusotoError<ListForecastsError>>;
+
+    /// <p>Returns a list of predictor backtest export jobs created using the <a>CreatePredictorBacktestExportJob</a> operation. This operation returns a summary for each backtest export job. You can filter the list using an array of <a>Filter</a> objects.</p> <p>To retrieve the complete set of properties for a particular backtest export job, use the ARN with the <a>DescribePredictorBacktestExportJob</a> operation.</p>
+    async fn list_predictor_backtest_export_jobs(
+        &self,
+        input: ListPredictorBacktestExportJobsRequest,
+    ) -> Result<
+        ListPredictorBacktestExportJobsResponse,
+        RusotoError<ListPredictorBacktestExportJobsError>,
+    >;
 
     /// <p>Returns a list of predictors created using the <a>CreatePredictor</a> operation. For each predictor, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). You can retrieve the complete set of properties by using the ARN with the <a>DescribePredictor</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>
     async fn list_predictors(
@@ -2945,7 +3391,7 @@ impl Forecast for ForecastClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDatasetResponse, _>()
     }
 
-    /// <p><p>Creates a dataset group, which holds a collection of related datasets. You can add datasets to the dataset group when you create the dataset group, or later by using the <a>UpdateDatasetGroup</a> operation.</p> <p>After creating a dataset group and adding datasets, you use the dataset group when you create a predictor. For more information, see <a>howitworks-datasets-groups</a>.</p> <p>To get a list of all your datasets groups, use the <a>ListDatasetGroups</a> operation.</p> <note> <p>The <code>Status</code> of a dataset group must be <code>ACTIVE</code> before you can create use the dataset group to create a predictor. To get the status, use the <a>DescribeDatasetGroup</a> operation.</p> </note></p>
+    /// <p><p>Creates a dataset group, which holds a collection of related datasets. You can add datasets to the dataset group when you create the dataset group, or later by using the <a>UpdateDatasetGroup</a> operation.</p> <p>After creating a dataset group and adding datasets, you use the dataset group when you create a predictor. For more information, see <a>howitworks-datasets-groups</a>.</p> <p>To get a list of all your datasets groups, use the <a>ListDatasetGroups</a> operation.</p> <note> <p>The <code>Status</code> of a dataset group must be <code>ACTIVE</code> before you can use the dataset group to create a predictor. To get the status, use the <a>DescribeDatasetGroup</a> operation.</p> </note></p>
     async fn create_dataset_group(
         &self,
         input: CreateDatasetGroupRequest,
@@ -3019,7 +3465,7 @@ impl Forecast for ForecastClient {
             .deserialize::<CreateForecastExportJobResponse, _>()
     }
 
-    /// <p><p>Creates an Amazon Forecast predictor.</p> <p>In the request, you provide a dataset group and either specify an algorithm or let Amazon Forecast choose the algorithm for you using AutoML. If you specify an algorithm, you also can override algorithm-specific hyperparameters.</p> <p>Amazon Forecast uses the chosen algorithm to train a model using the latest version of the datasets in the specified dataset group. The result is called a predictor. You then generate a forecast using the <a>CreateForecast</a> operation.</p> <p>After training a model, the <code>CreatePredictor</code> operation also evaluates it. To see the evaluation metrics, use the <a>GetAccuracyMetrics</a> operation. Always review the evaluation metrics before deciding to use the predictor to generate a forecast.</p> <p>Optionally, you can specify a featurization configuration to fill and aggregate the data fields in the <code>TARGET<em>TIME</em>SERIES</code> dataset to improve model training. For more information, see <a>FeaturizationConfig</a>.</p> <p>For RELATED<em>TIME</em>SERIES datasets, <code>CreatePredictor</code> verifies that the <code>DataFrequency</code> specified when the dataset was created matches the <code>ForecastFrequency</code>. TARGET<em>TIME</em>SERIES datasets don&#39;t have this restriction. Amazon Forecast also verifies the delimiter and timestamp format. For more information, see <a>howitworks-datasets-groups</a>.</p> <p> <b>AutoML</b> </p> <p>If you want Amazon Forecast to evaluate each algorithm and choose the one that minimizes the <code>objective function</code>, set <code>PerformAutoML</code> to <code>true</code>. The <code>objective function</code> is defined as the mean of the weighted p10, p50, and p90 quantile losses. For more information, see <a>EvaluationResult</a>.</p> <p>When AutoML is enabled, the following properties are disallowed:</p> <ul> <li> <p> <code>AlgorithmArn</code> </p> </li> <li> <p> <code>HPOConfig</code> </p> </li> <li> <p> <code>PerformHPO</code> </p> </li> <li> <p> <code>TrainingParameters</code> </p> </li> </ul> <p>To get a list of all of your predictors, use the <a>ListPredictors</a> operation.</p> <note> <p>Before you can use the predictor to create a forecast, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
+    /// <p><p>Creates an Amazon Forecast predictor.</p> <p>In the request, provide a dataset group and either specify an algorithm or let Amazon Forecast choose an algorithm for you using AutoML. If you specify an algorithm, you also can override algorithm-specific hyperparameters.</p> <p>Amazon Forecast uses the algorithm to train a predictor using the latest version of the datasets in the specified dataset group. You can then generate a forecast using the <a>CreateForecast</a> operation.</p> <p> To see the evaluation metrics, use the <a>GetAccuracyMetrics</a> operation. </p> <p>You can specify a featurization configuration to fill and aggregate the data fields in the <code>TARGET<em>TIME</em>SERIES</code> dataset to improve model training. For more information, see <a>FeaturizationConfig</a>.</p> <p>For RELATED<em>TIME</em>SERIES datasets, <code>CreatePredictor</code> verifies that the <code>DataFrequency</code> specified when the dataset was created matches the <code>ForecastFrequency</code>. TARGET<em>TIME</em>SERIES datasets don&#39;t have this restriction. Amazon Forecast also verifies the delimiter and timestamp format. For more information, see <a>howitworks-datasets-groups</a>.</p> <p>By default, predictors are trained and evaluated at the 0.1 (P10), 0.5 (P50), and 0.9 (P90) quantiles. You can choose custom forecast types to train and evaluate your predictor by setting the <code>ForecastTypes</code>. </p> <p> <b>AutoML</b> </p> <p>If you want Amazon Forecast to evaluate each algorithm and choose the one that minimizes the <code>objective function</code>, set <code>PerformAutoML</code> to <code>true</code>. The <code>objective function</code> is defined as the mean of the weighted losses over the forecast types. By default, these are the p10, p50, and p90 quantile losses. For more information, see <a>EvaluationResult</a>.</p> <p>When AutoML is enabled, the following properties are disallowed:</p> <ul> <li> <p> <code>AlgorithmArn</code> </p> </li> <li> <p> <code>HPOConfig</code> </p> </li> <li> <p> <code>PerformHPO</code> </p> </li> <li> <p> <code>TrainingParameters</code> </p> </li> </ul> <p>To get a list of all of your predictors, use the <a>ListPredictors</a> operation.</p> <note> <p>Before you can use the predictor to create a forecast, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
     async fn create_predictor(
         &self,
         input: CreatePredictorRequest,
@@ -3035,6 +3481,34 @@ impl Forecast for ForecastClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreatePredictorResponse, _>()
+    }
+
+    /// <p><p>Exports backtest forecasts and accuracy metrics generated by the <a>CreatePredictor</a> operation. Two folders containing CSV files are exported to your specified S3 bucket.</p> <p> The export file names will match the following conventions:</p> <p> <code>&lt;ExportJobName&gt;<em>&lt;ExportTimestamp&gt;</em>&lt;PartNumber&gt;.csv</code> </p> <p>The &lt;ExportTimestamp&gt; component is in Java SimpleDate format (yyyy-MM-ddTHH-mm-ssZ).</p> <p>You must specify a <a>DataDestination</a> object that includes an Amazon S3 bucket and an AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the Amazon S3 bucket. For more information, see <a>aws-forecast-iam-roles</a>.</p> <note> <p>The <code>Status</code> of the export job must be <code>ACTIVE</code> before you can access the export in your Amazon S3 bucket. To get the status, use the <a>DescribePredictorBacktestExportJob</a> operation.</p> </note></p>
+    async fn create_predictor_backtest_export_job(
+        &self,
+        input: CreatePredictorBacktestExportJobRequest,
+    ) -> Result<
+        CreatePredictorBacktestExportJobResponse,
+        RusotoError<CreatePredictorBacktestExportJobError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonForecast.CreatePredictorBacktestExportJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreatePredictorBacktestExportJobError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreatePredictorBacktestExportJobResponse, _>()
     }
 
     /// <p><p>Deletes an Amazon Forecast dataset that was created using the <a>CreateDataset</a> operation. You can only delete datasets that have a status of <code>ACTIVE</code> or <code>CREATE_FAILED</code>. To get the status use the <a>DescribeDataset</a> operation.</p> <note> <p>Forecast does not automatically update any dataset groups that contain the deleted dataset. In order to update the dataset group, use the operation, omitting the deleted dataset&#39;s ARN.</p> </note></p>
@@ -3134,6 +3608,29 @@ impl Forecast for ForecastClient {
 
         let response = self
             .sign_and_dispatch(request, DeletePredictorError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes a predictor backtest export job.</p>
+    async fn delete_predictor_backtest_export_job(
+        &self,
+        input: DeletePredictorBacktestExportJobRequest,
+    ) -> Result<(), RusotoError<DeletePredictorBacktestExportJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonForecast.DeletePredictorBacktestExportJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeletePredictorBacktestExportJobError::from_response,
+            )
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -3251,7 +3748,35 @@ impl Forecast for ForecastClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribePredictorResponse, _>()
     }
 
-    /// <p><p>Provides metrics on the accuracy of the models that were trained by the <a>CreatePredictor</a> operation. Use metrics to see how well the model performed and to decide whether to use the predictor to generate a forecast. For more information, see <a>metrics</a>.</p> <p>This operation generates metrics for each backtest window that was evaluated. The number of backtest windows (<code>NumberOfBacktestWindows</code>) is specified using the <a>EvaluationParameters</a> object, which is optionally included in the <code>CreatePredictor</code> request. If <code>NumberOfBacktestWindows</code> isn&#39;t specified, the number defaults to one.</p> <p>The parameters of the <code>filling</code> method determine which items contribute to the metrics. If you want all items to contribute, specify <code>zero</code>. If you want only those items that have complete data in the range being evaluated to contribute, specify <code>nan</code>. For more information, see <a>FeaturizationMethod</a>.</p> <note> <p>Before you can get accuracy metrics, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
+    /// <p><p>Describes a predictor backtest export job created using the <a>CreatePredictorBacktestExportJob</a> operation.</p> <p>In addition to listing the properties provided by the user in the <code>CreatePredictorBacktestExportJob</code> request, this operation lists the following properties:</p> <ul> <li> <p> <code>CreationTime</code> </p> </li> <li> <p> <code>LastModificationTime</code> </p> </li> <li> <p> <code>Status</code> </p> </li> <li> <p> <code>Message</code> (if an error occurred)</p> </li> </ul></p>
+    async fn describe_predictor_backtest_export_job(
+        &self,
+        input: DescribePredictorBacktestExportJobRequest,
+    ) -> Result<
+        DescribePredictorBacktestExportJobResponse,
+        RusotoError<DescribePredictorBacktestExportJobError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonForecast.DescribePredictorBacktestExportJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribePredictorBacktestExportJobError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePredictorBacktestExportJobResponse, _>()
+    }
+
+    /// <p><p>Provides metrics on the accuracy of the models that were trained by the <a>CreatePredictor</a> operation. Use metrics to see how well the model performed and to decide whether to use the predictor to generate a forecast. For more information, see <a href="https://docs.aws.amazon.com/forecast/latest/dg/metrics.html">Predictor Metrics</a>.</p> <p>This operation generates metrics for each backtest window that was evaluated. The number of backtest windows (<code>NumberOfBacktestWindows</code>) is specified using the <a>EvaluationParameters</a> object, which is optionally included in the <code>CreatePredictor</code> request. If <code>NumberOfBacktestWindows</code> isn&#39;t specified, the number defaults to one.</p> <p>The parameters of the <code>filling</code> method determine which items contribute to the metrics. If you want all items to contribute, specify <code>zero</code>. If you want only those items that have complete data in the range being evaluated to contribute, specify <code>nan</code>. For more information, see <a>FeaturizationMethod</a>.</p> <note> <p>Before you can get accuracy metrics, the <code>Status</code> of the predictor must be <code>ACTIVE</code>, signifying that training has completed. To get the status, use the <a>DescribePredictor</a> operation.</p> </note></p>
     async fn get_accuracy_metrics(
         &self,
         input: GetAccuracyMetricsRequest,
@@ -3359,6 +3884,31 @@ impl Forecast for ForecastClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListForecastsResponse, _>()
+    }
+
+    /// <p>Returns a list of predictor backtest export jobs created using the <a>CreatePredictorBacktestExportJob</a> operation. This operation returns a summary for each backtest export job. You can filter the list using an array of <a>Filter</a> objects.</p> <p>To retrieve the complete set of properties for a particular backtest export job, use the ARN with the <a>DescribePredictorBacktestExportJob</a> operation.</p>
+    async fn list_predictor_backtest_export_jobs(
+        &self,
+        input: ListPredictorBacktestExportJobsRequest,
+    ) -> Result<
+        ListPredictorBacktestExportJobsResponse,
+        RusotoError<ListPredictorBacktestExportJobsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonForecast.ListPredictorBacktestExportJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListPredictorBacktestExportJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPredictorBacktestExportJobsResponse, _>()
     }
 
     /// <p>Returns a list of predictors created using the <a>CreatePredictor</a> operation. For each predictor, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). You can retrieve the complete set of properties by using the ARN with the <a>DescribePredictor</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>

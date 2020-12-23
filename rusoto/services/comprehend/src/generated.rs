@@ -50,6 +50,17 @@ impl ComprehendClient {
 }
 
 use serde_json;
+/// <p>An augmented manifest file that provides training data for your custom model. An augmented manifest file is a labeled dataset that is produced by Amazon SageMaker Ground Truth.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AugmentedManifestsListItem {
+    /// <p>The JSON attribute that contains the annotations for your training documents. The number of attribute names that you specify depends on whether your augmented manifest file is the output of a single labeling job or a chained labeling job.</p> <p>If your file is the output of a single labeling job, specify the LabelAttributeName key that was used when the job was created in Ground Truth.</p> <p>If your file is the output of a chained labeling job, specify the LabelAttributeName key for one or more jobs in the chain. Each LabelAttributeName key provides the annotations from an individual job.</p>
+    #[serde(rename = "AttributeNames")]
+    pub attribute_names: Vec<String>,
+    /// <p>The Amazon S3 location of the augmented manifest file.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -327,7 +338,7 @@ pub struct ClassifyDocumentResponse {
     #[serde(rename = "Classes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classes: Option<Vec<DocumentClass>>,
-    /// <p>The labels used the document being analyzed. These are used for multi-label trained models. Individual labels represent different categories that are related in some manner and are not multually exclusive. For example, a movie can be just an action movie, or it can be an action movie, a science fiction movie, and a comedy, all at the same time. </p>
+    /// <p>The labels used the document being analyzed. These are used for multi-label trained models. Individual labels represent different categories that are related in some manner and are not mutually exclusive. For example, a movie can be just an action movie, or it can be an action movie, a science fiction movie, and a comedy, all at the same time. </p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<DocumentLabel>>,
@@ -427,7 +438,7 @@ pub struct CreateEntityRecognizerRequest {
     /// <p>Specifies the format and location of the input data. The S3 bucket containing the input data must be located in the same region as the entity recognizer being created. </p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: EntityRecognizerInputDataConfig,
-    /// <p> The language of the input documents. All documents must be in the same language. Only English ("en") is currently supported. </p>
+    /// <p> You can specify any of the following languages supported by Amazon Comprehend: English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), German ("de"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>The name given to the newly created recognizer. Recognizer names can be a maximum of 256 characters. Alphanumeric characters, hyphens (-) and underscores (_) are allowed. The name must be unique in the account/region.</p>
@@ -596,6 +607,23 @@ pub struct DescribeEntityRecognizerResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEventsDetectionJobRequest {
+    /// <p>The identifier of the events detection job.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeEventsDetectionJobResponse {
+    /// <p>An object that contains the properties associated with an event detection job.</p>
+    #[serde(rename = "EventsDetectionJobProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub events_detection_job_properties: Option<EventsDetectionJobProperties>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyPhrasesDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -609,6 +637,22 @@ pub struct DescribeKeyPhrasesDetectionJobResponse {
     #[serde(rename = "KeyPhrasesDetectionJobProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_phrases_detection_job_properties: Option<KeyPhrasesDetectionJobProperties>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePiiEntitiesDetectionJobRequest {
+    /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribePiiEntitiesDetectionJobResponse {
+    #[serde(rename = "PiiEntitiesDetectionJobProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pii_entities_detection_job_properties: Option<PiiEntitiesDetectionJobProperties>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -705,6 +749,26 @@ pub struct DetectKeyPhrasesResponse {
     #[serde(rename = "KeyPhrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_phrases: Option<Vec<KeyPhrase>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DetectPiiEntitiesRequest {
+    /// <p>The language of the input documents.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetectPiiEntitiesResponse {
+    /// <p>A collection of PII entities identified in the input text. For each entity, the response provides the entity type, where the entity text begins and ends, and the level of confidence that Amazon Comprehend has in the detection.</p>
+    #[serde(rename = "Entities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entities: Option<Vec<PiiEntity>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -845,7 +909,7 @@ pub struct DocumentClassificationJobProperties {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentClassifierFilter {
-    /// <p>Filters the list of classifiers based on status. </p>
+    /// <p>Filters the list of classifiers based on status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -862,13 +926,22 @@ pub struct DocumentClassifierFilter {
 /// <p>The input properties for training a document classifier. </p> <p>For more information on how the input file is formatted, see <a>how-document-classification-training-data</a>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentClassifierInputDataConfig {
+    /// <p>A list of augmented manifest files that provide training data for your custom model. An augmented manifest file is a labeled dataset that is produced by Amazon SageMaker Ground Truth.</p> <p>This parameter is required if you set <code>DataFormat</code> to <code>AUGMENTED_MANIFEST</code>.</p>
+    #[serde(rename = "AugmentedManifests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub augmented_manifests: Option<Vec<AugmentedManifestsListItem>>,
+    /// <p>The format of your training data:</p> <ul> <li> <p> <code>COMPREHEND_CSV</code>: A two-column CSV file, where labels are provided in the first column, and documents are provided in the second. If you use this value, you must provide the <code>S3Uri</code> parameter in your request.</p> </li> <li> <p> <code>AUGMENTED_MANIFEST</code>: A labeled dataset that is produced by Amazon SageMaker Ground Truth. This file is in JSON lines format. Each line is a complete JSON object that contains a training document and its associated labels. </p> <p>If you use this value, you must provide the <code>AugmentedManifests</code> parameter in your request.</p> </li> </ul> <p>If you don't specify a value, Amazon Comprehend uses <code>COMPREHEND_CSV</code> as the default.</p>
+    #[serde(rename = "DataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_format: Option<String>,
     /// <p>Indicates the delimiter used to separate each label for training a multi-label classifier. The default delimiter between labels is a pipe (|). You can use a different character as a delimiter (if it's an allowed character) by specifying it under Delimiter for labels. If the training documents use a delimiter other than the default or the delimiter you specify, the labels on that line will be combined to make a single unique label, such as LABELLABELLABEL.</p>
     #[serde(rename = "LabelDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label_delimiter: Option<String>,
-    /// <p>The Amazon S3 URI for the input data. The S3 bucket must be in the same region as the API endpoint that you are calling. The URI can point to a single input file or it can provide the prefix for a collection of input files.</p> <p>For example, if you use the URI <code>S3://bucketName/prefix</code>, if the prefix is a single file, Amazon Comprehend uses that file as input. If more than one file begins with the prefix, Amazon Comprehend uses all of them as input.</p>
+    /// <p>The Amazon S3 URI for the input data. The S3 bucket must be in the same region as the API endpoint that you are calling. The URI can point to a single input file or it can provide the prefix for a collection of input files.</p> <p>For example, if you use the URI <code>S3://bucketName/prefix</code>, if the prefix is a single file, Amazon Comprehend uses that file as input. If more than one file begins with the prefix, Amazon Comprehend uses all of them as input.</p> <p>This parameter is required if you set <code>DataFormat</code> to <code>COMPREHEND_CSV</code>.</p>
     #[serde(rename = "S3Uri")]
-    pub s3_uri: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_uri: Option<String>,
 }
 
 /// <p>Provides output results configuration parameters for custom classifier jobs. </p>
@@ -1050,7 +1123,7 @@ pub struct DominantLanguageDetectionJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
-/// <p>The filter used to determine which endpoints are are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
+/// <p>The filter used to determine which endpoints are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndpointFilter {
@@ -1279,18 +1352,27 @@ pub struct EntityRecognizerFilter {
 /// <p>Specifies the format and location of the input data.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EntityRecognizerInputDataConfig {
-    /// <p>S3 location of the annotations file for an entity recognizer.</p>
+    /// <p>The S3 location of the CSV file that annotates your training documents.</p>
     #[serde(rename = "Annotations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotations: Option<EntityRecognizerAnnotations>,
-    /// <p>S3 location of the documents folder for an entity recognizer</p>
+    /// <p>A list of augmented manifest files that provide training data for your custom model. An augmented manifest file is a labeled dataset that is produced by Amazon SageMaker Ground Truth.</p> <p>This parameter is required if you set <code>DataFormat</code> to <code>AUGMENTED_MANIFEST</code>.</p>
+    #[serde(rename = "AugmentedManifests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub augmented_manifests: Option<Vec<AugmentedManifestsListItem>>,
+    /// <p>The format of your training data:</p> <ul> <li> <p> <code>COMPREHEND_CSV</code>: A CSV file that supplements your training documents. The CSV file contains information about the custom entities that your trained model will detect. The required format of the file depends on whether you are providing annotations or an entity list.</p> <p>If you use this value, you must provide your CSV file by using either the <code>Annotations</code> or <code>EntityList</code> parameters. You must provide your training documents by using the <code>Documents</code> parameter.</p> </li> <li> <p> <code>AUGMENTED_MANIFEST</code>: A labeled dataset that is produced by Amazon SageMaker Ground Truth. This file is in JSON lines format. Each line is a complete JSON object that contains a training document and its labels. Each label annotates a named entity in the training document. </p> <p>If you use this value, you must provide the <code>AugmentedManifests</code> parameter in your request.</p> </li> </ul> <p>If you don't specify a value, Amazon Comprehend uses <code>COMPREHEND_CSV</code> as the default.</p>
+    #[serde(rename = "DataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_format: Option<String>,
+    /// <p>The S3 location of the folder that contains the training documents for your custom entity recognizer.</p> <p>This parameter is required if you set <code>DataFormat</code> to <code>COMPREHEND_CSV</code>.</p>
     #[serde(rename = "Documents")]
-    pub documents: EntityRecognizerDocuments,
-    /// <p>S3 location of the entity list for an entity recognizer.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documents: Option<EntityRecognizerDocuments>,
+    /// <p>The S3 location of the CSV file that has the entity list for your custom entity recognizer.</p>
     #[serde(rename = "EntityList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_list: Option<EntityRecognizerEntityList>,
-    /// <p>The entity types in the input data for an entity recognizer. A maximum of 12 entity types can be used at one time to train an entity recognizer.</p>
+    /// <p>The entity types in the labeled training data that Amazon Comprehend uses to train the custom entity recognizer. Any entity types that you don't specify are ignored.</p> <p>A maximum of 25 entity types can be used at one time to train an entity recognizer. Entity types must not contain the following invalid characters: \n (line break), \\n (escaped line break), \r (carriage return), \\r (escaped carriage return), \t (tab), \\t (escaped tab), space, and , (comma). </p>
     #[serde(rename = "EntityTypes")]
     pub entity_types: Vec<EntityTypesListItem>,
 }
@@ -1397,7 +1479,7 @@ pub struct EntityRecognizerProperties {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityTypesEvaluationMetrics {
-    /// <p>A measure of how accurate the recognizer results are for for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
+    /// <p>A measure of how accurate the recognizer results are for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
     #[serde(rename = "F1Score")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub f1_score: Option<f64>,
@@ -1411,12 +1493,84 @@ pub struct EntityTypesEvaluationMetrics {
     pub recall: Option<f64>,
 }
 
-/// <p>Information about an individual item on a list of entity types.</p>
+/// <p>An entity type within a labeled training dataset that Amazon Comprehend uses to train a custom entity recognizer.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EntityTypesListItem {
-    /// <p>Entity type of an item on an entity type list.</p>
+    /// <p>An entity type within a labeled training dataset that Amazon Comprehend uses to train a custom entity recognizer.</p> <p>Entity types must not contain the following invalid characters: \n (line break), \\n (escaped line break, \r (carriage return), \\r (escaped carriage return), \t (tab), \\t (escaped tab), space, and , (comma).</p>
     #[serde(rename = "Type")]
     pub type_: String,
+}
+
+/// <p>Provides information for filtering a list of event detection jobs.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EventsDetectionJobFilter {
+    /// <p>Filters on the name of the events detection job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
+    #[serde(rename = "SubmitTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_after: Option<f64>,
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in ascending order, oldest to newest.</p>
+    #[serde(rename = "SubmitTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_before: Option<f64>,
+}
+
+/// <p>Provides information about an events detection job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EventsDetectionJobProperties {
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identify and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
+    /// <p>The time that the events detection job completed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The input data configuration that you supplied when you created the events detection job.</p>
+    #[serde(rename = "InputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_data_config: Option<InputDataConfig>,
+    /// <p>The identifier assigned to the events detection job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The name you assigned the events detection job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The current status of the events detection job.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>The language code of the input documents.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>A description of the status of the events detection job.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The output data configuration that you supplied when you created the events detection job.</p>
+    #[serde(rename = "OutputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_data_config: Option<OutputDataConfig>,
+    /// <p>The time that the events detection job was submitted for processing.</p>
+    #[serde(rename = "SubmitTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time: Option<f64>,
+    /// <p>The types of events that are detected by the job.</p>
+    #[serde(rename = "TargetEventTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_event_types: Option<Vec<String>>,
 }
 
 /// <p>The input properties for a topic detection job.</p>
@@ -1713,6 +1867,36 @@ pub struct ListEntityRecognizersResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListEventsDetectionJobsRequest {
+    /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<EventsDetectionJobFilter>,
+    /// <p>The maximum number of results to return in each page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListEventsDetectionJobsResponse {
+    /// <p>A list containing the properties of each job that is returned.</p>
+    #[serde(rename = "EventsDetectionJobPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub events_detection_job_properties_list: Option<Vec<EventsDetectionJobProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyPhrasesDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1739,6 +1923,36 @@ pub struct ListKeyPhrasesDetectionJobsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPiiEntitiesDetectionJobsRequest {
+    /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<PiiEntitiesDetectionJobFilter>,
+    /// <p>The maximum number of results to return in each page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPiiEntitiesDetectionJobsResponse {
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list containing the properties of each job that is returned.</p>
+    #[serde(rename = "PiiEntitiesDetectionJobPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pii_entities_detection_job_properties_list: Option<Vec<PiiEntitiesDetectionJobProperties>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1846,6 +2060,134 @@ pub struct PartOfSpeechTag {
     #[serde(rename = "Tag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag: Option<String>,
+}
+
+/// <p>Provides information for filtering a list of PII entity detection jobs.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PiiEntitiesDetectionJobFilter {
+    /// <p>Filters on the name of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
+    #[serde(rename = "SubmitTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_after: Option<f64>,
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in ascending order, oldest to newest.</p>
+    #[serde(rename = "SubmitTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_before: Option<f64>,
+}
+
+/// <p>Provides information about a PII entities detection job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PiiEntitiesDetectionJobProperties {
+    /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
+    /// <p>The time that the PII entities detection job completed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The input properties for a PII entities detection job.</p>
+    #[serde(rename = "InputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_data_config: Option<InputDataConfig>,
+    /// <p>The identifier assigned to the PII entities detection job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The name that you assigned the PII entities detection job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The current status of the PII entities detection job. If the status is <code>FAILED</code>, the <code>Message</code> field shows the reason for the failure.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>The language code of the input documents</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>A description of the status of a job.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>Specifies whether the output provides the locations (offsets) of PII entities or a file in which PII entities are redacted.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p>The output data configuration that you supplied when you created the PII entities detection job.</p>
+    #[serde(rename = "OutputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_data_config: Option<PiiOutputDataConfig>,
+    /// <p>Provides configuration parameters for PII entity redaction.</p> <p>This parameter is required if you set the <code>Mode</code> parameter to <code>ONLY_REDACTION</code>. In that case, you must provide a <code>RedactionConfig</code> definition that includes the <code>PiiEntityTypes</code> parameter.</p>
+    #[serde(rename = "RedactionConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redaction_config: Option<RedactionConfig>,
+    /// <p>The time that the PII entities detection job was submitted for processing.</p>
+    #[serde(rename = "SubmitTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time: Option<f64>,
+}
+
+/// <p>Provides information about a PII entity.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PiiEntity {
+    /// <p>A character offset in the input text that shows where the PII entity begins (the first character is at position 0). The offset returns the position of each UTF-8 code point in the string. A <i>code point</i> is the abstract character from a particular graphical representation. For example, a multi-byte UTF-8 character maps to a single code point.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>A character offset in the input text that shows where the PII entity ends. The offset returns the position of each UTF-8 code point in the string. A <i>code point</i> is the abstract character from a particular graphical representation. For example, a multi-byte UTF-8 character maps to a single code point.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The entity's type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Provides configuration parameters for the output of PII entity detection jobs.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PiiOutputDataConfig {
+    /// <p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt the output results from an analysis job.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>When you use the <code>PiiOutputDataConfig</code> object with asynchronous operations, you specify the Amazon S3 location where you want to write the output data. </p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Provides configuration parameters for PII entity redaction.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RedactionConfig {
+    /// <p>A character that replaces each character in the redacted PII entity.</p>
+    #[serde(rename = "MaskCharacter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mask_character: Option<String>,
+    /// <p>Specifies whether the PII entity is redacted with the mask character or the entity type.</p>
+    #[serde(rename = "MaskMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mask_mode: Option<String>,
+    /// <p>An array of the types of PII entities that Amazon Comprehend detects in the input text for your request.</p>
+    #[serde(rename = "PiiEntityTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pii_entity_types: Option<Vec<String>>,
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
@@ -2087,6 +2429,47 @@ pub struct StartEntitiesDetectionJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartEventsDetectionJobRequest {
+    /// <p>An unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>Specifies the format and location of the input data for the job.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: InputDataConfig,
+    /// <p>The identifier of the events detection job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The language code of the input documents.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>Specifies where to send the output files.</p>
+    #[serde(rename = "OutputDataConfig")]
+    pub output_data_config: OutputDataConfig,
+    /// <p>The types of events to detect in the input documents.</p>
+    #[serde(rename = "TargetEventTypes")]
+    pub target_event_types: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartEventsDetectionJobResponse {
+    /// <p>An unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The status of the events detection job.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartKeyPhrasesDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2126,6 +2509,51 @@ pub struct StartKeyPhrasesDetectionJobResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
     /// <p><p>The status of the job. </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN_PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the operation.</p> </li> </ul></p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartPiiEntitiesDetectionJobRequest {
+    /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>The input properties for a PII entities detection job.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: InputDataConfig,
+    /// <p>The identifier of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The language of the input documents.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>Specifies whether the output provides the locations (offsets) of PII entities or a file in which PII entities are redacted.</p>
+    #[serde(rename = "Mode")]
+    pub mode: String,
+    /// <p>Provides conﬁguration parameters for the output of PII entity detection jobs.</p>
+    #[serde(rename = "OutputDataConfig")]
+    pub output_data_config: OutputDataConfig,
+    /// <p>Provides configuration parameters for PII entity redaction.</p> <p>This parameter is required if you set the <code>Mode</code> parameter to <code>ONLY_REDACTION</code>. In that case, you must provide a <code>RedactionConfig</code> definition that includes the <code>PiiEntityTypes</code> parameter.</p>
+    #[serde(rename = "RedactionConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redaction_config: Option<RedactionConfig>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartPiiEntitiesDetectionJobResponse {
+    /// <p>The identifier generated for the job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The status of the job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
@@ -2268,6 +2696,27 @@ pub struct StopEntitiesDetectionJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopEventsDetectionJobRequest {
+    /// <p>The identifier of the events detection job to stop.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopEventsDetectionJobResponse {
+    /// <p>The identifier of the events detection job to stop.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The status of the events detection job.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopKeyPhrasesDetectionJobRequest {
     /// <p>The identifier of the key phrases detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2282,6 +2731,27 @@ pub struct StopKeyPhrasesDetectionJobResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
     /// <p>Either <code>STOP_REQUESTED</code> if the job is currently running, or <code>STOPPED</code> if the job was previously stopped with the <code>StopKeyPhrasesDetectionJob</code> operation.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopPiiEntitiesDetectionJobRequest {
+    /// <p>The identifier of the PII entities detection job to stop.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopPiiEntitiesDetectionJobResponse {
+    /// <p>The identifier of the PII entities detection job to stop.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The status of the PII entities detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
@@ -2491,7 +2961,7 @@ pub struct UpdateEndpointRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointResponse {}
 
-/// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+/// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VpcConfig {
     /// <p>The ID number for a security group on an instance of your private VPC. Security groups on your VPC function serve as a virtual firewall to control inbound and outbound traffic and provides security for the resources that you’ll be accessing on the VPC. This ID number is preceded by "sg-", for instance: "sg-03b388029b0a285ea". For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for your VPC</a>. </p>
@@ -2575,7 +3045,7 @@ pub enum BatchDetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2635,7 +3105,7 @@ pub enum BatchDetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2699,7 +3169,7 @@ pub enum BatchDetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2759,7 +3229,7 @@ pub enum BatchDetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2877,7 +3347,7 @@ pub enum CreateDocumentClassifierError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3041,7 +3511,7 @@ pub enum CreateEntityRecognizerError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3660,6 +4130,64 @@ impl fmt::Display for DescribeEntityRecognizerError {
     }
 }
 impl Error for DescribeEntityRecognizerError {}
+/// Errors returned by DescribeEventsDetectionJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeEventsDetectionJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified job was not found. Check the job ID and try again.</p>
+    JobNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl DescribeEventsDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEventsDetectionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeEventsDetectionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeEventsDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return RusotoError::Service(DescribeEventsDetectionJobError::JobNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeEventsDetectionJobError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeEventsDetectionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEventsDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEventsDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEventsDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEventsDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeEventsDetectionJobError {}
 /// Errors returned by DescribeKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeKeyPhrasesDetectionJobError {
@@ -3724,6 +4252,70 @@ impl fmt::Display for DescribeKeyPhrasesDetectionJobError {
     }
 }
 impl Error for DescribeKeyPhrasesDetectionJobError {}
+/// Errors returned by DescribePiiEntitiesDetectionJob
+#[derive(Debug, PartialEq)]
+pub enum DescribePiiEntitiesDetectionJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified job was not found. Check the job ID and try again.</p>
+    JobNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl DescribePiiEntitiesDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribePiiEntitiesDetectionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DescribePiiEntitiesDetectionJobError::InternalServer(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DescribePiiEntitiesDetectionJobError::InvalidRequest(err.msg),
+                    )
+                }
+                "JobNotFoundException" => {
+                    return RusotoError::Service(DescribePiiEntitiesDetectionJobError::JobNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DescribePiiEntitiesDetectionJobError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribePiiEntitiesDetectionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribePiiEntitiesDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePiiEntitiesDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePiiEntitiesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribePiiEntitiesDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribePiiEntitiesDetectionJobError {}
 /// Errors returned by DescribeSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeSentimentDetectionJobError {
@@ -3901,7 +4493,7 @@ pub enum DetectEntitiesError {
     ResourceUnavailable(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3955,7 +4547,7 @@ pub enum DetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3998,6 +4590,58 @@ impl fmt::Display for DetectKeyPhrasesError {
     }
 }
 impl Error for DetectKeyPhrasesError {}
+/// Errors returned by DetectPiiEntities
+#[derive(Debug, PartialEq)]
+pub enum DetectPiiEntitiesError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
+    TextSizeLimitExceeded(String),
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    UnsupportedLanguage(String),
+}
+
+impl DetectPiiEntitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectPiiEntitiesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DetectPiiEntitiesError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DetectPiiEntitiesError::InvalidRequest(err.msg))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(DetectPiiEntitiesError::TextSizeLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedLanguageException" => {
+                    return RusotoError::Service(DetectPiiEntitiesError::UnsupportedLanguage(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DetectPiiEntitiesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DetectPiiEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectPiiEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectPiiEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectPiiEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DetectPiiEntitiesError {}
 /// Errors returned by DetectSentiment
 #[derive(Debug, PartialEq)]
 pub enum DetectSentimentError {
@@ -4007,7 +4651,7 @@ pub enum DetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -4057,7 +4701,7 @@ pub enum DetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -4434,6 +5078,62 @@ impl fmt::Display for ListEntityRecognizersError {
     }
 }
 impl Error for ListEntityRecognizersError {}
+/// Errors returned by ListEventsDetectionJobs
+#[derive(Debug, PartialEq)]
+pub enum ListEventsDetectionJobsError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
+    InvalidFilter(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl ListEventsDetectionJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventsDetectionJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListEventsDetectionJobsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidFilterException" => {
+                    return RusotoError::Service(ListEventsDetectionJobsError::InvalidFilter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListEventsDetectionJobsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListEventsDetectionJobsError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListEventsDetectionJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListEventsDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEventsDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListEventsDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEventsDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListEventsDetectionJobsError {}
 /// Errors returned by ListKeyPhrasesDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListKeyPhrasesDetectionJobsError {
@@ -4492,6 +5192,64 @@ impl fmt::Display for ListKeyPhrasesDetectionJobsError {
     }
 }
 impl Error for ListKeyPhrasesDetectionJobsError {}
+/// Errors returned by ListPiiEntitiesDetectionJobs
+#[derive(Debug, PartialEq)]
+pub enum ListPiiEntitiesDetectionJobsError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
+    InvalidFilter(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl ListPiiEntitiesDetectionJobsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListPiiEntitiesDetectionJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListPiiEntitiesDetectionJobsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidFilterException" => {
+                    return RusotoError::Service(ListPiiEntitiesDetectionJobsError::InvalidFilter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListPiiEntitiesDetectionJobsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        ListPiiEntitiesDetectionJobsError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPiiEntitiesDetectionJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPiiEntitiesDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListPiiEntitiesDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListPiiEntitiesDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPiiEntitiesDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListPiiEntitiesDetectionJobsError {}
 /// Errors returned by ListSentimentDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListSentimentDetectionJobsError {
@@ -4876,6 +5634,62 @@ impl fmt::Display for StartEntitiesDetectionJobError {
     }
 }
 impl Error for StartEntitiesDetectionJobError {}
+/// Errors returned by StartEventsDetectionJob
+#[derive(Debug, PartialEq)]
+pub enum StartEventsDetectionJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl StartEventsDetectionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartEventsDetectionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StartEventsDetectionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartEventsDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(StartEventsDetectionJobError::KmsKeyValidation(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(StartEventsDetectionJobError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartEventsDetectionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartEventsDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartEventsDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartEventsDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartEventsDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartEventsDetectionJobError {}
 /// Errors returned by StartKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartKeyPhrasesDetectionJobError {
@@ -4934,6 +5748,66 @@ impl fmt::Display for StartKeyPhrasesDetectionJobError {
     }
 }
 impl Error for StartKeyPhrasesDetectionJobError {}
+/// Errors returned by StartPiiEntitiesDetectionJob
+#[derive(Debug, PartialEq)]
+pub enum StartPiiEntitiesDetectionJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl StartPiiEntitiesDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartPiiEntitiesDetectionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StartPiiEntitiesDetectionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartPiiEntitiesDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(
+                        StartPiiEntitiesDetectionJobError::KmsKeyValidation(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        StartPiiEntitiesDetectionJobError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartPiiEntitiesDetectionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartPiiEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartPiiEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartPiiEntitiesDetectionJobError::KmsKeyValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartPiiEntitiesDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartPiiEntitiesDetectionJobError {}
 /// Errors returned by StartSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartSentimentDetectionJobError {
@@ -5150,6 +6024,52 @@ impl fmt::Display for StopEntitiesDetectionJobError {
     }
 }
 impl Error for StopEntitiesDetectionJobError {}
+/// Errors returned by StopEventsDetectionJob
+#[derive(Debug, PartialEq)]
+pub enum StopEventsDetectionJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified job was not found. Check the job ID and try again.</p>
+    JobNotFound(String),
+}
+
+impl StopEventsDetectionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopEventsDetectionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StopEventsDetectionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StopEventsDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return RusotoError::Service(StopEventsDetectionJobError::JobNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopEventsDetectionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopEventsDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopEventsDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopEventsDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopEventsDetectionJobError {}
 /// Errors returned by StopKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopKeyPhrasesDetectionJobError {
@@ -5200,6 +6120,56 @@ impl fmt::Display for StopKeyPhrasesDetectionJobError {
     }
 }
 impl Error for StopKeyPhrasesDetectionJobError {}
+/// Errors returned by StopPiiEntitiesDetectionJob
+#[derive(Debug, PartialEq)]
+pub enum StopPiiEntitiesDetectionJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified job was not found. Check the job ID and try again.</p>
+    JobNotFound(String),
+}
+
+impl StopPiiEntitiesDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopPiiEntitiesDetectionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StopPiiEntitiesDetectionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StopPiiEntitiesDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return RusotoError::Service(StopPiiEntitiesDetectionJobError::JobNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopPiiEntitiesDetectionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopPiiEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopPiiEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopPiiEntitiesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopPiiEntitiesDetectionJobError {}
 /// Errors returned by StopSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopSentimentDetectionJobError {
@@ -5669,6 +6639,12 @@ pub trait Comprehend {
         input: DescribeEntityRecognizerRequest,
     ) -> Result<DescribeEntityRecognizerResponse, RusotoError<DescribeEntityRecognizerError>>;
 
+    /// <p>Gets the status and details of an events detection job.</p>
+    async fn describe_events_detection_job(
+        &self,
+        input: DescribeEventsDetectionJobRequest,
+    ) -> Result<DescribeEventsDetectionJobResponse, RusotoError<DescribeEventsDetectionJobError>>;
+
     /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
     async fn describe_key_phrases_detection_job(
         &self,
@@ -5676,6 +6652,15 @@ pub trait Comprehend {
     ) -> Result<
         DescribeKeyPhrasesDetectionJobResponse,
         RusotoError<DescribeKeyPhrasesDetectionJobError>,
+    >;
+
+    /// <p>Gets the properties associated with a PII entities detection job. For example, you can use this operation to get the job status.</p>
+    async fn describe_pii_entities_detection_job(
+        &self,
+        input: DescribePiiEntitiesDetectionJobRequest,
+    ) -> Result<
+        DescribePiiEntitiesDetectionJobResponse,
+        RusotoError<DescribePiiEntitiesDetectionJobError>,
     >;
 
     /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
@@ -5710,6 +6695,12 @@ pub trait Comprehend {
         &self,
         input: DetectKeyPhrasesRequest,
     ) -> Result<DetectKeyPhrasesResponse, RusotoError<DetectKeyPhrasesError>>;
+
+    /// <p>Inspects the input text for entities that contain personally identifiable information (PII) and returns information about them.</p>
+    async fn detect_pii_entities(
+        &self,
+        input: DetectPiiEntitiesRequest,
+    ) -> Result<DetectPiiEntitiesResponse, RusotoError<DetectPiiEntitiesError>>;
 
     /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
     async fn detect_sentiment(
@@ -5765,11 +6756,23 @@ pub trait Comprehend {
         input: ListEntityRecognizersRequest,
     ) -> Result<ListEntityRecognizersResponse, RusotoError<ListEntityRecognizersError>>;
 
+    /// <p>Gets a list of the events detection jobs that you have submitted.</p>
+    async fn list_events_detection_jobs(
+        &self,
+        input: ListEventsDetectionJobsRequest,
+    ) -> Result<ListEventsDetectionJobsResponse, RusotoError<ListEventsDetectionJobsError>>;
+
     /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
     async fn list_key_phrases_detection_jobs(
         &self,
         input: ListKeyPhrasesDetectionJobsRequest,
     ) -> Result<ListKeyPhrasesDetectionJobsResponse, RusotoError<ListKeyPhrasesDetectionJobsError>>;
+
+    /// <p>Gets a list of the PII entity detection jobs that you have submitted.</p>
+    async fn list_pii_entities_detection_jobs(
+        &self,
+        input: ListPiiEntitiesDetectionJobsRequest,
+    ) -> Result<ListPiiEntitiesDetectionJobsResponse, RusotoError<ListPiiEntitiesDetectionJobsError>>;
 
     /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
     async fn list_sentiment_detection_jobs(
@@ -5813,11 +6816,23 @@ pub trait Comprehend {
         input: StartEntitiesDetectionJobRequest,
     ) -> Result<StartEntitiesDetectionJobResponse, RusotoError<StartEntitiesDetectionJobError>>;
 
+    /// <p>Starts an asynchronous event detection job for a collection of documents.</p>
+    async fn start_events_detection_job(
+        &self,
+        input: StartEventsDetectionJobRequest,
+    ) -> Result<StartEventsDetectionJobResponse, RusotoError<StartEventsDetectionJobError>>;
+
     /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
     async fn start_key_phrases_detection_job(
         &self,
         input: StartKeyPhrasesDetectionJobRequest,
     ) -> Result<StartKeyPhrasesDetectionJobResponse, RusotoError<StartKeyPhrasesDetectionJobError>>;
+
+    /// <p>Starts an asynchronous PII entity detection job for a collection of documents.</p>
+    async fn start_pii_entities_detection_job(
+        &self,
+        input: StartPiiEntitiesDetectionJobRequest,
+    ) -> Result<StartPiiEntitiesDetectionJobResponse, RusotoError<StartPiiEntitiesDetectionJobError>>;
 
     /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
     async fn start_sentiment_detection_job(
@@ -5846,11 +6861,23 @@ pub trait Comprehend {
         input: StopEntitiesDetectionJobRequest,
     ) -> Result<StopEntitiesDetectionJobResponse, RusotoError<StopEntitiesDetectionJobError>>;
 
+    /// <p>Stops an events detection job in progress.</p>
+    async fn stop_events_detection_job(
+        &self,
+        input: StopEventsDetectionJobRequest,
+    ) -> Result<StopEventsDetectionJobResponse, RusotoError<StopEventsDetectionJobError>>;
+
     /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
     async fn stop_key_phrases_detection_job(
         &self,
         input: StopKeyPhrasesDetectionJobRequest,
     ) -> Result<StopKeyPhrasesDetectionJobResponse, RusotoError<StopKeyPhrasesDetectionJobError>>;
+
+    /// <p>Stops a PII entities detection job in progress.</p>
+    async fn stop_pii_entities_detection_job(
+        &self,
+        input: StopPiiEntitiesDetectionJobRequest,
+    ) -> Result<StopPiiEntitiesDetectionJobResponse, RusotoError<StopPiiEntitiesDetectionJobError>>;
 
     /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
     async fn stop_sentiment_detection_job(
@@ -6306,6 +7333,29 @@ impl Comprehend for ComprehendClient {
             .deserialize::<DescribeEntityRecognizerResponse, _>()
     }
 
+    /// <p>Gets the status and details of an events detection job.</p>
+    async fn describe_events_detection_job(
+        &self,
+        input: DescribeEventsDetectionJobRequest,
+    ) -> Result<DescribeEventsDetectionJobResponse, RusotoError<DescribeEventsDetectionJobError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.DescribeEventsDetectionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeEventsDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEventsDetectionJobResponse, _>()
+    }
+
     /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
     async fn describe_key_phrases_detection_job(
         &self,
@@ -6329,6 +7379,31 @@ impl Comprehend for ComprehendClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DescribeKeyPhrasesDetectionJobResponse, _>()
+    }
+
+    /// <p>Gets the properties associated with a PII entities detection job. For example, you can use this operation to get the job status.</p>
+    async fn describe_pii_entities_detection_job(
+        &self,
+        input: DescribePiiEntitiesDetectionJobRequest,
+    ) -> Result<
+        DescribePiiEntitiesDetectionJobResponse,
+        RusotoError<DescribePiiEntitiesDetectionJobError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.DescribePiiEntitiesDetectionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribePiiEntitiesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePiiEntitiesDetectionJobResponse, _>()
     }
 
     /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
@@ -6432,6 +7507,24 @@ impl Comprehend for ComprehendClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DetectKeyPhrasesResponse, _>()
+    }
+
+    /// <p>Inspects the input text for entities that contain personally identifiable information (PII) and returns information about them.</p>
+    async fn detect_pii_entities(
+        &self,
+        input: DetectPiiEntitiesRequest,
+    ) -> Result<DetectPiiEntitiesResponse, RusotoError<DetectPiiEntitiesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Comprehend_20171127.DetectPiiEntities");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DetectPiiEntitiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectPiiEntitiesResponse, _>()
     }
 
     /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
@@ -6605,6 +7698,28 @@ impl Comprehend for ComprehendClient {
             .deserialize::<ListEntityRecognizersResponse, _>()
     }
 
+    /// <p>Gets a list of the events detection jobs that you have submitted.</p>
+    async fn list_events_detection_jobs(
+        &self,
+        input: ListEventsDetectionJobsRequest,
+    ) -> Result<ListEventsDetectionJobsResponse, RusotoError<ListEventsDetectionJobsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.ListEventsDetectionJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListEventsDetectionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListEventsDetectionJobsResponse, _>()
+    }
+
     /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
     async fn list_key_phrases_detection_jobs(
         &self,
@@ -6626,6 +7741,29 @@ impl Comprehend for ComprehendClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ListKeyPhrasesDetectionJobsResponse, _>()
+    }
+
+    /// <p>Gets a list of the PII entity detection jobs that you have submitted.</p>
+    async fn list_pii_entities_detection_jobs(
+        &self,
+        input: ListPiiEntitiesDetectionJobsRequest,
+    ) -> Result<ListPiiEntitiesDetectionJobsResponse, RusotoError<ListPiiEntitiesDetectionJobsError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.ListPiiEntitiesDetectionJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListPiiEntitiesDetectionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPiiEntitiesDetectionJobsResponse, _>()
     }
 
     /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
@@ -6767,6 +7905,28 @@ impl Comprehend for ComprehendClient {
             .deserialize::<StartEntitiesDetectionJobResponse, _>()
     }
 
+    /// <p>Starts an asynchronous event detection job for a collection of documents.</p>
+    async fn start_events_detection_job(
+        &self,
+        input: StartEventsDetectionJobRequest,
+    ) -> Result<StartEventsDetectionJobResponse, RusotoError<StartEventsDetectionJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.StartEventsDetectionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartEventsDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartEventsDetectionJobResponse, _>()
+    }
+
     /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
     async fn start_key_phrases_detection_job(
         &self,
@@ -6788,6 +7948,29 @@ impl Comprehend for ComprehendClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<StartKeyPhrasesDetectionJobResponse, _>()
+    }
+
+    /// <p>Starts an asynchronous PII entity detection job for a collection of documents.</p>
+    async fn start_pii_entities_detection_job(
+        &self,
+        input: StartPiiEntitiesDetectionJobRequest,
+    ) -> Result<StartPiiEntitiesDetectionJobResponse, RusotoError<StartPiiEntitiesDetectionJobError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.StartPiiEntitiesDetectionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartPiiEntitiesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartPiiEntitiesDetectionJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
@@ -6885,6 +8068,25 @@ impl Comprehend for ComprehendClient {
             .deserialize::<StopEntitiesDetectionJobResponse, _>()
     }
 
+    /// <p>Stops an events detection job in progress.</p>
+    async fn stop_events_detection_job(
+        &self,
+        input: StopEventsDetectionJobRequest,
+    ) -> Result<StopEventsDetectionJobResponse, RusotoError<StopEventsDetectionJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Comprehend_20171127.StopEventsDetectionJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopEventsDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopEventsDetectionJobResponse, _>()
+    }
+
     /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
     async fn stop_key_phrases_detection_job(
         &self,
@@ -6906,6 +8108,29 @@ impl Comprehend for ComprehendClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<StopKeyPhrasesDetectionJobResponse, _>()
+    }
+
+    /// <p>Stops a PII entities detection job in progress.</p>
+    async fn stop_pii_entities_detection_job(
+        &self,
+        input: StopPiiEntitiesDetectionJobRequest,
+    ) -> Result<StopPiiEntitiesDetectionJobResponse, RusotoError<StopPiiEntitiesDetectionJobError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.StopPiiEntitiesDetectionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopPiiEntitiesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopPiiEntitiesDetectionJobResponse, _>()
     }
 
     /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
