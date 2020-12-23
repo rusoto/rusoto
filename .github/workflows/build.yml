@@ -143,6 +143,25 @@ jobs:
     - name: Generate crates
       run: make generate
 
+  struct_serialize_feature_test:
+    name: Serialize Struct Feature
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Set up Rust
+      uses: hecrj/setup-rust-action@v1
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Run Checks
+      run: make serialize_structs_limited_test
+
   skeptic:
     name: Skeptic tests
     runs-on: ubuntu-latest
