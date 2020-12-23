@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update to `hmac` 0.10
 - Update to `hyper-rustls` 0.21.
 - Disable `chrono`'s `oldtime` feature
+- Remove dependency on `regex`
 
 
 ## [0.45.0] - 2020-07-22
