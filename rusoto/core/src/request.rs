@@ -253,7 +253,7 @@ impl HttpClient {
 
     /// Sets a local agent that is appended to the default HTTP
     /// `User-Agent` used by Rusoto.
-    pub fn local_agent_apppend(&mut self, local_agent: String) {
+    pub fn local_agent_append(&mut self, local_agent: String) {
         self.local_agent_append = Some(local_agent)
     }
 }
